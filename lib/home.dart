@@ -35,8 +35,12 @@ class _LoginHomeState extends State<VRChatMobileHome> {
             // 高画質 currentAvatarImageUrl
             column = Column(
               children: [
-                Image.network(response["currentAvatarThumbnailImageUrl"], fit: BoxFit.contain),
-                Text(response["displayName"]),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  height: 250,
+                  child: Image.network(response["currentAvatarThumbnailImageUrl"], fit: BoxFit.fitWidth),
+                ),
+                Text(response["displayName"], style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
                 Text(response["bio"]),
                 Text(response["status"]),
                 Text(response["state"]),

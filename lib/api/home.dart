@@ -2,11 +2,9 @@ import 'package:flutter/material.dart';
 import '../session.dart';
 
 class VRChatMobileAPIHome {
-  late BuildContext context;
   final vrchatSession = Session();
 
   VRChatMobileAPIHome(BuildContext _context, String _cookie) {
-    context = _context;
     vrchatSession.headers["cookie"] = _cookie;
   }
 
