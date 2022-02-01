@@ -1,11 +1,12 @@
-import 'session.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../session.dart';
 
-class VRCAPI {
+class VRChatMobileAPILogin {
   late BuildContext context;
   final vrchatSession = Session();
 
-  VRCAPI(BuildContext _context) {
+  VRChatMobileAPILogin(BuildContext _context) {
     context = _context;
   }
 
@@ -19,10 +20,14 @@ class VRCAPI {
   }
 
   void loginTotp(code) {
+    Future _setLoginSession() async {
+      final preferences = await SharedPreferences.getInstance();
+      preferences.setString("LoginSession", vrchatSession.headers["cookie"] as String);
+    }
+
     vrchatSession.post(Uri.parse("https://vrchat.com/api/1/auth/twofactorauth/totp/verify"), {"code": code}).then((response) {
       if (response.containsKey("error")) error(response["error"]["message"]);
-      if (response["verified"]) print("成功");
-      print(response);
+      if (response["verified"]) _setLoginSession();
     });
   }
 
@@ -53,7 +58,7 @@ class VRCAPI {
             content: TextField(
               keyboardType: TextInputType.number,
               controller: _passwordController,
-              decoration: const InputDecoration(labelText: 'TOTP'),
+              decoration: const InputDecoration(labelText: 'code'),
               maxLength: 6,
             ),
             actions: [

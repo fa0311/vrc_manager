@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
-import 'api.dart';
+import 'api/login.dart';
 
-class VRChatMobile extends StatefulWidget {
-  const VRChatMobile({Key? key, required this.title}) : super(key: key);
+class VRChatMobileLogin extends StatefulWidget {
+  const VRChatMobileLogin({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
   @override
-  State<VRChatMobile> createState() => _LoginPageState();
+  State<VRChatMobileLogin> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<VRChatMobile> {
+class _LoginPageState extends State<VRChatMobileLogin> {
   bool _isPasswordObscure = true;
   final _userController = TextEditingController();
   final _passwordController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,7 +25,6 @@ class _LoginPageState extends State<VRChatMobile> {
         child: Column(
           children: [
             TextFormField(
-              // ignore: prefer_const_constructors
               controller: _userController,
               decoration: const InputDecoration(labelText: 'Username/Email'),
             ),
@@ -50,7 +48,7 @@ class _LoginPageState extends State<VRChatMobile> {
             ),
             ElevatedButton(
               child: const Text('Login'),
-              onPressed: () => VRCAPI(context).login(_userController.text, _passwordController.text),
+              onPressed: () => VRChatMobileAPILogin(context).login(_userController.text, _passwordController.text),
             ),
           ],
         ),
