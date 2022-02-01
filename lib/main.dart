@@ -14,8 +14,11 @@ class MyApp extends StatelessWidget {
       title: 'VRChat Mobile Application',
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        pageTransitionsTheme: const PageTransitionsTheme(builders: <TargetPlatform, PageTransitionsBuilder>{
+          TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+        }),
       ),
-      home: const VRChatMobileHome(title: 'VRChat Mobile Application by fa0311'),
+      home: const VRChatMobileHome(),
     );
   }
 }
