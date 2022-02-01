@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'login.dart';
 import 'api/home.dart';
 import 'widgets/drawer.dart';
@@ -13,8 +13,8 @@ class VRChatMobileHome extends StatefulWidget {
 
 class _LoginHomeState extends State<VRChatMobileHome> {
   Future _getLoginSession() async {
-    final preferences = await SharedPreferences.getInstance();
-    return preferences.getString("LoginSession");
+    const storage = FlutterSecureStorage();
+    return storage.read(key: "LoginSession");
   }
 
   Column column = Column(

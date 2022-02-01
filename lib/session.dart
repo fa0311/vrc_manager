@@ -31,7 +31,6 @@ class Session {
       final String newCookie = (index == -1) ? rawCookie : rawCookie.substring(0, index);
       headers['cookie'] = (headers['cookie'] == "") ? newCookie : (headers['cookie']! + "; " + newCookie);
     }
-    print(headers);
   }
 }
 

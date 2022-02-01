@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'widgets/drawer.dart';
 
 class VRChatMobileSettings extends StatefulWidget {
@@ -11,8 +11,8 @@ class VRChatMobileSettings extends StatefulWidget {
 
 class _LoginPageState extends State<VRChatMobileSettings> {
   Future _removeLoginSession() async {
-    final preferences = await SharedPreferences.getInstance();
-    return preferences.remove("LoginSession");
+    const storage = FlutterSecureStorage();
+    return await storage.delete(key: 'LoginSession');
   }
 
   @override

@@ -43,7 +43,7 @@ Drawer drawr(context) {
                         MaterialPageRoute(
                           builder: (context) => const VRChatMobileSettings(),
                         )),
-                    leading: Icon(Icons.settings),
+                    leading: const Icon(Icons.settings),
                     title: const Text('設定')),
                 const ListTile(leading: Icon(Icons.help), title: Text('Help'))
               ],

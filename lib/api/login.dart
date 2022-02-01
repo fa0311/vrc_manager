@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:vrchat_mobile_client/home.dart';
 import '../session.dart';
 
 class VRChatMobileAPILogin {
@@ -15,19 +16,27 @@ class VRChatMobileAPILogin {
     vrchatSession.basic(Uri.parse("https://vrchat.com/api/1/auth/user?apiKey=JlE5Jldo5Jibnk5O5hTx6XVqsJu4WJ26"), username, password).then((response) {
       if (response.containsKey("error")) error(response["error"]["message"]);
       if (response.containsKey("requiresTwoFactorAuth")) totp();
-      print(response);
     });
   }
 
   void loginTotp(code) {
-    Future _setLoginSession() async {
-      final preferences = await SharedPreferences.getInstance();
-      preferences.setString("LoginSession", vrchatSession.headers["cookie"] as String);
+    _setLoginSession() async {
+      const storage = FlutterSecureStorage();
+      await storage.write(key: "LoginSession", value: vrchatSession.headers["cookie"]);
     }
 
     vrchatSession.post(Uri.parse("https://vrchat.com/api/1/auth/twofactorauth/totp/verify"), {"code": code}).then((response) {
       if (response.containsKey("error")) error(response["error"]["message"]);
-      if (response["verified"]) _setLoginSession();
+      if (response["verified"]) {
+        _setLoginSession().then((response) {
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const VRChatMobileHome(),
+              ),
+              (_) => false);
+        });
+      }
     });
   }
 
