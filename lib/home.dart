@@ -5,9 +5,7 @@ import 'api/home.dart';
 import 'widgets/drawer.dart';
 
 class VRChatMobileHome extends StatefulWidget {
-  const VRChatMobileHome({Key? key, required this.title}) : super(key: key);
-
-  final String title;
+  const VRChatMobileHome({Key? key}) : super(key: key);
 
   @override
   State<VRChatMobileHome> createState() => _LoginHomeState();
@@ -28,7 +26,12 @@ class _LoginHomeState extends State<VRChatMobileHome> {
   _LoginHomeState() {
     _getLoginSession().then((response) {
       if (response == null) {
-        const VRChatMobileLogin(title: 'VRChat Mobile Application by fa0311');
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const VRChatMobileLogin(),
+            ),
+            (_) => false);
       } else {
         VRChatMobileAPIHome(context, response).user().then((response) {
           setState(() {

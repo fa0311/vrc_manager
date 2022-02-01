@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'api/login.dart';
 
 class VRChatMobileLogin extends StatefulWidget {
-  const VRChatMobileLogin({Key? key, required this.title}) : super(key: key);
-
-  final String title;
+  const VRChatMobileLogin({Key? key}) : super(key: key);
 
   @override
   State<VRChatMobileLogin> createState() => _LoginPageState();
