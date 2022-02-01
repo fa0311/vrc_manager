@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'login.dart';
 import 'api/home.dart';
+import 'widgets/drawer.dart';
 
 class VRChatMobileHome extends StatefulWidget {
   const VRChatMobileHome({Key? key, required this.title}) : super(key: key);
@@ -60,18 +61,7 @@ class _LoginHomeState extends State<VRChatMobileHome> {
       appBar: AppBar(
         title: const Text('Home'),
       ),
-      drawer: Drawer(
-        child: ListView(
-          children: const <Widget>[
-            ListTile(
-              title: Text('My Page'),
-            ),
-            ListTile(
-              title: Text('Friends'),
-            )
-          ],
-        ),
-      ),
+      drawer: drawr(context),
       body: SizedBox(width: MediaQuery.of(context).size.width, child: column),
     );
   }
