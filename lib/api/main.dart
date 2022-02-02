@@ -1,4 +1,4 @@
-import '../session.dart';
+import '../assets/session.dart';
 
 class VRChatAPI {
   final vrchatSession = Session();

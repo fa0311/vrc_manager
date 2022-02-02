@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../home.dart';
-import '../settings.dart';
+import '../scenes/home.dart';
+import '../scenes/settings.dart';
 
 Drawer drawr(context) {
   return Drawer(

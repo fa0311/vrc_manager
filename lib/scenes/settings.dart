@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'login.dart';
-import 'widgets/drawer.dart';
+import '../widgets/drawer.dart';
 
 class VRChatMobileSettings extends StatefulWidget {
   const VRChatMobileSettings({Key? key}) : super(key: key);
