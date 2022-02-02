@@ -65,7 +65,7 @@ class _LoginHomeState extends State<VRChatMobileHome> {
         title: const Text('Home'),
       ),
       drawer: drawr(context),
-      body: SizedBox(width: MediaQuery.of(context).size.width, child: column),
+      body: SafeArea(child: SizedBox(width: MediaQuery.of(context).size.width, child: column)),
     );
   }
 }

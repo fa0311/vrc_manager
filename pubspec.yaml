@@ -37,6 +37,7 @@ dependencies:
   http: ^0.13.4
   shared_preferences: ^2.0.12
   flutter_secure_storage: ^5.0.2
+  url_launcher: ^6.0.18
 
 dev_dependencies:
   flutter_test:

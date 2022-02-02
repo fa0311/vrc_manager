@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'login.dart';
 import 'widgets/drawer.dart';
 
 class VRChatMobileSettings extends StatefulWidget {
@@ -10,9 +11,15 @@ class VRChatMobileSettings extends StatefulWidget {
 }
 
 class _LoginPageState extends State<VRChatMobileSettings> {
-  Future _removeLoginSession() async {
+  _removeLoginSession() async {
     const storage = FlutterSecureStorage();
-    return await storage.delete(key: 'LoginSession');
+    await storage.delete(key: 'LoginSession');
+    Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const VRChatMobileLogin(),
+        ),
+        (_) => false);
   }
 
   @override

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'api/login.dart';
+import 'home.dart';
 
 class VRChatMobileLogin extends StatefulWidget {
   const VRChatMobileLogin({Key? key}) : super(key: key);
@@ -45,9 +47,20 @@ class _LoginPageState extends State<VRChatMobileLogin> {
               height: 20,
             ),
             ElevatedButton(
-              child: const Text('Login'),
-              onPressed: () => VRChatMobileAPILogin(context).login(_userController.text, _passwordController.text),
-            ),
+                child: const Text('Login'),
+                onPressed: () async {
+                  final session = VRChatMobileAPILogin(context, (vrchatSession) async {
+                    const storage = FlutterSecureStorage();
+                    await storage.write(key: "LoginSession", value: vrchatSession.headers["cookie"]);
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const VRChatMobileHome(),
+                        ),
+                        (_) => false);
+                  });
+                  session.login(_userController.text, _passwordController.text);
+                }),
           ],
         ),
       ),
