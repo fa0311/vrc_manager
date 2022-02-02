@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'api/login.dart';
+import 'dart:convert';
+import 'api/main.dart';
 import 'home.dart';
+import './assets/error.dart';
 
 class VRChatMobileLogin extends StatefulWidget {
   const VRChatMobileLogin({Key? key}) : super(key: key);
@@ -10,10 +12,71 @@ class VRChatMobileLogin extends StatefulWidget {
   State<VRChatMobileLogin> createState() => _LoginPageState();
 }
 
+bool _isPasswordObscure = true;
+final _userController = TextEditingController();
+final _passwordController = TextEditingController();
+
+void onPressed(context) {
+  void save(String cookie) async {
+    const storage = FlutterSecureStorage();
+    await storage.write(key: "LoginSession", value: cookie);
+    Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const VRChatMobileHome(),
+        ),
+        (_) => false);
+  }
+
+  final session = VRChatAPI();
+  void totp() {
+    final _passwordController = TextEditingController();
+    showDialog(
+        context: context,
+        builder: (_) {
+          return AlertDialog(
+            title: const Text("Two-Factor Authentication"),
+            content: TextField(
+              keyboardType: TextInputType.number,
+              controller: _passwordController,
+              decoration: const InputDecoration(labelText: 'code'),
+              maxLength: 6,
+            ),
+            actions: [
+              TextButton(
+                  child: const Text("Verify"),
+                  onPressed: () => session.loginTotp(_passwordController.text).then((response) {
+                        if (response.containsKey("error")) {
+                          error(context, response["error"]["message"]);
+                        } else if (response.containsKey("verified") && response["verified"]) {
+                          save(session.vrchatSession.headers["cookie"] as String);
+                        } else if (response.containsKey("id")) {
+                          save(session.vrchatSession.headers["cookie"] as String);
+                        } else {
+                          error(context, "このアカウントのログイン方法は対応していません\n開発者に報告してください\nまた、報告をタップするとログがクリップボードにコピーされます", log: json.encode(response));
+                        }
+                      })),
+            ],
+          );
+        });
+  }
+
+  session.login(_userController.text, _passwordController.text).then((response) {
+    if (response.containsKey("error")) {
+      error(context, response["error"]["message"]);
+    } else if (response.containsKey("requiresTwoFactorAuth")) {
+      totp();
+    } else if (response.containsKey("verified") && response["verified"]) {
+      save(session.vrchatSession.headers["cookie"] as String);
+    } else if (response.containsKey("id")) {
+      save(session.vrchatSession.headers["cookie"] as String);
+    } else {
+      error(context, "このアカウントのログイン方法は対応していません\n開発者に報告してください\nまた、報告をタップするとログがクリップボードにコピーされます", log: json.encode(response));
+    }
+  });
+}
+
 class _LoginPageState extends State<VRChatMobileLogin> {
-  bool _isPasswordObscure = true;
-  final _userController = TextEditingController();
-  final _passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,20 +110,9 @@ class _LoginPageState extends State<VRChatMobileLogin> {
               height: 20,
             ),
             ElevatedButton(
-                child: const Text('Login'),
-                onPressed: () async {
-                  final session = VRChatMobileAPILogin(context, (vrchatSession) async {
-                    const storage = FlutterSecureStorage();
-                    await storage.write(key: "LoginSession", value: vrchatSession.headers["cookie"]);
-                    Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const VRChatMobileHome(),
-                        ),
-                        (_) => false);
-                  });
-                  session.login(_userController.text, _passwordController.text);
-                }),
+              child: const Text('Login'),
+              onPressed: () => onPressed(context),
+            ),
           ],
         ),
       ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'login.dart';
-import 'api/home.dart';
+import 'api/main.dart';
 import 'widgets/drawer.dart';
 
 class VRChatMobileHome extends StatefulWidget {
@@ -33,7 +33,7 @@ class _LoginHomeState extends State<VRChatMobileHome> {
             ),
             (_) => false);
       } else {
-        VRChatMobileAPIHome(context, response).user().then((response) {
+        VRChatAPI(cookie: response).user().then((response) {
           setState(() {
             // 低画質 currentAvatarThumbnailImageUrl
             // 高画質 currentAvatarImageUrl
