@@ -4,7 +4,7 @@ import 'dart:convert';
 class Session {
   Map<String, String> headers = {'cookie': ''};
 
-  Future<Map> get(url) async {
+  Future<Map> get(Uri url) async {
     http.Response response = await http.get(url, headers: headers);
     updateCookie(response);
     return json.decode(response.body);
