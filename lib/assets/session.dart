@@ -7,21 +7,26 @@ class Session {
   Future<Map> get(Uri url) async {
     http.Response response = await http.get(url, headers: headers);
     updateCookie(response);
-    return json.decode(response.body);
+    final body = json.decode(response.body);
+    if (body is List) return {for (int i = 0; i < body.length; i++) i: body[i]};
+    return body;
   }
 
   Future<Map> basic(Uri url, String username, String password) async {
     final headersAuth = Map<String, String>.from(headers)..addAll({'authorization': 'Basic ' + base64Encode(utf8.encode('$username:$password'))});
-
     http.Response response = await http.get(url, headers: headersAuth);
     updateCookie(response);
-    return json.decode(response.body);
+    final body = json.decode(response.body);
+    if (body is List) return {for (int i = 0; i < body.length; i++) i: body[i]};
+    return body;
   }
 
   Future<Map> post(Uri url, dynamic data) async {
     http.Response response = await http.post(url, body: data, headers: headers);
     updateCookie(response);
-    return json.decode(response.body);
+    final body = json.decode(response.body);
+    if (body is List) return {for (int i = 0; i < body.length; i++) i: body[i]};
+    return body;
   }
 
   void updateCookie(http.Response response) {

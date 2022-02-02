@@ -40,7 +40,6 @@ class _LoginHomeState extends State<VRChatMobileHome> {
             column = Column(
               children: [
                 SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.8,
                   height: 250,
                   child: Image.network(response["currentAvatarThumbnailImageUrl"], fit: BoxFit.fitWidth),
                 ),

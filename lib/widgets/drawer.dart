@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../scenes/home.dart';
+import '../scenes/friends.dart';
 import '../scenes/settings.dart';
 
 Drawer drawr(context) {
@@ -10,16 +11,24 @@ Drawer drawr(context) {
           child: Column(
             children: <Widget>[
               ListTile(
-                onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const VRChatMobileHome(),
-                    )),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const VRChatMobileHome(),
+                      ));
+                },
                 title: const Text('My Page'),
               ),
               ListTile(
                 onTap: () {
                   Navigator.pop(context);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const VRChatMobileFriends(),
+                      ));
                 },
                 title: const Text('Friends'),
               ),
@@ -38,11 +47,14 @@ Drawer drawr(context) {
               children: <Widget>[
                 const Divider(),
                 ListTile(
-                    onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const VRChatMobileSettings(),
-                        )),
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const VRChatMobileSettings(),
+                          ));
+                    },
                     leading: const Icon(Icons.settings),
                     title: const Text('設定')),
                 const ListTile(leading: Icon(Icons.help), title: Text('Help'))

@@ -30,8 +30,9 @@ class VRChatAPI {
     return vrchatSession.get(endpoint('api/1/auth/user', apiKey()));
   }
 
-  Future<Map> friends({int offset: 0, bool offline: true}) {
-    final param = {"offline": offline, "offset": offset, "n": 0}..addAll(apiKey());
+  Future<Map> friends({int offset: 0, bool offline: false}) {
+    final param = {"offline": offline.toString(), "offset": offset.toString(), "n": "50"};
+    param.addAll(apiKey());
     return vrchatSession.get(endpoint('api/1/auth/user/friends', param));
   }
 }
