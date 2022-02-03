@@ -16,7 +16,8 @@ class VRChatMobileHome extends StatefulWidget {
 class _LoginHomeState extends State<VRChatMobileHome> {
   Column column = Column(
     children: const [
-      Text('ロード中です'),
+      SizedBox(width: double.infinity, child: Text('ロード中です')),
+      Text('この画面がずっと表示されている場合、左のメニューから設定を開いてログアウトしてログインし直してください'),
     ],
   );
 
