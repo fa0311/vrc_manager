@@ -1,10 +1,13 @@
 # VRChatMC
 
-VRChatの非公式なAPIを利用したVRChatのモバイルクライアント
+VRChatの非公式なAPIを利用したVRChatのモバイルクライアント<br>
+Flutterで作成されシンプルなUIが特徴的です<br>
+iosビルドはする予定はありません<br>
 
-<img width="20%" src="https://raw.githubusercontent.com/fa0311/vrchat_mobile_client/master/docs/img/screenshots1.jpg?token=GHSAT0AAAAAABQUEYY7RI4SRYH4R5Q6QN3IYP3TCDA"><img width="20%" src="https://raw.githubusercontent.com/fa0311/vrchat_mobile_client/master/docs/img/screenshots2.jpg?token=GHSAT0AAAAAABQUEYY72UXUQWN3C33H7MEGYP3TCVQ">
+<img width="20%" src="docs/img/screenshots1.jpg"><img width="20%" src="docs/img/screenshots2.jpg">
 
-
+## インストール
+右の方の**Releases**をクリックした後**app-release.apk**をクリックしてダウンロード
 
 ## 免責事項
 VRChat APIの使用に関するVRChatチーム(Tupper氏)の公式な回答です。
