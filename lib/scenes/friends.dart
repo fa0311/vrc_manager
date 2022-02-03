@@ -32,7 +32,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
         offset += 50;
         response.forEach((dynamic index, dynamic user) {
           String wid = user["location"].split(":")[0];
-          if (["", "private"].contains(user["location"]) || dataColumn.locationMap.containsKey(wid)) return;
+          if (["", "private", "offline"].contains(user["location"]) || dataColumn.locationMap.containsKey(wid)) return;
           VRChatAPI(cookie: cookie).worlds(wid).then((responseWorld) {
             dataColumn.locationMap[wid] = responseWorld;
             setState(() => column = Column(

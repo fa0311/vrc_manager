@@ -4,6 +4,7 @@ import 'package:vrchat_mobile_client/assets/storage.dart';
 import 'package:vrchat_mobile_client/scenes/login.dart';
 import 'package:vrchat_mobile_client/widgets/drawer.dart';
 import 'package:vrchat_mobile_client/widgets/profile.dart';
+import 'package:vrchat_mobile_client/widgets/world.dart';
 
 class VRChatMobileHome extends StatefulWidget {
   const VRChatMobileHome({Key? key}) : super(key: key);
@@ -30,9 +31,27 @@ class _LoginHomeState extends State<VRChatMobileHome> {
             (_) => false);
       } else {
         VRChatAPI(cookie: cookie).user().then((response) {
-          setState(() {
-            column = profile(response);
-          });
+          if (response.containsKey("id")) {
+            VRChatAPI(cookie: cookie).users(response["id"]).then((user) {
+              setState(() {
+                column = Column(children: [profile(user)]);
+              });
+              if (!["", "private", "offline"].contains(user["worldId"])) {
+                VRChatAPI(cookie: cookie).worlds(user["worldId"]).then((response) {
+                  setState(() {
+                    column = Column(children: [profile(user), Container(padding: const EdgeInsets.only(top: 30)), worldSlim(context, response)]);
+                  });
+                });
+              }
+            });
+          } else {
+            Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const VRChatMobileLogin(),
+                ),
+                (_) => false);
+          }
         });
       }
     });
