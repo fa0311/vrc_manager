@@ -38,6 +38,7 @@ dependencies:
   shared_preferences: ^2.0.12
   flutter_secure_storage: ^5.0.2
   url_launcher: ^6.0.18
+  flutter_launcher_icons: ^0.9.2
 
 dev_dependencies:
   flutter_test:
@@ -91,3 +92,8 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "lib/img/icon.png"
