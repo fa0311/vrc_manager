@@ -15,9 +15,9 @@ Color statusConverter(String status) {
   if (status == "join me") return const Color(0xFF42CAFF);
   if (status == "active") return const Color(0xFF51e57e);
   if (status == "offline") return const Color(0xFF808080);
+  if (status == "ask me") return const Color(0xFFe88134);
 
   if (status == "busy") return const Color(0xFF5b0b0b);
-  if (status == "askme") return const Color(0xFFe88134);
   return const Color(0x00000000);
 }
 
