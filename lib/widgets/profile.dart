@@ -4,6 +4,9 @@ import 'package:vrchat_mobile_client/widgets/status.dart';
 
 Column profile(user) {
   return Column(
+    // 低画質 currentAvatarThumbnailImageUrl
+    // 高画質 currentAvatarImageUrl
+    // オリジナル profilePicOverride
     children: [
       SizedBox(
         height: 250,

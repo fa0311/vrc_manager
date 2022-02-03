@@ -37,4 +37,8 @@ class VRChatAPI {
   Future<Map> users(String uid) {
     return vrchatSession.get(endpoint('api/1/users/' + uid, apiKey()));
   }
+
+  Future<Map> worlds(String wid) {
+    return vrchatSession.get(endpoint('api/1/worlds/' + wid, apiKey()));
+  }
 }

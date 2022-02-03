@@ -27,14 +27,22 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
     moreOver();
   }
   moreOver() {
-    getLoginSession("LoginSession").then((response) {
-      VRChatAPI(cookie: response).friends(offline: widget.offline, offset: offset).then((response) {
+    getLoginSession("LoginSession").then((cookie) {
+      VRChatAPI(cookie: cookie).friends(offline: widget.offline, offset: offset).then((response) {
         offset += 50;
-        setState(() {
-          column = Column(
-            children: dataColumn.adds(response),
-          );
+        response.forEach((dynamic index, dynamic user) {
+          String wid = user["location"].split(":")[0];
+          if (["", "private"].contains(user["location"]) || dataColumn.locationMap.containsKey(wid)) return;
+          VRChatAPI(cookie: cookie).worlds(wid).then((responseWorld) {
+            dataColumn.locationMap[wid] = responseWorld;
+            setState(() => column = Column(
+                  children: dataColumn.reload(),
+                ));
+          });
         });
+        setState(() => column = Column(
+              children: dataColumn.adds(response),
+            ));
       });
     });
   }

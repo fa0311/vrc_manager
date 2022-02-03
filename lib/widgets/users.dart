@@ -5,8 +5,28 @@ import 'package:vrchat_mobile_client/widgets/status.dart';
 class Users {
   List<Widget> children = [];
   late BuildContext context;
+  late Map<String, dynamic> locationMap = {};
+  late List<dynamic> userList = [];
+
+  List<Widget> reload() {
+    children = [];
+    List<dynamic> tempUserList = userList;
+    userList = [];
+    for (var user in tempUserList) {
+      adds(user);
+    }
+    return children;
+  }
 
   List<Widget> adds(Map users) {
+    // 低画質 currentAvatarThumbnailImageUrl
+    // 高画質 currentAvatarImageUrl
+    // オリジナル profilePicOverride
+
+    // 低画質 thumbnailImageUrl
+    // 高画質 imageUrl
+    // オリジナル profilePicOverride
+    userList.add(users);
     users.forEach((dynamic index, dynamic user) {
       children.add(GestureDetector(
           onTap: () {
@@ -35,7 +55,9 @@ class Users {
                     Text(user["displayName"], style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
                   ],
                 ),
-                Text(user["statusDescription"])
+                Text(user["statusDescription"]),
+                if (!["", "private"].contains(user["location"]) && locationMap.containsKey(user["location"].split(":")[0]))
+                  Text(locationMap[user["location"].split(":")[0]]["name"])
               ])),
             ],
           )));
