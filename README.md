@@ -1,7 +1,7 @@
 # VRChatMC
 
 VRChatの非公式なAPIを利用したVRChatのモバイルクライアント<br>
-Flutterで作成されシンプルなUIが特徴的です<br>
+Flutterで作成されたシンプルなUIが特徴的です<br>
 iosビルドはする予定はありません<br>
 
 <img width="20%" src="docs/img/screenshots1.jpg"><img width="20%" src="docs/img/screenshots2.jpg">
