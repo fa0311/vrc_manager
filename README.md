@@ -1,16 +1,16 @@
-# vrchat_mobile_client
+# VRChatMC
 
-VRChatMobileClient
+VRChatの非公式なAPIを利用したVRChatのモバイルクライアント
 
-## Getting Started
+![screenshots](https://raw.githubusercontent.com/fa0311/vrchat_mobile_client/master/docs/img/screenshots1.png)
+![screenshots](https://raw.githubusercontent.com/fa0311/vrchat_mobile_client/master/docs/img/screenshots2.png)
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
+## 免責事項
+VRChat APIの使用に関するVRChatチーム(Tupper氏)の公式な回答です。
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+> Use of the API using applications other than the approved methods (website, VRChat application) are not officially supported. You may use the API for your own application, but keep these guidelines in mind:
+> - We do not provide documentation or support for the API.
+> - Do not make queries to the API more than once per 60 seconds.
+> - Abuse of the API may result in account termination.
+> - Access to API endpoints may break at any given time, with no warning.
