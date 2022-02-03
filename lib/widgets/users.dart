@@ -13,7 +13,7 @@ class Users {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const VRChatMobileUser(userId: "aaaa"),
+                  builder: (context) => VRChatMobileUser(userId: user["id"]),
                 ));
           },
           child: Row(
@@ -36,7 +36,7 @@ class Users {
                   ],
                 ),
                 Text(user["statusDescription"])
-              ]))
+              ])),
             ],
           )));
     });

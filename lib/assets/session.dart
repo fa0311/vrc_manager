@@ -42,8 +42,3 @@ class Session {
     return headers['cookie'] ?? "";
   }
 }
-
-
-
-
-// https://nobushiueshi.com/flutter%E5%B0%8F%E3%81%95%E3%81%84%E3%83%87%E3%83%BC%E3%82%BF%E3%82%92%E4%BF%9D%E5%AD%98%E3%81%99%E3%82%8B%E3%81%AE%E3%81%AB%E4%BE%BF%E5%88%A9%E3%81%AA%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3/

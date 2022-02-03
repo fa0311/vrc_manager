@@ -3,6 +3,7 @@ import 'package:vrchat_mobile_client/api/main.dart';
 import 'package:vrchat_mobile_client/assets/storage.dart';
 import 'package:vrchat_mobile_client/scenes/login.dart';
 import 'package:vrchat_mobile_client/widgets/drawer.dart';
+import 'package:vrchat_mobile_client/widgets/profile.dart';
 
 class VRChatMobileHome extends StatefulWidget {
   const VRChatMobileHome({Key? key}) : super(key: key);
@@ -19,7 +20,7 @@ class _LoginHomeState extends State<VRChatMobileHome> {
   );
 
   _LoginHomeState() {
-    getLoginSession().then((response) {
+    getLoginSession("LoginSession").then((response) {
       if (response == null) {
         Navigator.pushAndRemoveUntil(
             context,
@@ -30,36 +31,20 @@ class _LoginHomeState extends State<VRChatMobileHome> {
       } else {
         VRChatAPI(cookie: response).user().then((response) {
           setState(() {
-            // 低画質 currentAvatarThumbnailImageUrl
-            // 高画質 currentAvatarImageUrl
-            column = Column(
-              children: [
-                SizedBox(
-                  height: 250,
-                  child: Image.network(response["currentAvatarThumbnailImageUrl"], fit: BoxFit.fitWidth),
-                ),
-                Text(response["displayName"], style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
-                Text(response["bio"]),
-                Text(response["status"]),
-                Text(response["state"]),
-                Text(response["date_joined"]),
-                Text(response["last_activity"])
-              ],
-            );
+            column = profile(response);
           });
         });
       }
     });
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Home'),
+        title: const Text('ホーム'),
       ),
       drawer: drawr(context),
-      body: SafeArea(child: SizedBox(width: MediaQuery.of(context).size.width, child: column)),
+      body: SafeArea(child: Padding(padding: const EdgeInsets.all(30), child: SingleChildScrollView(child: column))),
     );
   }
 }

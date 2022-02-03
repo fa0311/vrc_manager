@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-Container status(String status) {
+Container status(String status, {double diameter = 20}) {
   return Container(
-    width: 20,
-    height: 20,
+    width: diameter,
+    height: diameter,
     decoration: BoxDecoration(
       shape: BoxShape.circle,
       color: statusConverter(status),

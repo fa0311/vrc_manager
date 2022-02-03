@@ -5,7 +5,9 @@ import 'package:vrchat_mobile_client/widgets/drawer.dart';
 import 'package:vrchat_mobile_client/widgets/users.dart';
 
 class VRChatMobileFriends extends StatefulWidget {
-  const VRChatMobileFriends({Key? key}) : super(key: key);
+  final bool offline;
+
+  const VRChatMobileFriends({Key? key, this.offline = true}) : super(key: key);
 
   @override
   State<VRChatMobileFriends> createState() => _FriendsPageState();
@@ -25,8 +27,8 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
     moreOver();
   }
   moreOver() {
-    getLoginSession().then((response) {
-      VRChatAPI(cookie: response).friends(offline: false, offset: offset).then((response) {
+    getLoginSession("LoginSession").then((response) {
+      VRChatAPI(cookie: response).friends(offline: widget.offline, offset: offset).then((response) {
         offset += 50;
         setState(() {
           column = Column(
@@ -42,7 +44,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
     dataColumn.context = context;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Home'),
+        title: const Text('フレンド'),
       ),
       drawer: drawr(context),
       body: SafeArea(

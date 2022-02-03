@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vrchat_mobile_client/scenes/friends.dart';
+import 'package:vrchat_mobile_client/scenes/help.dart';
 import 'package:vrchat_mobile_client/scenes/home.dart';
 import 'package:vrchat_mobile_client/scenes/settings.dart';
 
@@ -19,7 +20,8 @@ Drawer drawr(context) {
                         builder: (context) => const VRChatMobileHome(),
                       ));
                 },
-                title: const Text('My Page'),
+                leading: const Icon(Icons.home),
+                title: const Text('ホーム'),
               ),
               ListTile(
                 onTap: () {
@@ -27,16 +29,29 @@ Drawer drawr(context) {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const VRChatMobileFriends(),
+                        builder: (context) => const VRChatMobileFriends(offline: false),
                       ));
                 },
-                title: const Text('Friends'),
+                leading: const Icon(Icons.wb_sunny),
+                title: const Text('オンラインのフレンド'),
+              ),
+              ListTile(
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const VRChatMobileFriends(offline: true),
+                      ));
+                },
+                leading: const Icon(Icons.bedtime),
+                title: const Text('オフラインのフレンド'),
               ),
               TextButton(
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                child: const Text('Close'),
+                child: const Text('閉じる'),
               )
             ],
           ),
@@ -57,7 +72,13 @@ Drawer drawr(context) {
                     },
                     leading: const Icon(Icons.settings),
                     title: const Text('設定')),
-                const ListTile(leading: Icon(Icons.help), title: Text('Help'))
+                ListTile(
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => const VRChatMobileHelp()));
+                    },
+                    leading: const Icon(Icons.help),
+                    title: const Text('ヘルプ'))
               ],
             )),
       ]),
