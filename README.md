@@ -2,8 +2,8 @@
 
 VRChatの非公式なAPIを利用したVRChatのモバイルクライアント
 
-![screenshots](https://raw.githubusercontent.com/fa0311/vrchat_mobile_client/master/docs/img/screenshots1.png)
-![screenshots](https://raw.githubusercontent.com/fa0311/vrchat_mobile_client/master/docs/img/screenshots2.png)
+![screenshots](https://raw.githubusercontent.com/fa0311/vrchat_mobile_client/master/docs/img/screenshots1.jpg)
+![screenshots](https://raw.githubusercontent.com/fa0311/vrchat_mobile_client/master/docs/img/screenshots2.jpg)
 
 
 ## 免責事項
