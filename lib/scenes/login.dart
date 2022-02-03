@@ -50,6 +50,8 @@ void onPressed(context) {
                           error(context, response["error"]["message"]);
                         } else if (response.containsKey("verified") && response["verified"]) {
                           save(session.vrchatSession.headers["cookie"] as String);
+                        } else if (response.containsKey("verified") && !response["verified"]) {
+                          error(context, "ログイン情報が間違っています");
                         } else if (response.containsKey("id")) {
                           save(session.vrchatSession.headers["cookie"] as String);
                         } else {
@@ -68,6 +70,8 @@ void onPressed(context) {
       totp();
     } else if (response.containsKey("verified") && response["verified"]) {
       save(session.vrchatSession.headers["cookie"] as String);
+    } else if (response.containsKey("verified") && !response["verified"]) {
+      error(context, "ログイン情報が間違っています");
     } else if (response.containsKey("id")) {
       save(session.vrchatSession.headers["cookie"] as String);
     } else {

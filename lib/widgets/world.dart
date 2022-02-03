@@ -17,6 +17,7 @@ GestureDetector worldSlim(context, world) {
             height: 100,
             child: Image.network(world["thumbnailImageUrl"], fit: BoxFit.fitWidth),
           ),
+          Container(padding: const EdgeInsets.only(top: 10)),
           Expanded(
               child: Column(children: [
             SizedBox(width: double.infinity, child: Text(world["releaseStatus"])),

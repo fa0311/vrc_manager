@@ -9,6 +9,7 @@ Column profile(user) {
         height: 250,
         child: Image.network(user["profilePicOverride"] == "" ? user["currentAvatarImageUrl"] : user["profilePicOverride"], fit: BoxFit.fitWidth),
       ),
+      Container(padding: const EdgeInsets.only(top: 10)),
       Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
