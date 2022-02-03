@@ -1,6 +1,4 @@
-// ignore_for_file: prefer_equal_for_default_values
-
-import '../assets/session.dart';
+import 'package:vrchat_mobile_client/assets/session.dart';
 
 class VRChatAPI {
   Map<String, String> apiKey() {
@@ -30,9 +28,13 @@ class VRChatAPI {
     return vrchatSession.get(endpoint('api/1/auth/user', apiKey()));
   }
 
-  Future<Map> friends({int offset: 0, bool offline: false}) {
+  Future<Map> friends({int offset = 0, bool offline = false}) {
     final param = {"offline": offline.toString(), "offset": offset.toString(), "n": "50"};
     param.addAll(apiKey());
     return vrchatSession.get(endpoint('api/1/auth/user/friends', param));
+  }
+
+  Future<Map> users(String uid) {
+    return vrchatSession.get(endpoint('api/1/users/' + uid, apiKey()));
   }
 }

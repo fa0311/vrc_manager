@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:vrchat_mobile_client/api/main.dart';
+import 'package:vrchat_mobile_client/assets/error.dart';
+import 'package:vrchat_mobile_client/scenes/home.dart';
 import 'dart:convert';
-import '../api/main.dart';
-import 'home.dart';
-import '../assets/error.dart';
 
 class VRChatMobileLogin extends StatefulWidget {
   const VRChatMobileLogin({Key? key}) : super(key: key);

@@ -37,6 +37,10 @@ class Session {
       headers['cookie'] = (headers['cookie'] == "") ? newCookie : (headers['cookie']! + "; " + newCookie);
     }
   }
+
+  String getCookie() {
+    return headers['cookie'] ?? "";
+  }
 }
 
 

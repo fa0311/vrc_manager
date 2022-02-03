@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:vrchat_mobile_client/api/main.dart';
+import 'package:vrchat_mobile_client/assets/storage.dart';
+import 'package:vrchat_mobile_client/widgets/drawer.dart';
 import 'package:vrchat_mobile_client/widgets/users.dart';
-import '../widgets/drawer.dart';
 
 class VRChatMobileFriends extends StatefulWidget {
   const VRChatMobileFriends({Key? key}) : super(key: key);
@@ -12,13 +12,6 @@ class VRChatMobileFriends extends StatefulWidget {
 }
 
 class _FriendsPageState extends State<VRChatMobileFriends> {
-  get user => null;
-
-  Future _getLoginSession() async {
-    const storage = FlutterSecureStorage();
-    return storage.read(key: "LoginSession");
-  }
-
   int offset = 0;
 
   Column column = Column(
@@ -32,7 +25,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
     moreOver();
   }
   moreOver() {
-    _getLoginSession().then((response) {
+    getLoginSession().then((response) {
       VRChatAPI(cookie: response).friends(offline: false, offset: offset).then((response) {
         offset += 50;
         setState(() {
@@ -46,6 +39,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
 
   @override
   Widget build(BuildContext context) {
+    dataColumn.context = context;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Home'),

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'login.dart';
-import '../api/main.dart';
-import '../widgets/drawer.dart';
+import 'package:vrchat_mobile_client/api/main.dart';
+import 'package:vrchat_mobile_client/assets/storage.dart';
+import 'package:vrchat_mobile_client/scenes/login.dart';
+import 'package:vrchat_mobile_client/widgets/drawer.dart';
 
 class VRChatMobileHome extends StatefulWidget {
   const VRChatMobileHome({Key? key}) : super(key: key);
@@ -12,11 +12,6 @@ class VRChatMobileHome extends StatefulWidget {
 }
 
 class _LoginHomeState extends State<VRChatMobileHome> {
-  Future _getLoginSession() async {
-    const storage = FlutterSecureStorage();
-    return storage.read(key: "LoginSession");
-  }
-
   Column column = Column(
     children: const [
       Text('ロード中です'),
@@ -24,7 +19,7 @@ class _LoginHomeState extends State<VRChatMobileHome> {
   );
 
   _LoginHomeState() {
-    _getLoginSession().then((response) {
+    getLoginSession().then((response) {
       if (response == null) {
         Navigator.pushAndRemoveUntil(
             context,

@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:vrchat_mobile_client/scenes/user.dart';
 import 'package:vrchat_mobile_client/widgets/status.dart';
 
 class Users {
   List<Widget> children = [];
+  late BuildContext context;
+
   List<Widget> adds(Map users) {
     users.forEach((dynamic index, dynamic user) {
       children.add(GestureDetector(
           onTap: () {
-            print("Container was tapped");
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const VRChatMobileUser(userId: "aaaa"),
+                ));
           },
           child: Row(
             children: <Widget>[

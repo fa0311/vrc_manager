@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'scenes/home.dart';
+import 'package:vrchat_mobile_client/scenes/home.dart';
 
 void main() {
   runApp(const MyApp());
