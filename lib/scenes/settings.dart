@@ -45,11 +45,11 @@ class _LoginPageState extends State<VRChatMobileSettings> {
                         title: const Text("ログアウトしますか？"),
                         actions: <Widget>[
                           TextButton(
-                            child: const Text("Cancel"),
+                            child: const Text("キャンセル"),
                             onPressed: () => Navigator.pop(context),
                           ),
                           TextButton(
-                            child: const Text("OK"),
+                            child: const Text("ログアウト"),
                             onPressed: () => _removeLoginSession(),
                           ),
                         ],

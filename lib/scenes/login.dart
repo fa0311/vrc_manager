@@ -35,16 +35,16 @@ void onPressed(context) {
         context: context,
         builder: (_) {
           return AlertDialog(
-            title: const Text("Two-Factor Authentication"),
+            title: const Text("2段階認証"),
             content: TextField(
               keyboardType: TextInputType.number,
               controller: _passwordController,
-              decoration: const InputDecoration(labelText: 'code'),
+              decoration: const InputDecoration(labelText: 'コード'),
               maxLength: 6,
             ),
             actions: [
               TextButton(
-                  child: const Text("Verify"),
+                  child: const Text("送信"),
                   onPressed: () => session.loginTotp(_passwordController.text).then((response) {
                         if (response.containsKey("error")) {
                           error(context, response["error"]["message"]);
@@ -81,7 +81,7 @@ class _LoginPageState extends State<VRChatMobileLogin> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Login'),
+        title: const Text('ログイン'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(32.0),
@@ -89,13 +89,13 @@ class _LoginPageState extends State<VRChatMobileLogin> {
           children: [
             TextFormField(
               controller: _userController,
-              decoration: const InputDecoration(labelText: 'Username/Email'),
+              decoration: const InputDecoration(labelText: 'ユーザー名/メールアドレス'),
             ),
             TextFormField(
               obscureText: _isPasswordObscure,
               controller: _passwordController,
               decoration: InputDecoration(
-                labelText: 'Password',
+                labelText: 'パスワード',
                 suffixIcon: IconButton(
                   icon: Icon(_isPasswordObscure ? Icons.visibility_off : Icons.visibility),
                   onPressed: () {
@@ -110,7 +110,7 @@ class _LoginPageState extends State<VRChatMobileLogin> {
               height: 20,
             ),
             ElevatedButton(
-              child: const Text('Login'),
+              child: const Text('ログイン'),
               onPressed: () => onPressed(context),
             ),
           ],

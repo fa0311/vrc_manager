@@ -20,8 +20,8 @@ class _LoginHomeState extends State<VRChatMobileHome> {
   );
 
   _LoginHomeState() {
-    getLoginSession("LoginSession").then((response) {
-      if (response == null) {
+    getLoginSession("LoginSession").then((cookie) {
+      if (cookie == null) {
         Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
@@ -29,7 +29,7 @@ class _LoginHomeState extends State<VRChatMobileHome> {
             ),
             (_) => false);
       } else {
-        VRChatAPI(cookie: response).user().then((response) {
+        VRChatAPI(cookie: cookie).user().then((response) {
           setState(() {
             column = profile(response);
           });

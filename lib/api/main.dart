@@ -41,4 +41,8 @@ class VRChatAPI {
   Future<Map> worlds(String wid) {
     return vrchatSession.get(endpoint('api/1/worlds/' + wid, apiKey()));
   }
+
+  Future<Map> invite(String wid) {
+    return vrchatSession.post(endpoint('api/1/worlds/' + wid, apiKey()), {});
+  }
 }

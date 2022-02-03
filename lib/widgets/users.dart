@@ -19,6 +19,7 @@ class Users {
   }
 
   List<Widget> adds(Map users) {
+    // リストは低画質、単体だと高画質を表示させる
     // 低画質 currentAvatarThumbnailImageUrl
     // 高画質 currentAvatarImageUrl
     // オリジナル profilePicOverride
@@ -55,9 +56,9 @@ class Users {
                     Text(user["displayName"], style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
                   ],
                 ),
-                Text(user["statusDescription"]),
+                Text(user["statusDescription"], style: const TextStyle(fontSize: 14)),
                 if (!["", "private"].contains(user["location"]) && locationMap.containsKey(user["location"].split(":")[0]))
-                  Text(locationMap[user["location"].split(":")[0]]["name"])
+                  Text(locationMap[user["location"].split(":")[0]]["name"], style: const TextStyle(fontSize: 14)),
               ])),
             ],
           )));
