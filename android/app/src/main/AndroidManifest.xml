@@ -9,7 +9,7 @@
     </queries>
 
    <application
-        android:label="vrchat_mobile_client"
+        android:label="VRChatMC"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
