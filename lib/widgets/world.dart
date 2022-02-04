@@ -11,6 +11,7 @@ GestureDetector worldSlim(context, world) {
               builder: (context) => VRChatMobileWorld(worldId: world["id"]),
             ));
       },
+      behavior: HitTestBehavior.opaque,
       child: Row(
         children: <Widget>[
           SizedBox(

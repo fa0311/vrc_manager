@@ -37,6 +37,7 @@ class Users {
                   builder: (context) => VRChatMobileUser(userId: user["id"]),
                 ));
           },
+          behavior: HitTestBehavior.opaque,
           child: Row(
             children: <Widget>[
               SizedBox(
