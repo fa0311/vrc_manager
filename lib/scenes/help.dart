@@ -15,7 +15,7 @@ class _HelpPageState extends State<VRChatMobileHelp> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('設定'),
+        title: const Text('ヘルプ'),
       ),
       drawer: drawr(context),
       body: Padding(
@@ -37,7 +37,7 @@ class _HelpPageState extends State<VRChatMobileHelp> {
                 },
               ),
               ElevatedButton(
-                child: const Text('ライセンス'),
+                child: const Text('Licence'),
                 onPressed: () {
                   Navigator.pushAndRemoveUntil(
                       context,

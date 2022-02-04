@@ -27,11 +27,16 @@ class _UserHomeState extends State<VRChatMobileUser> {
         setState(() {
           column = Column(children: [profile(user)]);
         });
-        if (!["", "private", "offline"].contains(user["location"])) {
+        if (!["", "offline"].contains(user["location"])) {
           VRChatAPI(cookie: cookie).worlds(user["location"].split(":")[0]).then((response) {
             setState(() {
               column = Column(children: [profile(user), Container(padding: const EdgeInsets.only(top: 30)), worldSlim(context, response)]);
             });
+          });
+        }
+        if (user["location"] == "private") {
+          setState(() {
+            column = Column(children: [profile(user), Container(padding: const EdgeInsets.only(top: 30)), privateWorldSlim(context)]);
           });
         }
       });

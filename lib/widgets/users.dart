@@ -59,6 +59,7 @@ class Users {
                 Text(user["statusDescription"], style: const TextStyle(fontSize: 14)),
                 if (!["", "private", "offline"].contains(user["location"]) && locationMap.containsKey(user["location"].split(":")[0]))
                   Text(locationMap[user["location"].split(":")[0]]["name"], style: const TextStyle(fontSize: 14)),
+                if (user["location"] == "private") const Text("プライベートワールド", style: TextStyle(fontSize: 14)),
               ])),
             ],
           )));

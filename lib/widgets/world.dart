@@ -30,6 +30,27 @@ GestureDetector worldSlim(context, world) {
       ));
 }
 
+GestureDetector privateWorldSlim(context) {
+  return GestureDetector(
+      child: Row(
+    children: <Widget>[
+      SizedBox(
+        height: 100,
+        child: Image.network("https://assets.vrchat.com/www/images/default_private_image.png", fit: BoxFit.fitWidth),
+      ),
+      Container(padding: const EdgeInsets.only(top: 10)),
+      Expanded(
+        child: Padding(
+            padding: const EdgeInsets.only(left: 10),
+            child: Column(children: const [
+              SizedBox(width: double.infinity, child: Text("private")),
+              SizedBox(width: double.infinity, child: Text("プライベートワールド", style: TextStyle(fontWeight: FontWeight.bold))),
+            ])),
+      )
+    ],
+  ));
+}
+
 Column world(world) {
   return Column(children: <Widget>[
     SizedBox(
