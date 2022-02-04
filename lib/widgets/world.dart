@@ -30,7 +30,7 @@ GestureDetector worldSlim(context, world) {
       ));
 }
 
-GestureDetector privateWorldSlim(context) {
+GestureDetector privateWorldSlim() {
   return GestureDetector(
       child: Row(
     children: <Widget>[
