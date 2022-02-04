@@ -34,6 +34,11 @@ class _UserHomeState extends State<VRChatMobileUser> {
             });
           });
         }
+        if (user["location"] == "private") {
+          setState(() {
+            column = Column(children: [profile(user), Container(padding: const EdgeInsets.only(top: 30)), privateWorldSlim()]);
+          });
+        }
       });
     });
   }

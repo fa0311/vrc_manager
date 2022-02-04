@@ -17,7 +17,7 @@ class _LoginHomeState extends State<VRChatMobileHome> {
   Column column = Column(
     children: const [
       SizedBox(width: double.infinity, child: Text('ロード中です')),
-      Text('この画面がずっと表示されている場合、左のメニューから設定を開いてログアウトしてログインし直してください'),
+      Text('この画面がずっと表示されている場合、左のメニューから設定を開いてログアウトしてください'),
     ],
   );
 
@@ -42,6 +42,11 @@ class _LoginHomeState extends State<VRChatMobileHome> {
                   setState(() {
                     column = Column(children: [profile(user), Container(padding: const EdgeInsets.only(top: 30)), worldSlim(context, response)]);
                   });
+                });
+              }
+              if (user["location"] == "private") {
+                setState(() {
+                  column = Column(children: [profile(user), Container(padding: const EdgeInsets.only(top: 30)), privateWorldSlim()]);
                 });
               }
             });

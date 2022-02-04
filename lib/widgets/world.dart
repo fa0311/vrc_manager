@@ -19,12 +19,36 @@ GestureDetector worldSlim(context, world) {
           ),
           Container(padding: const EdgeInsets.only(top: 10)),
           Expanded(
-              child: Column(children: [
-            SizedBox(width: double.infinity, child: Text(world["releaseStatus"])),
-            Text(world["name"], style: const TextStyle(fontWeight: FontWeight.bold)),
-          ])),
+            child: Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: Column(children: [
+                  SizedBox(width: double.infinity, child: Text(world["releaseStatus"])),
+                  SizedBox(width: double.infinity, child: Text(world["name"], style: const TextStyle(fontWeight: FontWeight.bold))),
+                ])),
+          )
         ],
       ));
+}
+
+GestureDetector privateWorldSlim() {
+  return GestureDetector(
+      child: Row(
+    children: <Widget>[
+      SizedBox(
+        height: 100,
+        child: Image.network("https://assets.vrchat.com/www/images/default_private_image.png", fit: BoxFit.fitWidth),
+      ),
+      Container(padding: const EdgeInsets.only(top: 10)),
+      Expanded(
+        child: Padding(
+            padding: const EdgeInsets.only(left: 10),
+            child: Column(children: const [
+              SizedBox(width: double.infinity, child: Text("private")),
+              SizedBox(width: double.infinity, child: Text("プライベートワールド", style: TextStyle(fontWeight: FontWeight.bold))),
+            ])),
+      )
+    ],
+  ));
 }
 
 Column world(world) {

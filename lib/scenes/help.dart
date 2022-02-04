@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vrchat_mobile_client/scenes/licence.dart';
 import 'package:vrchat_mobile_client/widgets/drawer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -14,11 +15,11 @@ class _HelpPageState extends State<VRChatMobileHelp> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('設定'),
+        title: const Text('ヘルプ'),
       ),
       drawer: drawr(context),
       body: Padding(
-        padding: const EdgeInsets.all(32.0),
+        padding: const EdgeInsets.all(16),
         child: SizedBox(
           width: MediaQuery.of(context).size.width,
           child: Column(
@@ -33,6 +34,17 @@ class _HelpPageState extends State<VRChatMobileHelp> {
                   }
 
                   _launchURL();
+                },
+              ),
+              ElevatedButton(
+                child: const Text('Licence'),
+                onPressed: () {
+                  Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const VRChatMobileLicence(),
+                      ),
+                      (_) => false);
                 },
               ),
             ],
