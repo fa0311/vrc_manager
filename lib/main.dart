@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'VRChat Mobile Application',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        brightness: true ? Brightness.dark : Brightness.light,
         textTheme: const TextTheme(bodyText2: TextStyle(fontSize: 16)),
         pageTransitionsTheme: const PageTransitionsTheme(builders: <TargetPlatform, PageTransitionsBuilder>{
           TargetPlatform.android: CupertinoPageTransitionsBuilder(),
