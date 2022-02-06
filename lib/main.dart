@@ -1,24 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:vrchat_mobile_client/assets/storage.dart';
+import 'package:vrchat_mobile_client/material.dart';
 import 'package:vrchat_mobile_client/scenes/home.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const VRChatMobile());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+class VRChatMobile extends StatefulWidget {
+  const VRChatMobile({Key? key}) : super(key: key);
+
+  @override
+  State<VRChatMobile> createState() => _PageState();
+}
+
+String theme = "light";
+
+class _PageState extends State<VRChatMobile> {
+  _PageState() {
+    getStorage("theme_brightness").then((response) {
+      setState(() => theme = response);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'VRChat Mobile Application',
-      theme: ThemeData(
-        brightness: true ? Brightness.dark : Brightness.light,
-        textTheme: const TextTheme(bodyText2: TextStyle(fontSize: 16)),
-        pageTransitionsTheme: const PageTransitionsTheme(builders: <TargetPlatform, PageTransitionsBuilder>{
-          TargetPlatform.android: CupertinoPageTransitionsBuilder(),
-        }),
-      ),
-      home: const VRChatMobileHome(),
-    );
+    return getMaterialApp(const VRChatMobileHome(), theme == "dark" ? Brightness.dark : Brightness.light);
   }
 }

@@ -37,7 +37,7 @@ List<Widget> _biolink(List biolinks) {
   for (String link in biolinks) {
     if (link == "") continue;
     response.add(CircleAvatar(
-        backgroundColor: const Color(0xFF667584),
+        backgroundColor: const Color(0x00000000),
         child: IconButton(
           onPressed: () {
             _launchURL() async {
