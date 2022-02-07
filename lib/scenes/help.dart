@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:vrchat_mobile_client/scenes/licence.dart';
+import 'package:vrchat_mobile_client/assets/licence.dart';
 import 'package:vrchat_mobile_client/widgets/drawer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -39,12 +39,7 @@ class _HelpPageState extends State<VRChatMobileHelp> {
               ElevatedButton(
                 child: const Text('Licence'),
                 onPressed: () {
-                  Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const VRChatMobileLicence(),
-                      ),
-                      (_) => false);
+                  showLicence(context);
                 },
               ),
             ],
