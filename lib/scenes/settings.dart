@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:vrchat_mobile_client/assets/storage.dart';
+import 'package:vrchat_mobile_client/material.dart';
 import 'package:vrchat_mobile_client/scenes/login.dart';
 import 'package:vrchat_mobile_client/scenes/setting/token.dart';
 import 'package:vrchat_mobile_client/widgets/drawer.dart';
@@ -8,10 +10,10 @@ class VRChatMobileSettings extends StatefulWidget {
   const VRChatMobileSettings({Key? key}) : super(key: key);
 
   @override
-  State<VRChatMobileSettings> createState() => _LoginPageState();
+  State<VRChatMobileSettings> createState() => _SettingPageState();
 }
 
-class _LoginPageState extends State<VRChatMobileSettings> {
+class _SettingPageState extends State<VRChatMobileSettings> {
   _removeLoginSession() async {
     const storage = FlutterSecureStorage();
     await storage.delete(key: 'LoginSession');
@@ -23,6 +25,25 @@ class _LoginPageState extends State<VRChatMobileSettings> {
         (_) => false);
   }
 
+  bool theme = false;
+  void _changeSwitch(bool e) {
+    setStorage("theme_brightness", e ? "dark" : "light").then((response) {
+      Navigator.pop(context);
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const VRChatMobileSettingsMaterial(),
+          ));
+    });
+    setState(() => theme = e);
+  }
+
+  _SettingPageState() {
+    getStorage("theme_brightness").then((response) {
+      setState(() => theme = (response == "dark"));
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,11 +52,17 @@ class _LoginPageState extends State<VRChatMobileSettings> {
       ),
       drawer: drawr(context),
       body: Padding(
-        padding: const EdgeInsets.all(32.0),
+        padding: const EdgeInsets.all(8.0),
         child: SizedBox(
           width: MediaQuery.of(context).size.width,
           child: Column(
             children: [
+              SwitchListTile(
+                value: theme,
+                title: const Text('ダークテーマ'),
+                subtitle: const Text('目に優しいダークテーマに切り替えます'),
+                onChanged: _changeSwitch,
+              ),
               ElevatedButton(
                 child: const Text('ログアウト'),
                 onPressed: () => {
@@ -68,11 +95,33 @@ class _LoginPageState extends State<VRChatMobileSettings> {
                         builder: (context) => const VRChatMobileTokenSetting(),
                       ))
                 },
-              ),
+              )
             ],
           ),
         ),
       ),
     );
+  }
+}
+
+class VRChatMobileSettingsMaterial extends StatefulWidget {
+  const VRChatMobileSettingsMaterial({Key? key}) : super(key: key);
+
+  @override
+  State<VRChatMobileSettingsMaterial> createState() => _SettingMaterialPageState();
+}
+
+String theme = "light";
+
+class _SettingMaterialPageState extends State<VRChatMobileSettingsMaterial> {
+  _SettingMaterialPageState() {
+    getStorage("theme_brightness").then((response) {
+      setState(() => theme = response);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return getMaterialApp(const VRChatMobileSettings(), theme == "dark" ? Brightness.dark : Brightness.light);
   }
 }
