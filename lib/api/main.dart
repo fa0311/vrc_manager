@@ -45,4 +45,12 @@ class VRChatAPI {
   Future<Map> invite(String wid) {
     return vrchatSession.post(endpoint('api/1/worlds/' + wid, apiKey()), {});
   }
+
+  Future<Map> changeName(
+    String uid,
+    String username,
+    String password,
+  ) {
+    return vrchatSession.put(endpoint('api/1/users/' + uid, apiKey()), {"currentPassword": password, "displayName": username});
+  }
 }
