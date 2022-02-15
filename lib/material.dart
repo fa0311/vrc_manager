@@ -6,9 +6,6 @@ MaterialApp getMaterialApp(home, theme) {
       theme: ThemeData(
         brightness: theme,
         textTheme: const TextTheme(bodyText2: TextStyle(fontSize: 16)),
-        pageTransitionsTheme: const PageTransitionsTheme(builders: <TargetPlatform, PageTransitionsBuilder>{
-          TargetPlatform.android: CupertinoPageTransitionsBuilder(),
-        }),
       ),
       home: home);
 }
