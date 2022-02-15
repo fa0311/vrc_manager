@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:vrchat_mobile_client/assets/date.dart';
+import 'package:vrchat_mobile_client/assets/vrchat/instance_type.dart';
 import 'package:vrchat_mobile_client/scenes/world.dart';
+import 'package:vrchat_mobile_client/widgets/region.dart';
 
 GestureDetector worldSlim(context, world) {
   return GestureDetector(
@@ -18,12 +20,44 @@ GestureDetector worldSlim(context, world) {
             height: 100,
             child: Image.network(world["thumbnailImageUrl"], fit: BoxFit.fitWidth),
           ),
-          Container(padding: const EdgeInsets.only(top: 10)),
           Expanded(
             child: Padding(
                 padding: const EdgeInsets.only(left: 10),
                 child: Column(children: [
-                  SizedBox(width: double.infinity, child: Text(world["releaseStatus"])),
+                  const SizedBox(width: double.infinity, child: Text("")),
+                  SizedBox(width: double.infinity, child: Text(world["name"], style: const TextStyle(fontWeight: FontWeight.bold))),
+                ])),
+          )
+        ],
+      ));
+}
+
+GestureDetector worldSlimPlus(context, world, instance) {
+  return GestureDetector(
+      onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => VRChatMobileWorld(worldId: world["id"]),
+            ));
+      },
+      behavior: HitTestBehavior.opaque,
+      child: Row(
+        children: <Widget>[
+          SizedBox(
+            height: 100,
+            child: Image.network(world["thumbnailImageUrl"], fit: BoxFit.fitWidth),
+          ),
+          Expanded(
+            child: Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: Column(children: [
+                  Row(children: [
+                    Padding(padding: const EdgeInsets.only(right: 5), child: region(instance["region"])),
+                    const Icon(Icons.groups),
+                    Padding(padding: const EdgeInsets.only(right: 5), child: Text(instance['n_users'].toString() + "/" + instance['capacity'].toString())),
+                    Expanded(child: SizedBox(width: double.infinity, child: Text(getVrchatInstanceType()[instance["type"]] ?? "?")))
+                  ]),
                   SizedBox(width: double.infinity, child: Text(world["name"], style: const TextStyle(fontWeight: FontWeight.bold))),
                 ])),
           )
@@ -39,12 +73,11 @@ GestureDetector privateWorldSlim() {
         height: 100,
         child: Image.network("https://assets.vrchat.com/www/images/default_private_image.png", fit: BoxFit.fitWidth),
       ),
-      Container(padding: const EdgeInsets.only(top: 10)),
       Expanded(
         child: Padding(
             padding: const EdgeInsets.only(left: 10),
             child: Column(children: const [
-              SizedBox(width: double.infinity, child: Text("private")),
+              SizedBox(width: double.infinity, child: Text("Private")),
               SizedBox(width: double.infinity, child: Text("プライベートワールド", style: TextStyle(fontWeight: FontWeight.bold))),
             ])),
       )

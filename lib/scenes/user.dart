@@ -20,7 +20,6 @@ class _UserHomeState extends State<VRChatMobileUser> {
       Text('ロード中です'),
     ],
   );
-
   _UserHomeState() {
     getLoginSession("LoginSession").then((cookie) {
       VRChatAPI(cookie: cookie).users(widget.userId).then((user) {
@@ -28,9 +27,14 @@ class _UserHomeState extends State<VRChatMobileUser> {
           column = Column(children: [profile(user)]);
         });
         if (!["", "private", "offline"].contains(user["location"])) {
-          VRChatAPI(cookie: cookie).worlds(user["location"].split(":")[0]).then((response) {
+          VRChatAPI(cookie: cookie).worlds(user["location"].split(":")[0]).then((world) {
             setState(() {
-              column = Column(children: [profile(user), Container(padding: const EdgeInsets.only(top: 30)), worldSlim(context, response)]);
+              column = Column(children: [profile(user), Container(padding: const EdgeInsets.only(top: 30)), worldSlim(context, world)]);
+            });
+            VRChatAPI(cookie: cookie).instances(user["location"]).then((instance) {
+              setState(() {
+                column = Column(children: [profile(user), Container(padding: const EdgeInsets.only(top: 30)), worldSlimPlus(context, world, instance)]);
+              });
             });
           });
         }
