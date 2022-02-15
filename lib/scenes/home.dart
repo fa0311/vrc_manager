@@ -38,9 +38,9 @@ class _LoginHomeState extends State<VRChatMobileHome> {
                 column = Column(children: [profile(user)]);
               });
               if (!["", "private", "offline"].contains(user["worldId"])) {
-                VRChatAPI(cookie: cookie).worlds(user["worldId"]).then((response) {
+                VRChatAPI(cookie: cookie).worlds(user["worldId"].split(":")[0]).then((world) {
                   setState(() {
-                    column = Column(children: [profile(user), Container(padding: const EdgeInsets.only(top: 30)), worldSlim(context, response)]);
+                    column = Column(children: [profile(user), Container(padding: const EdgeInsets.only(top: 30)), worldSlim(context, world)]);
                   });
                 });
               }

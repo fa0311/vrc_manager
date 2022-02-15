@@ -29,6 +29,14 @@ class Session {
     return body;
   }
 
+  Future<Map> put(Uri url, dynamic data) async {
+    http.Response response = await http.put(url, body: data, headers: headers);
+    updateCookie(response);
+    final body = json.decode(response.body);
+    if (body is List) return {for (int i = 0; i < body.length; i++) i: body[i]};
+    return body;
+  }
+
   void updateCookie(http.Response response) {
     String? rawCookie = response.headers['set-cookie'];
     if (rawCookie != null) {
