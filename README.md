@@ -7,7 +7,10 @@ iosビルドはする予定はありません<br>
 <img width="20%" src="docs/img/screenshots1.jpg"><img width="20%" src="docs/img/screenshots2.jpg">
 
 ## インストール
-右の方の**Releases**をクリックした後**app-release.apk**をクリックしてダウンロード
+### Android
+[**Releases**](https://github.com/fa0311/vrchat_mobile_client/releases)の**app-release.apk**をクリックしてダウンロード
+### Windows
+[**Releases**](https://github.com/fa0311/vrchat_mobile_client/releases)の**VRChatMC-Setup.exe**をクリックしてダウンロード
 
 ## 免責事項
 VRChat APIの使用に関するVRChatチーム(Tupper氏)の公式な回答です。
