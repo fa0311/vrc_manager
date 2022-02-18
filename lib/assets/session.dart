@@ -21,16 +21,24 @@ class Session {
     return body;
   }
 
-  Future<Map> post(Uri url, dynamic data) async {
-    http.Response response = await http.post(url, body: data, headers: headers);
+  Future<Map> post(Uri url, [dynamic data]) async {
+    http.Response response = await http.post(url, body: data ?? {}, headers: headers);
     updateCookie(response);
     final body = json.decode(response.body);
     if (body is List) return {for (int i = 0; i < body.length; i++) i: body[i]};
     return body;
   }
 
-  Future<Map> put(Uri url, dynamic data) async {
-    http.Response response = await http.put(url, body: data, headers: headers);
+  Future<Map> put(Uri url, [dynamic data]) async {
+    http.Response response = await http.put(url, body: data ?? {}, headers: headers);
+    updateCookie(response);
+    final body = json.decode(response.body);
+    if (body is List) return {for (int i = 0; i < body.length; i++) i: body[i]};
+    return body;
+  }
+
+  Future<Map> delete(Uri url, [dynamic data]) async {
+    http.Response response = await http.delete(url, body: data ?? {}, headers: headers);
     updateCookie(response);
     final body = json.decode(response.body);
     if (body is List) return {for (int i = 0; i < body.length; i++) i: body[i]};
