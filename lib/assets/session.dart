@@ -21,7 +21,7 @@ class Session {
     return body;
   }
 
-  Future<Map> post(Uri url, [dynamic data]) async {
+  Future<Map> post(Uri url, [Map<String, dynamic>? data]) async {
     http.Response response = await http.post(url, body: data ?? {}, headers: headers);
     updateCookie(response);
     final body = json.decode(response.body);
@@ -29,7 +29,7 @@ class Session {
     return body;
   }
 
-  Future<Map> put(Uri url, [dynamic data]) async {
+  Future<Map> put(Uri url, [Map<String, dynamic>? data]) async {
     http.Response response = await http.put(url, body: data ?? {}, headers: headers);
     updateCookie(response);
     final body = json.decode(response.body);
@@ -37,7 +37,7 @@ class Session {
     return body;
   }
 
-  Future<Map> delete(Uri url, [dynamic data]) async {
+  Future<Map> delete(Uri url, [Map<String, dynamic>? data]) async {
     http.Response response = await http.delete(url, body: data ?? {}, headers: headers);
     updateCookie(response);
     final body = json.decode(response.body);
