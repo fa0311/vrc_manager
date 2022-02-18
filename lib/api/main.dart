@@ -29,9 +29,19 @@ class VRChatAPI {
   }
 
   Future<Map> friends({int offset = 0, bool offline = false}) {
-    final param = {"offline": offline.toString(), "offset": offset.toString(), "n": "50"};
-    param.addAll(apiKey());
+    final param = {"offline": offline.toString(), "offset": offset.toString(), "n": "50"}..addAll(apiKey());
     return vrchatSession.get(endpoint('api/1/auth/user/friends', param));
+  }
+
+  Future<Map> notifications({String type = "all", int offset = 0, String after = "", bool hidden = true}) {
+    final param = {"sent": "false", "type": type, "after": after, "hidden": hidden.toString(), "offset": offset.toString(), "n": "100"}..addAll(apiKey());
+    if (type == "friendRequest") param.remove("hidden");
+    if (param["after"] == "") param.remove("after");
+    return vrchatSession.get(endpoint('/api/1/auth/user/notifications', param));
+  }
+
+  Future<Map> notificationsSee(String fid) {
+    return vrchatSession.get(endpoint('/api/1/auth/user/notifications/' + fid + '/see', apiKey()));
   }
 
   Future<Map> users(String uid) {
@@ -44,10 +54,6 @@ class VRChatAPI {
 
   Future<Map> instances(String location) {
     return vrchatSession.get(endpoint('api/1/instances/' + location, apiKey()));
-  }
-
-  Future<Map> invite(String wid) {
-    return vrchatSession.post(endpoint('api/1/worlds/' + wid, apiKey()), {});
   }
 
   Future<Map> changeName(

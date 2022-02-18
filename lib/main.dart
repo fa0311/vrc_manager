@@ -14,12 +14,12 @@ class VRChatMobile extends StatefulWidget {
   State<VRChatMobile> createState() => _PageState();
 }
 
-String theme = "light";
-
 class _PageState extends State<VRChatMobile> {
+  String theme = "light";
+
   _PageState() {
     getStorage("theme_brightness").then((response) {
-      setState(() => theme = response);
+      setState(() => theme = response ?? "light");
     });
   }
 

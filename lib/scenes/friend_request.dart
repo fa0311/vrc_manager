@@ -4,17 +4,16 @@ import 'package:vrchat_mobile_client/assets/storage.dart';
 import 'package:vrchat_mobile_client/widgets/drawer.dart';
 import 'package:vrchat_mobile_client/widgets/users.dart';
 
-class VRChatMobileFriends extends StatefulWidget {
-  final bool offline;
-
-  const VRChatMobileFriends({Key? key, this.offline = true}) : super(key: key);
+class VRChatMobileFriendRequest extends StatefulWidget {
+  const VRChatMobileFriendRequest({Key? key}) : super(key: key);
 
   @override
-  State<VRChatMobileFriends> createState() => _FriendsPageState();
+  State<VRChatMobileFriendRequest> createState() => _FriendRequestPageState();
 }
 
-class _FriendsPageState extends State<VRChatMobileFriends> {
+class _FriendRequestPageState extends State<VRChatMobileFriendRequest> {
   int offset = 0;
+  List<Widget> children = [];
 
   Column column = Column(
     children: const [
@@ -23,26 +22,20 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
   );
 
   Users dataColumn = Users();
-  _FriendsPageState() {
+  _FriendRequestPageState() {
     moreOver();
   }
   moreOver() {
     getLoginSession("LoginSession").then((cookie) {
-      VRChatAPI(cookie: cookie).friends(offline: widget.offline, offset: offset).then((response) {
-        offset += 50;
-        response.forEach((dynamic index, dynamic user) {
-          String wid = user["location"].split(":")[0];
-          if (["", "private", "offline"].contains(user["location"]) || dataColumn.locationMap.containsKey(wid)) return;
-          VRChatAPI(cookie: cookie).worlds(wid).then((responseWorld) {
-            dataColumn.locationMap[wid] = responseWorld;
+      VRChatAPI(cookie: cookie).notifications(type: "friendRequest", offset: offset).then((response) {
+        offset += 100;
+        response.forEach((dynamic index, dynamic requestUser) {
+          VRChatAPI(cookie: cookie).users(requestUser["senderUserId"]).then((user) {
             setState(() => column = Column(
-                  children: dataColumn.reload(),
+                  children: dataColumn.adds({0: user}),
                 ));
           });
         });
-        setState(() => column = Column(
-              children: dataColumn.adds(response),
-            ));
       });
     });
   }
@@ -52,7 +45,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
     dataColumn.context = context;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('フレンド'),
+        title: const Text('フレンドリクエスト'),
       ),
       drawer: drawr(context),
       body: SafeArea(
@@ -61,7 +54,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
               child: SingleChildScrollView(
                   child: Column(children: [
                 column,
-                if (dataColumn.length() == offset)
+                if (dataColumn.children.length == offset)
                   SizedBox(
                     width: MediaQuery.of(context).size.width,
                     child: Column(
