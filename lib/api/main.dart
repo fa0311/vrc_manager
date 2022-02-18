@@ -6,8 +6,8 @@ class VRChatAPI {
   }
 
   final vrchatSession = Session();
-  Uri endpoint(path, Map<String, dynamic> queryParameters) {
-    return Uri(scheme: 'https', host: 'vrchat.com', port: 443, path: path, queryParameters: queryParameters);
+  Uri endpoint(path, [Map<String, dynamic>? queryParameters]) {
+    return Uri(scheme: 'https', host: 'vrchat.com', port: 443, path: path, queryParameters: queryParameters ?? {});
   }
 
   VRChatAPI({String cookie = ""}) {
@@ -21,7 +21,7 @@ class VRChatAPI {
 
   Future<Map> loginTotp(code) {
     final param = {"code": code}..addAll(apiKey());
-    return vrchatSession.post(endpoint('api/1/auth/twofactorauth/totp/verify', {}), param);
+    return vrchatSession.post(endpoint('api/1/auth/twofactorauth/totp/verify'), param);
   }
 
   Future<Map> user() {
@@ -46,6 +46,18 @@ class VRChatAPI {
 
   Future<Map> users(String uid) {
     return vrchatSession.get(endpoint('api/1/users/' + uid, apiKey()));
+  }
+
+  Future<Map> friendStatus(String uid) {
+    return vrchatSession.get(endpoint('api/1/user/' + uid + '/friendStatus', apiKey()));
+  }
+
+  Future<Map> sendFriendRequest(String uid) {
+    return vrchatSession.post(endpoint('api/1/user/' + uid + '/friendRequest', apiKey()));
+  }
+
+  Future<Map> deleteFriendRequest(String uid) {
+    return vrchatSession.delete(endpoint('api/1/user/' + uid + '/friendRequest', apiKey()));
   }
 
   Future<Map> worlds(String wid) {
