@@ -35,18 +35,20 @@ class _LoginHomeState extends State<VRChatMobileHome> {
           if (response.containsKey("id")) {
             VRChatAPI(cookie: cookie).users(response["id"]).then((user) {
               setState(() {
-                column = Column(children: [profile(user)]);
+                column = Column(children: [profile(user), Column()]);
               });
               if (!["", "private", "offline"].contains(user["worldId"])) {
                 VRChatAPI(cookie: cookie).worlds(user["worldId"].split(":")[0]).then((world) {
                   setState(() {
-                    column = Column(children: [profile(user), Container(padding: const EdgeInsets.only(top: 30)), worldSlim(context, world)]);
+                    column = Column(children: column.children);
+                    column.children[1] = Column(children: [Container(padding: const EdgeInsets.only(top: 30)), worldSlim(context, world)]);
                   });
                 });
               }
               if (user["location"] == "private") {
                 setState(() {
-                  column = Column(children: [profile(user), Container(padding: const EdgeInsets.only(top: 30)), privateWorldSlim()]);
+                  column = Column(children: column.children);
+                  column.children[1] = Column(children: [Container(padding: const EdgeInsets.only(top: 30)), privateWorldSlim()]);
                 });
               }
             });
