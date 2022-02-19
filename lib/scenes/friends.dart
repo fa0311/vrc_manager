@@ -31,11 +31,15 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
       VRChatAPI(cookie: cookie).friends(offline: widget.offline, offset: offset).then((response) {
         offset += 50;
         if (response.isEmpty) {
-          column = Column(
-            children: const [
-              Text('なし'),
-            ],
-          );
+          setState(() => column = Column(
+                children: const [
+                  Text('なし'),
+                ],
+              ));
+        } else {
+          setState(() => column = Column(
+                children: dataColumn.adds(response),
+              ));
         }
         response.forEach((dynamic index, dynamic user) {
           String wid = user["location"].split(":")[0];
@@ -47,9 +51,6 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
                 ));
           });
         });
-        setState(() => column = Column(
-              children: dataColumn.adds(response),
-            ));
       });
     });
   }

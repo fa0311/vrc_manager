@@ -30,11 +30,11 @@ class _FriendRequestPageState extends State<VRChatMobileFriendRequest> {
       VRChatAPI(cookie: cookie).notifications(type: "friendRequest", offset: offset).then((response) {
         offset += 100;
         if (response.isEmpty) {
-          column = Column(
-            children: const [
-              Text('なし'),
-            ],
-          );
+          setState(() => column = Column(
+                children: const [
+                  Text('なし'),
+                ],
+              ));
         }
         response.forEach((dynamic index, dynamic requestUser) {
           VRChatAPI(cookie: cookie).users(requestUser["senderUserId"]).then((user) {
