@@ -14,6 +14,8 @@ class VRChatAPI {
     vrchatSession.headers["cookie"] = cookie;
   }
 
+  /* ログイン */
+
   Future<Map> login(username, password) {
     vrchatSession.get(endpoint('api/1/config', {}));
     return vrchatSession.basic(endpoint('api/1/auth/user', apiKey()), username, password);
@@ -24,25 +26,13 @@ class VRChatAPI {
     return vrchatSession.post(endpoint('api/1/auth/twofactorauth/totp/verify'), param);
   }
 
+  /* 自身 */
+
   Future<Map> user() {
     return vrchatSession.get(endpoint('api/1/auth/user', apiKey()));
   }
 
-  Future<Map> friends({int offset = 0, bool offline = false}) {
-    final param = {"offline": offline.toString(), "offset": offset.toString(), "n": "50"}..addAll(apiKey());
-    return vrchatSession.get(endpoint('api/1/auth/user/friends', param));
-  }
-
-  Future<Map> notifications({String type = "all", int offset = 0, String after = "", bool hidden = true}) {
-    final param = {"sent": "false", "type": type, "after": after, "hidden": hidden.toString(), "offset": offset.toString(), "n": "100"}..addAll(apiKey());
-    if (type == "friendRequest") param.remove("hidden");
-    if (param["after"] == "") param.remove("after");
-    return vrchatSession.get(endpoint('/api/1/auth/user/notifications', param));
-  }
-
-  Future<Map> notificationsSee(String fid) {
-    return vrchatSession.get(endpoint('/api/1/auth/user/notifications/' + fid + '/see', apiKey()));
-  }
+  /* ユーザー */
 
   Future<Map> users(String uid) {
     return vrchatSession.get(endpoint('api/1/users/' + uid, apiKey()));
@@ -60,6 +50,32 @@ class VRChatAPI {
     return vrchatSession.delete(endpoint('api/1/user/' + uid + '/friendRequest', apiKey()));
   }
 
+  /* フレンド */
+
+  Future<Map> friends({int offset = 0, bool offline = false}) {
+    final param = {"offline": offline.toString(), "offset": offset.toString(), "n": "50"}..addAll(apiKey());
+    return vrchatSession.get(endpoint('api/1/auth/user/friends', param));
+  }
+
+  Future<Map> deleteFriend(String uid) {
+    return vrchatSession.delete(endpoint('api/1/auth/user/friends/' + uid, apiKey()));
+  }
+
+  /* 通知 */
+
+  Future<Map> notifications({String type = "all", int offset = 0, String after = "", bool hidden = true}) {
+    final param = {"sent": "false", "type": type, "after": after, "hidden": hidden.toString(), "offset": offset.toString(), "n": "100"}..addAll(apiKey());
+    if (type == "friendRequest") param.remove("hidden");
+    if (param["after"] == "") param.remove("after");
+    return vrchatSession.get(endpoint('/api/1/auth/user/notifications', param));
+  }
+
+  Future<Map> notificationsSee(String fid) {
+    return vrchatSession.get(endpoint('/api/1/auth/user/notifications/' + fid + '/see', apiKey()));
+  }
+
+  /* その他取得 */
+
   Future<Map> worlds(String wid) {
     return vrchatSession.get(endpoint('api/1/worlds/' + wid, apiKey()));
   }
@@ -67,6 +83,8 @@ class VRChatAPI {
   Future<Map> instances(String location) {
     return vrchatSession.get(endpoint('api/1/instances/' + location, apiKey()));
   }
+
+  /* 変更 */
 
   Future<Map> changeName(
     String uid,
