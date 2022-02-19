@@ -57,8 +57,8 @@ Drawer drawr(context) {
                         builder: (context) => const VRChatMobileFriendRequest(),
                       ));
                 },
-                leading: const Icon(Icons.bedtime),
-                title: const Text('オフラインのフレンド'),
+                leading: const Icon(Icons.notifications),
+                title: const Text('フレンドリクエスト'),
               ),
               TextButton(
                 onPressed: () {
