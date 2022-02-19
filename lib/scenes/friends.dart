@@ -30,6 +30,13 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
     getLoginSession("LoginSession").then((cookie) {
       VRChatAPI(cookie: cookie).friends(offline: widget.offline, offset: offset).then((response) {
         offset += 50;
+        if (response.isEmpty) {
+          column = Column(
+            children: const [
+              Text('なし'),
+            ],
+          );
+        }
         response.forEach((dynamic index, dynamic user) {
           String wid = user["location"].split(":")[0];
           if (["", "private", "offline"].contains(user["location"]) || dataColumn.locationMap.containsKey(wid)) return;
