@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vrchat_mobile_client/scenes/friend_request.dart';
 import 'package:vrchat_mobile_client/scenes/friends.dart';
 import 'package:vrchat_mobile_client/scenes/help.dart';
 import 'package:vrchat_mobile_client/scenes/home.dart';
@@ -46,6 +47,18 @@ Drawer drawr(context) {
                 },
                 leading: const Icon(Icons.bedtime),
                 title: const Text('オフラインのフレンド'),
+              ),
+              ListTile(
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const VRChatMobileFriendRequest(),
+                      ));
+                },
+                leading: const Icon(Icons.notifications),
+                title: const Text('フレンドリクエスト'),
               ),
               TextButton(
                 onPressed: () {

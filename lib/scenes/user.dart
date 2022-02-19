@@ -24,16 +24,24 @@ class _UserHomeState extends State<VRChatMobileUser> {
     getLoginSession("LoginSession").then((cookie) {
       VRChatAPI(cookie: cookie).users(widget.userId).then((user) {
         setState(() {
-          column = Column(children: [profile(user)]);
+          column = Column(children: [profile(user), Column(), Column()]);
+        });
+        VRChatAPI(cookie: cookie).friendStatus(widget.userId).then((status) {
+          setState(() {
+            column = Column(children: column.children);
+            column.children[1] = Column(children: [Container(padding: const EdgeInsets.only(top: 30)), profileAction(context, status, widget.userId)]);
+          });
         });
         if (!["", "private", "offline"].contains(user["location"])) {
           VRChatAPI(cookie: cookie).worlds(user["location"].split(":")[0]).then((world) {
             setState(() {
-              column = Column(children: [profile(user), Container(padding: const EdgeInsets.only(top: 30)), worldSlim(context, world)]);
+              column = Column(children: column.children);
+              column.children[2] = Column(children: [Container(padding: const EdgeInsets.only(top: 30)), worldSlim(context, world)]);
             });
             VRChatAPI(cookie: cookie).instances(user["location"]).then((instance) {
               setState(() {
-                column = Column(children: [profile(user), Container(padding: const EdgeInsets.only(top: 30)), worldSlimPlus(context, world, instance)]);
+                column = Column(children: column.children);
+                column.children[2] = Column(children: [Container(padding: const EdgeInsets.only(top: 30)), worldSlimPlus(context, world, instance)]);
               });
             });
           });
