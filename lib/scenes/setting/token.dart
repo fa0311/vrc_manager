@@ -29,7 +29,7 @@ class _TokenSettingPageState extends State<VRChatMobileTokenSetting> {
         ),
         body: Padding(
             padding: const EdgeInsets.all(32.0),
-            child: Column(children: [
+            child: Column(children: <Widget>[
               TextField(
                 controller: _tokenController,
                 maxLines: null,

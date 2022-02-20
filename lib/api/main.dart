@@ -6,7 +6,7 @@ class VRChatAPI {
   }
 
   final vrchatSession = Session();
-  Uri endpoint(path, [Map<String, dynamic>? queryParameters]) {
+  Uri endpoint(path, [Map<String, String>? queryParameters]) {
     return Uri(scheme: 'https', host: 'vrchat.com', port: 443, path: path, queryParameters: queryParameters ?? {});
   }
 

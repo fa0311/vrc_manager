@@ -23,7 +23,7 @@ class _HelpPageState extends State<VRChatMobileHelp> {
         child: SizedBox(
           width: MediaQuery.of(context).size.width,
           child: Column(
-            children: [
+            children: <Widget>[
               ElevatedButton(
                 child: const Text('報告'),
                 onPressed: () {

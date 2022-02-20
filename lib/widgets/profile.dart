@@ -10,7 +10,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 Column profile(user) {
   return Column(
-    children: [
+    children: <Widget>[
       SizedBox(
         height: 250,
         child: Image.network(user["profilePicOverride"] == "" ? user["currentAvatarImageUrl"] : user["profilePicOverride"], fit: BoxFit.fitWidth),
@@ -36,7 +36,7 @@ Column profile(user) {
 }
 
 Column profileAction(BuildContext context, status, String uid) {
-  return Column(children: [
+  return Column(children: <Widget>[
     if (!status["isFriend"] && !status["incomingRequest"] && !status["outgoingRequest"])
       ElevatedButton(
           child: const Text('フレンドリクエスト'),

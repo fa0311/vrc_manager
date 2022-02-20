@@ -16,7 +16,7 @@ class VRChatMobileUser extends StatefulWidget {
 
 class _UserHomeState extends State<VRChatMobileUser> {
   Column column = Column(
-    children: const [
+    children: const <Widget>[
       Text('ロード中です'),
     ],
   );
@@ -24,7 +24,7 @@ class _UserHomeState extends State<VRChatMobileUser> {
     getLoginSession("LoginSession").then((cookie) {
       VRChatAPI(cookie: cookie).users(widget.userId).then((user) {
         setState(() {
-          column = Column(children: [profile(user), Column(), Column()]);
+          column = Column(children: <Widget>[profile(user), Column(), Column()]);
         });
         VRChatAPI(cookie: cookie).friendStatus(widget.userId).then((status) {
           setState(() {

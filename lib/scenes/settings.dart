@@ -56,7 +56,7 @@ class _SettingPageState extends State<VRChatMobileSettings> {
         child: SizedBox(
           width: MediaQuery.of(context).size.width,
           child: Column(
-            children: [
+            children: <Widget>[
               SwitchListTile(
                 value: theme,
                 title: const Text('ダークテーマ'),

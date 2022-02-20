@@ -15,7 +15,7 @@ class VRChatMobileHome extends StatefulWidget {
 
 class _LoginHomeState extends State<VRChatMobileHome> {
   Column column = Column(
-    children: const [
+    children: const <Widget>[
       SizedBox(width: double.infinity, child: Text('ロード中です')),
       Text('この画面がずっと表示されている場合、左のメニューから設定を開いてログアウトしてください'),
     ],
@@ -35,7 +35,7 @@ class _LoginHomeState extends State<VRChatMobileHome> {
           if (response.containsKey("id")) {
             VRChatAPI(cookie: cookie).users(response["id"]).then((user) {
               setState(() {
-                column = Column(children: [profile(user), Column()]);
+                column = Column(children: <Widget>[profile(user), Column()]);
               });
               if (!["", "private", "offline"].contains(user["worldId"])) {
                 VRChatAPI(cookie: cookie).worlds(user["worldId"].split(":")[0]).then((world) {

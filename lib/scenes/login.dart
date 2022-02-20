@@ -90,7 +90,7 @@ class _LoginPageState extends State<VRChatMobileLogin> {
       body: Padding(
         padding: const EdgeInsets.all(32.0),
         child: Column(
-          children: [
+          children: <Widget>[
             TextFormField(
               controller: _userController,
               decoration: const InputDecoration(labelText: 'ユーザー名/メールアドレス'),

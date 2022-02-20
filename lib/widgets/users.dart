@@ -63,7 +63,7 @@ class Users {
                             fit: BoxFit.fitWidth),
                       ),
                       Expanded(
-                          child: Column(children: [
+                          child: Column(children: <Widget>[
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[

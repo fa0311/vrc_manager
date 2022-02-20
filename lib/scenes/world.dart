@@ -15,7 +15,7 @@ class VRChatMobileWorld extends StatefulWidget {
 
 class _WorldState extends State<VRChatMobileWorld> {
   Column column = Column(
-    children: const [
+    children: const <Widget>[
       Text('ロード中です'),
     ],
   );

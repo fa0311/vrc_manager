@@ -16,7 +16,7 @@ class _FriendRequestPageState extends State<VRChatMobileFriendRequest> {
   List<Widget> children = [];
 
   Column column = Column(
-    children: const [
+    children: const <Widget>[
       Text('ロード中です'),
     ],
   );
@@ -31,7 +31,7 @@ class _FriendRequestPageState extends State<VRChatMobileFriendRequest> {
         offset += 100;
         if (response.isEmpty) {
           setState(() => column = Column(
-                children: const [
+                children: const <Widget>[
                   Text('なし'),
                 ],
               ));
@@ -59,13 +59,13 @@ class _FriendRequestPageState extends State<VRChatMobileFriendRequest> {
           child: SizedBox(
               width: MediaQuery.of(context).size.width,
               child: SingleChildScrollView(
-                  child: Column(children: [
+                  child: Column(children: <Widget>[
                 column,
                 if (dataColumn.children.length == offset)
                   SizedBox(
                     width: MediaQuery.of(context).size.width,
                     child: Column(
-                      children: [
+                      children: <Widget>[
                         ElevatedButton(
                           child: const Text('続きを読み込む'),
                           onPressed: () => moreOver(),

@@ -27,7 +27,7 @@ Card worldSlim(context, world) {
                   Expanded(
                     child: Padding(
                         padding: const EdgeInsets.only(left: 10),
-                        child: Column(children: [
+                        child: Column(children: <Widget>[
                           SizedBox(width: double.infinity, child: Text(world["name"], style: const TextStyle(fontWeight: FontWeight.bold))),
                         ])),
                   )
@@ -58,8 +58,8 @@ Card worldSlimPlus(context, world, instance) {
                   Expanded(
                     child: Padding(
                         padding: const EdgeInsets.only(left: 10),
-                        child: Column(children: [
-                          Row(children: [
+                        child: Column(children: <Widget>[
+                          Row(children: <Widget>[
                             Padding(padding: const EdgeInsets.only(right: 5), child: region(instance["region"])),
                             const Icon(Icons.groups),
                             Padding(
@@ -88,7 +88,7 @@ Card privateWorldSlim() {
               Expanded(
                 child: Padding(
                     padding: const EdgeInsets.only(left: 10),
-                    child: Column(children: const [
+                    child: Column(children: const <Widget>[
                       SizedBox(width: double.infinity, child: Text("Private")),
                       SizedBox(width: double.infinity, child: Text("プライベートワールド", style: TextStyle(fontWeight: FontWeight.bold))),
                     ])),
