@@ -37,48 +37,52 @@ class Users {
     // オリジナル profilePicOverride
     userList.add(users);
     users.forEach((dynamic index, dynamic user) {
-      children.add(GestureDetector(
-          onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => VRChatMobileUser(userId: user["id"]),
-                ));
-          },
-          behavior: HitTestBehavior.opaque,
-          child: Row(
-            children: <Widget>[
-              SizedBox(
-                height: 100,
-                child: Image.network(
-                    user.containsKey("profilePicOverride")
-                        ? user["profilePicOverride"] == ""
-                            ? user["currentAvatarThumbnailImageUrl"]
-                            : user["profilePicOverride"]
-                        : user["currentAvatarThumbnailImageUrl"],
-                    fit: BoxFit.fitWidth),
-              ),
-              Expanded(
-                  child: Column(children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    status(user["status"]),
-                    Container(
-                      width: 5,
-                    ),
-                    Text(user["displayName"], style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
-                  ],
-                ),
-                if (user["statusDescription"] != "") Text(user["statusDescription"], style: const TextStyle(fontSize: 14)),
-                if (!["", "private", "offline"].contains(user["location"]) && locationMap.containsKey(user["location"].split(":")[0]))
-                  Text(locationMap[user["location"].split(":")[0]]["name"], style: const TextStyle(fontSize: 14)),
-                if (!["", "private", "offline"].contains(user["location"]) && !locationMap.containsKey(user["location"].split(":")[0]))
-                  const Text("ロード中", style: TextStyle(fontSize: 14)),
-                if (user["location"] == "private") const Text("プライベートワールド", style: TextStyle(fontSize: 14)),
-              ])),
-            ],
-          )));
+      children.add(Card(
+          elevation: 20.0,
+          child: Container(
+              padding: const EdgeInsets.all(10.0),
+              child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => VRChatMobileUser(userId: user["id"]),
+                        ));
+                  },
+                  behavior: HitTestBehavior.opaque,
+                  child: Row(
+                    children: <Widget>[
+                      SizedBox(
+                        height: 100,
+                        child: Image.network(
+                            user.containsKey("profilePicOverride")
+                                ? user["profilePicOverride"] == ""
+                                    ? user["currentAvatarThumbnailImageUrl"]
+                                    : user["profilePicOverride"]
+                                : user["currentAvatarThumbnailImageUrl"],
+                            fit: BoxFit.fitWidth),
+                      ),
+                      Expanded(
+                          child: Column(children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            status(user["status"]),
+                            Container(
+                              width: 5,
+                            ),
+                            Text(user["displayName"], style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+                          ],
+                        ),
+                        if (user["statusDescription"] != "") Text(user["statusDescription"], style: const TextStyle(fontSize: 14)),
+                        if (!["", "private", "offline"].contains(user["location"]) && locationMap.containsKey(user["location"].split(":")[0]))
+                          Text(locationMap[user["location"].split(":")[0]]["name"], style: const TextStyle(fontSize: 14)),
+                        if (!["", "private", "offline"].contains(user["location"]) && !locationMap.containsKey(user["location"].split(":")[0]))
+                          const Text("ロード中", style: TextStyle(fontSize: 14)),
+                        if (user["location"] == "private") const Text("プライベートワールド", style: TextStyle(fontSize: 14)),
+                      ])),
+                    ],
+                  )))));
     });
     return children;
   }

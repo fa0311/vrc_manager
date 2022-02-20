@@ -71,7 +71,7 @@ class _LoginHomeState extends State<VRChatMobileHome> {
         title: const Text('ホーム'),
       ),
       drawer: drawr(context),
-      body: SafeArea(child: Padding(padding: const EdgeInsets.all(30), child: SingleChildScrollView(child: column))),
+      body: SafeArea(child: SingleChildScrollView(child: Container(padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 30), child: column))),
     );
   }
 }
