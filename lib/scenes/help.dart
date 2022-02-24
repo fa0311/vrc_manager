@@ -24,9 +24,10 @@ class _HelpPageState extends State<VRChatMobileHelp> {
           width: MediaQuery.of(context).size.width,
           child: Column(
             children: <Widget>[
-              ElevatedButton(
-                child: const Text('報告'),
-                onPressed: () {
+              ListTile(
+                title: const Text('報告'),
+                subtitle: const Text('開発者にバグの報告や新機能のリクエストをします'),
+                onTap: () {
                   _launchURL() async {
                     if (await canLaunch("https://github.com/fa0311/vrchat_mobile_client/issues/new")) {
                       await launch("https://github.com/fa0311/vrchat_mobile_client/issues/new");
@@ -36,9 +37,11 @@ class _HelpPageState extends State<VRChatMobileHelp> {
                   _launchURL();
                 },
               ),
-              ElevatedButton(
-                child: const Text('Licence'),
-                onPressed: () {
+              const Divider(),
+              ListTile(
+                title: const Text('Licence'),
+                subtitle: const Text('Licence情報を確認します'),
+                onTap: () {
                   showLicence(context);
                 },
               ),
