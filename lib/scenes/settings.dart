@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:vrchat_mobile_client/assets/storage.dart';
-import 'package:vrchat_mobile_client/material.dart';
+import 'package:vrchat_mobile_client/main.dart';
 import 'package:vrchat_mobile_client/scenes/login.dart';
 import 'package:vrchat_mobile_client/scenes/setting/token.dart';
 import 'package:vrchat_mobile_client/widgets/drawer.dart';
@@ -28,12 +28,12 @@ class _SettingPageState extends State<VRChatMobileSettings> {
   bool theme = false;
   void _changeSwitch(bool e) {
     setStorage("theme_brightness", e ? "dark" : "light").then((response) {
-      Navigator.pop(context);
-      Navigator.push(
+      Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
-            builder: (context) => const VRChatMobileSettingsMaterial(),
-          ));
+            builder: (context) => const VRChatMobile(),
+          ),
+          (_) => false);
     });
     setState(() => theme = e);
   }
@@ -105,27 +105,5 @@ class _SettingPageState extends State<VRChatMobileSettings> {
         ),
       ),
     );
-  }
-}
-
-class VRChatMobileSettingsMaterial extends StatefulWidget {
-  const VRChatMobileSettingsMaterial({Key? key}) : super(key: key);
-
-  @override
-  State<VRChatMobileSettingsMaterial> createState() => _SettingMaterialPageState();
-}
-
-String theme = "light";
-
-class _SettingMaterialPageState extends State<VRChatMobileSettingsMaterial> {
-  _SettingMaterialPageState() {
-    getStorage("theme_brightness").then((response) {
-      setState(() => theme = response);
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return getMaterialApp(const VRChatMobileSettings(), theme == "dark" ? Brightness.dark : Brightness.light);
   }
 }
