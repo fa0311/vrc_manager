@@ -63,9 +63,11 @@ class _SettingPageState extends State<VRChatMobileSettings> {
                 subtitle: const Text('目に優しいダークテーマに切り替えます'),
                 onChanged: _changeSwitch,
               ),
-              ElevatedButton(
-                child: const Text('ログアウト'),
-                onPressed: () => {
+              const Divider(),
+              ListTile(
+                title: const Text('ログアウト'),
+                subtitle: const Text('ログアウトし端末からログイン情報を削除します'),
+                onTap: () => {
                   showDialog(
                     context: context,
                     builder: (_) {
@@ -86,9 +88,11 @@ class _SettingPageState extends State<VRChatMobileSettings> {
                   ),
                 },
               ),
-              ElevatedButton(
-                child: const Text('Token'),
-                onPressed: () => {
+              const Divider(),
+              ListTile(
+                title: const Text('Token'),
+                subtitle: const Text('認証情報を確認または変更できます'),
+                onTap: () => {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
