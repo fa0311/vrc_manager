@@ -14,6 +14,8 @@ Flutterで作成されたシンプルなUIが特徴的です<br>
 
 ## インストール
 ### Android
+[**play.google.com**](https://play.google.com/store/apps/details?id=com.yuki0311.vrchat_mobile_client)からダウンロード<br>
+もしくは
 [**Releases**](https://github.com/fa0311/vrchat_mobile_client/releases)の**app-release.apk**をクリックしてダウンロード
 ### Windows
 [**Releases**](https://github.com/fa0311/vrchat_mobile_client/releases)の**VRChatMC-Setup.exe**をクリックしてダウンロード
