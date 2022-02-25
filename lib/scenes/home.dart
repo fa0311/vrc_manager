@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:vrchat_mobile_client/api/main.dart';
+import 'package:vrchat_mobile_client/assets/flutter/url_parser.dart';
 import 'package:vrchat_mobile_client/assets/storage.dart';
 import 'package:vrchat_mobile_client/scenes/login.dart';
 import 'package:vrchat_mobile_client/widgets/drawer.dart';
@@ -51,6 +53,14 @@ class _LoginHomeState extends State<VRChatMobileHome> {
                   column.children[1] = Column(children: [Container(padding: const EdgeInsets.only(top: 30)), privateWorldSlim()]);
                 });
               }
+            });
+
+            ReceiveSharingIntent.getTextStream().listen((String value) {
+              urlParser(context, value);
+            });
+            ReceiveSharingIntent.getInitialText().then((String? value) {
+              if (value == null) return;
+              urlParser(context, value);
             });
           } else {
             Navigator.pushAndRemoveUntil(
