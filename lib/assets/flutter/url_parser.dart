@@ -13,6 +13,12 @@ void urlParser(BuildContext context, String strUri) {
         MaterialPageRoute(
           builder: (context) => VRChatMobileWorld(worldId: queryParameters["worldId"] ?? ""),
         ));
+  } else if (path[2] == "world") {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => VRChatMobileWorld(worldId: path[3]),
+        ));
   } else if (path[2] == "user") {
     Navigator.push(
         context,
