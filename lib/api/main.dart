@@ -61,6 +61,13 @@ class VRChatAPI {
     return vrchatSession.delete(endpoint('api/1/auth/user/friends/' + uid, apiKey()));
   }
 
+  /* お気に入り */
+
+  Future<Map> favoriteGroups(String type, {int offset = 0}) {
+    final param = {"type": type, "offset": offset.toString(), "n": "50"}..addAll(apiKey());
+    return vrchatSession.get(endpoint('api/1/favorite/groups', param));
+  }
+
   /* 通知 */
 
   Future<Map> notifications({String type = "all", int offset = 0, String after = "", bool hidden = true}) {
@@ -74,11 +81,18 @@ class VRChatAPI {
     return vrchatSession.get(endpoint('/api/1/auth/user/notifications/' + fid + '/see', apiKey()));
   }
 
-  /* その他取得 */
+  /* ワールド */
 
   Future<Map> worlds(String wid) {
     return vrchatSession.get(endpoint('api/1/worlds/' + wid, apiKey()));
   }
+
+  Future<Map> favoritesWorlds(String type, {int offset = 0}) {
+    final param = {"tag": type, "offset": offset.toString(), "n": "3"}..addAll(apiKey());
+    return vrchatSession.get(endpoint('api/1/worlds/favorites', param));
+  }
+
+  /* インスタンス */
 
   Future<Map> instances(String location) {
     return vrchatSession.get(endpoint('api/1/instances/' + location, apiKey()));
@@ -86,11 +100,7 @@ class VRChatAPI {
 
   /* 変更 */
 
-  Future<Map> changeName(
-    String uid,
-    String username,
-    String password,
-  ) {
+  Future<Map> changeName(String uid, String username, String password) {
     return vrchatSession.put(endpoint('api/1/users/' + uid, apiKey()), {"currentPassword": password, "displayName": username});
   }
 }
