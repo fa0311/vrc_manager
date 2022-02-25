@@ -55,7 +55,7 @@ class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
   moreOver(Map list, int index) {
     getLoginSession("LoginSession").then((cookie) {
       VRChatAPI(cookie: cookie).favoritesWorlds(list["name"], offset: offset[index]).then((worlds) {
-        offset[index] += 3;
+        offset[index] += 50;
         final List<Widget> worldList = [];
         worldList.addAll(childrenList[index].children);
         worlds.forEach((dynamic index, dynamic world) {

@@ -88,7 +88,7 @@ class VRChatAPI {
   }
 
   Future<Map> favoritesWorlds(String type, {int offset = 0}) {
-    final param = {"tag": type, "offset": offset.toString(), "n": "3"}..addAll(apiKey());
+    final param = {"tag": type, "offset": offset.toString(), "n": "50"}..addAll(apiKey());
     return vrchatSession.get(endpoint('api/1/worlds/favorites', param));
   }
 
