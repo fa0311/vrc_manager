@@ -1,3 +1,5 @@
+import 'package:flutter/services.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:vrchat_mobile_client/api/main.dart';
 import 'package:vrchat_mobile_client/assets/storage.dart';
@@ -21,6 +23,7 @@ class _UserHomeState extends State<VRChatMobileUser> {
     ],
   );
   Widget? dial;
+  Widget? popupMenu;
 
   _UserHomeState() {
     getLoginSession("LoginSession").then((cookie) {
@@ -62,7 +65,22 @@ class _UserHomeState extends State<VRChatMobileUser> {
       appBar: AppBar(title: const Text('ユーザー'), actions: <Widget>[
         PopupMenuButton(
           itemBuilder: (BuildContext context) => <PopupMenuEntry>[
-            const PopupMenuItem(child: ListTile(leading: Icon(Icons.share), title: Text('共有'))),
+            PopupMenuItem(
+                child: ListTile(
+                    leading: const Icon(Icons.share),
+                    title: const Text('共有'),
+                    onTap: () {
+                      Share.share("https://vrchat.com/home/user/" + widget.userId);
+                      Navigator.pop(context);
+                    })),
+            PopupMenuItem(
+                child: ListTile(
+                    leading: const Icon(Icons.copy),
+                    title: const Text('コピー'),
+                    onTap: () async {
+                      final data = ClipboardData(text: "https://vrchat.com/home/user/" + widget.userId);
+                      await Clipboard.setData(data).then((value) => Navigator.pop(context));
+                    })),
           ],
         )
       ]),

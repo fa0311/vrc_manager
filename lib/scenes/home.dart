@@ -1,7 +1,9 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:vrchat_mobile_client/api/main.dart';
 import 'package:vrchat_mobile_client/assets/flutter/url_parser.dart';
 import 'package:vrchat_mobile_client/assets/storage.dart';
@@ -25,6 +27,8 @@ class _LoginHomeState extends State<VRChatMobileHome> {
     ],
   );
 
+  List<Widget> popupMenu = [];
+
   _LoginHomeState() {
     getLoginSession("LoginSession").then((cookie) {
       if (cookie == null) {
@@ -40,6 +44,28 @@ class _LoginHomeState extends State<VRChatMobileHome> {
             VRChatAPI(cookie: cookie).users(response["id"]).then((user) {
               setState(() {
                 column = Column(children: <Widget>[profile(user), Column()]);
+                popupMenu = [
+                  PopupMenuButton(
+                    itemBuilder: (BuildContext context) => <PopupMenuEntry>[
+                      PopupMenuItem(
+                          child: ListTile(
+                              leading: const Icon(Icons.share),
+                              title: const Text('共有'),
+                              onTap: () {
+                                Share.share("https://vrchat.com/home/user/" + response["id"]);
+                                Navigator.pop(context);
+                              })),
+                      PopupMenuItem(
+                          child: ListTile(
+                              leading: const Icon(Icons.copy),
+                              title: const Text('コピー'),
+                              onTap: () async {
+                                final data = ClipboardData(text: "https://vrchat.com/home/user/" + response["id"]);
+                                await Clipboard.setData(data).then((value) => Navigator.pop(context));
+                              })),
+                    ],
+                  )
+                ];
               });
               if (!["", "private", "offline"].contains(user["worldId"])) {
                 VRChatAPI(cookie: cookie).worlds(user["worldId"].split(":")[0]).then((world) {
@@ -82,6 +108,7 @@ class _LoginHomeState extends State<VRChatMobileHome> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('ホーム'),
+        actions: popupMenu,
       ),
       drawer: drawr(context),
       body: SafeArea(child: SingleChildScrollView(child: Container(padding: const EdgeInsets.only(top: 10, bottom: 50, right: 30, left: 30), child: column))),
