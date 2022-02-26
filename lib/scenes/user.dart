@@ -20,28 +20,29 @@ class _UserHomeState extends State<VRChatMobileUser> {
       Text('ロード中です'),
     ],
   );
+  Widget? dial;
+
   _UserHomeState() {
     getLoginSession("LoginSession").then((cookie) {
       VRChatAPI(cookie: cookie).users(widget.userId).then((user) {
         setState(() {
-          column = Column(children: <Widget>[profile(user), Column(), Column()]);
+          column = Column(children: <Widget>[profile(user), Column()]);
         });
         VRChatAPI(cookie: cookie).friendStatus(widget.userId).then((status) {
           setState(() {
-            column = Column(children: column.children);
-            column.children[1] = Column(children: [Container(padding: const EdgeInsets.only(top: 30)), profileAction(context, status, widget.userId)]);
+            dial = profileAction(context, status, widget.userId);
           });
         });
         if (!["", "private", "offline"].contains(user["location"])) {
           VRChatAPI(cookie: cookie).worlds(user["location"].split(":")[0]).then((world) {
             setState(() {
               column = Column(children: column.children);
-              column.children[2] = Column(children: [Container(padding: const EdgeInsets.only(top: 30)), worldSlim(context, world)]);
+              column.children[1] = Column(children: [Container(padding: const EdgeInsets.only(top: 30)), worldSlim(context, world)]);
             });
             VRChatAPI(cookie: cookie).instances(user["location"]).then((instance) {
               setState(() {
                 column = Column(children: column.children);
-                column.children[2] = Column(children: [Container(padding: const EdgeInsets.only(top: 30)), worldSlimPlus(context, world, instance)]);
+                column.children[1] = Column(children: [Container(padding: const EdgeInsets.only(top: 30)), worldSlimPlus(context, world, instance)]);
               });
             });
           });
@@ -59,10 +60,11 @@ class _UserHomeState extends State<VRChatMobileUser> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('フレンド'),
+        title: const Text('ユーザー'),
       ),
       drawer: drawr(context),
-      body: SafeArea(child: SingleChildScrollView(child: Container(padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 30), child: column))),
+      body: SafeArea(child: SingleChildScrollView(child: Container(padding: const EdgeInsets.only(top: 10, bottom: 50, right: 30, left: 30), child: column))),
+      floatingActionButton: dial,
     );
   }
 }

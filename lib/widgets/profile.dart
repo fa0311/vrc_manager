@@ -7,6 +7,7 @@ import 'package:vrchat_mobile_client/assets/vrchat/icon.dart';
 import 'package:vrchat_mobile_client/scenes/user.dart';
 import 'package:vrchat_mobile_client/widgets/status.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
 Column profile(user) {
   return Column(
@@ -35,62 +36,50 @@ Column profile(user) {
   );
 }
 
-Column profileAction(BuildContext context, status, String uid) {
-  return Column(children: <Widget>[
-    if (!status["isFriend"] && !status["incomingRequest"] && !status["outgoingRequest"])
-      ElevatedButton(
-          child: const Text('フレンドリクエスト'),
-          onPressed: () => {
-                getLoginSession("LoginSession").then((cookie) {
-                  VRChatAPI(cookie: cookie).sendFriendRequest(uid).then((response) {
-                    Navigator.pop(context);
-                    Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => VRChatMobileUser(userId: uid),
-                        ),
-                        (_) => false);
-                  });
-                })
-              }),
-    if (status["isFriend"] && !status["incomingRequest"] && !status["outgoingRequest"])
-      ElevatedButton(
-          child: const Text('フレンド解除'),
-          onPressed: () => {
-                showDialog(
-                  context: context,
-                  builder: (_) {
-                    return AlertDialog(
-                      title: const Text("フレンドを解除しますか？"),
-                      actions: <Widget>[
-                        TextButton(
-                          child: const Text("キャンセル"),
-                          onPressed: () => Navigator.pop(context),
-                        ),
-                        TextButton(
-                          child: const Text("解除"),
-                          onPressed: () => getLoginSession("LoginSession").then((cookie) {
-                            VRChatAPI(cookie: cookie).deleteFriend(uid).then((response) {
-                              Navigator.pop(context);
-                              Navigator.pushAndRemoveUntil(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => VRChatMobileUser(userId: uid),
-                                  ),
-                                  (_) => false);
-                            });
-                          }),
-                        ),
-                      ],
-                    );
-                  },
-                ),
-              }),
-    if (!status["isFriend"] && status["incomingRequest"])
-      ElevatedButton(
-          child: const Text('フレンド許可'),
-          onPressed: () => getLoginSession("LoginSession").then((cookie) {
-                VRChatAPI(cookie: cookie).sendFriendRequest(uid).then((response) {
+Widget profileAction(BuildContext context, status, String uid) {
+  void sendFriendRequest() {
+    getLoginSession("LoginSession").then((cookie) {
+      VRChatAPI(cookie: cookie).sendFriendRequest(uid).then((response) {
+        Navigator.pop(context);
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+              builder: (context) => VRChatMobileUser(userId: uid),
+            ),
+            (_) => false);
+      });
+    });
+  }
+
+  void deleteFriendRequest() {
+    getLoginSession("LoginSession").then((cookie) {
+      VRChatAPI(cookie: cookie).deleteFriendRequest(uid).then((response) {
+        Navigator.pop(context);
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+              builder: (context) => VRChatMobileUser(userId: uid),
+            ),
+            (_) => false);
+      });
+    });
+  }
+
+  void deleteFriend() {
+    showDialog(
+      context: context,
+      builder: (_) {
+        return AlertDialog(
+          title: const Text("フレンドを解除しますか？"),
+          actions: <Widget>[
+            TextButton(
+              child: const Text("キャンセル"),
+              onPressed: () => Navigator.pop(context),
+            ),
+            TextButton(
+              child: const Text("解除"),
+              onPressed: () => getLoginSession("LoginSession").then((cookie) {
+                VRChatAPI(cookie: cookie).deleteFriend(uid).then((response) {
                   Navigator.pop(context);
                   Navigator.pushAndRemoveUntil(
                       context,
@@ -99,40 +88,44 @@ Column profileAction(BuildContext context, status, String uid) {
                       ),
                       (_) => false);
                 });
-              })),
-    if (!status["isFriend"] && status["incomingRequest"])
-      ElevatedButton(
-          child: const Text('フレンド拒否'),
-          onPressed: () => {
-                showDialog(
-                  context: context,
-                  builder: (_) {
-                    return AlertDialog(
-                      title: const Text("フレンドリクエストを拒否しますか？"),
-                      actions: <Widget>[
-                        TextButton(
-                          child: const Text("キャンセル"),
-                          onPressed: () => Navigator.pop(context),
-                        ),
-                        TextButton(
-                            child: const Text("拒否"),
-                            onPressed: () => getLoginSession("LoginSession").then((cookie) {
-                                  VRChatAPI(cookie: cookie).deleteFriendRequest(uid).then((response) {
-                                    Navigator.pop(context);
-                                    Navigator.pushAndRemoveUntil(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => VRChatMobileUser(userId: uid),
-                                        ),
-                                        (_) => false);
-                                  });
-                                })),
-                      ],
-                    );
-                  },
-                ),
               }),
-  ]);
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  return SpeedDial(
+    icon: Icons.add,
+    activeIcon: Icons.close,
+    children: [
+      if (!status["isFriend"] && !status["incomingRequest"] && !status["outgoingRequest"])
+        SpeedDialChild(
+          child: const Icon(Icons.person_add),
+          label: 'フレンドリクエスト',
+          onTap: sendFriendRequest,
+        ),
+      if (status["isFriend"] && !status["incomingRequest"] && !status["outgoingRequest"])
+        SpeedDialChild(
+          child: const Icon(Icons.person_remove),
+          label: 'フレンド解除',
+          onTap: deleteFriend,
+        ),
+      if (!status["isFriend"] && status["incomingRequest"])
+        SpeedDialChild(
+          child: const Icon(Icons.person_remove),
+          label: 'フレンド拒否',
+          onTap: deleteFriendRequest,
+        ),
+      if (!status["isFriend"] && status["incomingRequest"])
+        SpeedDialChild(
+          child: const Icon(Icons.person_add),
+          label: 'フレンド許可',
+          onTap: sendFriendRequest,
+        ),
+    ],
+  );
 }
 
 List<Widget> _biolink(List biolinks) {

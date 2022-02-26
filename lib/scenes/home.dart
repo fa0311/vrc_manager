@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:vrchat_mobile_client/api/main.dart';
@@ -54,14 +56,15 @@ class _LoginHomeState extends State<VRChatMobileHome> {
                 });
               }
             });
-
-            ReceiveSharingIntent.getTextStream().listen((String value) {
-              urlParser(context, value);
-            });
-            ReceiveSharingIntent.getInitialText().then((String? value) {
-              if (value == null) return;
-              urlParser(context, value);
-            });
+            if (Platform.isAndroid) {
+              ReceiveSharingIntent.getTextStream().listen((String value) {
+                urlParser(context, value);
+              });
+              ReceiveSharingIntent.getInitialText().then((String? value) {
+                if (value == null) return;
+                urlParser(context, value);
+              });
+            }
           } else {
             Navigator.pushAndRemoveUntil(
                 context,
@@ -81,7 +84,7 @@ class _LoginHomeState extends State<VRChatMobileHome> {
         title: const Text('ホーム'),
       ),
       drawer: drawr(context),
-      body: SafeArea(child: SingleChildScrollView(child: Container(padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 30), child: column))),
+      body: SafeArea(child: SingleChildScrollView(child: Container(padding: const EdgeInsets.only(top: 10, bottom: 50, right: 30, left: 30), child: column))),
     );
   }
 }
