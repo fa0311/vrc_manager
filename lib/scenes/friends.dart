@@ -69,7 +69,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
               child: SingleChildScrollView(
                   child: Column(children: <Widget>[
                 column,
-                if (dataColumn.length() == offset)
+                if (dataColumn.length() == offset && offset > 0)
                   SizedBox(
                     width: MediaQuery.of(context).size.width,
                     child: Column(

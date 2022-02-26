@@ -67,7 +67,7 @@ class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
           column.children[index] = Column(children: [
             Text(list["displayName"]),
             Column(children: childrenList[index].children),
-            if (childrenList[index].children.length == offset[index])
+            if (childrenList[index].children.length == offset[index] && offset[index] > 0)
               SizedBox(
                 width: MediaQuery.of(context).size.width,
                 child: Column(
