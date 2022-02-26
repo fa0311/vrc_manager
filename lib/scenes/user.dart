@@ -59,9 +59,13 @@ class _UserHomeState extends State<VRChatMobileUser> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('ユーザー'),
-      ),
+      appBar: AppBar(title: const Text('ユーザー'), actions: <Widget>[
+        PopupMenuButton(
+          itemBuilder: (BuildContext context) => <PopupMenuEntry>[
+            const PopupMenuItem(child: ListTile(leading: Icon(Icons.share), title: Text('共有'))),
+          ],
+        )
+      ]),
       drawer: drawr(context),
       body: SafeArea(child: SingleChildScrollView(child: Container(padding: const EdgeInsets.only(top: 10, bottom: 50, right: 30, left: 30), child: column))),
       floatingActionButton: dial,
