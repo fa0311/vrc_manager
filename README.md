@@ -2,12 +2,20 @@
 
 VRChatの非公式なAPIを利用したVRChatのモバイルクライアント<br>
 Flutterで作成されたシンプルなUIが特徴的です<br>
-iosビルドはする予定はありません<br>
 
 <img width="20%" src="docs/img/screenshots1.jpg"><img width="20%" src="docs/img/screenshots2.jpg">
 
+## 特徴
+- **マルチプラットフォーム**  Android Windows Web(Ios用のPullRequest Buildは歓迎します)
+- **完全日本語**  [翻訳者募集](https://github.com/fa0311/vrchat_mobile_client/discussions/23)
+- **広告無し**
+- **完全無料**
+- **オープンソース**
+
 ## インストール
 ### Android
+[**play.google.com**](https://play.google.com/store/apps/details?id=com.yuki0311.vrchat_mobile_client)からダウンロード<br>
+もしくは
 [**Releases**](https://github.com/fa0311/vrchat_mobile_client/releases)の**app-release.apk**をクリックしてダウンロード
 ### Windows
 [**Releases**](https://github.com/fa0311/vrchat_mobile_client/releases)の**VRChatMC-Setup.exe**をクリックしてダウンロード

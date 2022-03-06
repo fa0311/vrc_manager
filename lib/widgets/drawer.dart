@@ -4,6 +4,7 @@ import 'package:vrchat_mobile_client/scenes/friends.dart';
 import 'package:vrchat_mobile_client/scenes/help.dart';
 import 'package:vrchat_mobile_client/scenes/home.dart';
 import 'package:vrchat_mobile_client/scenes/settings.dart';
+import 'package:vrchat_mobile_client/scenes/worlds_favorite.dart';
 
 Drawer drawr(context) {
   return Drawer(
@@ -60,6 +61,32 @@ Drawer drawr(context) {
                 leading: const Icon(Icons.notifications),
                 title: const Text('フレンドリクエスト'),
               ),
+              ListTile(
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const VRChatMobileWorldsFavorite(),
+                      ));
+                },
+                leading: const Icon(Icons.notifications),
+                title: const Text('お気に入りのワールド'),
+              ),
+              /*
+              ListTile(
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const VRChatMobileWorldsFavorite(),
+                      ));
+                },
+                leading: const Icon(Icons.notifications),
+                title: const Text('最近訪れたワールド'),
+              ),
+              */
               TextButton(
                 onPressed: () {
                   Navigator.pop(context);
