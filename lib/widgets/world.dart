@@ -1,10 +1,17 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:vrchat_mobile_client/api/main.dart';
 import 'package:vrchat_mobile_client/assets/date.dart';
+import 'package:vrchat_mobile_client/assets/storage.dart';
 import 'package:vrchat_mobile_client/assets/vrchat/instance_type.dart';
+import 'package:vrchat_mobile_client/scenes/add_worlds_favorite.dart';
 import 'package:vrchat_mobile_client/scenes/world.dart';
+import 'package:vrchat_mobile_client/scenes/worlds_favorite.dart';
 import 'package:vrchat_mobile_client/widgets/region.dart';
 
-Card worldSlim(context, world) {
+Card worldSlim(BuildContext context, dynamic world) {
   return Card(
       elevation: 20.0,
       child: Container(
@@ -30,12 +37,30 @@ Card worldSlim(context, world) {
                         child: Column(children: <Widget>[
                           SizedBox(width: double.infinity, child: Text(world["name"], style: const TextStyle(fontWeight: FontWeight.bold))),
                         ])),
-                  )
+                  ),
+                  if (world.containsKey("favoriteId"))
+                    SizedBox(
+                        width: 50,
+                        child: IconButton(
+                          onPressed: () {
+                            getLoginSession("LoginSession").then((cookie) {
+                              VRChatAPI(cookie: cookie).deleteFavorites(world["favoriteId"]).then((response) {
+                                Navigator.pop(context);
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => VRChatMobileWorldsFavorite(),
+                                    ));
+                              });
+                            });
+                          },
+                          icon: const Icon(Icons.delete),
+                        )),
                 ],
               ))));
 }
 
-Card worldSlimPlus(context, world, instance) {
+Card worldSlimPlus(BuildContext context, dynamic world, dynamic instance) {
   return Card(
       elevation: 20.0,
       child: Container(
@@ -97,7 +122,7 @@ Card privateWorldSlim() {
           ))));
 }
 
-Column world(world) {
+Column world(dynamic world) {
   return Column(children: <Widget>[
     SizedBox(
       height: 250,
@@ -111,4 +136,24 @@ Column world(world) {
     Text("作成:" + generalDateDifference(world["created_at"])),
     Text("最終更新:" + generalDateDifference(world["updated_at"])),
   ]);
+}
+
+Widget worldAction(BuildContext context, String wid) {
+  return SpeedDial(
+    icon: Icons.add,
+    activeIcon: Icons.close,
+    children: [
+      SpeedDialChild(
+        child: const Icon(Icons.favorite),
+        label: 'お気に入りに追加',
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => VRChatMobileAddWorldsFavorite(worldId: wid),
+              ));
+        },
+      ),
+    ],
+  );
 }

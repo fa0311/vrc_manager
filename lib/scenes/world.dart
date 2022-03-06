@@ -21,12 +21,14 @@ class _WorldState extends State<VRChatMobileWorld> {
       Text('ロード中です'),
     ],
   );
+  Widget? dial;
 
   _WorldState() {
     getLoginSession("LoginSession").then((cookie) {
       VRChatAPI(cookie: cookie).worlds(widget.worldId).then((response) {
         setState(() {
           column = Column(children: [world(response)]);
+          dial = worldAction(context, widget.worldId);
         });
       });
     });
@@ -58,6 +60,7 @@ class _WorldState extends State<VRChatMobileWorld> {
       ]),
       drawer: drawr(context),
       body: SafeArea(child: Padding(padding: const EdgeInsets.all(30), child: SingleChildScrollView(child: column))),
+      floatingActionButton: dial,
     );
   }
 }

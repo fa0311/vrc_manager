@@ -68,6 +68,14 @@ class VRChatAPI {
     return vrchatSession.get(endpoint('api/1/favorite/groups', param));
   }
 
+  Future<Map> addFavorites(String type, String id, String tags) {
+    return vrchatSession.post(endpoint('api/1/favorites', apiKey()), {"type": type, "favoriteId": id, "tags": tags});
+  }
+
+  Future<Map> deleteFavorites(String fid) {
+    return vrchatSession.delete(endpoint('api/1/favorites/' + fid, apiKey()));
+  }
+
   /* 通知 */
 
   Future<Map> notifications({String type = "all", int offset = 0, String after = "", bool hidden = true}) {
