@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:vrchat_mobile_client/api/main.dart';
+import 'package:vrchat_mobile_client/assets/error.dart';
 import 'package:vrchat_mobile_client/assets/storage.dart';
 import 'package:vrchat_mobile_client/widgets/drawer.dart';
 import 'package:vrchat_mobile_client/widgets/world.dart';
@@ -26,6 +27,10 @@ class _WorldState extends State<VRChatMobileWorld> {
   _WorldState() {
     getLoginSession("LoginSession").then((cookie) {
       VRChatAPI(cookie: cookie).worlds(widget.worldId).then((response) {
+        if (response.containsKey("error")) {
+          error(context, response["error"]["message"]);
+          return;
+        }
         setState(() {
           column = Column(children: [world(response)]);
           dial = worldAction(context, widget.worldId);

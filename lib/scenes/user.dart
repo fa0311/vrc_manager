@@ -2,6 +2,7 @@ import 'package:flutter/services.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:vrchat_mobile_client/api/main.dart';
+import 'package:vrchat_mobile_client/assets/error.dart';
 import 'package:vrchat_mobile_client/assets/storage.dart';
 import 'package:vrchat_mobile_client/widgets/drawer.dart';
 import 'package:vrchat_mobile_client/widgets/profile.dart';
@@ -28,21 +29,38 @@ class _UserHomeState extends State<VRChatMobileUser> {
   _UserHomeState() {
     getLoginSession("LoginSession").then((cookie) {
       VRChatAPI(cookie: cookie).users(widget.userId).then((user) {
+        if (user.containsKey("error")) {
+          error(context, user["error"]["message"]);
+          return;
+        }
+
         setState(() {
           column = Column(children: <Widget>[profile(user), Column()]);
         });
         VRChatAPI(cookie: cookie).friendStatus(widget.userId).then((status) {
+          if (status.containsKey("error")) {
+            error(context, status["error"]["message"]);
+            return;
+          }
           setState(() {
             dial = profileAction(context, status, widget.userId);
           });
         });
         if (!["", "private", "offline"].contains(user["location"])) {
           VRChatAPI(cookie: cookie).worlds(user["location"].split(":")[0]).then((world) {
+            if (world.containsKey("error")) {
+              error(context, world["error"]["message"]);
+              return;
+            }
             setState(() {
               column = Column(children: column.children);
               column.children[1] = Column(children: [Container(padding: const EdgeInsets.only(top: 30)), worldSlim(context, world)]);
             });
             VRChatAPI(cookie: cookie).instances(user["location"]).then((instance) {
+              if (instance.containsKey("error")) {
+                error(context, instance["error"]["message"]);
+                return;
+              }
               setState(() {
                 column = Column(children: column.children);
                 column.children[1] = Column(children: [Container(padding: const EdgeInsets.only(top: 30)), worldSlimPlus(context, world, instance)]);

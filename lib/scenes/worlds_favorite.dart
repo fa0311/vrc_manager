@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vrchat_mobile_client/api/main.dart';
+import 'package:vrchat_mobile_client/assets/error.dart';
 import 'package:vrchat_mobile_client/assets/storage.dart';
 import 'package:vrchat_mobile_client/widgets/drawer.dart';
 import 'package:vrchat_mobile_client/widgets/world.dart';
@@ -26,6 +27,10 @@ class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
   _WorldsFavoriteState() {
     getLoginSession("LoginSession").then((cookie) {
       VRChatAPI(cookie: cookie).favoriteGroups("world", offset: 0).then((response) {
+        if (response.containsKey("error")) {
+          error(context, response["error"]["message"]);
+          return;
+        }
         if (response.isEmpty) {
           setState(() => column = Column(
                 children: const <Widget>[
@@ -55,6 +60,11 @@ class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
   moreOver(Map list, int index) {
     getLoginSession("LoginSession").then((cookie) {
       VRChatAPI(cookie: cookie).favoritesWorlds(list["name"], offset: offset[index]).then((worlds) {
+        if (worlds.containsKey("error")) {
+          error(context, worlds["error"]["message"]);
+          return;
+        }
+
         offset[index] += 50;
         final List<Widget> worldList = [];
         worldList.addAll(childrenList[index].children);

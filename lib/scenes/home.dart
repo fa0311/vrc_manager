@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:vrchat_mobile_client/api/main.dart';
+import 'package:vrchat_mobile_client/assets/error.dart';
 import 'package:vrchat_mobile_client/assets/flutter/url_parser.dart';
 import 'package:vrchat_mobile_client/assets/storage.dart';
 import 'package:vrchat_mobile_client/scenes/login.dart';
@@ -40,8 +41,17 @@ class _LoginHomeState extends State<VRChatMobileHome> {
             (_) => false);
       } else {
         VRChatAPI(cookie: cookie).user().then((response) {
+          if (response.containsKey("error")) {
+            error(context, response["error"]["message"]);
+            return;
+          }
           if (response.containsKey("id")) {
             VRChatAPI(cookie: cookie).users(response["id"]).then((user) {
+              if (user.containsKey("error")) {
+                error(context, user["error"]["message"]);
+                return;
+              }
+
               setState(() {
                 column = Column(children: <Widget>[profile(user), Column()]);
                 popupMenu = [
@@ -69,6 +79,10 @@ class _LoginHomeState extends State<VRChatMobileHome> {
               });
               if (!["", "private", "offline"].contains(user["worldId"])) {
                 VRChatAPI(cookie: cookie).worlds(user["worldId"].split(":")[0]).then((world) {
+                  if (world.containsKey("error")) {
+                    error(context, world["error"]["message"]);
+                    return;
+                  }
                   setState(() {
                     column = Column(children: column.children);
                     column.children[1] = Column(children: [Container(padding: const EdgeInsets.only(top: 30)), worldSlim(context, world)]);

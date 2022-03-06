@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:vrchat_mobile_client/api/main.dart';
 import 'package:vrchat_mobile_client/assets/date.dart';
+import 'package:vrchat_mobile_client/assets/error.dart';
 import 'package:vrchat_mobile_client/assets/storage.dart';
 import 'package:vrchat_mobile_client/assets/vrchat/icon.dart';
 import 'package:vrchat_mobile_client/scenes/user.dart';
@@ -40,6 +41,10 @@ Widget profileAction(BuildContext context, status, String uid) {
   void sendFriendRequest() {
     getLoginSession("LoginSession").then((cookie) {
       VRChatAPI(cookie: cookie).sendFriendRequest(uid).then((response) {
+        if (response.containsKey("error")) {
+          error(context, response["error"]["message"]);
+          return;
+        }
         Navigator.pop(context);
         Navigator.pushAndRemoveUntil(
             context,
@@ -54,6 +59,10 @@ Widget profileAction(BuildContext context, status, String uid) {
   void deleteFriendRequest() {
     getLoginSession("LoginSession").then((cookie) {
       VRChatAPI(cookie: cookie).deleteFriendRequest(uid).then((response) {
+        if (response.containsKey("error")) {
+          error(context, response["error"]["message"]);
+          return;
+        }
         Navigator.pop(context);
         Navigator.pushAndRemoveUntil(
             context,
@@ -80,6 +89,10 @@ Widget profileAction(BuildContext context, status, String uid) {
               child: const Text("解除"),
               onPressed: () => getLoginSession("LoginSession").then((cookie) {
                 VRChatAPI(cookie: cookie).deleteFriend(uid).then((response) {
+                  if (response.containsKey("error")) {
+                    error(context, response["error"]["message"]);
+                    return;
+                  }
                   Navigator.pop(context);
                   Navigator.pushAndRemoveUntil(
                       context,

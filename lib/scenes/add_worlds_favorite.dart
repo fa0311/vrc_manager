@@ -19,6 +19,10 @@ class _SettingPageState extends State<VRChatMobileAddWorldsFavorite> {
   _SettingPageState() {
     getLoginSession("LoginSession").then((cookie) {
       VRChatAPI(cookie: cookie).favoriteGroups("world", offset: 0).then((response) {
+        if (response.containsKey("error")) {
+          error(context, response["error"]["message"]);
+          return;
+        }
         if (response.isEmpty) {
           setState(() => column = [
                 Column(
@@ -35,9 +39,9 @@ class _SettingPageState extends State<VRChatMobileAddWorldsFavorite> {
                 VRChatAPI(cookie: cookie).addFavorites("world", widget.worldId, list["name"]).then((response) {
                   if (response.containsKey("error")) {
                     error(context, response["error"]["message"]);
-                  } else {
-                    Navigator.pop(context);
+                    return;
                   }
+                  Navigator.pop(context);
                 })
               },
             ));

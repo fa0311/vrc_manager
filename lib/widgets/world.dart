@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:vrchat_mobile_client/api/main.dart';
 import 'package:vrchat_mobile_client/assets/date.dart';
+import 'package:vrchat_mobile_client/assets/error.dart';
 import 'package:vrchat_mobile_client/assets/storage.dart';
 import 'package:vrchat_mobile_client/assets/vrchat/instance_type.dart';
 import 'package:vrchat_mobile_client/scenes/add_worlds_favorite.dart';
@@ -45,6 +46,10 @@ Card worldSlim(BuildContext context, dynamic world) {
                           onPressed: () {
                             getLoginSession("LoginSession").then((cookie) {
                               VRChatAPI(cookie: cookie).deleteFavorites(world["favoriteId"]).then((response) {
+                                if (response.containsKey("error")) {
+                                  error(context, response["error"]["message"]);
+                                  return;
+                                }
                                 Navigator.pop(context);
                                 Navigator.push(
                                     context,

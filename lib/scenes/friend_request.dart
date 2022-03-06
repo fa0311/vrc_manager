@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vrchat_mobile_client/api/main.dart';
+import 'package:vrchat_mobile_client/assets/error.dart';
 import 'package:vrchat_mobile_client/assets/storage.dart';
 import 'package:vrchat_mobile_client/widgets/drawer.dart';
 import 'package:vrchat_mobile_client/widgets/users.dart';
@@ -28,6 +29,10 @@ class _FriendRequestPageState extends State<VRChatMobileFriendRequest> {
   moreOver() {
     getLoginSession("LoginSession").then((cookie) {
       VRChatAPI(cookie: cookie).notifications(type: "friendRequest", offset: offset).then((response) {
+        if (response.containsKey("error")) {
+          error(context, response["error"]["message"]);
+          return;
+        }
         offset += 100;
         if (response.isEmpty) {
           setState(() => column = Column(
@@ -38,6 +43,10 @@ class _FriendRequestPageState extends State<VRChatMobileFriendRequest> {
         }
         response.forEach((dynamic index, dynamic requestUser) {
           VRChatAPI(cookie: cookie).users(requestUser["senderUserId"]).then((user) {
+            if (user.containsKey("error")) {
+              error(context, user["error"]["message"]);
+              return;
+            }
             setState(() => column = Column(
                   children: dataColumn.adds({0: user}),
                 ));

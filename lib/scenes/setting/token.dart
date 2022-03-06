@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vrchat_mobile_client/api/main.dart';
+import 'package:vrchat_mobile_client/assets/error.dart';
 import 'package:vrchat_mobile_client/assets/storage.dart';
 
 class VRChatMobileTokenSetting extends StatefulWidget {
@@ -59,6 +60,10 @@ class _TokenSettingPageState extends State<VRChatMobileTokenSetting> {
                 child: const Text('ログイン'),
                 onPressed: () {
                   VRChatAPI(cookie: _tokenController.text).user().then((response) {
+                    if (response.containsKey("error")) {
+                      error(context, response["error"]["message"]);
+                      return;
+                    }
                     if (response.containsKey("id")) {
                       showDialog(
                           context: context,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vrchat_mobile_client/api/main.dart';
+import 'package:vrchat_mobile_client/assets/error.dart';
 import 'package:vrchat_mobile_client/assets/storage.dart';
 import 'package:vrchat_mobile_client/widgets/drawer.dart';
 import 'package:vrchat_mobile_client/widgets/users.dart';
@@ -29,6 +30,10 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
   moreOver() {
     getLoginSession("LoginSession").then((cookie) {
       VRChatAPI(cookie: cookie).friends(offline: widget.offline, offset: offset).then((response) {
+        if (response.containsKey("error")) {
+          error(context, response["error"]["message"]);
+          return;
+        }
         offset += 50;
         if (response.isEmpty) {
           setState(() => column = Column(
@@ -45,6 +50,10 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
           String wid = user["location"].split(":")[0];
           if (["", "private", "offline"].contains(user["location"]) || dataColumn.locationMap.containsKey(wid)) return;
           VRChatAPI(cookie: cookie).worlds(wid).then((responseWorld) {
+            if (responseWorld.containsKey("error")) {
+              error(context, responseWorld["error"]["message"]);
+              return;
+            }
             dataColumn.locationMap[wid] = responseWorld;
             setState(() => column = Column(
                   children: dataColumn.reload(),
