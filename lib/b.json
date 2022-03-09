@@ -1,0 +1,82 @@
+{
+    "id": "wrld_3448f7e4-79a7-4115-a44c-e6221174969f",
+    "name": "MEROOM 336号室",
+    "description": "",
+    "featured": false,
+    "authorId": "usr_a6859653-fb16-4c9b-b459-e23a0f26b880",
+    "authorName": "MERU",
+    "capacity": 15,
+    "tags": [
+        "system_approved",
+        "author_tag_meroom"
+    ],
+    "releaseStatus": "public",
+    "imageUrl": "https://api.vrchat.cloud/api/1/file/file_17175ac6-0801-4398-9514-55d810af3703/4/file",
+    "thumbnailImageUrl": "https://api.vrchat.cloud/api/1/image/file_17175ac6-0801-4398-9514-55d810af3703/4/256",
+    "assetUrl": "https://api.vrchat.cloud/api/1/file/file_2e3eba25-43a8-4cce-89be-6c5492ea7801/31/file",
+    "assetUrlObject": {},
+    "pluginUrlObject": {},
+    "unityPackageUrlObject": {},
+    "namespace": "",
+    "unityPackages": [{
+            "id": "unp_d98bfec7-d559-45f4-b04a-1fb233c0fcc7",
+            "assetUrl": "https://api.vrchat.cloud/api/1/file/file_2e3eba25-43a8-4cce-89be-6c5492ea7801/13/file",
+            "assetUrlObject": {},
+            "pluginUrl": "",
+            "pluginUrlObject": {},
+            "unityVersion": "2019.4.29f1",
+            "unitySortNumber": 20190429000,
+            "assetVersion": 4,
+            "platform": "standalonewindows",
+            "created_at": "2021-12-08T21:19:58.109Z"
+        },
+        {
+            "id": "unp_1119bf00-39eb-45c6-9c1d-95d31d75b391",
+            "assetUrl": "https://api.vrchat.cloud/api/1/file/file_2e3eba25-43a8-4cce-89be-6c5492ea7801/31/file",
+            "assetUrlObject": {},
+            "pluginUrl": "",
+            "pluginUrlObject": {},
+            "unityVersion": "2019.4.31f1",
+            "unitySortNumber": 20190431000,
+            "assetVersion": 4,
+            "platform": "standalonewindows",
+            "created_at": "2022-02-15T09:49:18.829Z"
+        }
+    ],
+    "version": 33,
+    "organization": "vrchat",
+    "previewYoutubeId": null,
+    "favorites": 6869,
+    "created_at": "2021-11-09T08:08:04.467Z",
+    "updated_at": "2022-02-01T05:15:18.961Z",
+    "publicationDate": "2021-11-30T03:21:50.547Z",
+    "labsPublicationDate": "2021-11-29T08:42:15.540Z",
+    "visits": 242725,
+    "popularity": 7,
+    "heat": 6,
+    "publicOccupants": 17,
+    "privateOccupants": 226,
+    "occupants": 243,
+    "instances": [
+        [
+            "27512~friends(usr_899e3400-c322-458e-90b4-02614aa1b7a8)~region(jp)~nonce(F8DC207C52488CF4C1BF42D9748C4D0D6DECE8F36B61E6D6)",
+            2
+        ],
+        [
+            "47415~hidden(usr_8bc7484c-7fd2-445c-a993-ad8e8ca6f0e0)~region(jp)~nonce(D601E18702D2328A374DE50DC5CFC42DDC5D2D674EE17E3D)",
+            2
+        ],
+        [
+            "37760",
+            7
+        ],
+        [
+            "45479~region(jp)",
+            7
+        ],
+        [
+            "36187~region(use)",
+            4
+        ]
+    ]
+}
