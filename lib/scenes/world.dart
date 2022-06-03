@@ -63,7 +63,7 @@ class _WorldState extends State<VRChatMobileWorld> {
                     })),
             PopupMenuItem(
                 child: ListTile(
-                    leading: const Icon(Icons.web),
+                    leading: const Icon(Icons.open_in_browser),
                     title: const Text('ブラウザで開く'),
                     onTap: () async {
                       if (await canLaunchUrl(Uri.parse("https://vrchat.com/home/world/${widget.worldId}"))) {
