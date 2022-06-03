@@ -17,12 +17,6 @@ class _SettingPageState extends State<VRChatMobileSettings> {
   _removeLoginSession() async {
     const storage = FlutterSecureStorage();
     await storage.delete(key: 'LoginSession');
-    Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const VRChatMobileLogin(),
-        ),
-        (_) => false);
   }
 
   bool theme = false;
@@ -80,7 +74,15 @@ class _SettingPageState extends State<VRChatMobileSettings> {
                           ),
                           TextButton(
                             child: const Text("ログアウト"),
-                            onPressed: () => _removeLoginSession(),
+                            onPressed: () {
+                              Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const VRChatMobileLogin(),
+                                  ),
+                                  (_) => false);
+                              _removeLoginSession();
+                            },
                           ),
                         ],
                       );
