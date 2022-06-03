@@ -29,8 +29,8 @@ class _HelpPageState extends State<VRChatMobileHelp> {
                 subtitle: const Text('開発者にバグの報告や新機能のリクエストをします'),
                 onTap: () {
                   _launchURL() async {
-                    if (await canLaunch("https://github.com/fa0311/vrchat_mobile_client/issues/new")) {
-                      await launch("https://github.com/fa0311/vrchat_mobile_client/issues/new");
+                    if (await canLaunchUrl(Uri.parse("https://github.com/fa0311/vrchat_mobile_client/issues/new"))) {
+                      await launchUrl(Uri.parse("https://github.com/fa0311/vrchat_mobile_client/issues/new"));
                     }
                   }
 

@@ -15,8 +15,8 @@ void error(context, String text, {String log = ""}) {
                 child: const Text("報告"),
                 onPressed: () async {
                   _launchURL() async {
-                    if (await canLaunch("https://github.com/fa0311/vrchat_mobile_client/issues/new")) {
-                      await launch("https://github.com/fa0311/vrchat_mobile_client/issues/new");
+                    if (await canLaunchUrl(Uri.parse("https://github.com/fa0311/vrchat_mobile_client/issues/new"))) {
+                      await launchUrl(Uri.parse("https://github.com/fa0311/vrchat_mobile_client/issues/new"));
                     }
                   }
 

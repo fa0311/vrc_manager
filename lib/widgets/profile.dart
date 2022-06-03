@@ -150,8 +150,8 @@ List<Widget> _biolink(List biolinks) {
         child: IconButton(
           onPressed: () {
             _launchURL() async {
-              if (await canLaunch(link)) {
-                await launch(link);
+              if (await canLaunchUrl(Uri.parse(link))) {
+                await launchUrl(Uri.parse(link));
               }
             }
 
