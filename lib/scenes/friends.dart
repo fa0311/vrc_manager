@@ -25,9 +25,12 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
 
   Users dataColumn = Users();
   _FriendsPageState() {
-    moreOver();
+    getStorage("FriendsJoinable").then((response) {
+      moreOver();
+      dataColumn.joinable = response == "true" && !widget.offline;
+    });
   }
-  moreOver() {
+  void moreOver() {
     getLoginSession("LoginSession").then((cookie) {
       VRChatAPI(cookie: cookie).friends(offline: widget.offline, offset: offset).then((response) {
         if (response.containsKey("error")) {
@@ -68,9 +71,28 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
   Widget build(BuildContext context) {
     dataColumn.context = context;
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('フレンド'),
-      ),
+      appBar: AppBar(title: const Text('フレンド'), actions: <Widget>[
+        if (!widget.offline)
+          IconButton(
+            icon: const Icon(Icons.more_vert),
+            onPressed: () => showModalBottomSheet(
+                context: context,
+                builder: (BuildContext context) => StatefulBuilder(
+                    builder: (BuildContext context, setStateBuilder) => SwitchListTile(
+                          value: dataColumn.joinable,
+                          title: const Text('参加可能のみ表示'),
+                          onChanged: (bool e) => setStateBuilder(() {
+                            setStorage("FriendsJoinable", e ? "true" : "false");
+                            dataColumn.joinable = e;
+                            setState(() {
+                              column = Column(
+                                children: dataColumn.reload(),
+                              );
+                            });
+                          }),
+                        ))),
+          )
+      ]),
       drawer: drawr(context),
       body: SafeArea(
           child: SizedBox(

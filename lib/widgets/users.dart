@@ -4,6 +4,7 @@ import 'package:vrchat_mobile_client/widgets/status.dart';
 
 class Users {
   List<Widget> children = [];
+  bool joinable = false;
   late BuildContext context;
   late Map<String, dynamic> locationMap = {};
   late List<dynamic> userList = [];
@@ -12,15 +13,15 @@ class Users {
     children = [];
     List<dynamic> tempUserList = userList;
     userList = [];
-    for (var users in tempUserList) {
+    for (Map users in tempUserList) {
       adds(users);
     }
     return children;
   }
 
-  num length() {
-    num len = 0;
-    for (var users in userList) {
+  int length() {
+    int len = 0;
+    for (Map users in userList) {
       len += users.length;
     }
     return len;
@@ -37,6 +38,8 @@ class Users {
     // オリジナル profilePicOverride
     userList.add(users);
     users.forEach((dynamic index, dynamic user) {
+      if (["", "private", "offline"].contains(user["location"]) && joinable) return;
+
       children.add(Card(
           elevation: 20.0,
           child: Container(
