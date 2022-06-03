@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:vrchat_mobile_client/api/main.dart';
 import 'package:vrchat_mobile_client/assets/error.dart';
 import 'package:vrchat_mobile_client/assets/flutter/url_parser.dart';
@@ -72,6 +73,15 @@ class _LoginHomeState extends State<VRChatMobileHome> {
                               onTap: () async {
                                 final data = ClipboardData(text: "https://vrchat.com/home/user/${response['id']}");
                                 await Clipboard.setData(data).then((value) => Navigator.pop(context));
+                              })),
+                      PopupMenuItem(
+                          child: ListTile(
+                              leading: const Icon(Icons.web),
+                              title: const Text('ブラウザで開く'),
+                              onTap: () async {
+                                if (await canLaunchUrl(Uri.parse("https://vrchat.com/home/user/${response['id']}"))) {
+                                  await launchUrl(Uri.parse("https://vrchat.com/home/user/${response['id']}"));
+                                }
                               })),
                     ],
                   )
