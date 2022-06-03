@@ -13,7 +13,7 @@ class Session {
   }
 
   Future<Map> basic(Uri url, String username, String password) async {
-    final headersAuth = Map<String, String>.from(headers)..addAll({'authorization': 'Basic ' + base64Encode(utf8.encode('$username:$password'))});
+    final headersAuth = Map<String, String>.from(headers)..addAll({'authorization': 'Basic ${base64Encode(utf8.encode('$username:$password'))}'});
     http.Response response = await http.get(url, headers: headersAuth);
     updateCookie(response);
     final body = json.decode(response.body);
@@ -49,7 +49,7 @@ class Session {
     if (rawCookie != null) {
       int index = rawCookie.indexOf(';');
       final String newCookie = (index == -1) ? rawCookie : rawCookie.substring(0, index);
-      headers['cookie'] = (headers['cookie'] == "") ? newCookie : (headers['cookie']! + "; " + newCookie);
+      headers['cookie'] = (headers['cookie'] == "") ? newCookie : ("${headers['cookie']!}; $newCookie");
     }
   }
 
