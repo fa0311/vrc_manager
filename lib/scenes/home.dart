@@ -1,10 +1,6 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
-import 'package:share_plus/share_plus.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:vrchat_mobile_client/api/main.dart';
 import 'package:vrchat_mobile_client/assets/error.dart';
 import 'package:vrchat_mobile_client/assets/flutter/url_parser.dart';
@@ -12,6 +8,7 @@ import 'package:vrchat_mobile_client/assets/storage.dart';
 import 'package:vrchat_mobile_client/scenes/login.dart';
 import 'package:vrchat_mobile_client/widgets/drawer.dart';
 import 'package:vrchat_mobile_client/widgets/profile.dart';
+import 'package:vrchat_mobile_client/widgets/share.dart';
 import 'package:vrchat_mobile_client/widgets/world.dart';
 
 class VRChatMobileHome extends StatefulWidget {
@@ -55,37 +52,7 @@ class _LoginHomeState extends State<VRChatMobileHome> {
 
               setState(() {
                 column = Column(children: <Widget>[profile(user), Column()]);
-                popupMenu = [
-                  PopupMenuButton(
-                    itemBuilder: (BuildContext context) => <PopupMenuEntry>[
-                      PopupMenuItem(
-                          child: ListTile(
-                              leading: const Icon(Icons.share),
-                              title: const Text('共有'),
-                              onTap: () {
-                                Share.share("https://vrchat.com/home/user/${response['id']}");
-                                Navigator.pop(context);
-                              })),
-                      PopupMenuItem(
-                          child: ListTile(
-                              leading: const Icon(Icons.copy),
-                              title: const Text('コピー'),
-                              onTap: () async {
-                                final data = ClipboardData(text: "https://vrchat.com/home/user/${response['id']}");
-                                await Clipboard.setData(data).then((value) => Navigator.pop(context));
-                              })),
-                      PopupMenuItem(
-                          child: ListTile(
-                              leading: const Icon(Icons.open_in_browser),
-                              title: const Text('ブラウザで開く'),
-                              onTap: () async {
-                                if (await canLaunchUrl(Uri.parse("https://vrchat.com/home/user/${response['id']}"))) {
-                                  await launchUrl(Uri.parse("https://vrchat.com/home/user/${response['id']}"));
-                                }
-                              })),
-                    ],
-                  )
-                ];
+                popupMenu = [share("https://vrchat.com/home/user/${response['id']}")];
               });
               if (!["", "private", "offline"].contains(user["worldId"])) {
                 VRChatAPI(cookie: cookie).worlds(user["worldId"].split(":")[0]).then((world) {

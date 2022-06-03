@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vrchat_mobile_client/assets/licence.dart';
+import 'package:vrchat_mobile_client/scenes/user.dart';
 import 'package:vrchat_mobile_client/widgets/drawer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -27,14 +28,32 @@ class _HelpPageState extends State<VRChatMobileHelp> {
               ListTile(
                 title: const Text('報告'),
                 subtitle: const Text('開発者にバグの報告や新機能のリクエストをします'),
-                onTap: () {
-                  _launchURL() async {
-                    if (await canLaunchUrl(Uri.parse("https://github.com/fa0311/vrchat_mobile_client/issues/new"))) {
-                      await launchUrl(Uri.parse("https://github.com/fa0311/vrchat_mobile_client/issues/new"));
-                    }
+                onTap: () async {
+                  if (await canLaunchUrl(Uri.parse("https://github.com/fa0311/vrchat_mobile_client/issues/new"))) {
+                    await launchUrl(Uri.parse("https://github.com/fa0311/vrchat_mobile_client/issues/new"));
                   }
-
-                  _launchURL();
+                },
+              ),
+              const Divider(),
+              ListTile(
+                title: const Text('開発者情報'),
+                subtitle: const Text('開発者情報のアカウントを表示'),
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const VRChatMobileUser(userId: "usr_e4c94acd-b8d2-4dfa-92db-57365a32ab1b"),
+                      ));
+                },
+              ),
+              const Divider(),
+              ListTile(
+                title: const Text('評価する'),
+                subtitle: const Text('GooglePlayStoreでの評価をお願いします'),
+                onTap: () async {
+                  if (await canLaunchUrl(Uri.parse("https://play.google.com/store/apps/details?id=com.yuki0311.vrchat_mobile_client"))) {
+                    await launchUrl(Uri.parse("https://play.google.com/store/apps/details?id=com.yuki0311.vrchat_mobile_client"));
+                  }
                 },
               ),
               const Divider(),
