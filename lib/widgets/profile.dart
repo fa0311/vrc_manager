@@ -31,8 +31,8 @@ Column profile(user) {
       if (user["statusDescription"] != "") Text(user["statusDescription"]),
       ConstrainedBox(constraints: const BoxConstraints(maxHeight: 200), child: SingleChildScrollView(child: Text(user["bio"]))),
       Row(mainAxisAlignment: MainAxisAlignment.center, children: _biolink(user["bioLinks"] ?? [])),
-      if (user["last_login"] != "") Text("最終ログイン:" + generalDateDifference(user["last_login"])),
-      Text("登録日:" + generalDateDifference(user["date_joined"])),
+      if (user["last_login"] != "") Text("最終ログイン:${generalDateDifference(user["last_login"])}"),
+      Text("登録日:${generalDateDifference(user["date_joined"])}"),
     ],
   );
 }
@@ -150,8 +150,8 @@ List<Widget> _biolink(List biolinks) {
         child: IconButton(
           onPressed: () {
             _launchURL() async {
-              if (await canLaunch(link)) {
-                await launch(link);
+              if (await canLaunchUrl(Uri.parse(link))) {
+                await launchUrl(Uri.parse(link));
               }
             }
 

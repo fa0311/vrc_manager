@@ -92,8 +92,7 @@ Card worldSlimPlus(BuildContext context, dynamic world, dynamic instance) {
                           Row(children: <Widget>[
                             Padding(padding: const EdgeInsets.only(right: 5), child: region(instance["region"])),
                             const Icon(Icons.groups),
-                            Padding(
-                                padding: const EdgeInsets.only(right: 5), child: Text(instance['n_users'].toString() + "/" + instance['capacity'].toString())),
+                            Padding(padding: const EdgeInsets.only(right: 5), child: Text("${instance['n_users']}/${instance['capacity']}")),
                             Expanded(child: SizedBox(width: double.infinity, child: Text(getVrchatInstanceType()[instance["type"]] ?? "?")))
                           ]),
                           SizedBox(width: double.infinity, child: Text(world["name"], style: const TextStyle(fontWeight: FontWeight.bold))),
@@ -135,11 +134,11 @@ Column world(dynamic world) {
     ),
     Text(world["name"], style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
     ConstrainedBox(constraints: const BoxConstraints(maxHeight: 200), child: SingleChildScrollView(child: Text(world["description"]))),
-    Text("プレイヤー数:" + world["occupants"].toString()),
-    Text("プライベート:" + world["privateOccupants"].toString()),
-    Text("いいね:" + world["favorites"].toString()),
-    Text("作成:" + generalDateDifference(world["created_at"])),
-    Text("最終更新:" + generalDateDifference(world["updated_at"])),
+    Text("プレイヤー数:${world["occupants"]}"),
+    Text("プライベート:${world["privateOccupants"]}"),
+    Text("いいね:${world["favorites"]}"),
+    Text("作成:${generalDateDifference(world["created_at"])}"),
+    Text("最終更新:${generalDateDifference(world["updated_at"])}"),
   ]);
 }
 

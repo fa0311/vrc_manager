@@ -30,7 +30,7 @@ void onPressed(context) {
 
   final session = VRChatAPI();
   void totp() {
-    final _passwordController = TextEditingController();
+    final passwordController = TextEditingController();
     showDialog(
         context: context,
         builder: (_) {
@@ -38,14 +38,14 @@ void onPressed(context) {
             title: const Text("2段階認証"),
             content: TextField(
               keyboardType: TextInputType.number,
-              controller: _passwordController,
+              controller: passwordController,
               decoration: const InputDecoration(labelText: 'コード'),
               maxLength: 6,
             ),
             actions: [
               TextButton(
                   child: const Text("送信"),
-                  onPressed: () => session.loginTotp(_passwordController.text).then((response) {
+                  onPressed: () => session.loginTotp(passwordController.text).then((response) {
                         if (response.containsKey("error")) {
                           error(context, response["error"]["message"]);
                         } else if (response.containsKey("verified") && response["verified"]) {

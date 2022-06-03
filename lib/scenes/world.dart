@@ -49,7 +49,7 @@ class _WorldState extends State<VRChatMobileWorld> {
                     leading: const Icon(Icons.share),
                     title: const Text('共有'),
                     onTap: () {
-                      Share.share("https://vrchat.com/home/world/" + widget.worldId);
+                      Share.share("https://vrchat.com/home/world/${widget.worldId}");
                       Navigator.pop(context);
                     })),
             PopupMenuItem(
@@ -57,7 +57,7 @@ class _WorldState extends State<VRChatMobileWorld> {
                     leading: const Icon(Icons.copy),
                     title: const Text('コピー'),
                     onTap: () async {
-                      final data = ClipboardData(text: "https://vrchat.com/home/world/" + widget.worldId);
+                      final data = ClipboardData(text: "https://vrchat.com/home/world/${widget.worldId}");
                       await Clipboard.setData(data).then((value) => Navigator.pop(context));
                     })),
           ],

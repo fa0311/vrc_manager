@@ -62,7 +62,7 @@ class _LoginHomeState extends State<VRChatMobileHome> {
                               leading: const Icon(Icons.share),
                               title: const Text('共有'),
                               onTap: () {
-                                Share.share("https://vrchat.com/home/user/" + response["id"]);
+                                Share.share("https://vrchat.com/home/user/${response['id']}");
                                 Navigator.pop(context);
                               })),
                       PopupMenuItem(
@@ -70,7 +70,7 @@ class _LoginHomeState extends State<VRChatMobileHome> {
                               leading: const Icon(Icons.copy),
                               title: const Text('コピー'),
                               onTap: () async {
-                                final data = ClipboardData(text: "https://vrchat.com/home/user/" + response["id"]);
+                                final data = ClipboardData(text: "https://vrchat.com/home/user/${response['id']}");
                                 await Clipboard.setData(data).then((value) => Navigator.pop(context));
                               })),
                     ],
