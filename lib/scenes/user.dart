@@ -38,6 +38,7 @@ class _UserHomeState extends State<VRChatMobileUser> {
           column = Column(children: <Widget>[
             profile(user),
             Column(),
+            Column(),
             TextButton(
               style: ElevatedButton.styleFrom(
                 onPrimary: Colors.grey,
@@ -63,6 +64,36 @@ class _UserHomeState extends State<VRChatMobileUser> {
           });
         });
         if (!["", "private", "offline"].contains(user["location"])) {
+          column.children[2] = TextButton(
+            style: ElevatedButton.styleFrom(
+              onPrimary: Colors.grey,
+            ),
+            onPressed: () {
+              VRChatAPI(cookie: cookie).selfInvite(user["location"]).then((response) {
+                if (response.containsKey("error")) {
+                  error(context, response["error"]["message"]);
+                  return;
+                }
+                showDialog(
+                  context: context,
+                  builder: (_) {
+                    return AlertDialog(
+                      title: const Text("セルフ招待を送信しました"),
+                      content: const Text("ゲーム内の招待欄を確認してください"),
+                      actions: <Widget>[
+                        TextButton(
+                          child: const Text("閉じる"),
+                          onPressed: () => Navigator.pop(context),
+                        ),
+                      ],
+                    );
+                  },
+                );
+              });
+            },
+            child: const Text('インスタンスに参加'),
+          );
+
           VRChatAPI(cookie: cookie).worlds(user["location"].split(":")[0]).then((world) {
             if (world.containsKey("error")) {
               error(context, world["error"]["message"]);

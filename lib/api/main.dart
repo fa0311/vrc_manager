@@ -106,6 +106,10 @@ class VRChatAPI {
     return vrchatSession.get(endpoint('api/1/instances/$location', apiKey()));
   }
 
+  Future<Map> selfInvite(String location) {
+    return vrchatSession.post(endpoint('api/1/instances/$location/invite', apiKey()));
+  }
+
   /* 変更 */
 
   Future<Map> changeName(String uid, String username, String password) {
