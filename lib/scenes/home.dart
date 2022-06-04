@@ -5,6 +5,7 @@ import 'package:vrchat_mobile_client/api/main.dart';
 import 'package:vrchat_mobile_client/assets/error.dart';
 import 'package:vrchat_mobile_client/assets/flutter/url_parser.dart';
 import 'package:vrchat_mobile_client/assets/storage.dart';
+import 'package:vrchat_mobile_client/scenes/json_viewer.dart';
 import 'package:vrchat_mobile_client/scenes/login.dart';
 import 'package:vrchat_mobile_client/widgets/drawer.dart';
 import 'package:vrchat_mobile_client/widgets/profile.dart';
@@ -51,7 +52,23 @@ class _LoginHomeState extends State<VRChatMobileHome> {
               }
 
               setState(() {
-                column = Column(children: <Widget>[profile(user), Column()]);
+                column = Column(children: <Widget>[
+                  profile(user),
+                  Column(),
+                  TextButton(
+                    style: ElevatedButton.styleFrom(
+                      onPrimary: Colors.grey,
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => VRChatMobileJsonViewer(obj: user),
+                          ));
+                    },
+                    child: const Text('JSONビューワーで表示'),
+                  ),
+                ]);
                 popupMenu = [share("https://vrchat.com/home/user/${response['id']}")];
               });
               if (!["", "private", "offline"].contains(user["worldId"])) {

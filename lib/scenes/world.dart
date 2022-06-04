@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:vrchat_mobile_client/api/main.dart';
 import 'package:vrchat_mobile_client/assets/error.dart';
 import 'package:vrchat_mobile_client/assets/storage.dart';
+import 'package:vrchat_mobile_client/scenes/json_viewer.dart';
 import 'package:vrchat_mobile_client/widgets/drawer.dart';
 import 'package:vrchat_mobile_client/widgets/share.dart';
 import 'package:vrchat_mobile_client/widgets/world.dart';
@@ -31,7 +32,22 @@ class _WorldState extends State<VRChatMobileWorld> {
           return;
         }
         setState(() {
-          column = Column(children: [world(response)]);
+          column = Column(children: [
+            world(response),
+            TextButton(
+              style: ElevatedButton.styleFrom(
+                onPrimary: Colors.grey,
+              ),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => VRChatMobileJsonViewer(obj: response),
+                    ));
+              },
+              child: const Text('JSONビューワーで表示'),
+            ),
+          ]);
           dial = worldAction(context, widget.worldId);
         });
       });

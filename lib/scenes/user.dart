@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:vrchat_mobile_client/api/main.dart';
 import 'package:vrchat_mobile_client/assets/error.dart';
 import 'package:vrchat_mobile_client/assets/storage.dart';
+import 'package:vrchat_mobile_client/scenes/json_viewer.dart';
 import 'package:vrchat_mobile_client/widgets/drawer.dart';
 import 'package:vrchat_mobile_client/widgets/profile.dart';
 import 'package:vrchat_mobile_client/widgets/share.dart';
@@ -34,7 +35,23 @@ class _UserHomeState extends State<VRChatMobileUser> {
         }
 
         setState(() {
-          column = Column(children: <Widget>[profile(user), Column()]);
+          column = Column(children: <Widget>[
+            profile(user),
+            Column(),
+            TextButton(
+              style: ElevatedButton.styleFrom(
+                onPrimary: Colors.grey,
+              ),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => VRChatMobileJsonViewer(obj: user),
+                    ));
+              },
+              child: const Text('JSONビューワーで表示'),
+            ),
+          ]);
         });
         VRChatAPI(cookie: cookie).friendStatus(widget.userId).then((status) {
           if (status.containsKey("error")) {
