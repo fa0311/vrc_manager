@@ -78,7 +78,7 @@ class _UserHomeState extends State<VRChatMobileUser> {
                   context: context,
                   builder: (_) {
                     return AlertDialog(
-                      title: const Text("セルフ招待を送信しました"),
+                      title: const Text("招待を送信しました"),
                       content: const Text("ゲーム内の招待欄を確認してください"),
                       actions: <Widget>[
                         TextButton(
