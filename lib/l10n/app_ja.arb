@@ -1,0 +1,10 @@
+{
+    "@@locale": "ja",
+    "login": "ログイン",
+    "username": "ユーザー名",
+    "email": "メールアドレス",
+    "username-or-email": "ユーザー名/メールアドレス",
+    "password": "パスワード",
+    "two-factor-authentication": "2段階認証",
+    "authentication-code": "認証コード"
+}

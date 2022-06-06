@@ -4,6 +4,7 @@ import 'package:vrchat_mobile_client/assets/error.dart';
 import 'package:vrchat_mobile_client/assets/storage.dart';
 import 'package:vrchat_mobile_client/scenes/home.dart';
 import 'dart:convert';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class VRChatMobileLogin extends StatefulWidget {
   const VRChatMobileLogin({Key? key}) : super(key: key);
@@ -35,11 +36,13 @@ void onPressed(context) {
         context: context,
         builder: (_) {
           return AlertDialog(
-            title: const Text("2段階認証"),
+            title: const Text(
+              "AppLocalizations.of(context)!.two_factor_authentication",
+            ),
             content: TextField(
               keyboardType: TextInputType.number,
               controller: passwordController,
-              decoration: const InputDecoration(labelText: 'コード'),
+              decoration: const InputDecoration(labelText: "AppLocalizations.of(context)!.authentication_code"),
               maxLength: 6,
             ),
             actions: [
@@ -85,7 +88,7 @@ class _LoginPageState extends State<VRChatMobileLogin> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('ログイン'),
+        title: Text(AppLocalizations.of(context)!.login),
       ),
       body: Padding(
         padding: const EdgeInsets.all(32.0),
@@ -93,13 +96,13 @@ class _LoginPageState extends State<VRChatMobileLogin> {
           children: <Widget>[
             TextFormField(
               controller: _userController,
-              decoration: const InputDecoration(labelText: 'ユーザー名/メールアドレス'),
+              decoration: InputDecoration(labelText: AppLocalizations.of(context)!.username_or_email),
             ),
             TextFormField(
               obscureText: _isPasswordObscure,
               controller: _passwordController,
               decoration: InputDecoration(
-                labelText: 'パスワード',
+                labelText: AppLocalizations.of(context)!.password,
                 suffixIcon: IconButton(
                   icon: Icon(_isPasswordObscure ? Icons.visibility_off : Icons.visibility),
                   onPressed: () {
@@ -114,7 +117,9 @@ class _LoginPageState extends State<VRChatMobileLogin> {
               height: 20,
             ),
             ElevatedButton(
-              child: const Text('ログイン'),
+              child: Text(
+                AppLocalizations.of(context)!.login,
+              ),
               onPressed: () => onPressed(context),
             ),
           ],

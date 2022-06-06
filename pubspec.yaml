@@ -45,6 +45,8 @@ dependencies:
   flutter_speed_dial: ^6.0.0
   share_plus: ^4.0.5
   flutter_json_viewer: ^1.0.1
+  flutter_localizations:
+    sdk: flutter
 
 dev_dependencies:
   flutter_test:
@@ -64,6 +66,7 @@ dev_dependencies:
 flutter:
   assets:
    - assets/svg/
+  generate: true
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

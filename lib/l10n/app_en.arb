@@ -1,0 +1,10 @@
+{
+    "@@locale": "en",
+    "login": "Login",
+    "username": "Username",
+    "email": "Email",
+    "username-or-email": "Username/Email",
+    "password": "Password",
+    "two-factor-authentication": "Two Factor Authentication",
+    "authentication-code": "Authentication Code"
+}
