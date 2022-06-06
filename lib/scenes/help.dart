@@ -3,6 +3,7 @@ import 'package:vrchat_mobile_client/assets/licence.dart';
 import 'package:vrchat_mobile_client/scenes/user.dart';
 import 'package:vrchat_mobile_client/widgets/drawer.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class VRChatMobileHelp extends StatefulWidget {
   const VRChatMobileHelp({Key? key}) : super(key: key);
@@ -29,8 +30,8 @@ class _HelpPageState extends State<VRChatMobileHelp> {
                 title: const Text('報告'),
                 subtitle: const Text('開発者にバグの報告や新機能のリクエストをします'),
                 onTap: () async {
-                  if (await canLaunchUrl(Uri.parse("https://github.com/fa0311/vrchat_mobile_client/issues/new"))) {
-                    await launchUrl(Uri.parse("https://github.com/fa0311/vrchat_mobile_client/issues/new"));
+                  if (await canLaunchUrl(Uri.parse(AppLocalizations.of(context)!.issueUrl))) {
+                    await launchUrl(Uri.parse(AppLocalizations.of(context)!.issueUrl));
                   }
                 },
               ),

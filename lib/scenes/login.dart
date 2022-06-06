@@ -36,29 +36,31 @@ void onPressed(context) {
         context: context,
         builder: (_) {
           return AlertDialog(
-            title: const Text(
-              "AppLocalizations.of(context)!.two_factor_authentication",
+            title: Text(
+              AppLocalizations.of(context)!.twoFactorAuthentication,
             ),
             content: TextField(
               keyboardType: TextInputType.number,
               controller: passwordController,
-              decoration: const InputDecoration(labelText: "AppLocalizations.of(context)!.authentication_code"),
+              decoration: InputDecoration(labelText: AppLocalizations.of(context)!.authenticationCode),
               maxLength: 6,
             ),
             actions: [
               TextButton(
-                  child: const Text("送信"),
+                  child: Text(AppLocalizations.of(context)!.send),
                   onPressed: () => session.loginTotp(passwordController.text).then((response) {
                         if (response.containsKey("error")) {
                           error(context, response["error"]["message"]);
                         } else if (response.containsKey("verified") && response["verified"]) {
                           save(session.vrchatSession.headers["cookie"] as String);
                         } else if (response.containsKey("verified") && !response["verified"]) {
-                          error(context, "ログイン情報が間違っています");
+                          error(context, AppLocalizations.of(context)!.incorrectLogin);
                         } else if (response.containsKey("id")) {
                           save(session.vrchatSession.headers["cookie"] as String);
                         } else {
-                          error(context, "このアカウントのログイン方法は対応していません\n開発者に報告してください\nまた、報告をタップするとログがクリップボードにコピーされます", log: json.encode(response));
+                          error(context,
+                              "${AppLocalizations.of(context)!.unexpectedError}\n${AppLocalizations.of(context)!.reportMessage1}\n${AppLocalizations.of(context)!.reportMessage2(AppLocalizations.of(context)!.report)}",
+                              log: json.encode(response));
                         }
                       })),
             ],
@@ -74,11 +76,13 @@ void onPressed(context) {
     } else if (response.containsKey("verified") && response["verified"]) {
       save(session.vrchatSession.headers["cookie"] as String);
     } else if (response.containsKey("verified") && !response["verified"]) {
-      error(context, "ログイン情報が間違っています");
+      error(context, AppLocalizations.of(context)!.incorrectLogin);
     } else if (response.containsKey("id")) {
       save(session.vrchatSession.headers["cookie"] as String);
     } else {
-      error(context, "このアカウントのログイン方法は対応していません\n開発者に報告してください\nまた、報告をタップするとログがクリップボードにコピーされます", log: json.encode(response));
+      error(context,
+          "${AppLocalizations.of(context)!.unexpectedError}\n${AppLocalizations.of(context)!.reportMessage1}\n${AppLocalizations.of(context)!.reportMessage2(AppLocalizations.of(context)!.report)}",
+          log: json.encode(response));
     }
   });
 }
@@ -96,7 +100,7 @@ class _LoginPageState extends State<VRChatMobileLogin> {
           children: <Widget>[
             TextFormField(
               controller: _userController,
-              decoration: InputDecoration(labelText: AppLocalizations.of(context)!.username_or_email),
+              decoration: InputDecoration(labelText: AppLocalizations.of(context)!.usernameOrEmail),
             ),
             TextFormField(
               obscureText: _isPasswordObscure,

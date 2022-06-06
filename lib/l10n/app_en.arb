@@ -1,10 +1,43 @@
 {
     "@@locale": "en",
+    "@____________________CONFIG____________________": {},
+    "issueUrl": "https://github.com/fa0311/vrchat_mobile_client/issues/new",
+    "@____________________DIALOG____________________": {},
+    "ok": "OK",
+    "no": "NO",
+    "cancel": "Cancel",
+    "report": "Report",
+    "send": "送信",
+    "receive": "受信",
+    "@____________________ERROR_DIALOG____________________": {},
+    "errorDialog": "error",
+    "reportMessage1": "開発者に報告してください",
+    "reportMessage2": "また、{report}をタップするとログがクリップボードにコピーされ報告ページにアクセスします",
+    "@reportMessage2": {
+        "placeholders": {
+            "report": {
+                "example": "report"
+            }
+        }
+    },
+    "@____________________LOGIN____________________": {},
     "login": "Login",
     "username": "Username",
     "email": "Email",
-    "username-or-email": "Username/Email",
+    "usernameOrEmail": "Username/Email",
     "password": "Password",
-    "two-factor-authentication": "Two Factor Authentication",
-    "authentication-code": "Authentication Code"
+    "twoFactorAuthentication": "Two Factor Authentication",
+    "authenticationCode": "Authentication Code",
+    "@____________________MEMO____________________": {},
+    "@@login": "ログイン",
+    "@@username": "ユーザー名",
+    "@@email": "メールアドレス",
+    "@@usernameOrEmail": "ユーザー名/メールアドレス",
+    "@@password": "パスワード",
+    "@@twoFactorAuthentication": "2段階認証",
+    "@@authenticationCode": "認証コード",
+    "@____________________LOGIN_ERROR_DIALOG____________________": {},
+    "incorrectLogin": "ログイン情報が間違っています",
+    "unexpectedError": "このアカウントのログイン方法は対応していません",
+    "@____________________FRIEND____________________": {}
 }

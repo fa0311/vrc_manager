@@ -1,10 +1,19 @@
 {
     "@@locale": "ja",
+    "@____________________DIALOG____________________": {},
+    "ok": "OK",
+    "no": "NO",
+    "cancel": "キャンセル",
+    "report": "Report",
+    "@__ERROR_DIALOG__": {},
+    "errorDialog": "エラーが発生しました",
+    "@__LOGIN__": {},
     "login": "ログイン",
     "username": "ユーザー名",
     "email": "メールアドレス",
-    "username-or-email": "ユーザー名/メールアドレス",
+    "usernameOrEmail": "ユーザー名/メールアドレス",
     "password": "パスワード",
-    "two-factor-authentication": "2段階認証",
-    "authentication-code": "認証コード"
+    "twoFactorAuthentication": "2段階認証",
+    "authenticationCode": "認証コード",
+    "@__FRIEND__": {}
 }
