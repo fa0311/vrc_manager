@@ -7,6 +7,7 @@ import 'package:vrchat_mobile_client/widgets/drawer.dart';
 import 'package:vrchat_mobile_client/widgets/profile.dart';
 import 'package:vrchat_mobile_client/widgets/share.dart';
 import 'package:vrchat_mobile_client/widgets/world.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class VRChatMobileUser extends StatefulWidget {
   final String userId;
@@ -18,9 +19,9 @@ class VRChatMobileUser extends StatefulWidget {
 }
 
 class _UserHomeState extends State<VRChatMobileUser> {
-  Column column = Column(
-    children: const <Widget>[
-      Text('ロード中です'),
+  late Column column = Column(
+    children: <Widget>[
+      Text(AppLocalizations.of(context)!.loading),
     ],
   );
   Widget? dial;

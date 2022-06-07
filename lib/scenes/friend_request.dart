@@ -4,6 +4,7 @@ import 'package:vrchat_mobile_client/assets/error.dart';
 import 'package:vrchat_mobile_client/assets/storage.dart';
 import 'package:vrchat_mobile_client/widgets/drawer.dart';
 import 'package:vrchat_mobile_client/widgets/users.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class VRChatMobileFriendRequest extends StatefulWidget {
   const VRChatMobileFriendRequest({Key? key}) : super(key: key);
@@ -16,9 +17,9 @@ class _FriendRequestPageState extends State<VRChatMobileFriendRequest> {
   int offset = 0;
   List<Widget> children = [];
 
-  Column column = Column(
-    children: const <Widget>[
-      Text('ロード中です'),
+  late Column column = Column(
+    children: <Widget>[
+      Text(AppLocalizations.of(context)!.loading),
     ],
   );
 
@@ -36,8 +37,8 @@ class _FriendRequestPageState extends State<VRChatMobileFriendRequest> {
         offset += 100;
         if (response.isEmpty) {
           setState(() => column = Column(
-                children: const <Widget>[
-                  Text('なし'),
+                children: <Widget>[
+                  Text(AppLocalizations.of(context)!.none),
                 ],
               ));
         }

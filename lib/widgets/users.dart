@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:vrchat_mobile_client/scenes/user.dart';
 import 'package:vrchat_mobile_client/widgets/status.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Users {
   List<Widget> children = [];
@@ -81,7 +82,7 @@ class Users {
                         if (!["", "private", "offline"].contains(user["location"]) && locationMap.containsKey(user["location"].split(":")[0]))
                           Text(locationMap[user["location"].split(":")[0]]["name"], style: const TextStyle(fontSize: 14)),
                         if (!["", "private", "offline"].contains(user["location"]) && !locationMap.containsKey(user["location"].split(":")[0]))
-                          const Text("ロード中", style: TextStyle(fontSize: 14)),
+                          Text(AppLocalizations.of(context)!.loading, style: const TextStyle(fontSize: 14)),
                         if (user["location"] == "private") const Text("プライベートワールド", style: TextStyle(fontSize: 14)),
                       ])),
                     ],

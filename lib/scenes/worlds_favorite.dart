@@ -4,6 +4,7 @@ import 'package:vrchat_mobile_client/assets/error.dart';
 import 'package:vrchat_mobile_client/assets/storage.dart';
 import 'package:vrchat_mobile_client/widgets/drawer.dart';
 import 'package:vrchat_mobile_client/widgets/world.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class VRChatMobileWorldsFavorite extends StatefulWidget {
   final bool offline;
@@ -18,9 +19,9 @@ class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
   List<int> offset = [];
   List<Column> childrenList = [];
 
-  Column column = Column(
-    children: const <Widget>[
-      Text('ロード中です'),
+  late Column column = Column(
+    children: <Widget>[
+      Text(AppLocalizations.of(context)!.loading),
     ],
   );
 
@@ -33,8 +34,8 @@ class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
         }
         if (response.isEmpty) {
           setState(() => column = Column(
-                children: const <Widget>[
-                  Text('なし'),
+                children: <Widget>[
+                  Text(AppLocalizations.of(context)!.none),
                 ],
               ));
         } else {

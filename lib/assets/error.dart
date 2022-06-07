@@ -8,7 +8,7 @@ void error(context, String text, {String log = ""}) {
       context: context,
       builder: (_) {
         return AlertDialog(
-          title: Text(AppLocalizations.of(context)!.unexpectedError),
+          title: Text(AppLocalizations.of(context)!.errorDialog),
           content: Text(text),
           actions: [
             if (log.isNotEmpty)

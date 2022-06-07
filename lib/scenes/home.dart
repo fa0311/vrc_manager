@@ -11,6 +11,7 @@ import 'package:vrchat_mobile_client/widgets/drawer.dart';
 import 'package:vrchat_mobile_client/widgets/profile.dart';
 import 'package:vrchat_mobile_client/widgets/share.dart';
 import 'package:vrchat_mobile_client/widgets/world.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class VRChatMobileHome extends StatefulWidget {
   const VRChatMobileHome({Key? key}) : super(key: key);
@@ -20,10 +21,10 @@ class VRChatMobileHome extends StatefulWidget {
 }
 
 class _LoginHomeState extends State<VRChatMobileHome> {
-  Column column = Column(
-    children: const <Widget>[
-      SizedBox(width: double.infinity, child: Text('ロード中です')),
-      Text('この画面がずっと表示されている場合、左のメニューから設定を開いてログアウトしてください'),
+  late Column column = Column(
+    children: <Widget>[
+      SizedBox(width: double.infinity, child: Text(AppLocalizations.of(context)!.loading)),
+      const Text('この画面がずっと表示されている場合、左のメニューから設定を開いてログアウトしてください'),
     ],
   );
 

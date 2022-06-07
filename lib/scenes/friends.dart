@@ -4,6 +4,7 @@ import 'package:vrchat_mobile_client/assets/error.dart';
 import 'package:vrchat_mobile_client/assets/storage.dart';
 import 'package:vrchat_mobile_client/widgets/drawer.dart';
 import 'package:vrchat_mobile_client/widgets/users.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class VRChatMobileFriends extends StatefulWidget {
   final bool offline;
@@ -17,9 +18,9 @@ class VRChatMobileFriends extends StatefulWidget {
 class _FriendsPageState extends State<VRChatMobileFriends> {
   int offset = 0;
 
-  Column column = Column(
-    children: const <Widget>[
-      Text('ロード中です'),
+  late Column column = Column(
+    children: <Widget>[
+      Text(AppLocalizations.of(context)!.loading),
     ],
   );
 
@@ -30,7 +31,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
       dataColumn.joinable = response == "true" && !widget.offline;
     });
   }
-  void moreOver() {
+  moreOver() {
     getLoginSession("LoginSession").then((cookie) {
       VRChatAPI(cookie: cookie).friends(offline: widget.offline, offset: offset).then((response) {
         if (response.containsKey("error")) {
@@ -40,8 +41,8 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
         offset += 50;
         if (response.isEmpty) {
           setState(() => column = Column(
-                children: const <Widget>[
-                  Text('なし'),
+                children: <Widget>[
+                  Text(AppLocalizations.of(context)!.none),
                 ],
               ));
         } else {

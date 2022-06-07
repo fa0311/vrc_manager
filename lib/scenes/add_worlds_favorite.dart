@@ -3,6 +3,7 @@ import 'package:vrchat_mobile_client/api/main.dart';
 import 'package:vrchat_mobile_client/assets/error.dart';
 import 'package:vrchat_mobile_client/assets/storage.dart';
 import 'package:vrchat_mobile_client/widgets/drawer.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class VRChatMobileAddWorldsFavorite extends StatefulWidget {
   final String worldId;
@@ -26,8 +27,8 @@ class _SettingPageState extends State<VRChatMobileAddWorldsFavorite> {
         if (response.isEmpty) {
           setState(() => column = [
                 Column(
-                  children: const <Widget>[
-                    Text('なし'),
+                  children: <Widget>[
+                    Text(AppLocalizations.of(context)!.none),
                   ],
                 )
               ]);
