@@ -47,6 +47,7 @@ dependencies:
   flutter_json_viewer: ^1.0.1
   flutter_localizations:
     sdk: flutter
+  import_sorter: ^4.6.0
 
 dev_dependencies:
   flutter_test:
