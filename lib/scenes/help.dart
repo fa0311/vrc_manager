@@ -17,7 +17,7 @@ class _HelpPageState extends State<VRChatMobileHelp> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('ヘルプ'),
+        title: Text(AppLocalizations.of(context)!.help),
       ),
       drawer: drawr(context),
       body: Padding(
@@ -27,8 +27,8 @@ class _HelpPageState extends State<VRChatMobileHelp> {
           child: Column(
             children: <Widget>[
               ListTile(
-                title: const Text('報告'),
-                subtitle: const Text('開発者にバグの報告や新機能のリクエストをします'),
+                title: Text(AppLocalizations.of(context)!.report),
+                subtitle: Text(AppLocalizations.of(context)!.reportDetails),
                 onTap: () async {
                   if (await canLaunchUrl(Uri.parse(AppLocalizations.of(context)!.issueUrl))) {
                     await launchUrl(Uri.parse(AppLocalizations.of(context)!.issueUrl));
@@ -37,20 +37,20 @@ class _HelpPageState extends State<VRChatMobileHelp> {
               ),
               const Divider(),
               ListTile(
-                title: const Text('開発者情報'),
-                subtitle: const Text('開発者情報のアカウントを表示'),
+                title: Text(AppLocalizations.of(context)!.developerInfo),
+                subtitle: Text(AppLocalizations.of(context)!.developerInfoDetails),
                 onTap: () {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const VRChatMobileUser(userId: "usr_e4c94acd-b8d2-4dfa-92db-57365a32ab1b"),
+                        builder: (BuildContext context) => const VRChatMobileUser(userId: "usr_e4c94acd-b8d2-4dfa-92db-57365a32ab1b"),
                       ));
                 },
               ),
               const Divider(),
               ListTile(
-                title: const Text('評価する'),
-                subtitle: const Text('GooglePlayStoreでの評価をお願いします'),
+                title: Text(AppLocalizations.of(context)!.rateTheApp),
+                subtitle: Text(AppLocalizations.of(context)!.rateTheAppDetails),
                 onTap: () async {
                   if (await canLaunchUrl(Uri.parse("https://play.google.com/store/apps/details?id=com.yuki0311.vrchat_mobile_client"))) {
                     await launchUrl(Uri.parse("https://play.google.com/store/apps/details?id=com.yuki0311.vrchat_mobile_client"));
@@ -59,11 +59,9 @@ class _HelpPageState extends State<VRChatMobileHelp> {
               ),
               const Divider(),
               ListTile(
-                title: const Text('Licence'),
-                subtitle: const Text('Licence情報を確認します'),
-                onTap: () {
-                  showLicence(context);
-                },
+                title: Text(AppLocalizations.of(context)!.licence),
+                subtitle: Text(AppLocalizations.of(context)!.licenceDetails),
+                onTap: () => showLicence(context),
               ),
             ],
           ),

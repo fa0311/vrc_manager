@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:vrchat_mobile_client/api/main.dart';
 import 'package:vrchat_mobile_client/assets/error.dart';
 import 'package:vrchat_mobile_client/assets/storage.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class VRChatMobileTokenSetting extends StatefulWidget {
   final bool offline;
@@ -26,7 +27,7 @@ class _TokenSettingPageState extends State<VRChatMobileTokenSetting> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Token'),
+          title: Text(AppLocalizations.of(context)!.token),
         ),
         body: Padding(
             padding: const EdgeInsets.all(32.0),
@@ -34,20 +35,20 @@ class _TokenSettingPageState extends State<VRChatMobileTokenSetting> {
               TextField(
                 controller: _tokenController,
                 maxLines: null,
-                decoration: const InputDecoration(labelText: 'Cookie'),
+                decoration: InputDecoration(labelText: AppLocalizations.of(context)!.cookie),
               ),
               ElevatedButton(
-                child: const Text('保存'),
+                child: Text(AppLocalizations.of(context)!.save),
                 onPressed: () {
                   setLoginSession("LoginSession", _tokenController.text).then((response) {
                     showDialog(
                         context: context,
                         builder: (_) {
                           return AlertDialog(
-                            title: const Text("保存しました"),
+                            title: Text(AppLocalizations.of(context)!.saved),
                             actions: <Widget>[
                               TextButton(
-                                child: const Text("閉じる"),
+                                child: Text(AppLocalizations.of(context)!.close),
                                 onPressed: () => Navigator.pop(context),
                               ),
                             ],
@@ -57,7 +58,7 @@ class _TokenSettingPageState extends State<VRChatMobileTokenSetting> {
                 },
               ),
               ElevatedButton(
-                child: const Text('ログイン'),
+                child: Text(AppLocalizations.of(context)!.login),
                 onPressed: () {
                   VRChatAPI(cookie: _tokenController.text).user().then((response) {
                     if (response.containsKey("error")) {
@@ -69,10 +70,10 @@ class _TokenSettingPageState extends State<VRChatMobileTokenSetting> {
                           context: context,
                           builder: (_) {
                             return AlertDialog(
-                              title: const Text("成功しました"),
+                              title: Text(AppLocalizations.of(context)!.success),
                               actions: <Widget>[
                                 TextButton(
-                                  child: const Text("閉じる"),
+                                  child: Text(AppLocalizations.of(context)!.close),
                                   onPressed: () => Navigator.pop(context),
                                 ),
                               ],
@@ -83,10 +84,10 @@ class _TokenSettingPageState extends State<VRChatMobileTokenSetting> {
                           context: context,
                           builder: (_) {
                             return AlertDialog(
-                              title: const Text("失敗しました"),
+                              title: Text(AppLocalizations.of(context)!.failure),
                               actions: <Widget>[
                                 TextButton(
-                                  child: const Text("閉じる"),
+                                  child: Text(AppLocalizations.of(context)!.close),
                                   onPressed: () => Navigator.pop(context),
                                 ),
                               ],

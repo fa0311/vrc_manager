@@ -57,7 +57,7 @@ class _SettingPageState extends State<VRChatMobileAddWorldsFavorite> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('お気に入りに追加'),
+        title: Text(AppLocalizations.of(context)!.addFavoriteWorlds),
       ),
       drawer: drawr(context),
       body: Padding(

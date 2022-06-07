@@ -72,7 +72,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
   Widget build(BuildContext context) {
     dataColumn.context = context;
     return Scaffold(
-      appBar: AppBar(title: const Text('フレンド'), actions: <Widget>[
+      appBar: AppBar(title: Text(AppLocalizations.of(context)!.frends), actions: <Widget>[
         if (!widget.offline)
           IconButton(
             icon: const Icon(Icons.more_vert),
@@ -81,7 +81,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
                 builder: (BuildContext context) => StatefulBuilder(
                     builder: (BuildContext context, setStateBuilder) => SwitchListTile(
                           value: dataColumn.joinable,
-                          title: const Text('参加可能のみ表示'),
+                          title: Text(AppLocalizations.of(context)!.showOnlyAvailable),
                           onChanged: (bool e) => setStateBuilder(() {
                             setStorage("FriendsJoinable", e ? "true" : "false");
                             dataColumn.joinable = e;
@@ -107,7 +107,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
                     child: Column(
                       children: <Widget>[
                         ElevatedButton(
-                          child: const Text('続きを読み込む'),
+                          child: Text(AppLocalizations.of(context)!.readMore),
                           onPressed: () => moreOver(),
                         ),
                       ],

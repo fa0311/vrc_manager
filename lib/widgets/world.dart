@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:vrchat_mobile_client/api/main.dart';
@@ -11,6 +9,7 @@ import 'package:vrchat_mobile_client/scenes/add_worlds_favorite.dart';
 import 'package:vrchat_mobile_client/scenes/world.dart';
 import 'package:vrchat_mobile_client/scenes/worlds_favorite.dart';
 import 'package:vrchat_mobile_client/widgets/region.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 Card worldSlim(BuildContext context, dynamic world) {
   return Card(
@@ -22,7 +21,7 @@ Card worldSlim(BuildContext context, dynamic world) {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => VRChatMobileWorld(worldId: world["id"]),
+                      builder: (BuildContext context) => VRChatMobileWorld(worldId: world["id"]),
                     ));
               },
               behavior: HitTestBehavior.opaque,
@@ -54,7 +53,7 @@ Card worldSlim(BuildContext context, dynamic world) {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => VRChatMobileWorldsFavorite(),
+                                      builder: (BuildContext context) => const VRChatMobileWorldsFavorite(),
                                     ));
                               });
                             });
@@ -75,7 +74,7 @@ Card worldSlimPlus(BuildContext context, dynamic world, dynamic instance) {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => VRChatMobileWorld(worldId: world["id"]),
+                      builder: (BuildContext context) => VRChatMobileWorld(worldId: world["id"]),
                     ));
               },
               behavior: HitTestBehavior.opaque,
@@ -102,7 +101,7 @@ Card worldSlimPlus(BuildContext context, dynamic world, dynamic instance) {
               ))));
 }
 
-Card privateWorldSlim() {
+Card privateWorldSlim(BuildContext context) {
   return Card(
       elevation: 20.0,
       child: Container(
@@ -117,16 +116,17 @@ Card privateWorldSlim() {
               Expanded(
                 child: Padding(
                     padding: const EdgeInsets.only(left: 10),
-                    child: Column(children: const <Widget>[
-                      SizedBox(width: double.infinity, child: Text("Private")),
-                      SizedBox(width: double.infinity, child: Text("プライベートワールド", style: TextStyle(fontWeight: FontWeight.bold))),
+                    child: Column(children: <Widget>[
+                      const SizedBox(width: double.infinity, child: Text("Private")),
+                      SizedBox(
+                          width: double.infinity, child: Text(AppLocalizations.of(context)!.privateWorld, style: const TextStyle(fontWeight: FontWeight.bold))),
                     ])),
               )
             ],
           ))));
 }
 
-Column world(dynamic world) {
+Column world(BuildContext context, dynamic world) {
   return Column(children: <Widget>[
     SizedBox(
       height: 250,
@@ -134,11 +134,10 @@ Column world(dynamic world) {
     ),
     Text(world["name"], style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
     ConstrainedBox(constraints: const BoxConstraints(maxHeight: 200), child: SingleChildScrollView(child: Text(world["description"]))),
-    Text("プレイヤー数:${world["occupants"]}"),
-    Text("プライベート:${world["privateOccupants"]}"),
-    Text("いいね:${world["favorites"]}"),
-    Text("作成:${generalDateDifference(world["created_at"])}"),
-    Text("最終更新:${generalDateDifference(world["updated_at"])}"),
+    Text(AppLocalizations.of(context)!.privateOccupants(world["privateOccupants"])),
+    Text(AppLocalizations.of(context)!.favorites(world["favorites"])),
+    Text(AppLocalizations.of(context)!.createdAt(generalDateDifference(context, world["created_at"]))),
+    Text(AppLocalizations.of(context)!.updatedAt(generalDateDifference(context, world["updated_at"]))),
   ]);
 }
 
@@ -149,12 +148,12 @@ Widget worldAction(BuildContext context, String wid) {
     children: [
       SpeedDialChild(
         child: const Icon(Icons.favorite),
-        label: 'お気に入りに追加',
+        label: AppLocalizations.of(context)!.addFavoriteWorlds,
         onTap: () {
           Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => VRChatMobileAddWorldsFavorite(worldId: wid),
+                builder: (BuildContext context) => VRChatMobileAddWorldsFavorite(worldId: wid),
               ));
         },
       ),

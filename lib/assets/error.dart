@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-void error(context, String text, {String log = ""}) {
+error(BuildContext context, String text, {String log = ""}) {
   showDialog(
       context: context,
       builder: (_) {

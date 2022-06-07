@@ -5,6 +5,7 @@ import 'package:vrchat_mobile_client/main.dart';
 import 'package:vrchat_mobile_client/scenes/login.dart';
 import 'package:vrchat_mobile_client/scenes/setting/token.dart';
 import 'package:vrchat_mobile_client/widgets/drawer.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class VRChatMobileSettings extends StatefulWidget {
   const VRChatMobileSettings({Key? key}) : super(key: key);
@@ -25,7 +26,7 @@ class _SettingPageState extends State<VRChatMobileSettings> {
       Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
-            builder: (context) => const VRChatMobile(),
+            builder: (BuildContext context) => const VRChatMobile(),
           ),
           (_) => false);
     });
@@ -42,7 +43,7 @@ class _SettingPageState extends State<VRChatMobileSettings> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('設定'),
+        title: Text(AppLocalizations.of(context)!.setting),
       ),
       drawer: drawr(context),
       body: Padding(
@@ -53,32 +54,32 @@ class _SettingPageState extends State<VRChatMobileSettings> {
             children: <Widget>[
               SwitchListTile(
                 value: theme,
-                title: const Text('ダークテーマ'),
-                subtitle: const Text('目に優しいダークテーマに切り替えます'),
+                title: Text(AppLocalizations.of(context)!.darkTheme),
+                subtitle: Text(AppLocalizations.of(context)!.darkThemeDetails),
                 onChanged: _changeSwitch,
               ),
               const Divider(),
               ListTile(
-                title: const Text('ログアウト'),
-                subtitle: const Text('ログアウトし端末からログイン情報を削除します'),
+                title: Text(AppLocalizations.of(context)!.logout),
+                subtitle: Text(AppLocalizations.of(context)!.logoutDetails),
                 onTap: () => {
                   showDialog(
                     context: context,
                     builder: (_) {
                       return AlertDialog(
-                        title: const Text("ログアウトしますか？"),
+                        title: Text(AppLocalizations.of(context)!.logoutConfirm),
                         actions: <Widget>[
                           TextButton(
-                            child: const Text("キャンセル"),
+                            child: Text(AppLocalizations.of(context)!.cancel),
                             onPressed: () => Navigator.pop(context),
                           ),
                           TextButton(
-                            child: const Text("ログアウト"),
+                            child: Text(AppLocalizations.of(context)!.logout),
                             onPressed: () {
                               Navigator.pushAndRemoveUntil(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => const VRChatMobileLogin(),
+                                    builder: (BuildContext context) => const VRChatMobileLogin(),
                                   ),
                                   (_) => false);
                               _removeLoginSession();
@@ -92,13 +93,13 @@ class _SettingPageState extends State<VRChatMobileSettings> {
               ),
               const Divider(),
               ListTile(
-                title: const Text('Token'),
-                subtitle: const Text('認証情報を確認または変更できます'),
+                title: Text(AppLocalizations.of(context)!.token),
+                subtitle: Text(AppLocalizations.of(context)!.tokenDetails),
                 onTap: () => {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const VRChatMobileTokenSetting(),
+                        builder: (BuildContext context) => const VRChatMobileTokenSetting(),
                       ))
                 },
               )

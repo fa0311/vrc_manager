@@ -37,7 +37,7 @@ class _UserHomeState extends State<VRChatMobileUser> {
 
         setState(() {
           column = Column(children: <Widget>[
-            profile(user),
+            profile(context, user),
             Column(),
             Column(),
             TextButton(
@@ -48,10 +48,10 @@ class _UserHomeState extends State<VRChatMobileUser> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => VRChatMobileJsonViewer(obj: user),
+                      builder: (BuildContext context) => VRChatMobileJsonViewer(obj: user),
                     ));
               },
-              child: const Text('JSONビューワーで表示'),
+              child: Text(AppLocalizations.of(context)!.viewInJsonViewer),
             ),
           ]);
         });
@@ -79,11 +79,11 @@ class _UserHomeState extends State<VRChatMobileUser> {
                   context: context,
                   builder: (_) {
                     return AlertDialog(
-                      title: const Text("招待を送信しました"),
-                      content: const Text("ゲーム内の招待欄を確認してください"),
+                      title: Text(AppLocalizations.of(context)!.sendInvite),
+                      content: Text(AppLocalizations.of(context)!.selfInviteDetails),
                       actions: <Widget>[
                         TextButton(
-                          child: const Text("閉じる"),
+                          child: Text(AppLocalizations.of(context)!.close),
                           onPressed: () => Navigator.pop(context),
                         ),
                       ],
@@ -92,7 +92,7 @@ class _UserHomeState extends State<VRChatMobileUser> {
                 );
               });
             },
-            child: const Text('インスタンスに参加'),
+            child: Text(AppLocalizations.of(context)!.joinInstance),
           );
 
           VRChatAPI(cookie: cookie).worlds(user["location"].split(":")[0]).then((world) {
@@ -118,7 +118,7 @@ class _UserHomeState extends State<VRChatMobileUser> {
         }
         if (user["location"] == "private") {
           setState(() {
-            column = Column(children: [profile(user), Container(padding: const EdgeInsets.only(top: 30)), privateWorldSlim()]);
+            column = Column(children: [profile(context, user), Container(padding: const EdgeInsets.only(top: 30)), privateWorldSlim(context)]);
           });
         }
       });
@@ -128,7 +128,7 @@ class _UserHomeState extends State<VRChatMobileUser> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('ユーザー'), actions: <Widget>[share("https://vrchat.com/home/user/${widget.userId}")]),
+      appBar: AppBar(title: Text(AppLocalizations.of(context)!.user), actions: <Widget>[share("https://vrchat.com/home/user/${widget.userId}")]),
       drawer: drawr(context),
       body: SafeArea(child: SingleChildScrollView(child: Container(padding: const EdgeInsets.only(top: 10, bottom: 50, right: 30, left: 30), child: column))),
       floatingActionButton: dial,

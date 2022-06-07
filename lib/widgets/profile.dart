@@ -9,8 +9,9 @@ import 'package:vrchat_mobile_client/scenes/user.dart';
 import 'package:vrchat_mobile_client/widgets/status.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-Column profile(user) {
+Column profile(BuildContext context, user) {
   return Column(
     children: <Widget>[
       SizedBox(
@@ -31,8 +32,8 @@ Column profile(user) {
       if (user["statusDescription"] != "") Text(user["statusDescription"]),
       ConstrainedBox(constraints: const BoxConstraints(maxHeight: 200), child: SingleChildScrollView(child: Text(user["bio"]))),
       Row(mainAxisAlignment: MainAxisAlignment.center, children: _biolink(user["bioLinks"] ?? [])),
-      if (user["last_login"] != "") Text("最終ログイン:${generalDateDifference(user["last_login"])}"),
-      Text("登録日:${generalDateDifference(user["date_joined"])}"),
+      if (user["last_login"] != "") Text(AppLocalizations.of(context)!.lastLogin(generalDateDifference(context, user["last_login"]))),
+      Text(AppLocalizations.of(context)!.dateJoined(generalDateDifference(context, user["date_joined"]))),
     ],
   );
 }
@@ -49,14 +50,14 @@ Widget profileAction(BuildContext context, status, String uid) {
         Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
-              builder: (context) => VRChatMobileUser(userId: uid),
+              builder: (BuildContext context) => VRChatMobileUser(userId: uid),
             ),
             (_) => false);
       });
     });
   }
 
-  void deleteFriendRequest() {
+  deleteFriendRequest() {
     getLoginSession("LoginSession").then((cookie) {
       VRChatAPI(cookie: cookie).deleteFriendRequest(uid).then((response) {
         if (response.containsKey("error")) {
@@ -67,26 +68,26 @@ Widget profileAction(BuildContext context, status, String uid) {
         Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
-              builder: (context) => VRChatMobileUser(userId: uid),
+              builder: (BuildContext context) => VRChatMobileUser(userId: uid),
             ),
             (_) => false);
       });
     });
   }
 
-  void deleteFriend() {
+  deleteFriend() {
     showDialog(
       context: context,
       builder: (_) {
         return AlertDialog(
-          title: const Text("フレンドを解除しますか？"),
+          title: Text(AppLocalizations.of(context)!.unfriendConfirm),
           actions: <Widget>[
             TextButton(
-              child: const Text("キャンセル"),
+              child: Text(AppLocalizations.of(context)!.cancel),
               onPressed: () => Navigator.pop(context),
             ),
             TextButton(
-              child: const Text("解除"),
+              child: Text(AppLocalizations.of(context)!.unfriend),
               onPressed: () => getLoginSession("LoginSession").then((cookie) {
                 VRChatAPI(cookie: cookie).deleteFriend(uid).then((response) {
                   if (response.containsKey("error")) {
@@ -97,7 +98,7 @@ Widget profileAction(BuildContext context, status, String uid) {
                   Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => VRChatMobileUser(userId: uid),
+                        builder: (BuildContext context) => VRChatMobileUser(userId: uid),
                       ),
                       (_) => false);
                 });
@@ -116,25 +117,25 @@ Widget profileAction(BuildContext context, status, String uid) {
       if (!status["isFriend"] && !status["incomingRequest"] && !status["outgoingRequest"])
         SpeedDialChild(
           child: const Icon(Icons.person_add),
-          label: 'フレンドリクエスト',
+          label: AppLocalizations.of(context)!.offlineFrends,
           onTap: sendFriendRequest,
         ),
       if (status["isFriend"] && !status["incomingRequest"] && !status["outgoingRequest"])
         SpeedDialChild(
           child: const Icon(Icons.person_remove),
-          label: 'フレンド解除',
+          label: AppLocalizations.of(context)!.unfriend,
           onTap: deleteFriend,
         ),
       if (!status["isFriend"] && status["incomingRequest"])
         SpeedDialChild(
           child: const Icon(Icons.person_remove),
-          label: 'フレンド拒否',
+          label: AppLocalizations.of(context)!.denyFriends,
           onTap: deleteFriendRequest,
         ),
       if (!status["isFriend"] && status["incomingRequest"])
         SpeedDialChild(
           child: const Icon(Icons.person_add),
-          label: 'フレンド許可',
+          label: AppLocalizations.of(context)!.allowFriends,
           onTap: sendFriendRequest,
         ),
     ],
@@ -160,7 +161,6 @@ List<Widget> _biolink(List biolinks) {
           icon: SvgPicture.asset("assets/svg/${getVrchatIconContains(link)}.svg",
               width: 20, height: 20, color: Color(getVrchatIcon()[getVrchatIconContains(link)] ?? 0xFFFFFFFF), semanticsLabel: link),
         )));
-    continue;
   }
   return response;
 }

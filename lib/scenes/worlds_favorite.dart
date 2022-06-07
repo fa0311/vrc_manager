@@ -84,7 +84,7 @@ class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
                 child: Column(
                   children: <Widget>[
                     ElevatedButton(
-                      child: const Text('続きを読み込む'),
+                      child: Text(AppLocalizations.of(context)!.readMore),
                       onPressed: () => moreOver(list, index),
                     ),
                   ],
@@ -100,7 +100,7 @@ class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('お気に入りのワールド'),
+          title: Text(AppLocalizations.of(context)!.favoriteWorlds),
         ),
         drawer: drawr(context),
         body: SafeArea(child: SizedBox(width: MediaQuery.of(context).size.width, child: SingleChildScrollView(child: column))));

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_json_viewer/flutter_json_viewer.dart';
 import 'package:vrchat_mobile_client/assets/storage.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class VRChatMobileJsonViewer extends StatefulWidget {
   final dynamic obj;
@@ -22,7 +23,7 @@ class _JsonViewerPageState extends State<VRChatMobileJsonViewer> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('JSONビューワー'),
+          title: Text(AppLocalizations.of(context)!.jsonViewer),
         ),
         body: Container(
           color: theme == "dark" ? Colors.black : Colors.white,

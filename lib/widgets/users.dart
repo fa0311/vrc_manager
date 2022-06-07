@@ -50,7 +50,7 @@ class Users {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => VRChatMobileUser(userId: user["id"]),
+                          builder: (BuildContext context) => VRChatMobileUser(userId: user["id"]),
                         ));
                   },
                   behavior: HitTestBehavior.opaque,
@@ -83,7 +83,7 @@ class Users {
                           Text(locationMap[user["location"].split(":")[0]]["name"], style: const TextStyle(fontSize: 14)),
                         if (!["", "private", "offline"].contains(user["location"]) && !locationMap.containsKey(user["location"].split(":")[0]))
                           Text(AppLocalizations.of(context)!.loading, style: const TextStyle(fontSize: 14)),
-                        if (user["location"] == "private") const Text("プライベートワールド", style: TextStyle(fontSize: 14)),
+                        if (user["location"] == "private") Text(AppLocalizations.of(context)!.privateWorld, style: const TextStyle(fontSize: 14)),
                       ])),
                     ],
                   )))));

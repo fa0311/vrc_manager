@@ -62,7 +62,7 @@ class _FriendRequestPageState extends State<VRChatMobileFriendRequest> {
     dataColumn.context = context;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('フレンドリクエスト'),
+        title: Text(AppLocalizations.of(context)!.friendRequest),
       ),
       drawer: drawr(context),
       body: SafeArea(
@@ -77,7 +77,7 @@ class _FriendRequestPageState extends State<VRChatMobileFriendRequest> {
                     child: Column(
                       children: <Widget>[
                         ElevatedButton(
-                          child: const Text('続きを読み込む'),
+                          child: Text(AppLocalizations.of(context)!.readMore),
                           onPressed: () => moreOver(),
                         ),
                       ],

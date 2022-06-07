@@ -34,7 +34,7 @@ class _WorldState extends State<VRChatMobileWorld> {
         }
         setState(() {
           column = Column(children: [
-            world(response),
+            world(context, response),
             TextButton(
               style: ElevatedButton.styleFrom(
                 onPrimary: Colors.grey,
@@ -43,10 +43,10 @@ class _WorldState extends State<VRChatMobileWorld> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => VRChatMobileJsonViewer(obj: response),
+                      builder: (BuildContext context) => VRChatMobileJsonViewer(obj: response),
                     ));
               },
-              child: const Text('JSONビューワーで表示'),
+              child: Text(AppLocalizations.of(context)!.viewInJsonViewer),
             ),
           ]);
           dial = worldAction(context, widget.worldId);
@@ -57,7 +57,7 @@ class _WorldState extends State<VRChatMobileWorld> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('ワールド'), actions: <Widget>[share("https://vrchat.com/home/world/${widget.worldId}")]),
+      appBar: AppBar(title: Text(AppLocalizations.of(context)!.world), actions: <Widget>[share("https://vrchat.com/home/world/${widget.worldId}")]),
       drawer: drawr(context),
       body: SafeArea(child: Padding(padding: const EdgeInsets.all(30), child: SingleChildScrollView(child: column))),
       floatingActionButton: dial,
