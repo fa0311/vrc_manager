@@ -1,6 +1,14 @@
+// Dart imports:
 import 'dart:io';
+
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
+
+// Project imports:
 import 'package:vrchat_mobile_client/api/main.dart';
 import 'package:vrchat_mobile_client/assets/error.dart';
 import 'package:vrchat_mobile_client/assets/flutter/url_parser.dart';
@@ -11,7 +19,6 @@ import 'package:vrchat_mobile_client/widgets/drawer.dart';
 import 'package:vrchat_mobile_client/widgets/profile.dart';
 import 'package:vrchat_mobile_client/widgets/share.dart';
 import 'package:vrchat_mobile_client/widgets/world.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class VRChatMobileHome extends StatefulWidget {
   const VRChatMobileHome({Key? key}) : super(key: key);

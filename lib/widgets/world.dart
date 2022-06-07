@@ -1,5 +1,11 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+
+// Project imports:
 import 'package:vrchat_mobile_client/api/main.dart';
 import 'package:vrchat_mobile_client/assets/date.dart';
 import 'package:vrchat_mobile_client/assets/error.dart';
@@ -9,7 +15,6 @@ import 'package:vrchat_mobile_client/scenes/add_worlds_favorite.dart';
 import 'package:vrchat_mobile_client/scenes/world.dart';
 import 'package:vrchat_mobile_client/scenes/worlds_favorite.dart';
 import 'package:vrchat_mobile_client/widgets/region.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 Card worldSlim(BuildContext context, dynamic world) {
   return Card(

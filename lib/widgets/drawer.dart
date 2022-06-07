@@ -1,11 +1,16 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+// Project imports:
 import 'package:vrchat_mobile_client/scenes/friend_request.dart';
 import 'package:vrchat_mobile_client/scenes/friends.dart';
 import 'package:vrchat_mobile_client/scenes/help.dart';
 import 'package:vrchat_mobile_client/scenes/home.dart';
 import 'package:vrchat_mobile_client/scenes/settings.dart';
 import 'package:vrchat_mobile_client/scenes/worlds_favorite.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 Drawer drawr(BuildContext context) {
   return Drawer(

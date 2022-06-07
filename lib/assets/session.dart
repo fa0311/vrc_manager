@@ -1,5 +1,8 @@
-import 'package:http/http.dart' as http;
+// Dart imports:
 import 'dart:convert';
+
+// Package imports:
+import 'package:http/http.dart' as http;
 
 class Session {
   Map<String, String> headers = {'cookie': ''};

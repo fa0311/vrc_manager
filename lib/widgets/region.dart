@@ -1,4 +1,7 @@
+// Flutter imports:
 import 'package:flutter/widgets.dart';
+
+// Project imports:
 import 'package:vrchat_mobile_client/assets/vrchat/region.dart';
 
 region(String region) {

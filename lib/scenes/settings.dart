@@ -1,11 +1,16 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
+// Project imports:
 import 'package:vrchat_mobile_client/assets/storage.dart';
 import 'package:vrchat_mobile_client/main.dart';
 import 'package:vrchat_mobile_client/scenes/login.dart';
 import 'package:vrchat_mobile_client/scenes/setting/token.dart';
 import 'package:vrchat_mobile_client/widgets/drawer.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class VRChatMobileSettings extends StatefulWidget {
   const VRChatMobileSettings({Key? key}) : super(key: key);
