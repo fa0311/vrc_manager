@@ -1,13 +1,41 @@
 {
-    "@@locale": "ja",
+    "@@locale": "en",
+    "@____________________CONFIG____________________": {},
+    "issueUrl": "https://github.com/fa0311/vrchat_mobile_client/issues/new",
     "@____________________DIALOG____________________": {},
     "ok": "OK",
     "no": "NO",
-    "cancel": "キャンセル",
+    "cancel": "Cancel",
     "report": "Report",
-    "@__ERROR_DIALOG__": {},
-    "errorDialog": "エラーが発生しました",
-    "@__LOGIN__": {},
+    "send": "送信",
+    "save": "保存",
+    "saved": "保存しました",
+    "success": "成功しました",
+    "failure": "失敗しました",
+    "@____________________ERROR_DIALOG____________________": {},
+    "errorDialog": "error",
+    "reportMessage1": "開発者に報告してください",
+    "reportMessage2": "また、{report}をタップするとログがクリップボードにコピーされ報告ページにアクセスします",
+    "@____________________DATE____________________": {},
+    "dateFormat1": "{year}年{month}月{day}日",
+    "dateFormat2": "{inDays}日{inHours}時間前",
+    "dateFormat3": "{inHours}時間{inMinutes}分前",
+    "dateFormat4": "{inMinutes}分前",
+    "dateFormat5": "{inSeconds}秒前",
+    "@____________________LOAD____________________": {},
+    "loading": "ロード中です",
+    "loadingDetails": "この画面がずっと表示されている場合、左のメニューから設定を開いてログアウトしてください",
+    "none": "無し",
+    "readMore": "続きを読み込む",
+    "@____________________SHARE____________________": {},
+    "share": "共有",
+    "copy": "コピー",
+    "openInBrowser": "ブラウザで開く",
+    "@____________________MENU____________________": {},
+    "close": "閉じる",
+    "setting": "設定",
+    "help": "ヘルプ",
+    "@____________________LOGIN____________________": {},
     "login": "ログイン",
     "username": "ユーザー名",
     "email": "メールアドレス",
@@ -15,5 +43,136 @@
     "password": "パスワード",
     "twoFactorAuthentication": "2段階認証",
     "authenticationCode": "認証コード",
-    "@__FRIEND__": {}
+    "@____________________LOGIN_ERROR_DIALOG____________________": {},
+    "incorrectLogin": "ログイン情報が間違っています",
+    "unexpectedError": "このアカウントのログイン方法は対応していません",
+    "@____________________HOME____________________": {},
+    "home": "ホーム",
+    "@____________________FRIEND____________________": {},
+    "frends": "フレンド",
+    "onlineFrends": "オンラインのフレンド",
+    "offlineFrends": "オフラインのフレンド",
+    "@__FRIEND_SETTING__": {},
+    "showOnlyAvailable": "参加可能のみ表示",
+    "@____________________FRIEND_REQUEST____________________": {},
+    "friendRequest": "フレンドリクエスト",
+    "@____________________FAVORITE_WORLD____________________": {},
+    "favoriteWorlds": "お気に入りのワールド",
+    "@____________________ADD_FAVORITE_WORLD____________________": {},
+    "addFavoriteWorlds": "お気に入りに追加",
+    "@____________________USER____________________": {},
+    "user": "ユーザー",
+    "lastLogin": "最終ログイン:{data}",
+    "dateJoined": "登録日:{data}",
+    "viewInJsonViewer": "JSONビューワーで表示",
+    "joinInstance": "インスタンスに参加",
+    "@__USER_DIALOG__": {},
+    "sendInvite": "招待を送信しました",
+    "selfInviteDetails": "ゲーム内の招待欄を確認してください",
+    "@__USER_FRIEND__": {},
+    "unfriendConfirm": "フレンドを解除しますか？",
+    "unfriend": "フレンド解除",
+    "allowFriends": "フレンド許可",
+    "denyFriends": "フレンド拒否",
+    "@____________________JSON_VIEWER____________________": {},
+    "jsonViewer": "JSONビューワー",
+    "@____________________WORLD____________________": {},
+    "world": "ワールド",
+    "privateWorld": "プライベートワールド",
+    "occupants": "プレイヤー数:{data}",
+    "privateOccupants": "プライベート:{data}",
+    "favorites": "いいね:{data}",
+    "createdAt": "作成:{data}",
+    "updatedAt": "最終更新:{data}",
+    "@____________________SETTING____________________": {},
+    "darkTheme": "ダークテーマ",
+    "darkThemeDetails": "目に優しいダークテーマに切り替えます",
+    "logout": "ログアウト",
+    "logoutDetails": "ログアウトし端末からログイン情報を削除します",
+    "logoutConfirm": "ログアウトしますか？",
+    "token": "Token",
+    "tokenDetails": "認証情報を確認または変更できます",
+    "cookie": "Cookie",
+    "@____________________HELP____________________": {},
+    "reportDetails": "開発者にバグの報告や新機能のリクエストをします",
+    "developerInfo": "開発者情報",
+    "developerInfoDetails": "開発者の情報を表示",
+    "rateTheApp": "評価する",
+    "rateTheAppDetails": "GooglePlayStoreでの評価をお願いします",
+    "licence": "Licence",
+    "licenceDetails": "Licence情報を確認します",
+    "@____________________PLACEHOLDER____________________": {},
+    "@__PLACEHOLDER_ERROR_DIALOG__": {},
+    "@reportMessage2": {
+        "placeholders": {
+            "report": {}
+        }
+    },
+    "@__PLACEHOLDER_DATE__": {},
+    "@dateFormat1": {
+        "placeholders": {
+            "year": {},
+            "month": {},
+            "day": {}
+        }
+    },
+    "@dateFormat2": {
+        "placeholders": {
+            "inDays": {},
+            "inHours": {}
+        }
+    },
+    "@dateFormat3": {
+        "placeholders": {
+            "inHours": {},
+            "inMinutes": {}
+        }
+    },
+    "@dateFormat4": {
+        "placeholders": {
+            "inMinutes": {}
+        }
+    },
+    "@dateFormat5": {
+        "placeholders": {
+            "inSeconds": {}
+        }
+    },
+    "@__PLACEHOLDER_USER__": {},
+    "@dateJoined": {
+        "placeholders": {
+            "data": {}
+        }
+    },
+    "@lastLogin": {
+        "placeholders": {
+            "data": {}
+        }
+    },
+    "@__PLACEHOLDER_WORLD__": {},
+    "@occupants": {
+        "placeholders": {
+            "data": {}
+        }
+    },
+    "@privateOccupants": {
+        "placeholders": {
+            "data": {}
+        }
+    },
+    "@favorites": {
+        "placeholders": {
+            "data": {}
+        }
+    },
+    "@createdAt": {
+        "placeholders": {
+            "data": {}
+        }
+    },
+    "@updatedAt": {
+        "placeholders": {
+            "data": {}
+        }
+    }
 }
