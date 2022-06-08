@@ -1,5 +1,5 @@
 {
-    "@@locale": "en",
+    "@@locale": "ja",
     "@____________________CONFIG____________________": {},
     "issueUrl": "https://github.com/fa0311/vrchat_mobile_client/issues/new",
     "@____________________DIALOG____________________": {},
@@ -17,11 +17,10 @@
     "reportMessage1": "開発者に報告してください",
     "reportMessage2": "また、{report}をタップするとログがクリップボードにコピーされ報告ページにアクセスします",
     "@____________________DATE____________________": {},
-    "dateFormat1": "{year}年{month}月{day}日",
-    "dateFormat2": "{inDays}日{inHours}時間前",
-    "dateFormat3": "{inHours}時間{inMinutes}分前",
-    "dateFormat4": "{inMinutes}分前",
-    "dateFormat5": "{inSeconds}秒前",
+    "dateFormat1": "{inDays}日{inHours}時間前",
+    "dateFormat2": "{inHours}時間{inMinutes}分前",
+    "dateFormat3": "{inMinutes}分前",
+    "dateFormat4": "{inSeconds}秒前",
     "@____________________LOAD____________________": {},
     "loading": "ロード中です",
     "loadingDetails": "この画面がずっと表示されている場合、左のメニューから設定を開いてログアウトしてください",
@@ -111,29 +110,22 @@
     "@__PLACEHOLDER_DATE__": {},
     "@dateFormat1": {
         "placeholders": {
-            "year": {},
-            "month": {},
-            "day": {}
-        }
-    },
-    "@dateFormat2": {
-        "placeholders": {
             "inDays": {},
             "inHours": {}
         }
     },
-    "@dateFormat3": {
+    "@dateFormat2": {
         "placeholders": {
             "inHours": {},
             "inMinutes": {}
         }
     },
-    "@dateFormat4": {
+    "@dateFormat3": {
         "placeholders": {
             "inMinutes": {}
         }
     },
-    "@dateFormat5": {
+    "@dateFormat4": {
         "placeholders": {
             "inSeconds": {}
         }

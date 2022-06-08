@@ -17,11 +17,10 @@
     "reportMessage1": "Please report this to the developer.",
     "reportMessage2": "Also, tapping {report} will copy the log to the clipboard and access the report page",
     "@____________________DATE____________________": {},
-    "dateFormat1": "{month}/{day}/{year}",
-    "dateFormat2": "{inDays} days {inHours} hours ago",
-    "dateFormat3": "{inHours} hours {inMinutes} minutes ago",
-    "dateFormat4": "{inMinutes} minutes ago",
-    "dateFormat5": "{inSeconds} seconds ago",
+    "dateFormat1": "{inDays} days {inHours} hours ago",
+    "dateFormat2": "{inHours} hours {inMinutes} minutes ago",
+    "dateFormat3": "{inMinutes} minutes ago",
+    "dateFormat4": "{inSeconds} seconds ago",
     "@____________________LOAD____________________": {},
     "loading": "loading",
     "loadingDetails": "If this screen is displayed for a long time, please open the settings from the menu on the left and log out",
@@ -111,29 +110,22 @@
     "@__PLACEHOLDER_DATE__": {},
     "@dateFormat1": {
         "placeholders": {
-            "year": {},
-            "month": {},
-            "day": {}
-        }
-    },
-    "@dateFormat2": {
-        "placeholders": {
             "inDays": {},
             "inHours": {}
         }
     },
-    "@dateFormat3": {
+    "@dateFormat2": {
         "placeholders": {
             "inHours": {},
             "inMinutes": {}
         }
     },
-    "@dateFormat4": {
+    "@dateFormat3": {
         "placeholders": {
             "inMinutes": {}
         }
     },
-    "@dateFormat5": {
+    "@dateFormat4": {
         "placeholders": {
             "inSeconds": {}
         }
