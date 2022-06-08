@@ -132,10 +132,25 @@ Drawer drawr(BuildContext context) {
   );
 }
 
-Drawer drawrSimple(BuildContext context) {
+Drawer simpleDrawr(BuildContext context) {
   return Drawer(
     child: SafeArea(
       child: Column(children: <Widget>[
+        Expanded(
+            child: Column(children: <Widget>[
+          ListTile(
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => const VRChatMobileHome(),
+                  ));
+            },
+            leading: const Icon(Icons.home),
+            title: Text(AppLocalizations.of(context)!.home),
+          ),
+        ])),
         Align(
             alignment: FractionalOffset.bottomCenter,
             child: Column(
@@ -147,7 +162,7 @@ Drawer drawrSimple(BuildContext context) {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (BuildContext context) => const VRChatMobileSettings(),
+                            builder: (BuildContext context) => const VRChatMobileSettings(logged: false),
                           ));
                     },
                     leading: const Icon(Icons.settings),
@@ -155,7 +170,7 @@ Drawer drawrSimple(BuildContext context) {
                 ListTile(
                     onTap: () {
                       Navigator.pop(context);
-                      Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => const VRChatMobileHelp()));
+                      Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => const VRChatMobileHelp(logged: false)));
                     },
                     leading: const Icon(Icons.help),
                     title: Text(AppLocalizations.of(context)!.help))

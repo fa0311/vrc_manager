@@ -44,7 +44,7 @@ Column profile(BuildContext context, user) {
 }
 
 Widget profileAction(BuildContext context, status, String uid) {
-  void sendFriendRequest() {
+  sendFriendRequest() {
     getLoginSession("LoginSession").then((cookie) {
       VRChatAPI(cookie: cookie).sendFriendRequest(uid).then((response) {
         if (response.containsKey("error")) {

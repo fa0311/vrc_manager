@@ -16,7 +16,7 @@ import 'package:vrchat_mobile_client/scenes/world.dart';
 import 'package:vrchat_mobile_client/scenes/worlds_favorite.dart';
 import 'package:vrchat_mobile_client/widgets/region.dart';
 
-Card worldSimple(BuildContext context, dynamic world) {
+Card simpleWorld(BuildContext context, dynamic world) {
   return Card(
       elevation: 20.0,
       child: Container(
@@ -69,7 +69,7 @@ Card worldSimple(BuildContext context, dynamic world) {
               ))));
 }
 
-Card worldSimplePlus(BuildContext context, dynamic world, dynamic instance) {
+Card simpleWorldPlus(BuildContext context, dynamic world, dynamic instance) {
   return Card(
       elevation: 20.0,
       child: Container(
@@ -106,7 +106,7 @@ Card worldSimplePlus(BuildContext context, dynamic world, dynamic instance) {
               ))));
 }
 
-Card privateWorldSimple(BuildContext context) {
+Card privatesimpleWorld(BuildContext context) {
   return Card(
       elevation: 20.0,
       child: Container(
@@ -139,6 +139,7 @@ Column world(BuildContext context, dynamic world) {
     ),
     Text(world["name"], style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
     ConstrainedBox(constraints: const BoxConstraints(maxHeight: 200), child: SingleChildScrollView(child: Text(world["description"]))),
+    Text(AppLocalizations.of(context)!.occupants(world["occupants"])),
     Text(AppLocalizations.of(context)!.privateOccupants(world["privateOccupants"])),
     Text(AppLocalizations.of(context)!.favorites(world["favorites"])),
     Text(AppLocalizations.of(context)!.createdAt(generalDateDifference(context, world["created_at"]))),

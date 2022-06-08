@@ -12,6 +12,7 @@ import 'package:vrchat_mobile_client/api/main.dart';
 import 'package:vrchat_mobile_client/assets/error.dart';
 import 'package:vrchat_mobile_client/assets/storage.dart';
 import 'package:vrchat_mobile_client/scenes/home.dart';
+import 'package:vrchat_mobile_client/widgets/drawer.dart';
 
 class VRChatMobileLogin extends StatefulWidget {
   const VRChatMobileLogin({Key? key}) : super(key: key);
@@ -24,8 +25,8 @@ bool _isPasswordObscure = true;
 final _userController = TextEditingController();
 final _passwordController = TextEditingController();
 
-void onPressed(context) {
-  void save(String cookie) {
+onPressed(context) {
+  save(String cookie) {
     setLoginSession("LoginSession", cookie).then((response) {
       Navigator.pushAndRemoveUntil(
           context,
@@ -37,7 +38,7 @@ void onPressed(context) {
   }
 
   final session = VRChatAPI();
-  void totp() {
+  totp() {
     final passwordController = TextEditingController();
     showDialog(
         context: context,
@@ -101,6 +102,7 @@ class _LoginPageState extends State<VRChatMobileLogin> {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.login),
       ),
+      drawer: simpleDrawr(context),
       body: Padding(
         padding: const EdgeInsets.all(32.0),
         child: Column(

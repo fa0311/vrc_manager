@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:vrchat_mobile_client/scenes/user.dart';
 import 'package:vrchat_mobile_client/scenes/world.dart';
 
-void urlParser(BuildContext context, String strUri) {
+urlParser(BuildContext context, String strUri) {
   final List<String> path = Uri.parse(strUri).path.split("/");
   final Map<String, String> queryParameters = Uri.parse(strUri).queryParameters;
   if (path.length < 2) {

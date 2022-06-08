@@ -13,7 +13,8 @@ import 'package:vrchat_mobile_client/scenes/setting/token.dart';
 import 'package:vrchat_mobile_client/widgets/drawer.dart';
 
 class VRChatMobileSettings extends StatefulWidget {
-  const VRChatMobileSettings({Key? key}) : super(key: key);
+  final bool logged;
+  const VRChatMobileSettings({Key? key, this.logged = true}) : super(key: key);
 
   @override
   State<VRChatMobileSettings> createState() => _SettingPageState();
@@ -37,10 +38,10 @@ class _SettingPageState extends State<VRChatMobileSettings> {
     });
   }
 
-  ListTile _changeLocaleDialogOption(BuildContext context, String title, String subtitle, String languageCode) {
+  ListTile _changeLocaleDialogOption(BuildContext context, String title, String languageCode) {
     return ListTile(
       title: Text(title),
-      subtitle: Text(subtitle),
+      subtitle: Text(AppLocalizations.of(context)!.translaterDetails(lookupAppLocalizations(Locale(languageCode, "")).contributor)),
       onTap: () async {
         setStorage("language_code", languageCode).then((response) {
           Navigator.pushAndRemoveUntil(
@@ -66,7 +67,7 @@ class _SettingPageState extends State<VRChatMobileSettings> {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.setting),
       ),
-      drawer: drawr(context),
+      drawer: widget.logged ? drawr(context) : simpleDrawr(context),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: SizedBox(
@@ -88,8 +89,8 @@ class _SettingPageState extends State<VRChatMobileSettings> {
                       builder: (BuildContext context) => SingleChildScrollView(
                               child: Column(
                             children: <Widget>[
-                              _changeLocaleDialogOption(context, 'English', 'Translated by DeepL', 'en'),
-                              _changeLocaleDialogOption(context, '日本語', 'Translated by fa0311', 'ja'),
+                              _changeLocaleDialogOption(context, 'English', 'en'),
+                              _changeLocaleDialogOption(context, '日本語', 'ja'),
                             ],
                           )))),
               const Divider(),

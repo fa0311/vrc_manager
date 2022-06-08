@@ -47,7 +47,7 @@ class Session {
     return body;
   }
 
-  void updateCookie(http.Response response) {
+  updateCookie(http.Response response) {
     String? rawCookie = response.headers['set-cookie'];
     if (rawCookie != null) {
       int index = rawCookie.indexOf(';');

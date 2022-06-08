@@ -1,12 +1,14 @@
 {
     "@@locale": "ja",
+    "@____________________CONTRIBUTOR____________________": {},
+    "contributor": "faa0311",
     "@____________________CONFIG____________________": {},
     "issueUrl": "https://github.com/fa0311/vrchat_mobile_client/issues/new",
     "@____________________DIALOG____________________": {},
     "ok": "OK",
     "no": "NO",
-    "cancel": "Cancel",
-    "report": "Report",
+    "cancel": "キャンセル",
+    "report": "報告",
     "send": "送信",
     "save": "保存",
     "saved": "保存しました",
@@ -38,7 +40,7 @@
     "login": "ログイン",
     "username": "ユーザー名",
     "email": "メールアドレス",
-    "usernameOrEmail": "ユーザー名/メールアドレス",
+    "usernameOrEmail": "ユーザー名 / メールアドレス",
     "password": "パスワード",
     "twoFactorAuthentication": "2段階認証",
     "authenticationCode": "認証コード",
@@ -67,7 +69,7 @@
     "joinInstance": "インスタンスに参加",
     "@__USER_DIALOG__": {},
     "sendInvite": "招待を送信しました",
-    "selfInviteDetails": "ゲーム内の招待欄を確認してください",
+    "selfInviteDetails": "VRChatの招待欄を確認してください",
     "@__USER_FRIEND__": {},
     "unfriendConfirm": "フレンドを解除しますか？",
     "unfriend": "フレンド解除",
@@ -79,13 +81,16 @@
     "world": "ワールド",
     "privateWorld": "プライベートワールド",
     "occupants": "プレイヤー数:{data}",
-    "privateOccupants": "プライベート:{data}",
-    "favorites": "いいね:{data}",
+    "privateOccupants": "プライベートのプレイヤー数:{data}",
+    "favorites": "お気に入り:{data}",
     "createdAt": "作成:{data}",
     "updatedAt": "最終更新:{data}",
     "@____________________SETTING____________________": {},
     "darkTheme": "ダークテーマ",
     "darkThemeDetails": "目に優しいダークテーマに切り替えます",
+    "language": "言語",
+    "languageDetails": "言語を切り替えます",
+    "translaterDetails": "{name}による翻訳",
     "logout": "ログアウト",
     "logoutDetails": "ログアウトし端末からログイン情報を削除します",
     "logoutConfirm": "ログアウトしますか？",
@@ -99,72 +104,5 @@
     "rateTheApp": "評価する",
     "rateTheAppDetails": "GooglePlayStoreでの評価をお願いします",
     "licence": "Licence",
-    "licenceDetails": "Licence情報を確認します",
-    "@____________________PLACEHOLDER____________________": {},
-    "@__PLACEHOLDER_ERROR_DIALOG__": {},
-    "@reportMessage2": {
-        "placeholders": {
-            "report": {}
-        }
-    },
-    "@__PLACEHOLDER_DATE__": {},
-    "@dateFormat1": {
-        "placeholders": {
-            "inDays": {},
-            "inHours": {}
-        }
-    },
-    "@dateFormat2": {
-        "placeholders": {
-            "inHours": {},
-            "inMinutes": {}
-        }
-    },
-    "@dateFormat3": {
-        "placeholders": {
-            "inMinutes": {}
-        }
-    },
-    "@dateFormat4": {
-        "placeholders": {
-            "inSeconds": {}
-        }
-    },
-    "@__PLACEHOLDER_USER__": {},
-    "@dateJoined": {
-        "placeholders": {
-            "data": {}
-        }
-    },
-    "@lastLogin": {
-        "placeholders": {
-            "data": {}
-        }
-    },
-    "@__PLACEHOLDER_WORLD__": {},
-    "@occupants": {
-        "placeholders": {
-            "data": {}
-        }
-    },
-    "@privateOccupants": {
-        "placeholders": {
-            "data": {}
-        }
-    },
-    "@favorites": {
-        "placeholders": {
-            "data": {}
-        }
-    },
-    "@createdAt": {
-        "placeholders": {
-            "data": {}
-        }
-    },
-    "@updatedAt": {
-        "placeholders": {
-            "data": {}
-        }
-    }
+    "licenceDetails": "Licence情報を確認します"
 }

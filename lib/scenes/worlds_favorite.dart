@@ -75,7 +75,7 @@ class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
         final List<Widget> worldList = [];
         worldList.addAll(childrenList[index].children);
         worlds.forEach((dynamic index, dynamic world) {
-          worldList.add(worldSimple(context, world));
+          worldList.add(simpleWorld(context, world));
         });
         childrenList[index] = Column(children: worldList);
         column = Column(children: column.children);

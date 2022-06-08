@@ -11,7 +11,8 @@ import 'package:vrchat_mobile_client/scenes/user.dart';
 import 'package:vrchat_mobile_client/widgets/drawer.dart';
 
 class VRChatMobileHelp extends StatefulWidget {
-  const VRChatMobileHelp({Key? key}) : super(key: key);
+  final bool logged;
+  const VRChatMobileHelp({Key? key, this.logged = true}) : super(key: key);
 
   @override
   State<VRChatMobileHelp> createState() => _HelpPageState();
@@ -24,7 +25,7 @@ class _HelpPageState extends State<VRChatMobileHelp> {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.help),
       ),
-      drawer: drawr(context),
+      drawer: widget.logged ? drawr(context) : simpleDrawr(context),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: SizedBox(
