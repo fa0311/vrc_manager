@@ -131,3 +131,37 @@ Drawer drawr(BuildContext context) {
     ),
   );
 }
+
+Drawer drawrSimple(BuildContext context) {
+  return Drawer(
+    child: SafeArea(
+      child: Column(children: <Widget>[
+        Align(
+            alignment: FractionalOffset.bottomCenter,
+            child: Column(
+              children: <Widget>[
+                const Divider(),
+                ListTile(
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (BuildContext context) => const VRChatMobileSettings(),
+                          ));
+                    },
+                    leading: const Icon(Icons.settings),
+                    title: Text(AppLocalizations.of(context)!.setting)),
+                ListTile(
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => const VRChatMobileHelp()));
+                    },
+                    leading: const Icon(Icons.help),
+                    title: Text(AppLocalizations.of(context)!.help))
+              ],
+            )),
+      ]),
+    ),
+  );
+}

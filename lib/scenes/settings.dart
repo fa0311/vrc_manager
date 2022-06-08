@@ -26,7 +26,7 @@ class _SettingPageState extends State<VRChatMobileSettings> {
   }
 
   bool theme = false;
-  void _changeSwitch(bool e) {
+  _changeSwitch(bool e) {
     setStorage("theme_brightness", e ? "dark" : "light").then((response) {
       Navigator.pushAndRemoveUntil(
           context,
@@ -35,7 +35,23 @@ class _SettingPageState extends State<VRChatMobileSettings> {
           ),
           (_) => false);
     });
-    setState(() => theme = e);
+  }
+
+  ListTile _changeLocaleDialogOption(BuildContext context, String title, String subtitle, String languageCode) {
+    return ListTile(
+      title: Text(title),
+      subtitle: Text(subtitle),
+      onTap: () async {
+        setStorage("language_code", languageCode).then((response) {
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                builder: (BuildContext context) => const VRChatMobile(),
+              ),
+              (_) => false);
+        });
+      },
+    );
   }
 
   _SettingPageState() {
@@ -63,6 +79,19 @@ class _SettingPageState extends State<VRChatMobileSettings> {
                 subtitle: Text(AppLocalizations.of(context)!.darkThemeDetails),
                 onChanged: _changeSwitch,
               ),
+              const Divider(),
+              ListTile(
+                  title: Text(AppLocalizations.of(context)!.language),
+                  subtitle: Text(AppLocalizations.of(context)!.languageDetails),
+                  onTap: () => showModalBottomSheet(
+                      context: context,
+                      builder: (BuildContext context) => SingleChildScrollView(
+                              child: Column(
+                            children: <Widget>[
+                              _changeLocaleDialogOption(context, 'English', 'Translated by DeepL', 'en'),
+                              _changeLocaleDialogOption(context, '日本語', 'Translated by fa0311', 'ja'),
+                            ],
+                          )))),
               const Divider(),
               ListTile(
                 title: Text(AppLocalizations.of(context)!.logout),

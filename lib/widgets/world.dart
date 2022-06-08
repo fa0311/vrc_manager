@@ -16,7 +16,7 @@ import 'package:vrchat_mobile_client/scenes/world.dart';
 import 'package:vrchat_mobile_client/scenes/worlds_favorite.dart';
 import 'package:vrchat_mobile_client/widgets/region.dart';
 
-Card worldSlim(BuildContext context, dynamic world) {
+Card worldSimple(BuildContext context, dynamic world) {
   return Card(
       elevation: 20.0,
       child: Container(
@@ -69,7 +69,7 @@ Card worldSlim(BuildContext context, dynamic world) {
               ))));
 }
 
-Card worldSlimPlus(BuildContext context, dynamic world, dynamic instance) {
+Card worldSimplePlus(BuildContext context, dynamic world, dynamic instance) {
   return Card(
       elevation: 20.0,
       child: Container(
@@ -106,7 +106,7 @@ Card worldSlimPlus(BuildContext context, dynamic world, dynamic instance) {
               ))));
 }
 
-Card privateWorldSlim(BuildContext context) {
+Card privateWorldSimple(BuildContext context) {
   return Card(
       elevation: 20.0,
       child: Container(

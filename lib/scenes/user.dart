@@ -107,7 +107,7 @@ class _UserHomeState extends State<VRChatMobileUser> {
             }
             setState(() {
               column = Column(children: column.children);
-              column.children[1] = Column(children: [Container(padding: const EdgeInsets.only(top: 30)), worldSlim(context, world)]);
+              column.children[1] = Column(children: [Container(padding: const EdgeInsets.only(top: 30)), worldSimple(context, world)]);
             });
             VRChatAPI(cookie: cookie).instances(user["location"]).then((instance) {
               if (instance.containsKey("error")) {
@@ -116,14 +116,14 @@ class _UserHomeState extends State<VRChatMobileUser> {
               }
               setState(() {
                 column = Column(children: column.children);
-                column.children[1] = Column(children: [Container(padding: const EdgeInsets.only(top: 30)), worldSlimPlus(context, world, instance)]);
+                column.children[1] = Column(children: [Container(padding: const EdgeInsets.only(top: 30)), worldSimplePlus(context, world, instance)]);
               });
             });
           });
         }
         if (user["location"] == "private") {
           setState(() {
-            column = Column(children: [profile(context, user), Container(padding: const EdgeInsets.only(top: 30)), privateWorldSlim(context)]);
+            column = Column(children: [profile(context, user), Container(padding: const EdgeInsets.only(top: 30)), privateWorldSimple(context)]);
           });
         }
       });
