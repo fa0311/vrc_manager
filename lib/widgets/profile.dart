@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -115,36 +114,38 @@ Widget profileAction(BuildContext context, status, String uid) {
     );
   }
 
-  return SpeedDial(
-    icon: Icons.add,
-    activeIcon: Icons.close,
-    children: [
-      if (!status["isFriend"] && !status["incomingRequest"] && !status["outgoingRequest"])
-        SpeedDialChild(
-          child: const Icon(Icons.person_add),
-          label: AppLocalizations.of(context)!.offlineFrends,
-          onTap: sendFriendRequest,
-        ),
-      if (status["isFriend"] && !status["incomingRequest"] && !status["outgoingRequest"])
-        SpeedDialChild(
-          child: const Icon(Icons.person_remove),
-          label: AppLocalizations.of(context)!.unfriend,
-          onTap: deleteFriend,
-        ),
-      if (!status["isFriend"] && status["incomingRequest"])
-        SpeedDialChild(
-          child: const Icon(Icons.person_remove),
-          label: AppLocalizations.of(context)!.denyFriends,
-          onTap: deleteFriendRequest,
-        ),
-      if (!status["isFriend"] && status["incomingRequest"])
-        SpeedDialChild(
-          child: const Icon(Icons.person_add),
-          label: AppLocalizations.of(context)!.allowFriends,
-          onTap: sendFriendRequest,
-        ),
-    ],
-  );
+  return IconButton(
+      icon: const Icon(Icons.add),
+      onPressed: () => showModalBottomSheet(
+          context: context,
+          builder: (BuildContext context) => StatefulBuilder(
+              builder: (BuildContext context, setStateBuilder) => SingleChildScrollView(
+                      child: Column(children: [
+                    if (!status["isFriend"] && !status["incomingRequest"] && !status["outgoingRequest"])
+                      ListTile(
+                        leading: const Icon(Icons.person_add),
+                        title: Text(AppLocalizations.of(context)!.offlineFrends),
+                        onTap: sendFriendRequest,
+                      ),
+                    if (status["isFriend"] && !status["incomingRequest"] && !status["outgoingRequest"])
+                      ListTile(
+                        leading: const Icon(Icons.person_remove),
+                        title: Text(AppLocalizations.of(context)!.unfriend),
+                        onTap: deleteFriend,
+                      ),
+                    if (!status["isFriend"] && status["incomingRequest"])
+                      ListTile(
+                        leading: const Icon(Icons.person_remove),
+                        title: Text(AppLocalizations.of(context)!.denyFriends),
+                        onTap: deleteFriendRequest,
+                      ),
+                    if (!status["isFriend"] && status["incomingRequest"])
+                      ListTile(
+                        leading: const Icon(Icons.person_add),
+                        title: Text(AppLocalizations.of(context)!.allowFriends),
+                        onTap: sendFriendRequest,
+                      )
+                  ])))));
 }
 
 List<Widget> _biolink(List biolinks) {

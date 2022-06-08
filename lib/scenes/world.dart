@@ -28,7 +28,7 @@ class _WorldState extends State<VRChatMobileWorld> {
       Text(AppLocalizations.of(context)!.loading),
     ],
   );
-  Widget? dial;
+  late List<Widget> popupMenu = [share(context, "https://vrchat.com/home/user/${widget.worldId}")];
 
   _WorldState() {
     getLoginSession("LoginSession").then((cookie) {
@@ -54,7 +54,39 @@ class _WorldState extends State<VRChatMobileWorld> {
               child: Text(AppLocalizations.of(context)!.viewInJsonViewer),
             ),
           ]);
-          dial = worldAction(context, widget.worldId);
+        });
+        getLoginSession("LoginSession").then((cookie) {
+          VRChatAPI(cookie: cookie).favoriteGroups("world", offset: 0).then((response) {
+            List<Widget> bottomSheet = [];
+            if (response.containsKey("error")) {
+              error(context, response["error"]["message"]);
+              return;
+            }
+            if (response.isEmpty) return;
+            bottomSheet.add(ListTile(
+              title: Text(AppLocalizations.of(context)!.addFavoriteWorlds),
+            ));
+            bottomSheet.add(const Divider());
+            response.forEach((dynamic index, dynamic list) {
+              bottomSheet.add(ListTile(
+                title: Text(list["displayName"]),
+                onTap: () => {
+                  VRChatAPI(cookie: cookie).addFavorites("world", widget.worldId, list["name"]).then((response) {
+                    if (response.containsKey("error")) {
+                      error(context, response["error"]["message"]);
+                      return;
+                    }
+                    Navigator.pop(context);
+                  })
+                },
+              ));
+              bottomSheet.add(const Divider());
+            });
+            bottomSheet.removeLast();
+            setState(() {
+              popupMenu = <Widget>[share(context, "https://vrchat.com/home/user/${widget.worldId}"), worldAction(context, widget.worldId, bottomSheet)];
+            });
+          });
         });
       });
     });
@@ -62,10 +94,9 @@ class _WorldState extends State<VRChatMobileWorld> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(AppLocalizations.of(context)!.world), actions: <Widget>[share("https://vrchat.com/home/world/${widget.worldId}")]),
+      appBar: AppBar(title: Text(AppLocalizations.of(context)!.world), actions: popupMenu),
       drawer: drawr(context),
-      body: SafeArea(child: Padding(padding: const EdgeInsets.all(30), child: SingleChildScrollView(child: column))),
-      floatingActionButton: dial,
+      body: SafeArea(child: SingleChildScrollView(child: Padding(padding: const EdgeInsets.all(30), child: column))),
     );
   }
 }

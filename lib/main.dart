@@ -34,7 +34,7 @@ class _PageState extends State<VRChatMobile> {
   Widget build(BuildContext context) {
     return getMaterialApp(
       const VRChatMobileHome(),
-      theme == "dark" ? Brightness.dark : Brightness.light,
+      theme,
       Locale(locale, ''),
     );
   }

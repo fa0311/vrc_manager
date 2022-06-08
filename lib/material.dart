@@ -5,7 +5,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
-MaterialApp getMaterialApp(home, Brightness theme, Locale locale) {
+MaterialApp getMaterialApp(home, String theme, Locale locale) {
+  Map themeMap = {
+    "dark": ThemeData(
+      brightness: Brightness.dark,
+      textTheme: const TextTheme(bodyText2: TextStyle(fontSize: 16)),
+      primarySwatch: Colors.grey,
+    ),
+    "light": ThemeData(
+      brightness: Brightness.light,
+      textTheme: const TextTheme(bodyText2: TextStyle(fontSize: 16)),
+      primarySwatch: Colors.blue,
+    )
+  };
+
   return MaterialApp(
       title: 'VRChat Mobile Application',
       localizationsDelegates: const [
@@ -19,9 +32,7 @@ MaterialApp getMaterialApp(home, Brightness theme, Locale locale) {
         Locale('en', ''),
       ],
       locale: locale,
-      theme: ThemeData(
-        brightness: theme,
-        textTheme: const TextTheme(bodyText2: TextStyle(fontSize: 16)),
-      ),
+      theme: themeMap[theme],
+      darkTheme: themeMap["dark"],
       home: home);
 }

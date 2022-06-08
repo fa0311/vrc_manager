@@ -42,7 +42,6 @@ dependencies:
   package_info_plus: ^1.4.2
   flutter_svg: ^1.1.0
   receive_sharing_intent: ^1.4.5
-  flutter_speed_dial: ^6.0.0
   share_plus: ^4.0.5
   flutter_json_viewer: ^1.0.1
   flutter_localizations:

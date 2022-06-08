@@ -29,8 +29,8 @@ class _UserHomeState extends State<VRChatMobileUser> {
       Text(AppLocalizations.of(context)!.loading),
     ],
   );
-  Widget? dial;
-  Widget? popupMenu;
+
+  late List<Widget> popupMenu = [share(context, "https://vrchat.com/home/user/${widget.userId}")];
 
   _UserHomeState() {
     getLoginSession("LoginSession").then((cookie) {
@@ -66,7 +66,7 @@ class _UserHomeState extends State<VRChatMobileUser> {
             return;
           }
           setState(() {
-            dial = profileAction(context, status, widget.userId);
+            popupMenu = <Widget>[share(context, "https://vrchat.com/home/user/${widget.userId}"), profileAction(context, status, widget.userId)];
           });
         });
         if (!["", "private", "offline"].contains(user["location"])) {
@@ -133,10 +133,9 @@ class _UserHomeState extends State<VRChatMobileUser> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(AppLocalizations.of(context)!.user), actions: <Widget>[share("https://vrchat.com/home/user/${widget.userId}")]),
+      appBar: AppBar(title: Text(AppLocalizations.of(context)!.user), actions: popupMenu),
       drawer: drawr(context),
       body: SafeArea(child: SingleChildScrollView(child: Container(padding: const EdgeInsets.only(top: 10, bottom: 50, right: 30, left: 30), child: column))),
-      floatingActionButton: dial,
     );
   }
 }

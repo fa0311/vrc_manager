@@ -7,7 +7,6 @@ import 'package:url_launcher/url_launcher.dart';
 
 // Project imports:
 import 'package:vrchat_mobile_client/assets/licence.dart';
-import 'package:vrchat_mobile_client/scenes/user.dart';
 import 'package:vrchat_mobile_client/widgets/drawer.dart';
 
 class VRChatMobileHelp extends StatefulWidget {
@@ -33,6 +32,16 @@ class _HelpPageState extends State<VRChatMobileHelp> {
           child: Column(
             children: <Widget>[
               ListTile(
+                title: Text(AppLocalizations.of(context)!.contribution),
+                subtitle: Text(AppLocalizations.of(context)!.contributionDetails),
+                onTap: () async {
+                  if (await canLaunchUrl(Uri.parse(AppLocalizations.of(context)!.githubUrl))) {
+                    await launchUrl(Uri.parse(AppLocalizations.of(context)!.githubUrl));
+                  }
+                },
+              ),
+              const Divider(),
+              ListTile(
                 title: Text(AppLocalizations.of(context)!.report),
                 subtitle: Text(AppLocalizations.of(context)!.reportDetails),
                 onTap: () async {
@@ -45,12 +54,10 @@ class _HelpPageState extends State<VRChatMobileHelp> {
               ListTile(
                 title: Text(AppLocalizations.of(context)!.developerInfo),
                 subtitle: Text(AppLocalizations.of(context)!.developerInfoDetails),
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (BuildContext context) => const VRChatMobileUser(userId: "usr_e4c94acd-b8d2-4dfa-92db-57365a32ab1b"),
-                      ));
+                onTap: () async {
+                  if (await canLaunchUrl(Uri.parse("https://twitter.com/faa0311"))) {
+                    await launchUrl(Uri.parse("https://twitter.com/faa0311"));
+                  }
                 },
               ),
               const Divider(),

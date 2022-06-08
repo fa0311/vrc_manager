@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 
 // Project imports:
@@ -37,6 +38,11 @@ class _LoginHomeState extends State<VRChatMobileHome> {
 
   List<Widget> popupMenu = [];
 
+  _removeLoginSession() async {
+    const storage = FlutterSecureStorage();
+    await storage.delete(key: 'LoginSession');
+  }
+
   _LoginHomeState() {
     getLoginSession("LoginSession").then((cookie) {
       if (cookie == null) {
@@ -50,6 +56,15 @@ class _LoginHomeState extends State<VRChatMobileHome> {
         VRChatAPI(cookie: cookie).user().then((response) {
           if (response.containsKey("error")) {
             error(context, response["error"]["message"]);
+            if (response["error"]["message"] == '"Missing Credentials"') {
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => const VRChatMobileLogin(),
+                  ),
+                  (_) => false);
+              _removeLoginSession();
+            }
             return;
           }
           if (response.containsKey("id")) {
@@ -77,7 +92,7 @@ class _LoginHomeState extends State<VRChatMobileHome> {
                     child: Text(AppLocalizations.of(context)!.viewInJsonViewer),
                   ),
                 ]);
-                popupMenu = [share("https://vrchat.com/home/user/${response['id']}")];
+                popupMenu = [share(context, "https://vrchat.com/home/user/${response['id']}")];
               });
               if (!["", "private", "offline"].contains(user["worldId"])) {
                 VRChatAPI(cookie: cookie).worlds(user["worldId"].split(":")[0]).then((world) {

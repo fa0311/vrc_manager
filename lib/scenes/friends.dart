@@ -84,7 +84,8 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
             onPressed: () => showModalBottomSheet(
                 context: context,
                 builder: (BuildContext context) => StatefulBuilder(
-                    builder: (BuildContext context, setStateBuilder) => SwitchListTile(
+                    builder: (BuildContext context, setStateBuilder) => SingleChildScrollView(
+                            child: SwitchListTile(
                           value: dataColumn.joinable,
                           title: Text(AppLocalizations.of(context)!.showOnlyAvailable),
                           onChanged: (bool e) => setStateBuilder(() {
@@ -96,7 +97,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
                               );
                             });
                           }),
-                        ))),
+                        )))),
           )
       ]),
       drawer: drawr(context),

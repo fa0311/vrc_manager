@@ -77,7 +77,7 @@ class _SettingPageState extends State<VRChatMobileSettings> {
               SwitchListTile(
                 value: theme,
                 title: Text(AppLocalizations.of(context)!.darkTheme),
-                subtitle: Text(AppLocalizations.of(context)!.darkThemeDetails),
+                subtitle: Text("${AppLocalizations.of(context)!.darkThemeDetails1}\n${AppLocalizations.of(context)!.darkThemeDetails2}"),
                 onChanged: _changeSwitch,
               ),
               const Divider(),

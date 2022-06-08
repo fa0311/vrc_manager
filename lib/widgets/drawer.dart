@@ -150,6 +150,12 @@ Drawer simpleDrawr(BuildContext context) {
             leading: const Icon(Icons.home),
             title: Text(AppLocalizations.of(context)!.home),
           ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Text(AppLocalizations.of(context)!.close),
+          )
         ])),
         Align(
             alignment: FractionalOffset.bottomCenter,
