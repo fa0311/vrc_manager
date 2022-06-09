@@ -23,6 +23,7 @@ class VRChatMobileLogin extends StatefulWidget {
 
 class _LoginPageState extends State<VRChatMobileLogin> {
   bool _isPasswordObscure = true;
+  bool _rememberLoginInfo = false;
   final _userController = TextEditingController();
   final _passwordController = TextEditingController();
   final _totpController = TextEditingController();
@@ -89,6 +90,13 @@ class _LoginPageState extends State<VRChatMobileLogin> {
   }
 
   _save(String cookie) {
+    if (_rememberLoginInfo) {
+      setLoginSession("UserId", _userController.text);
+      setLoginSession("Password", _passwordController.text);
+    } else {
+      setLoginSession("UserId", "");
+      setLoginSession("Password", "");
+    }
     setLoginSession("LoginSession", cookie).then((response) {
       Navigator.pushAndRemoveUntil(
           context,
@@ -100,8 +108,23 @@ class _LoginPageState extends State<VRChatMobileLogin> {
   }
 
   _LoginPageState() {
-    getLoginSession("LoginSession").then((totpTolen) {
-      session = VRChatAPI(cookie: totpTolen);
+    getLoginSession("LoginSession").then((response) {
+      session = VRChatAPI(cookie: response);
+    });
+    getLoginSession("UserId").then((response) {
+      setState(() => _userController.text = response);
+    });
+    getLoginSession("Password").then((response) {
+      setState(() => _passwordController.text = response);
+    });
+    getStorage("remember_login_info").then((response) {
+      setState(() => _rememberLoginInfo = (response == "true"));
+    });
+  }
+
+  _changeSwitchRememberLoginInfo(bool e) {
+    setStorage("remember_login_info", e ? "true" : "false").then((response) {
+      setState(() => _rememberLoginInfo = e);
     });
   }
 
@@ -136,8 +159,14 @@ class _LoginPageState extends State<VRChatMobileLogin> {
                 ),
               ),
             ),
-            Container(
-              height: 20,
+            SwitchListTile(
+              value: _rememberLoginInfo,
+              title: Text(AppLocalizations.of(context)!.rememberLoginInfo,
+                  style: const TextStyle(
+                    color: Colors.black54,
+                    fontSize: 14,
+                  )),
+              onChanged: _changeSwitchRememberLoginInfo,
             ),
             ElevatedButton(
               child: Text(

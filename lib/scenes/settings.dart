@@ -26,6 +26,12 @@ class _SettingPageState extends State<VRChatMobileSettings> {
     await storage.delete(key: 'LoginSession');
   }
 
+  _removeLoginInfo() async {
+    setLoginSession("UserId", "");
+    setLoginSession("Password", "");
+    setStorage("remember_login_info", "false");
+  }
+
   bool theme = false;
   bool autoReadMore = false;
 
@@ -139,6 +145,34 @@ class _SettingPageState extends State<VRChatMobileSettings> {
                                   ),
                                   (_) => false);
                               _removeLoginSession();
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                },
+              ),
+              const Divider(),
+              ListTile(
+                title: Text(AppLocalizations.of(context)!.deleteLoginInfo),
+                subtitle: Text(AppLocalizations.of(context)!.deleteLoginInfoDetails),
+                onTap: () => {
+                  showDialog(
+                    context: context,
+                    builder: (_) {
+                      return AlertDialog(
+                        title: Text(AppLocalizations.of(context)!.deleteLoginInfoConfirm),
+                        actions: <Widget>[
+                          TextButton(
+                            child: Text(AppLocalizations.of(context)!.cancel),
+                            onPressed: () => Navigator.pop(context),
+                          ),
+                          TextButton(
+                            child: Text(AppLocalizations.of(context)!.delete),
+                            onPressed: () {
+                              _removeLoginInfo();
+                              Navigator.pop(context);
                             },
                           ),
                         ],
