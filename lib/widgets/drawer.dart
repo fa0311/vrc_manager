@@ -65,7 +65,7 @@ Drawer drawr(BuildContext context) {
                       ));
                 },
                 leading: const Icon(Icons.notifications),
-                title: Text(AppLocalizations.of(context)!.offlineFrends),
+                title: Text(AppLocalizations.of(context)!.friendRequest),
               ),
               ListTile(
                 onTap: () {
@@ -76,7 +76,7 @@ Drawer drawr(BuildContext context) {
                         builder: (BuildContext context) => const VRChatMobileWorldsFavorite(),
                       ));
                 },
-                leading: const Icon(Icons.notifications),
+                leading: const Icon(Icons.favorite),
                 title: Text(AppLocalizations.of(context)!.favoriteWorlds),
               ),
               /*

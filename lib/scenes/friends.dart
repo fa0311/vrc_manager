@@ -23,11 +23,7 @@ class VRChatMobileFriends extends StatefulWidget {
 class _FriendsPageState extends State<VRChatMobileFriends> {
   int offset = 0;
 
-  late Column column = Column(
-    children: <Widget>[
-      Text(AppLocalizations.of(context)!.loading),
-    ],
-  );
+  late Column column = Column(children: const [Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator())]);
 
   Users dataColumn = Users();
   _FriendsPageState() {

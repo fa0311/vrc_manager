@@ -24,11 +24,7 @@ class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
   List<int> offset = [];
   List<Column> childrenList = [];
 
-  late Column column = Column(
-    children: <Widget>[
-      Text(AppLocalizations.of(context)!.loading),
-    ],
-  );
+  late Column column = Column(children: const [Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator())]);
 
   _WorldsFavoriteState() {
     getLoginSession("LoginSession").then((cookie) {
@@ -104,10 +100,11 @@ class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text(AppLocalizations.of(context)!.favoriteWorlds),
-        ),
-        drawer: drawr(context),
-        body: SafeArea(child: SizedBox(width: MediaQuery.of(context).size.width, child: SingleChildScrollView(child: column))));
+      appBar: AppBar(
+        title: Text(AppLocalizations.of(context)!.favoriteWorlds),
+      ),
+      drawer: drawr(context),
+      body: SafeArea(child: SizedBox(width: MediaQuery.of(context).size.width, child: SingleChildScrollView(child: column))),
+    );
   }
 }

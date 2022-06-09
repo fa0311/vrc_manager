@@ -29,14 +29,9 @@ class VRChatMobileHome extends StatefulWidget {
 }
 
 class _LoginHomeState extends State<VRChatMobileHome> {
-  late Column column = Column(
-    children: <Widget>[
-      SizedBox(width: double.infinity, child: Text(AppLocalizations.of(context)!.loading)),
-      Text(AppLocalizations.of(context)!.loadingDetails),
-    ],
-  );
-
   List<Widget> popupMenu = [];
+
+  late Column column = Column(children: const [Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator())]);
 
   _removeLoginSession() async {
     const storage = FlutterSecureStorage();
@@ -142,7 +137,10 @@ class _LoginHomeState extends State<VRChatMobileHome> {
         actions: popupMenu,
       ),
       drawer: drawr(context),
-      body: SafeArea(child: SingleChildScrollView(child: Container(padding: const EdgeInsets.only(top: 10, bottom: 50, right: 30, left: 30), child: column))),
+      body: SafeArea(
+          child: SizedBox(
+              width: MediaQuery.of(context).size.width,
+              child: Container(padding: const EdgeInsets.only(top: 10, bottom: 50, right: 30, left: 30), child: SingleChildScrollView(child: column)))),
     );
   }
 }

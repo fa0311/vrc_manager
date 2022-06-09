@@ -87,7 +87,11 @@ class Users {
                         if (!["", "private", "offline"].contains(user["location"]) && locationMap.containsKey(user["location"].split(":")[0]))
                           Text(locationMap[user["location"].split(":")[0]]["name"], style: const TextStyle(fontSize: 14)),
                         if (!["", "private", "offline"].contains(user["location"]) && !locationMap.containsKey(user["location"].split(":")[0]))
-                          Text(AppLocalizations.of(context)!.loading, style: const TextStyle(fontSize: 14)),
+                          const SizedBox(
+                            height: 15.0,
+                            width: 15.0,
+                            child: CircularProgressIndicator(),
+                          ),
                         if (user["location"] == "private") Text(AppLocalizations.of(context)!.privateWorld, style: const TextStyle(fontSize: 14)),
                       ])),
                     ],

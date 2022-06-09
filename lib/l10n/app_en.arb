@@ -25,8 +25,6 @@
     "dateFormat3": "{inMinutes} minutes ago",
     "dateFormat4": "{inSeconds} seconds ago",
     "@____________________LOAD____________________": {},
-    "loading": "Now loading",
-    "loadingDetails": "If this screen is displayed for a long time, please open the settings from the menu on the left and log out.",
     "none": "Without",
     "readMore": "Read more",
     "@____________________SHARE____________________": {},

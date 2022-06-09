@@ -24,12 +24,7 @@ class VRChatMobileUser extends StatefulWidget {
 }
 
 class _UserHomeState extends State<VRChatMobileUser> {
-  late Column column = Column(
-    children: <Widget>[
-      Text(AppLocalizations.of(context)!.loading),
-    ],
-  );
-
+  late Column column = Column(children: const [Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator())]);
   late List<Widget> popupMenu = [share(context, "https://vrchat.com/home/user/${widget.userId}")];
 
   _UserHomeState() {
@@ -66,7 +61,7 @@ class _UserHomeState extends State<VRChatMobileUser> {
             return;
           }
           setState(() {
-            popupMenu = <Widget>[share(context, "https://vrchat.com/home/user/${widget.userId}"), profileAction(context, status, widget.userId)];
+            popupMenu = <Widget>[profileAction(context, status, widget.userId), share(context, "https://vrchat.com/home/user/${widget.userId}")];
           });
         });
         if (!["", "private", "offline"].contains(user["location"])) {
@@ -135,7 +130,10 @@ class _UserHomeState extends State<VRChatMobileUser> {
     return Scaffold(
       appBar: AppBar(title: Text(AppLocalizations.of(context)!.user), actions: popupMenu),
       drawer: drawr(context),
-      body: SafeArea(child: SingleChildScrollView(child: Container(padding: const EdgeInsets.only(top: 10, bottom: 50, right: 30, left: 30), child: column))),
+      body: SafeArea(
+          child: SizedBox(
+              width: MediaQuery.of(context).size.width,
+              child: Container(padding: const EdgeInsets.only(top: 10, bottom: 50, right: 30, left: 30), child: SingleChildScrollView(child: column)))),
     );
   }
 }

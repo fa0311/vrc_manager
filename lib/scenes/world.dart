@@ -23,11 +23,7 @@ class VRChatMobileWorld extends StatefulWidget {
 }
 
 class _WorldState extends State<VRChatMobileWorld> {
-  late Column column = Column(
-    children: <Widget>[
-      Text(AppLocalizations.of(context)!.loading),
-    ],
-  );
+  late Column column = Column(children: const [Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator())]);
   late List<Widget> popupMenu = [share(context, "https://vrchat.com/home/user/${widget.worldId}")];
 
   _WorldState() {
@@ -84,7 +80,7 @@ class _WorldState extends State<VRChatMobileWorld> {
             });
             bottomSheet.removeLast();
             setState(() {
-              popupMenu = <Widget>[share(context, "https://vrchat.com/home/user/${widget.worldId}"), worldAction(context, widget.worldId, bottomSheet)];
+              popupMenu = <Widget>[worldAction(context, widget.worldId, bottomSheet), share(context, "https://vrchat.com/home/user/${widget.worldId}")];
             });
           });
         });
@@ -96,7 +92,7 @@ class _WorldState extends State<VRChatMobileWorld> {
     return Scaffold(
       appBar: AppBar(title: Text(AppLocalizations.of(context)!.world), actions: popupMenu),
       drawer: drawr(context),
-      body: SafeArea(child: SingleChildScrollView(child: Padding(padding: const EdgeInsets.all(30), child: column))),
+      body: SafeArea(child: SizedBox(width: MediaQuery.of(context).size.width, child: SingleChildScrollView(child: column))),
     );
   }
 }
