@@ -118,6 +118,9 @@ Widget profileAction(BuildContext context, status, String uid) {
       icon: const Icon(Icons.add),
       onPressed: () => showModalBottomSheet(
           context: context,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
+          ),
           builder: (BuildContext context) => StatefulBuilder(
               builder: (BuildContext context, setStateBuilder) => SingleChildScrollView(
                       child: Column(children: [

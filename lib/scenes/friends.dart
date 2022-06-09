@@ -79,6 +79,9 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
             icon: const Icon(Icons.more_vert),
             onPressed: () => showModalBottomSheet(
                 context: context,
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
+                ),
                 builder: (BuildContext context) => StatefulBuilder(
                     builder: (BuildContext context, setStateBuilder) => SingleChildScrollView(
                             child: SwitchListTile(

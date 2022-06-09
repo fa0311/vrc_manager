@@ -133,7 +133,7 @@ class _UserHomeState extends State<VRChatMobileUser> {
       body: SafeArea(
           child: SizedBox(
               width: MediaQuery.of(context).size.width,
-              child: Container(padding: const EdgeInsets.only(top: 10, bottom: 50, right: 30, left: 30), child: SingleChildScrollView(child: column)))),
+              child: SingleChildScrollView(child: Container(padding: const EdgeInsets.only(top: 10, bottom: 0, right: 30, left: 30), child: column)))),
     );
   }
 }

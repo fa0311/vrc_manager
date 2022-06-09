@@ -86,6 +86,9 @@ class _SettingPageState extends State<VRChatMobileSettings> {
                   subtitle: Text(AppLocalizations.of(context)!.languageDetails),
                   onTap: () => showModalBottomSheet(
                       context: context,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
+                      ),
                       builder: (BuildContext context) => SingleChildScrollView(
                               child: Column(
                             children: <Widget>[

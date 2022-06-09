@@ -150,6 +150,9 @@ Widget worldAction(BuildContext context, String wid, List<Widget> bottomSheet) {
       icon: const Icon(Icons.favorite),
       onPressed: () => showModalBottomSheet(
           context: context,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
+          ),
           builder: (BuildContext context) => SingleChildScrollView(
                 child: Column(children: bottomSheet),
               )));

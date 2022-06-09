@@ -1,3 +1,6 @@
+// Dart imports:
+import 'dart:convert';
+
 // Flutter imports:
 import 'package:flutter/material.dart';
 
@@ -7,6 +10,8 @@ import 'package:flutter_json_viewer/flutter_json_viewer.dart';
 
 // Project imports:
 import 'package:vrchat_mobile_client/assets/storage.dart';
+import 'package:vrchat_mobile_client/widgets/drawer.dart';
+import 'package:vrchat_mobile_client/widgets/share.dart';
 
 class VRChatMobileJsonViewer extends StatefulWidget {
   final dynamic obj;
@@ -29,7 +34,9 @@ class _JsonViewerPageState extends State<VRChatMobileJsonViewer> {
     return Scaffold(
         appBar: AppBar(
           title: Text(AppLocalizations.of(context)!.jsonViewer),
+          actions: [simpleShare(context, jsonEncode(widget.obj))],
         ),
+        drawer: drawr(context),
         body: Container(
           color: theme == "dark" ? Colors.black : Colors.white,
           child: SafeArea(
