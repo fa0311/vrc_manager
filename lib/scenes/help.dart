@@ -35,8 +35,8 @@ class _HelpPageState extends State<VRChatMobileHelp> {
                 title: Text(AppLocalizations.of(context)!.contribution),
                 subtitle: Text(AppLocalizations.of(context)!.contributionDetails),
                 onTap: () async {
-                  if (await canLaunchUrl(Uri.parse(AppLocalizations.of(context)!.githubUrl))) {
-                    await launchUrl(Uri.parse(AppLocalizations.of(context)!.githubUrl));
+                  if (await canLaunchUrl(Uri.parse("https://github.com/fa0311/vrchat_mobile_client"))) {
+                    await launchUrl(Uri.parse("https://github.com/fa0311/vrchat_mobile_client"));
                   }
                 },
               ),
@@ -45,8 +45,8 @@ class _HelpPageState extends State<VRChatMobileHelp> {
                 title: Text(AppLocalizations.of(context)!.report),
                 subtitle: Text(AppLocalizations.of(context)!.reportDetails),
                 onTap: () async {
-                  if (await canLaunchUrl(Uri.parse(AppLocalizations.of(context)!.issueUrl))) {
-                    await launchUrl(Uri.parse(AppLocalizations.of(context)!.issueUrl));
+                  if (await canLaunchUrl(Uri.parse("https://github.com/fa0311/vrchat_mobile_client/issues/new"))) {
+                    await launchUrl(Uri.parse("https://github.com/fa0311/vrchat_mobile_client/issues/new"));
                   }
                 },
               ),

@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 
 // Project imports:
@@ -33,11 +32,6 @@ class _LoginHomeState extends State<VRChatMobileHome> {
 
   late Column column = Column(children: const [Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator())]);
 
-  _removeLoginSession() async {
-    const storage = FlutterSecureStorage();
-    await storage.delete(key: 'LoginSession');
-  }
-
   _LoginHomeState() {
     getLoginSession("LoginSession").then((cookie) {
       if (cookie == null) {
@@ -58,7 +52,6 @@ class _LoginHomeState extends State<VRChatMobileHome> {
                     builder: (BuildContext context) => const VRChatMobileLogin(),
                   ),
                   (_) => false);
-              _removeLoginSession();
             }
             return;
           }

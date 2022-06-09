@@ -19,8 +19,8 @@ error(BuildContext context, String text, {String log = ""}) {
                 child: Text(AppLocalizations.of(context)!.report),
                 onPressed: () async {
                   _launchURL() async {
-                    if (await canLaunchUrl(Uri.parse(AppLocalizations.of(context)!.issueUrl))) {
-                      await launchUrl(Uri.parse(AppLocalizations.of(context)!.issueUrl));
+                    if (await canLaunchUrl(Uri.parse("https://github.com/fa0311/vrchat_mobile_client/issues/new"))) {
+                      await launchUrl(Uri.parse("https://github.com/fa0311/vrchat_mobile_client/issues/new"));
                     }
                   }
 

@@ -27,7 +27,9 @@ class _SettingPageState extends State<VRChatMobileSettings> {
   }
 
   bool theme = false;
-  _changeSwitch(bool e) {
+  bool autoReadMore = false;
+
+  _changeSwitchTheme(bool e) {
     setStorage("theme_brightness", e ? "dark" : "light").then((response) {
       Navigator.pushAndRemoveUntil(
           context,
@@ -35,6 +37,12 @@ class _SettingPageState extends State<VRChatMobileSettings> {
             builder: (BuildContext context) => const VRChatMobile(),
           ),
           (_) => false);
+    });
+  }
+
+  _changeSwitchAutoReadMore(bool e) {
+    setStorage("auto_read_more", e ? "true" : "false").then((response) {
+      setState(() => autoReadMore = e);
     });
   }
 
@@ -59,6 +67,9 @@ class _SettingPageState extends State<VRChatMobileSettings> {
     getStorage("theme_brightness").then((response) {
       setState(() => theme = (response == "dark"));
     });
+    getStorage("auto_read_more").then((response) {
+      setState(() => autoReadMore = (response == "true"));
+    });
   }
 
   @override
@@ -74,13 +85,6 @@ class _SettingPageState extends State<VRChatMobileSettings> {
           width: MediaQuery.of(context).size.width,
           child: Column(
             children: <Widget>[
-              SwitchListTile(
-                value: theme,
-                title: Text(AppLocalizations.of(context)!.darkTheme),
-                subtitle: Text("${AppLocalizations.of(context)!.darkThemeDetails1}\n${AppLocalizations.of(context)!.darkThemeDetails2}"),
-                onChanged: _changeSwitch,
-              ),
-              const Divider(),
               ListTile(
                   title: Text(AppLocalizations.of(context)!.language),
                   subtitle: Text(AppLocalizations.of(context)!.languageDetails),
@@ -96,6 +100,20 @@ class _SettingPageState extends State<VRChatMobileSettings> {
                               _changeLocaleDialogOption(context, '日本語', 'ja'),
                             ],
                           )))),
+              const Divider(),
+              SwitchListTile(
+                value: theme,
+                title: Text(AppLocalizations.of(context)!.darkTheme),
+                subtitle: Text("${AppLocalizations.of(context)!.darkThemeDetails1}\n${AppLocalizations.of(context)!.darkThemeDetails2}"),
+                onChanged: _changeSwitchTheme,
+              ),
+              const Divider(),
+              SwitchListTile(
+                value: autoReadMore,
+                title: Text(AppLocalizations.of(context)!.autoReadMore),
+                subtitle: Text("${AppLocalizations.of(context)!.autoReadMoreDetails1}\n${AppLocalizations.of(context)!.autoReadMoreDetails2}"),
+                onChanged: _changeSwitchAutoReadMore,
+              ),
               const Divider(),
               ListTile(
                 title: Text(AppLocalizations.of(context)!.logout),

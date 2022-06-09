@@ -21,12 +21,74 @@ class VRChatMobileLogin extends StatefulWidget {
   State<VRChatMobileLogin> createState() => _LoginPageState();
 }
 
-bool _isPasswordObscure = true;
-final _userController = TextEditingController();
-final _passwordController = TextEditingController();
+class _LoginPageState extends State<VRChatMobileLogin> {
+  bool _isPasswordObscure = true;
+  final _userController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _totpController = TextEditingController();
+  late VRChatAPI session = VRChatAPI();
 
-onPressed(context) {
-  save(String cookie) {
+  _onPressed(context) {
+    session.login(_userController.text, _passwordController.text).then((response) {
+      if (response.containsKey("error")) {
+        error(context, response["error"]["message"]);
+      } else if (response.containsKey("requiresTwoFactorAuth")) {
+        _totp();
+      } else if (response.containsKey("verified") && response["verified"]) {
+        _save(session.vrchatSession.headers["cookie"] as String);
+      } else if (response.containsKey("verified") && !response["verified"]) {
+        error(context, AppLocalizations.of(context)!.incorrectLogin);
+      } else if (response.containsKey("id")) {
+        _save(session.vrchatSession.headers["cookie"] as String);
+      } else {
+        error(context,
+            "${AppLocalizations.of(context)!.unexpectedError}\n${AppLocalizations.of(context)!.reportMessage1}\n${AppLocalizations.of(context)!.reportMessage2(AppLocalizations.of(context)!.report)}",
+            log: json.encode(response));
+      }
+    });
+  }
+
+  _onPressedTotp(context) {
+    session.loginTotp(_totpController.text).then((response) {
+      if (response.containsKey("error")) {
+        error(context, response["error"]["message"]);
+      } else if (response.containsKey("verified") && response["verified"]) {
+        _save(session.vrchatSession.headers["cookie"] as String);
+      } else if (response.containsKey("verified") && !response["verified"]) {
+        error(context, AppLocalizations.of(context)!.incorrectLogin);
+      } else if (response.containsKey("id")) {
+        _save(session.vrchatSession.headers["cookie"] as String);
+      } else {
+        error(context,
+            "${AppLocalizations.of(context)!.unexpectedError}\n${AppLocalizations.of(context)!.reportMessage1}\n${AppLocalizations.of(context)!.reportMessage2(AppLocalizations.of(context)!.report)}",
+            log: json.encode(response));
+      }
+    });
+  }
+
+  _totp() {
+    showDialog(
+        context: context,
+        builder: (_) {
+          return AlertDialog(
+            title: Text(
+              AppLocalizations.of(context)!.twoFactorAuthentication,
+            ),
+            content: TextFormField(
+              keyboardType: TextInputType.number,
+              controller: _totpController,
+              onFieldSubmitted: (String e) => _onPressedTotp(context),
+              decoration: InputDecoration(labelText: AppLocalizations.of(context)!.authenticationCode),
+              maxLength: 6,
+            ),
+            actions: [
+              TextButton(child: Text(AppLocalizations.of(context)!.send), onPressed: () => _onPressedTotp(context)),
+            ],
+          );
+        });
+  }
+
+  _save(String cookie) {
     setLoginSession("LoginSession", cookie).then((response) {
       Navigator.pushAndRemoveUntil(
           context,
@@ -37,65 +99,12 @@ onPressed(context) {
     });
   }
 
-  final session = VRChatAPI();
-  totp() {
-    final passwordController = TextEditingController();
-    showDialog(
-        context: context,
-        builder: (_) {
-          return AlertDialog(
-            title: Text(
-              AppLocalizations.of(context)!.twoFactorAuthentication,
-            ),
-            content: TextField(
-              keyboardType: TextInputType.number,
-              controller: passwordController,
-              decoration: InputDecoration(labelText: AppLocalizations.of(context)!.authenticationCode),
-              maxLength: 6,
-            ),
-            actions: [
-              TextButton(
-                  child: Text(AppLocalizations.of(context)!.send),
-                  onPressed: () => session.loginTotp(passwordController.text).then((response) {
-                        if (response.containsKey("error")) {
-                          error(context, response["error"]["message"]);
-                        } else if (response.containsKey("verified") && response["verified"]) {
-                          save(session.vrchatSession.headers["cookie"] as String);
-                        } else if (response.containsKey("verified") && !response["verified"]) {
-                          error(context, AppLocalizations.of(context)!.incorrectLogin);
-                        } else if (response.containsKey("id")) {
-                          save(session.vrchatSession.headers["cookie"] as String);
-                        } else {
-                          error(context,
-                              "${AppLocalizations.of(context)!.unexpectedError}\n${AppLocalizations.of(context)!.reportMessage1}\n${AppLocalizations.of(context)!.reportMessage2(AppLocalizations.of(context)!.report)}",
-                              log: json.encode(response));
-                        }
-                      })),
-            ],
-          );
-        });
+  _LoginPageState() {
+    getLoginSession("LoginSession").then((totpTolen) {
+      session = VRChatAPI(cookie: totpTolen);
+    });
   }
 
-  session.login(_userController.text, _passwordController.text).then((response) {
-    if (response.containsKey("error")) {
-      error(context, response["error"]["message"]);
-    } else if (response.containsKey("requiresTwoFactorAuth")) {
-      totp();
-    } else if (response.containsKey("verified") && response["verified"]) {
-      save(session.vrchatSession.headers["cookie"] as String);
-    } else if (response.containsKey("verified") && !response["verified"]) {
-      error(context, AppLocalizations.of(context)!.incorrectLogin);
-    } else if (response.containsKey("id")) {
-      save(session.vrchatSession.headers["cookie"] as String);
-    } else {
-      error(context,
-          "${AppLocalizations.of(context)!.unexpectedError}\n${AppLocalizations.of(context)!.reportMessage1}\n${AppLocalizations.of(context)!.reportMessage2(AppLocalizations.of(context)!.report)}",
-          log: json.encode(response));
-    }
-  });
-}
-
-class _LoginPageState extends State<VRChatMobileLogin> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -114,6 +123,7 @@ class _LoginPageState extends State<VRChatMobileLogin> {
             TextFormField(
               obscureText: _isPasswordObscure,
               controller: _passwordController,
+              onFieldSubmitted: (String e) => _onPressed(context),
               decoration: InputDecoration(
                 labelText: AppLocalizations.of(context)!.password,
                 suffixIcon: IconButton(
@@ -133,7 +143,7 @@ class _LoginPageState extends State<VRChatMobileLogin> {
               child: Text(
                 AppLocalizations.of(context)!.login,
               ),
-              onPressed: () => onPressed(context),
+              onPressed: () => _onPressed(context),
             ),
           ],
         ),

@@ -72,6 +72,9 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
   @override
   Widget build(BuildContext context) {
     dataColumn.context = context;
+    getStorage("auto_read_more").then((response) {
+      if (dataColumn.children.length == offset && offset > 0 && response == "true") moreOver();
+    });
     return Scaffold(
       appBar: AppBar(title: Text(AppLocalizations.of(context)!.frends), actions: <Widget>[
         if (!widget.offline)
