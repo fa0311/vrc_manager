@@ -127,7 +127,7 @@ Widget profileAction(BuildContext context, status, String uid) {
                     if (!status["isFriend"] && !status["incomingRequest"] && !status["outgoingRequest"])
                       ListTile(
                         leading: const Icon(Icons.person_add),
-                        title: Text(AppLocalizations.of(context)!.offlineFrends),
+                        title: Text(AppLocalizations.of(context)!.friendRequest),
                         onTap: sendFriendRequest,
                       ),
                     if (status["isFriend"] && !status["incomingRequest"] && !status["outgoingRequest"])
