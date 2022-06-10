@@ -1,22 +1,26 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+// Package imports:
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-void error(context, String text, {String log = ""}) {
+error(BuildContext context, String text, {String log = ""}) {
   showDialog(
       context: context,
       builder: (_) {
         return AlertDialog(
-          title: const Text("エラーが発生しました"),
+          title: Text(AppLocalizations.of(context)!.errorDialog),
           content: Text(text),
           actions: [
             if (log.isNotEmpty)
               TextButton(
-                child: const Text("報告"),
+                child: Text(AppLocalizations.of(context)!.report),
                 onPressed: () async {
                   _launchURL() async {
-                    if (await canLaunch("https://github.com/fa0311/vrchat_mobile_client/issues/new")) {
-                      await launch("https://github.com/fa0311/vrchat_mobile_client/issues/new");
+                    if (await canLaunchUrl(Uri.parse("https://github.com/fa0311/vrchat_mobile_client/issues/new"))) {
+                      await launchUrl(Uri.parse("https://github.com/fa0311/vrchat_mobile_client/issues/new"));
                     }
                   }
 
@@ -26,7 +30,7 @@ void error(context, String text, {String log = ""}) {
                 },
               ),
             TextButton(
-              child: const Text("OK"),
+              child: Text(AppLocalizations.of(context)!.ok),
               onPressed: () => Navigator.pop(context),
             ),
           ],

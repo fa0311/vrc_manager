@@ -1,8 +1,11 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Project imports:
 import 'package:vrchat_mobile_client/scenes/user.dart';
 import 'package:vrchat_mobile_client/scenes/world.dart';
 
-void urlParser(BuildContext context, String strUri) {
+urlParser(BuildContext context, String strUri) {
   final List<String> path = Uri.parse(strUri).path.split("/");
   final Map<String, String> queryParameters = Uri.parse(strUri).queryParameters;
   if (path.length < 2) {
@@ -11,19 +14,19 @@ void urlParser(BuildContext context, String strUri) {
     Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => VRChatMobileWorld(worldId: queryParameters["worldId"] ?? ""),
+          builder: (BuildContext context) => VRChatMobileWorld(worldId: queryParameters["worldId"] ?? ""),
         ));
   } else if (path[2] == "world") {
     Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => VRChatMobileWorld(worldId: path[3]),
+          builder: (BuildContext context) => VRChatMobileWorld(worldId: path[3]),
         ));
   } else if (path[2] == "user") {
     Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => VRChatMobileUser(userId: path[3]),
+          builder: (BuildContext context) => VRChatMobileUser(userId: path[3]),
         ));
   }
 }

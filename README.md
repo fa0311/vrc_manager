@@ -3,14 +3,14 @@
 VRChatの非公式なAPIを利用したVRChatのモバイルクライアント<br>
 Flutterで作成されたシンプルなUIが特徴的です<br>
 
-<img width="20%" src="docs/img/screenshots1.jpg"><img width="20%" src="docs/img/screenshots2.jpg">
-
 ## 特徴
-- **マルチプラットフォーム**  Android Windows Web(Ios用のPullRequest Buildは歓迎します)
-- **完全日本語**  [翻訳者募集](https://github.com/fa0311/vrchat_mobile_client/discussions/23)
+- **マルチプラットフォーム**  Android Windows(iOS用のPullRequest Buildは歓迎します)
+- **多言語対応**
 - **広告無し**
 - **完全無料**
 - **オープンソース**
+
+<img width="20%" src="docs/img/screenshots1.jpg"><img width="20%" src="docs/img/screenshots2.jpg"><img width="20%" src="docs/img/screenshots3.jpg"><img width="20%" src="docs/img/screenshots4.jpg"><img width="20%" src="docs/img/screenshots5.jpg">
 
 ## インストール
 ### Android

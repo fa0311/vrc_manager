@@ -1,3 +1,4 @@
+// Project imports:
 import 'package:vrchat_mobile_client/assets/session.dart';
 
 class VRChatAPI {
@@ -35,19 +36,19 @@ class VRChatAPI {
   /* ユーザー */
 
   Future<Map> users(String uid) {
-    return vrchatSession.get(endpoint('api/1/users/' + uid, apiKey()));
+    return vrchatSession.get(endpoint('api/1/users/$uid', apiKey()));
   }
 
   Future<Map> friendStatus(String uid) {
-    return vrchatSession.get(endpoint('api/1/user/' + uid + '/friendStatus', apiKey()));
+    return vrchatSession.get(endpoint('api/1/user/$uid/friendStatus', apiKey()));
   }
 
   Future<Map> sendFriendRequest(String uid) {
-    return vrchatSession.post(endpoint('api/1/user/' + uid + '/friendRequest', apiKey()));
+    return vrchatSession.post(endpoint('api/1/user/$uid/friendRequest', apiKey()));
   }
 
   Future<Map> deleteFriendRequest(String uid) {
-    return vrchatSession.delete(endpoint('api/1/user/' + uid + '/friendRequest', apiKey()));
+    return vrchatSession.delete(endpoint('api/1/user/$uid/friendRequest', apiKey()));
   }
 
   /* フレンド */
@@ -58,7 +59,7 @@ class VRChatAPI {
   }
 
   Future<Map> deleteFriend(String uid) {
-    return vrchatSession.delete(endpoint('api/1/auth/user/friends/' + uid, apiKey()));
+    return vrchatSession.delete(endpoint('api/1/auth/user/friends/$uid', apiKey()));
   }
 
   /* お気に入り */
@@ -73,7 +74,7 @@ class VRChatAPI {
   }
 
   Future<Map> deleteFavorites(String fid) {
-    return vrchatSession.delete(endpoint('api/1/favorites/' + fid, apiKey()));
+    return vrchatSession.delete(endpoint('api/1/favorites/$fid', apiKey()));
   }
 
   /* 通知 */
@@ -86,13 +87,13 @@ class VRChatAPI {
   }
 
   Future<Map> notificationsSee(String fid) {
-    return vrchatSession.get(endpoint('/api/1/auth/user/notifications/' + fid + '/see', apiKey()));
+    return vrchatSession.get(endpoint('/api/1/auth/user/notifications/$fid/see', apiKey()));
   }
 
   /* ワールド */
 
   Future<Map> worlds(String wid) {
-    return vrchatSession.get(endpoint('api/1/worlds/' + wid, apiKey()));
+    return vrchatSession.get(endpoint('api/1/worlds/$wid', apiKey()));
   }
 
   Future<Map> favoritesWorlds(String type, {int offset = 0}) {
@@ -103,12 +104,16 @@ class VRChatAPI {
   /* インスタンス */
 
   Future<Map> instances(String location) {
-    return vrchatSession.get(endpoint('api/1/instances/' + location, apiKey()));
+    return vrchatSession.get(endpoint('api/1/instances/$location', apiKey()));
+  }
+
+  Future<Map> selfInvite(String location) {
+    return vrchatSession.post(endpoint('api/1/instances/$location/invite', apiKey()));
   }
 
   /* 変更 */
 
   Future<Map> changeName(String uid, String username, String password) {
-    return vrchatSession.put(endpoint('api/1/users/' + uid, apiKey()), {"currentPassword": password, "displayName": username});
+    return vrchatSession.put(endpoint('api/1/users/$uid', apiKey()), {"currentPassword": password, "displayName": username});
   }
 }

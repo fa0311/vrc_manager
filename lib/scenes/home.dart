@@ -1,16 +1,23 @@
+// Dart imports:
 import 'dart:io';
 
+// Flutter imports:
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+
+// Package imports:
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
-import 'package:share_plus/share_plus.dart';
+
+// Project imports:
 import 'package:vrchat_mobile_client/api/main.dart';
 import 'package:vrchat_mobile_client/assets/error.dart';
 import 'package:vrchat_mobile_client/assets/flutter/url_parser.dart';
 import 'package:vrchat_mobile_client/assets/storage.dart';
+import 'package:vrchat_mobile_client/scenes/json_viewer.dart';
 import 'package:vrchat_mobile_client/scenes/login.dart';
 import 'package:vrchat_mobile_client/widgets/drawer.dart';
 import 'package:vrchat_mobile_client/widgets/profile.dart';
+import 'package:vrchat_mobile_client/widgets/share.dart';
 import 'package:vrchat_mobile_client/widgets/world.dart';
 
 class VRChatMobileHome extends StatefulWidget {
@@ -21,14 +28,9 @@ class VRChatMobileHome extends StatefulWidget {
 }
 
 class _LoginHomeState extends State<VRChatMobileHome> {
-  Column column = Column(
-    children: const <Widget>[
-      SizedBox(width: double.infinity, child: Text('ロード中です')),
-      Text('この画面がずっと表示されている場合、左のメニューから設定を開いてログアウトしてください'),
-    ],
-  );
-
   List<Widget> popupMenu = [];
+
+  late Column column = Column(children: const [Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator())]);
 
   _LoginHomeState() {
     getLoginSession("LoginSession").then((cookie) {
@@ -36,13 +38,21 @@ class _LoginHomeState extends State<VRChatMobileHome> {
         Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
-              builder: (context) => const VRChatMobileLogin(),
+              builder: (BuildContext context) => const VRChatMobileLogin(),
             ),
             (_) => false);
       } else {
         VRChatAPI(cookie: cookie).user().then((response) {
           if (response.containsKey("error")) {
             error(context, response["error"]["message"]);
+            if (response["error"]["message"] == '"Missing Credentials"') {
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => const VRChatMobileLogin(),
+                  ),
+                  (_) => false);
+            }
             return;
           }
           if (response.containsKey("id")) {
@@ -53,29 +63,24 @@ class _LoginHomeState extends State<VRChatMobileHome> {
               }
 
               setState(() {
-                column = Column(children: <Widget>[profile(user), Column()]);
-                popupMenu = [
-                  PopupMenuButton(
-                    itemBuilder: (BuildContext context) => <PopupMenuEntry>[
-                      PopupMenuItem(
-                          child: ListTile(
-                              leading: const Icon(Icons.share),
-                              title: const Text('共有'),
-                              onTap: () {
-                                Share.share("https://vrchat.com/home/user/" + response["id"]);
-                                Navigator.pop(context);
-                              })),
-                      PopupMenuItem(
-                          child: ListTile(
-                              leading: const Icon(Icons.copy),
-                              title: const Text('コピー'),
-                              onTap: () async {
-                                final data = ClipboardData(text: "https://vrchat.com/home/user/" + response["id"]);
-                                await Clipboard.setData(data).then((value) => Navigator.pop(context));
-                              })),
-                    ],
-                  )
-                ];
+                column = Column(children: <Widget>[
+                  profile(context, user),
+                  Column(),
+                  TextButton(
+                    style: ElevatedButton.styleFrom(
+                      onPrimary: Colors.grey,
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (BuildContext context) => VRChatMobileJsonViewer(obj: user),
+                          ));
+                    },
+                    child: Text(AppLocalizations.of(context)!.viewInJsonViewer),
+                  ),
+                ]);
+                popupMenu = [share(context, "https://vrchat.com/home/user/${response['id']}")];
               });
               if (!["", "private", "offline"].contains(user["worldId"])) {
                 VRChatAPI(cookie: cookie).worlds(user["worldId"].split(":")[0]).then((world) {
@@ -85,14 +90,14 @@ class _LoginHomeState extends State<VRChatMobileHome> {
                   }
                   setState(() {
                     column = Column(children: column.children);
-                    column.children[1] = Column(children: [Container(padding: const EdgeInsets.only(top: 30)), worldSlim(context, world)]);
+                    column.children[1] = Column(children: [Container(padding: const EdgeInsets.only(top: 30)), simpleWorld(context, world)]);
                   });
                 });
               }
               if (user["location"] == "private") {
                 setState(() {
                   column = Column(children: column.children);
-                  column.children[1] = Column(children: [Container(padding: const EdgeInsets.only(top: 30)), privateWorldSlim()]);
+                  column.children[1] = Column(children: [Container(padding: const EdgeInsets.only(top: 30)), privatesimpleWorld(context)]);
                 });
               }
             });
@@ -109,7 +114,7 @@ class _LoginHomeState extends State<VRChatMobileHome> {
             Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const VRChatMobileLogin(),
+                  builder: (BuildContext context) => const VRChatMobileLogin(),
                 ),
                 (_) => false);
           }
@@ -121,11 +126,14 @@ class _LoginHomeState extends State<VRChatMobileHome> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('ホーム'),
+        title: Text(AppLocalizations.of(context)!.home),
         actions: popupMenu,
       ),
       drawer: drawr(context),
-      body: SafeArea(child: SingleChildScrollView(child: Container(padding: const EdgeInsets.only(top: 10, bottom: 50, right: 30, left: 30), child: column))),
+      body: SafeArea(
+          child: SizedBox(
+              width: MediaQuery.of(context).size.width,
+              child: SingleChildScrollView(child: Container(padding: const EdgeInsets.only(top: 10, bottom: 0, right: 30, left: 30), child: column)))),
     );
   }
 }

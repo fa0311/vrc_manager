@@ -1,4 +1,10 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+// Project imports:
 import 'package:vrchat_mobile_client/api/main.dart';
 import 'package:vrchat_mobile_client/assets/error.dart';
 import 'package:vrchat_mobile_client/assets/storage.dart';
@@ -18,11 +24,7 @@ class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
   List<int> offset = [];
   List<Column> childrenList = [];
 
-  Column column = Column(
-    children: const <Widget>[
-      Text('ロード中です'),
-    ],
-  );
+  late Column column = Column(children: const [Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator())]);
 
   _WorldsFavoriteState() {
     getLoginSession("LoginSession").then((cookie) {
@@ -33,8 +35,8 @@ class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
         }
         if (response.isEmpty) {
           setState(() => column = Column(
-                children: const <Widget>[
-                  Text('なし'),
+                children: <Widget>[
+                  Text(AppLocalizations.of(context)!.none),
                 ],
               ));
         } else {
@@ -69,7 +71,7 @@ class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
         final List<Widget> worldList = [];
         worldList.addAll(childrenList[index].children);
         worlds.forEach((dynamic index, dynamic world) {
-          worldList.add(worldSlim(context, world));
+          worldList.add(simpleWorld(context, world));
         });
         childrenList[index] = Column(children: worldList);
         column = Column(children: column.children);
@@ -83,7 +85,7 @@ class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
                 child: Column(
                   children: <Widget>[
                     ElevatedButton(
-                      child: const Text('続きを読み込む'),
+                      child: Text(AppLocalizations.of(context)!.readMore),
                       onPressed: () => moreOver(list, index),
                     ),
                   ],
@@ -98,10 +100,11 @@ class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('お気に入りのワールド'),
-        ),
-        drawer: drawr(context),
-        body: SafeArea(child: SizedBox(width: MediaQuery.of(context).size.width, child: SingleChildScrollView(child: column))));
+      appBar: AppBar(
+        title: Text(AppLocalizations.of(context)!.favoriteWorlds),
+      ),
+      drawer: drawr(context),
+      body: SafeArea(child: SizedBox(width: MediaQuery.of(context).size.width, child: SingleChildScrollView(child: column))),
+    );
   }
 }

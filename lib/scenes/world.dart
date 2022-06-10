@@ -1,10 +1,16 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:share_plus/share_plus.dart';
+
+// Package imports:
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+// Project imports:
 import 'package:vrchat_mobile_client/api/main.dart';
 import 'package:vrchat_mobile_client/assets/error.dart';
 import 'package:vrchat_mobile_client/assets/storage.dart';
+import 'package:vrchat_mobile_client/scenes/json_viewer.dart';
 import 'package:vrchat_mobile_client/widgets/drawer.dart';
+import 'package:vrchat_mobile_client/widgets/share.dart';
 import 'package:vrchat_mobile_client/widgets/world.dart';
 
 class VRChatMobileWorld extends StatefulWidget {
@@ -17,12 +23,8 @@ class VRChatMobileWorld extends StatefulWidget {
 }
 
 class _WorldState extends State<VRChatMobileWorld> {
-  Column column = Column(
-    children: const <Widget>[
-      Text('ロード中です'),
-    ],
-  );
-  Widget? dial;
+  late Column column = Column(children: const [Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator())]);
+  late List<Widget> popupMenu = [share(context, "https://vrchat.com/home/user/${widget.worldId}")];
 
   _WorldState() {
     getLoginSession("LoginSession").then((cookie) {
@@ -32,8 +34,55 @@ class _WorldState extends State<VRChatMobileWorld> {
           return;
         }
         setState(() {
-          column = Column(children: [world(response)]);
-          dial = worldAction(context, widget.worldId);
+          column = Column(children: [
+            world(context, response),
+            TextButton(
+              style: ElevatedButton.styleFrom(
+                onPrimary: Colors.grey,
+              ),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => VRChatMobileJsonViewer(obj: response),
+                    ));
+              },
+              child: Text(AppLocalizations.of(context)!.viewInJsonViewer),
+            ),
+          ]);
+        });
+        getLoginSession("LoginSession").then((cookie) {
+          VRChatAPI(cookie: cookie).favoriteGroups("world", offset: 0).then((response) {
+            List<Widget> bottomSheet = [];
+            if (response.containsKey("error")) {
+              error(context, response["error"]["message"]);
+              return;
+            }
+            if (response.isEmpty) return;
+            bottomSheet.add(ListTile(
+              title: Text(AppLocalizations.of(context)!.addFavoriteWorlds),
+            ));
+            bottomSheet.add(const Divider());
+            response.forEach((dynamic index, dynamic list) {
+              bottomSheet.add(ListTile(
+                title: Text(list["displayName"]),
+                onTap: () => {
+                  VRChatAPI(cookie: cookie).addFavorites("world", widget.worldId, list["name"]).then((response) {
+                    if (response.containsKey("error")) {
+                      error(context, response["error"]["message"]);
+                      return;
+                    }
+                    Navigator.pop(context);
+                  })
+                },
+              ));
+              bottomSheet.add(const Divider());
+            });
+            bottomSheet.removeLast();
+            setState(() {
+              popupMenu = <Widget>[worldAction(context, widget.worldId, bottomSheet), share(context, "https://vrchat.com/home/user/${widget.worldId}")];
+            });
+          });
         });
       });
     });
@@ -41,31 +90,9 @@ class _WorldState extends State<VRChatMobileWorld> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('ワールド'), actions: <Widget>[
-        PopupMenuButton(
-          itemBuilder: (BuildContext context) => <PopupMenuEntry>[
-            PopupMenuItem(
-                child: ListTile(
-                    leading: const Icon(Icons.share),
-                    title: const Text('共有'),
-                    onTap: () {
-                      Share.share("https://vrchat.com/home/world/" + widget.worldId);
-                      Navigator.pop(context);
-                    })),
-            PopupMenuItem(
-                child: ListTile(
-                    leading: const Icon(Icons.copy),
-                    title: const Text('コピー'),
-                    onTap: () async {
-                      final data = ClipboardData(text: "https://vrchat.com/home/world/" + widget.worldId);
-                      await Clipboard.setData(data).then((value) => Navigator.pop(context));
-                    })),
-          ],
-        )
-      ]),
+      appBar: AppBar(title: Text(AppLocalizations.of(context)!.world), actions: popupMenu),
       drawer: drawr(context),
-      body: SafeArea(child: Padding(padding: const EdgeInsets.all(30), child: SingleChildScrollView(child: column))),
-      floatingActionButton: dial,
+      body: SafeArea(child: SizedBox(width: MediaQuery.of(context).size.width, child: SingleChildScrollView(child: column))),
     );
   }
 }

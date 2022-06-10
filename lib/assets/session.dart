@@ -1,5 +1,8 @@
-import 'package:http/http.dart' as http;
+// Dart imports:
 import 'dart:convert';
+
+// Package imports:
+import 'package:http/http.dart' as http;
 
 class Session {
   Map<String, String> headers = {'cookie': ''};
@@ -13,7 +16,7 @@ class Session {
   }
 
   Future<Map> basic(Uri url, String username, String password) async {
-    final headersAuth = Map<String, String>.from(headers)..addAll({'authorization': 'Basic ' + base64Encode(utf8.encode('$username:$password'))});
+    final headersAuth = Map<String, String>.from(headers)..addAll({'authorization': 'Basic ${base64Encode(utf8.encode('$username:$password'))}'});
     http.Response response = await http.get(url, headers: headersAuth);
     updateCookie(response);
     final body = json.decode(response.body);
@@ -44,13 +47,32 @@ class Session {
     return body;
   }
 
-  void updateCookie(http.Response response) {
+  updateCookie(http.Response response) {
     String? rawCookie = response.headers['set-cookie'];
     if (rawCookie != null) {
-      int index = rawCookie.indexOf(';');
-      final String newCookie = (index == -1) ? rawCookie : rawCookie.substring(0, index);
-      headers['cookie'] = (headers['cookie'] == "") ? newCookie : (headers['cookie']! + "; " + newCookie);
+      Map<String, String> cookieMap = decodeCookie(headers['cookie'] ?? "");
+      cookieMap.addAll(decodeCookie(rawCookie));
+      headers['cookie'] = encodeCookie(cookieMap);
     }
+  }
+
+  String encodeCookie(Map<String, String> cookieMap) {
+    String rawCookie = "";
+    for (String key in cookieMap.keys) {
+      rawCookie += "$key=${cookieMap[key]}; ";
+    }
+    return rawCookie;
+  }
+
+  Map<String, String> decodeCookie(String rawCookie) {
+    Map<String, String> cookieMap = {};
+    for (String row in rawCookie.split(';')) {
+      List<String> data = row.trim().replaceFirst('HttpOnly,', '').split('=');
+      if (!row.contains('=')) continue;
+      if (["Max-Age", "Path", "Expires"].contains(data[0])) continue;
+      cookieMap[data[0]] = data[1];
+    }
+    return cookieMap;
   }
 
   String getCookie() {

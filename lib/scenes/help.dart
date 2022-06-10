@@ -1,10 +1,17 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
-import 'package:vrchat_mobile_client/assets/licence.dart';
-import 'package:vrchat_mobile_client/widgets/drawer.dart';
+
+// Package imports:
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+// Project imports:
+import 'package:vrchat_mobile_client/assets/licence.dart';
+import 'package:vrchat_mobile_client/widgets/drawer.dart';
+
 class VRChatMobileHelp extends StatefulWidget {
-  const VRChatMobileHelp({Key? key}) : super(key: key);
+  final bool logged;
+  const VRChatMobileHelp({Key? key, this.logged = true}) : super(key: key);
 
   @override
   State<VRChatMobileHelp> createState() => _HelpPageState();
@@ -15,9 +22,9 @@ class _HelpPageState extends State<VRChatMobileHelp> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('ヘルプ'),
+        title: Text(AppLocalizations.of(context)!.help),
       ),
-      drawer: drawr(context),
+      drawer: widget.logged ? drawr(context) : simpleDrawr(context),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: SizedBox(
@@ -25,25 +32,49 @@ class _HelpPageState extends State<VRChatMobileHelp> {
           child: Column(
             children: <Widget>[
               ListTile(
-                title: const Text('報告'),
-                subtitle: const Text('開発者にバグの報告や新機能のリクエストをします'),
-                onTap: () {
-                  _launchURL() async {
-                    if (await canLaunch("https://github.com/fa0311/vrchat_mobile_client/issues/new")) {
-                      await launch("https://github.com/fa0311/vrchat_mobile_client/issues/new");
-                    }
+                title: Text(AppLocalizations.of(context)!.contribution),
+                subtitle: Text(AppLocalizations.of(context)!.contributionDetails),
+                onTap: () async {
+                  if (await canLaunchUrl(Uri.parse("https://github.com/fa0311/vrchat_mobile_client"))) {
+                    await launchUrl(Uri.parse("https://github.com/fa0311/vrchat_mobile_client"));
                   }
-
-                  _launchURL();
                 },
               ),
               const Divider(),
               ListTile(
-                title: const Text('Licence'),
-                subtitle: const Text('Licence情報を確認します'),
-                onTap: () {
-                  showLicence(context);
+                title: Text(AppLocalizations.of(context)!.report),
+                subtitle: Text(AppLocalizations.of(context)!.reportDetails),
+                onTap: () async {
+                  if (await canLaunchUrl(Uri.parse("https://github.com/fa0311/vrchat_mobile_client/issues/new"))) {
+                    await launchUrl(Uri.parse("https://github.com/fa0311/vrchat_mobile_client/issues/new"));
+                  }
                 },
+              ),
+              const Divider(),
+              ListTile(
+                title: Text(AppLocalizations.of(context)!.developerInfo),
+                subtitle: Text(AppLocalizations.of(context)!.developerInfoDetails),
+                onTap: () async {
+                  if (await canLaunchUrl(Uri.parse("https://twitter.com/faa0311"))) {
+                    await launchUrl(Uri.parse("https://twitter.com/faa0311"));
+                  }
+                },
+              ),
+              const Divider(),
+              ListTile(
+                title: Text(AppLocalizations.of(context)!.rateTheApp),
+                subtitle: Text(AppLocalizations.of(context)!.rateTheAppDetails),
+                onTap: () async {
+                  if (await canLaunchUrl(Uri.parse("https://play.google.com/store/apps/details?id=com.yuki0311.vrchat_mobile_client"))) {
+                    await launchUrl(Uri.parse("https://play.google.com/store/apps/details?id=com.yuki0311.vrchat_mobile_client"));
+                  }
+                },
+              ),
+              const Divider(),
+              ListTile(
+                title: Text(AppLocalizations.of(context)!.licence),
+                subtitle: Text(AppLocalizations.of(context)!.licenceDetails),
+                onTap: () => showLicence(context),
               ),
             ],
           ),

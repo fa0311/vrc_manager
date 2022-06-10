@@ -1,4 +1,10 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+// Project imports:
 import 'package:vrchat_mobile_client/api/main.dart';
 import 'package:vrchat_mobile_client/assets/error.dart';
 import 'package:vrchat_mobile_client/assets/storage.dart';
@@ -16,11 +22,7 @@ class _FriendRequestPageState extends State<VRChatMobileFriendRequest> {
   int offset = 0;
   List<Widget> children = [];
 
-  Column column = Column(
-    children: const <Widget>[
-      Text('ロード中です'),
-    ],
-  );
+  late Column column = Column(children: const [Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator())]);
 
   Users dataColumn = Users();
   _FriendRequestPageState() {
@@ -36,8 +38,8 @@ class _FriendRequestPageState extends State<VRChatMobileFriendRequest> {
         offset += 100;
         if (response.isEmpty) {
           setState(() => column = Column(
-                children: const <Widget>[
-                  Text('なし'),
+                children: <Widget>[
+                  Text(AppLocalizations.of(context)!.none),
                 ],
               ));
         }
@@ -59,9 +61,12 @@ class _FriendRequestPageState extends State<VRChatMobileFriendRequest> {
   @override
   Widget build(BuildContext context) {
     dataColumn.context = context;
+    getStorage("auto_read_more").then((response) {
+      if (dataColumn.children.length == offset && offset > 0 && response == "true") moreOver();
+    });
     return Scaffold(
       appBar: AppBar(
-        title: const Text('フレンドリクエスト'),
+        title: Text(AppLocalizations.of(context)!.friendRequest),
       ),
       drawer: drawr(context),
       body: SafeArea(
@@ -76,7 +81,7 @@ class _FriendRequestPageState extends State<VRChatMobileFriendRequest> {
                     child: Column(
                       children: <Widget>[
                         ElevatedButton(
-                          child: const Text('続きを読み込む'),
+                          child: Text(AppLocalizations.of(context)!.readMore),
                           onPressed: () => moreOver(),
                         ),
                       ],

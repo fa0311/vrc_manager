@@ -1,11 +1,17 @@
-import 'package:flutter/services.dart';
-import 'package:share_plus/share_plus.dart';
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+// Project imports:
 import 'package:vrchat_mobile_client/api/main.dart';
 import 'package:vrchat_mobile_client/assets/error.dart';
 import 'package:vrchat_mobile_client/assets/storage.dart';
+import 'package:vrchat_mobile_client/scenes/json_viewer.dart';
 import 'package:vrchat_mobile_client/widgets/drawer.dart';
 import 'package:vrchat_mobile_client/widgets/profile.dart';
+import 'package:vrchat_mobile_client/widgets/share.dart';
 import 'package:vrchat_mobile_client/widgets/world.dart';
 
 class VRChatMobileUser extends StatefulWidget {
@@ -18,13 +24,8 @@ class VRChatMobileUser extends StatefulWidget {
 }
 
 class _UserHomeState extends State<VRChatMobileUser> {
-  Column column = Column(
-    children: const <Widget>[
-      Text('ロード中です'),
-    ],
-  );
-  Widget? dial;
-  Widget? popupMenu;
+  late Column column = Column(children: const [Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator())]);
+  late List<Widget> popupMenu = [share(context, "https://vrchat.com/home/user/${widget.userId}")];
 
   _UserHomeState() {
     getLoginSession("LoginSession").then((cookie) {
@@ -35,7 +36,24 @@ class _UserHomeState extends State<VRChatMobileUser> {
         }
 
         setState(() {
-          column = Column(children: <Widget>[profile(user), Column()]);
+          column = Column(children: <Widget>[
+            profile(context, user),
+            Column(),
+            Column(),
+            TextButton(
+              style: ElevatedButton.styleFrom(
+                onPrimary: Colors.grey,
+              ),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => VRChatMobileJsonViewer(obj: user),
+                    ));
+              },
+              child: Text(AppLocalizations.of(context)!.viewInJsonViewer),
+            ),
+          ]);
         });
         VRChatAPI(cookie: cookie).friendStatus(widget.userId).then((status) {
           if (status.containsKey("error")) {
@@ -43,10 +61,40 @@ class _UserHomeState extends State<VRChatMobileUser> {
             return;
           }
           setState(() {
-            dial = profileAction(context, status, widget.userId);
+            popupMenu = <Widget>[profileAction(context, status, widget.userId), share(context, "https://vrchat.com/home/user/${widget.userId}")];
           });
         });
         if (!["", "private", "offline"].contains(user["location"])) {
+          column.children[2] = TextButton(
+            style: ElevatedButton.styleFrom(
+              onPrimary: Colors.grey,
+            ),
+            onPressed: () {
+              VRChatAPI(cookie: cookie).selfInvite(user["location"]).then((response) {
+                if (response.containsKey("error")) {
+                  error(context, response["error"]["message"]);
+                  return;
+                }
+                showDialog(
+                  context: context,
+                  builder: (_) {
+                    return AlertDialog(
+                      title: Text(AppLocalizations.of(context)!.sendInvite),
+                      content: Text(AppLocalizations.of(context)!.selfInviteDetails),
+                      actions: <Widget>[
+                        TextButton(
+                          child: Text(AppLocalizations.of(context)!.close),
+                          onPressed: () => Navigator.pop(context),
+                        ),
+                      ],
+                    );
+                  },
+                );
+              });
+            },
+            child: Text(AppLocalizations.of(context)!.joinInstance),
+          );
+
           VRChatAPI(cookie: cookie).worlds(user["location"].split(":")[0]).then((world) {
             if (world.containsKey("error")) {
               error(context, world["error"]["message"]);
@@ -54,7 +102,7 @@ class _UserHomeState extends State<VRChatMobileUser> {
             }
             setState(() {
               column = Column(children: column.children);
-              column.children[1] = Column(children: [Container(padding: const EdgeInsets.only(top: 30)), worldSlim(context, world)]);
+              column.children[1] = Column(children: [Container(padding: const EdgeInsets.only(top: 30)), simpleWorld(context, world)]);
             });
             VRChatAPI(cookie: cookie).instances(user["location"]).then((instance) {
               if (instance.containsKey("error")) {
@@ -63,14 +111,14 @@ class _UserHomeState extends State<VRChatMobileUser> {
               }
               setState(() {
                 column = Column(children: column.children);
-                column.children[1] = Column(children: [Container(padding: const EdgeInsets.only(top: 30)), worldSlimPlus(context, world, instance)]);
+                column.children[1] = Column(children: [Container(padding: const EdgeInsets.only(top: 30)), simpleWorldPlus(context, world, instance)]);
               });
             });
           });
         }
         if (user["location"] == "private") {
           setState(() {
-            column = Column(children: [profile(user), Container(padding: const EdgeInsets.only(top: 30)), privateWorldSlim()]);
+            column = Column(children: [profile(context, user), Container(padding: const EdgeInsets.only(top: 30)), privatesimpleWorld(context)]);
           });
         }
       });
@@ -80,31 +128,12 @@ class _UserHomeState extends State<VRChatMobileUser> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('ユーザー'), actions: <Widget>[
-        PopupMenuButton(
-          itemBuilder: (BuildContext context) => <PopupMenuEntry>[
-            PopupMenuItem(
-                child: ListTile(
-                    leading: const Icon(Icons.share),
-                    title: const Text('共有'),
-                    onTap: () {
-                      Share.share("https://vrchat.com/home/user/" + widget.userId);
-                      Navigator.pop(context);
-                    })),
-            PopupMenuItem(
-                child: ListTile(
-                    leading: const Icon(Icons.copy),
-                    title: const Text('コピー'),
-                    onTap: () async {
-                      final data = ClipboardData(text: "https://vrchat.com/home/user/" + widget.userId);
-                      await Clipboard.setData(data).then((value) => Navigator.pop(context));
-                    })),
-          ],
-        )
-      ]),
+      appBar: AppBar(title: Text(AppLocalizations.of(context)!.user), actions: popupMenu),
       drawer: drawr(context),
-      body: SafeArea(child: SingleChildScrollView(child: Container(padding: const EdgeInsets.only(top: 10, bottom: 50, right: 30, left: 30), child: column))),
-      floatingActionButton: dial,
+      body: SafeArea(
+          child: SizedBox(
+              width: MediaQuery.of(context).size.width,
+              child: SingleChildScrollView(child: Container(padding: const EdgeInsets.only(top: 10, bottom: 0, right: 30, left: 30), child: column)))),
     );
   }
 }

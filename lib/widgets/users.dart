@@ -1,9 +1,16 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+// Project imports:
 import 'package:vrchat_mobile_client/scenes/user.dart';
 import 'package:vrchat_mobile_client/widgets/status.dart';
 
 class Users {
   List<Widget> children = [];
+  bool joinable = false;
   late BuildContext context;
   late Map<String, dynamic> locationMap = {};
   late List<dynamic> userList = [];
@@ -12,15 +19,15 @@ class Users {
     children = [];
     List<dynamic> tempUserList = userList;
     userList = [];
-    for (var users in tempUserList) {
+    for (Map users in tempUserList) {
       adds(users);
     }
     return children;
   }
 
-  num length() {
-    num len = 0;
-    for (var users in userList) {
+  int length() {
+    int len = 0;
+    for (Map users in userList) {
       len += users.length;
     }
     return len;
@@ -37,6 +44,8 @@ class Users {
     // オリジナル profilePicOverride
     userList.add(users);
     users.forEach((dynamic index, dynamic user) {
+      if (["", "private", "offline"].contains(user["location"]) && joinable) return;
+
       children.add(Card(
           elevation: 20.0,
           child: Container(
@@ -46,7 +55,7 @@ class Users {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => VRChatMobileUser(userId: user["id"]),
+                          builder: (BuildContext context) => VRChatMobileUser(userId: user["id"]),
                         ));
                   },
                   behavior: HitTestBehavior.opaque,
@@ -78,8 +87,12 @@ class Users {
                         if (!["", "private", "offline"].contains(user["location"]) && locationMap.containsKey(user["location"].split(":")[0]))
                           Text(locationMap[user["location"].split(":")[0]]["name"], style: const TextStyle(fontSize: 14)),
                         if (!["", "private", "offline"].contains(user["location"]) && !locationMap.containsKey(user["location"].split(":")[0]))
-                          const Text("ロード中", style: TextStyle(fontSize: 14)),
-                        if (user["location"] == "private") const Text("プライベートワールド", style: TextStyle(fontSize: 14)),
+                          const SizedBox(
+                            height: 15.0,
+                            width: 15.0,
+                            child: CircularProgressIndicator(),
+                          ),
+                        if (user["location"] == "private") Text(AppLocalizations.of(context)!.privateWorld, style: const TextStyle(fontSize: 14)),
                       ])),
                     ],
                   )))));

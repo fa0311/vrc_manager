@@ -1,4 +1,10 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+// Project imports:
 import 'package:vrchat_mobile_client/api/main.dart';
 import 'package:vrchat_mobile_client/assets/error.dart';
 import 'package:vrchat_mobile_client/assets/storage.dart';
@@ -17,15 +23,14 @@ class VRChatMobileFriends extends StatefulWidget {
 class _FriendsPageState extends State<VRChatMobileFriends> {
   int offset = 0;
 
-  Column column = Column(
-    children: const <Widget>[
-      Text('ロード中です'),
-    ],
-  );
+  late Column column = Column(children: const [Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator())]);
 
   Users dataColumn = Users();
   _FriendsPageState() {
-    moreOver();
+    getStorage("FriendsJoinable").then((response) {
+      moreOver();
+      dataColumn.joinable = response == "true" && !widget.offline;
+    });
   }
   moreOver() {
     getLoginSession("LoginSession").then((cookie) {
@@ -37,8 +42,8 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
         offset += 50;
         if (response.isEmpty) {
           setState(() => column = Column(
-                children: const <Widget>[
-                  Text('なし'),
+                children: <Widget>[
+                  Text(AppLocalizations.of(context)!.none),
                 ],
               ));
         } else {
@@ -67,10 +72,36 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
   @override
   Widget build(BuildContext context) {
     dataColumn.context = context;
+    getStorage("auto_read_more").then((response) {
+      if (dataColumn.children.length == offset && offset > 0 && response == "true") moreOver();
+    });
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('フレンド'),
-      ),
+      appBar: AppBar(title: Text(AppLocalizations.of(context)!.frends), actions: <Widget>[
+        if (!widget.offline)
+          IconButton(
+            icon: const Icon(Icons.more_vert),
+            onPressed: () => showModalBottomSheet(
+                context: context,
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
+                ),
+                builder: (BuildContext context) => StatefulBuilder(
+                    builder: (BuildContext context, setStateBuilder) => SingleChildScrollView(
+                            child: SwitchListTile(
+                          value: dataColumn.joinable,
+                          title: Text(AppLocalizations.of(context)!.showOnlyAvailable),
+                          onChanged: (bool e) => setStateBuilder(() {
+                            setStorage("FriendsJoinable", e ? "true" : "false");
+                            dataColumn.joinable = e;
+                            setState(() {
+                              column = Column(
+                                children: dataColumn.reload(),
+                              );
+                            });
+                          }),
+                        )))),
+          )
+      ]),
       drawer: drawr(context),
       body: SafeArea(
           child: SizedBox(
@@ -84,7 +115,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
                     child: Column(
                       children: <Widget>[
                         ElevatedButton(
-                          child: const Text('続きを読み込む'),
+                          child: Text(AppLocalizations.of(context)!.readMore),
                           onPressed: () => moreOver(),
                         ),
                       ],
