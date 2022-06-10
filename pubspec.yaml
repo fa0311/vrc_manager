@@ -48,6 +48,8 @@ dependencies:
     sdk: flutter
   import_sorter: ^4.6.0
   intl: ^0.17.0
+  webview_flutter: ^3.0.4
+  flutter_inappwebview: ^5.4.3+7
 
 dev_dependencies:
   flutter_test:

@@ -34,7 +34,7 @@ class _JsonViewerPageState extends State<VRChatMobileJsonViewer> {
     return Scaffold(
         appBar: AppBar(
           title: Text(AppLocalizations.of(context)!.jsonViewer),
-          actions: [simpleShare(context, jsonEncode(widget.obj))],
+          actions: [clipboardShare(context, jsonEncode(widget.obj))],
         ),
         drawer: drawr(context),
         body: Container(

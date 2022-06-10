@@ -1,4 +1,6 @@
 // Flutter imports:
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 // Package imports:
@@ -13,6 +15,7 @@ import 'package:vrchat_mobile_client/assets/error.dart';
 import 'package:vrchat_mobile_client/assets/storage.dart';
 import 'package:vrchat_mobile_client/assets/vrchat/icon.dart';
 import 'package:vrchat_mobile_client/scenes/user.dart';
+import 'package:vrchat_mobile_client/scenes/web_view.dart';
 import 'package:vrchat_mobile_client/widgets/status.dart';
 
 Column profile(BuildContext context, user) {
@@ -35,7 +38,7 @@ Column profile(BuildContext context, user) {
       ),
       if (user["statusDescription"] != "") Text(user["statusDescription"]),
       ConstrainedBox(constraints: const BoxConstraints(maxHeight: 200), child: SingleChildScrollView(child: Text(user["bio"]))),
-      Row(mainAxisAlignment: MainAxisAlignment.center, children: _biolink(user["bioLinks"] ?? [])),
+      Row(mainAxisAlignment: MainAxisAlignment.center, children: _biolink(context, user["bioLinks"] ?? [])),
       if (user["last_login"] != "") Text(AppLocalizations.of(context)!.lastLogin(generalDateDifference(context, user["last_login"]))),
       Text(AppLocalizations.of(context)!.dateJoined(generalDateDifference(context, user["date_joined"]))),
     ],
@@ -151,21 +154,29 @@ Widget profileAction(BuildContext context, status, String uid) {
                   ])))));
 }
 
-List<Widget> _biolink(List biolinks) {
+List<Widget> _biolink(BuildContext context, List biolinks) {
   List<Widget> response = [];
   for (String link in biolinks) {
     if (link == "") continue;
     response.add(CircleAvatar(
         backgroundColor: const Color(0x00000000),
         child: IconButton(
-          onPressed: () {
-            _launchURL() async {
+          onPressed: () async {
+            if (Platform.isAndroid || Platform.isIOS) {
+              getStorage("force_external_browser").then((response) async {
+                if (response == "true") {
+                  if (await canLaunchUrl(Uri.parse(link))) {
+                    await launchUrl(Uri.parse(link), mode: LaunchMode.externalApplication);
+                  }
+                } else {
+                  Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => VRChatMobileWebView(url: link)));
+                }
+              });
+            } else {
               if (await canLaunchUrl(Uri.parse(link))) {
                 await launchUrl(Uri.parse(link));
               }
             }
-
-            _launchURL();
           },
           icon: SvgPicture.asset("assets/svg/${getVrchatIconContains(link)}.svg",
               width: 20, height: 20, color: Color(getVrchatIcon()[getVrchatIconContains(link)] ?? 0xFFFFFFFF), semanticsLabel: link),
