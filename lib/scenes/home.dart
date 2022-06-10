@@ -101,7 +101,7 @@ class _LoginHomeState extends State<VRChatMobileHome> {
                 });
               }
             });
-            if (Platform.isAndroid) {
+            if (Platform.isAndroid || Platform.isIOS) {
               ReceiveSharingIntent.getTextStream().listen((String value) {
                 urlParser(context, value);
               });
