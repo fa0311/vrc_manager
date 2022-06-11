@@ -46,8 +46,8 @@ Card simpleWorld(BuildContext context, dynamic world) {
                         width: 50,
                         child: IconButton(
                           onPressed: () {
-                            getLoginSession("LoginSession").then((cookie) {
-                              VRChatAPI(cookie: cookie).deleteFavorites(world["favoriteId"]).then((response) {
+                            getLoginSession("login_session").then((cookie) {
+                              VRChatAPI(cookie: cookie ?? "").deleteFavorites(world["favoriteId"]).then((response) {
                                 if (response.containsKey("error")) {
                                   error(context, response["error"]["message"]);
                                   return;

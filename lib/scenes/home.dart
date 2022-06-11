@@ -33,7 +33,7 @@ class _LoginHomeState extends State<VRChatMobileHome> {
   late Column column = Column(children: const [Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator())]);
 
   _LoginHomeState() {
-    getLoginSession("LoginSession").then((cookie) {
+    getLoginSession("login_session").then((cookie) {
       if (cookie == null) {
         Navigator.pushAndRemoveUntil(
             context,

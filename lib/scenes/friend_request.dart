@@ -29,8 +29,8 @@ class _FriendRequestPageState extends State<VRChatMobileFriendRequest> {
     moreOver();
   }
   moreOver() {
-    getLoginSession("LoginSession").then((cookie) {
-      VRChatAPI(cookie: cookie).notifications(type: "friendRequest", offset: offset).then((response) {
+    getLoginSession("login_session").then((cookie) {
+      VRChatAPI(cookie: cookie ?? "").notifications(type: "friendRequest", offset: offset).then((response) {
         if (response.containsKey("error")) {
           error(context, response["error"]["message"]);
           return;
@@ -44,7 +44,7 @@ class _FriendRequestPageState extends State<VRChatMobileFriendRequest> {
               ));
         }
         response.forEach((dynamic index, dynamic requestUser) {
-          VRChatAPI(cookie: cookie).users(requestUser["senderUserId"]).then((user) {
+          VRChatAPI(cookie: cookie ?? "").users(requestUser["senderUserId"]).then((user) {
             if (user.containsKey("error")) {
               error(context, user["error"]["message"]);
               return;

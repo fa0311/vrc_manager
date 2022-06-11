@@ -33,8 +33,8 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
     });
   }
   moreOver() {
-    getLoginSession("LoginSession").then((cookie) {
-      VRChatAPI(cookie: cookie).friends(offline: widget.offline, offset: offset).then((response) {
+    getLoginSession("login_session").then((cookie) {
+      VRChatAPI(cookie: cookie ?? "").friends(offline: widget.offline, offset: offset).then((response) {
         if (response.containsKey("error")) {
           error(context, response["error"]["message"]);
           return;
@@ -54,7 +54,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
         response.forEach((dynamic index, dynamic user) {
           String wid = user["location"].split(":")[0];
           if (["", "private", "offline"].contains(user["location"]) || dataColumn.locationMap.containsKey(wid)) return;
-          VRChatAPI(cookie: cookie).worlds(wid).then((responseWorld) {
+          VRChatAPI(cookie: cookie ?? "").worlds(wid).then((responseWorld) {
             if (responseWorld.containsKey("error")) {
               error(context, responseWorld["error"]["message"]);
               return;

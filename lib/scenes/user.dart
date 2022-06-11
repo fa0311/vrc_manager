@@ -27,8 +27,8 @@ class _UserHomeState extends State<VRChatMobileUser> {
   late List<Widget> popupMenu = [share(context, "https://vrchat.com/home/user/${widget.userId}")];
 
   _UserHomeState() {
-    getLoginSession("LoginSession").then((cookie) {
-      VRChatAPI(cookie: cookie).users(widget.userId).then((user) {
+    getLoginSession("login_session").then((cookie) {
+      VRChatAPI(cookie: cookie ?? "").users(widget.userId).then((user) {
         if (user.containsKey("error")) {
           error(context, user["error"]["message"]);
           return;
@@ -54,7 +54,7 @@ class _UserHomeState extends State<VRChatMobileUser> {
             ),
           ]);
         });
-        VRChatAPI(cookie: cookie).friendStatus(widget.userId).then((status) {
+        VRChatAPI(cookie: cookie ?? "").friendStatus(widget.userId).then((status) {
           if (status.containsKey("error")) {
             error(context, status["error"]["message"]);
             return;
@@ -69,7 +69,7 @@ class _UserHomeState extends State<VRChatMobileUser> {
               onPrimary: Colors.grey,
             ),
             onPressed: () {
-              VRChatAPI(cookie: cookie).selfInvite(user["location"]).then((response) {
+              VRChatAPI(cookie: cookie ?? "").selfInvite(user["location"]).then((response) {
                 if (response.containsKey("error")) {
                   error(context, response["error"]["message"]);
                   return;
@@ -94,7 +94,7 @@ class _UserHomeState extends State<VRChatMobileUser> {
             child: Text(AppLocalizations.of(context)!.joinInstance),
           );
 
-          VRChatAPI(cookie: cookie).worlds(user["location"].split(":")[0]).then((world) {
+          VRChatAPI(cookie: cookie ?? "").worlds(user["location"].split(":")[0]).then((world) {
             if (world.containsKey("error")) {
               error(context, world["error"]["message"]);
               return;
@@ -103,7 +103,7 @@ class _UserHomeState extends State<VRChatMobileUser> {
               column = Column(children: column.children);
               column.children[1] = Column(children: [Container(padding: const EdgeInsets.only(top: 30)), simpleWorld(context, world)]);
             });
-            VRChatAPI(cookie: cookie).instances(user["location"]).then((instance) {
+            VRChatAPI(cookie: cookie ?? "").instances(user["location"]).then((instance) {
               if (instance.containsKey("error")) {
                 error(context, instance["error"]["message"]);
                 return;

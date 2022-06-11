@@ -22,7 +22,7 @@ class _TokenSettingPageState extends State<VRChatMobileTokenSetting> {
   TextEditingController _tokenController = TextEditingController();
 
   _TokenSettingPageState() {
-    getLoginSession("LoginSession").then((cookie) {
+    getLoginSession("login_session").then((cookie) {
       setState(() {
         _tokenController = TextEditingController(text: cookie);
       });
@@ -49,7 +49,7 @@ class _TokenSettingPageState extends State<VRChatMobileTokenSetting> {
                           ElevatedButton(
                             child: Text(AppLocalizations.of(context)!.save),
                             onPressed: () {
-                              setLoginSession("LoginSession", _tokenController.text).then((response) {
+                              setLoginSession("login_session", _tokenController.text).then((response) {
                                 showDialog(
                                     context: context,
                                     builder: (_) {

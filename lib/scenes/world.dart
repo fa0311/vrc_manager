@@ -26,8 +26,8 @@ class _WorldState extends State<VRChatMobileWorld> {
   late List<Widget> popupMenu = [share(context, "https://vrchat.com/home/world/${widget.worldId}")];
 
   _WorldState() {
-    getLoginSession("LoginSession").then((cookie) {
-      VRChatAPI(cookie: cookie).worlds(widget.worldId).then((response) {
+    getLoginSession("login_session").then((cookie) {
+      VRChatAPI(cookie: cookie ?? "").worlds(widget.worldId).then((response) {
         if (response.containsKey("error")) {
           error(context, response["error"]["message"]);
           return;
@@ -50,8 +50,8 @@ class _WorldState extends State<VRChatMobileWorld> {
             ),
           ]);
         });
-        getLoginSession("LoginSession").then((cookie) {
-          VRChatAPI(cookie: cookie).favoriteGroups("world", offset: 0).then((response) {
+        getLoginSession("login_session").then((cookie) {
+          VRChatAPI(cookie: cookie ?? "").favoriteGroups("world", offset: 0).then((response) {
             List<Widget> bottomSheet = [];
             if (response.containsKey("error")) {
               error(context, response["error"]["message"]);
@@ -66,7 +66,7 @@ class _WorldState extends State<VRChatMobileWorld> {
               bottomSheet.add(ListTile(
                 title: Text(list["displayName"]),
                 onTap: () => {
-                  VRChatAPI(cookie: cookie).addFavorites("world", widget.worldId, list["name"]).then((response) {
+                  VRChatAPI(cookie: cookie ?? "").addFavorites("world", widget.worldId, list["name"]).then((response) {
                     if (response.containsKey("error")) {
                       error(context, response["error"]["message"]);
                       return;

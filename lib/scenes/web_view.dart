@@ -23,8 +23,8 @@ class _WebViewPageState extends State<VRChatMobileWebView> {
   Widget build(BuildContext context) {
     final cookieManager = CookieManager();
 
-    getLoginSession("LoginSession").then((cookie) {
-      final cookieMap = Session().decodeCookie(cookie);
+    getLoginSession("login_session").then((cookie) {
+      final cookieMap = Session().decodeCookie(cookie ?? "");
       for (String key in cookieMap.keys) {
         cookieManager.setCookie(
           WebViewCookie(

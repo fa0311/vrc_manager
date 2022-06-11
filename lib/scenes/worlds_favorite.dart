@@ -27,8 +27,8 @@ class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
   late Column column = Column(children: const [Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator())]);
 
   _WorldsFavoriteState() {
-    getLoginSession("LoginSession").then((cookie) {
-      VRChatAPI(cookie: cookie).favoriteGroups("world", offset: 0).then((response) {
+    getLoginSession("login_session").then((cookie) {
+      VRChatAPI(cookie: cookie ?? "").favoriteGroups("world", offset: 0).then((response) {
         if (response.containsKey("error")) {
           error(context, response["error"]["message"]);
           return;
@@ -60,8 +60,8 @@ class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
   }
 
   moreOver(Map list, int index) {
-    getLoginSession("LoginSession").then((cookie) {
-      VRChatAPI(cookie: cookie).favoritesWorlds(list["name"], offset: offset[index]).then((worlds) {
+    getLoginSession("login_session").then((cookie) {
+      VRChatAPI(cookie: cookie ?? "").favoritesWorlds(list["name"], offset: offset[index]).then((worlds) {
         if (worlds.containsKey("error")) {
           error(context, worlds["error"]["message"]);
           return;

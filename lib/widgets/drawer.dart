@@ -7,7 +7,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 // Project imports:
 import 'package:vrchat_mobile_client/scenes/friend_request.dart';
 import 'package:vrchat_mobile_client/scenes/friends.dart';
-import 'package:vrchat_mobile_client/scenes/help.dart';
 import 'package:vrchat_mobile_client/scenes/home.dart';
 import 'package:vrchat_mobile_client/scenes/settings.dart';
 import 'package:vrchat_mobile_client/scenes/worlds_favorite.dart';
@@ -90,31 +89,17 @@ Drawer? drawr(BuildContext context) {
             ],
           ),
         ),
-        Align(
-            alignment: FractionalOffset.bottomCenter,
-            child: Column(
-              children: <Widget>[
-                const Divider(),
-                ListTile(
-                    onTap: () => Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                          builder: (BuildContext context) => const VRChatMobileSettings(),
-                        ),
-                        (_) => false),
-                    leading: const Icon(Icons.settings),
-                    title: Text(AppLocalizations.of(context)!.setting)),
-                ListTile(
-                    onTap: () => Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                          builder: (BuildContext context) => const VRChatMobileHelp(),
-                        ),
-                        (_) => false),
-                    leading: const Icon(Icons.help),
-                    title: Text(AppLocalizations.of(context)!.help))
-              ],
-            )),
+        const Divider(),
+        ListTile(
+            onTap: () => Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                  builder: (BuildContext context) => const VRChatMobileSettings(logged: true),
+                ),
+                (_) => false),
+            leading: const Icon(Icons.settings),
+            title: Text(AppLocalizations.of(context)!.setting)),
+        ListTile(onTap: () => {}, leading: const Icon(Icons.account_circle), title: Text(AppLocalizations.of(context)!.accountSwitch)),
       ]),
     ),
   );
@@ -155,15 +140,7 @@ Drawer simpleDrawr(BuildContext context) {
                         (_) => false),
                     leading: const Icon(Icons.settings),
                     title: Text(AppLocalizations.of(context)!.setting)),
-                ListTile(
-                    onTap: () => Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                          builder: (BuildContext context) => const VRChatMobileHelp(logged: false),
-                        ),
-                        (_) => false),
-                    leading: const Icon(Icons.help),
-                    title: Text(AppLocalizations.of(context)!.help))
+                ListTile(onTap: () => {}, leading: const Icon(Icons.account_circle), title: Text(AppLocalizations.of(context)!.accountSwitch)),
               ],
             )),
       ]),

@@ -47,8 +47,8 @@ Column profile(BuildContext context, user) {
 
 Widget profileAction(BuildContext context, status, String uid) {
   sendFriendRequest() {
-    getLoginSession("LoginSession").then((cookie) {
-      VRChatAPI(cookie: cookie).sendFriendRequest(uid).then((response) {
+    getLoginSession("login_session").then((cookie) {
+      VRChatAPI(cookie: cookie ?? "").sendFriendRequest(uid).then((response) {
         if (response.containsKey("error")) {
           error(context, response["error"]["message"]);
           return;
@@ -65,8 +65,8 @@ Widget profileAction(BuildContext context, status, String uid) {
   }
 
   deleteFriendRequest() {
-    getLoginSession("LoginSession").then((cookie) {
-      VRChatAPI(cookie: cookie).deleteFriendRequest(uid).then((response) {
+    getLoginSession("login_session").then((cookie) {
+      VRChatAPI(cookie: cookie ?? "").deleteFriendRequest(uid).then((response) {
         if (response.containsKey("error")) {
           error(context, response["error"]["message"]);
           return;
@@ -95,8 +95,8 @@ Widget profileAction(BuildContext context, status, String uid) {
             ),
             TextButton(
               child: Text(AppLocalizations.of(context)!.unfriend),
-              onPressed: () => getLoginSession("LoginSession").then((cookie) {
-                VRChatAPI(cookie: cookie).deleteFriend(uid).then((response) {
+              onPressed: () => getLoginSession("login_session").then((cookie) {
+                VRChatAPI(cookie: cookie ?? "").deleteFriend(uid).then((response) {
                   if (response.containsKey("error")) {
                     error(context, response["error"]["message"]);
                     return;
