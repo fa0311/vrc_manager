@@ -20,7 +20,7 @@ MaterialApp getMaterialApp(home, String theme, Locale locale) {
   };
 
   return MaterialApp(
-      title: 'VRChat Mobile Application',
+      title: 'VRChat Mobile Client',
       localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
