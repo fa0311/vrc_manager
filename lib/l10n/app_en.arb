@@ -88,6 +88,8 @@
     "addFavoriteWorlds": "Select a list to add",
     "@____________________ACCOUNT_SWITCH____________________": {},
     "accountSwitch": "Account switching",
+    "accountSetting": "Account settings",
+    "addAccount": "Add account",
     "@____________________SETTING____________________": {},
     "@__ACCESSIBILITY__": {},
     "accessibility": "Accessibility",

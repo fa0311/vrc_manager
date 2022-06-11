@@ -13,7 +13,7 @@ import 'package:vrchat_mobile_client/assets/error.dart';
 import 'package:vrchat_mobile_client/assets/storage.dart';
 import 'package:vrchat_mobile_client/scenes/home.dart';
 import 'package:vrchat_mobile_client/widgets/drawer.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'dart:math';
 
 class VRChatMobileLogin extends StatefulWidget {
   const VRChatMobileLogin({Key? key}) : super(key: key);
@@ -92,12 +92,9 @@ class _LoginPageState extends State<VRChatMobileLogin> {
 
   _save(String cookie) {
     if (_rememberLoginInfo) {
-      setLoginSession("userid", _userController.text);
       setLoginSession("password", _passwordController.text);
-    } else {
-      setLoginSession("userid", "");
-      setLoginSession("password", "");
     }
+    setLoginSession("userid", _userController.text);
     setLoginSession("login_session", cookie).then((response) {
       Navigator.pushAndRemoveUntil(
           context,
@@ -108,41 +105,35 @@ class _LoginPageState extends State<VRChatMobileLogin> {
     });
   }
 
-  _LoginPageState() {
-    getLoginSession("login_session").then((response) {
-      session = VRChatAPI(cookie: response ?? "");
-    });
-    getLoginSession("userid").then((response) {
-      setState(() => _userController.text = response ?? "");
-    });
-    getLoginSession("password").then((response) {
-      setState(() => _passwordController.text = response ?? "");
-    });
-    getStorage("remember_login_info").then((response) {
-      setState(() => _rememberLoginInfo = (response == "true"));
-    });
+  String _generateNonce([int length = 64]) {
+    const charset = '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._';
+    final Random random = Random.secure();
+    return List.generate(length, (_) => charset[random.nextInt(charset.length)]).join();
+  }
 
-    /* v2.0.0 から v2.1.0 への以降 */
-    getLoginSession("LoginSession").then((response) async {
-      if (response == null) return;
-      setLoginSession("login_session", response);
-      const storage = FlutterSecureStorage();
-      await storage.delete(key: 'LoginSession');
-      setState(() {});
-    });
-    getLoginSession("UserId").then((response) async {
-      if (response == null) return;
-      setLoginSession("userid", response);
-      const storage = FlutterSecureStorage();
-      await storage.delete(key: 'Userid');
-      setState(() {});
-    });
-    getLoginSession("Password").then((response) async {
-      if (response == null) return;
-      setLoginSession("password", response);
-      const storage = FlutterSecureStorage();
-      await storage.delete(key: 'Password');
-      setState(() {});
+  _LoginPageState() {
+    getStorage("account_index").then((response) {
+      if (response == null) {
+        String key = _generateNonce();
+        setStorage("account_index", key);
+        getStorageList("account_index_list").then((accountIndexList) {
+          accountIndexList.add(key);
+          setStorageList("account_index_list", accountIndexList);
+        });
+      } else {
+        getLoginSession("login_session").then((response) {
+          session = VRChatAPI(cookie: response ?? "");
+        });
+        getLoginSession("userid").then((response) {
+          setState(() => _userController.text = response ?? "");
+        });
+        getLoginSession("password").then((response) {
+          setState(() => _passwordController.text = response ?? "");
+        });
+        getStorage("remember_login_info").then((response) {
+          setState(() => _rememberLoginInfo = (response == "true"));
+        });
+      }
     });
   }
 

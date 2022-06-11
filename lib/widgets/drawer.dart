@@ -3,15 +3,47 @@ import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:vrchat_mobile_client/assets/storage.dart';
 
 // Project imports:
 import 'package:vrchat_mobile_client/scenes/friend_request.dart';
 import 'package:vrchat_mobile_client/scenes/friends.dart';
 import 'package:vrchat_mobile_client/scenes/home.dart';
+import 'package:vrchat_mobile_client/scenes/setting/other_account.dart';
 import 'package:vrchat_mobile_client/scenes/settings.dart';
 import 'package:vrchat_mobile_client/scenes/worlds_favorite.dart';
 
 Drawer? drawr(BuildContext context) {
+  Column column = Column();
+
+  getStorageList("account_index_list").then((response) {
+    List<Widget> list = [
+      const Divider(),
+      ListTile(
+          leading: const Icon(Icons.settings),
+          title: Text(AppLocalizations.of(context)!.accountSetting),
+          onTap: () => Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                builder: (BuildContext context) => const VRChatMobileSettingsOtherAccount(),
+              ),
+              (_) => false))
+    ];
+    response.asMap().forEach((_, String accountIndex) {
+      getLoginSession("userid", accountIndex: accountIndex).then((accountName) => list.insert(
+          0,
+          ListTile(
+              title: Text(accountName ?? "Unknown"),
+              onTap: () => setStorage("account_index", accountIndex).then((response) => Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => const VRChatMobileHome(),
+                  ),
+                  (_) => false)))));
+    });
+    column = Column(children: list);
+  });
+
   return Drawer(
     child: SafeArea(
       child: Column(children: <Widget>[
@@ -99,13 +131,51 @@ Drawer? drawr(BuildContext context) {
                 (_) => false),
             leading: const Icon(Icons.settings),
             title: Text(AppLocalizations.of(context)!.setting)),
-        ListTile(onTap: () => {}, leading: const Icon(Icons.account_circle), title: Text(AppLocalizations.of(context)!.accountSwitch)),
+        ListTile(
+            onTap: () => showModalBottomSheet(
+                context: context,
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
+                ),
+                builder: (BuildContext context) => SingleChildScrollView(child: column)),
+            leading: const Icon(Icons.account_circle),
+            title: Text(AppLocalizations.of(context)!.accountSwitch)),
       ]),
     ),
   );
 }
 
 Drawer simpleDrawr(BuildContext context) {
+  Column column = Column();
+
+  getStorageList("account_index_list").then((response) {
+    List<Widget> list = [
+      const Divider(),
+      ListTile(
+          leading: const Icon(Icons.settings),
+          title: Text(AppLocalizations.of(context)!.accountSetting),
+          onTap: () => Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                builder: (BuildContext context) => const VRChatMobileSettingsOtherAccount(),
+              ),
+              (_) => false))
+    ];
+    response.asMap().forEach((_, String accountIndex) {
+      getLoginSession("userid", accountIndex: accountIndex).then((accountName) => list.insert(
+          0,
+          ListTile(
+              title: Text(accountName ?? "Unknown"),
+              onTap: () => setStorage("account_index", accountIndex).then((response) => Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => const VRChatMobileHome(),
+                  ),
+                  (_) => false)))));
+    });
+    column = Column(children: list);
+  });
+
   return Drawer(
     child: SafeArea(
       child: Column(children: <Widget>[
@@ -140,7 +210,15 @@ Drawer simpleDrawr(BuildContext context) {
                         (_) => false),
                     leading: const Icon(Icons.settings),
                     title: Text(AppLocalizations.of(context)!.setting)),
-                ListTile(onTap: () => {}, leading: const Icon(Icons.account_circle), title: Text(AppLocalizations.of(context)!.accountSwitch)),
+                ListTile(
+                    onTap: () => showModalBottomSheet(
+                        context: context,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
+                        ),
+                        builder: (BuildContext context) => SingleChildScrollView(child: column)),
+                    leading: const Icon(Icons.account_circle),
+                    title: Text(AppLocalizations.of(context)!.accountSwitch)),
               ],
             )),
       ]),
