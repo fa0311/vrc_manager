@@ -12,7 +12,7 @@ import 'package:vrchat_mobile_client/scenes/home.dart';
 import 'package:vrchat_mobile_client/scenes/settings.dart';
 import 'package:vrchat_mobile_client/scenes/worlds_favorite.dart';
 
-Drawer drawr(BuildContext context) {
+Drawer? drawr(BuildContext context) {
   return Drawer(
     child: SafeArea(
       child: Column(children: <Widget>[
@@ -20,62 +20,52 @@ Drawer drawr(BuildContext context) {
           child: Column(
             children: <Widget>[
               ListTile(
-                onTap: () {
-                  Navigator.pop(context);
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (BuildContext context) => const VRChatMobileHome(),
-                      ));
-                },
+                onTap: () => Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => const VRChatMobileHome(),
+                    ),
+                    (_) => false),
                 leading: const Icon(Icons.home),
                 title: Text(AppLocalizations.of(context)!.home),
               ),
               ListTile(
-                onTap: () {
-                  Navigator.pop(context);
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (BuildContext context) => const VRChatMobileFriends(offline: false),
-                      ));
-                },
+                onTap: () => Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => const VRChatMobileFriends(offline: false),
+                    ),
+                    (_) => false),
                 leading: const Icon(Icons.wb_sunny),
                 title: Text(AppLocalizations.of(context)!.onlineFrends),
               ),
               ListTile(
-                onTap: () {
-                  Navigator.pop(context);
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (BuildContext context) => const VRChatMobileFriends(offline: true),
-                      ));
-                },
+                onTap: () => Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => const VRChatMobileFriends(offline: true),
+                    ),
+                    (_) => false),
                 leading: const Icon(Icons.bedtime),
                 title: Text(AppLocalizations.of(context)!.offlineFrends),
               ),
               ListTile(
-                onTap: () {
-                  Navigator.pop(context);
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (BuildContext context) => const VRChatMobileFriendRequest(),
-                      ));
-                },
+                onTap: () => Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => const VRChatMobileFriendRequest(),
+                    ),
+                    (_) => false),
                 leading: const Icon(Icons.notifications),
                 title: Text(AppLocalizations.of(context)!.friendRequest),
               ),
               ListTile(
-                onTap: () {
-                  Navigator.pop(context);
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (BuildContext context) => const VRChatMobileWorldsFavorite(),
-                      ));
-                },
+                onTap: () => Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => const VRChatMobileWorldsFavorite(),
+                    ),
+                    (_) => false),
                 leading: const Icon(Icons.favorite),
                 title: Text(AppLocalizations.of(context)!.favoriteWorlds),
               ),
@@ -94,9 +84,7 @@ Drawer drawr(BuildContext context) {
               ),
               */
               TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
+                onPressed: () => Navigator.pop(context),
                 child: Text(AppLocalizations.of(context)!.close),
               )
             ],
@@ -108,21 +96,21 @@ Drawer drawr(BuildContext context) {
               children: <Widget>[
                 const Divider(),
                 ListTile(
-                    onTap: () {
-                      Navigator.pop(context);
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (BuildContext context) => const VRChatMobileSettings(),
-                          ));
-                    },
+                    onTap: () => Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                          builder: (BuildContext context) => const VRChatMobileSettings(),
+                        ),
+                        (_) => false),
                     leading: const Icon(Icons.settings),
                     title: Text(AppLocalizations.of(context)!.setting)),
                 ListTile(
-                    onTap: () {
-                      Navigator.pop(context);
-                      Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => const VRChatMobileHelp()));
-                    },
+                    onTap: () => Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                          builder: (BuildContext context) => const VRChatMobileHelp(),
+                        ),
+                        (_) => false),
                     leading: const Icon(Icons.help),
                     title: Text(AppLocalizations.of(context)!.help))
               ],
@@ -139,21 +127,17 @@ Drawer simpleDrawr(BuildContext context) {
         Expanded(
             child: Column(children: <Widget>[
           ListTile(
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (BuildContext context) => const VRChatMobileHome(),
-                  ));
-            },
+            onTap: () => Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                  builder: (BuildContext context) => const VRChatMobileHome(),
+                ),
+                (_) => false),
             leading: const Icon(Icons.home),
             title: Text(AppLocalizations.of(context)!.home),
           ),
           TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
+            onPressed: () => Navigator.pop(context),
             child: Text(AppLocalizations.of(context)!.close),
           )
         ])),
@@ -163,21 +147,21 @@ Drawer simpleDrawr(BuildContext context) {
               children: <Widget>[
                 const Divider(),
                 ListTile(
-                    onTap: () {
-                      Navigator.pop(context);
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (BuildContext context) => const VRChatMobileSettings(logged: false),
-                          ));
-                    },
+                    onTap: () => Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                          builder: (BuildContext context) => const VRChatMobileSettings(logged: false),
+                        ),
+                        (_) => false),
                     leading: const Icon(Icons.settings),
                     title: Text(AppLocalizations.of(context)!.setting)),
                 ListTile(
-                    onTap: () {
-                      Navigator.pop(context);
-                      Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => const VRChatMobileHelp(logged: false)));
-                    },
+                    onTap: () => Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                          builder: (BuildContext context) => const VRChatMobileHelp(logged: false),
+                        ),
+                        (_) => false),
                     leading: const Icon(Icons.help),
                     title: Text(AppLocalizations.of(context)!.help))
               ],

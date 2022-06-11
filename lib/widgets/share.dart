@@ -35,13 +35,14 @@ IconButton share(BuildContext context, String url) {
                       leading: const Icon(Icons.copy),
                       title: Text(AppLocalizations.of(context)!.copy),
                       onTap: () async {
-                        final data = ClipboardData(text: url);
+                        final ClipboardData data = ClipboardData(text: url);
                         await Clipboard.setData(data).then((value) => Navigator.pop(context));
                       }),
                   ListTile(
                       leading: const Icon(Icons.open_in_browser),
                       title: Text(AppLocalizations.of(context)!.openInBrowser),
                       onTap: () async {
+                        Navigator.pop(context);
                         if (Platform.isAndroid || Platform.isIOS) {
                           getStorage("force_external_browser").then((response) async {
                             if (response == "true") {
@@ -91,6 +92,7 @@ IconButton simpleShare(BuildContext context, String url) {
                       leading: const Icon(Icons.open_in_browser),
                       title: Text(AppLocalizations.of(context)!.openInExternalBrowser),
                       onTap: () async {
+                        Navigator.pop(context);
                         if (await canLaunchUrl(Uri.parse(url))) {
                           await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
                         }

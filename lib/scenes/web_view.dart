@@ -8,7 +8,6 @@ import 'package:webview_flutter/webview_flutter.dart';
 // Project imports:
 import 'package:vrchat_mobile_client/assets/session.dart';
 import 'package:vrchat_mobile_client/assets/storage.dart';
-import 'package:vrchat_mobile_client/widgets/drawer.dart';
 
 class VRChatMobileWebView extends StatefulWidget {
   final String url;
@@ -53,7 +52,6 @@ class _WebViewPageState extends State<VRChatMobileWebView> {
           appBar: AppBar(
             actions: [simpleShare(context, widget.url)],
           ),
-          drawer: drawr(context),
           body: WebView(
             initialUrl: widget.url,
             javascriptMode: JavascriptMode.unrestricted,
