@@ -162,8 +162,8 @@ class _LoginPageState extends State<VRChatMobileLogin> {
             SwitchListTile(
               value: _rememberLoginInfo,
               title: Text(AppLocalizations.of(context)!.rememberLoginInfo,
-                  style: const TextStyle(
-                    color: Colors.black54,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.primary,
                     fontSize: 14,
                   )),
               onChanged: _changeSwitchRememberLoginInfo,
