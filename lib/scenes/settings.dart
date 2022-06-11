@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+// Project imports:
 import 'package:vrchat_mobile_client/scenes/setting/accessibility.dart';
 import 'package:vrchat_mobile_client/scenes/setting/account.dart';
 import 'package:vrchat_mobile_client/scenes/setting/help.dart';
-
-// Project imports:
 import 'package:vrchat_mobile_client/widgets/drawer.dart';
 
 class VRChatMobileSettings extends StatefulWidget {
