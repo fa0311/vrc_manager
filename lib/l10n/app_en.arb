@@ -43,7 +43,7 @@
     "email": "Email",
     "usernameOrEmail": "Username / Email",
     "password": "Password",
-    "rememberLoginInfo": "Remember my login information",
+    "rememberPassword": "Remember password",
     "twoFactorAuthentication": "Two Factor Authentication",
     "authenticationCode": "Authentication Code",
     "unknown": "Unknown",

@@ -43,7 +43,7 @@
     "email": "メールアドレス",
     "usernameOrEmail": "ユーザー名 / メールアドレス",
     "password": "パスワード",
-    "rememberLoginInfo": "ログイン情報を記憶する",
+    "rememberPassword": "パスワードを保存する",
     "twoFactorAuthentication": "2段階認証",
     "authenticationCode": "認証コード",
     "unknown": "名無し",
