@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "VRChatMobileClient"
-#define MyAppVersion "1.2.0"
+#define MyAppVersion "2.1.0"
 #define MyAppPublisher "yuki"
 #define MyAppURL "https://yuki0311.com/"
 #define MyAppExeName "vrchat_mobile_client.exe"

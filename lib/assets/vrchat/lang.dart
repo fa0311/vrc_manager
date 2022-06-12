@@ -27,6 +27,6 @@ Map<String, String> getVrchatLang() {
     "bfi": "British Sign Language",
     "dse": "Dutch Sign Language",
     "fsl": "French Sign Language",
-    "kvk": "Korean Sign Language"
+    "kvk": "Korean Sign Language",
   };
 }
