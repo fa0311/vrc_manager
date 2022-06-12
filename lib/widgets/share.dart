@@ -46,36 +46,7 @@ IconButton share(BuildContext context, String url) {
             ListTile(
               leading: const Icon(Icons.open_in_browser),
               title: Text(AppLocalizations.of(context)!.openInBrowser),
-              onTap: () async {
-                Navigator.pop(context);
-                if (Platform.isAndroid || Platform.isIOS) {
-                  getStorage("force_external_browser").then(
-                    (response) async {
-                      if (response == "true") {
-                        if (await canLaunchUrl(
-                          Uri.parse(url),
-                        )) {
-                          await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
-                        }
-                      } else {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (BuildContext context) => VRChatMobileWebView(url: url),
-                            ));
-                      }
-                    },
-                  );
-                } else {
-                  if (await canLaunchUrl(
-                    Uri.parse(url),
-                  )) {
-                    await launchUrl(
-                      Uri.parse(url),
-                    );
-                  }
-                }
-              },
+              onTap: () => openInBrowser(context, url),
             ),
           ],
         ),
@@ -160,4 +131,35 @@ IconButton clipboardShare(BuildContext context, String text) {
       ),
     ),
   );
+}
+
+Future<void> openInBrowser(BuildContext context, String url) async {
+  Navigator.pop(context);
+  if (Platform.isAndroid || Platform.isIOS) {
+    getStorage("force_external_browser").then(
+      (response) async {
+        if (response == "true") {
+          if (await canLaunchUrl(
+            Uri.parse(url),
+          )) {
+            await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+          }
+        } else {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (BuildContext context) => VRChatMobileWebView(url: url),
+              ));
+        }
+      },
+    );
+  } else {
+    if (await canLaunchUrl(
+      Uri.parse(url),
+    )) {
+      await launchUrl(
+        Uri.parse(url),
+      );
+    }
+  }
 }

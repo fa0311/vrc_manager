@@ -101,8 +101,6 @@
     "darkThemeDetails1": "目に優しいダークテーマに切り替えます",
     "darkThemeDetails2": "端末のテーマの設定が優先されます",
     "autoReadMore": "自動で続きを読み込む",
-    "autoReadMoreDetails1": "続きを読み込むを自動で行います",
-    "autoReadMoreDetails2": "フレンドの数によっては端末に負荷がかかる場合があります",
     "forceExternalBrowser": "外部のブラウザを強制する",
     "forceExternalBrowserDetails": "ブラウザを開く際に外部のブラウザを強制的に開きます",
     "@__ACCOUNT__": {},

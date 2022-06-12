@@ -17,7 +17,6 @@ class VRChatMobileSettingsAccessibility extends StatefulWidget {
 
 class _SettingAccessibilityPageState extends State<VRChatMobileSettingsAccessibility> {
   bool theme = false;
-  bool autoReadMore = false;
   bool forceExternalBrowser = false;
 
   _changeSwitchTheme(bool e) {
@@ -30,10 +29,6 @@ class _SettingAccessibilityPageState extends State<VRChatMobileSettingsAccessibi
         (_) => false,
       ),
     );
-  }
-
-  _changeSwitchAutoReadMore(bool e) {
-    setStorage("auto_read_more", e ? "true" : "false").then((_) => setState(() => autoReadMore = e));
   }
 
   _changeSwitchForceExternalBrowser(bool e) {
@@ -71,13 +66,6 @@ class _SettingAccessibilityPageState extends State<VRChatMobileSettingsAccessibi
       (response) {
         setState(
           () => theme = (response == "dark"),
-        );
-      },
-    );
-    getStorage("auto_read_more").then(
-      (response) {
-        setState(
-          () => autoReadMore = (response == "true"),
         );
       },
     );
@@ -129,13 +117,6 @@ class _SettingAccessibilityPageState extends State<VRChatMobileSettingsAccessibi
                     title: Text(AppLocalizations.of(context)!.darkTheme),
                     subtitle: Text("${AppLocalizations.of(context)!.darkThemeDetails1}\n${AppLocalizations.of(context)!.darkThemeDetails2}"),
                     onChanged: _changeSwitchTheme,
-                  ),
-                  const Divider(),
-                  SwitchListTile(
-                    value: autoReadMore,
-                    title: Text(AppLocalizations.of(context)!.autoReadMore),
-                    subtitle: Text("${AppLocalizations.of(context)!.autoReadMoreDetails1}\n${AppLocalizations.of(context)!.autoReadMoreDetails2}"),
-                    onChanged: _changeSwitchAutoReadMore,
                   ),
                   const Divider(),
                   SwitchListTile(

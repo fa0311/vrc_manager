@@ -9,6 +9,7 @@ import 'package:vrchat_mobile_client/api/main.dart';
 import 'package:vrchat_mobile_client/assets/error.dart';
 import 'package:vrchat_mobile_client/assets/storage.dart';
 import 'package:vrchat_mobile_client/widgets/drawer.dart';
+import 'package:vrchat_mobile_client/widgets/share.dart';
 import 'package:vrchat_mobile_client/widgets/users.dart';
 
 class VRChatMobileFriends extends StatefulWidget {
@@ -22,6 +23,7 @@ class VRChatMobileFriends extends StatefulWidget {
 
 class _FriendsPageState extends State<VRChatMobileFriends> {
   int offset = 0;
+  bool autoReadMore = false;
 
   late Column column = Column(
     children: const [
@@ -31,10 +33,17 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
 
   Users dataColumn = Users();
   _FriendsPageState() {
-    getStorage("FriendsJoinable").then(
+    getStorage("friends_joinable").then(
       (response) {
         moreOver();
         dataColumn.joinable = response == "true" && !widget.offline;
+      },
+    );
+    getStorage("auto_read_more").then(
+      (response) {
+        setState(
+          () => autoReadMore = (response == "true"),
+        );
       },
     );
   }
@@ -101,37 +110,51 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.frends),
         actions: <Widget>[
-          if (!widget.offline)
-            IconButton(
-              icon: const Icon(Icons.more_vert),
-              onPressed: () => showModalBottomSheet(
-                context: context,
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
-                ),
-                builder: (BuildContext context) => StatefulBuilder(
-                  builder: (BuildContext context, setStateBuilder) => SingleChildScrollView(
-                    child: SwitchListTile(
-                      value: dataColumn.joinable,
-                      title: Text(AppLocalizations.of(context)!.showOnlyAvailable),
-                      onChanged: (bool e) => setStateBuilder(
-                        () {
-                          setStorage("FriendsJoinable", e ? "true" : "false");
-                          dataColumn.joinable = e;
-                          setState(
+          IconButton(
+            icon: const Icon(Icons.more_vert),
+            onPressed: () => showModalBottomSheet(
+              context: context,
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
+              ),
+              builder: (BuildContext context) => StatefulBuilder(
+                builder: (BuildContext context, setStateBuilder) => SingleChildScrollView(
+                  child: Column(
+                    children: <Widget>[
+                      if (!widget.offline)
+                        SwitchListTile(
+                          value: dataColumn.joinable,
+                          title: Text(AppLocalizations.of(context)!.showOnlyAvailable),
+                          onChanged: (bool e) => setStateBuilder(
                             () {
-                              column = Column(
-                                children: dataColumn.reload(),
+                              setStorage("friends_joinable", e ? "true" : "false");
+                              dataColumn.joinable = e;
+                              setState(
+                                () => column = Column(
+                                  children: dataColumn.reload(),
+                                ),
                               );
                             },
-                          );
-                        },
+                          ),
+                        ),
+                      SwitchListTile(
+                        value: autoReadMore,
+                        title: Text(AppLocalizations.of(context)!.autoReadMore),
+                        onChanged: (bool e) => setStateBuilder(() {
+                          setStorage("auto_read_more", e ? "true" : "false");
+                          setState(() => autoReadMore = e);
+                        }),
                       ),
-                    ),
+                      ListTile(
+                        title: Text(AppLocalizations.of(context)!.openInBrowser),
+                        onTap: () => openInBrowser(context, "https://vrchat.com/home/locations"),
+                      ),
+                    ],
                   ),
                 ),
               ),
             ),
+          ),
         ],
       ),
       drawer: drawer(context),

@@ -9,6 +9,7 @@ import 'package:vrchat_mobile_client/api/main.dart';
 import 'package:vrchat_mobile_client/assets/error.dart';
 import 'package:vrchat_mobile_client/assets/storage.dart';
 import 'package:vrchat_mobile_client/widgets/drawer.dart';
+import 'package:vrchat_mobile_client/widgets/share.dart';
 import 'package:vrchat_mobile_client/widgets/users.dart';
 
 class VRChatMobileFriendRequest extends StatefulWidget {
@@ -85,6 +86,29 @@ class _FriendRequestPageState extends State<VRChatMobileFriendRequest> {
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.friendRequest),
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(Icons.more_vert),
+            onPressed: () => showModalBottomSheet(
+              context: context,
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
+              ),
+              builder: (BuildContext context) => StatefulBuilder(
+                builder: (BuildContext context, setStateBuilder) => SingleChildScrollView(
+                  child: Column(
+                    children: <Widget>[
+                      ListTile(
+                        title: Text(AppLocalizations.of(context)!.openInBrowser),
+                        onTap: () => openInBrowser(context, "https://vrchat.com/home/messages"),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
       drawer: drawer(context),
       body: SafeArea(

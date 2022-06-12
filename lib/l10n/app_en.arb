@@ -101,8 +101,6 @@
     "darkThemeDetails1": "Switch to a dark theme that is easy on the eyes.",
     "darkThemeDetails2": "The theme setting of the terminal takes precedence.",
     "autoReadMore": "Read the rest of the article automatically",
-    "autoReadMoreDetails1": "Automatically load the rest of the page.",
-    "autoReadMoreDetails2": "Depending on the number of friends, the terminal may be overloaded.",
     "forceExternalBrowser": "Force external browsers",
     "forceExternalBrowserDetails": "Force opening of an external browser when opening a browser",
     "@__ACCOUNT__": {},
