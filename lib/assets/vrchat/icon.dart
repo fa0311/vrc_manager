@@ -1,5 +1,5 @@
 Map<String, int> getVrchatIcon() {
-  return {
+  return <String, int>{
     "fivehundredpix": 0xFF222222,
     "bandsintown": 0xFF1B8793,
     "behance": 0xFF007CFF,
@@ -40,7 +40,7 @@ Map<String, int> getVrchatIcon() {
     "wechat": 0xFF00c80f,
     "whatsapp": 0xFF25D366,
     "yelp": 0xFFB90C04,
-    "youtube": 0xFFff3333
+    "youtube": 0xFFff3333,
   };
 }
 

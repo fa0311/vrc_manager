@@ -9,7 +9,6 @@ import 'package:vrchat_mobile_client/api/main.dart';
 import 'package:vrchat_mobile_client/assets/error.dart';
 import 'package:vrchat_mobile_client/assets/storage.dart';
 import 'package:vrchat_mobile_client/scenes/json_viewer.dart';
-import 'package:vrchat_mobile_client/widgets/drawer.dart';
 import 'package:vrchat_mobile_client/widgets/share.dart';
 import 'package:vrchat_mobile_client/widgets/world.dart';
 
@@ -23,76 +22,110 @@ class VRChatMobileWorld extends StatefulWidget {
 }
 
 class _WorldState extends State<VRChatMobileWorld> {
-  late Column column = Column(children: const [Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator())]);
-  late List<Widget> popupMenu = [share(context, "https://vrchat.com/home/user/${widget.worldId}")];
+  late Column column = Column(
+    children: const [
+      Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()),
+    ],
+  );
+  late List<Widget> popupMenu = [share(context, "https://vrchat.com/home/world/${widget.worldId}")];
 
   _WorldState() {
-    getLoginSession("LoginSession").then((cookie) {
-      VRChatAPI(cookie: cookie).worlds(widget.worldId).then((response) {
-        if (response.containsKey("error")) {
-          error(context, response["error"]["message"]);
-          return;
-        }
-        setState(() {
-          column = Column(children: [
-            world(context, response),
-            TextButton(
-              style: ElevatedButton.styleFrom(
-                onPrimary: Colors.grey,
-              ),
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (BuildContext context) => VRChatMobileJsonViewer(obj: response),
-                    ));
-              },
-              child: Text(AppLocalizations.of(context)!.viewInJsonViewer),
-            ),
-          ]);
-        });
-        getLoginSession("LoginSession").then((cookie) {
-          VRChatAPI(cookie: cookie).favoriteGroups("world", offset: 0).then((response) {
-            List<Widget> bottomSheet = [];
+    getLoginSession("login_session").then(
+      (cookie) {
+        VRChatAPI(cookie: cookie ?? "").worlds(widget.worldId).then(
+          (response) {
             if (response.containsKey("error")) {
               error(context, response["error"]["message"]);
               return;
             }
-            if (response.isEmpty) return;
-            bottomSheet.add(ListTile(
-              title: Text(AppLocalizations.of(context)!.addFavoriteWorlds),
-            ));
-            bottomSheet.add(const Divider());
-            response.forEach((dynamic index, dynamic list) {
-              bottomSheet.add(ListTile(
-                title: Text(list["displayName"]),
-                onTap: () => {
-                  VRChatAPI(cookie: cookie).addFavorites("world", widget.worldId, list["name"]).then((response) {
+            setState(
+              () {
+                column = Column(children: [
+                  world(context, response),
+                  TextButton(
+                    style: ElevatedButton.styleFrom(
+                      onPrimary: Colors.grey,
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (BuildContext context) => VRChatMobileJsonViewer(obj: response),
+                          ));
+                    },
+                    child: Text(AppLocalizations.of(context)!.viewInJsonViewer),
+                  ),
+                ]);
+              },
+            );
+            getLoginSession("login_session").then(
+              (cookie) {
+                VRChatAPI(cookie: cookie ?? "").favoriteGroups("world", offset: 0).then(
+                  (response) {
+                    List<Widget> bottomSheet = [];
                     if (response.containsKey("error")) {
                       error(context, response["error"]["message"]);
                       return;
                     }
-                    Navigator.pop(context);
-                  })
-                },
-              ));
-              bottomSheet.add(const Divider());
-            });
-            bottomSheet.removeLast();
-            setState(() {
-              popupMenu = <Widget>[worldAction(context, widget.worldId, bottomSheet), share(context, "https://vrchat.com/home/user/${widget.worldId}")];
-            });
-          });
-        });
-      });
-    });
+                    if (response.isEmpty) return;
+                    bottomSheet.add(ListTile(
+                      title: Text(AppLocalizations.of(context)!.addFavoriteWorlds),
+                    ));
+                    bottomSheet.add(const Divider());
+                    response.forEach(
+                      (_, dynamic list) {
+                        bottomSheet.add(ListTile(
+                          title: Text(list["displayName"]),
+                          onTap: () => {
+                            VRChatAPI(cookie: cookie ?? "").addFavorites("world", widget.worldId, list["name"]).then((response) {
+                              if (response.containsKey("error")) {
+                                error(context, response["error"]["message"]);
+                                return;
+                              }
+                              Navigator.pop(context);
+                            })
+                          },
+                        ));
+                        bottomSheet.add(const Divider());
+                      },
+                    );
+                    bottomSheet.removeLast();
+                    setState(
+                      () {
+                        popupMenu = <Widget>[
+                          worldAction(context, widget.worldId, bottomSheet),
+                          share(context, "https://vrchat.com/home/world/${widget.worldId}")
+                        ];
+                      },
+                    );
+                  },
+                );
+              },
+            );
+          },
+        );
+      },
+    );
   }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(AppLocalizations.of(context)!.world), actions: popupMenu),
-      drawer: drawr(context),
-      body: SafeArea(child: SizedBox(width: MediaQuery.of(context).size.width, child: SingleChildScrollView(child: column))),
+      body: SafeArea(
+        child: SizedBox(
+          width: MediaQuery.of(context).size.width,
+          child: SingleChildScrollView(
+            child: Container(
+                padding: const EdgeInsets.only(
+                  top: 10,
+                  bottom: 0,
+                  right: 30,
+                  left: 30,
+                ),
+                child: column),
+          ),
+        ),
+      ),
     );
   }
 }

@@ -30,97 +30,136 @@ class VRChatMobileHome extends StatefulWidget {
 class _LoginHomeState extends State<VRChatMobileHome> {
   List<Widget> popupMenu = [];
 
-  late Column column = Column(children: const [Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator())]);
+  late Column column = Column(
+    children: const [
+      Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()),
+    ],
+  );
 
   _LoginHomeState() {
-    getLoginSession("LoginSession").then((cookie) {
-      if (cookie == null) {
-        Navigator.pushAndRemoveUntil(
+    getLoginSession("login_session").then(
+      (cookie) {
+        if (cookie == null) {
+          Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
               builder: (BuildContext context) => const VRChatMobileLogin(),
             ),
-            (_) => false);
-      } else {
-        VRChatAPI(cookie: cookie).user().then((response) {
-          if (response.containsKey("error")) {
-            error(context, response["error"]["message"]);
-            if (response["error"]["message"] == '"Missing Credentials"') {
-              Navigator.pushAndRemoveUntil(
+            (_) => false,
+          );
+        } else {
+          VRChatAPI(cookie: cookie).user().then(
+            (response) {
+              if (response.containsKey("error")) {
+                error(context, response["error"]["message"]);
+                if (response["error"]["message"] == '"Missing Credentials"') {
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => const VRChatMobileLogin(),
+                    ),
+                    (_) => false,
+                  );
+                }
+              } else if (response.containsKey("id")) {
+                VRChatAPI(cookie: cookie).users(response["id"]).then(
+                  (user) {
+                    if (user.containsKey("error")) {
+                      error(context, user["error"]["message"]);
+                      return;
+                    }
+
+                    setState(
+                      () {
+                        column = Column(
+                          children: <Widget>[
+                            profile(context, user),
+                            Column(),
+                            TextButton(
+                              style: ElevatedButton.styleFrom(
+                                onPrimary: Colors.grey,
+                              ),
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (BuildContext context) => VRChatMobileJsonViewer(obj: user),
+                                    ));
+                              },
+                              child: Text(AppLocalizations.of(context)!.viewInJsonViewer),
+                            ),
+                          ],
+                        );
+                        popupMenu = [share(context, "https://vrchat.com/home/user/${response['id']}")];
+                      },
+                    );
+                    if (!["", "private", "offline"].contains(user["worldId"])) {
+                      VRChatAPI(cookie: cookie).worlds(user["worldId"].split(":")[0]).then(
+                        (world) {
+                          if (world.containsKey("error")) {
+                            error(context, world["error"]["message"]);
+                            return;
+                          }
+                          setState(
+                            () {
+                              column = Column(children: column.children);
+                              column.children[1] = Column(
+                                children: [
+                                  Container(
+                                    padding: const EdgeInsets.only(top: 30),
+                                  ),
+                                  simpleWorld(context, world)
+                                ],
+                              );
+                            },
+                          );
+                        },
+                      );
+                    }
+                    if (user["location"] == "private") {
+                      setState(
+                        () {
+                          column = Column(children: column.children);
+                          column.children[1] = Column(
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.only(top: 30),
+                              ),
+                              privatesimpleWorld(context)
+                            ],
+                          );
+                        },
+                      );
+                    }
+                  },
+                );
+                if (Platform.isAndroid || Platform.isIOS) {
+                  ReceiveSharingIntent.getTextStream().listen(
+                    (String value) {
+                      urlParser(context, value);
+                    },
+                  );
+                  ReceiveSharingIntent.getInitialText().then(
+                    (String? value) {
+                      if (value == null) return;
+                      urlParser(context, value);
+                    },
+                  );
+                }
+              } else {
+                Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(
                     builder: (BuildContext context) => const VRChatMobileLogin(),
                   ),
-                  (_) => false);
-            }
-            return;
-          }
-          if (response.containsKey("id")) {
-            VRChatAPI(cookie: cookie).users(response["id"]).then((user) {
-              if (user.containsKey("error")) {
-                error(context, user["error"]["message"]);
-                return;
+                  (_) => false,
+                );
               }
-
-              setState(() {
-                column = Column(children: <Widget>[
-                  profile(context, user),
-                  Column(),
-                  TextButton(
-                    style: ElevatedButton.styleFrom(
-                      onPrimary: Colors.grey,
-                    ),
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (BuildContext context) => VRChatMobileJsonViewer(obj: user),
-                          ));
-                    },
-                    child: Text(AppLocalizations.of(context)!.viewInJsonViewer),
-                  ),
-                ]);
-                popupMenu = [share(context, "https://vrchat.com/home/user/${response['id']}")];
-              });
-              if (!["", "private", "offline"].contains(user["worldId"])) {
-                VRChatAPI(cookie: cookie).worlds(user["worldId"].split(":")[0]).then((world) {
-                  if (world.containsKey("error")) {
-                    error(context, world["error"]["message"]);
-                    return;
-                  }
-                  setState(() {
-                    column = Column(children: column.children);
-                    column.children[1] = Column(children: [Container(padding: const EdgeInsets.only(top: 30)), simpleWorld(context, world)]);
-                  });
-                });
-              }
-              if (user["location"] == "private") {
-                setState(() {
-                  column = Column(children: column.children);
-                  column.children[1] = Column(children: [Container(padding: const EdgeInsets.only(top: 30)), privatesimpleWorld(context)]);
-                });
-              }
-            });
-            if (Platform.isAndroid) {
-              ReceiveSharingIntent.getTextStream().listen((String value) {
-                urlParser(context, value);
-              });
-              ReceiveSharingIntent.getInitialText().then((String? value) {
-                if (value == null) return;
-                urlParser(context, value);
-              });
-            }
-          } else {
-            Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(
-                  builder: (BuildContext context) => const VRChatMobileLogin(),
-                ),
-                (_) => false);
-          }
-        });
-      }
-    });
+            },
+          );
+        }
+      },
+    );
   }
   @override
   Widget build(BuildContext context) {
@@ -129,11 +168,23 @@ class _LoginHomeState extends State<VRChatMobileHome> {
         title: Text(AppLocalizations.of(context)!.home),
         actions: popupMenu,
       ),
-      drawer: drawr(context),
+      drawer: drawer(context),
       body: SafeArea(
-          child: SizedBox(
-              width: MediaQuery.of(context).size.width,
-              child: SingleChildScrollView(child: Container(padding: const EdgeInsets.only(top: 10, bottom: 0, right: 30, left: 30), child: column)))),
+        child: SizedBox(
+          width: MediaQuery.of(context).size.width,
+          child: SingleChildScrollView(
+            child: Container(
+              padding: const EdgeInsets.only(
+                top: 10,
+                bottom: 0,
+                right: 30,
+                left: 30,
+              ),
+              child: column,
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

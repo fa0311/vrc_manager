@@ -22,90 +22,108 @@ class _TokenSettingPageState extends State<VRChatMobileTokenSetting> {
   TextEditingController _tokenController = TextEditingController();
 
   _TokenSettingPageState() {
-    getLoginSession("LoginSession").then((cookie) {
-      setState(() {
-        _tokenController = TextEditingController(text: cookie);
-      });
-    });
+    getLoginSession("login_session").then(
+      (cookie) {
+        setState(
+          () {
+            _tokenController = TextEditingController(text: cookie);
+          },
+        );
+      },
+    );
   }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text(AppLocalizations.of(context)!.token),
+      appBar: AppBar(
+        title: Text(AppLocalizations.of(context)!.token),
+      ),
+      body: SafeArea(
+        child: SizedBox(
+          width: MediaQuery.of(context).size.width,
+          child: SingleChildScrollView(
+            child: Container(
+              padding: const EdgeInsets.all(32.0),
+              child: Column(
+                children: <Widget>[
+                  TextField(
+                    controller: _tokenController,
+                    maxLines: null,
+                    decoration: InputDecoration(labelText: AppLocalizations.of(context)!.cookie),
+                  ),
+                  ElevatedButton(
+                    child: Text(AppLocalizations.of(context)!.save),
+                    onPressed: () {
+                      setLoginSession("login_session", _tokenController.text).then(
+                        (_) {
+                          showDialog(
+                            context: context,
+                            builder: (_) {
+                              return AlertDialog(
+                                title: Text(AppLocalizations.of(context)!.saved),
+                                actions: <Widget>[
+                                  TextButton(
+                                    child: Text(AppLocalizations.of(context)!.close),
+                                    onPressed: () => Navigator.pop(context),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
+                      );
+                    },
+                  ),
+                  ElevatedButton(
+                    child: Text(AppLocalizations.of(context)!.login),
+                    onPressed: () {
+                      VRChatAPI(cookie: _tokenController.text).user().then(
+                        (response) {
+                          if (response.containsKey("error")) {
+                            error(context, response["error"]["message"]);
+                            return;
+                          }
+                          if (response.containsKey("id")) {
+                            showDialog(
+                              context: context,
+                              builder: (_) {
+                                return AlertDialog(
+                                  title: Text(AppLocalizations.of(context)!.success),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      child: Text(AppLocalizations.of(context)!.close),
+                                      onPressed: () => Navigator.pop(context),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          } else {
+                            showDialog(
+                              context: context,
+                              builder: (_) {
+                                return AlertDialog(
+                                  title: Text(AppLocalizations.of(context)!.failure),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      child: Text(AppLocalizations.of(context)!.close),
+                                      onPressed: () => Navigator.pop(context),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          }
+                        },
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ),
         ),
-        body: SafeArea(
-            child: SizedBox(
-                width: MediaQuery.of(context).size.width,
-                child: SingleChildScrollView(
-                    child: Padding(
-                        padding: const EdgeInsets.all(32.0),
-                        child: Column(children: <Widget>[
-                          TextField(
-                            controller: _tokenController,
-                            maxLines: null,
-                            decoration: InputDecoration(labelText: AppLocalizations.of(context)!.cookie),
-                          ),
-                          ElevatedButton(
-                            child: Text(AppLocalizations.of(context)!.save),
-                            onPressed: () {
-                              setLoginSession("LoginSession", _tokenController.text).then((response) {
-                                showDialog(
-                                    context: context,
-                                    builder: (_) {
-                                      return AlertDialog(
-                                        title: Text(AppLocalizations.of(context)!.saved),
-                                        actions: <Widget>[
-                                          TextButton(
-                                            child: Text(AppLocalizations.of(context)!.close),
-                                            onPressed: () => Navigator.pop(context),
-                                          ),
-                                        ],
-                                      );
-                                    });
-                              });
-                            },
-                          ),
-                          ElevatedButton(
-                            child: Text(AppLocalizations.of(context)!.login),
-                            onPressed: () {
-                              VRChatAPI(cookie: _tokenController.text).user().then((response) {
-                                if (response.containsKey("error")) {
-                                  error(context, response["error"]["message"]);
-                                  return;
-                                }
-                                if (response.containsKey("id")) {
-                                  showDialog(
-                                      context: context,
-                                      builder: (_) {
-                                        return AlertDialog(
-                                          title: Text(AppLocalizations.of(context)!.success),
-                                          actions: <Widget>[
-                                            TextButton(
-                                              child: Text(AppLocalizations.of(context)!.close),
-                                              onPressed: () => Navigator.pop(context),
-                                            ),
-                                          ],
-                                        );
-                                      });
-                                } else {
-                                  showDialog(
-                                      context: context,
-                                      builder: (_) {
-                                        return AlertDialog(
-                                          title: Text(AppLocalizations.of(context)!.failure),
-                                          actions: <Widget>[
-                                            TextButton(
-                                              child: Text(AppLocalizations.of(context)!.close),
-                                              onPressed: () => Navigator.pop(context),
-                                            ),
-                                          ],
-                                        );
-                                      });
-                                }
-                              });
-                            },
-                          ),
-                        ]))))));
+      ),
+    );
   }
 }
