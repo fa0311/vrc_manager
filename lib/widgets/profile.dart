@@ -12,6 +12,7 @@ import 'package:url_launcher/url_launcher.dart';
 // Project imports:
 import 'package:vrchat_mobile_client/api/main.dart';
 import 'package:vrchat_mobile_client/assets/date.dart';
+import 'package:vrchat_mobile_client/assets/dialog.dart';
 import 'package:vrchat_mobile_client/assets/error.dart';
 import 'package:vrchat_mobile_client/assets/storage.dart';
 import 'package:vrchat_mobile_client/assets/vrchat/icon.dart';
@@ -19,7 +20,7 @@ import 'package:vrchat_mobile_client/scenes/user.dart';
 import 'package:vrchat_mobile_client/scenes/web_view.dart';
 import 'package:vrchat_mobile_client/widgets/status.dart';
 
-Column profile(BuildContext context, user) {
+Column profile(BuildContext context, Map user) {
   return Column(
     children: <Widget>[
       SizedBox(
@@ -34,145 +35,182 @@ Column profile(BuildContext context, user) {
           Container(
             width: 5,
           ),
-          Text(user["displayName"], style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+          Text(user["displayName"],
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+              )),
         ],
       ),
       if (user["statusDescription"] != "") Text(user["statusDescription"]),
-      ConstrainedBox(constraints: const BoxConstraints(maxHeight: 200), child: SingleChildScrollView(child: Text(user["bio"]))),
-      Row(mainAxisAlignment: MainAxisAlignment.center, children: _biolink(context, user["bioLinks"] ?? [])),
-      if (user["last_login"] != "") Text(AppLocalizations.of(context)!.lastLogin(generalDateDifference(context, user["last_login"]))),
-      Text(AppLocalizations.of(context)!.dateJoined(generalDateDifference(context, user["date_joined"]))),
+      ConstrainedBox(
+        constraints: const BoxConstraints(maxHeight: 200),
+        child: SingleChildScrollView(
+          child: Text(user["bio"]),
+        ),
+      ),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: _biolink(
+          context,
+          user["bioLinks"] ?? [],
+        ),
+      ),
+      if (user["last_login"] != "")
+        Text(
+          AppLocalizations.of(context)!.lastLogin(
+            generalDateDifference(context, user["last_login"]),
+          ),
+        ),
+      Text(
+        AppLocalizations.of(context)!.dateJoined(
+          generalDateDifference(context, user["date_joined"]),
+        ),
+      ),
     ],
   );
 }
 
-Widget profileAction(BuildContext context, status, String uid) {
+Widget profileAction(BuildContext context, Map status, String uid) {
   sendFriendRequest() {
-    getLoginSession("login_session").then((cookie) {
-      VRChatAPI(cookie: cookie ?? "").sendFriendRequest(uid).then((response) {
-        if (response.containsKey("error")) {
-          error(context, response["error"]["message"]);
-          return;
-        }
-        Navigator.pop(context);
-        Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-              builder: (BuildContext context) => VRChatMobileUser(userId: uid),
-            ),
-            (_) => false);
-      });
-    });
-  }
-
-  deleteFriendRequest() {
-    getLoginSession("login_session").then((cookie) {
-      VRChatAPI(cookie: cookie ?? "").deleteFriendRequest(uid).then((response) {
-        if (response.containsKey("error")) {
-          error(context, response["error"]["message"]);
-          return;
-        }
-        Navigator.pop(context);
-        Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-              builder: (BuildContext context) => VRChatMobileUser(userId: uid),
-            ),
-            (_) => false);
-      });
-    });
-  }
-
-  deleteFriend() {
-    showDialog(
-      context: context,
-      builder: (_) {
-        return AlertDialog(
-          title: Text(AppLocalizations.of(context)!.unfriendConfirm),
-          actions: <Widget>[
-            TextButton(
-              child: Text(AppLocalizations.of(context)!.cancel),
-              onPressed: () => Navigator.pop(context),
-            ),
-            TextButton(
-              child: Text(AppLocalizations.of(context)!.unfriend),
-              onPressed: () => getLoginSession("login_session").then((cookie) {
-                VRChatAPI(cookie: cookie ?? "").deleteFriend(uid).then((response) {
-                  if (response.containsKey("error")) {
-                    error(context, response["error"]["message"]);
-                    return;
-                  }
-                  Navigator.pop(context);
-                  Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
-                        builder: (BuildContext context) => VRChatMobileUser(userId: uid),
-                      ),
-                      (_) => false);
-                });
-              }),
-            ),
-          ],
+    getLoginSession("login_session").then(
+      (cookie) {
+        VRChatAPI(cookie: cookie ?? "").sendFriendRequest(uid).then(
+          (response) {
+            if (response.containsKey("error")) {
+              error(context, response["error"]["message"]);
+              return;
+            }
+            Navigator.pop(context);
+            Navigator.pop(context);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (BuildContext context) => VRChatMobileUser(userId: uid),
+              ),
+            );
+          },
         );
       },
     );
   }
 
+  deleteFriendRequest() {
+    getLoginSession("login_session").then(
+      (cookie) {
+        VRChatAPI(cookie: cookie ?? "").deleteFriendRequest(uid).then(
+          (response) {
+            if (response.containsKey("error")) {
+              error(context, response["error"]["message"]);
+              return;
+            }
+            Navigator.pop(context);
+            Navigator.pop(context);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (BuildContext context) => VRChatMobileUser(userId: uid),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  deleteFriend() {
+    confirm(
+      context,
+      AppLocalizations.of(context)!.unfriendConfirm,
+      AppLocalizations.of(context)!.unfriend,
+      () => getLoginSession("login_session").then(
+        (cookie) {
+          VRChatAPI(cookie: cookie ?? "").deleteFriend(uid).then(
+            (response) {
+              if (response.containsKey("error")) {
+                error(context, response["error"]["message"]);
+                return;
+              }
+              Navigator.pop(context);
+              Navigator.pop(context);
+              Navigator.pop(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (BuildContext context) => VRChatMobileUser(userId: uid),
+                ),
+              );
+            },
+          );
+        },
+      ),
+    );
+  }
+
   return IconButton(
-      icon: const Icon(Icons.add),
-      onPressed: () => showModalBottomSheet(
-          context: context,
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
+    icon: const Icon(Icons.add),
+    onPressed: () => showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
+      ),
+      builder: (BuildContext context) => StatefulBuilder(
+        builder: (BuildContext context, setStateBuilder) => SingleChildScrollView(
+          child: Column(
+            children: [
+              if (!status["isFriend"] && !status["incomingRequest"] && !status["outgoingRequest"])
+                ListTile(
+                  leading: const Icon(Icons.person_add),
+                  title: Text(AppLocalizations.of(context)!.friendRequest),
+                  onTap: sendFriendRequest,
+                ),
+              if (status["isFriend"] && !status["incomingRequest"] && !status["outgoingRequest"])
+                ListTile(
+                  leading: const Icon(Icons.person_remove),
+                  title: Text(AppLocalizations.of(context)!.unfriend),
+                  onTap: deleteFriend,
+                ),
+              if (!status["isFriend"] && status["incomingRequest"])
+                ListTile(
+                  leading: const Icon(Icons.person_remove),
+                  title: Text(AppLocalizations.of(context)!.denyFriends),
+                  onTap: deleteFriendRequest,
+                ),
+              if (!status["isFriend"] && status["incomingRequest"])
+                ListTile(
+                  leading: const Icon(Icons.person_add),
+                  title: Text(AppLocalizations.of(context)!.allowFriends),
+                  onTap: sendFriendRequest,
+                ),
+            ],
           ),
-          builder: (BuildContext context) => StatefulBuilder(
-              builder: (BuildContext context, setStateBuilder) => SingleChildScrollView(
-                      child: Column(children: [
-                    if (!status["isFriend"] && !status["incomingRequest"] && !status["outgoingRequest"])
-                      ListTile(
-                        leading: const Icon(Icons.person_add),
-                        title: Text(AppLocalizations.of(context)!.friendRequest),
-                        onTap: sendFriendRequest,
-                      ),
-                    if (status["isFriend"] && !status["incomingRequest"] && !status["outgoingRequest"])
-                      ListTile(
-                        leading: const Icon(Icons.person_remove),
-                        title: Text(AppLocalizations.of(context)!.unfriend),
-                        onTap: deleteFriend,
-                      ),
-                    if (!status["isFriend"] && status["incomingRequest"])
-                      ListTile(
-                        leading: const Icon(Icons.person_remove),
-                        title: Text(AppLocalizations.of(context)!.denyFriends),
-                        onTap: deleteFriendRequest,
-                      ),
-                    if (!status["isFriend"] && status["incomingRequest"])
-                      ListTile(
-                        leading: const Icon(Icons.person_add),
-                        title: Text(AppLocalizations.of(context)!.allowFriends),
-                        onTap: sendFriendRequest,
-                      )
-                  ])))));
+        ),
+      ),
+    ),
+  );
 }
 
-List<Widget> _biolink(BuildContext context, List biolinks) {
+List<Widget> _biolink(BuildContext context, List<dynamic> biolinks) {
   List<Widget> response = [];
   for (String link in biolinks) {
     if (link == "") continue;
-    response.add(CircleAvatar(
+    response.add(
+      CircleAvatar(
         backgroundColor: const Color(0x00000000),
         child: IconButton(
           onPressed: () async {
             if (Platform.isAndroid || Platform.isIOS) {
-              getStorage("force_external_browser").then((response) async {
-                if (response == "true") {
-                  if (await canLaunchUrl(Uri.parse(link))) {
-                    await launchUrl(Uri.parse(link), mode: LaunchMode.externalApplication);
+              getStorage("force_external_browser").then(
+                (response) async {
+                  if (response == "true") {
+                    if (await canLaunchUrl(Uri.parse(link))) {
+                      await launchUrl(Uri.parse(link), mode: LaunchMode.externalApplication);
+                    }
+                  } else {
+                    Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => VRChatMobileWebView(url: link)));
                   }
-                } else {
-                  Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => VRChatMobileWebView(url: link)));
-                }
-              });
+                },
+              );
             } else {
               if (await canLaunchUrl(Uri.parse(link))) {
                 await launchUrl(Uri.parse(link));
@@ -181,7 +219,9 @@ List<Widget> _biolink(BuildContext context, List biolinks) {
           },
           icon: SvgPicture.asset("assets/svg/${getVrchatIconContains(link)}.svg",
               width: 20, height: 20, color: Color(getVrchatIcon()[getVrchatIconContains(link)] ?? 0xFFFFFFFF), semanticsLabel: link),
-        )));
+        ),
+      ),
+    );
   }
   return response;
 }

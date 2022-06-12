@@ -21,55 +21,73 @@ class _SettingAccessibilityPageState extends State<VRChatMobileSettingsAccessibi
   bool forceExternalBrowser = false;
 
   _changeSwitchTheme(bool e) {
-    setStorage("theme_brightness", e ? "dark" : "light").then((response) {
-      Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-            builder: (BuildContext context) => const VRChatMobile(),
-          ),
-          (_) => false);
-    });
+    setStorage("theme_brightness", e ? "dark" : "light").then(
+      (_) => Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (BuildContext context) => const VRChatMobile(),
+        ),
+        (_) => false,
+      ),
+    );
   }
 
   _changeSwitchAutoReadMore(bool e) {
-    setStorage("auto_read_more", e ? "true" : "false").then((response) {
-      setState(() => autoReadMore = e);
-    });
+    setStorage("auto_read_more", e ? "true" : "false").then((_) => setState(() => autoReadMore = e));
   }
 
   _changeSwitchForceExternalBrowser(bool e) {
-    setStorage("force_external_browser", e ? "true" : "false").then((response) {
-      setState(() => forceExternalBrowser = e);
-    });
+    setStorage("force_external_browser", e ? "true" : "false").then(
+      (_) => setState(() => forceExternalBrowser = e),
+    );
   }
 
   ListTile _changeLocaleDialogOption(BuildContext context, String title, String languageCode) {
     return ListTile(
       title: Text(title),
-      subtitle: Text(AppLocalizations.of(context)!.translaterDetails(lookupAppLocalizations(Locale(languageCode, "")).contributor)),
+      subtitle: Text(
+        AppLocalizations.of(context)!.translaterDetails(lookupAppLocalizations(
+          Locale(languageCode, ""),
+        ).contributor),
+      ),
       onTap: () async {
-        setStorage("language_code", languageCode).then((response) {
-          Navigator.pushAndRemoveUntil(
+        setStorage("language_code", languageCode).then(
+          (_) {
+            Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(
                 builder: (BuildContext context) => const VRChatMobile(),
               ),
-              (_) => false);
-        });
+              (_) => false,
+            );
+          },
+        );
       },
     );
   }
 
   _SettingAccessibilityPageState() {
-    getStorage("theme_brightness").then((response) {
-      setState(() => theme = (response == "dark"));
-    });
-    getStorage("auto_read_more").then((response) {
-      setState(() => autoReadMore = (response == "true"));
-    });
-    getStorage("force_external_browser").then((response) {
-      setState(() => forceExternalBrowser = (response == "true"));
-    });
+    getStorage("theme_brightness").then(
+      (response) {
+        setState(
+          () => theme = (response == "dark"),
+        );
+      },
+    );
+    getStorage("auto_read_more").then(
+      (response) {
+        setState(
+          () => autoReadMore = (response == "true"),
+        );
+      },
+    );
+    getStorage("force_external_browser").then(
+      (response) {
+        setState(
+          () => forceExternalBrowser = (response == "true"),
+        );
+      },
+    );
   }
 
   @override
@@ -86,20 +104,25 @@ class _SettingAccessibilityPageState extends State<VRChatMobileSettingsAccessibi
               child: Column(
                 children: <Widget>[
                   ListTile(
-                      title: Text(AppLocalizations.of(context)!.language),
-                      subtitle: Text(AppLocalizations.of(context)!.languageDetails),
-                      onTap: () => showModalBottomSheet(
-                          context: context,
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
-                          ),
-                          builder: (BuildContext context) => SingleChildScrollView(
-                                  child: Column(
-                                children: <Widget>[
-                                  _changeLocaleDialogOption(context, 'English', 'en'),
-                                  _changeLocaleDialogOption(context, '日本語', 'ja'),
-                                ],
-                              )))),
+                    title: Text(AppLocalizations.of(context)!.language),
+                    subtitle: Text(AppLocalizations.of(context)!.languageDetails),
+                    onTap: () => showModalBottomSheet(
+                      context: context,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(15),
+                        ),
+                      ),
+                      builder: (BuildContext context) => SingleChildScrollView(
+                        child: Column(
+                          children: <Widget>[
+                            _changeLocaleDialogOption(context, 'English', 'en'),
+                            _changeLocaleDialogOption(context, '日本語', 'ja'),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
                   const Divider(),
                   SwitchListTile(
                     value: theme,

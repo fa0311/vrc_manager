@@ -23,7 +23,7 @@ class _HelpPageState extends State<VRChatMobileHelp> {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.help),
       ),
-      drawer: drawr(context),
+      drawer: drawer(context),
       body: SafeArea(
         child: SizedBox(
           child: SingleChildScrollView(
@@ -35,8 +35,12 @@ class _HelpPageState extends State<VRChatMobileHelp> {
                     title: Text(AppLocalizations.of(context)!.contribution),
                     subtitle: Text(AppLocalizations.of(context)!.contributionDetails),
                     onTap: () async {
-                      if (await canLaunchUrl(Uri.parse("https://github.com/fa0311/vrchat_mobile_client"))) {
-                        await launchUrl(Uri.parse("https://github.com/fa0311/vrchat_mobile_client"));
+                      if (await canLaunchUrl(
+                        Uri.parse("https://github.com/fa0311/vrchat_mobile_client"),
+                      )) {
+                        await launchUrl(
+                          Uri.parse("https://github.com/fa0311/vrchat_mobile_client"),
+                        );
                       }
                     },
                   ),
@@ -45,8 +49,12 @@ class _HelpPageState extends State<VRChatMobileHelp> {
                     title: Text(AppLocalizations.of(context)!.report),
                     subtitle: Text(AppLocalizations.of(context)!.reportDetails),
                     onTap: () async {
-                      if (await canLaunchUrl(Uri.parse("https://github.com/fa0311/vrchat_mobile_client/issues/new"))) {
-                        await launchUrl(Uri.parse("https://github.com/fa0311/vrchat_mobile_client/issues/new"));
+                      if (await canLaunchUrl(
+                        Uri.parse("https://github.com/fa0311/vrchat_mobile_client/issues/new"),
+                      )) {
+                        await launchUrl(
+                          Uri.parse("https://github.com/fa0311/vrchat_mobile_client/issues/new"),
+                        );
                       }
                     },
                   ),
@@ -55,8 +63,12 @@ class _HelpPageState extends State<VRChatMobileHelp> {
                     title: Text(AppLocalizations.of(context)!.developerInfo),
                     subtitle: Text(AppLocalizations.of(context)!.developerInfoDetails),
                     onTap: () async {
-                      if (await canLaunchUrl(Uri.parse("https://twitter.com/faa0311"))) {
-                        await launchUrl(Uri.parse("https://twitter.com/faa0311"));
+                      if (await canLaunchUrl(
+                        Uri.parse("https://twitter.com/faa0311"),
+                      )) {
+                        await launchUrl(
+                          Uri.parse("https://twitter.com/faa0311"),
+                        );
                       }
                     },
                   ),
@@ -65,8 +77,12 @@ class _HelpPageState extends State<VRChatMobileHelp> {
                     title: Text(AppLocalizations.of(context)!.rateTheApp),
                     subtitle: Text(AppLocalizations.of(context)!.rateTheAppDetails),
                     onTap: () async {
-                      if (await canLaunchUrl(Uri.parse("https://play.google.com/store/apps/details?id=com.yuki0311.vrchat_mobile_client"))) {
-                        await launchUrl(Uri.parse("https://play.google.com/store/apps/details?id=com.yuki0311.vrchat_mobile_client"));
+                      if (await canLaunchUrl(
+                        Uri.parse("https://play.google.com/store/apps/details?id=com.yuki0311.vrchat_mobile_client"),
+                      )) {
+                        await launchUrl(
+                          Uri.parse("https://play.google.com/store/apps/details?id=com.yuki0311.vrchat_mobile_client"),
+                        );
                       }
                     },
                   ),

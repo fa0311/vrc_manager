@@ -34,69 +34,79 @@ class Users {
   }
 
   List<Widget> adds(Map users) {
-    // リストは低画質、単体だと高画質を表示させる
-    // 低画質 currentAvatarThumbnailImageUrl
-    // 高画質 currentAvatarImageUrl
-    // オリジナル profilePicOverride
-
-    // 低画質 thumbnailImageUrl
-    // 高画質 imageUrl
-    // オリジナル profilePicOverride
     userList.add(users);
-    users.forEach((dynamic index, dynamic user) {
-      if (["", "private", "offline"].contains(user["location"]) && joinable) return;
+    users.forEach(
+      (_, dynamic user) {
+        if (["", "private", "offline"].contains(user["location"]) && joinable) return;
 
-      children.add(Card(
-          elevation: 20.0,
-          child: Container(
+        children.add(
+          Card(
+            elevation: 20.0,
+            child: Container(
               padding: const EdgeInsets.all(10.0),
               child: GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (BuildContext context) => VRChatMobileUser(userId: user["id"]),
-                        ));
-                  },
-                  behavior: HitTestBehavior.opaque,
-                  child: Row(
-                    children: <Widget>[
-                      SizedBox(
-                        height: 100,
-                        child: Image.network(
-                            user.containsKey("profilePicOverride")
-                                ? user["profilePicOverride"] == ""
-                                    ? user["currentAvatarThumbnailImageUrl"]
-                                    : user["profilePicOverride"]
-                                : user["currentAvatarThumbnailImageUrl"],
-                            fit: BoxFit.fitWidth),
-                      ),
-                      Expanded(
-                          child: Column(children: <Widget>[
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            status(user["status"]),
-                            Container(
-                              width: 5,
-                            ),
-                            Text(user["displayName"], style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
-                          ],
-                        ),
-                        if (user["statusDescription"] != "") Text(user["statusDescription"], style: const TextStyle(fontSize: 14)),
-                        if (!["", "private", "offline"].contains(user["location"]) && locationMap.containsKey(user["location"].split(":")[0]))
-                          Text(locationMap[user["location"].split(":")[0]]["name"], style: const TextStyle(fontSize: 14)),
-                        if (!["", "private", "offline"].contains(user["location"]) && !locationMap.containsKey(user["location"].split(":")[0]))
-                          const SizedBox(
-                            height: 15.0,
-                            width: 15.0,
-                            child: CircularProgressIndicator(),
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (BuildContext context) => VRChatMobileUser(userId: user["id"]),
+                      ));
+                },
+                behavior: HitTestBehavior.opaque,
+                child: Row(
+                  children: <Widget>[
+                    SizedBox(
+                      height: 100,
+                      child: Image.network(
+                          user.containsKey("profilePicOverride")
+                              ? user["profilePicOverride"] == ""
+                                  ? user["currentAvatarThumbnailImageUrl"]
+                                  : user["profilePicOverride"]
+                              : user["currentAvatarThumbnailImageUrl"],
+                          fit: BoxFit.fitWidth),
+                    ),
+                    Expanded(
+                      child: Column(
+                        children: <Widget>[
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              status(user["status"]),
+                              Container(
+                                width: 5,
+                              ),
+                              Text(user["displayName"],
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20,
+                                  )),
+                            ],
                           ),
-                        if (user["location"] == "private") Text(AppLocalizations.of(context)!.privateWorld, style: const TextStyle(fontSize: 14)),
-                      ])),
-                    ],
-                  )))));
-    });
+                          if (user["statusDescription"] != "") Text(user["statusDescription"], style: const TextStyle(fontSize: 14)),
+                          if (!["", "private", "offline"].contains(user["location"]) && locationMap.containsKey(user["location"].split(":")[0]))
+                            Text(locationMap[user["location"].split(":")[0]]["name"], style: const TextStyle(fontSize: 14)),
+                          if (!["", "private", "offline"].contains(user["location"]) && !locationMap.containsKey(user["location"].split(":")[0]))
+                            const SizedBox(
+                              height: 15.0,
+                              width: 15.0,
+                              child: CircularProgressIndicator(),
+                            ),
+                          if (user["location"] == "private")
+                            Text(
+                              AppLocalizations.of(context)!.privateWorld,
+                              style: const TextStyle(fontSize: 14),
+                            ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
     return children;
   }
 }

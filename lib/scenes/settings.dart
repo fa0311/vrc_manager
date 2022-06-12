@@ -25,7 +25,7 @@ class _SettingPageState extends State<VRChatMobileSettings> {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.setting),
       ),
-      drawer: widget.logged ? drawr(context) : simpleDrawr(context),
+      drawer: widget.logged ? drawer(context) : simpledrawer(context),
       body: SafeArea(
         child: SizedBox(
           child: SingleChildScrollView(
@@ -45,10 +45,11 @@ class _SettingPageState extends State<VRChatMobileSettings> {
                     title: Text(AppLocalizations.of(context)!.accessibility),
                     onTap: () => {
                       Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (BuildContext context) => const VRChatMobileSettingsAccessibility(),
-                          ))
+                        context,
+                        MaterialPageRoute(
+                          builder: (BuildContext context) => const VRChatMobileSettingsAccessibility(),
+                        ),
+                      ),
                     },
                   ),
                   const Divider(),
@@ -64,10 +65,11 @@ class _SettingPageState extends State<VRChatMobileSettings> {
                     title: Text(AppLocalizations.of(context)!.account),
                     onTap: () => {
                       Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (BuildContext context) => const VRChatMobileSettingsAccount(),
-                          ))
+                        context,
+                        MaterialPageRoute(
+                          builder: (BuildContext context) => const VRChatMobileSettingsAccount(),
+                        ),
+                      ),
                     },
                   ),
                   const Divider(),
@@ -82,12 +84,13 @@ class _SettingPageState extends State<VRChatMobileSettings> {
                     ),
                     title: Text(AppLocalizations.of(context)!.help),
                     onTap: () => Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                          builder: (BuildContext context) => const VRChatMobileHelp(),
-                        ),
-                        (_) => false),
-                  )
+                      context,
+                      MaterialPageRoute(
+                        builder: (BuildContext context) => const VRChatMobileHelp(),
+                      ),
+                      (_) => false,
+                    ),
+                  ),
                 ],
               ),
             ),

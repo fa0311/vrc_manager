@@ -9,13 +9,13 @@ Future<String?> getLoginSession(String key, {String? accountIndex}) async {
   return await storage.read(key: "$key$accountIndex");
 }
 
-Future setLoginSession(String key, String value, {String? accountIndex}) async {
+Future<void> setLoginSession(String key, String value, {String? accountIndex}) async {
   accountIndex ??= await getStorage("account_index");
   const FlutterSecureStorage storage = FlutterSecureStorage();
   return await storage.write(key: "$key$accountIndex", value: value);
 }
 
-Future removeLoginSession(String key, {String? accountIndex}) async {
+Future<void> removeLoginSession(String key, {String? accountIndex}) async {
   accountIndex ??= await getStorage("account_index");
   const FlutterSecureStorage storage = FlutterSecureStorage();
   return await storage.delete(key: "$key$accountIndex");
@@ -30,12 +30,12 @@ Future<String?> getStorage(String key) async {
   }
 }
 
-Future setStorage(String key, String value) async {
+Future<bool> setStorage(String key, String value) async {
   final SharedPreferences storage = await SharedPreferences.getInstance();
   return await storage.setString(key, value);
 }
 
-Future removeStorage(String key) async {
+Future<bool> removeStorage(String key) async {
   final SharedPreferences storage = await SharedPreferences.getInstance();
   return await storage.remove(key);
 }
@@ -49,7 +49,7 @@ Future<List<String>> getStorageList(String key) async {
   }
 }
 
-Future setStorageList(String key, List<String> value) async {
+Future<bool> setStorageList(String key, List<String> value) async {
   final SharedPreferences storage = await SharedPreferences.getInstance();
   return await storage.setStringList(key, value);
 }

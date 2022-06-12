@@ -23,24 +23,35 @@ class VRChatMobileJsonViewer extends StatefulWidget {
 class _JsonViewerPageState extends State<VRChatMobileJsonViewer> {
   String theme = "light";
   _JsonViewerPageState() {
-    getStorage("theme_brightness").then((response) {
-      setState(() => theme = response ?? "light");
-    });
+    getStorage("theme_brightness").then(
+      (response) {
+        setState(() => theme = response ?? "light");
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text(AppLocalizations.of(context)!.jsonViewer),
-          actions: [clipboardShare(context, jsonEncode(widget.obj))],
+      appBar: AppBar(
+        title: Text(AppLocalizations.of(context)!.jsonViewer),
+        actions: [
+          clipboardShare(
+            context,
+            jsonEncode(widget.obj),
+          ),
+        ],
+      ),
+      body: Container(
+        color: Theme.of(context).colorScheme.onPrimary,
+        child: SafeArea(
+          child: ListView(
+            children: [
+              JsonViewer(widget.obj),
+            ],
+          ),
         ),
-        body: Container(
-          color: Theme.of(context).colorScheme.onPrimary,
-          child: SafeArea(
-              child: ListView(children: [
-            JsonViewer(widget.obj),
-          ])),
-        ));
+      ),
+    );
   }
 }

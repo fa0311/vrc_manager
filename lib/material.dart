@@ -9,30 +9,35 @@ MaterialApp getMaterialApp(home, String theme, Locale locale) {
   Map themeMap = {
     "dark": ThemeData(
       brightness: Brightness.dark,
-      textTheme: const TextTheme(bodyText2: TextStyle(fontSize: 16)),
+      textTheme: const TextTheme(
+        bodyText2: TextStyle(fontSize: 16),
+      ),
       primarySwatch: Colors.grey,
     ),
     "light": ThemeData(
       brightness: Brightness.light,
-      textTheme: const TextTheme(bodyText2: TextStyle(fontSize: 16)),
+      textTheme: const TextTheme(
+        bodyText2: TextStyle(fontSize: 16),
+      ),
       primarySwatch: Colors.blue,
-    )
+    ),
   };
 
   return MaterialApp(
-      title: 'VRChat Mobile Client',
-      localizationsDelegates: const [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: const [
-        Locale('ja', ''),
-        Locale('en', ''),
-      ],
-      locale: locale,
-      theme: themeMap[theme],
-      darkTheme: themeMap["dark"],
-      home: home);
+    title: 'VRChat Mobile Client',
+    localizationsDelegates: const [
+      AppLocalizations.delegate,
+      GlobalMaterialLocalizations.delegate,
+      GlobalWidgetsLocalizations.delegate,
+      GlobalCupertinoLocalizations.delegate,
+    ],
+    supportedLocales: const [
+      Locale('ja', ''),
+      Locale('en', ''),
+    ],
+    locale: locale,
+    theme: themeMap[theme],
+    darkTheme: themeMap["dark"],
+    home: home,
+  );
 }

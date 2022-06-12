@@ -13,215 +13,251 @@ import 'package:vrchat_mobile_client/scenes/setting/other_account.dart';
 import 'package:vrchat_mobile_client/scenes/settings.dart';
 import 'package:vrchat_mobile_client/scenes/worlds_favorite.dart';
 
-Drawer? drawr(BuildContext context) {
+Drawer? drawer(BuildContext context) {
   Column column = Column();
 
-  getStorageList("account_index_list").then((response) {
-    List<Widget> list = [
-      const Divider(),
-      ListTile(
+  getStorageList("account_index_list").then(
+    (response) {
+      List<Widget> list = [
+        const Divider(),
+        ListTile(
           leading: const Icon(Icons.settings),
           title: Text(AppLocalizations.of(context)!.accountSwitchSetting),
           onTap: () => Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(
-                builder: (BuildContext context) => const VRChatMobileSettingsOtherAccount(),
-              ),
-              (_) => false))
-    ];
-    response.asMap().forEach((_, String accountIndex) {
-      getLoginSession("userid", accountIndex: accountIndex).then((accountName) => list.insert(
-          0,
-          ListTile(
-              title: Text(accountName ?? "Unknown"),
-              onTap: () => setStorage("account_index", accountIndex).then((response) => Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(
-                    builder: (BuildContext context) => const VRChatMobileHome(),
-                  ),
-                  (_) => false)))));
-    });
-    column = Column(children: list);
-  });
-
-  return Drawer(
-    child: SafeArea(
-      child: Column(children: <Widget>[
-        Expanded(
-          child: Column(
-            children: <Widget>[
+            context,
+            MaterialPageRoute(
+              builder: (BuildContext context) => const VRChatMobileSettingsOtherAccount(),
+            ),
+            (_) => false,
+          ),
+        )
+      ];
+      response.asMap().forEach(
+        (_, String accountIndex) {
+          getLoginSession("userid", accountIndex: accountIndex).then(
+            (accountName) => list.insert(
+              0,
               ListTile(
-                onTap: () => Navigator.pushAndRemoveUntil(
+                title: Text(accountName ?? "Unknown"),
+                onTap: () => setStorage("account_index", accountIndex).then(
+                  (_) => Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
                       builder: (BuildContext context) => const VRChatMobileHome(),
                     ),
-                    (_) => false),
-                leading: const Icon(Icons.home),
-                title: Text(AppLocalizations.of(context)!.home),
+                    (_) => false,
+                  ),
+                ),
               ),
-              ListTile(
-                onTap: () => Navigator.pushAndRemoveUntil(
+            ),
+          );
+        },
+      );
+      column = Column(children: list);
+    },
+  );
+
+  return Drawer(
+    child: SafeArea(
+      child: Column(
+        children: <Widget>[
+          Expanded(
+            child: Column(
+              children: <Widget>[
+                ListTile(
+                  onTap: () => Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => const VRChatMobileHome(),
+                    ),
+                    (_) => false,
+                  ),
+                  leading: const Icon(Icons.home),
+                  title: Text(AppLocalizations.of(context)!.home),
+                ),
+                ListTile(
+                  onTap: () => Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
                       builder: (BuildContext context) => const VRChatMobileFriends(offline: false),
                     ),
-                    (_) => false),
-                leading: const Icon(Icons.wb_sunny),
-                title: Text(AppLocalizations.of(context)!.onlineFrends),
-              ),
-              ListTile(
-                onTap: () => Navigator.pushAndRemoveUntil(
+                    (_) => false,
+                  ),
+                  leading: const Icon(Icons.wb_sunny),
+                  title: Text(AppLocalizations.of(context)!.onlineFrends),
+                ),
+                ListTile(
+                  onTap: () => Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
                       builder: (BuildContext context) => const VRChatMobileFriends(offline: true),
                     ),
-                    (_) => false),
-                leading: const Icon(Icons.bedtime),
-                title: Text(AppLocalizations.of(context)!.offlineFrends),
-              ),
-              ListTile(
-                onTap: () => Navigator.pushAndRemoveUntil(
+                    (_) => false,
+                  ),
+                  leading: const Icon(Icons.bedtime),
+                  title: Text(AppLocalizations.of(context)!.offlineFrends),
+                ),
+                ListTile(
+                  onTap: () => Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
                       builder: (BuildContext context) => const VRChatMobileFriendRequest(),
                     ),
-                    (_) => false),
-                leading: const Icon(Icons.notifications),
-                title: Text(AppLocalizations.of(context)!.friendRequest),
-              ),
-              ListTile(
-                onTap: () => Navigator.pushAndRemoveUntil(
+                    (_) => false,
+                  ),
+                  leading: const Icon(Icons.notifications),
+                  title: Text(AppLocalizations.of(context)!.friendRequest),
+                ),
+                ListTile(
+                  onTap: () => Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
                       builder: (BuildContext context) => const VRChatMobileWorldsFavorite(),
                     ),
-                    (_) => false),
-                leading: const Icon(Icons.favorite),
-                title: Text(AppLocalizations.of(context)!.favoriteWorlds),
-              ),
-              /*
-              ListTile(
-                onTap: () {
-                  Navigator.pop(context);
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (BuildContext context) => const VRChatMobileWorldsFavorite(),
-                      ));
-                },
-                leading: const Icon(Icons.notifications),
-                title: const Text('最近訪れたワールド'),
-              ),
-              */
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: Text(AppLocalizations.of(context)!.close),
-              )
-            ],
+                    (_) => false,
+                  ),
+                  leading: const Icon(Icons.favorite),
+                  title: Text(AppLocalizations.of(context)!.favoriteWorlds),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: Text(AppLocalizations.of(context)!.close),
+                )
+              ],
+            ),
           ),
-        ),
-        const Divider(),
-        ListTile(
+          const Divider(),
+          ListTile(
             onTap: () => Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(
-                  builder: (BuildContext context) => const VRChatMobileSettings(logged: true),
-                ),
-                (_) => false),
+              context,
+              MaterialPageRoute(
+                builder: (BuildContext context) => const VRChatMobileSettings(logged: true),
+              ),
+              (_) => false,
+            ),
             leading: const Icon(Icons.settings),
-            title: Text(AppLocalizations.of(context)!.setting)),
-        ListTile(
+            title: Text(AppLocalizations.of(context)!.setting),
+          ),
+          ListTile(
             onTap: () => showModalBottomSheet(
-                context: context,
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
+              context: context,
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.vertical(
+                  top: Radius.circular(15),
                 ),
-                builder: (BuildContext context) => SingleChildScrollView(child: column)),
+              ),
+              builder: (BuildContext context) => SingleChildScrollView(child: column),
+            ),
             leading: const Icon(Icons.account_circle),
-            title: Text(AppLocalizations.of(context)!.accountSwitch)),
-      ]),
+            title: Text(AppLocalizations.of(context)!.accountSwitch),
+          ),
+        ],
+      ),
     ),
   );
 }
 
-Drawer simpleDrawr(BuildContext context) {
+Drawer simpledrawer(BuildContext context) {
   Column column = Column();
 
-  getStorageList("account_index_list").then((response) {
-    List<Widget> list = [
-      const Divider(),
-      ListTile(
+  getStorageList("account_index_list").then(
+    (response) {
+      List<Widget> list = [
+        const Divider(),
+        ListTile(
           leading: const Icon(Icons.settings),
           title: Text(AppLocalizations.of(context)!.accountSwitchSetting),
           onTap: () => Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(
-                builder: (BuildContext context) => const VRChatMobileSettingsOtherAccount(),
+            context,
+            MaterialPageRoute(
+              builder: (BuildContext context) => const VRChatMobileSettingsOtherAccount(),
+            ),
+            (_) => false,
+          ),
+        )
+      ];
+      response.asMap().forEach(
+        (_, String accountIndex) {
+          getLoginSession("userid", accountIndex: accountIndex).then(
+            (accountName) => list.insert(
+              0,
+              ListTile(
+                title: Text(accountName ?? "Unknown"),
+                onTap: () => setStorage("account_index", accountIndex).then(
+                  (_) => Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => const VRChatMobileHome(),
+                    ),
+                    (_) => false,
+                  ),
+                ),
               ),
-              (_) => false))
-    ];
-    response.asMap().forEach((_, String accountIndex) {
-      getLoginSession("userid", accountIndex: accountIndex).then((accountName) => list.insert(
-          0,
-          ListTile(
-              title: Text(accountName ?? "Unknown"),
-              onTap: () => setStorage("account_index", accountIndex).then((response) => Navigator.pushAndRemoveUntil(
+            ),
+          );
+        },
+      );
+      column = Column(children: list);
+    },
+  );
+
+  return Drawer(
+    child: SafeArea(
+      child: Column(
+        children: <Widget>[
+          Expanded(
+            child: Column(children: <Widget>[
+              ListTile(
+                onTap: () => Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(
                     builder: (BuildContext context) => const VRChatMobileHome(),
                   ),
-                  (_) => false)))));
-    });
-    column = Column(children: list);
-  });
-
-  return Drawer(
-    child: SafeArea(
-      child: Column(children: <Widget>[
-        Expanded(
-            child: Column(children: <Widget>[
-          ListTile(
-            onTap: () => Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(
-                  builder: (BuildContext context) => const VRChatMobileHome(),
+                  (_) => false,
                 ),
-                (_) => false),
-            leading: const Icon(Icons.home),
-            title: Text(AppLocalizations.of(context)!.home),
+                leading: const Icon(Icons.home),
+                title: Text(AppLocalizations.of(context)!.home),
+              ),
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text(AppLocalizations.of(context)!.close),
+              )
+            ]),
           ),
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text(AppLocalizations.of(context)!.close),
-          )
-        ])),
-        Align(
+          Align(
             alignment: FractionalOffset.bottomCenter,
             child: Column(
               children: <Widget>[
                 const Divider(),
                 ListTile(
-                    onTap: () => Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                          builder: (BuildContext context) => const VRChatMobileSettings(logged: false),
-                        ),
-                        (_) => false),
-                    leading: const Icon(Icons.settings),
-                    title: Text(AppLocalizations.of(context)!.setting)),
+                  onTap: () => Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => const VRChatMobileSettings(logged: false),
+                    ),
+                    (_) => false,
+                  ),
+                  leading: const Icon(Icons.settings),
+                  title: Text(AppLocalizations.of(context)!.setting),
+                ),
                 ListTile(
-                    onTap: () => showModalBottomSheet(
-                        context: context,
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
-                        ),
-                        builder: (BuildContext context) => SingleChildScrollView(child: column)),
-                    leading: const Icon(Icons.account_circle),
-                    title: Text(AppLocalizations.of(context)!.accountSwitch)),
+                  onTap: () => showModalBottomSheet(
+                    context: context,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(15),
+                      ),
+                    ),
+                    builder: (BuildContext context) => SingleChildScrollView(child: column),
+                  ),
+                  leading: const Icon(Icons.account_circle),
+                  title: Text(AppLocalizations.of(context)!.accountSwitch),
+                ),
               ],
-            )),
-      ]),
+            ),
+          ),
+        ],
+      ),
     ),
   );
 }

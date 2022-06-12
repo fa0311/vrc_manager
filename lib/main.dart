@@ -22,12 +22,8 @@ class _PageState extends State<VRChatMobile> {
   String locale = "en";
 
   _PageState() {
-    getStorage("theme_brightness").then((response) {
-      setState(() => theme = response ?? "light");
-    });
-    getStorage("language_code").then((response) {
-      setState(() => locale = response ?? "en");
-    });
+    getStorage("theme_brightness").then((response) => setState(() => theme = response ?? "light"));
+    getStorage("language_code").then((response) => setState(() => locale = response ?? "en"));
   }
 
   @override

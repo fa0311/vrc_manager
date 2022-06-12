@@ -24,77 +24,97 @@ class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
   List<int> offset = [];
   List<Column> childrenList = [];
 
-  late Column column = Column(children: const [Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator())]);
+  late Column column = Column(
+    children: const [
+      Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()),
+    ],
+  );
 
   _WorldsFavoriteState() {
-    getLoginSession("login_session").then((cookie) {
-      VRChatAPI(cookie: cookie ?? "").favoriteGroups("world", offset: 0).then((response) {
-        if (response.containsKey("error")) {
-          error(context, response["error"]["message"]);
-          return;
-        }
-        if (response.isEmpty) {
-          setState(() => column = Column(
-                children: <Widget>[
-                  Text(AppLocalizations.of(context)!.none),
-                ],
-              ));
-        } else {
-          final List<Widget> children = [];
-          response.forEach((dynamic index, dynamic list) {
-            children.add(Column(
-              children: <Widget>[
-                Text(list["displayName"]),
-              ],
-            ));
-          });
-          column = Column(children: children);
-        }
-        response.forEach((dynamic index, dynamic list) {
-          offset.add(0);
-          childrenList.add(Column());
-          moreOver(list, index);
-        });
-      });
-    });
+    getLoginSession("login_session").then(
+      (cookie) {
+        VRChatAPI(cookie: cookie ?? "").favoriteGroups("world", offset: 0).then(
+          (response) {
+            if (response.containsKey("error")) {
+              error(context, response["error"]["message"]);
+              return;
+            }
+            if (response.isEmpty) {
+              setState(() => column = Column(
+                    children: <Widget>[
+                      Text(AppLocalizations.of(context)!.none),
+                    ],
+                  ));
+            } else {
+              final List<Widget> children = [];
+              response.forEach(
+                (_, dynamic list) {
+                  children.add(Column(
+                    children: <Widget>[
+                      Text(list["displayName"]),
+                    ],
+                  ));
+                },
+              );
+              column = Column(children: children);
+            }
+            response.forEach(
+              (index, dynamic list) {
+                offset.add(0);
+                childrenList.add(Column());
+                moreOver(list, index);
+              },
+            );
+          },
+        );
+      },
+    );
   }
 
   moreOver(Map list, int index) {
-    getLoginSession("login_session").then((cookie) {
-      VRChatAPI(cookie: cookie ?? "").favoritesWorlds(list["name"], offset: offset[index]).then((worlds) {
-        if (worlds.containsKey("error")) {
-          error(context, worlds["error"]["message"]);
-          return;
-        }
+    getLoginSession("login_session").then(
+      (cookie) {
+        VRChatAPI(cookie: cookie ?? "").favoritesWorlds(list["name"], offset: offset[index]).then(
+          (worlds) {
+            if (worlds.containsKey("error")) {
+              error(context, worlds["error"]["message"]);
+              return;
+            }
 
-        offset[index] += 50;
-        final List<Widget> worldList = [];
-        worldList.addAll(childrenList[index].children);
-        worlds.forEach((dynamic index, dynamic world) {
-          worldList.add(simpleWorld(context, world));
-        });
-        childrenList[index] = Column(children: worldList);
-        column = Column(children: column.children);
-        setState(() {
-          column.children[index] = Column(children: [
-            Text(list["displayName"]),
-            Column(children: childrenList[index].children),
-            if (childrenList[index].children.length == offset[index] && offset[index] > 0)
-              SizedBox(
-                width: MediaQuery.of(context).size.width,
-                child: Column(
-                  children: <Widget>[
-                    ElevatedButton(
-                      child: Text(AppLocalizations.of(context)!.readMore),
-                      onPressed: () => moreOver(list, index),
-                    ),
-                  ],
-                ),
-              )
-          ]);
-        });
-      });
-    });
+            offset[index] += 50;
+            final List<Widget> worldList = [];
+            worldList.addAll(childrenList[index].children);
+            worlds.forEach(
+              (_, dynamic world) {
+                worldList.add(simpleWorld(context, world));
+              },
+            );
+            childrenList[index] = Column(children: worldList);
+            column = Column(children: column.children);
+            setState(
+              () {
+                column.children[index] = Column(children: [
+                  Text(list["displayName"]),
+                  Column(children: childrenList[index].children),
+                  if (childrenList[index].children.length == offset[index] && offset[index] > 0)
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      child: Column(
+                        children: <Widget>[
+                          ElevatedButton(
+                            child: Text(AppLocalizations.of(context)!.readMore),
+                            onPressed: () => moreOver(list, index),
+                          ),
+                        ],
+                      ),
+                    )
+                ]);
+              },
+            );
+          },
+        );
+      },
+    );
   }
 
   @override
@@ -103,8 +123,13 @@ class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.favoriteWorlds),
       ),
-      drawer: drawr(context),
-      body: SafeArea(child: SizedBox(width: MediaQuery.of(context).size.width, child: SingleChildScrollView(child: column))),
+      drawer: drawer(context),
+      body: SafeArea(
+        child: SizedBox(
+          width: MediaQuery.of(context).size.width,
+          child: SingleChildScrollView(child: column),
+        ),
+      ),
     );
   }
 }
