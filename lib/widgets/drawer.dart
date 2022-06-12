@@ -38,7 +38,9 @@ Drawer? drawer(BuildContext context) {
             (accountName) => list.insert(
               0,
               ListTile(
-                title: Text(accountName ?? "Unknown"),
+                title: Text(
+                  accountName ?? AppLocalizations.of(context)!.unknown,
+                ),
                 onTap: () => setStorage("account_index", accountIndex).then(
                   (_) => Navigator.pushAndRemoveUntil(
                     context,
@@ -182,7 +184,9 @@ Drawer simpledrawer(BuildContext context) {
             (accountName) => list.insert(
               0,
               ListTile(
-                title: Text(accountName ?? "Unknown"),
+                title: Text(
+                  accountName ?? AppLocalizations.of(context)!.unknown,
+                ),
                 onTap: () => setStorage("account_index", accountIndex).then(
                   (_) => Navigator.pushAndRemoveUntil(
                     context,

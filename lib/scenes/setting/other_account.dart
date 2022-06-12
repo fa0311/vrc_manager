@@ -105,7 +105,7 @@ class _SettingOtherAccountPageState extends State<VRChatMobileSettingsOtherAccou
                             child: SizedBox(
                               width: double.infinity,
                               child: Text(
-                                accountName ?? "Unknown",
+                                accountName ?? AppLocalizations.of(context)!.unknown,
                                 style: const TextStyle(fontWeight: FontWeight.bold),
                               ),
                             ),

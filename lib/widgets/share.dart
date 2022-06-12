@@ -46,7 +46,10 @@ IconButton share(BuildContext context, String url) {
             ListTile(
               leading: const Icon(Icons.open_in_browser),
               title: Text(AppLocalizations.of(context)!.openInBrowser),
-              onTap: () => openInBrowser(context, url),
+              onTap: () {
+                Navigator.pop(context);
+                openInBrowser(context, url);
+              },
             ),
           ],
         ),
@@ -134,7 +137,6 @@ IconButton clipboardShare(BuildContext context, String text) {
 }
 
 Future<void> openInBrowser(BuildContext context, String url) async {
-  Navigator.pop(context);
   if (Platform.isAndroid || Platform.isIOS) {
     getStorage("force_external_browser").then(
       (response) async {

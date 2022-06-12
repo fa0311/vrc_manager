@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 // Project imports:
 import 'package:vrchat_mobile_client/assets/licence.dart';
 import 'package:vrchat_mobile_client/widgets/drawer.dart';
+import 'package:vrchat_mobile_client/widgets/share.dart';
 
 class VRChatMobileHelp extends StatefulWidget {
   const VRChatMobileHelp({Key? key}) : super(key: key);
@@ -32,59 +32,25 @@ class _HelpPageState extends State<VRChatMobileHelp> {
               child: Column(
                 children: <Widget>[
                   ListTile(
-                    title: Text(AppLocalizations.of(context)!.contribution),
-                    subtitle: Text(AppLocalizations.of(context)!.contributionDetails),
-                    onTap: () async {
-                      if (await canLaunchUrl(
-                        Uri.parse("https://github.com/fa0311/vrchat_mobile_client"),
-                      )) {
-                        await launchUrl(
-                          Uri.parse("https://github.com/fa0311/vrchat_mobile_client"),
-                        );
-                      }
-                    },
-                  ),
+                      title: Text(AppLocalizations.of(context)!.contribution),
+                      subtitle: Text(AppLocalizations.of(context)!.contributionDetails),
+                      onTap: () => openInBrowser(context, "https://github.com/fa0311/vrchat_mobile_client")),
                   const Divider(),
                   ListTile(
-                    title: Text(AppLocalizations.of(context)!.report),
-                    subtitle: Text(AppLocalizations.of(context)!.reportDetails),
-                    onTap: () async {
-                      if (await canLaunchUrl(
-                        Uri.parse("https://github.com/fa0311/vrchat_mobile_client/issues/new"),
-                      )) {
-                        await launchUrl(
-                          Uri.parse("https://github.com/fa0311/vrchat_mobile_client/issues/new"),
-                        );
-                      }
-                    },
-                  ),
+                      title: Text(AppLocalizations.of(context)!.report),
+                      subtitle: Text(AppLocalizations.of(context)!.reportDetails),
+                      onTap: () => openInBrowser(context, "https://github.com/fa0311/vrchat_mobile_client/issues/new")),
                   const Divider(),
                   ListTile(
                     title: Text(AppLocalizations.of(context)!.developerInfo),
                     subtitle: Text(AppLocalizations.of(context)!.developerInfoDetails),
-                    onTap: () async {
-                      if (await canLaunchUrl(
-                        Uri.parse("https://twitter.com/faa0311"),
-                      )) {
-                        await launchUrl(
-                          Uri.parse("https://twitter.com/faa0311"),
-                        );
-                      }
-                    },
+                    onTap: () => openInBrowser(context, "https://twitter.com/faa0311"),
                   ),
                   const Divider(),
                   ListTile(
                     title: Text(AppLocalizations.of(context)!.rateTheApp),
                     subtitle: Text(AppLocalizations.of(context)!.rateTheAppDetails),
-                    onTap: () async {
-                      if (await canLaunchUrl(
-                        Uri.parse("https://play.google.com/store/apps/details?id=com.yuki0311.vrchat_mobile_client"),
-                      )) {
-                        await launchUrl(
-                          Uri.parse("https://play.google.com/store/apps/details?id=com.yuki0311.vrchat_mobile_client"),
-                        );
-                      }
-                    },
+                    onTap: () => openInBrowser(context, "https://play.google.com/store/apps/details?id=com.yuki0311.vrchat_mobile_client"),
                   ),
                   const Divider(),
                   ListTile(

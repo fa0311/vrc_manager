@@ -100,7 +100,10 @@ class _FriendRequestPageState extends State<VRChatMobileFriendRequest> {
                     children: <Widget>[
                       ListTile(
                         title: Text(AppLocalizations.of(context)!.openInBrowser),
-                        onTap: () => openInBrowser(context, "https://vrchat.com/home/messages"),
+                        onTap: () {
+                          Navigator.pop(context);
+                          openInBrowser(context, "https://vrchat.com/home/messages");
+                        },
                       ),
                     ],
                   ),

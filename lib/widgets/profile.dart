@@ -1,5 +1,4 @@
 // Dart imports:
-import 'dart:io';
 
 // Flutter imports:
 import 'package:flutter/material.dart';
@@ -7,7 +6,6 @@ import 'package:flutter/material.dart';
 // Package imports:
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 // Project imports:
 import 'package:vrchat_mobile_client/api/main.dart';
@@ -17,7 +15,7 @@ import 'package:vrchat_mobile_client/assets/error.dart';
 import 'package:vrchat_mobile_client/assets/storage.dart';
 import 'package:vrchat_mobile_client/assets/vrchat/icon.dart';
 import 'package:vrchat_mobile_client/scenes/user.dart';
-import 'package:vrchat_mobile_client/scenes/web_view.dart';
+import 'package:vrchat_mobile_client/widgets/share.dart';
 import 'package:vrchat_mobile_client/widgets/status.dart';
 
 Column profile(BuildContext context, Map user) {
@@ -198,25 +196,7 @@ List<Widget> _biolink(BuildContext context, List<dynamic> biolinks) {
       CircleAvatar(
         backgroundColor: const Color(0x00000000),
         child: IconButton(
-          onPressed: () async {
-            if (Platform.isAndroid || Platform.isIOS) {
-              getStorage("force_external_browser").then(
-                (response) async {
-                  if (response == "true") {
-                    if (await canLaunchUrl(Uri.parse(link))) {
-                      await launchUrl(Uri.parse(link), mode: LaunchMode.externalApplication);
-                    }
-                  } else {
-                    Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => VRChatMobileWebView(url: link)));
-                  }
-                },
-              );
-            } else {
-              if (await canLaunchUrl(Uri.parse(link))) {
-                await launchUrl(Uri.parse(link));
-              }
-            }
-          },
+          onPressed: () => openInBrowser(context, link),
           icon: SvgPicture.asset("assets/svg/${getVrchatIconContains(link)}.svg",
               width: 20, height: 20, color: Color(getVrchatIcon()[getVrchatIconContains(link)] ?? 0xFFFFFFFF), semanticsLabel: link),
         ),

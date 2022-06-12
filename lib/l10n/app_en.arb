@@ -46,6 +46,7 @@
     "rememberLoginInfo": "Remember my login information",
     "twoFactorAuthentication": "Two Factor Authentication",
     "authenticationCode": "Authentication Code",
+    "unknown": "Unknown",
     "@____________________LOGIN_ERROR_DIALOG____________________": {},
     "incorrectLogin": "Incorrect login information",
     "unexpectedError": "Login method for this account is not supported.",

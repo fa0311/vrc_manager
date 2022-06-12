@@ -46,6 +46,7 @@
     "rememberLoginInfo": "ログイン情報を記憶する",
     "twoFactorAuthentication": "2段階認証",
     "authenticationCode": "認証コード",
+    "unknown": "名無し",
     "@____________________LOGIN_ERROR_DIALOG____________________": {},
     "incorrectLogin": "ログイン情報が間違っています",
     "unexpectedError": "このアカウントのログイン方法は対応していません",
@@ -120,7 +121,7 @@
     "reportDetails": "開発者にバグの報告や新機能のリクエストをします",
     "developerInfo": "開発者情報",
     "developerInfoDetails": "開発者の情報を表示",
-    "rateTheApp": "評価する",
+    "rateTheApp": "評価",
     "rateTheAppDetails": "GooglePlayStoreでの評価をお願いします",
     "licence": "Licence",
     "licenceDetails": "Licence情報を確認します"

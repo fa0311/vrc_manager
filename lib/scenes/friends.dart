@@ -147,7 +147,10 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
                       ),
                       ListTile(
                         title: Text(AppLocalizations.of(context)!.openInBrowser),
-                        onTap: () => openInBrowser(context, "https://vrchat.com/home/locations"),
+                        onTap: () {
+                          Navigator.pop(context);
+                          openInBrowser(context, "https://vrchat.com/home/locations");
+                        },
                       ),
                     ],
                   ),
