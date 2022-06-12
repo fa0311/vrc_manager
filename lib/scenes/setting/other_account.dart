@@ -10,7 +10,8 @@ import 'package:vrchat_mobile_client/scenes/home.dart';
 import 'package:vrchat_mobile_client/widgets/drawer.dart';
 
 class VRChatMobileSettingsOtherAccount extends StatefulWidget {
-  const VRChatMobileSettingsOtherAccount({Key? key}) : super(key: key);
+  final bool drawer;
+  const VRChatMobileSettingsOtherAccount({Key? key, this.drawer = true}) : super(key: key);
 
   @override
   State<VRChatMobileSettingsOtherAccount> createState() => _SettingOtherAccountPageState();
@@ -127,8 +128,8 @@ class _SettingOtherAccountPageState extends State<VRChatMobileSettingsOtherAccou
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text(AppLocalizations.of(context)!.accountSetting)),
-        drawer: drawr(context),
+        appBar: AppBar(title: Text(AppLocalizations.of(context)!.accountSwitchSetting)),
+        drawer: widget.drawer ? drawr(context) : null,
         body: SafeArea(child: SizedBox(width: MediaQuery.of(context).size.width, child: SingleChildScrollView(child: column))));
   }
 }

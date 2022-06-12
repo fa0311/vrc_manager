@@ -38,7 +38,7 @@ class _TokenSettingPageState extends State<VRChatMobileTokenSetting> {
             child: SizedBox(
                 width: MediaQuery.of(context).size.width,
                 child: SingleChildScrollView(
-                    child: Padding(
+                    child: Container(
                         padding: const EdgeInsets.all(32.0),
                         child: Column(children: <Widget>[
                           TextField(

@@ -53,9 +53,7 @@ class _LoginHomeState extends State<VRChatMobileHome> {
                   ),
                   (_) => false);
             }
-            return;
-          }
-          if (response.containsKey("id")) {
+          } else if (response.containsKey("id")) {
             VRChatAPI(cookie: cookie).users(response["id"]).then((user) {
               if (user.containsKey("error")) {
                 error(context, user["error"]["message"]);

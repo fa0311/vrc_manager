@@ -21,7 +21,7 @@ Drawer? drawr(BuildContext context) {
       const Divider(),
       ListTile(
           leading: const Icon(Icons.settings),
-          title: Text(AppLocalizations.of(context)!.accountSetting),
+          title: Text(AppLocalizations.of(context)!.accountSwitchSetting),
           onTap: () => Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(
@@ -153,7 +153,7 @@ Drawer simpleDrawr(BuildContext context) {
       const Divider(),
       ListTile(
           leading: const Icon(Icons.settings),
-          title: Text(AppLocalizations.of(context)!.accountSetting),
+          title: Text(AppLocalizations.of(context)!.accountSwitchSetting),
           onTap: () => Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(

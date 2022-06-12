@@ -90,7 +90,10 @@ class _WorldState extends State<VRChatMobileWorld> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(AppLocalizations.of(context)!.world), actions: popupMenu),
-      body: SafeArea(child: SizedBox(width: MediaQuery.of(context).size.width, child: SingleChildScrollView(child: column))),
+      body: SafeArea(
+          child: SizedBox(
+              width: MediaQuery.of(context).size.width,
+              child: SingleChildScrollView(child: Container(padding: const EdgeInsets.only(top: 10, bottom: 0, right: 30, left: 30), child: column)))),
     );
   }
 }

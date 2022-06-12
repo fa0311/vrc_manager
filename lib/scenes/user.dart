@@ -68,29 +68,27 @@ class _UserHomeState extends State<VRChatMobileUser> {
             style: ElevatedButton.styleFrom(
               onPrimary: Colors.grey,
             ),
-            onPressed: () {
-              VRChatAPI(cookie: cookie ?? "").selfInvite(user["location"]).then((response) {
-                if (response.containsKey("error")) {
-                  error(context, response["error"]["message"]);
-                  return;
-                }
-                showDialog(
-                  context: context,
-                  builder: (_) {
-                    return AlertDialog(
-                      title: Text(AppLocalizations.of(context)!.sendInvite),
-                      content: Text(AppLocalizations.of(context)!.selfInviteDetails),
-                      actions: <Widget>[
-                        TextButton(
-                          child: Text(AppLocalizations.of(context)!.close),
-                          onPressed: () => Navigator.pop(context),
-                        ),
-                      ],
-                    );
-                  },
-                );
-              });
-            },
+            onPressed: () => VRChatAPI(cookie: cookie ?? "").selfInvite(user["location"]).then((response) {
+              if (response.containsKey("error")) {
+                error(context, response["error"]["message"]);
+                return;
+              }
+              showDialog(
+                context: context,
+                builder: (_) {
+                  return AlertDialog(
+                    title: Text(AppLocalizations.of(context)!.sendInvite),
+                    content: Text(AppLocalizations.of(context)!.selfInviteDetails),
+                    actions: <Widget>[
+                      TextButton(
+                        child: Text(AppLocalizations.of(context)!.close),
+                        onPressed: () => Navigator.pop(context),
+                      ),
+                    ],
+                  );
+                },
+              );
+            }),
             child: Text(AppLocalizations.of(context)!.joinInstance),
           );
 
@@ -117,7 +115,8 @@ class _UserHomeState extends State<VRChatMobileUser> {
         }
         if (user["location"] == "private") {
           setState(() {
-            column = Column(children: [profile(context, user), Container(padding: const EdgeInsets.only(top: 30)), privatesimpleWorld(context)]);
+            column = Column(children: column.children);
+            column.children[1] = Column(children: [Container(padding: const EdgeInsets.only(top: 30)), privatesimpleWorld(context)]);
           });
         }
       });

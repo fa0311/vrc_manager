@@ -28,42 +28,68 @@ class _SettingPageState extends State<VRChatMobileSettings> {
       drawer: widget.logged ? drawr(context) : simpleDrawr(context),
       body: SafeArea(
         child: SizedBox(
-          width: MediaQuery.of(context).size.width,
           child: SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-                ListTile(
-                  title: Text(AppLocalizations.of(context)!.accessibility),
-                  onTap: () => {
-                    Navigator.push(
+            child: Container(
+              padding: const EdgeInsets.only(top: 10),
+              child: Column(
+                children: <Widget>[
+                  ListTile(
+                    leading: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const <Widget>[
+                        Icon(
+                          Icons.accessibility,
+                        ),
+                      ],
+                    ),
+                    title: Text(AppLocalizations.of(context)!.accessibility),
+                    onTap: () => {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (BuildContext context) => const VRChatMobileSettingsAccessibility(),
+                          ))
+                    },
+                  ),
+                  const Divider(),
+                  ListTile(
+                    leading: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const <Widget>[
+                        Icon(
+                          Icons.account_circle,
+                        ),
+                      ],
+                    ),
+                    title: Text(AppLocalizations.of(context)!.account),
+                    onTap: () => {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (BuildContext context) => const VRChatMobileSettingsAccount(),
+                          ))
+                    },
+                  ),
+                  const Divider(),
+                  ListTile(
+                    leading: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const <Widget>[
+                        Icon(
+                          Icons.help,
+                        ),
+                      ],
+                    ),
+                    title: Text(AppLocalizations.of(context)!.help),
+                    onTap: () => Navigator.pushAndRemoveUntil(
                         context,
                         MaterialPageRoute(
-                          builder: (BuildContext context) => const VRChatMobileSettingsAccessibility(),
-                        ))
-                  },
-                ),
-                const Divider(),
-                ListTile(
-                  title: Text(AppLocalizations.of(context)!.account),
-                  onTap: () => {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (BuildContext context) => const VRChatMobileSettingsAccount(),
-                        ))
-                  },
-                ),
-                const Divider(),
-                ListTile(
-                  title: Text(AppLocalizations.of(context)!.help),
-                  onTap: () => Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
-                        builder: (BuildContext context) => const VRChatMobileHelp(),
-                      ),
-                      (_) => false),
-                )
-              ],
+                          builder: (BuildContext context) => const VRChatMobileHelp(),
+                        ),
+                        (_) => false),
+                  )
+                ],
+              ),
             ),
           ),
         ),

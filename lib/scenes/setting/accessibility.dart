@@ -80,47 +80,49 @@ class _SettingAccessibilityPageState extends State<VRChatMobileSettingsAccessibi
       ),
       body: SafeArea(
         child: SizedBox(
-          width: MediaQuery.of(context).size.width,
           child: SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-                ListTile(
-                    title: Text(AppLocalizations.of(context)!.language),
-                    subtitle: Text(AppLocalizations.of(context)!.languageDetails),
-                    onTap: () => showModalBottomSheet(
-                        context: context,
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
-                        ),
-                        builder: (BuildContext context) => SingleChildScrollView(
-                                child: Column(
-                              children: <Widget>[
-                                _changeLocaleDialogOption(context, 'English', 'en'),
-                                _changeLocaleDialogOption(context, '日本語', 'ja'),
-                              ],
-                            )))),
-                const Divider(),
-                SwitchListTile(
-                  value: theme,
-                  title: Text(AppLocalizations.of(context)!.darkTheme),
-                  subtitle: Text("${AppLocalizations.of(context)!.darkThemeDetails1}\n${AppLocalizations.of(context)!.darkThemeDetails2}"),
-                  onChanged: _changeSwitchTheme,
-                ),
-                const Divider(),
-                SwitchListTile(
-                  value: autoReadMore,
-                  title: Text(AppLocalizations.of(context)!.autoReadMore),
-                  subtitle: Text("${AppLocalizations.of(context)!.autoReadMoreDetails1}\n${AppLocalizations.of(context)!.autoReadMoreDetails2}"),
-                  onChanged: _changeSwitchAutoReadMore,
-                ),
-                const Divider(),
-                SwitchListTile(
-                  value: forceExternalBrowser,
-                  title: Text(AppLocalizations.of(context)!.forceExternalBrowser),
-                  subtitle: Text(AppLocalizations.of(context)!.forceExternalBrowserDetails),
-                  onChanged: _changeSwitchForceExternalBrowser,
-                )
-              ],
+            child: Container(
+              padding: const EdgeInsets.only(top: 10),
+              child: Column(
+                children: <Widget>[
+                  ListTile(
+                      title: Text(AppLocalizations.of(context)!.language),
+                      subtitle: Text(AppLocalizations.of(context)!.languageDetails),
+                      onTap: () => showModalBottomSheet(
+                          context: context,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
+                          ),
+                          builder: (BuildContext context) => SingleChildScrollView(
+                                  child: Column(
+                                children: <Widget>[
+                                  _changeLocaleDialogOption(context, 'English', 'en'),
+                                  _changeLocaleDialogOption(context, '日本語', 'ja'),
+                                ],
+                              )))),
+                  const Divider(),
+                  SwitchListTile(
+                    value: theme,
+                    title: Text(AppLocalizations.of(context)!.darkTheme),
+                    subtitle: Text("${AppLocalizations.of(context)!.darkThemeDetails1}\n${AppLocalizations.of(context)!.darkThemeDetails2}"),
+                    onChanged: _changeSwitchTheme,
+                  ),
+                  const Divider(),
+                  SwitchListTile(
+                    value: autoReadMore,
+                    title: Text(AppLocalizations.of(context)!.autoReadMore),
+                    subtitle: Text("${AppLocalizations.of(context)!.autoReadMoreDetails1}\n${AppLocalizations.of(context)!.autoReadMoreDetails2}"),
+                    onChanged: _changeSwitchAutoReadMore,
+                  ),
+                  const Divider(),
+                  SwitchListTile(
+                    value: forceExternalBrowser,
+                    title: Text(AppLocalizations.of(context)!.forceExternalBrowser),
+                    subtitle: Text(AppLocalizations.of(context)!.forceExternalBrowserDetails),
+                    onChanged: _changeSwitchForceExternalBrowser,
+                  )
+                ],
+              ),
             ),
           ),
         ),
