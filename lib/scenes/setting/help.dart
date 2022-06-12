@@ -6,7 +6,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 // Project imports:
 import 'package:vrchat_mobile_client/assets/licence.dart';
-import 'package:vrchat_mobile_client/widgets/drawer.dart';
 import 'package:vrchat_mobile_client/widgets/share.dart';
 
 class VRChatMobileHelp extends StatefulWidget {
@@ -23,7 +22,6 @@ class _HelpPageState extends State<VRChatMobileHelp> {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.help),
       ),
-      drawer: drawer(context),
       body: SafeArea(
         child: SizedBox(
           child: SingleChildScrollView(

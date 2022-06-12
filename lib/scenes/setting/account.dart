@@ -20,12 +20,12 @@ class VRChatMobileSettingsAccount extends StatefulWidget {
 
 class _SettingAccountPageState extends State<VRChatMobileSettingsAccount> {
   _removeLoginSession() async {
-    setLoginSession("login_session", "");
+    removeLoginSession("login_session");
   }
 
   _removeLoginInfo() async {
-    setLoginSession("userid", "");
-    setLoginSession("password", "");
+    removeLoginSession("userid");
+    removeLoginSession("password");
     setStorage("remember_login_info", "false");
   }
 

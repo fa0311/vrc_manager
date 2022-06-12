@@ -43,14 +43,12 @@ class _SettingPageState extends State<VRChatMobileSettings> {
                       ],
                     ),
                     title: Text(AppLocalizations.of(context)!.accessibility),
-                    onTap: () => {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (BuildContext context) => const VRChatMobileSettingsAccessibility(),
-                        ),
+                    onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (BuildContext context) => const VRChatMobileSettingsAccessibility(),
                       ),
-                    },
+                    ),
                   ),
                   const Divider(),
                   ListTile(
@@ -63,14 +61,12 @@ class _SettingPageState extends State<VRChatMobileSettings> {
                       ],
                     ),
                     title: Text(AppLocalizations.of(context)!.account),
-                    onTap: () => {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (BuildContext context) => const VRChatMobileSettingsAccount(),
-                        ),
+                    onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (BuildContext context) => const VRChatMobileSettingsAccount(),
                       ),
-                    },
+                    ),
                   ),
                   const Divider(),
                   ListTile(
@@ -83,14 +79,13 @@ class _SettingPageState extends State<VRChatMobileSettings> {
                       ],
                     ),
                     title: Text(AppLocalizations.of(context)!.help),
-                    onTap: () => Navigator.pushAndRemoveUntil(
+                    onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (BuildContext context) => const VRChatMobileHelp(),
                       ),
-                      (_) => false,
                     ),
-                  ),
+                  )
                 ],
               ),
             ),
