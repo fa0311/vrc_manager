@@ -24,7 +24,7 @@ class VRChatMobileLogin extends StatefulWidget {
 
 class _LoginPageState extends State<VRChatMobileLogin> {
   bool _isPasswordObscure = true;
-  bool _rememberLoginInfo = false;
+  bool _rememberPassword = false;
   final _userController = TextEditingController();
   final _passwordController = TextEditingController();
   final _totpController = TextEditingController();
@@ -96,7 +96,7 @@ class _LoginPageState extends State<VRChatMobileLogin> {
   }
 
   _save(String cookie) {
-    if (_rememberLoginInfo) {
+    if (_rememberPassword) {
       setLoginSession("password", _passwordController.text);
     }
     setLoginSession("userid", _userController.text);
@@ -149,7 +149,7 @@ class _LoginPageState extends State<VRChatMobileLogin> {
           );
           getStorage("remember_login_info").then(
             (response) {
-              setState(() => _rememberLoginInfo = (response == "true"));
+              setState(() => _rememberPassword = (response == "true"));
             },
           );
         }
@@ -157,10 +157,10 @@ class _LoginPageState extends State<VRChatMobileLogin> {
     );
   }
 
-  _changeSwitchRememberLoginInfo(bool e) {
+  _changeSwitchrememberPassword(bool e) {
     setStorage("remember_login_info", e ? "true" : "false").then(
       (_) {
-        setState(() => _rememberLoginInfo = e);
+        setState(() => _rememberPassword = e);
       },
     );
   }
@@ -199,15 +199,15 @@ class _LoginPageState extends State<VRChatMobileLogin> {
               ),
             ),
             SwitchListTile(
-              value: _rememberLoginInfo,
+              value: _rememberPassword,
               title: Text(
-                AppLocalizations.of(context)!.rememberLoginInfo,
+                AppLocalizations.of(context)!.rememberPassword,
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.primary,
                   fontSize: 14,
                 ),
               ),
-              onChanged: _changeSwitchRememberLoginInfo,
+              onChanged: _changeSwitchrememberPassword,
             ),
             ElevatedButton(
               child: Text(

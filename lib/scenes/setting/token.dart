@@ -24,11 +24,7 @@ class _TokenSettingPageState extends State<VRChatMobileTokenSetting> {
   _TokenSettingPageState() {
     getLoginSession("login_session").then(
       (cookie) {
-        setState(
-          () {
-            _tokenController = TextEditingController(text: cookie);
-          },
-        );
+        setState(() => _tokenController = TextEditingController(text: cookie));
       },
     );
   }
@@ -54,9 +50,7 @@ class _TokenSettingPageState extends State<VRChatMobileTokenSetting> {
                   ElevatedButton(
                     child: Text(AppLocalizations.of(context)!.save),
                     onPressed: () {
-                      setLoginSession("login_session", _tokenController.text).then(
-                        (_) {
-                          showDialog(
+                      setLoginSession("login_session", _tokenController.text).then((_) => showDialog(
                             context: context,
                             builder: (_) {
                               return AlertDialog(
@@ -69,9 +63,7 @@ class _TokenSettingPageState extends State<VRChatMobileTokenSetting> {
                                 ],
                               );
                             },
-                          );
-                        },
-                      );
+                          ));
                     },
                   ),
                   ElevatedButton(
