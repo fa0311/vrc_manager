@@ -10,7 +10,7 @@ class VRChatAPI {
     return <String, String>{"apiKey": "JlE5Jldo5Jibnk5O5hTx6XVqsJu4WJ26"};
   }
 
-  final vrchatSession = Session();
+  final Session vrchatSession = Session();
   Uri endpoint(String path, [Map<String, String>? queryParameters]) {
     return Uri(
       scheme: 'https',
