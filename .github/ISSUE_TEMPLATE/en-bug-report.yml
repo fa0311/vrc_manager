@@ -23,7 +23,7 @@ body:
   - type: input
     id: country-of-origin
     attributes:
-      label: Country of origin of connection.
+      label: Country of origin of connection
       placeholder: "Example: Japan"
     validations:
       required: false
@@ -31,7 +31,7 @@ body:
   - type: dropdown
     id: download-location
     attributes:
-      label: Where you downloaded the app.
+      label: Where you downloaded the app
       multiple: true
       options:
         - Github
