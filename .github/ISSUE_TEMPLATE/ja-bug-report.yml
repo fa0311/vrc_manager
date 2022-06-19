@@ -4,6 +4,7 @@ labels: ["bug"]
 body:
 
   - type: input
+    id: os
     attributes:
       label: OS
       description: バージョンも含めてください
@@ -12,6 +13,7 @@ body:
       required: true
 
   - type: input
+    id: device-name
     attributes:
       label: 端末名
       placeholder: "例: Samsung Galaxy S22 Ultra"
@@ -19,6 +21,7 @@ body:
       required: false
 
   - type: input
+    id: country-of-origin
     attributes:
       label: 接続元の国名
       placeholder: "例: 日本"
@@ -26,6 +29,7 @@ body:
       required: false
 
   - type: dropdown
+    id: download-location
     attributes:
       label: アプリをダウンロードした場所
       multiple: true
@@ -34,6 +38,7 @@ body:
         - Google Play Store
 
   - type: textarea
+    id: bug-description
     attributes:
       label: 不具合の説明
       description: バグの内容を詳しく記述してください。期待される動作と実際の動作を含めてください。必要があれば画像を添付して下さい。
@@ -41,6 +46,7 @@ body:
       required: true
 
   - type: textarea
+    id: steps-to-reproduce
     attributes:
       label: 不具合を起こすための手順
       description: バグを発生させるための詳細な手順を記述してください。
@@ -54,6 +60,7 @@ body:
       required: true
 
   - type: textarea
+    id: error-message
     attributes:
       label: エラーメッセージ
       description: エラーメッセージが表示されていればそれを貼り付けてください。
