@@ -1,0 +1,62 @@
+name: "[ja] 🐛 バグを報告する"
+description: vrchat_mobile_clientの不具合を報告する。
+labels: ["bug"]
+body:
+
+  - type: input
+    attributes:
+      label: OS
+      description: バージョンも含めてください
+      placeholder: "例: Android 12, Window 10"
+    validations:
+      required: true
+
+  - type: input
+    attributes:
+      label: 端末名
+      placeholder: "例: Samsung Galaxy S22 Ultra"
+    validations:
+      required: false
+
+  - type: input
+    attributes:
+      label: 接続元の国名
+      placeholder: "例: 日本"
+    validations:
+      required: false
+
+  - type: dropdown
+    attributes:
+      label: アプリをダウンロードした場所
+      multiple: true
+      options:
+        - Github
+        - Google Play Store
+
+  - type: textarea
+    attributes:
+      label: 不具合の説明
+      description: バグの内容を詳しく記述してください。期待される動作と実際の動作を含めてください。必要があれば画像を添付して下さい。
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: 不具合を起こすための手順
+      description: バグを発生させるための詳細な手順を記述してください。
+      placeholder: |
+        例:
+          1. アプリのデータを全て削除した状態で起動します
+          2. ログインします
+          3. ...
+          ...
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: エラーメッセージ
+      description: エラーメッセージが表示されていればそれを貼り付けてください。
+      render: shell
+    validations:
+      required: false
