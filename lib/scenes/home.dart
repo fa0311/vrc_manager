@@ -94,7 +94,7 @@ class _LoginHomeState extends State<VRChatMobileHome> {
                         popupMenu = [share(context, "https://vrchat.com/home/user/${response['id']}")];
                       },
                     );
-                    if (!["", "private", "offline"].contains(user.worldId)) {
+                    if (!["private", "offline"].contains(user.worldId)) {
                       VRChatAPI(cookie: cookie).worlds(user.worldId.split(":")[0]).then(
                         (world) {
                           if (world.containsKey("error")) {

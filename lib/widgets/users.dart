@@ -29,7 +29,7 @@ class Users {
     int id = 0;
     for (dynamic user in userList) {
       String location = user["location"];
-      if (["", "private", "offline"].contains(location) && joinable) continue;
+      if (["private", "offline"].contains(location) && joinable) continue;
       if (inLocation[location] == null) {
         id++;
         inLocation[location] = {
@@ -50,8 +50,8 @@ class Users {
       String locationA = userA.location;
       String locationB = userB.location;
       if (locationA == locationB) return 0;
-      if (["", "private", "offline"].contains(locationA) && joinable) return 1;
-      if (["", "private", "offline"].contains(locationB) && joinable) return -1;
+      if (["private", "offline"].contains(locationA) && joinable) return 1;
+      if (["private", "offline"].contains(locationB) && joinable) return -1;
       if (inLocation[locationA]!["number"]! > inLocation[locationB]!["number"]!) return -1;
       if (inLocation[locationA]!["number"]! < inLocation[locationB]!["number"]!) return 1;
       if (inLocation[locationA]!["id"]! > inLocation[locationB]!["id"]!) return -1;
@@ -69,7 +69,7 @@ class Users {
 
   List<Widget> add(VRChatUser user) {
     userList.add(user);
-    if (["", "private", "offline"].contains(user.location) && joinable) return children;
+    if (["private", "offline"].contains(user.location) && joinable) return children;
     children.add(
       Card(
         elevation: 20.0,
@@ -109,9 +109,9 @@ class Users {
                         ],
                       ),
                       if (user.statusDescription != "") Text(user.statusDescription, style: const TextStyle(fontSize: 14)),
-                      if (!["", "private", "offline"].contains(user.location) && locationMap.containsKey(user.location.split(":")[0]))
+                      if (!["private", "offline"].contains(user.location) && locationMap.containsKey(user.location.split(":")[0]))
                         Text(locationMap[user.location.split(":")[0]]["name"], style: const TextStyle(fontSize: 14)),
-                      if (!["", "private", "offline"].contains(user.location) && !locationMap.containsKey(user.location.split(":")[0]))
+                      if (!["private", "offline"].contains(user.location) && !locationMap.containsKey(user.location.split(":")[0]))
                         const SizedBox(
                           height: 15.0,
                           width: 15.0,

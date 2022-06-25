@@ -76,7 +76,7 @@ class _UserHomeState extends State<VRChatMobileUser> {
                 );
               },
             );
-            if (!["", "private", "offline"].contains(user.location)) {
+            if (!["private", "offline"].contains(user.location)) {
               column.children[2] = TextButton(
                 style: ElevatedButton.styleFrom(
                   onPrimary: Colors.grey,

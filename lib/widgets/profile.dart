@@ -56,16 +56,18 @@ Column profile(BuildContext context, VRChatUser user) {
           user.bioLinks,
         ),
       ),
-      Text(
-        AppLocalizations.of(context)!.lastLogin(
-          generalDateDifference(context, user.lastLogin),
+      if (user.lastLogin != null)
+        Text(
+          AppLocalizations.of(context)!.lastLogin(
+            generalDateDifference(context, user.lastLogin!),
+          ),
         ),
-      ),
-      Text(
-        AppLocalizations.of(context)!.dateJoined(
-          generalDateDifference(context, user.dateJoined),
+      if (user.dateJoined != null)
+        Text(
+          AppLocalizations.of(context)!.dateJoined(
+            generalDateDifference(context, user.dateJoined!),
+          ),
         ),
-      ),
     ],
   );
 }

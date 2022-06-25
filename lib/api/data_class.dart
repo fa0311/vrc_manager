@@ -39,25 +39,24 @@ class VRChatUser {
   late String? state;
   late List<String> tags;
   late String developerType;
-  late String lastLogin;
+  late DateTime? lastLogin;
   late String lastPlatform;
   late bool allowAvatarCopying;
   late String status;
-  late String dateJoined;
+  late DateTime? dateJoined;
   late bool isFriend;
   late String friendKey;
-  late String lastActivity;
-  late String worldId;
-  late String instanceId;
+  late String? lastActivity;
+  late String? instanceId;
   late String location;
-  late String travelingToWorld;
-  late String travelingToInstance;
-  late String travelingToLocation;
-  late String friendRequestStatus;
+  late String worldId;
+  late String? travelingToWorld;
+  late String? travelingToInstance;
+  late String? travelingToLocation;
+  late String? friendRequestStatus;
 
   VRChatUser.fromJson(Map<String, dynamic> json) {
     vrchatStatus = VRChatStatus.fromJson(json);
-
     id = json['id'];
     username = json['username'];
     displayName = json['displayName'];
@@ -71,21 +70,21 @@ class VRChatUser {
     state = json['state'];
     tags = json['tags'].cast<String>();
     developerType = json['developerType'];
-    lastLogin = json['last_login'];
+    lastLogin = json['last_login'] == null ? null : DateTime.parse(json['last_login']);
     lastPlatform = json['last_platform'];
     allowAvatarCopying = json['allowAvatarCopying'] ?? false;
     status = json['status'];
-    dateJoined = json['date_joined'] ?? "";
+    dateJoined = json['date_joined'] == null ? null : DateTime.parse(json['date_joined']);
     isFriend = json['isFriend'];
     friendKey = json['friendKey'];
-    lastActivity = json['last_activity'] ?? "";
-    worldId = json['worldId'] ?? "";
-    instanceId = json['instanceId'] ?? "";
-    location = json['location'];
-    travelingToWorld = json['travelingToWorld'] ?? "";
-    travelingToInstance = json['travelingToInstance'] ?? "";
-    travelingToLocation = json['travelingToLocation'] ?? "";
-    friendRequestStatus = json['friendRequestStatus'] ?? "";
+    lastActivity = json['last_activity'];
+    instanceId = json['instanceId'];
+    location = json['location'] == "" ? "offline" : json['location'] ?? "offline";
+    worldId = json['worldId'] == "" ? location : json['location'] ?? location;
+    travelingToWorld = json['travelingToWorld'];
+    travelingToInstance = json['travelingToInstance'];
+    travelingToLocation = json['travelingToLocation'];
+    friendRequestStatus = json['friendRequestStatus'];
   }
 }
 
