@@ -18,6 +18,7 @@
     "delete": "Delete",
     "@____________________ERROR_DIALOG____________________": {},
     "errorDialog": "Error",
+    "reportMessageEmpty": "There were no error messages.",
     "reportMessage1": "Please report this to the developer.",
     "reportMessage2": "Tapping {report} will copy the log to the clipboard and access the report page.",
     "@____________________DATE____________________": {},

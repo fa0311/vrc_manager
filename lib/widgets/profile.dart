@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 // Package imports:
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:vrchat_mobile_client/api/data_class.dart';
 
 // Project imports:
 import 'package:vrchat_mobile_client/api/main.dart';
@@ -18,54 +19,51 @@ import 'package:vrchat_mobile_client/scenes/user.dart';
 import 'package:vrchat_mobile_client/widgets/share.dart';
 import 'package:vrchat_mobile_client/widgets/status.dart';
 
-Column profile(BuildContext context, Map user) {
+Column profile(BuildContext context, VRChatUser user) {
   return Column(
     children: <Widget>[
       SizedBox(
         height: 250,
-        child: Image.network(
-            user.containsKey("profilePicOverride") && user["profilePicOverride"] != "" ? user["profilePicOverride"] : user["currentAvatarImageUrl"],
-            fit: BoxFit.fitWidth,
-            errorBuilder: (BuildContext context, _, __) => Column()),
+        child:
+            Image.network(user.profilePicOverride ?? user.currentAvatarImageUrl, fit: BoxFit.fitWidth, errorBuilder: (BuildContext context, _, __) => Column()),
       ),
       Container(padding: const EdgeInsets.only(top: 10)),
       Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          status(user["state"] == "offline" ? user["state"] : user["status"]),
+          status(user.state == "offline" ? user.state! : user.status),
           Container(
             width: 5,
           ),
-          Text(user["displayName"],
+          Text(user.displayName,
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 20,
               )),
         ],
       ),
-      if (user["statusDescription"] != "") Text(user["statusDescription"]),
+      Text(user.statusDescription),
       ConstrainedBox(
         constraints: const BoxConstraints(maxHeight: 200),
         child: SingleChildScrollView(
-          child: Text(user["bio"]),
+          child: Text(user.bio ?? ""),
         ),
       ),
       Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: _biolink(
           context,
-          user["bioLinks"] ?? [],
+          user.bioLinks,
         ),
       ),
-      if (user["last_login"] != "")
-        Text(
-          AppLocalizations.of(context)!.lastLogin(
-            generalDateDifference(context, user["last_login"]),
-          ),
+      Text(
+        AppLocalizations.of(context)!.lastLogin(
+          generalDateDifference(context, user.lastLogin),
         ),
+      ),
       Text(
         AppLocalizations.of(context)!.dateJoined(
-          generalDateDifference(context, user["date_joined"]),
+          generalDateDifference(context, user.dateJoined),
         ),
       ),
     ],

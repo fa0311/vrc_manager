@@ -1,4 +1,5 @@
 // Project imports:
+import 'package:vrchat_mobile_client/api/data_class.dart';
 import 'package:vrchat_mobile_client/assets/session.dart';
 
 class VRChatAPI {
@@ -45,7 +46,7 @@ class VRChatAPI {
 
   // Self
 
-  Future<Map<dynamic, dynamic>> user() {
+  Future<dynamic> user() {
     return vrchatSession.get(
       endpoint(
         'api/1/auth/user',
@@ -56,16 +57,18 @@ class VRChatAPI {
 
   // User
 
-  Future<Map<dynamic, dynamic>> users(String uid) {
-    return vrchatSession.get(
-      endpoint(
-        'api/1/users/$uid',
-        apiKey(),
-      ),
-    );
+  Future<VRChatUser> users(String uid) {
+    return vrchatSession
+        .get(
+          endpoint(
+            'api/1/users/$uid',
+            apiKey(),
+          ),
+        )
+        .then((value) => VRChatUser.fromJson(value));
   }
 
-  Future<Map<dynamic, dynamic>> friendStatus(String uid) {
+  Future<dynamic> friendStatus(String uid) {
     return vrchatSession.get(
       endpoint(
         'api/1/user/$uid/friendStatus',
@@ -94,7 +97,7 @@ class VRChatAPI {
 
   // Friends
 
-  Future<Map<dynamic, dynamic>> friends({int offset = 0, bool offline = false}) {
+  Future<VRChatUsers> friends({int offset = 0, bool offline = false}) {
     final param = {
       "offline": offline.toString(),
       "offset": offset.toString(),
@@ -102,9 +105,11 @@ class VRChatAPI {
     }..addAll(
         apiKey(),
       );
-    return vrchatSession.get(
-      endpoint('api/1/auth/user/friends', param),
-    );
+    return vrchatSession
+        .get(
+          endpoint('api/1/auth/user/friends', param),
+        )
+        .then((value) => VRChatUsers.fromJson(value));
   }
 
   Future<Map<dynamic, dynamic>> deleteFriend(String uid) {
@@ -118,7 +123,7 @@ class VRChatAPI {
 
   // Favorite
 
-  Future<Map<dynamic, dynamic>> favoriteGroups(String type, {int offset = 0}) {
+  Future<dynamic> favoriteGroups(String type, {int offset = 0}) {
     final param = {
       "type": type,
       "offset": offset.toString(),
@@ -152,7 +157,7 @@ class VRChatAPI {
 
   // Notify
 
-  Future<Map<dynamic, dynamic>> notifications({String type = "all", int offset = 0, String after = "", bool hidden = true}) {
+  Future<dynamic> notifications({String type = "all", int offset = 0, String after = "", bool hidden = true}) {
     final param = <String, String>{
       "sent": "false",
       "type": type,
@@ -170,7 +175,7 @@ class VRChatAPI {
     );
   }
 
-  Future<Map<dynamic, dynamic>> notificationsSee(String fid) {
+  Future<dynamic> notificationsSee(String fid) {
     return vrchatSession.get(
       endpoint(
         '/api/1/auth/user/notifications/$fid/see',
@@ -181,7 +186,7 @@ class VRChatAPI {
 
   // World
 
-  Future<Map<dynamic, dynamic>> worlds(String wid) {
+  Future<dynamic> worlds(String wid) {
     return vrchatSession.get(
       endpoint(
         'api/1/worlds/$wid',
@@ -190,7 +195,7 @@ class VRChatAPI {
     );
   }
 
-  Future<Map<dynamic, dynamic>> favoritesWorlds(String type, {int offset = 0}) {
+  Future<dynamic> favoritesWorlds(String type, {int offset = 0}) {
     final param = {
       "tag": type,
       "offset": offset.toString(),
@@ -205,7 +210,7 @@ class VRChatAPI {
 
   // Instance
 
-  Future<Map<dynamic, dynamic>> instances(String location) {
+  Future<dynamic> instances(String location) {
     return vrchatSession.get(
       endpoint(
         'api/1/instances/$location',

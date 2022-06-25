@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 // Package imports:
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
+import 'package:vrchat_mobile_client/api/data_class.dart';
 
 // Project imports:
 import 'package:vrchat_mobile_client/api/main.dart';
@@ -63,9 +64,9 @@ class _LoginHomeState extends State<VRChatMobileHome> {
                 }
               } else if (response.containsKey("id")) {
                 VRChatAPI(cookie: cookie).users(response["id"]).then(
-                  (user) {
-                    if (user.containsKey("error")) {
-                      error(context, user["error"]["message"]);
+                  (VRChatUser user) {
+                    if (user.vrchatStatus.status == "error") {
+                      error(context, user.vrchatStatus.message ?? AppLocalizations.of(context)!.reportMessageEmpty);
                       return;
                     }
 
@@ -93,8 +94,8 @@ class _LoginHomeState extends State<VRChatMobileHome> {
                         popupMenu = [share(context, "https://vrchat.com/home/user/${response['id']}")];
                       },
                     );
-                    if (!["", "private", "offline"].contains(user["worldId"])) {
-                      VRChatAPI(cookie: cookie).worlds(user["worldId"].split(":")[0]).then(
+                    if (!["", "private", "offline"].contains(user.worldId)) {
+                      VRChatAPI(cookie: cookie).worlds(user.worldId.split(":")[0]).then(
                         (world) {
                           if (world.containsKey("error")) {
                             error(context, world["error"]["message"]);
@@ -116,7 +117,7 @@ class _LoginHomeState extends State<VRChatMobileHome> {
                         },
                       );
                     }
-                    if (user["location"] == "private") {
+                    if (user.location == "private") {
                       setState(
                         () {
                           column = Column(children: column.children);

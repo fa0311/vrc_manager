@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:vrchat_mobile_client/api/data_class.dart';
 
 // Project imports:
 import 'package:vrchat_mobile_client/scenes/user.dart';
@@ -13,15 +14,13 @@ class Users {
   bool joinable = false;
   late BuildContext context;
   Map<String, dynamic> locationMap = {};
-  List<dynamic> userList = [];
+  List<VRChatUser> userList = [];
 
   List<Widget> reload() {
     children = [];
-    List<dynamic> tempUserList = userList;
+    List<VRChatUser> tempUserList = userList;
     userList = [];
-    for (Map users in tempUserList) {
-      adds(users);
-    }
+    adds(tempUserList);
     return children;
   }
 
@@ -48,8 +47,8 @@ class Users {
     Map<String, Map<String, int>> inLocation = numberOfFriendsInLocation();
 
     userList.sort((userA, userB) {
-      String locationA = userA["location"];
-      String locationB = userB["location"];
+      String locationA = userA.location;
+      String locationB = userB.location;
       if (locationA == locationB) return 0;
       if (["", "private", "offline"].contains(locationA) && joinable) return 1;
       if (["", "private", "offline"].contains(locationB) && joinable) return -1;
@@ -61,85 +60,76 @@ class Users {
     });
   }
 
-  int length() {
-    int len = 0;
-    for (Map users in userList) {
-      len += users.length;
+  List<Widget> adds(List<VRChatUser> users) {
+    for (VRChatUser user in users) {
+      add(user);
     }
-    return len;
+    return children;
   }
 
-  List<Widget> adds(Map users) {
-    userList.add(users);
-    users.forEach(
-      (_, dynamic user) {
-        if (["", "private", "offline"].contains(user["location"]) && joinable) return;
-        children.add(
-          Card(
-            elevation: 20.0,
-            child: Container(
-              padding: const EdgeInsets.all(10.0),
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (BuildContext context) => VRChatMobileUser(userId: user["id"]),
-                      ));
-                },
-                behavior: HitTestBehavior.opaque,
-                child: Row(
-                  children: <Widget>[
-                    SizedBox(
-                      height: 100,
-                      child: Image.network(
-                          user.containsKey("profilePicOverride") && user["profilePicOverride"] != ""
-                              ? user["profilePicOverride"]
-                              : user["currentAvatarThumbnailImageUrl"],
-                          fit: BoxFit.fitWidth,
-                          errorBuilder: (BuildContext context, _, __) => Column()),
-                    ),
-                    Expanded(
-                      child: Column(
+  List<Widget> add(VRChatUser user) {
+    userList.add(user);
+    if (["", "private", "offline"].contains(user.location) && joinable) return children;
+    children.add(
+      Card(
+        elevation: 20.0,
+        child: Container(
+          padding: const EdgeInsets.all(10.0),
+          child: GestureDetector(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => VRChatMobileUser(userId: user.id),
+                  ));
+            },
+            behavior: HitTestBehavior.opaque,
+            child: Row(
+              children: <Widget>[
+                SizedBox(
+                  height: 100,
+                  child: Image.network(user.profilePicOverride ?? user.currentAvatarThumbnailImageUrl,
+                      fit: BoxFit.fitWidth, errorBuilder: (BuildContext context, _, __) => Column()),
+                ),
+                Expanded(
+                  child: Column(
+                    children: <Widget>[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              status(user["status"]),
-                              Container(
-                                width: 5,
-                              ),
-                              Text(user["displayName"],
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20,
-                                  )),
-                            ],
+                          status(user.status),
+                          Container(
+                            width: 5,
                           ),
-                          if (user["statusDescription"] != "") Text(user["statusDescription"], style: const TextStyle(fontSize: 14)),
-                          if (!["", "private", "offline"].contains(user["location"]) && locationMap.containsKey(user["location"].split(":")[0]))
-                            Text(locationMap[user["location"].split(":")[0]]["name"], style: const TextStyle(fontSize: 14)),
-                          if (!["", "private", "offline"].contains(user["location"]) && !locationMap.containsKey(user["location"].split(":")[0]))
-                            const SizedBox(
-                              height: 15.0,
-                              width: 15.0,
-                              child: CircularProgressIndicator(),
-                            ),
-                          if (user["location"] == "private")
-                            Text(
-                              AppLocalizations.of(context)!.privateWorld,
-                              style: const TextStyle(fontSize: 14),
-                            ),
+                          Text(user.displayName,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                              )),
                         ],
                       ),
-                    ),
-                  ],
+                      if (user.statusDescription != "") Text(user.statusDescription, style: const TextStyle(fontSize: 14)),
+                      if (!["", "private", "offline"].contains(user.location) && locationMap.containsKey(user.location.split(":")[0]))
+                        Text(locationMap[user.location.split(":")[0]]["name"], style: const TextStyle(fontSize: 14)),
+                      if (!["", "private", "offline"].contains(user.location) && !locationMap.containsKey(user.location.split(":")[0]))
+                        const SizedBox(
+                          height: 15.0,
+                          width: 15.0,
+                          child: CircularProgressIndicator(),
+                        ),
+                      if (user.location == "private")
+                        Text(
+                          AppLocalizations.of(context)!.privateWorld,
+                          style: const TextStyle(fontSize: 14),
+                        ),
+                    ],
+                  ),
                 ),
-              ),
+              ],
             ),
           ),
-        );
-      },
+        ),
+      ),
     );
     return children;
   }

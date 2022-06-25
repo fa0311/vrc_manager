@@ -7,11 +7,10 @@ import 'package:http/http.dart' as http;
 class Session {
   Map<String, String> headers = <String, String>{'cookie': ''};
 
-  Future<Map> get(Uri url) async {
+  Future<dynamic> get(Uri url) async {
     http.Response response = await http.get(url, headers: headers);
     updateCookie(response);
-    final body = json.decode(response.body);
-    if (body is List) return {for (int i = 0; i < body.length; i++) i: body[i]};
+    final dynamic body = json.decode(response.body);
     return body;
   }
 

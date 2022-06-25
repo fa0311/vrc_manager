@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:vrchat_mobile_client/api/data_class.dart';
 
 // Project imports:
 import 'package:vrchat_mobile_client/api/main.dart';
@@ -51,13 +52,13 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
     getLoginSession("login_session").then(
       (cookie) {
         VRChatAPI(cookie: cookie ?? "").friends(offline: widget.offline, offset: offset).then(
-          (response) {
-            if (response.containsKey("error")) {
-              error(context, response["error"]["message"]);
+          (VRChatUsers users) {
+            if (users.vrchatStatus.status == "error") {
+              error(context, users.vrchatStatus.message ?? AppLocalizations.of(context)!.reportMessageEmpty);
               return;
             }
             offset += 50;
-            if (response.isEmpty && dataColumn.children == []) {
+            if (users.users == [] && dataColumn.children == []) {
               setState(
                 () => column = Column(
                   children: <Widget>[
@@ -68,30 +69,28 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
             } else {
               setState(
                 () => column = Column(
-                  children: dataColumn.adds(response),
+                  children: dataColumn.adds(users.users),
                 ),
               );
             }
-            response.forEach(
-              (_, dynamic user) {
-                String wid = user["location"].split(":")[0];
-                if (["", "private", "offline"].contains(user["location"]) || dataColumn.locationMap.containsKey(wid)) return;
-                VRChatAPI(cookie: cookie ?? "").worlds(wid).then(
-                  (responseWorld) {
-                    if (responseWorld.containsKey("error")) {
-                      error(context, responseWorld["error"]["message"]);
-                      return;
-                    }
-                    dataColumn.locationMap[wid] = responseWorld;
-                    setState(
-                      () => column = Column(
-                        children: dataColumn.reload(),
-                      ),
-                    );
-                  },
-                );
-              },
-            );
+            for (VRChatUser user in users.users) {
+              String wid = user.location.split(":")[0];
+              if (["", "private", "offline"].contains(user.location) || dataColumn.locationMap.containsKey(wid)) continue;
+              VRChatAPI(cookie: cookie ?? "").worlds(wid).then(
+                (responseWorld) {
+                  if (responseWorld.containsKey("error")) {
+                    error(context, responseWorld["error"]["message"]);
+                    return;
+                  }
+                  dataColumn.locationMap[wid] = responseWorld;
+                  setState(
+                    () => column = Column(
+                      children: dataColumn.reload(),
+                    ),
+                  );
+                },
+              );
+            }
           },
         );
       },
@@ -102,7 +101,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
   Widget build(BuildContext context) {
     dataColumn.context = context;
     getStorage("auto_read_more").then((response) {
-      if (dataColumn.length() == offset && offset > 0 && response == "true") moreOver();
+      if (dataColumn.children.length == offset && offset > 0 && response == "true") moreOver();
     });
     return Scaffold(
       appBar: AppBar(
@@ -166,7 +165,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
             child: Column(
               children: <Widget>[
                 column,
-                if (dataColumn.length() == offset && offset > 0)
+                if (dataColumn.children.length == offset && offset > 0)
                   SizedBox(
                     width: MediaQuery.of(context).size.width,
                     child: Column(

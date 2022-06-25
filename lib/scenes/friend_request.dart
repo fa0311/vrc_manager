@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:vrchat_mobile_client/api/data_class.dart';
 
 // Project imports:
 import 'package:vrchat_mobile_client/api/main.dart';
@@ -55,14 +56,14 @@ class _FriendRequestPageState extends State<VRChatMobileFriendRequest> {
             response.forEach(
               (_, dynamic requestUser) {
                 VRChatAPI(cookie: cookie ?? "").users(requestUser["senderUserId"]).then(
-                  (user) {
-                    if (user.containsKey("error")) {
-                      error(context, user["error"]["message"]);
+                  (VRChatUser user) {
+                    if (user.vrchatStatus.status == "error") {
+                      error(context, user.vrchatStatus.message ?? AppLocalizations.of(context)!.reportMessageEmpty);
                       return;
                     }
                     setState(
                       () => column = Column(
-                        children: dataColumn.adds({0: user}),
+                        children: dataColumn.add(user),
                       ),
                     );
                   },
@@ -80,7 +81,7 @@ class _FriendRequestPageState extends State<VRChatMobileFriendRequest> {
     dataColumn.context = context;
     getStorage("auto_read_more").then(
       (response) {
-        if (dataColumn.length() == offset && offset > 0 && response == "true") moreOver();
+        if (dataColumn.children.length == offset && offset > 0 && response == "true") moreOver();
       },
     );
     return Scaffold(
@@ -121,7 +122,7 @@ class _FriendRequestPageState extends State<VRChatMobileFriendRequest> {
             child: Column(
               children: <Widget>[
                 column,
-                if (dataColumn.length() == offset && offset > 0)
+                if (dataColumn.children.length == offset && offset > 0)
                   SizedBox(
                     width: MediaQuery.of(context).size.width,
                     child: Column(
