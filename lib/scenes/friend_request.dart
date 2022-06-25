@@ -43,7 +43,7 @@ class _FriendRequestPageState extends State<VRChatMobileFriendRequest> {
               return;
             }
             offset += 100;
-            if (response.isEmpty) {
+            if (response.isEmpty && dataColumn.children == []) {
               setState(
                 () => column = Column(
                   children: <Widget>[
@@ -80,7 +80,7 @@ class _FriendRequestPageState extends State<VRChatMobileFriendRequest> {
     dataColumn.context = context;
     getStorage("auto_read_more").then(
       (response) {
-        if (dataColumn.children.length == offset && offset > 0 && response == "true") moreOver();
+        if (dataColumn.length() == offset && offset > 0 && response == "true") moreOver();
       },
     );
     return Scaffold(
@@ -121,7 +121,7 @@ class _FriendRequestPageState extends State<VRChatMobileFriendRequest> {
             child: Column(
               children: <Widget>[
                 column,
-                if (dataColumn.children.length == offset && offset > 0)
+                if (dataColumn.length() == offset && offset > 0)
                   SizedBox(
                     width: MediaQuery.of(context).size.width,
                     child: Column(

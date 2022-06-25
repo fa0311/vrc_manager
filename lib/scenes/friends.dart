@@ -57,7 +57,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
               return;
             }
             offset += 50;
-            if (response.isEmpty) {
+            if (response.isEmpty && dataColumn.children == []) {
               setState(
                 () => column = Column(
                   children: <Widget>[
@@ -101,11 +101,9 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
   @override
   Widget build(BuildContext context) {
     dataColumn.context = context;
-    getStorage("auto_read_more").then(
-      (response) {
-        if (dataColumn.children.length == offset && offset > 0 && response == "true") moreOver();
-      },
-    );
+    getStorage("auto_read_more").then((response) {
+      if (dataColumn.length() == offset && offset > 0 && response == "true") moreOver();
+    });
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.frends),
