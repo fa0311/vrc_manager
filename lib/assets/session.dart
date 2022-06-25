@@ -14,7 +14,7 @@ class Session {
     return body;
   }
 
-  Future<Map> basic(Uri url, String username, String password) async {
+  Future<dynamic> basic(Uri url, String username, String password) async {
     final headersAuth = Map<String, String>.from(headers)
       ..addAll(
         {
@@ -23,17 +23,13 @@ class Session {
       );
     http.Response response = await http.get(url, headers: headersAuth);
     updateCookie(response);
-    final body = json.decode(response.body);
-    if (body is List) return {for (int i = 0; i < body.length; i++) i: body[i]};
-    return body;
+    return json.decode(response.body);
   }
 
-  Future<Map> post(Uri url, [Object? data]) async {
+  Future<dynamic> post(Uri url, [Object? data]) async {
     http.Response response = await http.post(url, body: data ?? {}, headers: headers);
     updateCookie(response);
-    final body = json.decode(response.body);
-    if (body is List) return {for (int i = 0; i < body.length; i++) i: body[i]};
-    return body;
+    return json.decode(response.body);
   }
 
   Future<Map> put(Uri url, [Object? data]) async {

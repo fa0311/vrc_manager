@@ -24,24 +24,27 @@ class VRChatAPI {
 
   // Login
 
-  Future<Map<dynamic, dynamic>> login(String username, String password) {
+  Future<VRChatLogin> login(String username, String password) {
     vrchatSession.get(
       endpoint('api/1/config', {}),
     );
-    return vrchatSession.basic(
-        endpoint(
-          'api/1/auth/user',
-          apiKey(),
-        ),
-        username,
-        password);
+    return vrchatSession
+        .basic(
+          endpoint(
+            'api/1/auth/user',
+            apiKey(),
+          ),
+          username,
+          password,
+        )
+        .then((value) => VRChatLogin.fromJson(value));
   }
 
-  Future<Map<dynamic, dynamic>> loginTotp(String code) {
+  Future<VRChatLogin> loginTotp(String code) {
     final param = {"code": code}..addAll(
         apiKey(),
       );
-    return vrchatSession.post(endpoint('api/1/auth/twofactorauth/totp/verify'), param);
+    return vrchatSession.post(endpoint('api/1/auth/twofactorauth/totp/verify'), param).then((value) => VRChatLogin.fromJson(value));
   }
 
   // Self
@@ -77,7 +80,7 @@ class VRChatAPI {
     );
   }
 
-  Future<Map<dynamic, dynamic>> sendFriendRequest(String uid) {
+  Future<dynamic> sendFriendRequest(String uid) {
     return vrchatSession.post(
       endpoint(
         'api/1/user/$uid/friendRequest',
@@ -136,7 +139,7 @@ class VRChatAPI {
     );
   }
 
-  Future<Map<dynamic, dynamic>> addFavorites(String type, String id, String tags) {
+  Future<dynamic> addFavorites(String type, String id, String tags) {
     return vrchatSession.post(
       endpoint(
         'api/1/favorites',
@@ -219,7 +222,7 @@ class VRChatAPI {
     );
   }
 
-  Future<Map<dynamic, dynamic>> selfInvite(String location) {
+  Future<dynamic> selfInvite(String location) {
     return vrchatSession.post(
       endpoint(
         'api/1/instances/$location/invite',

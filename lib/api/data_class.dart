@@ -1,30 +1,62 @@
 class VRChatStatus {
+  dynamic source;
   String status = "success";
   int? statusCode = 200;
   String? message;
 
   VRChatStatus.fromJson(dynamic json) {
-    if (json.runtimeType is Map && json.containsKey("error")) {
-      status = "error";
-      message = json['message'];
-      statusCode = json['statusCode'];
+    source = json;
+    try {
+      if (json.containsKey("error")) {
+        status = "error";
+        message = json[status]['message'];
+        statusCode = json[status]['status_code'];
+      }
+    } on NoSuchMethodError catch (e) {
+      return;
     }
+  }
+  dynamic toSource() {
+    return source;
+  }
+}
+
+class VRChatLogin {
+  dynamic source;
+  late VRChatStatus vrchatStatus;
+  bool verified = false;
+  bool requiresTwoFactorAuth = false;
+
+  VRChatLogin.fromJson(dynamic json) {
+    source = json;
+    vrchatStatus = VRChatStatus.fromJson(json);
+    verified = json['verified'] ?? true;
+    if (json.containsKey('requiresTwoFactorAuth')) requiresTwoFactorAuth = true;
+  }
+  dynamic toSource() {
+    return source;
   }
 }
 
 class VRChatUsers {
+  dynamic source;
   late VRChatStatus vrchatStatus;
   List<VRChatUser> users = [];
 
   VRChatUsers.fromJson(dynamic json) {
+    source = json;
     for (Map<String, dynamic> user in json) {
       users.add(VRChatUser.fromJson(user));
     }
     vrchatStatus = VRChatStatus.fromJson(json);
   }
+  dynamic toSource() {
+    return source;
+  }
 }
 
 class VRChatUser {
+  dynamic source;
   late VRChatStatus vrchatStatus;
   late String id;
   late String username;
@@ -56,6 +88,7 @@ class VRChatUser {
   late String? friendRequestStatus;
 
   VRChatUser.fromJson(Map<String, dynamic> json) {
+    source = json;
     vrchatStatus = VRChatStatus.fromJson(json);
     id = json['id'];
     username = json['username'];
@@ -86,9 +119,13 @@ class VRChatUser {
     travelingToLocation = json['travelingToLocation'];
     friendRequestStatus = json['friendRequestStatus'];
   }
+  dynamic toSource() {
+    return source;
+  }
 }
 
 class VRChatWorld {
+  dynamic source;
   String? id;
   String? name;
   String? description;
@@ -157,6 +194,7 @@ class VRChatWorld {
       this.instances});
 
   VRChatWorld.fromJson(Map<String, dynamic> json) {
+    source = json;
     id = json['id'];
     name = json['name'];
     description = json['description'];
@@ -193,55 +231,13 @@ class VRChatWorld {
     instances = json['instances'].map((value) => VRChatInstance.fromJson(value)).toList();
   }
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = {};
-    data['id'] = id;
-    data['name'] = name;
-    data['description'] = description;
-    data['featured'] = featured;
-    data['authorId'] = authorId;
-    data['authorName'] = authorName;
-    data['capacity'] = capacity;
-    data['tags'] = tags;
-    data['releaseStatus'] = releaseStatus;
-    data['imageUrl'] = imageUrl;
-    data['thumbnailImageUrl'] = thumbnailImageUrl;
-    data['assetUrl'] = assetUrl;
-    if (assetUrlObject != null) {
-      data['assetUrlObject'] = assetUrlObject.toJson();
-    }
-    if (pluginUrlObject != null) {
-      data['pluginUrlObject'] = pluginUrlObject.toJson();
-    }
-    if (unityPackageUrlObject != null) {
-      data['unityPackageUrlObject'] = unityPackageUrlObject.toJson();
-    }
-    data['namespace'] = namespace;
-
-    data['unityPackages'] = unityPackages == null ? null : unityPackages!.map((value) => value.toJson()).toList();
-
-    data['version'] = version;
-    data['organization'] = organization;
-    data['previewYoutubeId'] = previewYoutubeId;
-    data['favorites'] = favorites;
-    data['created_at'] = createdAt;
-    data['updated_at'] = updatedAt;
-    data['publicationDate'] = publicationDate;
-    data['labsPublicationDate'] = labsPublicationDate;
-    data['visits'] = visits;
-    data['popularity'] = popularity;
-    data['heat'] = heat;
-    data['publicOccupants'] = publicOccupants;
-    data['privateOccupants'] = privateOccupants;
-    data['occupants'] = occupants;
-
-    data['instances'] = instances == null ? null : instances!.map((value) => value.toJson()).toList();
-
-    return data;
+  dynamic toSource() {
+    return source;
   }
 }
 
 class UnityPackages {
+  dynamic source;
   String? id;
   String? assetUrl;
   dynamic assetUrlObject;
@@ -266,6 +262,7 @@ class UnityPackages {
       this.createdAt});
 
   UnityPackages.fromJson(Map<String, dynamic> json) {
+    source = json;
     id = json['id'];
     assetUrl = json['assetUrl'];
     assetUrlObject = json['assetUrlObject'];
@@ -278,41 +275,25 @@ class UnityPackages {
     createdAt = json['created_at'];
   }
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = {};
-    data['id'] = id;
-    data['assetUrl'] = assetUrl;
-    if (assetUrlObject != null) {
-      data['assetUrlObject'] = assetUrlObject.toJson();
-    }
-    data['pluginUrl'] = pluginUrl;
-    if (pluginUrlObject != null) {
-      data['pluginUrlObject'] = pluginUrlObject.toJson();
-    }
-    data['unityVersion'] = unityVersion;
-    data['unitySortNumber'] = unitySortNumber;
-    data['assetVersion'] = assetVersion;
-    data['platform'] = platform;
-    data['created_at'] = createdAt;
-    return data;
+  dynamic toSource() {
+    return source;
   }
 }
 
 class VRChatInstance {
+  dynamic source;
   String? location;
   int? people;
 
   VRChatInstance({this.location, this.people});
 
   VRChatInstance.fromJson(List<dynamic> json) {
+    source = json;
     location = json[0];
     people = json[1];
   }
 
-  List<dynamic> toJson() {
-    final List<dynamic> data = [];
-    data[0] = location;
-    data[1] = people;
-    return data;
+  dynamic toSource() {
+    return source;
   }
 }
