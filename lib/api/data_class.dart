@@ -62,7 +62,7 @@ class VRChatUser {
     username = json['username'];
     displayName = json['displayName'];
     userIcon = json['userIcon'];
-    profilePicOverride = json['bio'] == "" ? null : json['bio'];
+    bio = json['bio'] == "" ? null : json['bio'];
     bioLinks = (json['bioLinks'] ?? []).cast<String>();
     profilePicOverride = json['profilePicOverride'] == "" ? null : json['profilePicOverride'];
     statusDescription = json['statusDescription'];
