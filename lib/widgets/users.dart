@@ -12,8 +12,8 @@ class Users {
   List<Widget> children = [];
   bool joinable = false;
   late BuildContext context;
-  late Map<String, dynamic> locationMap = {};
-  late List<dynamic> userList = [];
+  Map<String, dynamic> locationMap = {};
+  List<dynamic> userList = [];
 
   List<Widget> reload() {
     children = [];
@@ -23,6 +23,42 @@ class Users {
       adds(users);
     }
     return children;
+  }
+
+  Map<String, Map<String, int>> numberOfFriendsInLocation() {
+    Map<String, Map<String, int>> inLocation = {};
+    int id = 0;
+    for (dynamic user in userList) {
+      String location = user["location"];
+      if (["", "private", "offline"].contains(location) && joinable) continue;
+      if (inLocation[location] == null) {
+        id++;
+        inLocation[location] = {
+          "id": id,
+          "number": 0,
+        };
+      }
+      inLocation[location]!["number"] = (inLocation[location]!["number"]! + 1);
+    }
+
+    return inLocation;
+  }
+
+  sortByLocationMap() {
+    Map<String, Map<String, int>> inLocation = numberOfFriendsInLocation();
+
+    userList.sort((userA, userB) {
+      String locationA = userA["location"];
+      String locationB = userB["location"];
+      if (locationA == locationB) return 0;
+      if (["", "private", "offline"].contains(locationA) && joinable) return 1;
+      if (["", "private", "offline"].contains(locationB) && joinable) return -1;
+      if (inLocation[locationA]!["number"]! > inLocation[locationB]!["number"]!) return -1;
+      if (inLocation[locationA]!["number"]! < inLocation[locationB]!["number"]!) return 1;
+      if (inLocation[locationA]!["id"]! > inLocation[locationB]!["id"]!) return -1;
+      if (inLocation[locationA]!["id"]! < inLocation[locationB]!["id"]!) return 1;
+      return 0;
+    });
   }
 
   int length() {
@@ -38,7 +74,6 @@ class Users {
     users.forEach(
       (_, dynamic user) {
         if (["", "private", "offline"].contains(user["location"]) && joinable) return;
-
         children.add(
           Card(
             elevation: 20.0,
@@ -58,12 +93,11 @@ class Users {
                     SizedBox(
                       height: 100,
                       child: Image.network(
-                          user.containsKey("profilePicOverride")
-                              ? user["profilePicOverride"] == ""
-                                  ? user["currentAvatarThumbnailImageUrl"]
-                                  : user["profilePicOverride"]
+                          user.containsKey("profilePicOverride") && user["profilePicOverride"] != ""
+                              ? user["profilePicOverride"]
                               : user["currentAvatarThumbnailImageUrl"],
-                          fit: BoxFit.fitWidth),
+                          fit: BoxFit.fitWidth,
+                          errorBuilder: (BuildContext context, _, __) => Column()),
                     ),
                     Expanded(
                       child: Column(

@@ -23,7 +23,10 @@ Column profile(BuildContext context, Map user) {
     children: <Widget>[
       SizedBox(
         height: 250,
-        child: Image.network(user["profilePicOverride"] == "" ? user["currentAvatarImageUrl"] : user["profilePicOverride"], fit: BoxFit.fitWidth),
+        child: Image.network(
+            user.containsKey("profilePicOverride") && user["profilePicOverride"] != "" ? user["profilePicOverride"] : user["currentAvatarImageUrl"],
+            fit: BoxFit.fitWidth,
+            errorBuilder: (BuildContext context, _, __) => Column()),
       ),
       Container(padding: const EdgeInsets.only(top: 10)),
       Row(
