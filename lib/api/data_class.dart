@@ -12,7 +12,7 @@ class VRChatStatus {
         message = json[status]['message'];
         statusCode = json[status]['status_code'];
       }
-    } on NoSuchMethodError catch (e) {
+    } on NoSuchMethodError {
       return;
     }
   }
@@ -35,6 +35,108 @@ class VRChatLogin {
   }
   dynamic toSource() {
     return source;
+  }
+}
+
+class VRChatUserOverload {
+  late dynamic source;
+  late VRChatStatus vrchatStatus;
+  late String id;
+  late String username;
+  late String displayName;
+  late String userIcon;
+  late String bio;
+  late List<String> bioLinks;
+  late String profilePicOverride;
+  late String statusDescription;
+  late List<Map<String, String>> pastDisplayNames;
+  late bool hasEmail;
+  late bool hasPendingEmail;
+  late String obfuscatedEmail;
+  late String obfuscatedPendingEmail;
+  late bool emailVerified;
+  late bool hasBirthday;
+  late bool unsubscribe;
+  late List<String> statusHistory;
+  late bool statusFirstTime;
+  late List<String> friends;
+  late String friendGroupNames;
+  late String currentAvatarImageUrl;
+  late String currentAvatarThumbnailImageUrl;
+  late String currentAvatar;
+  late String currentAvatarAssetUrl;
+  late String fallbackAvatar;
+  late DateTime? accountDeletionDate;
+  late int acceptedTOSVersion;
+  late String steamId;
+  late dynamic steamDetails; //default {}
+  late String oculusId;
+  late bool hasLoggedInFromClient;
+  late String homeLocation;
+  late bool twoFactorAuthEnabled;
+  late String twoFactorAuthEnabledDate;
+  late String state;
+  late List<String> tags;
+  late String developerType;
+  late String lastLogin;
+  late String lastPlatform;
+  late bool allowAvatarCopying;
+  late String status;
+  late String dateJoined;
+  late bool isFriend;
+  late String friendKey;
+  late String lastActivity;
+
+  VRChatUserOverload.fromJson(dynamic json) {
+    source = json;
+    vrchatStatus = VRChatStatus.fromJson(json);
+    if (vrchatStatus.status == "error") return;
+
+    id = json['id'];
+    username = json['username'];
+    displayName = json['displayName'];
+    userIcon = json['userIcon'];
+    bio = json['bio'];
+    bioLinks = json['bioLinks'].cast<String>();
+    profilePicOverride = json['profilePicOverride'];
+    statusDescription = json['statusDescription'];
+    pastDisplayNames = json['pastDisplayNames'];
+    hasEmail = json['hasEmail'];
+    hasPendingEmail = json['hasPendingEmail'];
+    obfuscatedEmail = json['obfuscatedEmail'];
+    obfuscatedPendingEmail = json['obfuscatedPendingEmail'];
+    emailVerified = json['emailVerified'];
+    hasBirthday = json['hasBirthday'];
+    unsubscribe = json['unsubscribe'];
+    statusHistory = json['statusHistory'].cast<String>();
+    statusFirstTime = json['statusFirstTime'];
+    friends = json['friends'].cast<String>();
+    friendGroupNames = json['friendGroupNames'];
+    currentAvatarImageUrl = json['currentAvatarImageUrl'];
+    currentAvatarThumbnailImageUrl = json['currentAvatarThumbnailImageUrl'];
+    currentAvatar = json['currentAvatar'];
+    currentAvatarAssetUrl = json['currentAvatarAssetUrl'];
+    fallbackAvatar = json['fallbackAvatar'];
+    accountDeletionDate = json['accountDeletionDate'];
+    acceptedTOSVersion = json['acceptedTOSVersion'];
+    steamId = json['steamId'];
+    steamDetails = json['steamDetails'];
+    oculusId = json['oculusId'];
+    hasLoggedInFromClient = json['hasLoggedInFromClient'];
+    homeLocation = json['homeLocation'];
+    twoFactorAuthEnabled = json['twoFactorAuthEnabled'];
+    twoFactorAuthEnabledDate = json['twoFactorAuthEnabledDate'];
+    state = json['state'];
+    tags = json['tags'].cast<String>();
+    developerType = json['developerType'];
+    lastLogin = json['last_login'];
+    lastPlatform = json['last_platform'];
+    allowAvatarCopying = json['allowAvatarCopying'];
+    status = json['status'];
+    dateJoined = json['date_joined'];
+    isFriend = json['isFriend'];
+    friendKey = json['friendKey'];
+    lastActivity = json['last_activity'];
   }
 }
 
@@ -90,6 +192,7 @@ class VRChatUser {
   VRChatUser.fromJson(Map<String, dynamic> json) {
     source = json;
     vrchatStatus = VRChatStatus.fromJson(json);
+    if (vrchatStatus.status == "error") return;
     id = json['id'];
     username = json['username'];
     displayName = json['displayName'];

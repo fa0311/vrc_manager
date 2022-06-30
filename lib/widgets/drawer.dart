@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:vrchat_mobile_client/api/main.dart';
 
 // Project imports:
 import 'package:vrchat_mobile_client/assets/storage.dart';
@@ -124,7 +125,15 @@ Drawer drawer(BuildContext context) {
                 TextButton(
                   onPressed: () => Navigator.pop(context),
                   child: Text(AppLocalizations.of(context)!.close),
-                )
+                ),
+                TextButton(
+                  onPressed: () => {
+                    getLoginSession("login_session").then((cookie) {
+                      VRChatAPI(cookie: cookie ?? "").changeName("aaa", "aaa", "aaa").then((value) => print(value));
+                    })
+                  },
+                  child: Text(AppLocalizations.of(context)!.close),
+                ),
               ],
             ),
           ),

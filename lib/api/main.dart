@@ -233,13 +233,23 @@ class VRChatAPI {
 
   // Change
 
-  Future<Map<dynamic, dynamic>> changeName(String uid, String username, String password) {
+  Future<VRChatUserOverload> changeName(String uid, String username, String password) {
     return vrchatSession.put(
       endpoint(
         'api/1/users/$uid',
         apiKey(),
       ),
       {"currentPassword": password, "displayName": username},
-    );
+    ).then((value) => VRChatUserOverload.fromJson(value));
+  }
+
+  Future<VRChatUserOverload> changeBio(String uid, String bio) {
+    return vrchatSession.put(
+      endpoint(
+        'api/1/users/$uid',
+        apiKey(),
+      ),
+      {"bio": bio},
+    ).then((value) => VRChatUserOverload.fromJson(value));
   }
 }
