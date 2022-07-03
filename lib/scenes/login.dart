@@ -32,35 +32,35 @@ class _LoginPageState extends State<VRChatMobileLogin> {
   late VRChatAPI session = VRChatAPI();
 
   _onPressed(context) {
-    session.login(_userController.text, _passwordController.text).then(
-      (VRChatLoginResponse login) {
-        if (login.status.statusCode != 200) {
-          error(context, login.status.message!);
-        } else if (login.body!.requiresTwoFactorAuth) {
-          _totp();
-        } else if (login.body!.verified) {
-          _save(session.vrchatSession.headers["cookie"] as String);
-        } else {
-          error(context,
-              "${AppLocalizations.of(context)!.unexpectedError}\n${AppLocalizations.of(context)!.reportMessage1}\n${AppLocalizations.of(context)!.reportMessage2(AppLocalizations.of(context)!.report)}",
-              log: json.encode(login.source));
-        }
-      },
-    );
+    session.login(_userController.text, _passwordController.text).then((VRChatLogin login) {
+      if (login.requiresTwoFactorAuth) {
+        _totp();
+      } else if (login.verified) {
+        _save(session.vrchatSession.headers["cookie"] as String);
+      } else {
+        error(context,
+            "${AppLocalizations.of(context)!.unexpectedError}\n${AppLocalizations.of(context)!.reportMessage1}\n${AppLocalizations.of(context)!.reportMessage2(AppLocalizations.of(context)!.report)}",
+            log: json.encode(login.json));
+      }
+    }).catchError((status) {
+      error(context, status.message);
+    }, test: (error) {
+      return error is VRChatStatus;
+    });
   }
 
   _onPressedTotp(context) {
-    session.loginTotp(_totpController.text).then(
-      (VRChatLoginResponse login) {
-        if (login.status.statusCode != 200) {
-          error(context, login.status.message!);
-        } else if (login.body!.verified) {
-          _save(session.vrchatSession.headers["cookie"] as String);
-        } else {
-          error(context, AppLocalizations.of(context)!.incorrectLogin);
-        }
-      },
-    );
+    session.loginTotp(_totpController.text).then((VRChatLogin login) {
+      if (login.verified) {
+        _save(session.vrchatSession.headers["cookie"] as String);
+      } else {
+        error(context, AppLocalizations.of(context)!.incorrectLogin);
+      }
+    }).catchError((onError) {
+      error(context, onError.message);
+    }, test: (onError) {
+      return onError is VRChatStatus;
+    });
   }
 
   _totp() {

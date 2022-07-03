@@ -70,28 +70,26 @@ class _TokenSettingPageState extends State<VRChatMobileTokenSetting> {
                   ElevatedButton(
                     child: Text(AppLocalizations.of(context)!.login),
                     onPressed: () {
-                      VRChatAPI(cookie: _tokenController.text).user().then(
-                        (VRChatUserOverloadResponse response) {
-                          if (response.status.statusCode != 200) {
-                            error(context, response.status.message ?? AppLocalizations.of(context)!.reportMessageEmpty);
-                            return;
-                          }
-                          showDialog(
-                            context: context,
-                            builder: (_) {
-                              return AlertDialog(
-                                title: Text(AppLocalizations.of(context)!.success),
-                                actions: <Widget>[
-                                  TextButton(
-                                    child: Text(AppLocalizations.of(context)!.close),
-                                    onPressed: () => Navigator.pop(context),
-                                  ),
-                                ],
-                              );
-                            },
-                          );
-                        },
-                      );
+                      VRChatAPI(cookie: _tokenController.text).user().then((VRChatUserOverload response) {
+                        showDialog(
+                          context: context,
+                          builder: (_) {
+                            return AlertDialog(
+                              title: Text(AppLocalizations.of(context)!.success),
+                              actions: <Widget>[
+                                TextButton(
+                                  child: Text(AppLocalizations.of(context)!.close),
+                                  onPressed: () => Navigator.pop(context),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      }).catchError((status) {
+                        error(context, status.message ?? AppLocalizations.of(context)!.reportMessageEmpty);
+                      }, test: (onError) {
+                        return onError is VRChatStatus;
+                      });
                     },
                   ),
                 ],

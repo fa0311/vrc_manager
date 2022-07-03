@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:vrchat_mobile_client/api/data_class.dart';
 
 // Project imports:
 import 'package:vrchat_mobile_client/api/main.dart';
@@ -34,10 +35,6 @@ class _WorldState extends State<VRChatMobileWorld> {
       (cookie) {
         VRChatAPI(cookie: cookie ?? "").worlds(widget.worldId).then(
           (response) {
-            if (response.status.statusCode != 200) {
-              error(context, response.status.message ?? AppLocalizations.of(context)!.reportMessageEmpty);
-              return;
-            }
             setState(
               () {
                 column = Column(children: [
@@ -103,7 +100,11 @@ class _WorldState extends State<VRChatMobileWorld> {
               },
             );
           },
-        );
+        ).catchError((status) {
+          error(context, status.message ?? AppLocalizations.of(context)!.reportMessageEmpty);
+        }, test: (onError) {
+          return onError is VRChatStatus;
+        });
       },
     );
   }

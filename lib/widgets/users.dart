@@ -70,7 +70,6 @@ class Users {
   List<Widget> add(VRChatUser user) {
     userList.add(user);
     if (["private", "offline"].contains(user.location) && joinable) return children;
-    print(user.location.split(":")[0]);
     children.add(
       Card(
         elevation: 20.0,

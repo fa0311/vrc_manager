@@ -24,7 +24,7 @@ class VRChatAPI {
 
   // Login
 
-  Future<VRChatLoginResponse> login(String username, String password) {
+  Future<VRChatLogin> login(String username, String password) {
     vrchatSession.get(
       endpoint('api/1/config', {}),
     );
@@ -37,19 +37,19 @@ class VRChatAPI {
           username,
           password,
         )
-        .then((value) => VRChatLoginResponse.fromJson(value));
+        .then((value) => VRChatLogin.fromJson(value));
   }
 
-  Future<VRChatLoginResponse> loginTotp(String code) {
+  Future<VRChatLogin> loginTotp(String code) {
     final param = {"code": code}..addAll(
         apiKey(),
       );
-    return vrchatSession.post(endpoint('api/1/auth/twofactorauth/totp/verify'), param).then((value) => VRChatLoginResponse.fromJson(value));
+    return vrchatSession.post(endpoint('api/1/auth/twofactorauth/totp/verify'), param).then((value) => VRChatLogin.fromJson(value));
   }
 
   // Self
 
-  Future<VRChatUserOverloadResponse> user() {
+  Future<VRChatUserOverload> user() {
     return vrchatSession
         .get(
           endpoint(
@@ -57,12 +57,12 @@ class VRChatAPI {
             apiKey(),
           ),
         )
-        .then((value) => VRChatUserOverloadResponse.fromJson(value));
+        .then((value) => VRChatUserOverload.fromJson(value));
   }
 
   // User
 
-  Future<VRChatUserResponse> users(String uid) {
+  Future<VRChatUser> users(String uid) {
     return vrchatSession
         .get(
           endpoint(
@@ -70,7 +70,7 @@ class VRChatAPI {
             apiKey(),
           ),
         )
-        .then((value) => VRChatUserResponse.fromJson(value));
+        .then((value) => VRChatUser.fromJson(value));
   }
 
   Future<dynamic> friendStatus(String uid) {
@@ -102,7 +102,7 @@ class VRChatAPI {
 
   // Friends
 
-  Future<VRChatUsersResponse> friends({int offset = 0, bool offline = false}) {
+  Future<VRChatUsers> friends({int offset = 0, bool offline = false}) {
     final param = {
       "offline": offline.toString(),
       "offset": offset.toString(),
@@ -114,7 +114,7 @@ class VRChatAPI {
         .get(
           endpoint('api/1/auth/user/friends', param),
         )
-        .then((value) => VRChatUsersResponse.fromJson(value));
+        .then((value) => VRChatUsers.fromJson(value));
   }
 
   Future<Map<dynamic, dynamic>> deleteFriend(String uid) {
@@ -191,7 +191,7 @@ class VRChatAPI {
 
   // World
 
-  Future<VRChatWorldResponse> worlds(String wid) {
+  Future<VRChatWorld> worlds(String wid) {
     return vrchatSession
         .get(
           endpoint(
@@ -199,7 +199,7 @@ class VRChatAPI {
             apiKey(),
           ),
         )
-        .then((value) => VRChatWorldResponse.fromJson(value));
+        .then((value) => VRChatWorld.fromJson(value));
   }
 
   Future<dynamic> favoritesWorlds(String type, {int offset = 0}) {
@@ -237,23 +237,23 @@ class VRChatAPI {
 
   // Change
 
-  Future<VRChatUserOverloadResponse> changeName(String uid, String username, String password) {
+  Future<VRChatUserOverload> changeName(String uid, String username, String password) {
     return vrchatSession.put(
       endpoint(
         'api/1/users/$uid',
         apiKey(),
       ),
       {"currentPassword": password, "displayName": username},
-    ).then((value) => VRChatUserOverloadResponse.fromJson(value));
+    ).then((value) => VRChatUserOverload.fromJson(value));
   }
 
-  Future<VRChatUserOverloadResponse> changeBio(String uid, String bio) {
+  Future<VRChatUserOverload> changeBio(String uid, String bio) {
     return vrchatSession.put(
       endpoint(
         'api/1/users/$uid',
         apiKey(),
       ),
       {"bio": bio},
-    ).then((value) => VRChatUserOverloadResponse.fromJson(value));
+    ).then((value) => VRChatUserOverload.fromJson(value));
   }
 }

@@ -52,13 +52,9 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
     getLoginSession("login_session").then(
       (cookie) {
         VRChatAPI(cookie: cookie ?? "").friends(offline: widget.offline, offset: offset).then(
-          (VRChatUsersResponse users) {
-            if (users.status.statusCode != 200) {
-              error(context, users.status.message ?? AppLocalizations.of(context)!.reportMessageEmpty);
-              return;
-            }
+          (VRChatUsers users) {
             offset += 50;
-            if (users.body!.users == [] && dataColumn.children == []) {
+            if (users.users == [] && dataColumn.children == []) {
               setState(
                 () => column = Column(
                   children: <Widget>[
@@ -69,30 +65,32 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
             } else {
               setState(
                 () => column = Column(
-                  children: dataColumn.adds(users.body!.users),
+                  children: dataColumn.adds(users.users),
                 ),
               );
             }
-            for (VRChatUser user in users.body!.users) {
+            for (VRChatUser user in users.users) {
               String wid = user.location.split(":")[0];
               if (["private", "offline"].contains(user.location) || dataColumn.locationMap.containsKey(wid)) continue;
-              VRChatAPI(cookie: cookie ?? "").worlds(wid).then(
-                (responseWorld) {
-                  if (responseWorld.status.statusCode == 200) {
-                    dataColumn.locationMap[wid] = responseWorld.body!;
-                    setState(
-                      () => column = Column(
-                        children: dataColumn.reload(),
-                      ),
-                    );
-                  } else {
-                    error(context, responseWorld.status.message ?? AppLocalizations.of(context)!.reportMessageEmpty);
-                  }
-                },
-              );
+              VRChatAPI(cookie: cookie ?? "").worlds(wid).then((responseWorld) {
+                dataColumn.locationMap[wid] = responseWorld;
+                setState(
+                  () => column = Column(
+                    children: dataColumn.reload(),
+                  ),
+                );
+              }).catchError((status) {
+                error(context, status.message ?? AppLocalizations.of(context)!.reportMessageEmpty);
+              }, test: (onError) {
+                return onError is VRChatStatus;
+              });
             }
           },
-        );
+        ).catchError((status) {
+          error(context, status.message ?? AppLocalizations.of(context)!.reportMessageEmpty);
+        }, test: (onError) {
+          return onError is VRChatStatus;
+        });
       },
     );
   }

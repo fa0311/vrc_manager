@@ -55,19 +55,17 @@ class _FriendRequestPageState extends State<VRChatMobileFriendRequest> {
             }
             response.forEach(
               (_, dynamic requestUser) {
-                VRChatAPI(cookie: cookie ?? "").users(requestUser["senderUserId"]).then(
-                  (VRChatUserResponse user) {
-                    if (user.status.statusCode == 200) {
-                      setState(
-                        () => column = Column(
-                          children: dataColumn.add(user.body!),
-                        ),
-                      );
-                    } else {
-                      error(context, user.status.message ?? AppLocalizations.of(context)!.reportMessageEmpty);
-                    }
-                  },
-                );
+                VRChatAPI(cookie: cookie ?? "").users(requestUser["senderUserId"]).then((VRChatUser user) {
+                  setState(
+                    () => column = Column(
+                      children: dataColumn.add(user),
+                    ),
+                  );
+                }).catchError((status) {
+                  error(context, status.message ?? AppLocalizations.of(context)!.reportMessageEmpty);
+                }, test: (error) {
+                  return error is VRChatStatus;
+                });
               },
             );
           },

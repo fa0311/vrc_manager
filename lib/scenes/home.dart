@@ -38,121 +38,115 @@ class _LoginHomeState extends State<VRChatMobileHome> {
   );
 
   _LoginHomeState() {
-    getLoginSession("login_session").then(
-      (cookie) {
-        if (cookie == null) {
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-              builder: (BuildContext context) => const VRChatMobileLogin(),
-            ),
-            (_) => false,
-          );
-        } else {
-          VRChatAPI(cookie: cookie).user().then(
-            (VRChatUserOverloadResponse response) {
-              if (response.status.statusCode == 200) {
-                VRChatAPI(cookie: cookie).users(response.body!.id).then(
-                  (VRChatUserResponse user) {
-                    if (user.status.statusCode != 200) {
-                      error(context, user.status.message ?? AppLocalizations.of(context)!.reportMessageEmpty);
-                      return;
-                    }
-
-                    setState(
-                      () {
-                        column = Column(
-                          children: <Widget>[
-                            profile(context, user.body!),
-                            Column(),
-                            TextButton(
-                              style: ElevatedButton.styleFrom(
-                                onPrimary: Colors.grey,
-                              ),
-                              onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (BuildContext context) => VRChatMobileJsonViewer(obj: user),
-                                    ));
-                              },
-                              child: Text(AppLocalizations.of(context)!.viewInJsonViewer),
-                            ),
-                          ],
-                        );
-                        popupMenu = [share(context, "https://vrchat.com/home/user/${response.body!.id}")];
+    getLoginSession("login_session").then((cookie) {
+      if (cookie == null) {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (BuildContext context) => const VRChatMobileLogin(),
+          ),
+          (_) => false,
+        );
+      } else {
+        VRChatAPI(cookie: cookie).user().then((VRChatUserOverload response) {
+          VRChatAPI(cookie: cookie).users(response.id).then((VRChatUser user) {
+            setState(
+              () {
+                column = Column(
+                  children: <Widget>[
+                    profile(context, user),
+                    Column(),
+                    TextButton(
+                      style: ElevatedButton.styleFrom(
+                        onPrimary: Colors.grey,
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (BuildContext context) => VRChatMobileJsonViewer(obj: user),
+                            ));
                       },
-                    );
-                    if (!["private", "offline"].contains(user.body!.worldId)) {
-                      VRChatAPI(cookie: cookie).worlds(user.body!.worldId.split(":")[0]).then(
-                        (world) {
-                          if (world.status.statusCode == 200) {
-                            setState(
-                              () {
-                                column = Column(children: column.children);
-                                column.children[1] = Column(
-                                  children: [
-                                    Container(
-                                      padding: const EdgeInsets.only(top: 30),
-                                    ),
-                                    simpleWorld(context, world)
-                                  ],
-                                );
-                              },
-                            );
-                          } else {
-                            error(context, world.status.message ?? AppLocalizations.of(context)!.reportMessageEmpty);
-                          }
-                        },
-                      );
-                    }
-                    if (user.body!.location == "private") {
-                      setState(
-                        () {
-                          column = Column(children: column.children);
-                          column.children[1] = Column(
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.only(top: 30),
-                              ),
-                              privatesimpleWorld(context)
-                            ],
-                          );
-                        },
-                      );
-                    }
-                  },
-                );
-                if (Platform.isAndroid || Platform.isIOS) {
-                  ReceiveSharingIntent.getTextStream().listen(
-                    (String value) {
-                      urlParser(context, value);
-                    },
-                  );
-                  ReceiveSharingIntent.getInitialText().then(
-                    (String? value) {
-                      if (value == null) return;
-                      urlParser(context, value);
-                    },
-                  );
-                }
-              } else {
-                error(context, response.status.message ?? AppLocalizations.of(context)!.reportMessageEmpty);
-                if (response.status.message == '"Missing Credentials"') {
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                      builder: (BuildContext context) => const VRChatMobileLogin(),
+                      child: Text(AppLocalizations.of(context)!.viewInJsonViewer),
                     ),
-                    (_) => false,
+                  ],
+                );
+                popupMenu = [share(context, "https://vrchat.com/home/user/${response.id}")];
+              },
+            );
+            if (!["private", "offline"].contains(user.worldId)) {
+              VRChatAPI(cookie: cookie).worlds(user.worldId.split(":")[0]).then(
+                (world) {
+                  setState(
+                    () {
+                      column = Column(children: column.children);
+                      column.children[1] = Column(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.only(top: 30),
+                          ),
+                          simpleWorld(context, world)
+                        ],
+                      );
+                    },
                   );
-                }
-              }
-            },
-          );
-        }
-      },
-    );
+                },
+              ).catchError((status) {
+                error(context, status.message ?? AppLocalizations.of(context)!.reportMessageEmpty);
+              }, test: (onError) {
+                return onError is VRChatStatus;
+              });
+            }
+            if (user.location == "private") {
+              setState(
+                () {
+                  column = Column(children: column.children);
+                  column.children[1] = Column(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.only(top: 30),
+                      ),
+                      privatesimpleWorld(context)
+                    ],
+                  );
+                },
+              );
+            }
+          }).catchError((status) {
+            error(context, status.message ?? AppLocalizations.of(context)!.reportMessageEmpty);
+          }, test: (onError) {
+            return onError is VRChatStatus;
+          });
+
+          if (Platform.isAndroid || Platform.isIOS) {
+            ReceiveSharingIntent.getTextStream().listen(
+              (String value) {
+                urlParser(context, value);
+              },
+            );
+            ReceiveSharingIntent.getInitialText().then(
+              (String? value) {
+                if (value == null) return;
+                urlParser(context, value);
+              },
+            );
+          }
+        }).catchError((status) {
+          error(context, status.message ?? AppLocalizations.of(context)!.reportMessageEmpty);
+          if (status.message == '"Missing Credentials"') {
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                builder: (BuildContext context) => const VRChatMobileLogin(),
+              ),
+              (_) => false,
+            );
+          }
+        }, test: (onError) {
+          return onError is VRChatStatus;
+        });
+      }
+    });
   }
   @override
   Widget build(BuildContext context) {

@@ -35,16 +35,11 @@ class _UserHomeState extends State<VRChatMobileUser> {
     getLoginSession("login_session").then(
       (cookie) {
         VRChatAPI(cookie: cookie ?? "").users(widget.userId).then(
-          (VRChatUserResponse user) {
-            if (user.status.statusCode != 200) {
-              error(context, user.status.message ?? AppLocalizations.of(context)!.reportMessageEmpty);
-              return;
-            }
-
+          (VRChatUser user) {
             setState(
               () {
                 column = Column(children: <Widget>[
-                  profile(context, user.body!),
+                  profile(context, user),
                   Column(),
                   Column(),
                   TextButton(
@@ -76,12 +71,12 @@ class _UserHomeState extends State<VRChatMobileUser> {
                 );
               },
             );
-            if (!["private", "offline"].contains(user.body!.location)) {
+            if (!["private", "offline"].contains(user.location)) {
               column.children[2] = TextButton(
                 style: ElevatedButton.styleFrom(
                   onPrimary: Colors.grey,
                 ),
-                onPressed: () => VRChatAPI(cookie: cookie ?? "").selfInvite(user.body!.location).then((response) {
+                onPressed: () => VRChatAPI(cookie: cookie ?? "").selfInvite(user.location).then((response) {
                   if (response.containsKey("error")) {
                     error(context, response["error"]["message"]);
                     return;
@@ -105,12 +100,8 @@ class _UserHomeState extends State<VRChatMobileUser> {
                 child: Text(AppLocalizations.of(context)!.joinInstance),
               );
 
-              VRChatAPI(cookie: cookie ?? "").worlds(user.body!.location.split(":")[0]).then(
+              VRChatAPI(cookie: cookie ?? "").worlds(user.location.split(":")[0]).then(
                 (world) {
-                  if (world.status.statusCode != 200) {
-                    error(context, world.status.message ?? AppLocalizations.of(context)!.reportMessageEmpty);
-                    return;
-                  }
                   setState(
                     () {
                       column = Column(children: column.children);
@@ -122,7 +113,7 @@ class _UserHomeState extends State<VRChatMobileUser> {
                       );
                     },
                   );
-                  VRChatAPI(cookie: cookie ?? "").instances(user.body!.location).then(
+                  VRChatAPI(cookie: cookie ?? "").instances(user.location).then(
                     (instance) {
                       if (instance.containsKey("error")) {
                         error(context, instance["error"]["message"]);
@@ -142,9 +133,13 @@ class _UserHomeState extends State<VRChatMobileUser> {
                     },
                   );
                 },
-              );
+              ).catchError((status) {
+                error(context, status.message ?? AppLocalizations.of(context)!.reportMessageEmpty);
+              }, test: (onError) {
+                return onError is VRChatStatus;
+              });
             }
-            if (user.body!.location == "private") {
+            if (user.location == "private") {
               setState(
                 () {
                   column = Column(children: column.children);
@@ -158,7 +153,11 @@ class _UserHomeState extends State<VRChatMobileUser> {
               );
             }
           },
-        );
+        ).catchError((status) {
+          error(context, status.message ?? AppLocalizations.of(context)!.reportMessageEmpty);
+        }, test: (onError) {
+          return onError is VRChatStatus;
+        });
       },
     );
   }
