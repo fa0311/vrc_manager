@@ -34,7 +34,7 @@ class _WorldState extends State<VRChatMobileWorld> {
     getLoginSession("login_session").then(
       (cookie) {
         VRChatAPI(cookie: cookie ?? "").worlds(widget.worldId).then(
-          (response) {
+          (VRChatWorld response) {
             setState(
               () {
                 column = Column(children: [
@@ -59,11 +59,8 @@ class _WorldState extends State<VRChatMobileWorld> {
               (cookie) {
                 VRChatAPI(cookie: cookie ?? "").favoriteGroups("world", offset: 0).then(
                   (response) {
+                    print(response);
                     List<Widget> bottomSheet = [];
-                    if (response.containsKey("error")) {
-                      error(context, response["error"]["message"]);
-                      return;
-                    }
                     if (response.isEmpty) return;
                     bottomSheet.add(ListTile(
                       title: Text(AppLocalizations.of(context)!.addFavoriteWorlds),

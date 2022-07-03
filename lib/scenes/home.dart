@@ -76,7 +76,7 @@ class _LoginHomeState extends State<VRChatMobileHome> {
             );
             if (!["private", "offline"].contains(user.worldId)) {
               VRChatAPI(cookie: cookie).worlds(user.worldId.split(":")[0]).then(
-                (world) {
+                (VRChatWorld world) {
                   setState(
                     () {
                       column = Column(children: column.children);

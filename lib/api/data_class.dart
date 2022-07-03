@@ -228,8 +228,8 @@ class VRChatWorld {
   late String organization;
   late String? previewYoutubeId;
   late int favorites;
-  late String createdAt;
-  late String updatedAt;
+  late DateTime createdAt;
+  late DateTime updatedAt;
   late String publicationDate;
   late String labsPublicationDate;
   late int visits;
@@ -265,8 +265,8 @@ class VRChatWorld {
     organization = json['organization'];
     previewYoutubeId = json['previewYoutubeId'] == "" ? null : json['previewYoutubeId'];
     favorites = json['favorites'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
+    createdAt = DateTime.parse(json['created_at']);
+    updatedAt = DateTime.parse(json['updated_at']);
     publicationDate = json['publicationDate'];
     labsPublicationDate = json['labsPublicationDate'];
     visits = json['visits'];
