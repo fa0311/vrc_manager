@@ -129,11 +129,11 @@ class VRChatUserOverload {
   }
 }
 
-class VRChatUsers {
+class VRChatUserList {
   dynamic json;
   List<VRChatUser> users = [];
 
-  VRChatUsers.fromJson(this.json) {
+  VRChatUserList.fromJson(this.json) {
     if (vrchatStatusCheck(json)) throw VRChatStatus.fromJson(json);
     for (Map<String, dynamic> user in json) {
       users.add(VRChatUser.fromJson(user));
@@ -205,11 +205,25 @@ class VRChatUser {
   }
 }
 
+class VRChatWorldList {
+  dynamic json;
+  List<VRChatWorld> world = [];
+
+  VRChatWorldList.fromJson(this.json) {
+    if (vrchatStatusCheck(json)) throw VRChatStatus.fromJson(json);
+    for (dynamic user in json) {
+      world.add(VRChatWorld.fromJson(user));
+    }
+  }
+
+  void forEach(Null Function(dynamic list) param0) {}
+}
+
 class VRChatWorld {
   dynamic json;
   late String id;
   late String name;
-  late String description;
+  late String? description;
   late bool featured;
   late String authorId;
   late String authorName;
@@ -238,14 +252,14 @@ class VRChatWorld {
   late int publicOccupants;
   late int privateOccupants;
   late int occupants;
-  late List<VRChatInstance> instances = [];
+  late List<Map<String, int>> instances = [];
 
   VRChatWorld.fromJson(this.json) {
     if (vrchatStatusCheck(json)) throw VRChatStatus.fromJson(json);
     id = json['id'];
     name = json['name'];
-    description = json['description'];
-    featured = json['featured'];
+    description = json['description'] == "" ? null : json['previewYoutubeId'];
+    featured = json['featured'] ?? false;
     authorId = json['authorId'];
     authorName = json['authorName'];
     capacity = json['capacity'];
@@ -275,9 +289,10 @@ class VRChatWorld {
     publicOccupants = json['publicOccupants'];
     privateOccupants = json['privateOccupants'];
     occupants = json['occupants'];
-    for (dynamic instance in json['instances']) {
-      instances.add(VRChatInstance.fromJson(instance));
-    }
+    instances = json['instances'].cast<Map<String, int>>();
+  }
+  VRChatLimitedWorld toLimited() {
+    return VRChatLimitedWorld.fromJson(json);
   }
 }
 
@@ -307,12 +322,169 @@ class UnityPackages {
   }
 }
 
-class VRChatInstance {
-  String? location;
-  int? people;
+class LimitedUnityPackages {
+  late String unityVersion;
+  late String platform;
 
-  VRChatInstance.fromJson(dynamic json) {
-    location = json[0];
-    people = json[1];
+  LimitedUnityPackages.fromJson(dynamic json) {
+    unityVersion = json['unityVersion'];
+    platform = json['platform'];
+  }
+}
+
+class VRChatLimitedWorldList {
+  dynamic json;
+  List<VRChatLimitedWorld> world = [];
+
+  VRChatLimitedWorldList.fromJson(this.json) {
+    if (vrchatStatusCheck(json)) throw VRChatStatus.fromJson(json);
+    for (dynamic w in json) {
+      world.add(VRChatLimitedWorld.fromJson(w));
+    }
+  }
+}
+
+class VRChatLimitedWorld {
+  dynamic json;
+  late String authorId;
+  late String authorName;
+  late int capacity;
+  late DateTime createdAt;
+  late int favorites;
+  late int heat;
+  late String id;
+  late String imageUrl;
+  late String labsPublicationDate;
+  late String name;
+  late int occupants;
+  late String organization;
+  late int popularity;
+  late String publicationDate;
+  late String releaseStatus;
+  late List<String> tags;
+  late String thumbnailImageUrl;
+  late List<LimitedUnityPackages> unityPackages = [];
+  late DateTime updatedAt;
+
+  VRChatLimitedWorld.fromJson(this.json) {
+    authorId = json['authorId'];
+    authorName = json['authorName'];
+    capacity = json['capacity'];
+    createdAt = DateTime.parse(json['created_at']);
+    favorites = json['favorites'];
+    heat = json['heat'];
+    id = json['id'];
+    imageUrl = json['imageUrl'];
+    labsPublicationDate = json['labsPublicationDate'];
+    name = json['name'];
+    occupants = json['occupants'];
+    organization = json['organization'];
+    popularity = json['popularity'];
+    publicationDate = json['publicationDate'];
+    releaseStatus = json['releaseStatus'];
+    tags = json['tags'].cast<String>();
+    thumbnailImageUrl = json['thumbnailImageUrl'];
+    for (dynamic unityPackage in json['unityPackages']) {
+      unityPackages.add(LimitedUnityPackages.fromJson(unityPackage));
+    }
+    updatedAt = DateTime.parse(json['updated_at']);
+  }
+}
+
+class VRChatFavoriteWorldList {
+  dynamic json;
+  List<VRChatFavoriteWorld> world = [];
+
+  VRChatFavoriteWorldList.fromJson(this.json) {
+    if (vrchatStatusCheck(json)) throw VRChatStatus.fromJson(json);
+    for (dynamic w in json) {
+      world.add(VRChatFavoriteWorld.fromJson(w));
+    }
+  }
+}
+
+class VRChatFavoriteWorld {
+  dynamic json;
+  late String authorId;
+  late String authorName;
+  late int capacity;
+  late DateTime createdAt;
+  late int favorites;
+  late int heat;
+  late String id;
+  late String imageUrl;
+  late String labsPublicationDate;
+  late String name;
+  late int occupants;
+  late String organization;
+  late int popularity;
+  late String publicationDate;
+  late String releaseStatus;
+  late List<String> tags;
+  late String thumbnailImageUrl;
+  late List<LimitedUnityPackages> unityPackages = [];
+  late DateTime updatedAt;
+  late String favoriteId;
+  late String favoriteGroup;
+
+  VRChatFavoriteWorld.fromJson(this.json) {
+    authorId = json['authorId'];
+    authorName = json['authorName'];
+    capacity = json['capacity'];
+    createdAt = DateTime.parse(json['created_at']);
+    favorites = json['favorites'];
+    heat = json['heat'];
+    id = json['id'];
+    imageUrl = json['imageUrl'];
+    labsPublicationDate = json['labsPublicationDate'];
+    name = json['name'];
+    occupants = json['occupants'];
+    organization = json['organization'];
+    popularity = json['popularity'];
+    publicationDate = json['publicationDate'];
+    releaseStatus = json['releaseStatus'];
+    tags = json['tags'].cast<String>();
+    thumbnailImageUrl = json['thumbnailImageUrl'];
+    for (dynamic unityPackage in json['unityPackages']) {
+      unityPackages.add(LimitedUnityPackages.fromJson(unityPackage));
+    }
+    updatedAt = DateTime.parse(json['updated_at']);
+    favoriteId = json['favoriteId'];
+    favoriteGroup = json['favoriteGroup'];
+  }
+}
+
+class VRChatFavoriteGroupList {
+  dynamic json;
+  List<VRChatFavoriteGroup> group = [];
+
+  VRChatFavoriteGroupList.fromJson(this.json) {
+    if (vrchatStatusCheck(json)) throw VRChatStatus.fromJson(json);
+    for (dynamic user in json) {
+      group.add(VRChatFavoriteGroup.fromJson(user));
+    }
+  }
+}
+
+class VRChatFavoriteGroup {
+  dynamic json;
+  late String ownerDisplayName;
+  late String id;
+  late String name;
+  late String displayName;
+  late String ownerId;
+  late List<Map<String, int>> tags;
+  late String type;
+  late String visibility;
+
+  VRChatFavoriteGroup.fromJson(this.json) {
+    id = json['id'];
+    ownerId = json['ownerId'];
+    ownerDisplayName = json['ownerDisplayName'];
+    name = json['name'];
+    displayName = json['displayName'];
+    type = json['type'];
+    visibility = json['visibility'];
+    tags = json['tags'].cast<Map<String, int>>();
   }
 }

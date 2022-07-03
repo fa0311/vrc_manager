@@ -102,7 +102,7 @@ class VRChatAPI {
 
   // Friends
 
-  Future<VRChatUsers> friends({int offset = 0, bool offline = false}) {
+  Future<VRChatUserList> friends({int offset = 0, bool offline = false}) {
     final param = {
       "offline": offline.toString(),
       "offset": offset.toString(),
@@ -114,7 +114,7 @@ class VRChatAPI {
         .get(
           endpoint('api/1/auth/user/friends', param),
         )
-        .then((value) => VRChatUsers.fromJson(value));
+        .then((value) => VRChatUserList.fromJson(value));
   }
 
   Future<Map<dynamic, dynamic>> deleteFriend(String uid) {
@@ -128,7 +128,7 @@ class VRChatAPI {
 
   // Favorite
 
-  Future<dynamic> favoriteGroups(String type, {int offset = 0}) {
+  Future<VRChatFavoriteGroupList> favoriteGroups(String type, {int offset = 0}) {
     final param = {
       "type": type,
       "offset": offset.toString(),
@@ -136,9 +136,11 @@ class VRChatAPI {
     }..addAll(
         apiKey(),
       );
-    return vrchatSession.get(
-      endpoint('api/1/favorite/groups', param),
-    );
+    return vrchatSession
+        .get(
+          endpoint('api/1/favorite/groups', param),
+        )
+        .then((value) => VRChatFavoriteGroupList.fromJson(value));
   }
 
   Future<dynamic> addFavorites(String type, String id, String tags) {
@@ -202,7 +204,7 @@ class VRChatAPI {
         .then((value) => VRChatWorld.fromJson(value));
   }
 
-  Future<dynamic> favoritesWorlds(String type, {int offset = 0}) {
+  Future<VRChatFavoriteWorldList> favoritesWorlds(String type, {int offset = 0}) {
     final param = {
       "tag": type,
       "offset": offset.toString(),
@@ -210,9 +212,11 @@ class VRChatAPI {
     }..addAll(
         apiKey(),
       );
-    return vrchatSession.get(
-      endpoint('api/1/worlds/favorites', param),
-    );
+    return vrchatSession
+        .get(
+          endpoint('api/1/worlds/favorites', param),
+        )
+        .then((value) => VRChatFavoriteWorldList.fromJson(value));
   }
 
   // Instance

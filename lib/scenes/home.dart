@@ -85,7 +85,7 @@ class _LoginHomeState extends State<VRChatMobileHome> {
                           Container(
                             padding: const EdgeInsets.only(top: 30),
                           ),
-                          simpleWorld(context, world)
+                          simpleWorld(context, world.toLimited())
                         ],
                       );
                     },

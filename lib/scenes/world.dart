@@ -58,31 +58,28 @@ class _WorldState extends State<VRChatMobileWorld> {
             getLoginSession("login_session").then(
               (cookie) {
                 VRChatAPI(cookie: cookie ?? "").favoriteGroups("world", offset: 0).then(
-                  (response) {
-                    print(response);
+                  (VRChatFavoriteGroupList response) {
                     List<Widget> bottomSheet = [];
-                    if (response.isEmpty) return;
+                    if (response.group.isEmpty) return;
                     bottomSheet.add(ListTile(
                       title: Text(AppLocalizations.of(context)!.addFavoriteWorlds),
                     ));
                     bottomSheet.add(const Divider());
-                    response.forEach(
-                      (_, dynamic list) {
-                        bottomSheet.add(ListTile(
-                          title: Text(list["displayName"]),
-                          onTap: () => {
-                            VRChatAPI(cookie: cookie ?? "").addFavorites("world", widget.worldId, list["name"]).then((response) {
-                              if (response.containsKey("error")) {
-                                error(context, response["error"]["message"]);
-                                return;
-                              }
-                              Navigator.pop(context);
-                            })
-                          },
-                        ));
-                        bottomSheet.add(const Divider());
-                      },
-                    );
+                    for (VRChatFavoriteGroup list in response.group) {
+                      bottomSheet.add(ListTile(
+                        title: Text(list.displayName),
+                        onTap: () => {
+                          VRChatAPI(cookie: cookie ?? "").addFavorites("world", widget.worldId, list.name).then((response) {
+                            if (response.containsKey("error")) {
+                              error(context, response["error"]["message"]);
+                              return;
+                            }
+                            Navigator.pop(context);
+                          })
+                        },
+                      ));
+                      bottomSheet.add(const Divider());
+                    }
                     bottomSheet.removeLast();
                     setState(
                       () {
@@ -93,7 +90,11 @@ class _WorldState extends State<VRChatMobileWorld> {
                       },
                     );
                   },
-                );
+                ).catchError((status) {
+                  error(context, status.message ?? AppLocalizations.of(context)!.reportMessageEmpty);
+                }, test: (onError) {
+                  return onError is VRChatStatus;
+                });
               },
             );
           },

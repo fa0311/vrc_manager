@@ -108,7 +108,7 @@ class _UserHomeState extends State<VRChatMobileUser> {
                       column.children[1] = Column(
                         children: [
                           Container(padding: const EdgeInsets.only(top: 30)),
-                          simpleWorld(context, world),
+                          simpleWorld(context, world.toLimited()),
                         ],
                       );
                     },

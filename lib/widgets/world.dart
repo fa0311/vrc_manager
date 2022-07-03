@@ -1,14 +1,13 @@
 // Flutter imports:
-import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:vrchat_mobile_client/api/data_class.dart';
+import 'package:vrchat_mobile_client/api/main.dart';
 
 // Project imports:
-import 'package:vrchat_mobile_client/api/main.dart';
 import 'package:vrchat_mobile_client/assets/date.dart';
 import 'package:vrchat_mobile_client/assets/error.dart';
 import 'package:vrchat_mobile_client/assets/storage.dart';
@@ -17,7 +16,7 @@ import 'package:vrchat_mobile_client/scenes/world.dart';
 import 'package:vrchat_mobile_client/scenes/worlds_favorite.dart';
 import 'package:vrchat_mobile_client/widgets/region.dart';
 
-Card simpleWorld(BuildContext context, VRChatWorld world) {
+Card simpleWorld(BuildContext context, VRChatLimitedWorld world) {
   return Card(
     elevation: 20.0,
     child: Container(
@@ -53,35 +52,75 @@ Card simpleWorld(BuildContext context, VRChatWorld world) {
                 ),
               ),
             ),
-            /*
-            if (world.favoriteId)
-              SizedBox(
-                width: 50,
-                child: IconButton(
-                  onPressed: () {
-                    getLoginSession("login_session").then(
-                      (cookie) {
-                        VRChatAPI(cookie: cookie ?? "").deleteFavorites(world.favoriteId).then(
-                          (response) {
-                            if (response.containsKey("error")) {
-                              error(context, response["error"]["message"]);
-                              return;
-                            }
-                            Navigator.pop(context);
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (BuildContext context) => const VRChatMobileWorldsFavorite(),
-                                ));
-                          },
-                        );
-                      },
-                    );
-                  },
-                  icon: const Icon(Icons.delete),
+          ],
+        ),
+      ),
+    ),
+  );
+}
+
+Card simpleWorldFavorite(BuildContext context, VRChatFavoriteWorld world) {
+  return Card(
+    elevation: 20.0,
+    child: Container(
+      padding: const EdgeInsets.all(10.0),
+      child: GestureDetector(
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id),
+              ));
+        },
+        behavior: HitTestBehavior.opaque,
+        child: Row(
+          children: <Widget>[
+            SizedBox(
+              height: 100,
+              child: Image.network(world.thumbnailImageUrl, fit: BoxFit.fitWidth),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: Column(
+                  children: <Widget>[
+                    SizedBox(
+                      width: double.infinity,
+                      child: Text(
+                        world.name,
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              */
+            ),
+            SizedBox(
+              width: 50,
+              child: IconButton(
+                onPressed: () {
+                  getLoginSession("login_session").then(
+                    (cookie) {
+                      VRChatAPI(cookie: cookie ?? "").deleteFavorites(world.favoriteId).then(
+                        (response) {
+                          if (response.containsKey("error")) {
+                            error(context, response["error"]["message"]);
+                            return;
+                          }
+                          Navigator.pop(context);
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (BuildContext context) => const VRChatMobileWorldsFavorite(),
+                              ));
+                        },
+                      );
+                    },
+                  );
+                },
+                icon: const Icon(Icons.delete),
+              ),
+            ),
           ],
         ),
       ),
@@ -199,7 +238,7 @@ Column world(BuildContext context, VRChatWorld world) {
     ConstrainedBox(
       constraints: const BoxConstraints(maxHeight: 200),
       child: SingleChildScrollView(
-        child: Text(world.description),
+        child: Text(world.description ?? ""),
       ),
     ),
     Text(
