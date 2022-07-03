@@ -78,16 +78,16 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
               if (["private", "offline"].contains(user.location) || dataColumn.locationMap.containsKey(wid)) continue;
               VRChatAPI(cookie: cookie ?? "").worlds(wid).then(
                 (responseWorld) {
-                  if (responseWorld.containsKey("error")) {
-                    error(context, responseWorld["error"]["message"]);
-                    return;
+                  if (responseWorld.status.statusCode == 200) {
+                    dataColumn.locationMap[wid] = responseWorld.body!;
+                    setState(
+                      () => column = Column(
+                        children: dataColumn.reload(),
+                      ),
+                    );
+                  } else {
+                    error(context, responseWorld.status.message ?? AppLocalizations.of(context)!.reportMessageEmpty);
                   }
-                  dataColumn.locationMap[wid] = responseWorld;
-                  setState(
-                    () => column = Column(
-                      children: dataColumn.reload(),
-                    ),
-                  );
                 },
               );
             }

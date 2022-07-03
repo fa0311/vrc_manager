@@ -13,7 +13,7 @@ class Users {
   List<Widget> children = [];
   bool joinable = false;
   late BuildContext context;
-  Map<String, dynamic> locationMap = {};
+  Map<String, VRChatWorld> locationMap = {};
   List<VRChatUser> userList = [];
 
   List<Widget> reload() {
@@ -70,6 +70,7 @@ class Users {
   List<Widget> add(VRChatUser user) {
     userList.add(user);
     if (["private", "offline"].contains(user.location) && joinable) return children;
+    print(user.location.split(":")[0]);
     children.add(
       Card(
         elevation: 20.0,
@@ -108,9 +109,9 @@ class Users {
                               )),
                         ],
                       ),
-                      if (user.statusDescription != "") Text(user.statusDescription, style: const TextStyle(fontSize: 14)),
+                      if (user.statusDescription != null) Text(user.statusDescription!, style: const TextStyle(fontSize: 14)),
                       if (!["private", "offline"].contains(user.location) && locationMap.containsKey(user.location.split(":")[0]))
-                        Text(locationMap[user.location.split(":")[0]]["name"], style: const TextStyle(fontSize: 14)),
+                        Text(locationMap[user.location.split(":")[0]]!.name, style: const TextStyle(fontSize: 14)),
                       if (!["private", "offline"].contains(user.location) && !locationMap.containsKey(user.location.split(":")[0]))
                         const SizedBox(
                           height: 15.0,

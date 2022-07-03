@@ -42,7 +42,7 @@ Column profile(BuildContext context, VRChatUser user) {
               )),
         ],
       ),
-      Text(user.statusDescription),
+      Text(user.statusDescription ?? ""),
       ConstrainedBox(
         constraints: const BoxConstraints(maxHeight: 200),
         child: SingleChildScrollView(

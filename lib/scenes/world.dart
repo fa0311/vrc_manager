@@ -34,8 +34,8 @@ class _WorldState extends State<VRChatMobileWorld> {
       (cookie) {
         VRChatAPI(cookie: cookie ?? "").worlds(widget.worldId).then(
           (response) {
-            if (response.containsKey("error")) {
-              error(context, response["error"]["message"]);
+            if (response.status.statusCode != 200) {
+              error(context, response.status.message ?? AppLocalizations.of(context)!.reportMessageEmpty);
               return;
             }
             setState(

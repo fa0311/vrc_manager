@@ -86,23 +86,23 @@ class _LoginHomeState extends State<VRChatMobileHome> {
                     if (!["private", "offline"].contains(user.body!.worldId)) {
                       VRChatAPI(cookie: cookie).worlds(user.body!.worldId.split(":")[0]).then(
                         (world) {
-                          if (world.containsKey("error")) {
-                            error(context, world["error"]["message"]);
-                            return;
+                          if (world.status.statusCode == 200) {
+                            setState(
+                              () {
+                                column = Column(children: column.children);
+                                column.children[1] = Column(
+                                  children: [
+                                    Container(
+                                      padding: const EdgeInsets.only(top: 30),
+                                    ),
+                                    simpleWorld(context, world)
+                                  ],
+                                );
+                              },
+                            );
+                          } else {
+                            error(context, world.status.message ?? AppLocalizations.of(context)!.reportMessageEmpty);
                           }
-                          setState(
-                            () {
-                              column = Column(children: column.children);
-                              column.children[1] = Column(
-                                children: [
-                                  Container(
-                                    padding: const EdgeInsets.only(top: 30),
-                                  ),
-                                  simpleWorld(context, world)
-                                ],
-                              );
-                            },
-                          );
                         },
                       );
                     }

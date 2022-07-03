@@ -191,13 +191,15 @@ class VRChatAPI {
 
   // World
 
-  Future<dynamic> worlds(String wid) {
-    return vrchatSession.get(
-      endpoint(
-        'api/1/worlds/$wid',
-        apiKey(),
-      ),
-    );
+  Future<VRChatWorldResponse> worlds(String wid) {
+    return vrchatSession
+        .get(
+          endpoint(
+            'api/1/worlds/$wid',
+            apiKey(),
+          ),
+        )
+        .then((value) => VRChatWorldResponse.fromJson(value));
   }
 
   Future<dynamic> favoritesWorlds(String type, {int offset = 0}) {

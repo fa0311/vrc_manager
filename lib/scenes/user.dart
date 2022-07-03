@@ -107,8 +107,8 @@ class _UserHomeState extends State<VRChatMobileUser> {
 
               VRChatAPI(cookie: cookie ?? "").worlds(user.body!.location.split(":")[0]).then(
                 (world) {
-                  if (world.containsKey("error")) {
-                    error(context, world["error"]["message"]);
+                  if (world.status.statusCode != 200) {
+                    error(context, world.status.message ?? AppLocalizations.of(context)!.reportMessageEmpty);
                     return;
                   }
                   setState(

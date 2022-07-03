@@ -185,7 +185,7 @@ class VRChatUser {
   late String? bio;
   late List<String> bioLinks;
   late String? profilePicOverride;
-  late String statusDescription;
+  late String? statusDescription;
   late String currentAvatarImageUrl;
   late String currentAvatarThumbnailImageUrl;
   late String? state;
@@ -215,7 +215,7 @@ class VRChatUser {
     bio = json['bio'] == "" ? null : json['bio'];
     bioLinks = (json['bioLinks'] ?? []).cast<String>();
     profilePicOverride = json['profilePicOverride'] == "" ? null : json['profilePicOverride'];
-    statusDescription = json['statusDescription'];
+    statusDescription = json['statusDescription'] == "" ? null : json['statusDescription'];
     currentAvatarImageUrl = json['currentAvatarImageUrl'];
     currentAvatarThumbnailImageUrl = json['currentAvatarThumbnailImageUrl'];
     state = json['state'];
@@ -239,77 +239,53 @@ class VRChatUser {
   }
 }
 
-class VRChatWorld {
+class VRChatWorldResponse {
   dynamic source;
-  String? id;
-  String? name;
-  String? description;
-  bool? featured;
-  String? authorId;
-  String? authorName;
-  int? capacity;
-  List<String>? tags;
-  String? releaseStatus;
-  String? imageUrl;
-  String? thumbnailImageUrl;
-  String? assetUrl;
-  dynamic assetUrlObject;
-  dynamic pluginUrlObject;
-  dynamic unityPackageUrlObject;
-  String? namespace;
-  List<UnityPackages>? unityPackages;
-  int? version;
-  String? organization;
-  String? previewYoutubeId;
-  int? favorites;
-  String? createdAt;
-  String? updatedAt;
-  String? publicationDate;
-  String? labsPublicationDate;
-  int? visits;
-  int? popularity;
-  int? heat;
-  int? publicOccupants;
-  int? privateOccupants;
-  int? occupants;
-  List<VRChatInstance>? instances;
+  late VRChatStatus status;
+  VRChatWorld? body;
 
-  VRChatWorld(
-      {this.id,
-      this.name,
-      this.description,
-      this.featured,
-      this.authorId,
-      this.authorName,
-      this.capacity,
-      this.tags,
-      this.releaseStatus,
-      this.imageUrl,
-      this.thumbnailImageUrl,
-      this.assetUrl,
-      this.assetUrlObject,
-      this.pluginUrlObject,
-      this.unityPackageUrlObject,
-      this.namespace,
-      this.unityPackages,
-      this.version,
-      this.organization,
-      this.previewYoutubeId,
-      this.favorites,
-      this.createdAt,
-      this.updatedAt,
-      this.publicationDate,
-      this.labsPublicationDate,
-      this.visits,
-      this.popularity,
-      this.heat,
-      this.publicOccupants,
-      this.privateOccupants,
-      this.occupants,
-      this.instances});
+  VRChatWorldResponse.fromJson(this.source) {
+    status = VRChatStatus.fromJson(source);
+    if (status.statusCode != 200) return;
+    body = VRChatWorld.fromJson(source);
+  }
+}
+
+class VRChatWorld {
+  late String id;
+  late String name;
+  late String description;
+  late bool featured;
+  late String authorId;
+  late String authorName;
+  late int capacity;
+  late List<String> tags;
+  late String releaseStatus;
+  late String imageUrl;
+  late String thumbnailImageUrl;
+  late String assetUrl;
+  late dynamic assetUrlObject;
+  late dynamic pluginUrlObject;
+  late dynamic unityPackageUrlObject;
+  late String namespace;
+  late List<UnityPackages> unityPackages = [];
+  late int version;
+  late String organization;
+  late String? previewYoutubeId;
+  late int favorites;
+  late String createdAt;
+  late String updatedAt;
+  late String publicationDate;
+  late String labsPublicationDate;
+  late int visits;
+  late int popularity;
+  late int heat;
+  late int publicOccupants;
+  late int privateOccupants;
+  late int occupants;
+  late List<VRChatInstance> instances = [];
 
   VRChatWorld.fromJson(Map<String, dynamic> json) {
-    source = json;
     id = json['id'];
     name = json['name'];
     description = json['description'];
@@ -326,11 +302,12 @@ class VRChatWorld {
     pluginUrlObject = json['pluginUrlObject'];
     unityPackageUrlObject = json['unityPackageUrlObject'];
     namespace = json['namespace'];
-
-    unityPackages = json['unityPackages'].map((value) => UnityPackages.fromJson(value)).toList();
+    for (dynamic unitypackage in json['unityPackages']) {
+      unityPackages.add(UnityPackages.fromJson(unitypackage));
+    }
     version = json['version'];
     organization = json['organization'];
-    previewYoutubeId = json['previewYoutubeId'];
+    previewYoutubeId = json['previewYoutubeId'] == "" ? null : json['previewYoutubeId'];
     favorites = json['favorites'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
@@ -342,42 +319,25 @@ class VRChatWorld {
     publicOccupants = json['publicOccupants'];
     privateOccupants = json['privateOccupants'];
     occupants = json['occupants'];
-
-    instances = json['instances'].map((value) => VRChatInstance.fromJson(value)).toList();
-  }
-
-  dynamic toSource() {
-    return source;
+    for (dynamic instance in json['instances']) {
+      instances.add(VRChatInstance.fromJson(instance));
+    }
   }
 }
 
 class UnityPackages {
-  dynamic source;
-  String? id;
-  String? assetUrl;
-  dynamic assetUrlObject;
-  String? pluginUrl;
-  dynamic pluginUrlObject;
-  String? unityVersion;
-  int? unitySortNumber;
-  int? assetVersion;
-  String? platform;
-  String? createdAt;
+  late String id;
+  late String assetUrl;
+  late dynamic assetUrlObject;
+  late String pluginUrl;
+  late dynamic pluginUrlObject;
+  late String unityVersion;
+  late int unitySortNumber;
+  late int assetVersion;
+  late String platform;
+  late String createdAt;
 
-  UnityPackages(
-      {this.id,
-      this.assetUrl,
-      this.assetUrlObject,
-      this.pluginUrl,
-      this.pluginUrlObject,
-      this.unityVersion,
-      this.unitySortNumber,
-      this.assetVersion,
-      this.platform,
-      this.createdAt});
-
-  UnityPackages.fromJson(Map<String, dynamic> json) {
-    source = json;
+  UnityPackages.fromJson(dynamic json) {
     id = json['id'];
     assetUrl = json['assetUrl'];
     assetUrlObject = json['assetUrlObject'];
@@ -389,26 +349,14 @@ class UnityPackages {
     platform = json['platform'];
     createdAt = json['created_at'];
   }
-
-  dynamic toSource() {
-    return source;
-  }
 }
 
 class VRChatInstance {
-  dynamic source;
   String? location;
   int? people;
 
-  VRChatInstance({this.location, this.people});
-
-  VRChatInstance.fromJson(List<dynamic> json) {
-    source = json;
+  VRChatInstance.fromJson(dynamic json) {
     location = json[0];
     people = json[1];
-  }
-
-  dynamic toSource() {
-    return source;
   }
 }
