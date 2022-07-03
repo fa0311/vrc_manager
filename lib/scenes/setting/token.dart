@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:vrchat_mobile_client/api/data_class.dart';
 
 // Project imports:
 import 'package:vrchat_mobile_client/api/main.dart';
@@ -70,42 +71,25 @@ class _TokenSettingPageState extends State<VRChatMobileTokenSetting> {
                     child: Text(AppLocalizations.of(context)!.login),
                     onPressed: () {
                       VRChatAPI(cookie: _tokenController.text).user().then(
-                        (response) {
-                          if (response.containsKey("error")) {
-                            error(context, response["error"]["message"]);
+                        (VRChatUserOverloadResponse response) {
+                          if (response.status.statusCode != 200) {
+                            error(context, response.status.message ?? AppLocalizations.of(context)!.reportMessageEmpty);
                             return;
                           }
-                          if (response.containsKey("id")) {
-                            showDialog(
-                              context: context,
-                              builder: (_) {
-                                return AlertDialog(
-                                  title: Text(AppLocalizations.of(context)!.success),
-                                  actions: <Widget>[
-                                    TextButton(
-                                      child: Text(AppLocalizations.of(context)!.close),
-                                      onPressed: () => Navigator.pop(context),
-                                    ),
-                                  ],
-                                );
-                              },
-                            );
-                          } else {
-                            showDialog(
-                              context: context,
-                              builder: (_) {
-                                return AlertDialog(
-                                  title: Text(AppLocalizations.of(context)!.failure),
-                                  actions: <Widget>[
-                                    TextButton(
-                                      child: Text(AppLocalizations.of(context)!.close),
-                                      onPressed: () => Navigator.pop(context),
-                                    ),
-                                  ],
-                                );
-                              },
-                            );
-                          }
+                          showDialog(
+                            context: context,
+                            builder: (_) {
+                              return AlertDialog(
+                                title: Text(AppLocalizations.of(context)!.success),
+                                actions: <Widget>[
+                                  TextButton(
+                                    child: Text(AppLocalizations.of(context)!.close),
+                                    onPressed: () => Navigator.pop(context),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
                         },
                       );
                     },

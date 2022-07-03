@@ -56,16 +56,16 @@ class _FriendRequestPageState extends State<VRChatMobileFriendRequest> {
             response.forEach(
               (_, dynamic requestUser) {
                 VRChatAPI(cookie: cookie ?? "").users(requestUser["senderUserId"]).then(
-                  (VRChatUser user) {
-                    if (user.vrchatStatus.status == "error") {
-                      error(context, user.vrchatStatus.message ?? AppLocalizations.of(context)!.reportMessageEmpty);
-                      return;
+                  (VRChatUserResponse user) {
+                    if (user.status.statusCode == 200) {
+                      setState(
+                        () => column = Column(
+                          children: dataColumn.add(user.body!),
+                        ),
+                      );
+                    } else {
+                      error(context, user.status.message ?? AppLocalizations.of(context)!.reportMessageEmpty);
                     }
-                    setState(
-                      () => column = Column(
-                        children: dataColumn.add(user),
-                      ),
-                    );
                   },
                 );
               },

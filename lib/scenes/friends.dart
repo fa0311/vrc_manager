@@ -52,13 +52,13 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
     getLoginSession("login_session").then(
       (cookie) {
         VRChatAPI(cookie: cookie ?? "").friends(offline: widget.offline, offset: offset).then(
-          (VRChatUsers users) {
-            if (users.vrchatStatus.status == "error") {
-              error(context, users.vrchatStatus.message ?? AppLocalizations.of(context)!.reportMessageEmpty);
+          (VRChatUsersResponse users) {
+            if (users.status.statusCode != 200) {
+              error(context, users.status.message ?? AppLocalizations.of(context)!.reportMessageEmpty);
               return;
             }
             offset += 50;
-            if (users.users == [] && dataColumn.children == []) {
+            if (users.body!.users == [] && dataColumn.children == []) {
               setState(
                 () => column = Column(
                   children: <Widget>[
@@ -69,11 +69,11 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
             } else {
               setState(
                 () => column = Column(
-                  children: dataColumn.adds(users.users),
+                  children: dataColumn.adds(users.body!.users),
                 ),
               );
             }
-            for (VRChatUser user in users.users) {
+            for (VRChatUser user in users.body!.users) {
               String wid = user.location.split(":")[0];
               if (["private", "offline"].contains(user.location) || dataColumn.locationMap.containsKey(wid)) continue;
               VRChatAPI(cookie: cookie ?? "").worlds(wid).then(

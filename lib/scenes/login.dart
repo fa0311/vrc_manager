@@ -33,12 +33,12 @@ class _LoginPageState extends State<VRChatMobileLogin> {
 
   _onPressed(context) {
     session.login(_userController.text, _passwordController.text).then(
-      (VRChatLogin login) {
-        if (login.vrchatStatus.status == "error") {
-          error(context, login.vrchatStatus.message!);
-        } else if (login.requiresTwoFactorAuth) {
+      (VRChatLoginResponse login) {
+        if (login.status.statusCode != 200) {
+          error(context, login.status.message!);
+        } else if (login.body!.requiresTwoFactorAuth) {
           _totp();
-        } else if (login.verified) {
+        } else if (login.body!.verified) {
           _save(session.vrchatSession.headers["cookie"] as String);
         } else {
           error(context,
@@ -51,10 +51,10 @@ class _LoginPageState extends State<VRChatMobileLogin> {
 
   _onPressedTotp(context) {
     session.loginTotp(_totpController.text).then(
-      (VRChatLogin login) {
-        if (login.vrchatStatus.status == "error") {
-          error(context, login.vrchatStatus.message!);
-        } else if (login.verified) {
+      (VRChatLoginResponse login) {
+        if (login.status.statusCode != 200) {
+          error(context, login.status.message!);
+        } else if (login.body!.verified) {
           _save(session.vrchatSession.headers["cookie"] as String);
         } else {
           error(context, AppLocalizations.of(context)!.incorrectLogin);

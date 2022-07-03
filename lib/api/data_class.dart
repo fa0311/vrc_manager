@@ -1,46 +1,53 @@
 class VRChatStatus {
-  dynamic source;
   String status = "success";
-  int? statusCode = 200;
+  int statusCode = 200;
   String? message;
 
   VRChatStatus.fromJson(dynamic json) {
-    source = json;
-    try {
-      if (json.containsKey("error")) {
-        status = "error";
-        message = json[status]['message'];
-        statusCode = json[status]['status_code'];
-      }
-    } on NoSuchMethodError {
-      return;
+    if (json is List) return;
+    if (json.containsKey("error")) {
+      status = "error";
+      message = json[status]['message'];
+      statusCode = json[status]['status_code'];
     }
   }
-  dynamic toSource() {
-    return source;
+}
+
+class VRChatLoginResponse {
+  dynamic source;
+  late VRChatStatus status;
+  VRChatLogin? body;
+
+  VRChatLoginResponse.fromJson(this.source) {
+    status = VRChatStatus.fromJson(source);
+    if (status.statusCode != 200) return;
+    body = VRChatLogin.fromJson(source);
   }
 }
 
 class VRChatLogin {
-  dynamic source;
-  late VRChatStatus vrchatStatus;
   bool verified = false;
   bool requiresTwoFactorAuth = false;
 
   VRChatLogin.fromJson(dynamic json) {
-    source = json;
-    vrchatStatus = VRChatStatus.fromJson(json);
     verified = json['verified'] ?? true;
     if (json.containsKey('requiresTwoFactorAuth')) requiresTwoFactorAuth = true;
   }
-  dynamic toSource() {
-    return source;
+}
+
+class VRChatUserOverloadResponse {
+  dynamic source;
+  late VRChatStatus status;
+  VRChatUserOverload? body;
+
+  VRChatUserOverloadResponse.fromJson(this.source) {
+    status = VRChatStatus.fromJson(source);
+    if (status.statusCode != 200) return;
+    body = VRChatUserOverload.fromJson(source);
   }
 }
 
 class VRChatUserOverload {
-  late dynamic source;
-  late VRChatStatus vrchatStatus;
   late String id;
   late String username;
   late String displayName;
@@ -60,7 +67,7 @@ class VRChatUserOverload {
   late List<String> statusHistory;
   late bool statusFirstTime;
   late List<String> friends;
-  late String friendGroupNames;
+  late List<String> friendGroupNames;
   late String currentAvatarImageUrl;
   late String currentAvatarThumbnailImageUrl;
   late String currentAvatar;
@@ -74,7 +81,7 @@ class VRChatUserOverload {
   late bool hasLoggedInFromClient;
   late String homeLocation;
   late bool twoFactorAuthEnabled;
-  late String twoFactorAuthEnabledDate;
+  late DateTime? twoFactorAuthEnabledDate;
   late String state;
   late List<String> tags;
   late String developerType;
@@ -88,10 +95,6 @@ class VRChatUserOverload {
   late String lastActivity;
 
   VRChatUserOverload.fromJson(dynamic json) {
-    source = json;
-    vrchatStatus = VRChatStatus.fromJson(json);
-    if (vrchatStatus.status == "error") return;
-
     id = json['id'];
     username = json['username'];
     displayName = json['displayName'];
@@ -100,7 +103,7 @@ class VRChatUserOverload {
     bioLinks = json['bioLinks'].cast<String>();
     profilePicOverride = json['profilePicOverride'];
     statusDescription = json['statusDescription'];
-    pastDisplayNames = json['pastDisplayNames'];
+    pastDisplayNames = json['pastDisplayNames'].cast<Map<String, String>>();
     hasEmail = json['hasEmail'];
     hasPendingEmail = json['hasPendingEmail'];
     obfuscatedEmail = json['obfuscatedEmail'];
@@ -111,13 +114,13 @@ class VRChatUserOverload {
     statusHistory = json['statusHistory'].cast<String>();
     statusFirstTime = json['statusFirstTime'];
     friends = json['friends'].cast<String>();
-    friendGroupNames = json['friendGroupNames'];
+    friendGroupNames = json['friendGroupNames'].cast<String>();
     currentAvatarImageUrl = json['currentAvatarImageUrl'];
     currentAvatarThumbnailImageUrl = json['currentAvatarThumbnailImageUrl'];
     currentAvatar = json['currentAvatar'];
     currentAvatarAssetUrl = json['currentAvatarAssetUrl'];
     fallbackAvatar = json['fallbackAvatar'];
-    accountDeletionDate = json['accountDeletionDate'];
+    accountDeletionDate = json['accountDeletionDate'] == null ? null : DateTime.parse(json['accountDeletionDate']);
     acceptedTOSVersion = json['acceptedTOSVersion'];
     steamId = json['steamId'];
     steamDetails = json['steamDetails'];
@@ -125,7 +128,7 @@ class VRChatUserOverload {
     hasLoggedInFromClient = json['hasLoggedInFromClient'];
     homeLocation = json['homeLocation'];
     twoFactorAuthEnabled = json['twoFactorAuthEnabled'];
-    twoFactorAuthEnabledDate = json['twoFactorAuthEnabledDate'];
+    twoFactorAuthEnabledDate = json['twoFactorAuthEnabledDate'] == null ? null : DateTime.parse(json['twoFactorAuthEnabledDate']);
     state = json['state'];
     tags = json['tags'].cast<String>();
     developerType = json['developerType'];
@@ -140,26 +143,41 @@ class VRChatUserOverload {
   }
 }
 
-class VRChatUsers {
+class VRChatUsersResponse {
   dynamic source;
-  late VRChatStatus vrchatStatus;
+  late VRChatStatus status;
+  VRChatUsers? body;
+
+  VRChatUsersResponse.fromJson(this.source) {
+    status = VRChatStatus.fromJson(source);
+    if (status.statusCode != 200) return;
+    body = VRChatUsers.fromJson(source);
+  }
+}
+
+class VRChatUsers {
   List<VRChatUser> users = [];
 
   VRChatUsers.fromJson(dynamic json) {
-    source = json;
     for (Map<String, dynamic> user in json) {
       users.add(VRChatUser.fromJson(user));
     }
-    vrchatStatus = VRChatStatus.fromJson(json);
   }
-  dynamic toSource() {
-    return source;
+}
+
+class VRChatUserResponse {
+  dynamic source;
+  late VRChatStatus status;
+  VRChatUser? body;
+
+  VRChatUserResponse.fromJson(this.source) {
+    status = VRChatStatus.fromJson(source);
+    if (status.statusCode != 200) return;
+    body = VRChatUser.fromJson(source);
   }
 }
 
 class VRChatUser {
-  dynamic source;
-  late VRChatStatus vrchatStatus;
   late String id;
   late String username;
   late String displayName;
@@ -190,9 +208,6 @@ class VRChatUser {
   late String? friendRequestStatus;
 
   VRChatUser.fromJson(Map<String, dynamic> json) {
-    source = json;
-    vrchatStatus = VRChatStatus.fromJson(json);
-    if (vrchatStatus.status == "error") return;
     id = json['id'];
     username = json['username'];
     displayName = json['displayName'];
@@ -221,9 +236,6 @@ class VRChatUser {
     travelingToInstance = json['travelingToInstance'];
     travelingToLocation = json['travelingToLocation'];
     friendRequestStatus = json['friendRequestStatus'];
-  }
-  dynamic toSource() {
-    return source;
   }
 }
 

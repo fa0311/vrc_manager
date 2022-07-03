@@ -50,23 +50,12 @@ class _LoginHomeState extends State<VRChatMobileHome> {
           );
         } else {
           VRChatAPI(cookie: cookie).user().then(
-            (response) {
-              if (response.containsKey("error")) {
-                error(context, response["error"]["message"]);
-                if (response["error"]["message"] == '"Missing Credentials"') {
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                      builder: (BuildContext context) => const VRChatMobileLogin(),
-                    ),
-                    (_) => false,
-                  );
-                }
-              } else if (response.containsKey("id")) {
-                VRChatAPI(cookie: cookie).users(response["id"]).then(
-                  (VRChatUser user) {
-                    if (user.vrchatStatus.status == "error") {
-                      error(context, user.vrchatStatus.message ?? AppLocalizations.of(context)!.reportMessageEmpty);
+            (VRChatUserOverloadResponse response) {
+              if (response.status.statusCode == 200) {
+                VRChatAPI(cookie: cookie).users(response.body!.id).then(
+                  (VRChatUserResponse user) {
+                    if (user.status.statusCode != 200) {
+                      error(context, user.status.message ?? AppLocalizations.of(context)!.reportMessageEmpty);
                       return;
                     }
 
@@ -74,7 +63,7 @@ class _LoginHomeState extends State<VRChatMobileHome> {
                       () {
                         column = Column(
                           children: <Widget>[
-                            profile(context, user),
+                            profile(context, user.body!),
                             Column(),
                             TextButton(
                               style: ElevatedButton.styleFrom(
@@ -91,11 +80,11 @@ class _LoginHomeState extends State<VRChatMobileHome> {
                             ),
                           ],
                         );
-                        popupMenu = [share(context, "https://vrchat.com/home/user/${response['id']}")];
+                        popupMenu = [share(context, "https://vrchat.com/home/user/${response.body!.id}")];
                       },
                     );
-                    if (!["private", "offline"].contains(user.worldId)) {
-                      VRChatAPI(cookie: cookie).worlds(user.worldId.split(":")[0]).then(
+                    if (!["private", "offline"].contains(user.body!.worldId)) {
+                      VRChatAPI(cookie: cookie).worlds(user.body!.worldId.split(":")[0]).then(
                         (world) {
                           if (world.containsKey("error")) {
                             error(context, world["error"]["message"]);
@@ -117,7 +106,7 @@ class _LoginHomeState extends State<VRChatMobileHome> {
                         },
                       );
                     }
-                    if (user.location == "private") {
+                    if (user.body!.location == "private") {
                       setState(
                         () {
                           column = Column(children: column.children);
@@ -148,13 +137,16 @@ class _LoginHomeState extends State<VRChatMobileHome> {
                   );
                 }
               } else {
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(
-                    builder: (BuildContext context) => const VRChatMobileLogin(),
-                  ),
-                  (_) => false,
-                );
+                error(context, response.status.message ?? AppLocalizations.of(context)!.reportMessageEmpty);
+                if (response.status.message == '"Missing Credentials"') {
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => const VRChatMobileLogin(),
+                    ),
+                    (_) => false,
+                  );
+                }
               }
             },
           );
