@@ -1,13 +1,14 @@
 // Flutter imports:
 
+// Flutter imports:
 import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:vrchat_mobile_client/api/data_class.dart';
-import 'package:vrchat_mobile_client/api/main.dart';
 
 // Project imports:
+import 'package:vrchat_mobile_client/api/data_class.dart';
+import 'package:vrchat_mobile_client/api/main.dart';
 import 'package:vrchat_mobile_client/assets/date.dart';
 import 'package:vrchat_mobile_client/assets/error.dart';
 import 'package:vrchat_mobile_client/assets/storage.dart';
