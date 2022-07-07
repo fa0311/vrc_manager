@@ -13,7 +13,11 @@ class VRChatStatus {
   late String message;
 
   VRChatStatus.fromJson(this.json) {
-    status = "error";
+    if (json.containsKey("error")) {
+      status = "error";
+    } else if (json.containsKey("success")) {
+      status = "success";
+    }
     message = json[status]['message'];
     statusCode = json[status]['status_code'];
   }
