@@ -37,101 +37,107 @@ class VRChatLogin {
 
 class VRChatUserOverload {
   dynamic json;
+
+  late int acceptedTOSVersion;
+  late DateTime? accountDeletionDate;
+  late List<String> activeFriends;
+  late bool allowAvatarCopying;
+  late String bio;
+  late List<String> bioLinks;
+  late String currentAvatarImageUrl;
+  late String currentAvatarThumbnailImageUrl;
+  late String currentAvatar;
+  late String currentAvatarAssetUrl;
+  late String dateJoined;
+  late String developerType;
+  late String displayName;
+  late bool emailVerified;
+  late String fallbackAvatar;
+  late List<String> friendGroupNames;
+  late List<String> friends;
+  late String friendKey;
+  late bool hasBirthday;
+  late bool hasEmail;
+  late bool hasLoggedInFromClient;
+  late bool hasPendingEmail;
+  late String homeLocation;
   late String id;
-  late String username;
-  late String displayName; //
-  late String userIcon;
-  late String bio; //
-  late List<String> bioLinks; //
-  late String profilePicOverride;
-  late String statusDescription;
-  late List<Map<String, String>> pastDisplayNames;
-  late bool hasEmail; //
-  late bool hasPendingEmail; //
-  late String obfuscatedEmail;
-  late String obfuscatedPendingEmail;
-  late bool emailVerified; //
-  late bool hasBirthday; //
-  late bool unsubscribe;
-  late List<String> statusHistory;
-  late bool statusFirstTime;
-  late List<String> friends; //
-  late List<String> friendGroupNames; //
-  late List<String> activeFriends; //
-  late String currentAvatarImageUrl; //
-  late String currentAvatarThumbnailImageUrl; //
-  late String currentAvatar; //
-  late String currentAvatarAssetUrl; //
-  late String fallbackAvatar; //
-  late DateTime? accountDeletionDate; //
-  late int acceptedTOSVersion; //
-  late String steamId;
-  late dynamic steamDetails; //default {}
-  late String oculusId;
-  late bool hasLoggedInFromClient; //
-  late String homeLocation; //
-  late bool twoFactorAuthEnabled;
-  late DateTime? twoFactorAuthEnabledDate;
-  late String state;
-  late List<String> tags;
-  late String developerType; //
+  late bool isFriend;
   late String lastLogin;
   late String lastPlatform;
-  late bool allowAvatarCopying; //
+  late String obfuscatedEmail;
+  late String obfuscatedPendingEmail;
+  late String oculusId;
+  late List<String> offlineFriends;
+  late List<String> onlineFriends;
+  late List<Map<String, String>> pastDisplayNames = [];
+  late String profilePicOverride;
+  late String state;
   late String status;
-  late String dateJoined; //
-  late bool isFriend;
-  late String friendKey; //
+  late String statusDescription;
+  late bool statusFirstTime;
+  late List<String> statusHistory;
+  late Map steamDetails; //default {}
+  late String steamId;
+  late List<String> tags;
+  late bool twoFactorAuthEnabled;
+  late DateTime? twoFactorAuthEnabledDate;
+  late bool unsubscribe;
+  late String userIcon;
+  late String username;
   late String lastActivity;
 
   VRChatUserOverload.fromJson(this.json) {
     if (vrchatStatusCheck(json)) throw VRChatStatus.fromJson(json);
-    id = json['id'];
-    username = json['username'];
-    displayName = json['displayName'];
-    userIcon = json['userIcon'];
+
+    acceptedTOSVersion = json['acceptedTOSVersion'];
+    accountDeletionDate = json['accountDeletionDate'] == null ? null : DateTime.parse(json['accountDeletionDate']);
+    activeFriends = json['activeFriends'] == null ? [] : json['activeFriends'].cast<String>();
+    allowAvatarCopying = json['allowAvatarCopying'];
     bio = json['bio'];
     bioLinks = json['bioLinks'].cast<String>();
-    profilePicOverride = json['profilePicOverride'];
-    statusDescription = json['statusDescription'];
-    pastDisplayNames = json['pastDisplayNames'].cast<Map<String, String>>();
-    hasEmail = json['hasEmail'];
-    hasPendingEmail = json['hasPendingEmail'];
-    obfuscatedEmail = json['obfuscatedEmail'];
-    obfuscatedPendingEmail = json['obfuscatedPendingEmail'];
-    emailVerified = json['emailVerified'];
-    hasBirthday = json['hasBirthday'];
-    unsubscribe = json['unsubscribe'];
-    statusHistory = json['statusHistory'].cast<String>();
-    statusFirstTime = json['statusFirstTime'];
-    friends = json['friends'].cast<String>();
-    friendGroupNames = json['friendGroupNames'].cast<String>();
-    activeFriends = json['activeFriends'] == null ? [] : json['activeFriends'].cast<String>();
-    currentAvatarImageUrl = json['currentAvatarImageUrl'];
-    currentAvatarThumbnailImageUrl = json['currentAvatarThumbnailImageUrl'];
     currentAvatar = json['currentAvatar'];
     currentAvatarAssetUrl = json['currentAvatarAssetUrl'];
-    fallbackAvatar = json['fallbackAvatar'];
-    accountDeletionDate = json['accountDeletionDate'] == null ? null : DateTime.parse(json['accountDeletionDate']);
-    acceptedTOSVersion = json['acceptedTOSVersion'];
-    steamId = json['steamId'];
-    steamDetails = json['steamDetails'];
-    oculusId = json['oculusId'];
-    hasLoggedInFromClient = json['hasLoggedInFromClient'];
-    homeLocation = json['homeLocation'];
-    twoFactorAuthEnabled = json['twoFactorAuthEnabled'];
-    twoFactorAuthEnabledDate = json['twoFactorAuthEnabledDate'] == null ? null : DateTime.parse(json['twoFactorAuthEnabledDate']);
-    state = json['state'];
-    tags = json['tags'].cast<String>();
+    currentAvatarImageUrl = json['currentAvatarImageUrl'];
+    currentAvatarThumbnailImageUrl = json['currentAvatarThumbnailImageUrl'];
+    dateJoined = json['date_joined'];
     developerType = json['developerType'];
+    displayName = json['displayName'];
+    emailVerified = json['emailVerified'];
+    fallbackAvatar = json['fallbackAvatar'];
+    friendGroupNames = json['friendGroupNames'].cast<String>();
+    friendKey = json['friendKey'];
+    friends = json['friends'].cast<String>();
+    hasBirthday = json['hasBirthday'];
+    hasEmail = json['hasEmail'];
+    hasLoggedInFromClient = json['hasLoggedInFromClient'];
+    hasPendingEmail = json['hasPendingEmail'];
+    homeLocation = json['homeLocation'];
+    id = json['id'];
+    isFriend = json['isFriend'];
+    lastActivity = json['last_activity'];
     lastLogin = json['last_login'];
     lastPlatform = json['last_platform'];
-    allowAvatarCopying = json['allowAvatarCopying'];
+    obfuscatedEmail = json['obfuscatedEmail'];
+    obfuscatedPendingEmail = json['obfuscatedPendingEmail'];
+    oculusId = json['oculusId'];
+    offlineFriends = json['offlineFriends'].cast<String>();
+    onlineFriends = json['onlineFriends'].cast<String>();
+    pastDisplayNames = json['pastDisplayNames'].cast<Map<String, String>>();
+    profilePicOverride = json['profilePicOverride'];
+    state = json['state'];
     status = json['status'];
-    dateJoined = json['date_joined'];
-    isFriend = json['isFriend'];
-    friendKey = json['friendKey'];
-    lastActivity = json['last_activity'];
+    statusDescription = json['statusDescription'];
+    statusFirstTime = json['statusFirstTime'];
+    statusHistory = json['statusHistory'].cast<String>();
+    steamDetails = json['steamDetails'];
+    steamId = json['steamId'];
+    tags = json['tags'].cast<String>();
+    twoFactorAuthEnabled = json['twoFactorAuthEnabled'];
+    twoFactorAuthEnabledDate = json['twoFactorAuthEnabledDate'] == null ? null : DateTime.parse(json['twoFactorAuthEnabledDate']);
+    unsubscribe = json['unsubscribe'];
+    userIcon = json['userIcon'];
+    username = json['username'];
   }
 }
 
