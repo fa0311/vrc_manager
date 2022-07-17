@@ -84,22 +84,48 @@ class VRChatAPI {
         .then((value) => VRChatfriendStatus.fromJson(value));
   }
 
-  Future<dynamic> sendFriendRequest(String uid) {
-    return vrchatSession.post(
-      endpoint(
-        'api/1/user/$uid/friendRequest',
-        apiKey(),
-      ),
-    );
+  Future<VRChatStatus> sendFriendRequest(String uid) {
+    return vrchatSession
+        .post(
+          endpoint(
+            'api/1/user/$uid/friendRequest',
+            apiKey(),
+          ),
+        )
+        .then((value) => vrchatStatusCheck(value) ? throw VRChatStatus.fromJson(value) : VRChatStatus.fromJson(value));
   }
 
-  Future<Map<dynamic, dynamic>> deleteFriendRequest(String uid) {
-    return vrchatSession.delete(
-      endpoint(
-        'api/1/user/$uid/friendRequest',
-        apiKey(),
-      ),
-    );
+  Future<VRChatStatus> deleteFriendRequest(String uid) {
+    return vrchatSession
+        .delete(
+          endpoint(
+            'api/1/user/$uid/friendRequest',
+            apiKey(),
+          ),
+        )
+        .then((value) => vrchatStatusCheck(value) ? throw VRChatStatus.fromJson(value) : VRChatStatus.fromJson(value));
+  }
+
+  Future<VRChatStatus> acceptFriendRequest(String notificationId) {
+    return vrchatSession
+        .put(
+          endpoint(
+            '/auth/user/notifications/$notificationId/accept',
+            apiKey(),
+          ),
+        )
+        .then((value) => vrchatStatusCheck(value) ? throw VRChatStatus.fromJson(value) : VRChatStatus.fromJson(value));
+  }
+
+  Future<VRChatAcceptFriendRequestByUid> acceptFriendRequestByUid(String uid) {
+    return vrchatSession
+        .post(
+          endpoint(
+            'api/1/user/$uid/friendRequest',
+            apiKey(),
+          ),
+        )
+        .then((value) => VRChatAcceptFriendRequestByUid.fromJson(value));
   }
 
   // Friends
@@ -119,13 +145,15 @@ class VRChatAPI {
         .then((value) => VRChatUserList.fromJson(value));
   }
 
-  Future<Map<dynamic, dynamic>> deleteFriend(String uid) {
-    return vrchatSession.delete(
-      endpoint(
-        'api/1/auth/user/friends/$uid',
-        apiKey(),
-      ),
-    );
+  Future<VRChatStatus> deleteFriend(String uid) {
+    return vrchatSession
+        .delete(
+          endpoint(
+            'api/1/auth/user/friends/$uid',
+            apiKey(),
+          ),
+        )
+        .then((value) => vrchatStatusCheck(value) ? throw VRChatStatus.fromJson(value) : VRChatStatus.fromJson(value));
   }
 
   // Favorite
@@ -166,7 +194,7 @@ class VRChatAPI {
 
   // Notify
 
-  Future<dynamic> notifications({String type = "all", int offset = 0, String after = "", bool hidden = true}) {
+  Future<VRChatNotificationsList> notifications({String type = "all", int offset = 0, String after = "", bool hidden = true}) {
     final param = <String, String>{
       "sent": "false",
       "type": type,
@@ -179,9 +207,11 @@ class VRChatAPI {
       );
     if (type == "friendRequest") param.remove("hidden");
     if (param["after"] == "") param.remove("after");
-    return vrchatSession.get(
-      endpoint('/api/1/auth/user/notifications', param),
-    );
+    return vrchatSession
+        .get(
+          endpoint('/api/1/auth/user/notifications', param),
+        )
+        .then((value) => VRChatNotificationsList.fromJson(value));
   }
 
   Future<dynamic> notificationsSee(String fid) {

@@ -37,39 +37,36 @@ class _FriendRequestPageState extends State<VRChatMobileFriendRequest> {
   moreOver() {
     getLoginSession("login_session").then(
       (cookie) {
-        VRChatAPI(cookie: cookie ?? "").notifications(type: "friendRequest", offset: offset).then(
-          (response) {
-            if (response.containsKey("error")) {
-              error(context, response["error"]["message"]);
-              return;
-            }
-            offset += 100;
-            if (response.isEmpty && dataColumn.children == []) {
+        VRChatAPI(cookie: cookie ?? "").notifications(type: "friendRequest", offset: offset).then((VRChatNotificationsList response) {
+          offset += 100;
+          print(dataColumn.children.isEmpty);
+          if (response.notifications.isEmpty && dataColumn.children.isEmpty) {
+            setState(
+              () => column = Column(
+                children: <Widget>[
+                  Text(AppLocalizations.of(context)!.none),
+                ],
+              ),
+            );
+          }
+          for (VRChatNotifications requestUser in response.notifications) {
+            VRChatAPI(cookie: cookie ?? "").users(requestUser.senderUserId).then((VRChatUser user) {
               setState(
                 () => column = Column(
-                  children: <Widget>[
-                    Text(AppLocalizations.of(context)!.none),
-                  ],
+                  children: dataColumn.add(user),
                 ),
               );
-            }
-            response.forEach(
-              (_, dynamic requestUser) {
-                VRChatAPI(cookie: cookie ?? "").users(requestUser["senderUserId"]).then((VRChatUser user) {
-                  setState(
-                    () => column = Column(
-                      children: dataColumn.add(user),
-                    ),
-                  );
-                }).catchError((status) {
-                  error(context, status.message ?? AppLocalizations.of(context)!.reportMessageEmpty);
-                }, test: (error) {
-                  return error is VRChatStatus;
-                });
-              },
-            );
-          },
-        );
+            }).catchError((status) {
+              error(context, status.message ?? AppLocalizations.of(context)!.reportMessageEmpty);
+            }, test: (error) {
+              return error is VRChatStatus;
+            });
+          }
+        }).catchError((status) {
+          error(context, status.message ?? AppLocalizations.of(context)!.reportMessageEmpty);
+        }, test: (error) {
+          return error is VRChatStatus;
+        });
       },
     );
   }

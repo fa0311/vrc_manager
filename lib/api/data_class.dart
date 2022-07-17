@@ -214,7 +214,7 @@ class VRChatUser {
     friendRequestStatus = json['friendRequestStatus'];
     instanceId = json['instanceId'];
     lastActivity = json['last_activity'];
-    lastLogin = json['last_login'] == null ? null : DateTime.parse(json['last_login']);
+    lastLogin = json['last_login'] == null || json['last_login'] == "" ? null : DateTime.parse(json['last_login']);
     state = json['state'];
     travelingToInstance = json['travelingToInstance'];
     travelingToLocation = json['travelingToLocation'];
@@ -498,6 +498,64 @@ class VRChatFavoriteGroup {
     type = json['type'];
     visibility = json['visibility'];
     tags = json['tags'].cast<Map<String, int>>();
+  }
+}
+
+class VRChatNotificationsList {
+  dynamic json;
+
+  List<VRChatNotifications> notifications = [];
+
+  VRChatNotificationsList.fromJson(this.json) {
+    if (vrchatStatusCheck(json)) throw VRChatStatus.fromJson(json);
+
+    for (dynamic notification in json) {
+      notifications.add(VRChatNotifications.fromJson(notification));
+    }
+  }
+}
+
+class VRChatNotifications {
+  dynamic json;
+
+  late DateTime createdAt;
+  late String details;
+  late String id;
+  late String message;
+  late bool seen;
+  late String senderUserId;
+  late String senderUsername;
+  late String type;
+
+  VRChatNotifications.fromJson(this.json) {
+    if (vrchatStatusCheck(json)) throw VRChatStatus.fromJson(json);
+
+    createdAt = DateTime.parse(json['created_at']);
+    details = json['details'];
+    id = json['id'];
+    message = json['message'];
+    seen = json['seen'];
+    senderUserId = json['senderUserId'];
+    senderUsername = json['senderUsername'];
+    type = json['type'];
+  }
+}
+
+class VRChatAcceptFriendRequestByUid {
+  dynamic json;
+
+  late String details;
+  late String message;
+  late bool seen;
+  late String type;
+
+  VRChatAcceptFriendRequestByUid.fromJson(this.json) {
+    if (vrchatStatusCheck(json)) throw VRChatStatus.fromJson(json);
+
+    details = json['details'];
+    message = json['message'];
+    seen = json['seen'];
+    type = json['type'];
   }
 }
 

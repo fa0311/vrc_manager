@@ -54,7 +54,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
         VRChatAPI(cookie: cookie ?? "").friends(offline: widget.offline, offset: offset).then(
           (VRChatUserList users) {
             offset += 50;
-            if (users.users == [] && dataColumn.children == []) {
+            if (users.users.isEmpty && dataColumn.children.isEmpty) {
               setState(
                 () => column = Column(
                   children: <Widget>[

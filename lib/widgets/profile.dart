@@ -78,10 +78,6 @@ Widget profileAction(BuildContext context, VRChatfriendStatus status, String uid
       (cookie) {
         VRChatAPI(cookie: cookie ?? "").sendFriendRequest(uid).then(
           (response) {
-            if (response.containsKey("error")) {
-              error(context, response["error"]["message"]);
-              return;
-            }
             Navigator.pop(context);
             Navigator.pop(context);
             Navigator.push(
@@ -91,7 +87,11 @@ Widget profileAction(BuildContext context, VRChatfriendStatus status, String uid
               ),
             );
           },
-        );
+        ).catchError((status) {
+          error(context, status.message ?? AppLocalizations.of(context)!.reportMessageEmpty);
+        }, test: (onError) {
+          return onError is VRChatStatus;
+        });
       },
     );
   }
@@ -99,22 +99,20 @@ Widget profileAction(BuildContext context, VRChatfriendStatus status, String uid
   deleteFriendRequest() {
     getLoginSession("login_session").then(
       (cookie) {
-        VRChatAPI(cookie: cookie ?? "").deleteFriendRequest(uid).then(
-          (response) {
-            if (response.containsKey("error")) {
-              error(context, response["error"]["message"]);
-              return;
-            }
-            Navigator.pop(context);
-            Navigator.pop(context);
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (BuildContext context) => VRChatMobileUser(userId: uid),
-              ),
-            );
-          },
-        );
+        VRChatAPI(cookie: cookie ?? "").deleteFriendRequest(uid).then((response) {
+          Navigator.pop(context);
+          Navigator.pop(context);
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (BuildContext context) => VRChatMobileUser(userId: uid),
+            ),
+          );
+        }).catchError((status) {
+          error(context, status.message ?? AppLocalizations.of(context)!.reportMessageEmpty);
+        }, test: (onError) {
+          return onError is VRChatStatus;
+        });
       },
     );
   }
@@ -126,23 +124,21 @@ Widget profileAction(BuildContext context, VRChatfriendStatus status, String uid
       AppLocalizations.of(context)!.unfriend,
       () => getLoginSession("login_session").then(
         (cookie) {
-          VRChatAPI(cookie: cookie ?? "").deleteFriend(uid).then(
-            (response) {
-              if (response.containsKey("error")) {
-                error(context, response["error"]["message"]);
-                return;
-              }
-              Navigator.pop(context);
-              Navigator.pop(context);
-              Navigator.pop(context);
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (BuildContext context) => VRChatMobileUser(userId: uid),
-                ),
-              );
-            },
-          );
+          VRChatAPI(cookie: cookie ?? "").deleteFriend(uid).then((response) {
+            Navigator.pop(context);
+            Navigator.pop(context);
+            Navigator.pop(context);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (BuildContext context) => VRChatMobileUser(userId: uid),
+              ),
+            );
+          }).catchError((status) {
+            error(context, status.message ?? AppLocalizations.of(context)!.reportMessageEmpty);
+          }, test: (onError) {
+            return onError is VRChatStatus;
+          });
         },
       ),
     );
