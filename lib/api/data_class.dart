@@ -63,6 +63,7 @@ class VRChatUserOverload {
   late String homeLocation;
   late String id;
   late bool isFriend;
+  late String lastActivity;
   late String lastLogin;
   late String lastPlatform;
   late String obfuscatedEmail;
@@ -85,7 +86,6 @@ class VRChatUserOverload {
   late bool unsubscribe;
   late String userIcon;
   late String username;
-  late String lastActivity;
 
   VRChatUserOverload.fromJson(this.json) {
     if (vrchatStatusCheck(json)) throw VRChatStatus.fromJson(json);
@@ -155,65 +155,71 @@ class VRChatUserList {
 
 class VRChatUser {
   dynamic json;
-  late String id;
-  late String username;
-  late String displayName;
-  late String userIcon;
+
   late String? bio;
-  late List<String> bioLinks;
-  late String? profilePicOverride;
-  late String? statusDescription;
   late String currentAvatarImageUrl;
   late String currentAvatarThumbnailImageUrl;
-  late String? state;
-  late List<String> tags;
   late String developerType;
-  late DateTime? lastLogin;
-  late String lastPlatform;
-  late bool allowAvatarCopying;
-  late String status;
-  late DateTime? dateJoined;
+  late String displayName;
+  late String? fallbackAvatar;
+  late String id;
   late bool isFriend;
-  late String friendKey;
-  late String? lastActivity;
-  late String? instanceId;
+  late String lastPlatform;
+  late String? profilePicOverride;
+  late String status;
+  late String? statusDescription;
+  late List<String> tags;
+  late String userIcon;
+  late String username;
   late String location;
-  late String worldId;
-  late String? travelingToWorld;
+  late String friendKey;
+
+  late bool allowAvatarCopying;
+  late List<String> bioLinks;
+  late DateTime? dateJoined;
+  late String? friendRequestStatus;
+  late String? instanceId;
+  late String? lastActivity;
+  late DateTime? lastLogin;
+  late String? state;
   late String? travelingToInstance;
   late String? travelingToLocation;
-  late String? friendRequestStatus;
+  late String? travelingToWorld;
+  late String worldId;
 
   VRChatUser.fromJson(this.json) {
     if (vrchatStatusCheck(json)) throw VRChatStatus.fromJson(json);
-    id = json['id'];
-    username = json['username'];
-    displayName = json['displayName'];
-    userIcon = json['userIcon'];
+
     bio = json['bio'] == "" ? null : json['bio'];
-    bioLinks = (json['bioLinks'] ?? []).cast<String>();
-    profilePicOverride = json['profilePicOverride'] == "" ? null : json['profilePicOverride'];
-    statusDescription = json['statusDescription'] == "" ? null : json['statusDescription'];
     currentAvatarImageUrl = json['currentAvatarImageUrl'];
     currentAvatarThumbnailImageUrl = json['currentAvatarThumbnailImageUrl'];
-    state = json['state'];
-    tags = json['tags'].cast<String>();
     developerType = json['developerType'];
-    lastLogin = json['last_login'] == null ? null : DateTime.parse(json['last_login']);
-    lastPlatform = json['last_platform'];
-    allowAvatarCopying = json['allowAvatarCopying'] ?? false;
-    status = json['status'];
-    dateJoined = json['date_joined'] == null ? null : DateTime.parse(json['date_joined']);
+    displayName = json['displayName'];
+    fallbackAvatar = json['fallbackAvatar'];
+    id = json['id'];
     isFriend = json['isFriend'];
-    friendKey = json['friendKey'];
-    lastActivity = json['last_activity'];
-    instanceId = json['instanceId'];
+    lastPlatform = json['last_platform'];
+    profilePicOverride = json['profilePicOverride'] == "" ? null : json['profilePicOverride'];
+    status = json['status'];
+    statusDescription = json['statusDescription'] == "" ? null : json['statusDescription'];
+    tags = json['tags'].cast<String>();
+    userIcon = json['userIcon'];
+    username = json['username'];
     location = json['location'] == "" ? "offline" : json['location'] ?? "offline";
-    worldId = json['worldId'] == "" ? location : json['location'] ?? location;
-    travelingToWorld = json['travelingToWorld'];
+    friendKey = json['friendKey'];
+
+    allowAvatarCopying = json['allowAvatarCopying'] ?? false;
+    bioLinks = (json['bioLinks'] ?? []).cast<String>();
+    dateJoined = json['date_joined'] == null ? null : DateTime.parse(json['date_joined']);
+    friendRequestStatus = json['friendRequestStatus'];
+    instanceId = json['instanceId'];
+    lastActivity = json['last_activity'];
+    lastLogin = json['last_login'] == null ? null : DateTime.parse(json['last_login']);
+    state = json['state'];
     travelingToInstance = json['travelingToInstance'];
     travelingToLocation = json['travelingToLocation'];
-    friendRequestStatus = json['friendRequestStatus'];
+    travelingToWorld = json['travelingToWorld'];
+    worldId = json['worldId'] == "" ? location : json['location'] ?? location;
   }
 }
 
@@ -227,81 +233,81 @@ class VRChatWorldList {
       world.add(VRChatWorld.fromJson(user));
     }
   }
-
-  void forEach(Null Function(dynamic list) param0) {}
 }
 
 class VRChatWorld {
   dynamic json;
-  late String id;
-  late String name;
-  late String? description;
-  late bool featured;
+
+  late String assetUrl;
+  late Map assetUrlObject; //default {}
   late String authorId;
   late String authorName;
   late int capacity;
-  late List<String> tags;
-  late String releaseStatus;
-  late String imageUrl;
-  late String thumbnailImageUrl;
-  late String assetUrl;
-  late dynamic assetUrlObject;
-  late dynamic pluginUrlObject;
-  late dynamic unityPackageUrlObject;
-  late String namespace;
-  late List<UnityPackages> unityPackages = [];
-  late int version;
-  late String organization;
-  late String? previewYoutubeId;
-  late int favorites;
   late DateTime createdAt;
-  late DateTime updatedAt;
-  late String publicationDate;
-  late String labsPublicationDate;
-  late int visits;
-  late int popularity;
+  late String? description;
+  late int favorites;
+  late bool featured;
   late int heat;
-  late int publicOccupants;
-  late int privateOccupants;
-  late int occupants;
+  late String id;
+  late String imageUrl;
   late List<Map<String, int>> instances = [];
+  late String labsPublicationDate;
+  late String name;
+  late String namespace;
+  late int occupants;
+  late String organization;
+  late Map pluginUrlObject; //default {}
+  late int popularity;
+  late String? previewYoutubeId;
+  late int privateOccupants;
+  late int publicOccupants;
+  late String publicationDate;
+  late String releaseStatus;
+  late List<String> tags;
+  late String thumbnailImageUrl;
+  late Map unityPackageUrlObject; //default {}
+  late List<UnityPackages> unityPackages = [];
+  late DateTime updatedAt;
+  late int version;
+  late int visits;
 
   VRChatWorld.fromJson(this.json) {
     if (vrchatStatusCheck(json)) throw VRChatStatus.fromJson(json);
-    id = json['id'];
-    name = json['name'];
-    description = json['description'] == "" ? null : json['previewYoutubeId'];
-    featured = json['featured'] ?? false;
+
+    assetUrl = json['assetUrl'];
+    assetUrlObject = json['assetUrlObject'];
     authorId = json['authorId'];
     authorName = json['authorName'];
     capacity = json['capacity'];
-    tags = json['tags'].cast<String>();
-    releaseStatus = json['releaseStatus'];
+    createdAt = DateTime.parse(json['created_at']);
+    description = json['description'] == "" ? null : json['previewYoutubeId'];
+    favorites = json['favorites'];
+    featured = json['featured'] ?? false;
+    heat = json['heat'];
+    id = json['id'];
     imageUrl = json['imageUrl'];
-    thumbnailImageUrl = json['thumbnailImageUrl'];
-    assetUrl = json['assetUrl'];
-    assetUrlObject = json['assetUrlObject'];
-    pluginUrlObject = json['pluginUrlObject'];
-    unityPackageUrlObject = json['unityPackageUrlObject'];
+    instances = json['instances'].cast<Map<String, int>>();
+    labsPublicationDate = json['labsPublicationDate'];
+    name = json['name'];
     namespace = json['namespace'];
+    occupants = json['occupants'];
+    organization = json['organization'];
+    pluginUrlObject = json['pluginUrlObject'];
+    popularity = json['popularity'];
+    previewYoutubeId = json['previewYoutubeId'] == "" ? null : json['previewYoutubeId'];
+    privateOccupants = json['privateOccupants'];
+    publicationDate = json['publicationDate'];
+    publicOccupants = json['publicOccupants'];
+    releaseStatus = json['releaseStatus'];
+    tags = json['tags'].cast<String>();
+    thumbnailImageUrl = json['thumbnailImageUrl'];
     for (dynamic unitypackage in json['unityPackages']) {
       unityPackages.add(UnityPackages.fromJson(unitypackage));
     }
-    version = json['version'];
-    organization = json['organization'];
-    previewYoutubeId = json['previewYoutubeId'] == "" ? null : json['previewYoutubeId'];
-    favorites = json['favorites'];
-    createdAt = DateTime.parse(json['created_at']);
+    unityPackageUrlObject = json['unityPackageUrlObject'];
     updatedAt = DateTime.parse(json['updated_at']);
-    publicationDate = json['publicationDate'];
-    labsPublicationDate = json['labsPublicationDate'];
+    version = json['version'];
     visits = json['visits'];
-    popularity = json['popularity'];
-    heat = json['heat'];
-    publicOccupants = json['publicOccupants'];
-    privateOccupants = json['privateOccupants'];
-    occupants = json['occupants'];
-    instances = json['instances'].cast<Map<String, int>>();
   }
   VRChatLimitedWorld toLimited() {
     return VRChatLimitedWorld.fromJson(json);
@@ -309,28 +315,28 @@ class VRChatWorld {
 }
 
 class UnityPackages {
-  late String id;
   late String assetUrl;
-  late dynamic assetUrlObject;
-  late String pluginUrl;
-  late dynamic pluginUrlObject;
-  late String unityVersion;
-  late int unitySortNumber;
+  late Map assetUrlObject; //default {}
   late int assetVersion;
-  late String platform;
   late String createdAt;
+  late String id;
+  late String platform;
+  late String pluginUrl;
+  late Map pluginUrlObject; //default {}
+  late int unitySortNumber;
+  late String unityVersion;
 
   UnityPackages.fromJson(dynamic json) {
-    id = json['id'];
     assetUrl = json['assetUrl'];
     assetUrlObject = json['assetUrlObject'];
+    assetVersion = json['assetVersion'];
+    createdAt = json['created_at'];
+    id = json['id'];
+    platform = json['platform'];
     pluginUrl = json['pluginUrl'];
     pluginUrlObject = json['pluginUrlObject'];
-    unityVersion = json['unityVersion'];
     unitySortNumber = json['unitySortNumber'];
-    assetVersion = json['assetVersion'];
-    platform = json['platform'];
-    createdAt = json['created_at'];
+    unityVersion = json['unityVersion'];
   }
 }
 
@@ -358,6 +364,7 @@ class VRChatLimitedWorldList {
 
 class VRChatLimitedWorld {
   dynamic json;
+
   late String authorId;
   late String authorName;
   late int capacity;
@@ -379,6 +386,8 @@ class VRChatLimitedWorld {
   late DateTime updatedAt;
 
   VRChatLimitedWorld.fromJson(this.json) {
+    if (vrchatStatusCheck(json)) throw VRChatStatus.fromJson(json);
+
     authorId = json['authorId'];
     authorName = json['authorName'];
     capacity = json['capacity'];
@@ -417,6 +426,7 @@ class VRChatFavoriteWorldList {
 
 class VRChatFavoriteWorld {
   dynamic json;
+
   late String authorId;
   late String authorName;
   late int capacity;
@@ -440,6 +450,8 @@ class VRChatFavoriteWorld {
   late String favoriteGroup;
 
   VRChatFavoriteWorld.fromJson(this.json) {
+    if (vrchatStatusCheck(json)) throw VRChatStatus.fromJson(json);
+
     authorId = json['authorId'];
     authorName = json['authorName'];
     capacity = json['capacity'];
@@ -480,6 +492,7 @@ class VRChatFavoriteGroupList {
 
 class VRChatFavoriteGroup {
   dynamic json;
+
   late String ownerDisplayName;
   late String id;
   late String name;
@@ -490,6 +503,8 @@ class VRChatFavoriteGroup {
   late String visibility;
 
   VRChatFavoriteGroup.fromJson(this.json) {
+    if (vrchatStatusCheck(json)) throw VRChatStatus.fromJson(json);
+
     id = json['id'];
     ownerId = json['ownerId'];
     ownerDisplayName = json['ownerDisplayName'];
