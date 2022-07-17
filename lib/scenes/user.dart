@@ -59,18 +59,19 @@ class _UserHomeState extends State<VRChatMobileUser> {
               },
             );
             VRChatAPI(cookie: cookie ?? "").friendStatus(widget.userId).then(
-              (status) {
-                if (status.containsKey("error")) {
-                  error(context, status["error"]["message"]);
-                  return;
-                }
+              (VRChatfriendStatus status) {
                 setState(
                   () {
                     popupMenu = <Widget>[profileAction(context, status, widget.userId), share(context, "https://vrchat.com/home/user/${widget.userId}")];
                   },
                 );
               },
-            );
+            ).catchError((status) {
+              error(context, status.message ?? AppLocalizations.of(context)!.reportMessageEmpty);
+            }, test: (onError) {
+              return onError is VRChatStatus;
+            });
+
             if (!["private", "offline"].contains(user.location)) {
               column.children[2] = TextButton(
                 style: ElevatedButton.styleFrom(

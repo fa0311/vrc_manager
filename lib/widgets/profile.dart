@@ -72,7 +72,7 @@ Column profile(BuildContext context, VRChatUser user) {
   );
 }
 
-Widget profileAction(BuildContext context, Map status, String uid) {
+Widget profileAction(BuildContext context, VRChatfriendStatus status, String uid) {
   sendFriendRequest() {
     getLoginSession("login_session").then(
       (cookie) {
@@ -159,25 +159,25 @@ Widget profileAction(BuildContext context, Map status, String uid) {
         builder: (BuildContext context, setStateBuilder) => SingleChildScrollView(
           child: Column(
             children: [
-              if (!status["isFriend"] && !status["incomingRequest"] && !status["outgoingRequest"])
+              if (!status.isFriend && !status.incomingRequest && !status.outgoingRequest)
                 ListTile(
                   leading: const Icon(Icons.person_add),
                   title: Text(AppLocalizations.of(context)!.friendRequest),
                   onTap: sendFriendRequest,
                 ),
-              if (status["isFriend"] && !status["incomingRequest"] && !status["outgoingRequest"])
+              if (status.isFriend && !status.incomingRequest && !status.outgoingRequest)
                 ListTile(
                   leading: const Icon(Icons.person_remove),
                   title: Text(AppLocalizations.of(context)!.unfriend),
                   onTap: deleteFriend,
                 ),
-              if (!status["isFriend"] && status["incomingRequest"])
+              if (!status.isFriend && status.incomingRequest)
                 ListTile(
                   leading: const Icon(Icons.person_remove),
                   title: Text(AppLocalizations.of(context)!.denyFriends),
                   onTap: deleteFriendRequest,
                 ),
-              if (!status["isFriend"] && status["incomingRequest"])
+              if (!status.isFriend && status.incomingRequest)
                 ListTile(
                   leading: const Icon(Icons.person_add),
                   title: Text(AppLocalizations.of(context)!.allowFriends),

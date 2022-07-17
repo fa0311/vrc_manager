@@ -223,6 +223,22 @@ class VRChatUser {
   }
 }
 
+class VRChatfriendStatus {
+  dynamic json;
+
+  late bool incomingRequest;
+  late bool isFriend;
+  late bool outgoingRequest;
+
+  VRChatfriendStatus.fromJson(this.json) {
+    if (vrchatStatusCheck(json)) throw VRChatStatus.fromJson(json);
+
+    incomingRequest = json['incomingRequest'];
+    isFriend = json['isFriend'];
+    outgoingRequest = json['outgoingRequest'];
+  }
+}
+
 class VRChatWorldList {
   dynamic json;
   List<VRChatWorld> world = [];

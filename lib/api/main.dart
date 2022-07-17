@@ -73,13 +73,15 @@ class VRChatAPI {
         .then((value) => VRChatUser.fromJson(value));
   }
 
-  Future<dynamic> friendStatus(String uid) {
-    return vrchatSession.get(
-      endpoint(
-        'api/1/user/$uid/friendStatus',
-        apiKey(),
-      ),
-    );
+  Future<VRChatfriendStatus> friendStatus(String uid) {
+    return vrchatSession
+        .get(
+          endpoint(
+            'api/1/user/$uid/friendStatus',
+            apiKey(),
+          ),
+        )
+        .then((value) => VRChatfriendStatus.fromJson(value));
   }
 
   Future<dynamic> sendFriendRequest(String uid) {
