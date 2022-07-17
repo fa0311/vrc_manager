@@ -314,48 +314,14 @@ class VRChatWorld {
   }
 }
 
-class UnityPackages {
-  late String assetUrl;
-  late Map assetUrlObject; //default {}
-  late int assetVersion;
-  late String createdAt;
-  late String id;
-  late String platform;
-  late String pluginUrl;
-  late Map pluginUrlObject; //default {}
-  late int unitySortNumber;
-  late String unityVersion;
-
-  UnityPackages.fromJson(dynamic json) {
-    assetUrl = json['assetUrl'];
-    assetUrlObject = json['assetUrlObject'];
-    assetVersion = json['assetVersion'];
-    createdAt = json['created_at'];
-    id = json['id'];
-    platform = json['platform'];
-    pluginUrl = json['pluginUrl'];
-    pluginUrlObject = json['pluginUrlObject'];
-    unitySortNumber = json['unitySortNumber'];
-    unityVersion = json['unityVersion'];
-  }
-}
-
-class LimitedUnityPackages {
-  late String unityVersion;
-  late String platform;
-
-  LimitedUnityPackages.fromJson(dynamic json) {
-    unityVersion = json['unityVersion'];
-    platform = json['platform'];
-  }
-}
-
 class VRChatLimitedWorldList {
   dynamic json;
+
   List<VRChatLimitedWorld> world = [];
 
   VRChatLimitedWorldList.fromJson(this.json) {
     if (vrchatStatusCheck(json)) throw VRChatStatus.fromJson(json);
+
     for (dynamic w in json) {
       world.add(VRChatLimitedWorld.fromJson(w));
     }
@@ -414,10 +380,12 @@ class VRChatLimitedWorld {
 
 class VRChatFavoriteWorldList {
   dynamic json;
+
   List<VRChatFavoriteWorld> world = [];
 
   VRChatFavoriteWorldList.fromJson(this.json) {
     if (vrchatStatusCheck(json)) throw VRChatStatus.fromJson(json);
+
     for (dynamic w in json) {
       world.add(VRChatFavoriteWorld.fromJson(w));
     }
@@ -484,6 +452,7 @@ class VRChatFavoriteGroupList {
 
   VRChatFavoriteGroupList.fromJson(this.json) {
     if (vrchatStatusCheck(json)) throw VRChatStatus.fromJson(json);
+
     for (dynamic user in json) {
       group.add(VRChatFavoriteGroup.fromJson(user));
     }
@@ -513,5 +482,41 @@ class VRChatFavoriteGroup {
     type = json['type'];
     visibility = json['visibility'];
     tags = json['tags'].cast<Map<String, int>>();
+  }
+}
+
+class UnityPackages {
+  late String assetUrl;
+  late Map assetUrlObject; //default {}
+  late int assetVersion;
+  late String createdAt;
+  late String id;
+  late String platform;
+  late String pluginUrl;
+  late Map pluginUrlObject; //default {}
+  late int unitySortNumber;
+  late String unityVersion;
+
+  UnityPackages.fromJson(dynamic json) {
+    assetUrl = json['assetUrl'];
+    assetUrlObject = json['assetUrlObject'];
+    assetVersion = json['assetVersion'];
+    createdAt = json['created_at'];
+    id = json['id'];
+    platform = json['platform'];
+    pluginUrl = json['pluginUrl'];
+    pluginUrlObject = json['pluginUrlObject'];
+    unitySortNumber = json['unitySortNumber'];
+    unityVersion = json['unityVersion'];
+  }
+}
+
+class LimitedUnityPackages {
+  late String unityVersion;
+  late String platform;
+
+  LimitedUnityPackages.fromJson(dynamic json) {
+    unityVersion = json['unityVersion'];
+    platform = json['platform'];
   }
 }
