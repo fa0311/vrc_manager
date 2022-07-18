@@ -563,7 +563,7 @@ class UnityPackages {
   late String assetUrl;
   late Map assetUrlObject; //default {}
   late int assetVersion;
-  late String createdAt;
+  late DateTime? createdAt;
   late String id;
   late String platform;
   late String pluginUrl;
@@ -575,7 +575,7 @@ class UnityPackages {
     assetUrl = json['assetUrl'];
     assetUrlObject = json['assetUrlObject'];
     assetVersion = json['assetVersion'];
-    createdAt = json['created_at'];
+    createdAt = json['created_at'] == null ? null : DateTime.parse(json['created_at']);
     id = json['id'];
     platform = json['platform'];
     pluginUrl = json['pluginUrl'];

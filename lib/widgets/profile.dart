@@ -96,6 +96,29 @@ Widget profileAction(BuildContext context, VRChatfriendStatus status, String uid
     );
   }
 
+  acceptFriendRequest() {
+    getLoginSession("login_session").then(
+      (cookie) {
+        VRChatAPI(cookie: cookie ?? "").acceptFriendRequestByUid(uid).then(
+          (response) {
+            Navigator.pop(context);
+            Navigator.pop(context);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (BuildContext context) => VRChatMobileUser(userId: uid),
+              ),
+            );
+          },
+        ).catchError((status) {
+          error(context, status.message ?? AppLocalizations.of(context)!.reportMessageEmpty);
+        }, test: (onError) {
+          return onError is VRChatStatus;
+        });
+      },
+    );
+  }
+
   deleteFriendRequest() {
     getLoginSession("login_session").then(
       (cookie) {
@@ -167,17 +190,23 @@ Widget profileAction(BuildContext context, VRChatfriendStatus status, String uid
                   title: Text(AppLocalizations.of(context)!.unfriend),
                   onTap: deleteFriend,
                 ),
-              if (!status.isFriend && status.incomingRequest)
+              if (!status.isFriend && status.outgoingRequest)
                 ListTile(
                   leading: const Icon(Icons.person_remove),
-                  title: Text(AppLocalizations.of(context)!.denyFriends),
+                  title: Text(AppLocalizations.of(context)!.unrequested),
                   onTap: deleteFriendRequest,
                 ),
               if (!status.isFriend && status.incomingRequest)
                 ListTile(
                   leading: const Icon(Icons.person_add),
                   title: Text(AppLocalizations.of(context)!.allowFriends),
-                  onTap: sendFriendRequest,
+                  onTap: acceptFriendRequest,
+                ),
+              if (!status.isFriend && status.incomingRequest)
+                ListTile(
+                  leading: const Icon(Icons.person_remove),
+                  title: Text(AppLocalizations.of(context)!.denyFriends),
+                  onTap: deleteFriendRequest,
                 ),
             ],
           ),

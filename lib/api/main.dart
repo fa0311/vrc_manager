@@ -84,7 +84,7 @@ class VRChatAPI {
         .then((value) => VRChatfriendStatus.fromJson(value));
   }
 
-  Future<VRChatStatus> sendFriendRequest(String uid) {
+  Future<VRChatNotifications> sendFriendRequest(String uid) {
     return vrchatSession
         .post(
           endpoint(
@@ -92,7 +92,7 @@ class VRChatAPI {
             apiKey(),
           ),
         )
-        .then((value) => vrchatStatusCheck(value) ? throw VRChatStatus.fromJson(value) : VRChatStatus.fromJson(value));
+        .then((value) => VRChatNotifications.fromJson(value));
   }
 
   Future<VRChatStatus> deleteFriendRequest(String uid) {

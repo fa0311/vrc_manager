@@ -39,7 +39,6 @@ class _FriendRequestPageState extends State<VRChatMobileFriendRequest> {
       (cookie) {
         VRChatAPI(cookie: cookie ?? "").notifications(type: "friendRequest", offset: offset).then((VRChatNotificationsList response) {
           offset += 100;
-          print(dataColumn.children.isEmpty);
           if (response.notifications.isEmpty && dataColumn.children.isEmpty) {
             setState(
               () => column = Column(
