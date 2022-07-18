@@ -70,12 +70,12 @@ class _WorldState extends State<VRChatMobileWorld> {
                         title: Text(list.displayName),
                         onTap: () => {
                           VRChatAPI(cookie: cookie ?? "").addFavorites("world", widget.worldId, list.name).then((response) {
-                            if (response.containsKey("error")) {
-                              error(context, response["error"]["message"]);
-                              return;
-                            }
                             Navigator.pop(context);
-                          })
+                          }).catchError((status) {
+                            error(context, status.message ?? AppLocalizations.of(context)!.reportMessageEmpty);
+                          }, test: (onError) {
+                            return onError is VRChatStatus;
+                          }),
                         },
                       ));
                       bottomSheet.add(const Divider());

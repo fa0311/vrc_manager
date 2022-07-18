@@ -559,6 +559,24 @@ class VRChatAcceptFriendRequestByUid {
   }
 }
 
+class VRChatFavorite {
+  dynamic json;
+
+  late String favoriteId;
+  late String id;
+  late List<String> tags;
+  late String type;
+
+  VRChatFavorite.fromJson(this.json) {
+    if (vrchatStatusCheck(json)) throw VRChatStatus.fromJson(json);
+
+    favoriteId = json['favoriteId'];
+    id = json['id'];
+    tags = json['tags'];
+    type = json['type'];
+  }
+}
+
 class UnityPackages {
   late String assetUrl;
   late Map assetUrlObject; //default {}

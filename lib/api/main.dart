@@ -173,23 +173,25 @@ class VRChatAPI {
         .then((value) => VRChatFavoriteGroupList.fromJson(value));
   }
 
-  Future<dynamic> addFavorites(String type, String id, String tags) {
+  Future<VRChatFavorite> addFavorites(String type, String id, String tags) {
     return vrchatSession.post(
       endpoint(
         'api/1/favorites',
         apiKey(),
       ),
       {"type": type, "favoriteId": id, "tags": tags},
-    );
+    ).then((value) => VRChatFavorite.fromJson(value));
   }
 
-  Future<Map<dynamic, dynamic>> deleteFavorites(String fid) {
-    return vrchatSession.delete(
-      endpoint(
-        'api/1/favorites/$fid',
-        apiKey(),
-      ),
-    );
+  Future<VRChatStatus> deleteFavorites(String fid) {
+    return vrchatSession
+        .delete(
+          endpoint(
+            'api/1/favorites/$fid',
+            apiKey(),
+          ),
+        )
+        .then((value) => VRChatStatus.fromJson(value));
   }
 
   // Notify
@@ -214,13 +216,15 @@ class VRChatAPI {
         .then((value) => VRChatNotificationsList.fromJson(value));
   }
 
-  Future<dynamic> notificationsSee(String fid) {
-    return vrchatSession.get(
-      endpoint(
-        '/api/1/auth/user/notifications/$fid/see',
-        apiKey(),
-      ),
-    );
+  Future<VRChatNotifications> notificationsSee(String fid) {
+    return vrchatSession
+        .get(
+          endpoint(
+            '/api/1/auth/user/notifications/$fid/see',
+            apiKey(),
+          ),
+        )
+        .then((value) => VRChatNotifications.fromJson(value));
   }
 
   // World

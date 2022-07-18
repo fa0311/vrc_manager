@@ -102,20 +102,18 @@ Card simpleWorldFavorite(BuildContext context, VRChatFavoriteWorld world) {
                 onPressed: () {
                   getLoginSession("login_session").then(
                     (cookie) {
-                      VRChatAPI(cookie: cookie ?? "").deleteFavorites(world.favoriteId).then(
-                        (response) {
-                          if (response.containsKey("error")) {
-                            error(context, response["error"]["message"]);
-                            return;
-                          }
-                          Navigator.pop(context);
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (BuildContext context) => const VRChatMobileWorldsFavorite(),
-                              ));
-                        },
-                      );
+                      VRChatAPI(cookie: cookie ?? "").deleteFavorites(world.favoriteId).then((response) {
+                        Navigator.pop(context);
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (BuildContext context) => const VRChatMobileWorldsFavorite(),
+                            ));
+                      }).catchError((status) {
+                        error(context, status.message ?? AppLocalizations.of(context)!.reportMessageEmpty);
+                      }, test: (onError) {
+                        return onError is VRChatStatus;
+                      });
                     },
                   );
                 },
