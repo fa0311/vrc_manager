@@ -1,3 +1,4 @@
+// Dart imports:
 import 'dart:ffi';
 
 bool vrchatStatusCheck(dynamic json) {
