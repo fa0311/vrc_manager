@@ -27,8 +27,8 @@ class Users {
   Map<String, Map<String, int>> numberOfFriendsInLocation() {
     Map<String, Map<String, int>> inLocation = {};
     int id = 0;
-    for (dynamic user in userList) {
-      String location = user["location"];
+    for (VRChatUser user in userList) {
+      String location = user.location;
       if (["private", "offline"].contains(location) && joinable) continue;
       if (inLocation[location] == null) {
         id++;
