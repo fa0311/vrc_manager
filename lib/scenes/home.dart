@@ -94,7 +94,7 @@ class _LoginHomeState extends State<VRChatMobileHome> {
               ).catchError((status) {
                 error(context, status.message ?? AppLocalizations.of(context)!.reportMessageEmpty);
               }, test: (onError) {
-                return onError is VRChatStatus;
+                return onError is HttpException;
               });
             }
             if (user.location == "private") {
@@ -115,7 +115,7 @@ class _LoginHomeState extends State<VRChatMobileHome> {
           }).catchError((status) {
             error(context, status.message ?? AppLocalizations.of(context)!.reportMessageEmpty);
           }, test: (onError) {
-            return onError is VRChatStatus;
+            return onError is HttpException;
           });
 
           if (Platform.isAndroid || Platform.isIOS) {
@@ -143,7 +143,7 @@ class _LoginHomeState extends State<VRChatMobileHome> {
             );
           }
         }, test: (onError) {
-          return onError is VRChatStatus;
+          return onError is HttpException;
         });
       }
     });

@@ -1,5 +1,8 @@
 // Dart imports:
 
+// Dart imports:
+import 'dart:io';
+
 // Flutter imports:
 import 'package:flutter/material.dart';
 
@@ -90,7 +93,7 @@ Widget profileAction(BuildContext context, VRChatfriendStatus status, String uid
         ).catchError((status) {
           error(context, status.message ?? AppLocalizations.of(context)!.reportMessageEmpty);
         }, test: (onError) {
-          return onError is VRChatStatus;
+          return onError is HttpException;
         });
       },
     );
@@ -113,7 +116,7 @@ Widget profileAction(BuildContext context, VRChatfriendStatus status, String uid
         ).catchError((status) {
           error(context, status.message ?? AppLocalizations.of(context)!.reportMessageEmpty);
         }, test: (onError) {
-          return onError is VRChatStatus;
+          return onError is HttpException;
         });
       },
     );
@@ -134,7 +137,7 @@ Widget profileAction(BuildContext context, VRChatfriendStatus status, String uid
         }).catchError((status) {
           error(context, status.message ?? AppLocalizations.of(context)!.reportMessageEmpty);
         }, test: (onError) {
-          return onError is VRChatStatus;
+          return onError is HttpException;
         });
       },
     );
@@ -160,7 +163,7 @@ Widget profileAction(BuildContext context, VRChatfriendStatus status, String uid
           }).catchError((status) {
             error(context, status.message ?? AppLocalizations.of(context)!.reportMessageEmpty);
           }, test: (onError) {
-            return onError is VRChatStatus;
+            return onError is HttpException;
           });
         },
       ),

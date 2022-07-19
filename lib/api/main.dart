@@ -103,7 +103,7 @@ class VRChatAPI {
             apiKey(),
           ),
         )
-        .then((value) => vrchatStatusCheck(value) ? throw VRChatStatus.fromJson(value) : VRChatStatus.fromJson(value));
+        .then((value) => VRChatStatus.fromJson(value));
   }
 
   Future<VRChatStatus> acceptFriendRequest(String notificationId) {
@@ -114,7 +114,7 @@ class VRChatAPI {
             apiKey(),
           ),
         )
-        .then((value) => vrchatStatusCheck(value) ? throw VRChatStatus.fromJson(value) : VRChatStatus.fromJson(value));
+        .then((value) => VRChatStatus.fromJson(value));
   }
 
   Future<VRChatAcceptFriendRequestByUid> acceptFriendRequestByUid(String uid) {
@@ -153,7 +153,7 @@ class VRChatAPI {
             apiKey(),
           ),
         )
-        .then((value) => vrchatStatusCheck(value) ? throw VRChatStatus.fromJson(value) : VRChatStatus.fromJson(value));
+        .then((value) => VRChatStatus.fromJson(value));
   }
 
   // Favorite

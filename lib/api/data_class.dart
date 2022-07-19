@@ -1,28 +1,11 @@
-// Dart imports:
-import 'dart:ffi';
-
-bool vrchatStatusCheck(dynamic json) {
-  try {
-    return json.containsKey("error");
-  } on NoSuchMethodError {
-    return false;
-  }
-}
-
 class VRChatStatus {
   dynamic json;
-  late String status;
   late int statusCode;
   late String message;
 
   VRChatStatus.fromJson(this.json) {
-    if (json.containsKey("error")) {
-      status = "error";
-    } else if (json.containsKey("success")) {
-      status = "success";
-    }
-    message = json[status]['message'];
-    statusCode = json[status]['status_code'];
+    message = json['success']['message'];
+    statusCode = json['success']['status_code'];
   }
 }
 
@@ -32,8 +15,7 @@ class VRChatLogin {
   bool requiresTwoFactorAuth = false;
 
   VRChatLogin.fromJson(this.json) {
-    if (vrchatStatusCheck(json)) throw VRChatStatus.fromJson(json);
-    verified = json['verified'] ?? true;
+    verified = json['verified'];
     if (json.containsKey('requiresTwoFactorAuth')) requiresTwoFactorAuth = true;
   }
 }
@@ -91,8 +73,6 @@ class VRChatUserOverload {
   late String username;
 
   VRChatUserOverload.fromJson(this.json) {
-    if (vrchatStatusCheck(json)) throw VRChatStatus.fromJson(json);
-
     acceptedTOSVersion = json['acceptedTOSVersion'];
     accountDeletionDate = json['accountDeletionDate'] == null ? null : DateTime.parse(json['accountDeletionDate']);
     activeFriends = json['activeFriends'] == null ? [] : json['activeFriends'].cast<String>();
@@ -149,7 +129,6 @@ class VRChatUserList {
   List<VRChatUser> users = [];
 
   VRChatUserList.fromJson(this.json) {
-    if (vrchatStatusCheck(json)) throw VRChatStatus.fromJson(json);
     for (Map<String, dynamic> user in json) {
       users.add(VRChatUser.fromJson(user));
     }
@@ -191,8 +170,6 @@ class VRChatUser {
   late String worldId;
 
   VRChatUser.fromJson(this.json) {
-    if (vrchatStatusCheck(json)) throw VRChatStatus.fromJson(json);
-
     bio = json['bio'] == "" ? null : json['bio'];
     currentAvatarImageUrl = json['currentAvatarImageUrl'];
     currentAvatarThumbnailImageUrl = json['currentAvatarThumbnailImageUrl'];
@@ -234,8 +211,6 @@ class VRChatfriendStatus {
   late bool outgoingRequest;
 
   VRChatfriendStatus.fromJson(this.json) {
-    if (vrchatStatusCheck(json)) throw VRChatStatus.fromJson(json);
-
     incomingRequest = json['incomingRequest'];
     isFriend = json['isFriend'];
     outgoingRequest = json['outgoingRequest'];
@@ -247,7 +222,6 @@ class VRChatWorldList {
   List<VRChatWorld> world = [];
 
   VRChatWorldList.fromJson(this.json) {
-    if (vrchatStatusCheck(json)) throw VRChatStatus.fromJson(json);
     for (dynamic user in json) {
       world.add(VRChatWorld.fromJson(user));
     }
@@ -291,8 +265,6 @@ class VRChatWorld {
   late int visits;
 
   VRChatWorld.fromJson(this.json) {
-    if (vrchatStatusCheck(json)) throw VRChatStatus.fromJson(json);
-
     assetUrl = json['assetUrl'];
     assetUrlObject = json['assetUrlObject'];
     authorId = json['authorId'];
@@ -339,8 +311,6 @@ class VRChatLimitedWorldList {
   List<VRChatLimitedWorld> world = [];
 
   VRChatLimitedWorldList.fromJson(this.json) {
-    if (vrchatStatusCheck(json)) throw VRChatStatus.fromJson(json);
-
     for (dynamic w in json) {
       world.add(VRChatLimitedWorld.fromJson(w));
     }
@@ -371,8 +341,6 @@ class VRChatLimitedWorld {
   late DateTime updatedAt;
 
   VRChatLimitedWorld.fromJson(this.json) {
-    if (vrchatStatusCheck(json)) throw VRChatStatus.fromJson(json);
-
     authorId = json['authorId'];
     authorName = json['authorName'];
     capacity = json['capacity'];
@@ -424,8 +392,6 @@ class VRChatInstance {
   late String? private;
 
   VRChatInstance.fromJson(this.json) {
-    if (vrchatStatusCheck(json)) throw VRChatStatus.fromJson(json);
-
     active = json['active'];
     canRequestInvite = json['canRequestInvite'];
     capacity = json['capacity'];
@@ -458,8 +424,6 @@ class VRChatPlatforms {
   late int standalonewindows;
 
   VRChatPlatforms.fromJson(this.json) {
-    if (vrchatStatusCheck(json)) throw VRChatStatus.fromJson(json);
-
     android = json['android'];
     standalonewindows = json['standalonewindows'];
   }
@@ -471,8 +435,6 @@ class VRChatFavoriteWorldList {
   List<VRChatFavoriteWorld> world = [];
 
   VRChatFavoriteWorldList.fromJson(this.json) {
-    if (vrchatStatusCheck(json)) throw VRChatStatus.fromJson(json);
-
     for (dynamic w in json) {
       world.add(VRChatFavoriteWorld.fromJson(w));
     }
@@ -505,8 +467,6 @@ class VRChatFavoriteWorld {
   late String favoriteGroup;
 
   VRChatFavoriteWorld.fromJson(this.json) {
-    if (vrchatStatusCheck(json)) throw VRChatStatus.fromJson(json);
-
     authorId = json['authorId'];
     authorName = json['authorName'];
     capacity = json['capacity'];
@@ -538,8 +498,6 @@ class VRChatFavoriteGroupList {
   List<VRChatFavoriteGroup> group = [];
 
   VRChatFavoriteGroupList.fromJson(this.json) {
-    if (vrchatStatusCheck(json)) throw VRChatStatus.fromJson(json);
-
     for (dynamic user in json) {
       group.add(VRChatFavoriteGroup.fromJson(user));
     }
@@ -559,8 +517,6 @@ class VRChatFavoriteGroup {
   late String visibility;
 
   VRChatFavoriteGroup.fromJson(this.json) {
-    if (vrchatStatusCheck(json)) throw VRChatStatus.fromJson(json);
-
     id = json['id'];
     ownerId = json['ownerId'];
     ownerDisplayName = json['ownerDisplayName'];
@@ -578,8 +534,6 @@ class VRChatNotificationsList {
   List<VRChatNotifications> notifications = [];
 
   VRChatNotificationsList.fromJson(this.json) {
-    if (vrchatStatusCheck(json)) throw VRChatStatus.fromJson(json);
-
     for (dynamic notification in json) {
       notifications.add(VRChatNotifications.fromJson(notification));
     }
@@ -599,8 +553,6 @@ class VRChatNotifications {
   late String type;
 
   VRChatNotifications.fromJson(this.json) {
-    if (vrchatStatusCheck(json)) throw VRChatStatus.fromJson(json);
-
     createdAt = DateTime.parse(json['created_at']);
     details = json['details'];
     id = json['id'];
@@ -621,8 +573,6 @@ class VRChatAcceptFriendRequestByUid {
   late String type;
 
   VRChatAcceptFriendRequestByUid.fromJson(this.json) {
-    if (vrchatStatusCheck(json)) throw VRChatStatus.fromJson(json);
-
     details = json['details'];
     message = json['message'];
     seen = json['seen'];
@@ -639,8 +589,6 @@ class VRChatFavorite {
   late String type;
 
   VRChatFavorite.fromJson(this.json) {
-    if (vrchatStatusCheck(json)) throw VRChatStatus.fromJson(json);
-
     favoriteId = json['favoriteId'];
     id = json['id'];
     tags = json['tags'];

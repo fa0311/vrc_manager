@@ -1,5 +1,6 @@
 // Dart imports:
 import 'dart:convert';
+import 'dart:io';
 
 // Package imports:
 import 'package:http/http.dart' as http;
@@ -9,8 +10,9 @@ class Session {
 
   Future<dynamic> get(Uri url) async {
     http.Response response = await http.get(url, headers: headers);
-    updateCookie(response);
+    if (response.statusCode != 200) throw HttpException(response.body);
     final dynamic body = json.decode(response.body);
+    updateCookie(response);
     return body;
   }
 
@@ -22,28 +24,33 @@ class Session {
         },
       );
     http.Response response = await http.get(url, headers: headersAuth);
+    if (response.statusCode != 200) throw HttpException(response.body);
+    final dynamic body = json.decode(response.body);
     updateCookie(response);
-    return json.decode(response.body);
+    return body;
   }
 
   Future<dynamic> post(Uri url, [Object? data]) async {
     http.Response response = await http.post(url, body: data ?? {}, headers: headers);
+    if (response.statusCode != 200) throw HttpException(response.body);
+    final dynamic body = json.decode(response.body);
     updateCookie(response);
-    return json.decode(response.body);
-  }
-
-  Future<Map> put(Uri url, [Object? data]) async {
-    http.Response response = await http.put(url, body: data ?? {}, headers: headers);
-    updateCookie(response);
-    final body = json.decode(response.body);
-    if (body is List) return {for (int i = 0; i < body.length; i++) i: body[i]};
     return body;
   }
 
-  Future<Map> delete(Uri url, [Object? data]) async {
-    http.Response response = await http.delete(url, body: data ?? {}, headers: headers);
+  Future<dynamic> put(Uri url, [Object? data]) async {
+    http.Response response = await http.put(url, body: data ?? {}, headers: headers);
+    if (response.statusCode != 200) throw HttpException(response.body);
+    final dynamic body = json.decode(response.body);
     updateCookie(response);
-    final body = json.decode(response.body);
+    return body;
+  }
+
+  Future<dynamic> delete(Uri url, [Object? data]) async {
+    http.Response response = await http.delete(url, body: data ?? {}, headers: headers);
+    if (response.statusCode != 200) throw HttpException(response.body);
+    final dynamic body = json.decode(response.body);
+    updateCookie(response);
     return body;
   }
 

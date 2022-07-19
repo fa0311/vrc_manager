@@ -1,3 +1,6 @@
+// Dart imports:
+import 'dart:io';
+
 // Flutter imports:
 import 'package:flutter/material.dart';
 
@@ -62,7 +65,7 @@ class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
         }).catchError((status) {
           error(context, status.message ?? AppLocalizations.of(context)!.reportMessageEmpty);
         }, test: (onError) {
-          return onError is VRChatStatus;
+          return onError is HttpException;
         });
       },
     );
@@ -102,7 +105,11 @@ class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
               },
             );
           },
-        );
+        ).catchError((status) {
+          error(context, status.message ?? AppLocalizations.of(context)!.reportMessageEmpty);
+        }, test: (onError) {
+          return onError is HttpException;
+        });
       },
     );
   }

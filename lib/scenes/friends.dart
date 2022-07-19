@@ -1,3 +1,6 @@
+// Dart imports:
+import 'dart:io';
+
 // Flutter imports:
 import 'package:flutter/material.dart';
 
@@ -82,14 +85,14 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
               }).catchError((status) {
                 error(context, status.message ?? AppLocalizations.of(context)!.reportMessageEmpty);
               }, test: (onError) {
-                return onError is VRChatStatus;
+                return onError is HttpException;
               });
             }
           },
         ).catchError((status) {
           error(context, status.message ?? AppLocalizations.of(context)!.reportMessageEmpty);
         }, test: (onError) {
-          return onError is VRChatStatus;
+          return onError is HttpException;
         });
       },
     );

@@ -1,3 +1,6 @@
+// Dart imports:
+import 'dart:io';
+
 // Flutter imports:
 import 'package:flutter/material.dart';
 
@@ -69,7 +72,7 @@ class _UserHomeState extends State<VRChatMobileUser> {
             ).catchError((status) {
               error(context, status.message ?? AppLocalizations.of(context)!.reportMessageEmpty);
             }, test: (onError) {
-              return onError is VRChatStatus;
+              return onError is HttpException;
             });
 
             if (!["private", "offline"].contains(user.location)) {
@@ -96,7 +99,7 @@ class _UserHomeState extends State<VRChatMobileUser> {
                 }).catchError((status) {
                   error(context, status.message ?? AppLocalizations.of(context)!.reportMessageEmpty);
                 }, test: (onError) {
-                  return onError is VRChatStatus;
+                  return onError is HttpException;
                 }),
                 child: Text(AppLocalizations.of(context)!.joinInstance),
               );
@@ -129,13 +132,13 @@ class _UserHomeState extends State<VRChatMobileUser> {
                   }).catchError((status) {
                     error(context, status.message ?? AppLocalizations.of(context)!.reportMessageEmpty);
                   }, test: (onError) {
-                    return onError is VRChatStatus;
+                    return onError is HttpException;
                   });
                 },
               ).catchError((status) {
                 error(context, status.message ?? AppLocalizations.of(context)!.reportMessageEmpty);
               }, test: (onError) {
-                return onError is VRChatStatus;
+                return onError is HttpException;
               });
             }
             if (user.location == "private") {
@@ -155,7 +158,7 @@ class _UserHomeState extends State<VRChatMobileUser> {
         ).catchError((status) {
           error(context, status.message ?? AppLocalizations.of(context)!.reportMessageEmpty);
         }, test: (onError) {
-          return onError is VRChatStatus;
+          return onError is HttpException;
         });
       },
     );

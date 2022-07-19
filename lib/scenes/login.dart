@@ -1,5 +1,6 @@
 // Dart imports:
 import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
 
 // Flutter imports:
@@ -44,8 +45,20 @@ class _LoginPageState extends State<VRChatMobileLogin> {
       }
     }).catchError((status) {
       error(context, status.message);
-    }, test: (error) {
-      return error is VRChatStatus;
+    }, test: (onError) {
+      return onError is HttpException;
+    }).catchError((status) {
+      error(context, "TypeError");
+    }, test: (onError) {
+      return onError is TypeError;
+    }).catchError((status) {
+      error(context, "SocketException");
+    }, test: (onError) {
+      return onError is SocketException;
+    }).catchError((status) {
+      error(context, "FormatException");
+    }, test: (onError) {
+      return onError is FormatException;
     });
   }
 
@@ -59,7 +72,7 @@ class _LoginPageState extends State<VRChatMobileLogin> {
     }).catchError((onError) {
       error(context, onError.message);
     }, test: (onError) {
-      return onError is VRChatStatus;
+      return onError is HttpException;
     });
   }
 
