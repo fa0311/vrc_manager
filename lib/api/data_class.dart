@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 bool vrchatStatusCheck(dynamic json) {
   try {
     return json.containsKey("error");
@@ -391,6 +393,74 @@ class VRChatLimitedWorld {
       unityPackages.add(LimitedUnityPackages.fromJson(unityPackage));
     }
     updatedAt = DateTime.parse(json['updated_at']);
+  }
+}
+
+class VRChatInstance {
+  dynamic json;
+
+  late bool active;
+  late bool canRequestInvite;
+  late int capacity;
+  late String clientNumber; //default unknown
+  late bool full;
+  late String id;
+  late String instanceId;
+  late String location;
+  late int nUsers;
+  late String name;
+  late String ownerId;
+  late bool permanent;
+  late String photonRegion;
+  late VRChatPlatforms platforms;
+  late String region;
+  late String shortName;
+  late List<String> tags;
+  late String type;
+  late String worldId;
+  late String? hidden;
+  late String? friends;
+  late String? private;
+
+  VRChatInstance.fromJson(this.json) {
+    if (vrchatStatusCheck(json)) throw VRChatStatus.fromJson(json);
+
+    active = json['active'];
+    canRequestInvite = json['canRequestInvite'];
+    capacity = json['capacity'];
+    clientNumber = json['clientNumber'];
+    full = json['full'];
+    id = json['id'];
+    instanceId = json['instanceId'];
+    location = json['location'];
+    nUsers = json['n_users'];
+    name = json['name'];
+    ownerId = json['ownerId'];
+    permanent = json['permanent'];
+    photonRegion = json['photonRegion'];
+    platforms = VRChatPlatforms.fromJson(json['platforms']);
+    region = json['region'];
+    shortName = json['shortName'];
+    tags = json['tags'].cast<String>();
+    type = json['type'];
+    worldId = json['worldId'];
+    hidden = json['hidden'];
+    friends = json['friends'];
+    private = json['private'];
+  }
+}
+
+class VRChatPlatforms {
+  dynamic json;
+
+  late int android;
+  late int standalonewindows;
+
+  VRChatPlatforms.fromJson(this.json) {
+    if (vrchatStatusCheck(json)) throw VRChatStatus.fromJson(json);
+
+    android = json['android'];
+    standalonewindows = json['standalonewindows'];
   }
 }
 

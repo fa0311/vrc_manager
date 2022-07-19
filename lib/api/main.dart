@@ -257,13 +257,15 @@ class VRChatAPI {
 
   // Instance
 
-  Future<dynamic> instances(String location) {
-    return vrchatSession.get(
-      endpoint(
-        'api/1/instances/$location',
-        apiKey(),
-      ),
-    );
+  Future<VRChatInstance> instances(String location) {
+    return vrchatSession
+        .get(
+          endpoint(
+            'api/1/instances/$location',
+            apiKey(),
+          ),
+        )
+        .then((value) => VRChatInstance.fromJson(value));
   }
 
   Future<VRChatStatus> selfInvite(String location) {

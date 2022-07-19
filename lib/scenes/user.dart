@@ -114,25 +114,23 @@ class _UserHomeState extends State<VRChatMobileUser> {
                       );
                     },
                   );
-                  VRChatAPI(cookie: cookie ?? "").instances(user.location).then(
-                    (instance) {
-                      if (instance.containsKey("error")) {
-                        error(context, instance["error"]["message"]);
-                        return;
-                      }
-                      setState(
-                        () {
-                          column = Column(children: column.children);
-                          column.children[1] = Column(
-                            children: [
-                              Container(padding: const EdgeInsets.only(top: 30)),
-                              simpleWorldPlus(context, world, instance),
-                            ],
-                          );
-                        },
-                      );
-                    },
-                  );
+                  VRChatAPI(cookie: cookie ?? "").instances(user.location).then((instance) {
+                    setState(
+                      () {
+                        column = Column(children: column.children);
+                        column.children[1] = Column(
+                          children: [
+                            Container(padding: const EdgeInsets.only(top: 30)),
+                            simpleWorldPlus(context, world, instance),
+                          ],
+                        );
+                      },
+                    );
+                  }).catchError((status) {
+                    error(context, status.message ?? AppLocalizations.of(context)!.reportMessageEmpty);
+                  }, test: (onError) {
+                    return onError is VRChatStatus;
+                  });
                 },
               ).catchError((status) {
                 error(context, status.message ?? AppLocalizations.of(context)!.reportMessageEmpty);

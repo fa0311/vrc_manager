@@ -127,7 +127,7 @@ Card simpleWorldFavorite(BuildContext context, VRChatFavoriteWorld world) {
   );
 }
 
-Card simpleWorldPlus(BuildContext context, VRChatWorld world, dynamic instance) {
+Card simpleWorldPlus(BuildContext context, VRChatWorld world, VRChatInstance instance) {
   // instance is VRCinstance class
   return Card(
     elevation: 20.0,
@@ -157,15 +157,15 @@ Card simpleWorldPlus(BuildContext context, VRChatWorld world, dynamic instance) 
                       Padding(
                         padding: const EdgeInsets.only(right: 5),
                         child: region(
-                          instance["region"],
+                          instance.region,
                         ),
                       ),
                       const Icon(Icons.groups),
-                      Padding(padding: const EdgeInsets.only(right: 5), child: Text("${instance['n_users']}/${instance['capacity']}")),
+                      Padding(padding: const EdgeInsets.only(right: 5), child: Text("${instance.nUsers}/${instance.capacity}")),
                       Expanded(
                         child: SizedBox(
                           width: double.infinity,
-                          child: Text(getVrchatInstanceType()[instance["type"]] ?? "?"),
+                          child: Text(getVrchatInstanceType()[instance.type] ?? "?"),
                         ),
                       )
                     ]),
