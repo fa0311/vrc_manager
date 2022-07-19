@@ -77,11 +77,7 @@ class _UserHomeState extends State<VRChatMobileUser> {
                 style: ElevatedButton.styleFrom(
                   onPrimary: Colors.grey,
                 ),
-                onPressed: () => VRChatAPI(cookie: cookie ?? "").selfInvite(user.location).then((response) {
-                  if (response.containsKey("error")) {
-                    error(context, response["error"]["message"]);
-                    return;
-                  }
+                onPressed: () => VRChatAPI(cookie: cookie ?? "").selfInvite(user.location).then((VRChatStatus response) {
                   showDialog(
                     context: context,
                     builder: (_) {
@@ -97,6 +93,10 @@ class _UserHomeState extends State<VRChatMobileUser> {
                       );
                     },
                   );
+                }).catchError((status) {
+                  error(context, status.message ?? AppLocalizations.of(context)!.reportMessageEmpty);
+                }, test: (onError) {
+                  return onError is VRChatStatus;
                 }),
                 child: Text(AppLocalizations.of(context)!.joinInstance),
               );

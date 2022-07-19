@@ -266,13 +266,15 @@ class VRChatAPI {
     );
   }
 
-  Future<dynamic> selfInvite(String location) {
-    return vrchatSession.post(
-      endpoint(
-        'api/1/instances/$location/invite',
-        apiKey(),
-      ),
-    );
+  Future<VRChatStatus> selfInvite(String location) {
+    return vrchatSession
+        .post(
+          endpoint(
+            'api/1/instances/$location/invite',
+            apiKey(),
+          ),
+        )
+        .then((value) => VRChatStatus.fromJson(value));
   }
 
   // Change
