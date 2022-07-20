@@ -1,3 +1,5 @@
+// Dart imports:
+
 // Flutter imports:
 import 'package:flutter/material.dart';
 
@@ -5,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 // Project imports:
+import 'package:vrchat_mobile_client/api/data_class.dart';
 import 'package:vrchat_mobile_client/api/main.dart';
 import 'package:vrchat_mobile_client/assets/error.dart';
 import 'package:vrchat_mobile_client/assets/storage.dart';
@@ -36,41 +39,31 @@ class _FriendRequestPageState extends State<VRChatMobileFriendRequest> {
   moreOver() {
     getLoginSession("login_session").then(
       (cookie) {
-        VRChatAPI(cookie: cookie ?? "").notifications(type: "friendRequest", offset: offset).then(
-          (response) {
-            if (response.containsKey("error")) {
-              error(context, response["error"]["message"]);
-              return;
-            }
-            offset += 100;
-            if (response.isEmpty) {
+        VRChatAPI(cookie: cookie ?? "").notifications(type: "friendRequest", offset: offset).then((VRChatNotificationsList response) {
+          offset += 100;
+          if (response.notifications.isEmpty && dataColumn.children.isEmpty) {
+            setState(
+              () => column = Column(
+                children: <Widget>[
+                  Text(AppLocalizations.of(context)!.none),
+                ],
+              ),
+            );
+          }
+          for (VRChatNotifications requestUser in response.notifications) {
+            VRChatAPI(cookie: cookie ?? "").users(requestUser.senderUserId).then((VRChatUser user) {
               setState(
                 () => column = Column(
-                  children: <Widget>[
-                    Text(AppLocalizations.of(context)!.none),
-                  ],
+                  children: dataColumn.add(user),
                 ),
               );
-            }
-            response.forEach(
-              (_, dynamic requestUser) {
-                VRChatAPI(cookie: cookie ?? "").users(requestUser["senderUserId"]).then(
-                  (user) {
-                    if (user.containsKey("error")) {
-                      error(context, user["error"]["message"]);
-                      return;
-                    }
-                    setState(
-                      () => column = Column(
-                        children: dataColumn.adds({0: user}),
-                      ),
-                    );
-                  },
-                );
-              },
-            );
-          },
-        );
+            }).catchError((status) {
+              apiError(context, status);
+            });
+          }
+        }).catchError((status) {
+          apiError(context, status);
+        });
       },
     );
   }

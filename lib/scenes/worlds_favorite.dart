@@ -1,3 +1,5 @@
+// Dart imports:
+
 // Flutter imports:
 import 'package:flutter/material.dart';
 
@@ -5,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 // Project imports:
+import 'package:vrchat_mobile_client/api/data_class.dart';
 import 'package:vrchat_mobile_client/api/main.dart';
 import 'package:vrchat_mobile_client/assets/error.dart';
 import 'package:vrchat_mobile_client/assets/storage.dart';
@@ -33,86 +36,73 @@ class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
   _WorldsFavoriteState() {
     getLoginSession("login_session").then(
       (cookie) {
-        VRChatAPI(cookie: cookie ?? "").favoriteGroups("world", offset: 0).then(
-          (response) {
-            if (response.containsKey("error")) {
-              error(context, response["error"]["message"]);
-              return;
+        VRChatAPI(cookie: cookie ?? "").favoriteGroups("world", offset: 0).then((
+          VRChatFavoriteGroupList response,
+        ) {
+          if (response.group.isEmpty) {
+            setState(() => column = Column(
+                  children: <Widget>[
+                    Text(AppLocalizations.of(context)!.none),
+                  ],
+                ));
+          } else {
+            final List<Widget> children = [];
+            for (VRChatFavoriteGroup list in response.group) {
+              children.add(Column(
+                children: <Widget>[
+                  Text(list.displayName),
+                ],
+              ));
             }
-            if (response.isEmpty) {
-              setState(() => column = Column(
-                    children: <Widget>[
-                      Text(AppLocalizations.of(context)!.none),
-                    ],
-                  ));
-            } else {
-              final List<Widget> children = [];
-              response.forEach(
-                (_, dynamic list) {
-                  children.add(Column(
-                    children: <Widget>[
-                      Text(list["displayName"]),
-                    ],
-                  ));
-                },
-              );
-              column = Column(children: children);
-            }
-            response.forEach(
-              (index, dynamic list) {
-                offset.add(0);
-                childrenList.add(Column());
-                moreOver(list, index);
-              },
-            );
-          },
-        );
+            column = Column(children: children);
+          }
+          response.group.asMap().forEach((index, VRChatFavoriteGroup list) {
+            offset.add(0);
+            childrenList.add(Column());
+            moreOver(list, index);
+          });
+        }).catchError((status) {
+          apiError(context, status);
+        });
       },
     );
   }
 
-  moreOver(Map list, int index) {
+  moreOver(VRChatFavoriteGroup list, int index) {
     getLoginSession("login_session").then(
       (cookie) {
-        VRChatAPI(cookie: cookie ?? "").favoritesWorlds(list["name"], offset: offset[index]).then(
-          (worlds) {
-            if (worlds.containsKey("error")) {
-              error(context, worlds["error"]["message"]);
-              return;
-            }
-
-            offset[index] += 50;
-            final List<Widget> worldList = [];
-            worldList.addAll(childrenList[index].children);
-            worlds.forEach(
-              (_, dynamic world) {
-                worldList.add(simpleWorld(context, world));
-              },
-            );
-            childrenList[index] = Column(children: worldList);
-            column = Column(children: column.children);
-            setState(
-              () {
-                column.children[index] = Column(children: [
-                  Text(list["displayName"]),
-                  Column(children: childrenList[index].children),
-                  if (childrenList[index].children.length == offset[index] && offset[index] > 0)
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width,
-                      child: Column(
-                        children: <Widget>[
-                          ElevatedButton(
-                            child: Text(AppLocalizations.of(context)!.readMore),
-                            onPressed: () => moreOver(list, index),
-                          ),
-                        ],
-                      ),
-                    )
-                ]);
-              },
-            );
-          },
-        );
+        VRChatAPI(cookie: cookie ?? "").favoritesWorlds(list.name, offset: offset[index]).then((VRChatFavoriteWorldList worlds) {
+          offset[index] += 50;
+          final List<Widget> worldList = [];
+          worldList.addAll(childrenList[index].children);
+          for (VRChatFavoriteWorld world in worlds.world) {
+            worldList.add(simpleWorldFavorite(context, world));
+          }
+          childrenList[index] = Column(children: worldList);
+          column = Column(children: column.children);
+          setState(
+            () {
+              column.children[index] = Column(children: [
+                Text(list.displayName),
+                Column(children: childrenList[index].children),
+                if (childrenList[index].children.length == offset[index] && offset[index] > 0)
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    child: Column(
+                      children: <Widget>[
+                        ElevatedButton(
+                          child: Text(AppLocalizations.of(context)!.readMore),
+                          onPressed: () => moreOver(list, index),
+                        ),
+                      ],
+                    ),
+                  )
+              ]);
+            },
+          );
+        }).catchError((status) {
+          apiError(context, status);
+        });
       },
     );
   }

@@ -1,5 +1,4 @@
 // Dart imports:
-import 'dart:convert';
 import 'dart:math';
 
 // Flutter imports:
@@ -9,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 // Project imports:
+import 'package:vrchat_mobile_client/api/data_class.dart';
 import 'package:vrchat_mobile_client/api/main.dart';
 import 'package:vrchat_mobile_client/assets/error.dart';
 import 'package:vrchat_mobile_client/assets/storage.dart';
@@ -31,45 +31,29 @@ class _LoginPageState extends State<VRChatMobileLogin> {
   late VRChatAPI session = VRChatAPI();
 
   _onPressed(context) {
-    session.login(_userController.text, _passwordController.text).then(
-      (response) {
-        if (response.containsKey("error")) {
-          error(context, response["error"]["message"]);
-        } else if (response.containsKey("requiresTwoFactorAuth")) {
-          _totp();
-        } else if (response.containsKey("verified") && response["verified"]) {
-          _save(session.vrchatSession.headers["cookie"] as String);
-        } else if (response.containsKey("verified") && !response["verified"]) {
-          error(context, AppLocalizations.of(context)!.incorrectLogin);
-        } else if (response.containsKey("id")) {
-          _save(session.vrchatSession.headers["cookie"] as String);
-        } else {
-          error(context,
-              "${AppLocalizations.of(context)!.unexpectedError}\n${AppLocalizations.of(context)!.reportMessage1}\n${AppLocalizations.of(context)!.reportMessage2(AppLocalizations.of(context)!.report)}",
-              log: json.encode(response));
-        }
-      },
-    );
+    session.login(_userController.text, _passwordController.text).then((VRChatLogin login) {
+      if (login.requiresTwoFactorAuth) {
+        _totp();
+      } else if (login.verified) {
+        _save(session.vrchatSession.headers["cookie"] as String);
+      } else {
+        otherError(context, AppLocalizations.of(context)!.unexpectedError, content: login.content);
+      }
+    }).catchError((status) {
+      apiError(context, status);
+    });
   }
 
   _onPressedTotp(context) {
-    session.loginTotp(_totpController.text).then(
-      (response) {
-        if (response.containsKey("error")) {
-          error(context, response["error"]["message"]);
-        } else if (response.containsKey("verified") && response["verified"]) {
-          _save(session.vrchatSession.headers["cookie"] as String);
-        } else if (response.containsKey("verified") && !response["verified"]) {
-          error(context, AppLocalizations.of(context)!.incorrectLogin);
-        } else if (response.containsKey("id")) {
-          _save(session.vrchatSession.headers["cookie"] as String);
-        } else {
-          error(context,
-              "${AppLocalizations.of(context)!.unexpectedError}\n${AppLocalizations.of(context)!.reportMessage1}\n${AppLocalizations.of(context)!.reportMessage2(AppLocalizations.of(context)!.report)}",
-              log: json.encode(response));
-        }
-      },
-    );
+    session.loginTotp(_totpController.text).then((VRChatLogin login) {
+      if (login.verified) {
+        _save(session.vrchatSession.headers["cookie"] as String);
+      } else {
+        errorDialog(context, AppLocalizations.of(context)!.incorrectLogin);
+      }
+    }).catchError((status) {
+      apiError(context, status);
+    });
   }
 
   _totp() {

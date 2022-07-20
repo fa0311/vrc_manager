@@ -37,7 +37,7 @@ class _HelpPageState extends State<VRChatMobileHelp> {
                   ListTile(
                       title: Text(AppLocalizations.of(context)!.report),
                       subtitle: Text(AppLocalizations.of(context)!.reportDetails),
-                      onTap: () => openInBrowser(context, "https://github.com/fa0311/vrchat_mobile_client/issues/new")),
+                      onTap: () => openInBrowser(context, "https://github.com/fa0311/vrchat_mobile_client/issues/new/choosenew")),
                   const Divider(),
                   ListTile(
                     title: Text(AppLocalizations.of(context)!.developerInfo),

@@ -13,7 +13,7 @@ import 'package:vrchat_mobile_client/scenes/setting/other_account.dart';
 import 'package:vrchat_mobile_client/scenes/settings.dart';
 import 'package:vrchat_mobile_client/scenes/worlds_favorite.dart';
 
-Drawer? drawer(BuildContext context) {
+Drawer drawer(BuildContext context) {
   Column column = Column();
 
   getStorageList("account_index_list").then(
@@ -124,7 +124,7 @@ Drawer? drawer(BuildContext context) {
                 TextButton(
                   onPressed: () => Navigator.pop(context),
                   child: Text(AppLocalizations.of(context)!.close),
-                )
+                ),
               ],
             ),
           ),
