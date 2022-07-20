@@ -48,7 +48,7 @@ class _WorldState extends State<VRChatMobileWorld> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (BuildContext context) => VRChatMobileJsonViewer(obj: response),
+                          builder: (BuildContext context) => VRChatMobileJsonViewer(obj: response.content),
                         ));
                   },
                   child: Text(AppLocalizations.of(context)!.viewInJsonViewer),
