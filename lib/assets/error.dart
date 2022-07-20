@@ -33,7 +33,7 @@ void errorDialog(BuildContext context, String text, {String log = ""}) {
                 child: Text(AppLocalizations.of(context)!.report),
                 onPressed: () {
                   ClipboardData data = ClipboardData(text: log);
-                  Clipboard.setData(data).then(((_) => openInBrowser(context, "https://github.com/fa0311/vrchat_mobile_client/issues/new")));
+                  Clipboard.setData(data).then(((_) => openInBrowser(context, "https://github.com/fa0311/vrchat_mobile_client/issues/new/choosenew")));
                 }),
           TextButton(
             child: Text(AppLocalizations.of(context)!.ok),
