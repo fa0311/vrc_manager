@@ -1,6 +1,4 @@
 // Dart imports:
-import 'dart:convert';
-import 'dart:io';
 import 'dart:math';
 
 // Flutter imports:
@@ -39,26 +37,10 @@ class _LoginPageState extends State<VRChatMobileLogin> {
       } else if (login.verified) {
         _save(session.vrchatSession.headers["cookie"] as String);
       } else {
-        error(context,
-            "${AppLocalizations.of(context)!.unexpectedError}\n${AppLocalizations.of(context)!.reportMessage1}\n${AppLocalizations.of(context)!.reportMessage2(AppLocalizations.of(context)!.report)}",
-            log: json.encode(login.json));
+        otherError(context, AppLocalizations.of(context)!.unexpectedError, content: login.json);
       }
     }).catchError((status) {
-      error(context, status.message);
-    }, test: (onError) {
-      return onError is HttpException;
-    }).catchError((status) {
-      error(context, "TypeError");
-    }, test: (onError) {
-      return onError is TypeError;
-    }).catchError((status) {
-      error(context, "SocketException");
-    }, test: (onError) {
-      return onError is SocketException;
-    }).catchError((status) {
-      error(context, "FormatException");
-    }, test: (onError) {
-      return onError is FormatException;
+      apiError(context, status);
     });
   }
 
@@ -67,12 +49,10 @@ class _LoginPageState extends State<VRChatMobileLogin> {
       if (login.verified) {
         _save(session.vrchatSession.headers["cookie"] as String);
       } else {
-        error(context, AppLocalizations.of(context)!.incorrectLogin);
+        errorDialog(context, AppLocalizations.of(context)!.incorrectLogin);
       }
-    }).catchError((onError) {
-      error(context, onError.message);
-    }, test: (onError) {
-      return onError is HttpException;
+    }).catchError((status) {
+      apiError(context, status);
     });
   }
 

@@ -1,7 +1,6 @@
 // Dart imports:
 
 // Dart imports:
-import 'dart:io';
 
 // Flutter imports:
 import 'package:flutter/material.dart';
@@ -79,21 +78,17 @@ Widget profileAction(BuildContext context, VRChatfriendStatus status, String uid
   sendFriendRequest() {
     getLoginSession("login_session").then(
       (cookie) {
-        VRChatAPI(cookie: cookie ?? "").sendFriendRequest(uid).then(
-          (response) {
-            Navigator.pop(context);
-            Navigator.pop(context);
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (BuildContext context) => VRChatMobileUser(userId: uid),
-              ),
-            );
-          },
-        ).catchError((status) {
-          error(context, status.message ?? AppLocalizations.of(context)!.reportMessageEmpty);
-        }, test: (onError) {
-          return onError is HttpException;
+        VRChatAPI(cookie: cookie ?? "").sendFriendRequest(uid).then((response) {
+          Navigator.pop(context);
+          Navigator.pop(context);
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (BuildContext context) => VRChatMobileUser(userId: uid),
+            ),
+          );
+        }).catchError((status) {
+          apiError(context, status);
         });
       },
     );
@@ -102,21 +97,17 @@ Widget profileAction(BuildContext context, VRChatfriendStatus status, String uid
   acceptFriendRequest() {
     getLoginSession("login_session").then(
       (cookie) {
-        VRChatAPI(cookie: cookie ?? "").acceptFriendRequestByUid(uid).then(
-          (response) {
-            Navigator.pop(context);
-            Navigator.pop(context);
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (BuildContext context) => VRChatMobileUser(userId: uid),
-              ),
-            );
-          },
-        ).catchError((status) {
-          error(context, status.message ?? AppLocalizations.of(context)!.reportMessageEmpty);
-        }, test: (onError) {
-          return onError is HttpException;
+        VRChatAPI(cookie: cookie ?? "").acceptFriendRequestByUid(uid).then((response) {
+          Navigator.pop(context);
+          Navigator.pop(context);
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (BuildContext context) => VRChatMobileUser(userId: uid),
+            ),
+          );
+        }).catchError((status) {
+          apiError(context, status);
         });
       },
     );
@@ -135,9 +126,7 @@ Widget profileAction(BuildContext context, VRChatfriendStatus status, String uid
             ),
           );
         }).catchError((status) {
-          error(context, status.message ?? AppLocalizations.of(context)!.reportMessageEmpty);
-        }, test: (onError) {
-          return onError is HttpException;
+          apiError(context, status);
         });
       },
     );
@@ -161,9 +150,7 @@ Widget profileAction(BuildContext context, VRChatfriendStatus status, String uid
               ),
             );
           }).catchError((status) {
-            error(context, status.message ?? AppLocalizations.of(context)!.reportMessageEmpty);
-          }, test: (onError) {
-            return onError is HttpException;
+            apiError(context, status);
           });
         },
       ),

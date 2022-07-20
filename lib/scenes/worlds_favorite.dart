@@ -1,5 +1,4 @@
 // Dart imports:
-import 'dart:io';
 
 // Flutter imports:
 import 'package:flutter/material.dart';
@@ -63,9 +62,7 @@ class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
             moreOver(list, index);
           });
         }).catchError((status) {
-          error(context, status.message ?? AppLocalizations.of(context)!.reportMessageEmpty);
-        }, test: (onError) {
-          return onError is HttpException;
+          apiError(context, status);
         });
       },
     );
@@ -74,41 +71,37 @@ class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
   moreOver(VRChatFavoriteGroup list, int index) {
     getLoginSession("login_session").then(
       (cookie) {
-        VRChatAPI(cookie: cookie ?? "").favoritesWorlds(list.name, offset: offset[index]).then(
-          (VRChatFavoriteWorldList worlds) {
-            offset[index] += 50;
-            final List<Widget> worldList = [];
-            worldList.addAll(childrenList[index].children);
-            for (VRChatFavoriteWorld world in worlds.world) {
-              worldList.add(simpleWorldFavorite(context, world));
-            }
-            childrenList[index] = Column(children: worldList);
-            column = Column(children: column.children);
-            setState(
-              () {
-                column.children[index] = Column(children: [
-                  Text(list.displayName),
-                  Column(children: childrenList[index].children),
-                  if (childrenList[index].children.length == offset[index] && offset[index] > 0)
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width,
-                      child: Column(
-                        children: <Widget>[
-                          ElevatedButton(
-                            child: Text(AppLocalizations.of(context)!.readMore),
-                            onPressed: () => moreOver(list, index),
-                          ),
-                        ],
-                      ),
-                    )
-                ]);
-              },
-            );
-          },
-        ).catchError((status) {
-          error(context, status.message ?? AppLocalizations.of(context)!.reportMessageEmpty);
-        }, test: (onError) {
-          return onError is HttpException;
+        VRChatAPI(cookie: cookie ?? "").favoritesWorlds(list.name, offset: offset[index]).then((VRChatFavoriteWorldList worlds) {
+          offset[index] += 50;
+          final List<Widget> worldList = [];
+          worldList.addAll(childrenList[index].children);
+          for (VRChatFavoriteWorld world in worlds.world) {
+            worldList.add(simpleWorldFavorite(context, world));
+          }
+          childrenList[index] = Column(children: worldList);
+          column = Column(children: column.children);
+          setState(
+            () {
+              column.children[index] = Column(children: [
+                Text(list.displayName),
+                Column(children: childrenList[index].children),
+                if (childrenList[index].children.length == offset[index] && offset[index] > 0)
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    child: Column(
+                      children: <Widget>[
+                        ElevatedButton(
+                          child: Text(AppLocalizations.of(context)!.readMore),
+                          onPressed: () => moreOver(list, index),
+                        ),
+                      ],
+                    ),
+                  )
+              ]);
+            },
+          );
+        }).catchError((status) {
+          apiError(context, status);
         });
       },
     );

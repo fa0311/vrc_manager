@@ -1,5 +1,4 @@
 // Dart imports:
-import 'dart:io';
 
 // Flutter imports:
 import 'package:flutter/material.dart';
@@ -36,75 +35,62 @@ class _WorldState extends State<VRChatMobileWorld> {
   _WorldState() {
     getLoginSession("login_session").then(
       (cookie) {
-        VRChatAPI(cookie: cookie ?? "").worlds(widget.worldId).then(
-          (VRChatWorld response) {
-            setState(
-              () {
-                column = Column(children: [
-                  world(context, response),
-                  TextButton(
-                    style: ElevatedButton.styleFrom(
-                      onPrimary: Colors.grey,
-                    ),
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (BuildContext context) => VRChatMobileJsonViewer(obj: response),
-                          ));
-                    },
-                    child: Text(AppLocalizations.of(context)!.viewInJsonViewer),
+        VRChatAPI(cookie: cookie ?? "").worlds(widget.worldId).then((VRChatWorld response) {
+          setState(
+            () {
+              column = Column(children: [
+                world(context, response),
+                TextButton(
+                  style: ElevatedButton.styleFrom(
+                    onPrimary: Colors.grey,
                   ),
-                ]);
-              },
-            );
-            getLoginSession("login_session").then(
-              (cookie) {
-                VRChatAPI(cookie: cookie ?? "").favoriteGroups("world", offset: 0).then(
-                  (VRChatFavoriteGroupList response) {
-                    List<Widget> bottomSheet = [];
-                    if (response.group.isEmpty) return;
-                    bottomSheet.add(ListTile(
-                      title: Text(AppLocalizations.of(context)!.addFavoriteWorlds),
-                    ));
-                    bottomSheet.add(const Divider());
-                    for (VRChatFavoriteGroup list in response.group) {
-                      bottomSheet.add(ListTile(
-                        title: Text(list.displayName),
-                        onTap: () => {
-                          VRChatAPI(cookie: cookie ?? "").addFavorites("world", widget.worldId, list.name).then((response) {
-                            Navigator.pop(context);
-                          }).catchError((status) {
-                            error(context, status.message ?? AppLocalizations.of(context)!.reportMessageEmpty);
-                          }, test: (onError) {
-                            return onError is HttpException;
-                          }),
-                        },
-                      ));
-                      bottomSheet.add(const Divider());
-                    }
-                    bottomSheet.removeLast();
-                    setState(
-                      () {
-                        popupMenu = <Widget>[
-                          worldAction(context, widget.worldId, bottomSheet),
-                          share(context, "https://vrchat.com/home/world/${widget.worldId}")
-                        ];
-                      },
-                    );
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (BuildContext context) => VRChatMobileJsonViewer(obj: response),
+                        ));
                   },
-                ).catchError((status) {
-                  error(context, status.message ?? AppLocalizations.of(context)!.reportMessageEmpty);
-                }, test: (onError) {
-                  return onError is HttpException;
-                });
-              },
-            );
-          },
-        ).catchError((status) {
-          error(context, status.message ?? AppLocalizations.of(context)!.reportMessageEmpty);
-        }, test: (onError) {
-          return onError is HttpException;
+                  child: Text(AppLocalizations.of(context)!.viewInJsonViewer),
+                ),
+              ]);
+            },
+          );
+          getLoginSession("login_session").then(
+            (cookie) {
+              VRChatAPI(cookie: cookie ?? "").favoriteGroups("world", offset: 0).then((VRChatFavoriteGroupList response) {
+                List<Widget> bottomSheet = [];
+                if (response.group.isEmpty) return;
+                bottomSheet.add(ListTile(
+                  title: Text(AppLocalizations.of(context)!.addFavoriteWorlds),
+                ));
+                bottomSheet.add(const Divider());
+                for (VRChatFavoriteGroup list in response.group) {
+                  bottomSheet.add(ListTile(
+                    title: Text(list.displayName),
+                    onTap: () => {
+                      VRChatAPI(cookie: cookie ?? "").addFavorites("world", widget.worldId, list.name).then((response) {
+                        Navigator.pop(context);
+                      }).catchError((status) {
+                        apiError(context, status);
+                      }),
+                    },
+                  ));
+                  bottomSheet.add(const Divider());
+                }
+                bottomSheet.removeLast();
+                setState(
+                  () {
+                    popupMenu = <Widget>[worldAction(context, widget.worldId, bottomSheet), share(context, "https://vrchat.com/home/world/${widget.worldId}")];
+                  },
+                );
+              }).catchError((status) {
+                apiError(context, status);
+              });
+            },
+          );
+        }).catchError((status) {
+          apiError(context, status);
         });
       },
     );

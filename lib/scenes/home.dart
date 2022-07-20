@@ -75,26 +75,22 @@ class _LoginHomeState extends State<VRChatMobileHome> {
               },
             );
             if (!["private", "offline"].contains(user.worldId)) {
-              VRChatAPI(cookie: cookie).worlds(user.worldId.split(":")[0]).then(
-                (VRChatWorld world) {
-                  setState(
-                    () {
-                      column = Column(children: column.children);
-                      column.children[1] = Column(
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.only(top: 30),
-                          ),
-                          simpleWorld(context, world.toLimited())
-                        ],
-                      );
-                    },
-                  );
-                },
-              ).catchError((status) {
-                error(context, status.message ?? AppLocalizations.of(context)!.reportMessageEmpty);
-              }, test: (onError) {
-                return onError is HttpException;
+              VRChatAPI(cookie: cookie).worlds(user.worldId.split(":")[0]).then((VRChatWorld world) {
+                setState(
+                  () {
+                    column = Column(children: column.children);
+                    column.children[1] = Column(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.only(top: 30),
+                        ),
+                        simpleWorld(context, world.toLimited())
+                      ],
+                    );
+                  },
+                );
+              }).catchError((status) {
+                apiError(context, status);
               });
             }
             if (user.location == "private") {
@@ -113,9 +109,7 @@ class _LoginHomeState extends State<VRChatMobileHome> {
               );
             }
           }).catchError((status) {
-            error(context, status.message ?? AppLocalizations.of(context)!.reportMessageEmpty);
-          }, test: (onError) {
-            return onError is HttpException;
+            apiError(context, status);
           });
 
           if (Platform.isAndroid || Platform.isIOS) {
@@ -132,18 +126,7 @@ class _LoginHomeState extends State<VRChatMobileHome> {
             );
           }
         }).catchError((status) {
-          error(context, status.message ?? AppLocalizations.of(context)!.reportMessageEmpty);
-          if (status.message == '"Missing Credentials"') {
-            Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(
-                builder: (BuildContext context) => const VRChatMobileLogin(),
-              ),
-              (_) => false,
-            );
-          }
-        }, test: (onError) {
-          return onError is HttpException;
+          apiError(context, status);
         });
       }
     });

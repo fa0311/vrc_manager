@@ -1,7 +1,6 @@
 // Flutter imports:
 
 // Dart imports:
-import 'dart:io';
 
 // Flutter imports:
 import 'package:flutter/material.dart';
@@ -113,9 +112,7 @@ Card simpleWorldFavorite(BuildContext context, VRChatFavoriteWorld world) {
                               builder: (BuildContext context) => const VRChatMobileWorldsFavorite(),
                             ));
                       }).catchError((status) {
-                        error(context, status.message ?? AppLocalizations.of(context)!.reportMessageEmpty);
-                      }, test: (onError) {
-                        return onError is HttpException;
+                        apiError(context, status);
                       });
                     },
                   );

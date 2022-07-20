@@ -51,6 +51,7 @@ dependencies:
   webview_flutter: ^3.0.4
   flutter_inappwebview: ^5.4.3+7
   domain_verification_manager: ^0.0.9
+  device_info_plus: ^4.0.0
 
 dev_dependencies:
   flutter_test:

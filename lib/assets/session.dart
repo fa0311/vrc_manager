@@ -10,7 +10,7 @@ class Session {
 
   Future<dynamic> get(Uri url) async {
     http.Response response = await http.get(url, headers: headers);
-    if (response.statusCode != 200) throw HttpException(response.body);
+    if (response.statusCode != 200) throw HttpException(response.body, uri: url);
     final dynamic body = json.decode(response.body);
     updateCookie(response);
     return body;
@@ -24,7 +24,7 @@ class Session {
         },
       );
     http.Response response = await http.get(url, headers: headersAuth);
-    if (response.statusCode != 200) throw HttpException(response.body);
+    if (response.statusCode != 200) throw HttpException(response.body, uri: url);
     final dynamic body = json.decode(response.body);
     updateCookie(response);
     return body;
@@ -32,7 +32,7 @@ class Session {
 
   Future<dynamic> post(Uri url, [Object? data]) async {
     http.Response response = await http.post(url, body: data ?? {}, headers: headers);
-    if (response.statusCode != 200) throw HttpException(response.body);
+    if (response.statusCode != 200) throw HttpException(response.body, uri: url);
     final dynamic body = json.decode(response.body);
     updateCookie(response);
     return body;
@@ -40,7 +40,7 @@ class Session {
 
   Future<dynamic> put(Uri url, [Object? data]) async {
     http.Response response = await http.put(url, body: data ?? {}, headers: headers);
-    if (response.statusCode != 200) throw HttpException(response.body);
+    if (response.statusCode != 200) throw HttpException(response.body, uri: url);
     final dynamic body = json.decode(response.body);
     updateCookie(response);
     return body;
@@ -48,7 +48,7 @@ class Session {
 
   Future<dynamic> delete(Uri url, [Object? data]) async {
     http.Response response = await http.delete(url, body: data ?? {}, headers: headers);
-    if (response.statusCode != 200) throw HttpException(response.body);
+    if (response.statusCode != 200) throw HttpException(response.body, uri: url);
     final dynamic body = json.decode(response.body);
     updateCookie(response);
     return body;

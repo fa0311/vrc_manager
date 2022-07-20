@@ -9,13 +9,24 @@ class VRChatStatus {
   }
 }
 
+class VRChatError {
+  dynamic json;
+  late int statusCode;
+  late String message;
+
+  VRChatError.fromJson(this.json) {
+    message = json['error']['message'];
+    statusCode = json['error']['status_code'];
+  }
+}
+
 class VRChatLogin {
   dynamic json;
   bool verified = false;
   bool requiresTwoFactorAuth = false;
 
   VRChatLogin.fromJson(this.json) {
-    verified = json['verified'];
+    verified = json['verified'] ?? json.containsKey('username');
     if (json.containsKey('requiresTwoFactorAuth')) requiresTwoFactorAuth = true;
   }
 }
