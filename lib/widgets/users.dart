@@ -9,6 +9,12 @@ import 'package:vrchat_mobile_client/api/data_class.dart';
 import 'package:vrchat_mobile_client/scenes/user.dart';
 import 'package:vrchat_mobile_client/widgets/status.dart';
 
+class LocationDataClass {
+  int id;
+  int count = 0;
+  LocationDataClass(this.id);
+}
+
 class Users {
   List<Widget> children = [];
   bool joinable = false;
@@ -24,27 +30,22 @@ class Users {
     return children;
   }
 
-  Map<String, Map<String, int>> numberOfFriendsInLocation() {
-    Map<String, Map<String, int>> inLocation = {};
+  Map<String, LocationDataClass> numberOfFriendsInLocation() {
+    Map<String, LocationDataClass> inLocation = {};
     int id = 0;
     for (VRChatUser user in userList) {
       String location = user.location;
       if (["private", "offline"].contains(location) && joinable) continue;
-      if (inLocation[location] == null) {
-        id++;
-        inLocation[location] = {
-          "id": id,
-          "number": 0,
-        };
-      }
-      inLocation[location]!["number"] = (inLocation[location]!["number"]! + 1);
+
+      inLocation[location] ??= LocationDataClass(++id);
+      inLocation[location]!.count++;
     }
 
     return inLocation;
   }
 
   sortByLocationMap() {
-    Map<String, Map<String, int>> inLocation = numberOfFriendsInLocation();
+    Map<String, LocationDataClass> inLocation = numberOfFriendsInLocation();
 
     userList.sort((userA, userB) {
       String locationA = userA.location;
@@ -52,10 +53,10 @@ class Users {
       if (locationA == locationB) return 0;
       if (["private", "offline"].contains(locationA) && joinable) return 1;
       if (["private", "offline"].contains(locationB) && joinable) return -1;
-      if (inLocation[locationA]!["number"]! > inLocation[locationB]!["number"]!) return -1;
-      if (inLocation[locationA]!["number"]! < inLocation[locationB]!["number"]!) return 1;
-      if (inLocation[locationA]!["id"]! > inLocation[locationB]!["id"]!) return -1;
-      if (inLocation[locationA]!["id"]! < inLocation[locationB]!["id"]!) return 1;
+      if (inLocation[locationA]!.count > inLocation[locationB]!.count) return -1;
+      if (inLocation[locationA]!.count < inLocation[locationB]!.count) return 1;
+      if (inLocation[locationA]!.id > inLocation[locationB]!.id) return -1;
+      if (inLocation[locationA]!.id < inLocation[locationB]!.id) return 1;
       return 0;
     });
   }
