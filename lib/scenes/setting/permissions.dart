@@ -1,4 +1,6 @@
 // Flutter imports:
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 // Package imports:
@@ -12,7 +14,7 @@ class VRChatMobileSettingsPermissions extends StatefulWidget {
   State<VRChatMobileSettingsPermissions> createState() => _SettingPermissionsPageState();
 }
 
-class _SettingPermissionsPageState extends State<VRChatMobileSettingsPermissions> {
+class _SettingPermissionsPageState extends State<VRChatMobileSettingsPermissions> with WidgetsBindingObserver {
   Future<void> _domainRequest() async {
     if (await DomainVerificationManager.isSupported) {
       await DomainVerificationManager.domainRequest();
@@ -85,16 +87,17 @@ class _SettingPermissionsPageState extends State<VRChatMobileSettingsPermissions
               padding: const EdgeInsets.only(top: 10),
               child: Column(
                 children: <Widget>[
-                  ListTile(
-                      leading: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          domainStageVerification,
-                        ],
-                      ),
-                      title: Text(AppLocalizations.of(context)!.domainVerification),
-                      subtitle: Text(AppLocalizations.of(context)!.domainVerificationDetails),
-                      onTap: () => _domainRequest()),
+                  if (Platform.isAndroid || Platform.isIOS)
+                    ListTile(
+                        leading: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            domainStageVerification,
+                          ],
+                        ),
+                        title: Text(AppLocalizations.of(context)!.domainVerification),
+                        subtitle: Text(AppLocalizations.of(context)!.domainVerificationDetails),
+                        onTap: () => _domainRequest()),
                 ],
               ),
             ),
@@ -102,5 +105,24 @@ class _SettingPermissionsPageState extends State<VRChatMobileSettingsPermissions
         ),
       ),
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      setState(() => _domainStageNone());
+    }
   }
 }
