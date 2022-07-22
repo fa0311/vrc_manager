@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 
 // Package imports:
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -15,6 +16,7 @@ import 'package:vrchat_mobile_client/assets/storage.dart';
 import 'package:vrchat_mobile_client/scenes/web_view.dart';
 
 IconButton share(BuildContext context, String url) {
+  String copiedMessage = AppLocalizations.of(context)!.copied;
   return IconButton(
     icon: const Icon(Icons.share),
     onPressed: () => showModalBottomSheet(
@@ -42,6 +44,9 @@ IconButton share(BuildContext context, String url) {
                   await Clipboard.setData(data).then(
                     (_) => Navigator.pop(context),
                   );
+                  if (Platform.isAndroid || Platform.isIOS) {
+                    Fluttertoast.showToast(msg: copiedMessage);
+                  }
                 }),
             ListTile(
               leading: const Icon(Icons.open_in_browser),
@@ -59,6 +64,7 @@ IconButton share(BuildContext context, String url) {
 }
 
 IconButton simpleShare(BuildContext context, String url) {
+  String copiedMessage = AppLocalizations.of(context)!.copied;
   return IconButton(
     icon: const Icon(Icons.share),
     onPressed: () => showModalBottomSheet(
@@ -86,6 +92,9 @@ IconButton simpleShare(BuildContext context, String url) {
                   await Clipboard.setData(data).then(
                     (_) => Navigator.pop(context),
                   );
+                  if (Platform.isAndroid || Platform.isIOS) {
+                    Fluttertoast.showToast(msg: copiedMessage);
+                  }
                 }),
             ListTile(
               leading: const Icon(Icons.open_in_browser),
@@ -107,6 +116,7 @@ IconButton simpleShare(BuildContext context, String url) {
 }
 
 IconButton clipboardShare(BuildContext context, String text) {
+  String copiedMessage = AppLocalizations.of(context)!.copied;
   return IconButton(
     icon: const Icon(Icons.share),
     onPressed: () => showModalBottomSheet(
@@ -127,6 +137,9 @@ IconButton clipboardShare(BuildContext context, String text) {
                 await Clipboard.setData(data).then(
                   (_) => Navigator.pop(context),
                 );
+                if (Platform.isAndroid || Platform.isIOS) {
+                  Fluttertoast.showToast(msg: copiedMessage);
+                }
               },
             ),
           ],
@@ -140,18 +153,17 @@ Future<void> openInBrowser(BuildContext context, String url) async {
   if (Platform.isAndroid || Platform.isIOS) {
     getStorage("force_external_browser").then(
       (response) async {
-        if (response == "true") {
-          if (await canLaunchUrl(
-            Uri.parse(url),
-          )) {
+        if (response == "true" && Uri.parse(url).host != "vrchat.com") {
+          if (await canLaunchUrl(Uri.parse(url))) {
             await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
           }
         } else {
           Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (BuildContext context) => VRChatMobileWebView(url: url),
-              ));
+            context,
+            MaterialPageRoute(
+              builder: (BuildContext context) => VRChatMobileWebView(url: url),
+            ),
+          );
         }
       },
     );

@@ -39,6 +39,7 @@
     "@____________________SHARE____________________": {},
     "share": "Share",
     "copy": "Copy",
+    "copied": "Copied to clipboard.",
     "openInBrowser": "Open in browser",
     "openInExternalBrowser": "Open in external browser",
     "@____________________MENU____________________": {},
