@@ -283,7 +283,7 @@ class VRChatWorld {
     capacity = content['capacity'];
     createdAt = DateTime.parse(content['created_at']);
     description = content['description'] == "" ? null : content['previewYoutubeId'];
-    favorites = content['favorites'];
+    favorites = content['favorites'] ?? 0;
     featured = content['featured'] ?? false;
     heat = content['heat'];
     id = content['id'];
@@ -389,7 +389,7 @@ class VRChatInstance {
   late String location;
   late int nUsers;
   late String name;
-  late String ownerId;
+  late String? ownerId;
   late bool permanent;
   late String photonRegion;
   late VRChatPlatforms platforms;
@@ -611,13 +611,13 @@ class UnityPackages {
   dynamic content;
 
   late String assetUrl;
-  late Map assetUrlObject; //default {}
+  late Map? assetUrlObject; //default {}
   late int assetVersion;
   late DateTime? createdAt;
   late String id;
   late String platform;
   late String pluginUrl;
-  late Map pluginUrlObject; //default {}
+  late Map? pluginUrlObject; //default {}
   late int unitySortNumber;
   late String unityVersion;
 

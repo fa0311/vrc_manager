@@ -1,4 +1,6 @@
 // Flutter imports:
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
 // Package imports:
@@ -44,21 +46,47 @@ class Users {
     return inLocation;
   }
 
-  sortByLocationMap() {
+  List<Widget> sortByLocationMap() {
     Map<String, LocationDataClass> inLocation = numberOfFriendsInLocation();
-
     userList.sort((userA, userB) {
       String locationA = userA.location;
       String locationB = userB.location;
       if (locationA == locationB) return 0;
-      if (["private", "offline"].contains(locationA) && joinable) return 1;
-      if (["private", "offline"].contains(locationB) && joinable) return -1;
+      if (["private", "offline"].contains(locationA)) return 1;
+      if (["private", "offline"].contains(locationB)) return -1;
       if (inLocation[locationA]!.count > inLocation[locationB]!.count) return -1;
       if (inLocation[locationA]!.count < inLocation[locationB]!.count) return 1;
       if (inLocation[locationA]!.id > inLocation[locationB]!.id) return -1;
       if (inLocation[locationA]!.id < inLocation[locationB]!.id) return 1;
       return 0;
     });
+    return reload();
+  }
+
+  List<Widget> sortByName() {
+    userList.sort((userA, userB) {
+      List<int> userBytesA = utf8.encode(userA.displayName);
+      List<int> userBytesB = utf8.encode(userB.displayName);
+      for (int i = 0; i < userBytesA.length && i < userBytesB.length; i++) {
+        if (userBytesA[i] < userBytesB[i]) return -1;
+        if (userBytesA[i] > userBytesB[i]) return 1;
+      }
+      if (userBytesA.length < userBytesB.length) return -1;
+      if (userBytesA.length > userBytesB.length) return 1;
+      return 0;
+    });
+    return reload();
+  }
+
+  List<Widget> sortByLastLogin() {
+    userList.sort((userA, userB) {
+      if (userA.lastLogin == null) return 1;
+      if (userB.lastLogin == null) return -1;
+      if (userA.lastLogin!.millisecondsSinceEpoch > userB.lastLogin!.millisecondsSinceEpoch) return -1;
+      if (userA.lastLogin!.millisecondsSinceEpoch < userB.lastLogin!.millisecondsSinceEpoch) return 1;
+      return 0;
+    });
+    return reload();
   }
 
   List<Widget> adds(List<VRChatUser> users) {
