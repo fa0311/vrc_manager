@@ -86,7 +86,7 @@ Drawer drawer(BuildContext context) {
                     (_) => false,
                   ),
                   leading: const Icon(Icons.wb_sunny),
-                  title: Text(AppLocalizations.of(context)!.onlineFrends),
+                  title: Text(AppLocalizations.of(context)!.onlinefriends),
                 ),
                 ListTile(
                   onTap: () => Navigator.pushAndRemoveUntil(
@@ -97,7 +97,7 @@ Drawer drawer(BuildContext context) {
                     (_) => false,
                   ),
                   leading: const Icon(Icons.bedtime),
-                  title: Text(AppLocalizations.of(context)!.offlineFrends),
+                  title: Text(AppLocalizations.of(context)!.offlinefriends),
                 ),
                 ListTile(
                   onTap: () => Navigator.pushAndRemoveUntil(

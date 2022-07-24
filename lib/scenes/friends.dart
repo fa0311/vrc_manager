@@ -206,7 +206,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.frends),
+        title: Text(AppLocalizations.of(context)!.friends),
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.more_vert),

@@ -2,6 +2,10 @@
 
 // Flutter imports:
 
+// Dart imports:
+import 'dart:math';
+
+// Flutter imports:
 import 'package:flutter/material.dart';
 
 // Package imports:
@@ -15,10 +19,9 @@ import 'package:vrchat_mobile_client/assets/storage.dart';
 import 'package:vrchat_mobile_client/assets/vrchat/region.dart';
 import 'package:vrchat_mobile_client/scenes/json_viewer.dart';
 import 'package:vrchat_mobile_client/widgets/drawer.dart';
+import 'package:vrchat_mobile_client/widgets/region.dart';
 import 'package:vrchat_mobile_client/widgets/share.dart';
 import 'package:vrchat_mobile_client/widgets/world.dart';
-import 'package:vrchat_mobile_client/widgets/region.dart';
-import 'dart:math';
 
 class VRChatMobileWorld extends StatefulWidget {
   final String worldId;
@@ -105,25 +108,43 @@ class _WorldState extends State<VRChatMobileWorld> {
         child: Column(
           children: [
             ListTile(
-              title: const Text("public"),
-              onTap: () => genInstanceId(regionText, "public", false).then((instanceId) => lunchWorldModalBottom(context, widget.worldId, instanceId)),
+              title: Text(AppLocalizations.of(context)!.vrchatPublic),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.pop(context);
+                genInstanceId(regionText, "public", false).then((instanceId) => lunchWorldModalBottom(context, widget.worldId, instanceId));
+              },
             ),
             ListTile(
-              title: const Text("friends+"),
-              onTap: () => genInstanceId(regionText, "hidden", false).then((instanceId) => lunchWorldModalBottom(context, widget.worldId, instanceId)),
-            ),
+                title: Text(AppLocalizations.of(context)!.vrchatFriendsPlus),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+
+                  genInstanceId(regionText, "hidden", false).then((instanceId) => lunchWorldModalBottom(context, widget.worldId, instanceId));
+                }),
             ListTile(
-              title: const Text("friends"),
-              onTap: () => genInstanceId(regionText, "friends", false).then((instanceId) => lunchWorldModalBottom(context, widget.worldId, instanceId)),
-            ),
+                title: Text(AppLocalizations.of(context)!.vrchatFriends),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+
+                  genInstanceId(regionText, "friends", false).then((instanceId) => lunchWorldModalBottom(context, widget.worldId, instanceId));
+                }),
             ListTile(
-              title: const Text("invite+"),
-              onTap: () => genInstanceId(regionText, "private", true).then((instanceId) => lunchWorldModalBottom(context, widget.worldId, instanceId)),
-            ),
+                title: Text(AppLocalizations.of(context)!.vrchatInvitePlus),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                  genInstanceId(regionText, "private", true).then((instanceId) => lunchWorldModalBottom(context, widget.worldId, instanceId));
+                }),
             ListTile(
-              title: const Text("invite"),
-              onTap: () => genInstanceId(regionText, "private", false).then((instanceId) => lunchWorldModalBottom(context, widget.worldId, instanceId)),
-            )
+                title: Text(AppLocalizations.of(context)!.vrchatInvite),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                  genInstanceId(regionText, "private", false).then((instanceId) => lunchWorldModalBottom(context, widget.worldId, instanceId));
+                })
           ],
         ),
       ),
@@ -156,7 +177,7 @@ class _WorldState extends State<VRChatMobileWorld> {
                     onPrimary: Colors.grey,
                   ),
                   onPressed: () => launchWorld(),
-                  child: Text(AppLocalizations.of(context)!.viewInJsonViewer),
+                  child: Text(AppLocalizations.of(context)!.launchWorld),
                 ),
               ]);
             },
