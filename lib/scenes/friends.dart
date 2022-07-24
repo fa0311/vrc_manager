@@ -29,7 +29,6 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
   bool autoReadMore = false;
   bool delayedDisplay = false;
   String sortMode = "default";
-  List<Future> futureList = [];
 
   late Column column = Column(
     children: const [
@@ -81,9 +80,11 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
 
   sort() {
     if (canMoreOver() && (autoReadMore || delayedDisplay)) {
-      List<Widget> children = [];
-      children = [const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator())];
-      setState(() => column = Column(children: children));
+      if (dataColumn.children.isNotEmpty) {
+        List<Widget> children = [];
+        children = [const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator())];
+        setState(() => column = Column(children: children));
+      }
       moreOver();
     } else if (delayedDisplay) {
       List<Widget> children = [];
@@ -123,14 +124,15 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
           for (VRChatUser user in users.users) {
             String wid = user.location.split(":")[0];
             if (["private", "offline"].contains(user.location) || dataColumn.locationMap.containsKey(wid)) continue;
-            futureList.add(VRChatAPI(cookie: cookie ?? "").worlds(wid).then((responseWorld) {
+            VRChatAPI(cookie: cookie ?? "").worlds(wid).then((responseWorld) {
               dataColumn.locationMap[wid] = responseWorld;
+              if (dataColumn.children.isEmpty) return;
               setState(() => column = Column(
                     children: dataColumn.reload(),
                   ));
             }).catchError((status) {
               apiError(context, status);
-            }));
+            });
           }
           sort();
         }).catchError((status) {
