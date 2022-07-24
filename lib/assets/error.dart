@@ -10,6 +10,7 @@ import 'package:flutter/services.dart';
 // Package imports:
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 // Project imports:
@@ -33,7 +34,14 @@ void errorDialog(BuildContext context, String text, {String log = ""}) {
                 child: Text(AppLocalizations.of(context)!.report),
                 onPressed: () {
                   ClipboardData data = ClipboardData(text: log);
-                  Clipboard.setData(data).then(((_) => openInBrowser(context, "https://github.com/fa0311/vrchat_mobile_client/issues/new/choosenew")));
+                  Clipboard.setData(data).then(
+                    (_) {
+                      if (Platform.isAndroid || Platform.isIOS) {
+                        Fluttertoast.showToast(msg: AppLocalizations.of(context)!.copied);
+                      }
+                      openInBrowser(context, "https://github.com/fa0311/vrchat_mobile_client/issues/new/choose");
+                    },
+                  );
                 }),
           TextButton(
             child: Text(AppLocalizations.of(context)!.ok),

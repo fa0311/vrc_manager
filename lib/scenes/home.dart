@@ -64,7 +64,7 @@ class _LoginHomeState extends State<VRChatMobileHome> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (BuildContext context) => VRChatMobileJsonViewer(obj: user),
+                              builder: (BuildContext context) => VRChatMobileJsonViewer(obj: user.content),
                             ));
                       },
                       child: Text(AppLocalizations.of(context)!.viewInJsonViewer),

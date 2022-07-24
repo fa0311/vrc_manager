@@ -1,7 +1,11 @@
+// Dart imports:
+import 'dart:convert';
+
 // Flutter imports:
 import 'package:flutter/material.dart';
 
 // Package imports:
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 // Project imports:
@@ -9,9 +13,16 @@ import 'package:vrchat_mobile_client/api/data_class.dart';
 import 'package:vrchat_mobile_client/scenes/user.dart';
 import 'package:vrchat_mobile_client/widgets/status.dart';
 
+class LocationDataClass {
+  int id;
+  int count = 0;
+  LocationDataClass(this.id);
+}
+
 class Users {
   List<Widget> children = [];
   bool joinable = false;
+  bool descending = false;
   late BuildContext context;
   Map<String, VRChatWorld> locationMap = {};
   List<VRChatUser> userList = [];
@@ -24,40 +35,63 @@ class Users {
     return children;
   }
 
-  Map<String, Map<String, int>> numberOfFriendsInLocation() {
-    Map<String, Map<String, int>> inLocation = {};
+  Map<String, LocationDataClass> numberOfFriendsInLocation() {
+    Map<String, LocationDataClass> inLocation = {};
     int id = 0;
     for (VRChatUser user in userList) {
       String location = user.location;
       if (["private", "offline"].contains(location) && joinable) continue;
-      if (inLocation[location] == null) {
-        id++;
-        inLocation[location] = {
-          "id": id,
-          "number": 0,
-        };
-      }
-      inLocation[location]!["number"] = (inLocation[location]!["number"]! + 1);
-    }
 
+      inLocation[location] ??= LocationDataClass(++id);
+      inLocation[location]!.count++;
+    }
     return inLocation;
   }
 
-  sortByLocationMap() {
-    Map<String, Map<String, int>> inLocation = numberOfFriendsInLocation();
-
+  List<Widget> sortByLocationMap() {
+    Map<String, LocationDataClass> inLocation = numberOfFriendsInLocation();
     userList.sort((userA, userB) {
       String locationA = userA.location;
       String locationB = userB.location;
       if (locationA == locationB) return 0;
-      if (["private", "offline"].contains(locationA) && joinable) return 1;
-      if (["private", "offline"].contains(locationB) && joinable) return -1;
-      if (inLocation[locationA]!["number"]! > inLocation[locationB]!["number"]!) return -1;
-      if (inLocation[locationA]!["number"]! < inLocation[locationB]!["number"]!) return 1;
-      if (inLocation[locationA]!["id"]! > inLocation[locationB]!["id"]!) return -1;
-      if (inLocation[locationA]!["id"]! < inLocation[locationB]!["id"]!) return 1;
+      if (["private", "offline"].contains(locationA)) return 1;
+      if (["private", "offline"].contains(locationB)) return -1;
+      if (inLocation[locationA]!.count > inLocation[locationB]!.count) return -1;
+      if (inLocation[locationA]!.count < inLocation[locationB]!.count) return 1;
+      if (inLocation[locationA]!.id > inLocation[locationB]!.id) return -1;
+      if (inLocation[locationA]!.id < inLocation[locationB]!.id) return 1;
       return 0;
     });
+    if (descending) userList = userList.reversed.toList();
+    return reload();
+  }
+
+  List<Widget> sortByName() {
+    userList.sort((userA, userB) {
+      List<int> userBytesA = utf8.encode(userA.displayName);
+      List<int> userBytesB = utf8.encode(userB.displayName);
+      for (int i = 0; i < userBytesA.length && i < userBytesB.length; i++) {
+        if (userBytesA[i] < userBytesB[i]) return -1;
+        if (userBytesA[i] > userBytesB[i]) return 1;
+      }
+      if (userBytesA.length < userBytesB.length) return -1;
+      if (userBytesA.length > userBytesB.length) return 1;
+      return 0;
+    });
+    if (descending) userList = userList.reversed.toList();
+    return reload();
+  }
+
+  List<Widget> sortByLastLogin() {
+    userList.sort((userA, userB) {
+      if (userA.lastLogin == null) return 1;
+      if (userB.lastLogin == null) return -1;
+      if (userA.lastLogin!.millisecondsSinceEpoch > userB.lastLogin!.millisecondsSinceEpoch) return -1;
+      if (userA.lastLogin!.millisecondsSinceEpoch < userB.lastLogin!.millisecondsSinceEpoch) return 1;
+      return 0;
+    });
+    if (descending) userList = userList.reversed.toList();
+    return reload();
   }
 
   List<Widget> adds(List<VRChatUser> users) {
@@ -88,8 +122,21 @@ class Users {
               children: <Widget>[
                 SizedBox(
                   height: 100,
-                  child: Image.network(user.profilePicOverride ?? user.currentAvatarThumbnailImageUrl,
-                      fit: BoxFit.fitWidth, errorBuilder: (BuildContext context, _, __) => Column()),
+                  child: CachedNetworkImage(
+                    imageUrl: user.profilePicOverride ?? user.currentAvatarThumbnailImageUrl,
+                    fit: BoxFit.fitWidth,
+                    progressIndicatorBuilder: (context, url, downloadProgress) => const SizedBox(
+                      width: 100.0,
+                      child: Padding(
+                        padding: EdgeInsets.all(30),
+                        child: CircularProgressIndicator(),
+                      ),
+                    ),
+                    errorWidget: (context, url, error) => const SizedBox(
+                      width: 100.0,
+                      child: Icon(Icons.error),
+                    ),
+                  ),
                 ),
                 Expanded(
                   child: Column(

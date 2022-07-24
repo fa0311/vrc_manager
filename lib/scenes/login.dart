@@ -12,6 +12,7 @@ import 'package:vrchat_mobile_client/api/data_class.dart';
 import 'package:vrchat_mobile_client/api/main.dart';
 import 'package:vrchat_mobile_client/assets/error.dart';
 import 'package:vrchat_mobile_client/assets/storage.dart';
+import 'package:vrchat_mobile_client/main.dart';
 import 'package:vrchat_mobile_client/scenes/home.dart';
 import 'package:vrchat_mobile_client/widgets/drawer.dart';
 
@@ -149,59 +150,105 @@ class _LoginPageState extends State<VRChatMobileLogin> {
     );
   }
 
+  ListTile _changeLocaleDialogOption(BuildContext context, String title, String languageCode) {
+    return ListTile(
+      title: Text(title),
+      subtitle: Text(
+        AppLocalizations.of(context)!.translaterDetails(lookupAppLocalizations(
+          Locale(languageCode, ""),
+        ).contributor),
+      ),
+      onTap: () async {
+        setStorage("language_code", languageCode).then(
+          (_) {
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                builder: (BuildContext context) => const VRChatMobile(),
+              ),
+              (_) => false,
+            );
+          },
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.login),
+        actions: [
+          IconButton(
+            icon: const Icon(
+              Icons.translate,
+            ),
+            onPressed: () => showModalBottomSheet(
+              context: context,
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.vertical(
+                  top: Radius.circular(15),
+                ),
+              ),
+              builder: (BuildContext context) => SingleChildScrollView(
+                child: Column(
+                  children: <Widget>[
+                    _changeLocaleDialogOption(context, 'English', 'en'),
+                    _changeLocaleDialogOption(context, '日本語', 'ja'),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
       drawer: simpledrawer(context),
       body: Padding(
-        padding: const EdgeInsets.all(32.0),
-        child: Column(
-          children: <Widget>[
-            TextFormField(
-              controller: _userController,
-              decoration: InputDecoration(labelText: AppLocalizations.of(context)!.usernameOrEmail),
-            ),
-            TextFormField(
-              obscureText: _isPasswordObscure,
-              controller: _passwordController,
-              onFieldSubmitted: (String e) => _onPressed(context),
-              decoration: InputDecoration(
-                labelText: AppLocalizations.of(context)!.password,
-                suffixIcon: IconButton(
-                  icon: Icon(_isPasswordObscure ? Icons.visibility_off : Icons.visibility),
-                  onPressed: () {
-                    setState(
-                      () {
-                        _isPasswordObscure = !_isPasswordObscure;
-                      },
-                    );
-                  },
+          padding: const EdgeInsets.all(32.0),
+          child: Column(
+            children: <Widget>[
+              TextFormField(
+                controller: _userController,
+                decoration: InputDecoration(labelText: AppLocalizations.of(context)!.usernameOrEmail),
+              ),
+              TextFormField(
+                obscureText: _isPasswordObscure,
+                controller: _passwordController,
+                onFieldSubmitted: (String e) => _onPressed(context),
+                decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context)!.password,
+                  suffixIcon: IconButton(
+                    icon: Icon(_isPasswordObscure ? Icons.visibility_off : Icons.visibility),
+                    onPressed: () {
+                      setState(
+                        () {
+                          _isPasswordObscure = !_isPasswordObscure;
+                        },
+                      );
+                    },
+                  ),
                 ),
               ),
-            ),
-            SwitchListTile(
-              value: _rememberPassword,
-              title: Text(
-                AppLocalizations.of(context)!.rememberPassword,
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.primary,
-                  fontSize: 14,
+              SwitchListTile(
+                value: _rememberPassword,
+                title: Text(
+                  AppLocalizations.of(context)!.rememberPassword,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.primary,
+                    fontSize: 14,
+                  ),
                 ),
+                onChanged: _changeSwitchrememberPassword,
               ),
-              onChanged: _changeSwitchrememberPassword,
-            ),
-            ElevatedButton(
-              child: Text(
-                AppLocalizations.of(context)!.login,
+              ElevatedButton(
+                child: Text(
+                  AppLocalizations.of(context)!.login,
+                ),
+                onPressed: () => _onPressed(context),
               ),
-              onPressed: () => _onPressed(context),
-            ),
-          ],
-        ),
-      ),
+            ],
+          )),
     );
   }
 }
