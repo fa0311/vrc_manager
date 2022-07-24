@@ -92,7 +92,10 @@ Column profile(BuildContext context, VRChatUser user) {
         constraints: const BoxConstraints(maxHeight: 200),
         child: SingleChildScrollView(
           child: RichText(
-            text: TextSpan(children: lineList),
+            text: TextSpan(
+              children: lineList,
+              style: TextStyle(color: Theme.of(context).textTheme.bodyText2?.color),
+            ),
           ),
         ),
       ),
