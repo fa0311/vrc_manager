@@ -54,15 +54,14 @@ shareModalBottom(BuildContext context, String url) {
                   },
                 );
               }),
-          if (Uri.parse(url).host != "vrchat.com")
-            ListTile(
-              leading: const Icon(Icons.open_in_browser),
-              title: Text(AppLocalizations.of(context)!.openInBrowser),
-              onTap: () {
-                Navigator.pop(context);
-                openInBrowser(context, url);
-              },
-            ),
+          ListTile(
+            leading: const Icon(Icons.open_in_browser),
+            title: Text(AppLocalizations.of(context)!.openInBrowser),
+            onTap: () {
+              Navigator.pop(context);
+              openInBrowser(context, url);
+            },
+          ),
         ],
       ),
     ),
@@ -165,6 +164,61 @@ clipboardShareModalBottom(BuildContext context, String text) {
   );
 }
 
+lunchWorldModalBottom(BuildContext context, String worldId, String instanceId) {
+  showModalBottomSheet(
+    context: context,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(
+        top: Radius.circular(15),
+      ),
+    ),
+    builder: (BuildContext context) => SingleChildScrollView(
+      child: Column(
+        children: <Widget>[
+          ListTile(
+              leading: const Icon(Icons.share),
+              title: Text(AppLocalizations.of(context)!.share),
+              onTap: () {
+                Share.share("https://vrchat.com/home/launch?worldId=$worldId&instanceId=$instanceId");
+                Navigator.pop(context);
+              }),
+          ListTile(
+              leading: const Icon(Icons.copy),
+              title: Text(AppLocalizations.of(context)!.copy),
+              onTap: () {
+                final ClipboardData data = ClipboardData(text: "https://vrchat.com/home/launch?worldId=$worldId&instanceId=$instanceId");
+                Clipboard.setData(data).then(
+                  (_) {
+                    if (Platform.isAndroid || Platform.isIOS) {
+                      Fluttertoast.showToast(msg: AppLocalizations.of(context)!.copied);
+                    }
+                    Navigator.pop(context);
+                  },
+                );
+              }),
+          ListTile(
+            leading: const Icon(Icons.open_in_browser),
+            title: Text(AppLocalizations.of(context)!.openInExternalBrowser),
+            onTap: () {
+              Navigator.pop(context);
+              openInBrowser(context, "https://vrchat.com/home/launch?worldId=$worldId&instanceId=$instanceId");
+            },
+          ),
+          if (Platform.isWindows)
+            ListTile(
+              leading: const Icon(Icons.laptop_windows),
+              title: const Text("launch World"),
+              onTap: () {
+                Navigator.pop(context);
+                openInBrowser(context, "vrchat://launch?ref=vrchat.com&id=$worldId:$instanceId");
+              },
+            ),
+        ],
+      ),
+    ),
+  );
+}
+
 Future<void> openInBrowser(BuildContext context, String url) async {
   if (Platform.isAndroid || Platform.isIOS) {
     getStorage("force_external_browser").then(
@@ -184,12 +238,8 @@ Future<void> openInBrowser(BuildContext context, String url) async {
       },
     );
   } else {
-    if (await canLaunchUrl(
-      Uri.parse(url),
-    )) {
-      await launchUrl(
-        Uri.parse(url),
-      );
+    if (await canLaunchUrl(Uri.parse(url))) {
+      await launchUrl(Uri.parse(url));
     }
   }
 }
