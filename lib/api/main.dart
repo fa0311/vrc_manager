@@ -211,7 +211,7 @@ class VRChatAPI {
     if (param["after"] == "") param.remove("after");
     return vrchatSession
         .get(
-          endpoint('/api/1/auth/user/notifications', param),
+          endpoint('api/1/auth/user/notifications', param),
         )
         .then((value) => VRChatNotificationsList.fromJson(value));
   }
@@ -220,7 +220,7 @@ class VRChatAPI {
     return vrchatSession
         .get(
           endpoint(
-            '/api/1/auth/user/notifications/$fid/see',
+            'api/1/auth/user/notifications/$fid/see',
             apiKey(),
           ),
         )
