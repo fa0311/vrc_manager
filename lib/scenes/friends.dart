@@ -28,7 +28,6 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
   int offset = 0;
   bool autoReadMore = false;
   bool delayedDisplay = false;
-  bool delayedDisplayWorld = false;
   String sortMode = "default";
   List<Future> futureList = [];
 
@@ -65,9 +64,8 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
   }
 
   updateSortMode() {
-    if (widget.offline && delayedDisplayWorld) sortMode = "default";
+    if (widget.offline && sortMode == "friends_in_instance") sortMode = "default";
     delayedDisplay = (sortMode != "default");
-    delayedDisplayWorld = sortMode == "friends_in_instance";
   }
 
   bool canMoreOver() {
@@ -76,24 +74,18 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
 
   sort() {
     if (canMoreOver() && (autoReadMore || delayedDisplay)) {
+      List<Widget> children = [];
+      children = [const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator())];
+      setState(() => column = Column(children: children));
       moreOver();
-    } else if (delayedDisplayWorld) {
-      Future.wait(futureList).then((value) {
-        List<Widget> children = [];
-        if (sortMode == "friends_in_instance") {
-          children = dataColumn.sortByLocationMap();
-        }
-        if (children.isEmpty) {
-          children = [Text(AppLocalizations.of(context)!.none)];
-        }
-        return setState(() => column = Column(children: children));
-      });
     } else if (delayedDisplay) {
       List<Widget> children = [];
       if (sortMode == "name") {
         children = dataColumn.sortByName();
       } else if (sortMode == "last_login") {
         children = dataColumn.sortByLastLogin();
+      } else if (sortMode == "friends_in_instance") {
+        children = dataColumn.sortByLocationMap();
       }
       if (children.isEmpty) {
         children = [Text(AppLocalizations.of(context)!.none)];
@@ -107,7 +99,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
     getLoginSession("login_session").then(
       (cookie) {
         VRChatAPI(cookie: cookie ?? "").friends(offline: widget.offline, offset: offset - 50).then((VRChatUserList users) {
-          if (delayedDisplay || delayedDisplayWorld) {
+          if (delayedDisplay) {
             for (VRChatUser user in users.users) {
               dataColumn.userList.add(user);
             }
@@ -117,7 +109,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
             });
           }
 
-          if (!canMoreOver() && dataColumn.children.isEmpty && !delayedDisplay && !delayedDisplayWorld) {
+          if (!canMoreOver() && dataColumn.children.isEmpty && !delayedDisplay) {
             setState(() => column = Column(children: <Widget>[Text(AppLocalizations.of(context)!.none)]));
           }
 
@@ -126,7 +118,6 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
             if (["private", "offline"].contains(user.location) || dataColumn.locationMap.containsKey(wid)) continue;
             futureList.add(VRChatAPI(cookie: cookie ?? "").worlds(wid).then((responseWorld) {
               dataColumn.locationMap[wid] = responseWorld;
-              if (delayedDisplayWorld) return;
               setState(() => column = Column(
                     children: dataColumn.reload(),
                   ));
