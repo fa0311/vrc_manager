@@ -18,37 +18,43 @@ import 'package:vrchat_mobile_client/scenes/web_view.dart';
 IconButton share(BuildContext context, String url) {
   return IconButton(
     icon: const Icon(Icons.share),
-    onPressed: () => showModalBottomSheet(
-      context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(15),
-        ),
+    onPressed: () => shareModalBottom(context, url),
+  );
+}
+
+shareModalBottom(BuildContext context, String url) {
+  showModalBottomSheet(
+    context: context,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(
+        top: Radius.circular(15),
       ),
-      builder: (BuildContext context) => SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            ListTile(
-                leading: const Icon(Icons.share),
-                title: Text(AppLocalizations.of(context)!.share),
-                onTap: () {
-                  Share.share(url);
-                  Navigator.pop(context);
-                }),
-            ListTile(
-                leading: const Icon(Icons.copy),
-                title: Text(AppLocalizations.of(context)!.copy),
-                onTap: () {
-                  final ClipboardData data = ClipboardData(text: url);
-                  Clipboard.setData(data).then(
-                    (_) {
-                      if (Platform.isAndroid || Platform.isIOS) {
-                        Fluttertoast.showToast(msg: AppLocalizations.of(context)!.copied);
-                      }
-                      Navigator.pop(context);
-                    },
-                  );
-                }),
+    ),
+    builder: (BuildContext context) => SingleChildScrollView(
+      child: Column(
+        children: <Widget>[
+          ListTile(
+              leading: const Icon(Icons.share),
+              title: Text(AppLocalizations.of(context)!.share),
+              onTap: () {
+                Share.share(url);
+                Navigator.pop(context);
+              }),
+          ListTile(
+              leading: const Icon(Icons.copy),
+              title: Text(AppLocalizations.of(context)!.copy),
+              onTap: () {
+                final ClipboardData data = ClipboardData(text: url);
+                Clipboard.setData(data).then(
+                  (_) {
+                    if (Platform.isAndroid || Platform.isIOS) {
+                      Fluttertoast.showToast(msg: AppLocalizations.of(context)!.copied);
+                    }
+                    Navigator.pop(context);
+                  },
+                );
+              }),
+          if (Uri.parse(url).host != "vrchat.com")
             ListTile(
               leading: const Icon(Icons.open_in_browser),
               title: Text(AppLocalizations.of(context)!.openInBrowser),
@@ -57,95 +63,103 @@ IconButton share(BuildContext context, String url) {
                 openInBrowser(context, url);
               },
             ),
-          ],
-        ),
+        ],
       ),
     ),
   );
 }
 
 IconButton simpleShare(BuildContext context, String url) {
-  String copiedMessage = AppLocalizations.of(context)!.copied;
   return IconButton(
     icon: const Icon(Icons.share),
-    onPressed: () => showModalBottomSheet(
-      context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(15),
-        ),
+    onPressed: () => simpleShareModalBottom(context, url),
+  );
+}
+
+simpleShareModalBottom(BuildContext context, String url) {
+  showModalBottomSheet(
+    context: context,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(
+        top: Radius.circular(15),
       ),
-      builder: (BuildContext context) => SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
+    ),
+    builder: (BuildContext context) => SingleChildScrollView(
+      child: Column(
+        children: <Widget>[
+          ListTile(
+              leading: const Icon(Icons.share),
+              title: Text(AppLocalizations.of(context)!.share),
+              onTap: () {
+                Share.share(url);
+                Navigator.pop(context);
+              }),
+          ListTile(
+              leading: const Icon(Icons.copy),
+              title: Text(AppLocalizations.of(context)!.copy),
+              onTap: () {
+                final ClipboardData data = ClipboardData(text: url);
+                Clipboard.setData(data).then(
+                  (_) {
+                    if (Platform.isAndroid || Platform.isIOS) {
+                      Fluttertoast.showToast(msg: AppLocalizations.of(context)!.copied);
+                    }
+                    Navigator.pop(context);
+                  },
+                );
+              }),
+          if (Uri.parse(url).host != "vrchat.com")
             ListTile(
-                leading: const Icon(Icons.share),
-                title: Text(AppLocalizations.of(context)!.share),
-                onTap: () {
-                  Share.share(url);
-                  Navigator.pop(context);
-                }),
-            ListTile(
-                leading: const Icon(Icons.copy),
-                title: Text(AppLocalizations.of(context)!.copy),
-                onTap: () async {
-                  final data = ClipboardData(text: url);
-                  await Clipboard.setData(data).then(
-                    (_) => Navigator.pop(context),
-                  );
-                  if (Platform.isAndroid || Platform.isIOS) {
-                    Fluttertoast.showToast(msg: copiedMessage);
-                  }
-                }),
-            if (Uri.parse(url).host != "vrchat.com")
-              ListTile(
-                leading: const Icon(Icons.open_in_browser),
-                title: Text(AppLocalizations.of(context)!.openInExternalBrowser),
-                onTap: () async {
-                  Navigator.pop(context);
-                  if (await canLaunchUrl(
-                    Uri.parse(url),
-                  )) {
-                    await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
-                  }
-                },
-              ),
-          ],
-        ),
+              leading: const Icon(Icons.open_in_browser),
+              title: Text(AppLocalizations.of(context)!.openInExternalBrowser),
+              onTap: () async {
+                Navigator.pop(context);
+                if (await canLaunchUrl(
+                  Uri.parse(url),
+                )) {
+                  await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+                }
+              },
+            ),
+        ],
       ),
     ),
   );
 }
 
 IconButton clipboardShare(BuildContext context, String text) {
-  String copiedMessage = AppLocalizations.of(context)!.copied;
   return IconButton(
     icon: const Icon(Icons.share),
-    onPressed: () => showModalBottomSheet(
-      context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(15),
-        ),
+    onPressed: () => clipboardShareModalBottom(context, text),
+  );
+}
+
+clipboardShareModalBottom(BuildContext context, String text) {
+  showModalBottomSheet(
+    context: context,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(
+        top: Radius.circular(15),
       ),
-      builder: (BuildContext context) => SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            ListTile(
+    ),
+    builder: (BuildContext context) => SingleChildScrollView(
+      child: Column(
+        children: <Widget>[
+          ListTile(
               leading: const Icon(Icons.copy),
               title: Text(AppLocalizations.of(context)!.copy),
-              onTap: () async {
-                final data = ClipboardData(text: text);
-                await Clipboard.setData(data).then(
-                  (_) => Navigator.pop(context),
+              onTap: () {
+                final ClipboardData data = ClipboardData(text: text);
+                Clipboard.setData(data).then(
+                  (_) {
+                    if (Platform.isAndroid || Platform.isIOS) {
+                      Fluttertoast.showToast(msg: AppLocalizations.of(context)!.copied);
+                    }
+                    Navigator.pop(context);
+                  },
                 );
-                if (Platform.isAndroid || Platform.isIOS) {
-                  Fluttertoast.showToast(msg: copiedMessage);
-                }
-              },
-            ),
-          ],
-        ),
+              }),
+        ],
       ),
     ),
   );

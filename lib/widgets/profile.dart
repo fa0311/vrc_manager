@@ -4,6 +4,7 @@
 
 // Flutter imports:
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 // Package imports:
@@ -23,6 +24,32 @@ import 'package:vrchat_mobile_client/widgets/share.dart';
 import 'package:vrchat_mobile_client/widgets/status.dart';
 
 Column profile(BuildContext context, VRChatUser user) {
+  List<InlineSpan> lineList = [];
+  for (String line in (user.bio ?? "").split('\n')) {
+    Match? matchTwitter = RegExp(r'^(Twitter|twitter|TWITTER)([:˸：\s]{0,3})([@＠\s]{0,3}[0-9０-９a-zA-Z_]{1,15})$').firstMatch(line);
+    Match? matchDiscord = RegExp(r'^(Discord|discord|DISCORD)([:˸：\s]{1,3})(.{1,16}[#＃][0-9０-９]{4})$').firstMatch(line);
+    Match? matchGithub = RegExp(r'^(Github|github|GITHUB)([:˸：\s]{1,3})([0-9０-９a-zA-Z_]{1,38})$').firstMatch(line);
+    Match? matchUrl = RegExp(r'^([0-9０-９a-zA-Z_]{2,16})([:˸：\s]{1,3})(https?[:˸][/⁄]{2}.+)$').firstMatch(line);
+    Match? match = matchTwitter ?? matchDiscord ?? matchGithub ?? matchUrl;
+
+    if (match != null) {
+      lineList.add(TextSpan(text: match.group(1)));
+      lineList.add(TextSpan(text: match.group(2)));
+      lineList.add(TextSpan(
+          text: "${match.group(3)}\n",
+          style: const TextStyle(color: Colors.blue),
+          recognizer: TapGestureRecognizer()
+            ..onTap = () {
+              if (matchTwitter != null) shareModalBottom(context, "https://twitter.com/${match.group(3)}");
+              if (matchDiscord != null) clipboardShareModalBottom(context, "${match.group(3)}");
+              if (matchGithub != null) shareModalBottom(context, "https://github.com/${match.group(3)}");
+              if (matchUrl != null) shareModalBottom(context, "${match.group(3)}".replaceAll("⁄", "/").replaceAll("˸", ":").replaceAll("․", "."));
+            }));
+    } else {
+      lineList.add(TextSpan(text: "$line\n"));
+    }
+  }
+
   return Column(
     children: <Widget>[
       SizedBox(
@@ -64,7 +91,9 @@ Column profile(BuildContext context, VRChatUser user) {
       ConstrainedBox(
         constraints: const BoxConstraints(maxHeight: 200),
         child: SingleChildScrollView(
-          child: Text(user.bio ?? ""),
+          child: RichText(
+            text: TextSpan(children: lineList),
+          ),
         ),
       ),
       Row(
