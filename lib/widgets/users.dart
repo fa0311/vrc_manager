@@ -1,6 +1,7 @@
 // Flutter imports:
 import 'dart:convert';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 // Package imports:
@@ -117,8 +118,21 @@ class Users {
               children: <Widget>[
                 SizedBox(
                   height: 100,
-                  child: Image.network(user.profilePicOverride ?? user.currentAvatarThumbnailImageUrl,
-                      fit: BoxFit.fitWidth, errorBuilder: (BuildContext context, _, __) => Column()),
+                  child: CachedNetworkImage(
+                    imageUrl: user.profilePicOverride ?? user.currentAvatarThumbnailImageUrl,
+                    fit: BoxFit.fitWidth,
+                    progressIndicatorBuilder: (context, url, downloadProgress) => const SizedBox(
+                      width: 100.0,
+                      child: Padding(
+                        padding: EdgeInsets.all(30),
+                        child: CircularProgressIndicator(),
+                      ),
+                    ),
+                    errorWidget: (context, url, error) => const SizedBox(
+                      width: 100.0,
+                      child: Icon(Icons.error),
+                    ),
+                  ),
                 ),
                 Expanded(
                   child: Column(

@@ -3,6 +3,7 @@
 // Dart imports:
 
 // Flutter imports:
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 // Package imports:
@@ -26,8 +27,23 @@ Column profile(BuildContext context, VRChatUser user) {
     children: <Widget>[
       SizedBox(
         height: 250,
-        child:
-            Image.network(user.profilePicOverride ?? user.currentAvatarImageUrl, fit: BoxFit.fitWidth, errorBuilder: (BuildContext context, _, __) => Column()),
+        child: CachedNetworkImage(
+          imageUrl: user.profilePicOverride ?? user.currentAvatarImageUrl,
+          fit: BoxFit.fitWidth,
+          progressIndicatorBuilder: (context, url, downloadProgress) => const SizedBox(
+            width: 250,
+            child: Padding(
+              padding: EdgeInsets.all(30),
+              child: CircularProgressIndicator(
+                strokeWidth: 10,
+              ),
+            ),
+          ),
+          errorWidget: (context, url, error) => const SizedBox(
+            width: 250.0,
+            child: Icon(Icons.error),
+          ),
+        ),
       ),
       Container(padding: const EdgeInsets.only(top: 10)),
       Row(

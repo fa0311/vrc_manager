@@ -3,6 +3,7 @@
 // Dart imports:
 
 // Flutter imports:
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 // Package imports:
@@ -37,7 +38,18 @@ Card simpleWorld(BuildContext context, VRChatLimitedWorld world) {
           children: <Widget>[
             SizedBox(
               height: 100,
-              child: Image.network(world.thumbnailImageUrl, fit: BoxFit.fitWidth),
+              child: CachedNetworkImage(
+                imageUrl: world.thumbnailImageUrl,
+                fit: BoxFit.fitWidth,
+                progressIndicatorBuilder: (context, url, downloadProgress) => const SizedBox(
+                  width: 100.0,
+                  child: CircularProgressIndicator(),
+                ),
+                errorWidget: (context, url, error) => const SizedBox(
+                  width: 100.0,
+                  child: Icon(Icons.error),
+                ),
+              ),
             ),
             Expanded(
               child: Padding(
@@ -80,7 +92,18 @@ Card simpleWorldFavorite(BuildContext context, VRChatFavoriteWorld world) {
           children: <Widget>[
             SizedBox(
               height: 100,
-              child: Image.network(world.thumbnailImageUrl, fit: BoxFit.fitWidth),
+              child: CachedNetworkImage(
+                imageUrl: world.thumbnailImageUrl,
+                fit: BoxFit.fitWidth,
+                progressIndicatorBuilder: (context, url, downloadProgress) => const SizedBox(
+                  width: 100.0,
+                  child: CircularProgressIndicator(),
+                ),
+                errorWidget: (context, url, error) => const SizedBox(
+                  width: 100.0,
+                  child: Icon(Icons.error),
+                ),
+              ),
             ),
             Expanded(
               child: Padding(
@@ -146,7 +169,18 @@ Card simpleWorldPlus(BuildContext context, VRChatWorld world, VRChatInstance ins
           children: <Widget>[
             SizedBox(
               height: 100,
-              child: Image.network(world.thumbnailImageUrl, fit: BoxFit.fitWidth),
+              child: CachedNetworkImage(
+                imageUrl: world.thumbnailImageUrl,
+                fit: BoxFit.fitWidth,
+                progressIndicatorBuilder: (context, url, downloadProgress) => const SizedBox(
+                  width: 100.0,
+                  child: CircularProgressIndicator(),
+                ),
+                errorWidget: (context, url, error) => const SizedBox(
+                  width: 100.0,
+                  child: Icon(Icons.error),
+                ),
+              ),
             ),
             Expanded(
               child: Padding(
@@ -197,7 +231,18 @@ Card privatesimpleWorld(BuildContext context) {
           children: <Widget>[
             SizedBox(
               height: 100,
-              child: Image.network("https://assets.vrchat.com/www/images/default_private_image.png", fit: BoxFit.fitWidth),
+              child: CachedNetworkImage(
+                imageUrl: "https://assets.vrchat.com/www/images/default_private_image.png",
+                fit: BoxFit.fitWidth,
+                progressIndicatorBuilder: (context, url, downloadProgress) => const SizedBox(
+                  width: 100.0,
+                  child: CircularProgressIndicator(),
+                ),
+                errorWidget: (context, url, error) => const SizedBox(
+                  width: 100.0,
+                  child: Icon(Icons.error),
+                ),
+              ),
             ),
             Expanded(
               child: Padding(
@@ -227,7 +272,18 @@ Column world(BuildContext context, VRChatWorld world) {
   return Column(children: <Widget>[
     SizedBox(
       height: 250,
-      child: Image.network(world.imageUrl, fit: BoxFit.fitWidth),
+      child: CachedNetworkImage(
+        imageUrl: world.imageUrl,
+        fit: BoxFit.fitWidth,
+        progressIndicatorBuilder: (context, url, downloadProgress) => const SizedBox(
+          width: 250.0,
+          child: CircularProgressIndicator(),
+        ),
+        errorWidget: (context, url, error) => const SizedBox(
+          width: 250.0,
+          child: Icon(Icons.error),
+        ),
+      ),
     ),
     Text(world.name,
         style: const TextStyle(
