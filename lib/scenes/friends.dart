@@ -28,6 +28,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
   int offset = 0;
   bool autoReadMore = false;
   bool delayedDisplay = false;
+  bool delayedDisplayWorld = false;
   String sortMode = "default";
   List<Future> futureList = [];
 
@@ -56,12 +57,49 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
       (response) {
         setState(() {
           sortMode = response ?? "default";
-          delayedDisplay = (sortMode != "default");
-          if (widget.offline && sortMode == "web_style") sortMode = "default";
+          updateSortMode();
         });
       },
     ));
     Future.wait(futureStorageList).then(((value) => moreOver()));
+  }
+
+  updateSortMode() {
+    if (widget.offline && delayedDisplayWorld) sortMode = "default";
+    delayedDisplay = (sortMode != "default");
+    delayedDisplayWorld = sortMode == "friends_in_instance";
+  }
+
+  bool canMoreOver() {
+    return (dataColumn.userList.length == offset);
+  }
+
+  sort() {
+    if (canMoreOver() && (autoReadMore || delayedDisplay)) {
+      moreOver();
+    } else if (delayedDisplayWorld) {
+      Future.wait(futureList).then((value) {
+        List<Widget> children = [];
+        if (sortMode == "friends_in_instance") {
+          children = dataColumn.sortByLocationMap();
+        }
+        if (children.isEmpty) {
+          children = [Text(AppLocalizations.of(context)!.none)];
+        }
+        return setState(() => column = Column(children: children));
+      });
+    } else if (delayedDisplay) {
+      List<Widget> children = [];
+      if (sortMode == "name") {
+        children = dataColumn.sortByName();
+      } else if (sortMode == "last_login") {
+        children = dataColumn.sortByLastLogin();
+      }
+      if (children.isEmpty) {
+        children = [Text(AppLocalizations.of(context)!.none)];
+      }
+      setState(() => column = Column(children: children));
+    }
   }
 
   moreOver() {
@@ -69,49 +107,18 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
     getLoginSession("login_session").then(
       (cookie) {
         VRChatAPI(cookie: cookie ?? "").friends(offline: widget.offline, offset: offset - 50).then((VRChatUserList users) {
-          bool last = (users.users.length < 50);
-          if (!last && (autoReadMore || delayedDisplay)) moreOver();
-
-          if (last && delayedDisplay && sortMode == "web_style") {
-            Future.wait(futureList).then(
-              (value) => setState(() {
-                column = Column(
-                  children: dataColumn.sortByLocationMap(),
-                );
-              }),
-            );
-          } else if (last && delayedDisplay) {
-            setState(() {
-              if (sortMode == "name") {
-                column = Column(
-                  children: dataColumn.sortByName(),
-                );
-              } else if (sortMode == "last_login") {
-                column = Column(
-                  children: dataColumn.sortByLastLogin(),
-                );
-              }
-            });
-          } else if (!last && delayedDisplay) {
+          if (delayedDisplay || delayedDisplayWorld) {
             for (VRChatUser user in users.users) {
               dataColumn.userList.add(user);
             }
-          } else if (!last) {
+          } else {
             setState(() {
-              column = Column(
-                children: dataColumn.adds(users.users),
-              );
+              column = Column(children: dataColumn.adds(users.users));
             });
           }
 
-          if (last && dataColumn.children.isEmpty && sortMode != "web_style") {
-            setState(
-              () => column = Column(
-                children: <Widget>[
-                  Text(AppLocalizations.of(context)!.none),
-                ],
-              ),
-            );
+          if (!canMoreOver() && dataColumn.children.isEmpty && !delayedDisplay && !delayedDisplayWorld) {
+            setState(() => column = Column(children: <Widget>[Text(AppLocalizations.of(context)!.none)]));
           }
 
           for (VRChatUser user in users.users) {
@@ -119,16 +126,15 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
             if (["private", "offline"].contains(user.location) || dataColumn.locationMap.containsKey(wid)) continue;
             futureList.add(VRChatAPI(cookie: cookie ?? "").worlds(wid).then((responseWorld) {
               dataColumn.locationMap[wid] = responseWorld;
-              if (delayedDisplay) return;
-              setState(
-                () => column = Column(
-                  children: dataColumn.reload(),
-                ),
-              );
+              if (delayedDisplayWorld) return;
+              setState(() => column = Column(
+                    children: dataColumn.reload(),
+                  ));
             }).catchError((status) {
               apiError(context, status);
             }));
           }
+          sort();
         }).catchError((status) {
           apiError(context, status);
         });
@@ -149,85 +155,42 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
               ListTile(
                 title: const Text("Default"),
                 onTap: () => setStateBuilder(() {
-                  setStorage("friends_sort", sortMode = "default").then(
-                    (value) => setState(() {
-                      delayedDisplay = false;
-                      if (dataColumn.userList.length == offset && autoReadMore) {
-                        moreOver();
-                      }
-                      setStateBuilderParent(() => Navigator.pop(context));
-                    }),
-                  );
+                  setStorage("friends_sort", sortMode = "default").then((value) {
+                    updateSortMode();
+                    sort();
+                    setStateBuilderParent(() => Navigator.pop(context));
+                  });
                 }),
               ),
               ListTile(
                 title: const Text("Name"),
                 onTap: () => setStateBuilder(() {
-                  setStorage("friends_sort", sortMode = "name").then(
-                    (value) => setState(() {
-                      delayedDisplay = true;
-                      if (dataColumn.userList.length == offset) {
-                        column = Column(
-                          children: const [
-                            Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()),
-                          ],
-                        );
-                        moreOver();
-                      } else {
-                        column = Column(
-                          children: dataColumn.sortByName(),
-                        );
-                      }
-                      setStateBuilderParent(() => Navigator.pop(context));
-                    }),
-                  );
+                  setStorage("friends_sort", sortMode = "name").then((value) {
+                    updateSortMode();
+                    sort();
+                    setStateBuilderParent(() => Navigator.pop(context));
+                  });
                 }),
               ),
               ListTile(
                 title: const Text("Last login"),
                 onTap: () => setStateBuilder(() {
-                  setStorage("friends_sort", sortMode = "last_login").then(
-                    (value) => setState(() {
-                      delayedDisplay = true;
-                      if (dataColumn.userList.length == offset) {
-                        column = Column(
-                          children: const [
-                            Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()),
-                          ],
-                        );
-                        moreOver();
-                      } else {
-                        column = Column(
-                          children: dataColumn.sortByLastLogin(),
-                        );
-                      }
-                      setStateBuilderParent(() => Navigator.pop(context));
-                    }),
-                  );
+                  setStorage("friends_sort", sortMode = "last_login").then((value) {
+                    updateSortMode();
+                    sort();
+                    setStateBuilderParent(() => Navigator.pop(context));
+                  });
                 }),
               ),
               if (!widget.offline)
                 ListTile(
-                  title: const Text("Number of friends in the instance"),
+                  title: const Text("Number of friends of the instance"),
                   onTap: () => setStateBuilder(() {
-                    setStorage("friends_sort", sortMode = "web_style").then(
-                      (value) => setState(() {
-                        delayedDisplay = true;
-                        if (dataColumn.userList.length == offset) {
-                          column = Column(
-                            children: const [
-                              Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()),
-                            ],
-                          );
-                          moreOver();
-                        } else {
-                          column = Column(
-                            children: dataColumn.sortByLocationMap(),
-                          );
-                        }
-                        setStateBuilderParent(() => Navigator.pop(context));
-                      }),
-                    );
+                    setStorage("friends_sort", sortMode = "friends_in_instance").then((value) {
+                      updateSortMode();
+                      sort();
+                      setStateBuilderParent(() => Navigator.pop(context));
+                    });
                   }),
                 )
             ],
@@ -277,9 +240,9 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
                           title: Text(AppLocalizations.of(context)!.autoReadMore),
                           onChanged: sortMode == "default"
                               ? (bool e) => setStateBuilder(() {
-                                    moreOver();
-                                    setStorage("auto_read_more", e ? "true" : "false");
                                     setState(() => autoReadMore = e);
+                                    if (canMoreOver() && autoReadMore) moreOver();
+                                    setStorage("auto_read_more", e ? "true" : "false");
                                   })
                               : null),
                       ListTile(
@@ -287,7 +250,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
                         subtitle: {
                               "name": const Text("Name"),
                               "last_login": const Text("Last login"),
-                              "web_style": const Text("Number of friends in the instance"),
+                              "friends_in_instance": const Text("Number of friends in the instance"),
                             }[sortMode] ??
                             const Text("Default"),
                         onTap: () => setStateBuilder(() => sortModal(setStateBuilder)),
