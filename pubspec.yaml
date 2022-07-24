@@ -53,6 +53,7 @@ dependencies:
   domain_verification_manager: ^0.0.9
   device_info_plus: ^4.0.0
   fluttertoast: ^8.0.9
+  cached_network_image: ^3.2.1
 
 dev_dependencies:
   flutter_test:
