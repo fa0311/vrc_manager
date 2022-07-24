@@ -21,6 +21,7 @@ class LocationDataClass {
 class Users {
   List<Widget> children = [];
   bool joinable = false;
+  bool descending = false;
   late BuildContext context;
   Map<String, VRChatWorld> locationMap = {};
   List<VRChatUser> userList = [];
@@ -43,7 +44,6 @@ class Users {
       inLocation[location] ??= LocationDataClass(++id);
       inLocation[location]!.count++;
     }
-
     return inLocation;
   }
 
@@ -61,6 +61,7 @@ class Users {
       if (inLocation[locationA]!.id < inLocation[locationB]!.id) return 1;
       return 0;
     });
+    if (descending) userList = userList.reversed.toList();
     return reload();
   }
 
@@ -76,6 +77,7 @@ class Users {
       if (userBytesA.length > userBytesB.length) return 1;
       return 0;
     });
+    if (descending) userList = userList.reversed.toList();
     return reload();
   }
 
@@ -87,6 +89,7 @@ class Users {
       if (userA.lastLogin!.millisecondsSinceEpoch < userB.lastLogin!.millisecondsSinceEpoch) return 1;
       return 0;
     });
+    if (descending) userList = userList.reversed.toList();
     return reload();
   }
 
