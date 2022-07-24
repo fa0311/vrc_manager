@@ -144,7 +144,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
           child: Column(
             children: <Widget>[
               ListTile(
-                title: const Text("Default"),
+                title: Text(AppLocalizations.of(context)!.sortedByDefault),
                 onTap: () => setStateBuilder(() {
                   setStorage("friends_sort", sortMode = "default").then((value) {
                     updateSortMode();
@@ -154,7 +154,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
                 }),
               ),
               ListTile(
-                title: const Text("Name"),
+                title: Text(AppLocalizations.of(context)!.sortedByName),
                 onTap: () => setStateBuilder(() {
                   setStorage("friends_sort", sortMode = "name").then((value) {
                     updateSortMode();
@@ -164,7 +164,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
                 }),
               ),
               ListTile(
-                title: const Text("Last login"),
+                title: Text(AppLocalizations.of(context)!.sortedByLastLogin),
                 onTap: () => setStateBuilder(() {
                   setStorage("friends_sort", sortMode = "last_login").then((value) {
                     updateSortMode();
@@ -175,7 +175,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
               ),
               if (!widget.offline)
                 ListTile(
-                  title: const Text("Number of friends of the instance"),
+                  title: Text(AppLocalizations.of(context)!.sortedByFriendsInInstance),
                   onTap: () => setStateBuilder(() {
                     setStorage("friends_sort", sortMode = "friends_in_instance").then((value) {
                       updateSortMode();
@@ -237,13 +237,13 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
                                   })
                               : null),
                       ListTile(
-                        title: const Text("Sorted by"),
+                        title: Text(AppLocalizations.of(context)!.sort),
                         subtitle: {
-                              "name": const Text("Name"),
-                              "last_login": const Text("Last login"),
-                              "friends_in_instance": const Text("Number of friends in the instance"),
+                              "name": Text(AppLocalizations.of(context)!.sortedByName),
+                              "last_login": Text(AppLocalizations.of(context)!.sortedByLastLogin),
+                              "friends_in_instance": Text(AppLocalizations.of(context)!.sortedByFriendsInInstance),
                             }[sortMode] ??
-                            const Text("Default"),
+                            Text(AppLocalizations.of(context)!.sortedByDefault),
                         onTap: () => setStateBuilder(() => sortModal(setStateBuilder)),
                       ),
                       ListTile(
