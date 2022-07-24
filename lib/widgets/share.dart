@@ -16,7 +16,6 @@ import 'package:vrchat_mobile_client/assets/storage.dart';
 import 'package:vrchat_mobile_client/scenes/web_view.dart';
 
 IconButton share(BuildContext context, String url) {
-  String copiedMessage = AppLocalizations.of(context)!.copied;
   return IconButton(
     icon: const Icon(Icons.share),
     onPressed: () => showModalBottomSheet(
@@ -39,14 +38,16 @@ IconButton share(BuildContext context, String url) {
             ListTile(
                 leading: const Icon(Icons.copy),
                 title: Text(AppLocalizations.of(context)!.copy),
-                onTap: () async {
+                onTap: () {
                   final ClipboardData data = ClipboardData(text: url);
-                  await Clipboard.setData(data).then(
-                    (_) => Navigator.pop(context),
+                  Clipboard.setData(data).then(
+                    (_) {
+                      if (Platform.isAndroid || Platform.isIOS) {
+                        Fluttertoast.showToast(msg: AppLocalizations.of(context)!.copied);
+                      }
+                      Navigator.pop(context);
+                    },
                   );
-                  if (Platform.isAndroid || Platform.isIOS) {
-                    Fluttertoast.showToast(msg: copiedMessage);
-                  }
                 }),
             ListTile(
               leading: const Icon(Icons.open_in_browser),
@@ -96,18 +97,19 @@ IconButton simpleShare(BuildContext context, String url) {
                     Fluttertoast.showToast(msg: copiedMessage);
                   }
                 }),
-            ListTile(
-              leading: const Icon(Icons.open_in_browser),
-              title: Text(AppLocalizations.of(context)!.openInExternalBrowser),
-              onTap: () async {
-                Navigator.pop(context);
-                if (await canLaunchUrl(
-                  Uri.parse(url),
-                )) {
-                  await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
-                }
-              },
-            ),
+            if (Uri.parse(url).host != "vrchat.com")
+              ListTile(
+                leading: const Icon(Icons.open_in_browser),
+                title: Text(AppLocalizations.of(context)!.openInExternalBrowser),
+                onTap: () async {
+                  Navigator.pop(context);
+                  if (await canLaunchUrl(
+                    Uri.parse(url),
+                  )) {
+                    await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+                  }
+                },
+              ),
           ],
         ),
       ),
