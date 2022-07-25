@@ -1,4 +1,6 @@
 // Flutter imports:
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 // Package imports:
@@ -118,13 +120,14 @@ class _SettingAccessibilityPageState extends State<VRChatMobileSettingsAccessibi
                     subtitle: Text("${AppLocalizations.of(context)!.darkThemeDetails1}\n${AppLocalizations.of(context)!.darkThemeDetails2}"),
                     onChanged: _changeSwitchTheme,
                   ),
-                  const Divider(),
-                  SwitchListTile(
-                    value: forceExternalBrowser,
-                    title: Text(AppLocalizations.of(context)!.forceExternalBrowser),
-                    subtitle: Text(AppLocalizations.of(context)!.forceExternalBrowserDetails),
-                    onChanged: _changeSwitchForceExternalBrowser,
-                  )
+                  if (!Platform.isWindows) const Divider(),
+                  if (!Platform.isWindows)
+                    SwitchListTile(
+                      value: forceExternalBrowser,
+                      title: Text(AppLocalizations.of(context)!.forceExternalBrowser),
+                      subtitle: Text(AppLocalizations.of(context)!.forceExternalBrowserDetails),
+                      onChanged: _changeSwitchForceExternalBrowser,
+                    )
                 ],
               ),
             ),
