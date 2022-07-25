@@ -105,11 +105,17 @@ class Users {
   List<Widget> add(VRChatUser user) {
     userList.add(user);
     if (["private", "offline"].contains(user.location) && joinable) return children;
-    if (displayMode == "default") defaultAdd(user);
+    if (displayMode == "default") childrenAdd(user);
+    if (displayMode == "simple") childrenAdd(user, imageSize: 50.0, nameFontSize: 16, statusView: false);
     return children;
   }
 
-  defaultAdd(VRChatUser user) {
+  childrenAdd(
+    VRChatUser user, {
+    double imageSize = 100.0,
+    double nameFontSize = 20.0,
+    bool statusView = false,
+  }) {
     children.add(
       Card(
         elevation: 20.0,
@@ -127,20 +133,20 @@ class Users {
             child: Row(
               children: <Widget>[
                 SizedBox(
-                  height: 100,
+                  height: imageSize,
                   child: CachedNetworkImage(
                     imageUrl: user.profilePicOverride ?? user.currentAvatarThumbnailImageUrl,
                     fit: BoxFit.fitWidth,
-                    progressIndicatorBuilder: (context, url, downloadProgress) => const SizedBox(
-                      width: 100.0,
-                      child: Padding(
+                    progressIndicatorBuilder: (context, url, downloadProgress) => SizedBox(
+                      width: imageSize,
+                      child: const Padding(
                         padding: EdgeInsets.all(30),
                         child: CircularProgressIndicator(),
                       ),
                     ),
-                    errorWidget: (context, url, error) => const SizedBox(
-                      width: 100.0,
-                      child: Icon(Icons.error),
+                    errorWidget: (context, url, error) => SizedBox(
+                      width: imageSize,
+                      child: const Icon(Icons.error),
                     ),
                   ),
                 ),
@@ -150,18 +156,18 @@ class Users {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          status(user.status),
+                          status(user.status, diameter: nameFontSize),
                           Container(
                             width: 5,
                           ),
                           Text(user.displayName,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
+                              style: TextStyle(
+                                fontWeight: nameFontSize > 19 ? FontWeight.bold : null,
+                                fontSize: nameFontSize,
                               )),
                         ],
                       ),
-                      if (user.statusDescription != null) Text(user.statusDescription!, style: const TextStyle(fontSize: 14)),
+                      if (user.statusDescription != null && statusView) Text(user.statusDescription!, style: const TextStyle(fontSize: 14)),
                       if (!["private", "offline"].contains(user.location) && locationMap.containsKey(user.location.split(":")[0]))
                         Text(locationMap[user.location.split(":")[0]]!.name, style: const TextStyle(fontSize: 14)),
                       if (!["private", "offline"].contains(user.location) && !locationMap.containsKey(user.location.split(":")[0]))
