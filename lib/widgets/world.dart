@@ -43,7 +43,10 @@ Card simpleWorld(BuildContext context, VRChatLimitedWorld world) {
                 fit: BoxFit.fitWidth,
                 progressIndicatorBuilder: (context, url, downloadProgress) => const SizedBox(
                   width: 100.0,
-                  child: CircularProgressIndicator(),
+                  child: Padding(
+                    padding: EdgeInsets.all(30),
+                    child: CircularProgressIndicator(),
+                  ),
                 ),
                 errorWidget: (context, url, error) => const SizedBox(
                   width: 100.0,
@@ -97,7 +100,10 @@ Card simpleWorldFavorite(BuildContext context, VRChatFavoriteWorld world) {
                 fit: BoxFit.fitWidth,
                 progressIndicatorBuilder: (context, url, downloadProgress) => const SizedBox(
                   width: 100.0,
-                  child: CircularProgressIndicator(),
+                  child: Padding(
+                    padding: EdgeInsets.all(30),
+                    child: CircularProgressIndicator(),
+                  ),
                 ),
                 errorWidget: (context, url, error) => const SizedBox(
                   width: 100.0,
@@ -174,7 +180,10 @@ Card simpleWorldPlus(BuildContext context, VRChatWorld world, VRChatInstance ins
                 fit: BoxFit.fitWidth,
                 progressIndicatorBuilder: (context, url, downloadProgress) => const SizedBox(
                   width: 100.0,
-                  child: CircularProgressIndicator(),
+                  child: Padding(
+                    padding: EdgeInsets.all(30),
+                    child: CircularProgressIndicator(),
+                  ),
                 ),
                 errorWidget: (context, url, error) => const SizedBox(
                   width: 100.0,
@@ -236,7 +245,10 @@ Card privatesimpleWorld(BuildContext context) {
                 fit: BoxFit.fitWidth,
                 progressIndicatorBuilder: (context, url, downloadProgress) => const SizedBox(
                   width: 100.0,
-                  child: CircularProgressIndicator(),
+                  child: Padding(
+                    padding: EdgeInsets.all(30),
+                    child: CircularProgressIndicator(),
+                  ),
                 ),
                 errorWidget: (context, url, error) => const SizedBox(
                   width: 100.0,
@@ -277,7 +289,12 @@ Column world(BuildContext context, VRChatWorld world) {
         fit: BoxFit.fitWidth,
         progressIndicatorBuilder: (context, url, downloadProgress) => const SizedBox(
           width: 250.0,
-          child: CircularProgressIndicator(),
+          child: Padding(
+            padding: EdgeInsets.all(30),
+            child: CircularProgressIndicator(
+              strokeWidth: 10,
+            ),
+          ),
         ),
         errorWidget: (context, url, error) => const SizedBox(
           width: 250.0,
