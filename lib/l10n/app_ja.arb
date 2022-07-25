@@ -152,5 +152,11 @@
     "rateTheApp": "評価",
     "rateTheAppDetails": "GooglePlayStoreでの評価をお願いします",
     "licence": "Licence",
-    "licenceDetails": "Licence情報を確認します"
+    "licenceDetails": "Licence情報を確認します",
+    "@____________________DEBUG____________________": {},
+    "text1": "テキスト1",
+    "text2": "テキスト2",
+    "text3": "テキスト3",
+    "text4": "テキスト4",
+    "textLong": "テキスト テキスト テキスト テキスト テキスト"
 }
