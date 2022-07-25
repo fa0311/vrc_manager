@@ -29,6 +29,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
   bool autoReadMore = false;
   bool delayedDisplay = false;
   String sortMode = "default";
+  String displayMode = "default";
 
   late Column column = Column(
     children: const [
@@ -57,6 +58,13 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
           sortMode = response ?? "default";
           updateSortMode();
         });
+      },
+    ));
+    futureStorageList.add(getStorage("friends_display_mode").then(
+      (response) {
+        setState(
+          () => dataColumn.displayMode = response ?? "default",
+        );
       },
     ));
     futureStorageList.add(getStorage("friends_descending").then(
@@ -142,7 +150,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
     );
   }
 
-  sortModal(setStateBuilderParent) {
+  sortModal(Function setStateBuilderParent) {
     showModalBottomSheet(
       context: context,
       shape: const RoundedRectangleBorder(
@@ -154,6 +162,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
             children: <Widget>[
               ListTile(
                 title: Text(AppLocalizations.of(context)!.sortedByDefault),
+                trailing: sortMode == "default" ? const Icon(Icons.check) : null,
                 onTap: () => setStateBuilder(() {
                   setStorage("friends_sort", sortMode = "default").then((value) {
                     updateSortMode();
@@ -164,6 +173,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
               ),
               ListTile(
                 title: Text(AppLocalizations.of(context)!.sortedByName),
+                trailing: sortMode == "name" ? const Icon(Icons.check) : null,
                 onTap: () => setStateBuilder(() {
                   setStorage("friends_sort", sortMode = "name").then((value) {
                     updateSortMode();
@@ -174,6 +184,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
               ),
               ListTile(
                 title: Text(AppLocalizations.of(context)!.sortedByLastLogin),
+                trailing: sortMode == "last_login" ? const Icon(Icons.check) : null,
                 onTap: () => setStateBuilder(() {
                   setStorage("friends_sort", sortMode = "last_login").then((value) {
                     updateSortMode();
@@ -185,6 +196,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
               if (!widget.offline)
                 ListTile(
                   title: Text(AppLocalizations.of(context)!.sortedByFriendsInInstance),
+                  trailing: sortMode == "friends_in_instance" ? const Icon(Icons.check) : null,
                   onTap: () => setStateBuilder(() {
                     setStorage("friends_sort", sortMode = "friends_in_instance").then((value) {
                       updateSortMode();
@@ -193,6 +205,63 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
                     });
                   }),
                 )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  displeyModeModal(Function setStateBuilderParent) {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
+      ),
+      builder: (BuildContext context) => StatefulBuilder(
+        builder: (BuildContext context, setStateBuilder) => SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              ListTile(
+                title: Text(AppLocalizations.of(context)!.text1),
+                trailing: dataColumn.displayMode == "default" ? const Icon(Icons.check) : null,
+                onTap: () => setStateBuilder(() {
+                  setStorage("friends_display_mode", dataColumn.displayMode = "default").then((value) {
+                    setState(() {});
+                    setStateBuilderParent(() => Navigator.pop(context));
+                  });
+                }),
+              ),
+              ListTile(
+                title: Text(AppLocalizations.of(context)!.text2),
+                trailing: dataColumn.displayMode == "world_details" ? const Icon(Icons.check) : null,
+                onTap: () => setStateBuilder(() {
+                  setStorage("friends_display_mode", dataColumn.displayMode = "world_details").then((value) {
+                    setState(() {});
+                    setStateBuilderParent(() => Navigator.pop(context));
+                  });
+                }),
+              ),
+              ListTile(
+                title: Text(AppLocalizations.of(context)!.text3),
+                trailing: dataColumn.displayMode == "simple" ? const Icon(Icons.check) : null,
+                onTap: () => setStateBuilder(() {
+                  setStorage("friends_display_mode", dataColumn.displayMode = "simple").then((value) {
+                    setState(() {});
+                    setStateBuilderParent(() => Navigator.pop(context));
+                  });
+                }),
+              ),
+              ListTile(
+                title: Text(AppLocalizations.of(context)!.text4),
+                trailing: dataColumn.displayMode == "text_only" ? const Icon(Icons.check) : null,
+                onTap: () => setStateBuilder(() {
+                  setStorage("friends_display_mode", dataColumn.displayMode = "text_only").then((value) {
+                    setState(() {});
+                    setStateBuilderParent(() => Navigator.pop(context));
+                  });
+                }),
+              ),
             ],
           ),
         ),
@@ -216,7 +285,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
                 borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
               ),
               builder: (BuildContext context) => StatefulBuilder(
-                builder: (BuildContext context, setStateBuilder) => SingleChildScrollView(
+                builder: (BuildContext context, Function setStateBuilder) => SingleChildScrollView(
                   child: Column(
                     children: <Widget>[
                       if (!widget.offline)
@@ -266,6 +335,17 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
                             }[sortMode] ??
                             Text(AppLocalizations.of(context)!.sortedByDefault),
                         onTap: () => setStateBuilder(() => sortModal(setStateBuilder)),
+                      ),
+                      ListTile(
+                        title: Text(AppLocalizations.of(context)!.text1),
+                        subtitle: {
+                              "default": Text(AppLocalizations.of(context)!.text1),
+                              "world_details": Text(AppLocalizations.of(context)!.text2),
+                              "simple": Text(AppLocalizations.of(context)!.text3),
+                              "text_only": Text(AppLocalizations.of(context)!.text4),
+                            }[dataColumn.displayMode] ??
+                            Text(AppLocalizations.of(context)!.sortedByDefault),
+                        onTap: () => setStateBuilder(() => displeyModeModal(setStateBuilder)),
                       ),
                       ListTile(
                         title: Text(AppLocalizations.of(context)!.openInBrowser),

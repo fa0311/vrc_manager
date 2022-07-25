@@ -23,6 +23,7 @@ class Users {
   List<Widget> children = [];
   bool joinable = false;
   bool descending = false;
+  String displayMode = "default";
   late BuildContext context;
   Map<String, VRChatWorld> locationMap = {};
   List<VRChatUser> userList = [];
@@ -104,6 +105,11 @@ class Users {
   List<Widget> add(VRChatUser user) {
     userList.add(user);
     if (["private", "offline"].contains(user.location) && joinable) return children;
+    if (displayMode == "default") defaultAdd(user);
+    return children;
+  }
+
+  defaultAdd(VRChatUser user) {
     children.add(
       Card(
         elevation: 20.0,
@@ -178,6 +184,5 @@ class Users {
         ),
       ),
     );
-    return children;
   }
 }
