@@ -32,7 +32,9 @@ class Users {
     children = [];
     List<VRChatUser> tempUserList = userList;
     userList = [];
-    adds(tempUserList);
+    for (VRChatUser user in tempUserList) {
+      add(user);
+    }
     return children;
   }
 
@@ -95,27 +97,16 @@ class Users {
     return reload();
   }
 
-  List<Widget> adds(List<VRChatUser> users) {
-    for (VRChatUser user in users) {
-      add(user);
-    }
-    return children;
-  }
-
   List<Widget> add(VRChatUser user) {
     userList.add(user);
     if (["private", "offline"].contains(user.location) && joinable) return children;
-    if (displayMode == "default") childrenAdd(user);
-    if (displayMode == "simple") childrenAdd(user, imageSize: 50.0, nameFontSize: 16, statusView: false);
+    if (displayMode == "default") defaultAdd(user);
+    if (displayMode == "simple") simpleAdd(user);
+    if (displayMode == "text_only") textOnlyAdd(user);
     return children;
   }
 
-  childrenAdd(
-    VRChatUser user, {
-    double imageSize = 100.0,
-    double nameFontSize = 20.0,
-    bool statusView = false,
-  }) {
+  defaultAdd(VRChatUser user) {
     children.add(
       Card(
         elevation: 20.0,
@@ -133,41 +124,42 @@ class Users {
             child: Row(
               children: <Widget>[
                 SizedBox(
-                  height: imageSize,
+                  height: 100,
                   child: CachedNetworkImage(
                     imageUrl: user.profilePicOverride ?? user.currentAvatarThumbnailImageUrl,
                     fit: BoxFit.fitWidth,
-                    progressIndicatorBuilder: (context, url, downloadProgress) => SizedBox(
-                      width: imageSize,
-                      child: const Padding(
+                    progressIndicatorBuilder: (context, url, downloadProgress) => const SizedBox(
+                      width: 100,
+                      child: Padding(
                         padding: EdgeInsets.all(30),
                         child: CircularProgressIndicator(),
                       ),
                     ),
-                    errorWidget: (context, url, error) => SizedBox(
-                      width: imageSize,
-                      child: const Icon(Icons.error),
+                    errorWidget: (context, url, error) => const SizedBox(
+                      width: 100,
+                      child: Icon(Icons.error),
                     ),
                   ),
                 ),
                 Expanded(
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          status(user.status, diameter: nameFontSize),
+                          status(user.status, diameter: 20),
                           Container(
                             width: 5,
                           ),
                           Text(user.displayName,
-                              style: TextStyle(
-                                fontWeight: nameFontSize > 19 ? FontWeight.bold : null,
-                                fontSize: nameFontSize,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
                               )),
                         ],
                       ),
-                      if (user.statusDescription != null && statusView) Text(user.statusDescription!, style: const TextStyle(fontSize: 14)),
+                      if (user.statusDescription != null) Text(user.statusDescription!, style: const TextStyle(fontSize: 14)),
                       if (!["private", "offline"].contains(user.location) && locationMap.containsKey(user.location.split(":")[0]))
                         Text(locationMap[user.location.split(":")[0]]!.name, style: const TextStyle(fontSize: 14)),
                       if (!["private", "offline"].contains(user.location) && !locationMap.containsKey(user.location.split(":")[0]))
@@ -189,6 +181,164 @@ class Users {
           ),
         ),
       ),
+    );
+  }
+
+  simpleAdd(VRChatUser user) {
+    children.add(
+      Card(
+        elevation: 20.0,
+        child: Container(
+          padding: const EdgeInsets.all(5.0),
+          child: GestureDetector(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => VRChatMobileUser(userId: user.id),
+                  ));
+            },
+            behavior: HitTestBehavior.opaque,
+            child: Row(
+              children: <Widget>[
+                SizedBox(
+                  height: 50,
+                  child: CachedNetworkImage(
+                    imageUrl: user.profilePicOverride ?? user.currentAvatarThumbnailImageUrl,
+                    fit: BoxFit.fitWidth,
+                    progressIndicatorBuilder: (context, url, downloadProgress) => const SizedBox(
+                      width: 50,
+                      child: Padding(
+                        padding: EdgeInsets.all(30),
+                        child: CircularProgressIndicator(),
+                      ),
+                    ),
+                    errorWidget: (context, url, error) => const SizedBox(
+                      width: 50,
+                      child: Icon(Icons.error),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          status(user.status, diameter: 14),
+                          Container(
+                            width: 5,
+                          ),
+                          Text(
+                            user.displayName,
+                            style: const TextStyle(fontSize: 14),
+                          ),
+                        ],
+                      ),
+                      if (!["private", "offline"].contains(user.location) && locationMap.containsKey(user.location.split(":")[0]))
+                        Text(locationMap[user.location.split(":")[0]]!.name, style: const TextStyle(fontSize: 14)),
+                      if (!["private", "offline"].contains(user.location) && !locationMap.containsKey(user.location.split(":")[0]))
+                        const SizedBox(
+                          height: 15.0,
+                          width: 15.0,
+                          child: CircularProgressIndicator(),
+                        ),
+                      if (user.location == "private")
+                        Text(
+                          AppLocalizations.of(context)!.privateWorld,
+                          style: const TextStyle(fontSize: 14),
+                        ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  textOnlyAdd(VRChatUser user) {
+    children.add(
+      Card(
+        elevation: 20.0,
+        child: Container(
+          padding: const EdgeInsets.all(5.0),
+          child: GestureDetector(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => VRChatMobileUser(userId: user.id),
+                  ));
+            },
+            behavior: HitTestBehavior.opaque,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    status(user.status, diameter: 12),
+                    Container(
+                      width: 5,
+                    ),
+                    Text(user.displayName,
+                        style: const TextStyle(
+                          fontSize: 16,
+                        )),
+                    Container(
+                      width: 15,
+                    ),
+                  ],
+                ),
+                if (!["private", "offline"].contains(user.location) && locationMap.containsKey(user.location.split(":")[0]))
+                  Text(locationMap[user.location.split(":")[0]]!.name, style: const TextStyle(fontSize: 14)),
+                if (!["private", "offline"].contains(user.location) && !locationMap.containsKey(user.location.split(":")[0]))
+                  const SizedBox(
+                    height: 15.0,
+                    width: 15.0,
+                    child: CircularProgressIndicator(),
+                  ),
+                if (user.location == "private")
+                  Text(
+                    AppLocalizations.of(context)!.privateWorld,
+                    style: const TextStyle(fontSize: 14),
+                  ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget render({required List<Widget> children}) {
+    double width = MediaQuery.of(context).size.width;
+    int height = 0;
+    int wrap = 0;
+    if (displayMode == "default") {
+      height = 120;
+      wrap = 600;
+    }
+    if (displayMode == "simple") {
+      height = 80;
+      wrap = 300;
+    }
+    if (displayMode == "text_only") {
+      height = 40;
+      wrap = 400;
+    }
+
+    return GridView.count(
+      crossAxisCount: width ~/ wrap + 1,
+      crossAxisSpacing: 0,
+      mainAxisSpacing: 0,
+      childAspectRatio: width / (width ~/ wrap + 1) / height,
+      shrinkWrap: true,
+      children: children,
     );
   }
 }

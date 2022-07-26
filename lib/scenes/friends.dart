@@ -31,7 +31,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
   String sortMode = "default";
   String displayMode = "default";
 
-  late Column column = Column(
+  Widget body = Column(
     children: const [
       Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()),
     ],
@@ -91,7 +91,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
       if (dataColumn.children.isNotEmpty) {
         List<Widget> children = [];
         children = [const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator())];
-        setState(() => column = Column(children: children));
+        setState(() => body = dataColumn.render(children: children));
       }
       moreOver();
     } else if (delayedDisplay) {
@@ -106,7 +106,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
       if (children.isEmpty) {
         children = [Text(AppLocalizations.of(context)!.none)];
       }
-      setState(() => column = Column(children: children));
+      setState(() => body = dataColumn.render(children: children));
     }
   }
 
@@ -120,13 +120,16 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
               dataColumn.userList.add(user);
             }
           } else {
+            for (VRChatUser user in users.users) {
+              dataColumn.add(user);
+            }
             setState(() {
-              column = Column(children: dataColumn.adds(users.users));
+              body = dataColumn.render(children: dataColumn.children);
             });
           }
 
           if (!canMoreOver() && dataColumn.children.isEmpty && !delayedDisplay) {
-            setState(() => column = Column(children: <Widget>[Text(AppLocalizations.of(context)!.none)]));
+            setState(() => body = Column(children: <Widget>[Text(AppLocalizations.of(context)!.none)]));
           }
 
           for (VRChatUser user in users.users) {
@@ -135,7 +138,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
             VRChatAPI(cookie: cookie ?? "").worlds(wid).then((responseWorld) {
               dataColumn.locationMap[wid] = responseWorld;
               if (dataColumn.children.isEmpty) return;
-              setState(() => column = Column(
+              setState(() => body = dataColumn.render(
                     children: dataColumn.reload(),
                   ));
             }).catchError((status) {
@@ -227,17 +230,9 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
                 trailing: dataColumn.displayMode == "default" ? const Icon(Icons.check) : null,
                 onTap: () => setStateBuilder(() {
                   setStorage("friends_display_mode", dataColumn.displayMode = "default").then((value) {
-                    setState(() {});
-                    setStateBuilderParent(() => Navigator.pop(context));
-                  });
-                }),
-              ),
-              ListTile(
-                title: Text(AppLocalizations.of(context)!.text2),
-                trailing: dataColumn.displayMode == "world_details" ? const Icon(Icons.check) : null,
-                onTap: () => setStateBuilder(() {
-                  setStorage("friends_display_mode", dataColumn.displayMode = "world_details").then((value) {
-                    setState(() {});
+                    setState(() => body = dataColumn.render(
+                          children: dataColumn.reload(),
+                        ));
                     setStateBuilderParent(() => Navigator.pop(context));
                   });
                 }),
@@ -247,7 +242,9 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
                 trailing: dataColumn.displayMode == "simple" ? const Icon(Icons.check) : null,
                 onTap: () => setStateBuilder(() {
                   setStorage("friends_display_mode", dataColumn.displayMode = "simple").then((value) {
-                    setState(() {});
+                    setState(() => body = dataColumn.render(
+                          children: dataColumn.reload(),
+                        ));
                     setStateBuilderParent(() => Navigator.pop(context));
                   });
                 }),
@@ -257,7 +254,9 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
                 trailing: dataColumn.displayMode == "text_only" ? const Icon(Icons.check) : null,
                 onTap: () => setStateBuilder(() {
                   setStorage("friends_display_mode", dataColumn.displayMode = "text_only").then((value) {
-                    setState(() {});
+                    setState(() => body = dataColumn.render(
+                          children: dataColumn.reload(),
+                        ));
                     setStateBuilderParent(() => Navigator.pop(context));
                   });
                 }),
@@ -297,7 +296,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
                               setStorage("friends_joinable", e ? "true" : "false");
                               dataColumn.joinable = e;
                               setState(
-                                () => column = Column(
+                                () => body = dataColumn.render(
                                   children: dataColumn.reload(),
                                 ),
                               );
@@ -340,7 +339,6 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
                         title: Text(AppLocalizations.of(context)!.text1),
                         subtitle: {
                               "default": Text(AppLocalizations.of(context)!.text1),
-                              "world_details": Text(AppLocalizations.of(context)!.text2),
                               "simple": Text(AppLocalizations.of(context)!.text3),
                               "text_only": Text(AppLocalizations.of(context)!.text4),
                             }[dataColumn.displayMode] ??
@@ -369,7 +367,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
           child: SingleChildScrollView(
             child: Column(
               children: <Widget>[
-                column,
+                body,
                 if (dataColumn.userList.length == offset && offset > 0)
                   SizedBox(
                     width: MediaQuery.of(context).size.width,

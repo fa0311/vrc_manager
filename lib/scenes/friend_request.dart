@@ -26,7 +26,7 @@ class _FriendRequestPageState extends State<VRChatMobileFriendRequest> {
   int offset = 0;
   List<Widget> children = [];
 
-  late Column column = Column(
+  Widget body = Column(
     children: const [
       Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()),
     ],
@@ -43,7 +43,7 @@ class _FriendRequestPageState extends State<VRChatMobileFriendRequest> {
           offset += 100;
           if (response.notifications.isEmpty && dataColumn.children.isEmpty) {
             setState(
-              () => column = Column(
+              () => body = Column(
                 children: <Widget>[
                   Text(AppLocalizations.of(context)!.none),
                 ],
@@ -53,7 +53,7 @@ class _FriendRequestPageState extends State<VRChatMobileFriendRequest> {
           for (VRChatNotifications requestUser in response.notifications) {
             VRChatAPI(cookie: cookie ?? "").users(requestUser.senderUserId).then((VRChatUser user) {
               setState(
-                () => column = Column(
+                () => body = dataColumn.render(
                   children: dataColumn.add(user),
                 ),
               );
@@ -113,7 +113,7 @@ class _FriendRequestPageState extends State<VRChatMobileFriendRequest> {
           child: SingleChildScrollView(
             child: Column(
               children: <Widget>[
-                column,
+                body,
                 if (dataColumn.children.length == offset && offset > 0)
                   SizedBox(
                     width: MediaQuery.of(context).size.width,
