@@ -338,6 +338,7 @@ class Users {
       mainAxisSpacing: 0,
       childAspectRatio: width / (width ~/ wrap + 1) / height,
       shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
       children: children,
     );
   }

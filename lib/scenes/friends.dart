@@ -31,11 +31,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
   String sortMode = "default";
   String displayMode = "default";
 
-  Widget body = Column(
-    children: const [
-      Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()),
-    ],
-  );
+  Widget body = const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator());
 
   Users dataColumn = Users();
   _FriendsPageState() {
@@ -89,9 +85,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
   sort() {
     if (canMoreOver() && (autoReadMore || delayedDisplay)) {
       if (dataColumn.children.isNotEmpty) {
-        List<Widget> children = [];
-        children = [const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator())];
-        setState(() => body = dataColumn.render(children: children));
+        setState(() => body = const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()));
       }
       moreOver();
     } else if (delayedDisplay) {
@@ -104,17 +98,18 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
         children = dataColumn.sortByLocationMap();
       }
       if (children.isEmpty) {
-        children = [Text(AppLocalizations.of(context)!.none)];
+        setState(() => body = const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()));
+      } else {
+        setState(() => body = dataColumn.render(children: children));
       }
-      setState(() => body = dataColumn.render(children: children));
     }
   }
 
-  moreOver() {
+  Future<void> moreOver() {
     offset += 50;
-    getLoginSession("login_session").then(
+    return getLoginSession("login_session").then(
       (cookie) {
-        VRChatAPI(cookie: cookie ?? "").friends(offline: widget.offline, offset: offset - 50).then((VRChatUserList users) {
+        return VRChatAPI(cookie: cookie ?? "").friends(offline: widget.offline, offset: offset - 50).then((VRChatUserList users) {
           if (delayedDisplay) {
             for (VRChatUser user in users.users) {
               dataColumn.userList.add(user);
@@ -375,9 +370,10 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
                     child: Column(
                       children: <Widget>[
                         ElevatedButton(
-                          child: Text(AppLocalizations.of(context)!.readMore),
-                          onPressed: () => moreOver(),
-                        ),
+                            child: Text(AppLocalizations.of(context)!.readMore),
+                            onPressed: () {
+                              moreOver().then((_) => setState(() => body = dataColumn.render(children: dataColumn.reload())));
+                            }),
                       ],
                     ),
                   ),

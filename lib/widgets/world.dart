@@ -11,10 +11,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 // Project imports:
 import 'package:vrchat_mobile_client/api/data_class.dart';
-import 'package:vrchat_mobile_client/api/main.dart';
 import 'package:vrchat_mobile_client/assets/date.dart';
-import 'package:vrchat_mobile_client/assets/error.dart';
-import 'package:vrchat_mobile_client/assets/storage.dart';
 import 'package:vrchat_mobile_client/assets/vrchat/instance_type.dart';
 import 'package:vrchat_mobile_client/scenes/world.dart';
 import 'package:vrchat_mobile_client/widgets/region.dart';
@@ -67,78 +64,6 @@ Card simpleWorld(BuildContext context, VRChatLimitedWorld world) {
                     ),
                   ],
                 ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    ),
-  );
-}
-
-Card simpleWorldFavorite(BuildContext context, VRChatFavoriteWorld world, Function then) {
-  return Card(
-    elevation: 20.0,
-    child: Container(
-      padding: const EdgeInsets.all(10.0),
-      child: GestureDetector(
-        onTap: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id),
-              ));
-        },
-        behavior: HitTestBehavior.opaque,
-        child: Row(
-          children: <Widget>[
-            SizedBox(
-              height: 100,
-              child: CachedNetworkImage(
-                imageUrl: world.thumbnailImageUrl,
-                fit: BoxFit.fitWidth,
-                progressIndicatorBuilder: (context, url, downloadProgress) => const SizedBox(
-                  width: 100.0,
-                  child: Padding(
-                    padding: EdgeInsets.all(30),
-                    child: CircularProgressIndicator(),
-                  ),
-                ),
-                errorWidget: (context, url, error) => const SizedBox(
-                  width: 100.0,
-                  child: Icon(Icons.error),
-                ),
-              ),
-            ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(left: 10),
-                child: Column(
-                  children: <Widget>[
-                    SizedBox(
-                      width: double.infinity,
-                      child: Text(
-                        world.name,
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            SizedBox(
-              width: 50,
-              child: IconButton(
-                onPressed: () {
-                  getLoginSession("login_session").then(
-                    (cookie) {
-                      VRChatAPI(cookie: cookie ?? "").deleteFavorites(world.favoriteId).then((response) => then(response)).catchError((status) {
-                        apiError(context, status);
-                      });
-                    },
-                  );
-                },
-                icon: const Icon(Icons.delete),
               ),
             ),
           ],
