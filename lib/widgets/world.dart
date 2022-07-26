@@ -17,7 +17,6 @@ import 'package:vrchat_mobile_client/assets/error.dart';
 import 'package:vrchat_mobile_client/assets/storage.dart';
 import 'package:vrchat_mobile_client/assets/vrchat/instance_type.dart';
 import 'package:vrchat_mobile_client/scenes/world.dart';
-import 'package:vrchat_mobile_client/scenes/worlds_favorite.dart';
 import 'package:vrchat_mobile_client/widgets/region.dart';
 
 Card simpleWorld(BuildContext context, VRChatLimitedWorld world) {
@@ -77,7 +76,7 @@ Card simpleWorld(BuildContext context, VRChatLimitedWorld world) {
   );
 }
 
-Card simpleWorldFavorite(BuildContext context, VRChatFavoriteWorld world) {
+Card simpleWorldFavorite(BuildContext context, VRChatFavoriteWorld world, Function then) {
   return Card(
     elevation: 20.0,
     child: Container(
@@ -133,14 +132,7 @@ Card simpleWorldFavorite(BuildContext context, VRChatFavoriteWorld world) {
                 onPressed: () {
                   getLoginSession("login_session").then(
                     (cookie) {
-                      VRChatAPI(cookie: cookie ?? "").deleteFavorites(world.favoriteId).then((response) {
-                        Navigator.pop(context);
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (BuildContext context) => const VRChatMobileWorldsFavorite(),
-                            ));
-                      }).catchError((status) {
+                      VRChatAPI(cookie: cookie ?? "").deleteFavorites(world.favoriteId).then((response) => then(response)).catchError((status) {
                         apiError(context, status);
                       });
                     },

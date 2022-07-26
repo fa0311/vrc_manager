@@ -26,6 +26,7 @@ class VRChatMobileWorldsFavorite extends StatefulWidget {
 class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
   List<int> offset = [];
   List<Column> childrenList = [];
+  List<List<VRChatFavoriteWorld>> worldList = [];
 
   late Column column = Column(
     children: const [
@@ -58,6 +59,7 @@ class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
           }
           response.group.asMap().forEach((index, VRChatFavoriteGroup list) {
             offset.add(0);
+            worldList.add([]);
             childrenList.add(Column());
             moreOver(list, index);
           });
@@ -67,18 +69,25 @@ class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
       },
     );
   }
+  render() {}
 
   moreOver(VRChatFavoriteGroup list, int index) {
     getLoginSession("login_session").then(
       (cookie) {
-        VRChatAPI(cookie: cookie ?? "").favoritesWorlds(list.name, offset: offset[index]).then((VRChatFavoriteWorldList worlds) {
-          offset[index] += 50;
-          final List<Widget> worldList = [];
-          worldList.addAll(childrenList[index].children);
-          for (VRChatFavoriteWorld world in worlds.world) {
-            worldList.add(simpleWorldFavorite(context, world));
+        offset[index] += 50;
+        VRChatAPI(cookie: cookie ?? "").favoritesWorlds(list.name, offset: offset[index] - 50).then((VRChatFavoriteWorldList worlds) {
+          worldList[index].addAll(worlds.world);
+
+          List<Widget> children = [];
+
+          for (VRChatFavoriteWorld world in worldList[index]) {
+            children.add(simpleWorldFavorite(context, world, (response) {
+              worldList[index].remove(world);
+
+              setState(() {});
+            }));
           }
-          childrenList[index] = Column(children: worldList);
+          childrenList[index] = Column(children: children);
           column = Column(children: column.children);
           setState(
             () {
