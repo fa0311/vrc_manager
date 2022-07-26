@@ -207,7 +207,20 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
                       setStateBuilderParent(() => Navigator.pop(context));
                     });
                   }),
-                )
+                ),
+              if (!widget.offline)
+                SwitchListTile(
+                  value: dataColumn.descending && sortMode != "default",
+                  title: Text(AppLocalizations.of(context)!.descending),
+                  onChanged: sortMode == "default"
+                      ? null
+                      : (bool e) => setStateBuilder(() {
+                            dataColumn.descending = e;
+                            setStorage("friends_descending", e ? "true" : "false");
+                            updateSortMode();
+                            sort();
+                          }),
+                ),
             ],
           ),
         ),
@@ -313,18 +326,6 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
                                     setStorage("auto_read_more", e ? "true" : "false");
                                   })
                               : null),
-                      SwitchListTile(
-                        value: dataColumn.descending && sortMode != "default",
-                        title: Text(AppLocalizations.of(context)!.descending),
-                        onChanged: sortMode == "default"
-                            ? null
-                            : (bool e) => setStateBuilder(() {
-                                  dataColumn.descending = e;
-                                  setStorage("friends_descending", e ? "true" : "false");
-                                  updateSortMode();
-                                  sort();
-                                }),
-                      ),
                       ListTile(
                         title: Text(AppLocalizations.of(context)!.sort),
                         subtitle: {
