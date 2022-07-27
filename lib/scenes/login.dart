@@ -14,6 +14,7 @@ import 'package:vrchat_mobile_client/assets/error.dart';
 import 'package:vrchat_mobile_client/assets/storage.dart';
 import 'package:vrchat_mobile_client/main.dart';
 import 'package:vrchat_mobile_client/scenes/home.dart';
+import 'package:vrchat_mobile_client/scenes/web_view_login.dart';
 import 'package:vrchat_mobile_client/widgets/drawer.dart';
 
 class VRChatMobileLogin extends StatefulWidget {
@@ -246,6 +247,17 @@ class _LoginPageState extends State<VRChatMobileLogin> {
                   AppLocalizations.of(context)!.login,
                 ),
                 onPressed: () => _onPressed(context),
+              ),
+              TextButton(
+                child: Text(
+                  AppLocalizations.of(context)!.text1,
+                ),
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => const VRChatMobileWebViewLogin(),
+                  ),
+                ),
               ),
             ],
           )),

@@ -50,6 +50,7 @@ class _LoginHomeState extends State<VRChatMobileHome> {
       } else {
         VRChatAPI(cookie: cookie).user().then((VRChatUserOverload response) {
           VRChatAPI(cookie: cookie).users(response.id).then((VRChatUser user) {
+            setLoginSession("displayname", user.displayName);
             setState(
               () {
                 column = Column(
