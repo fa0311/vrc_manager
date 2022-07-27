@@ -34,7 +34,7 @@ Drawer drawer(BuildContext context) {
       ];
       response.asMap().forEach(
         (_, String accountIndex) {
-          getLoginSession("userid", accountIndex: accountIndex).then(
+          getLoginSession("displayname", accountIndex: accountIndex).then(
             (accountName) => list.insert(
               0,
               ListTile(
@@ -180,7 +180,7 @@ Drawer simpledrawer(BuildContext context) {
       ];
       response.asMap().forEach(
         (_, String accountIndex) {
-          getLoginSession("userid", accountIndex: accountIndex).then(
+          getLoginSession("displayname", accountIndex: accountIndex).then(
             (accountName) => list.insert(
               0,
               ListTile(

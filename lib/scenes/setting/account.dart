@@ -26,6 +26,7 @@ class _SettingAccountPageState extends State<VRChatMobileSettingsAccount> {
   _removeLoginInfo() async {
     removeLoginSession("userid");
     removeLoginSession("password");
+    removeLoginSession("displayname");
     setStorage("remember_login_info", "false");
   }
 
