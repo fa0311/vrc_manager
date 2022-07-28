@@ -14,8 +14,8 @@ import 'package:vrchat_mobile_client/assets/error.dart';
 import 'package:vrchat_mobile_client/assets/storage.dart';
 import 'package:vrchat_mobile_client/main.dart';
 import 'package:vrchat_mobile_client/scenes/home.dart';
-import 'package:vrchat_mobile_client/scenes/web_view_login.dart';
 import 'package:vrchat_mobile_client/widgets/drawer.dart';
+import 'package:vrchat_mobile_client/widgets/share.dart';
 
 class VRChatMobileLogin extends StatefulWidget {
   const VRChatMobileLogin({Key? key}) : super(key: key);
@@ -250,13 +250,27 @@ class _LoginPageState extends State<VRChatMobileLogin> {
               ),
               TextButton(
                 child: Text(
-                  AppLocalizations.of(context)!.text1,
+                  AppLocalizations.of(context)!.help,
                 ),
-                onPressed: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (BuildContext context) => const VRChatMobileWebViewLogin(),
-                  ),
+                onPressed: () => showDialog(
+                  context: context,
+                  builder: (_) {
+                    return AlertDialog(
+                      title: Text(AppLocalizations.of(context)!.help),
+                      content: const Text(
+                          "To use the VRChat website, you'll need to create a VRChat account here.Don't worry! You can link your VRChat account to your existing Oculus / Steam / Viveport account and keep all your friends."),
+                      actions: <Widget>[
+                        TextButton(
+                          child: Text(AppLocalizations.of(context)!.cancel),
+                          onPressed: () => Navigator.pop(context),
+                        ),
+                        TextButton(
+                          onPressed: () => openInBrowser(context, "https://vrchat.com/home/login"),
+                          child: Text(AppLocalizations.of(context)!.openInBrowser),
+                        ),
+                      ],
+                    );
+                  },
                 ),
               ),
             ],

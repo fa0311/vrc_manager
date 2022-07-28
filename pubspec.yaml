@@ -73,7 +73,6 @@ dev_dependencies:
 flutter:
   assets:
    - assets/svg/
-   - assets/js/
   generate: true
 
   # The following line ensures that the Material Icons font is
