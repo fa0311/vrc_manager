@@ -257,8 +257,7 @@ class _LoginPageState extends State<VRChatMobileLogin> {
                   builder: (_) {
                     return AlertDialog(
                       title: Text(AppLocalizations.of(context)!.help),
-                      content: const Text(
-                          "To use the VRChat website, you'll need to create a VRChat account here.Don't worry! You can link your VRChat account to your existing Oculus / Steam / Viveport account and keep all your friends."),
+                      content: Text(AppLocalizations.of(context)!.cantLogin),
                       actions: <Widget>[
                         TextButton(
                           child: Text(AppLocalizations.of(context)!.cancel),

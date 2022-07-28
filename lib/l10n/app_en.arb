@@ -62,6 +62,7 @@
     "twoFactorAuthentication": "Two Factor Authentication",
     "authenticationCode": "Authentication Code",
     "unknown": "Unknown",
+    "cantLogin": "Please make sure you can log in via vrchat.com.",
     "@____________________LOGIN_ERROR_DIALOG____________________": {},
     "incorrectLogin": "Incorrect login information",
     "@____________________HOME____________________": {},

@@ -62,6 +62,7 @@
     "twoFactorAuthentication": "2段階認証",
     "authenticationCode": "認証コード",
     "unknown": "名無し",
+    "cantLogin": "vrchat.com でログインできるか確認してください",
     "@____________________LOGIN_ERROR_DIALOG____________________": {},
     "incorrectLogin": "ログイン情報が間違っています",
     "@____________________HOME____________________": {},
