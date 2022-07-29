@@ -28,7 +28,7 @@
     "unknownError": "Unknown error",
     "unexpectedError": "This request is not supported.",
     "reportMessage1": "Please report this to the developer.",
-    "reportMessage2": "Tapping {report} will copy the log to the clipboard and access the report page.",
+    "reportMessage2": "Tapping Report will copy the log to the clipboard and access the report page.",
     "@____________________ERROR_TRANSLATION____________________": {},
     "tooManyRequests": "Too many requests. Please wait a while and try again.",
     "invalidLoginInfo": "Invalid Username/Email or Password.",
@@ -165,12 +165,6 @@
     "text4": "text4",
     "textLong": "text text text text text text",
     "@____________________PLACEHOLDER____________________": {},
-    "@__PLACEHOLDER_ERROR_DIALOG__": {},
-    "@reportMessage2": {
-        "placeholders": {
-            "report": {}
-        }
-    },
     "@__PLACEHOLDER_DATE__": {},
     "@dateFormat1": {
         "placeholders": {
@@ -231,11 +225,13 @@
             "data": {}
         }
     },
+    "@__SETTING__": {},
     "@translaterDetails": {
         "placeholders": {
             "name": {}
         }
     },
+    "@__HELP__": {},
     "@versionDetails": {
         "placeholders": {
             "version": {}

@@ -28,7 +28,7 @@
     "unknownError": "不明なエラー",
     "unexpectedError": "このリクエストは非対応です",
     "reportMessage1": "開発者に報告してください",
-    "reportMessage2": "{report}をタップするとログがクリップボードにコピーされ報告ページにアクセスします",
+    "reportMessage2": "報告をタップするとログがクリップボードにコピーされ報告ページにアクセスします",
     "@____________________ERROR_TRANSLATION____________________": {},
     "tooManyRequests": "リクエストが多すぎます しばらく待ってから再試行してください",
     "invalidLoginInfo": "ユーザー名/メールアドレスまたはパスワードが無効です",
