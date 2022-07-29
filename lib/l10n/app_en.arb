@@ -106,6 +106,7 @@
     "@____________________WORLD____________________": {},
     "world": "World",
     "privateWorld": "Private World",
+    "traveling": "traveling",
     "occupants": "Number of users: {data}",
     "privateOccupants": "Number of private users: {data}",
     "favorites": "Favorites: {data}",

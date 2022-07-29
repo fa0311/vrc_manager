@@ -73,7 +73,7 @@ class _UserHomeState extends State<VRChatMobileUser> {
             apiError(context, status);
           });
 
-          if (!["private", "offline"].contains(user.location)) {
+          if (!["private", "offline", "traveling"].contains(user.location)) {
             column.children[2] = TextButton(
               style: ElevatedButton.styleFrom(
                 onPrimary: Colors.grey,
@@ -139,6 +139,21 @@ class _UserHomeState extends State<VRChatMobileUser> {
                   children: [
                     Container(padding: const EdgeInsets.only(top: 30)),
                     privatesimpleWorld(context),
+                  ],
+                );
+              },
+            );
+          }
+          if (user.location == "traveling") {
+            setState(
+              () {
+                column = Column(children: column.children);
+                column.children[1] = Column(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.only(top: 30),
+                    ),
+                    travelingWorld(context),
                   ],
                 );
               },

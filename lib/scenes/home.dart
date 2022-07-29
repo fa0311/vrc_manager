@@ -75,7 +75,7 @@ class _LoginHomeState extends State<VRChatMobileHome> {
                 popupMenu = [share(context, "https://vrchat.com/home/user/${response.id}")];
               },
             );
-            if (!["private", "offline"].contains(user.worldId)) {
+            if (!["private", "offline", "traveling"].contains(user.worldId)) {
               column.children[2] = TextButton(
                 style: ElevatedButton.styleFrom(
                   onPrimary: Colors.grey,
@@ -142,7 +142,22 @@ class _LoginHomeState extends State<VRChatMobileHome> {
                       Container(
                         padding: const EdgeInsets.only(top: 30),
                       ),
-                      privatesimpleWorld(context)
+                      privatesimpleWorld(context),
+                    ],
+                  );
+                },
+              );
+            }
+            if (user.location == "traveling") {
+              setState(
+                () {
+                  column = Column(children: column.children);
+                  column.children[1] = Column(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.only(top: 30),
+                      ),
+                      travelingWorld(context),
                     ],
                   );
                 },

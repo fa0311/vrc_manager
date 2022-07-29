@@ -106,6 +106,7 @@
     "@____________________WORLD____________________": {},
     "world": "ワールド",
     "privateWorld": "プライベートワールド",
+    "traveling": "移動中",
     "occupants": "プレイヤー数: {data}",
     "privateOccupants": "プライベートのプレイヤー数: {data}",
     "favorites": "お気に入り: {data}",

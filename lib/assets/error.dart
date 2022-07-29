@@ -22,6 +22,9 @@ void errorDialog(BuildContext context, String text, {String log = ""}) {
   if (log.isNotEmpty) {
     text += "\n${AppLocalizations.of(context)!.reportMessage1}\n${AppLocalizations.of(context)!.reportMessage2}";
   }
+  if (kDebugMode) {
+    print(json.decode(log));
+  }
   showDialog(
     context: context,
     builder: (_) {
@@ -75,10 +78,19 @@ httpError(BuildContext context, HttpException error) {
     } else if (content.message == '"Invalid Username/Email or Password"') {
       errorDialog(context, AppLocalizations.of(context)!.invalidLoginInfo);
     } else {
-      if (kDebugMode) {
-        print(content.message);
-      }
-      errorDialog(context, content.message);
+      PackageInfo.fromPlatform().then((PackageInfo packageInfo) {
+        DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
+        deviceInfoPlugin.deviceInfo.then((BaseDeviceInfo deviceInfo) {
+          Map<String, dynamic> logs = {
+            "exceptionType": error.toString(),
+            "version": packageInfo.version,
+            "deviceInfo": deviceInfo.toMap(),
+            "error": error.toString(),
+            "message": message
+          };
+          errorDialog(context, content.message, log: errorLog(logs));
+        });
+      });
     }
   } catch (e) {
     standardError(context, e);

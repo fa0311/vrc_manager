@@ -129,7 +129,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
 
           for (VRChatUser user in users.users) {
             String wid = user.location.split(":")[0];
-            if (["private", "offline"].contains(user.location) || dataColumn.locationMap.containsKey(wid)) continue;
+            if (["private", "offline", "traveling"].contains(user.location) || dataColumn.locationMap.containsKey(wid)) continue;
             VRChatAPI(cookie: cookie ?? "").worlds(wid).then((responseWorld) {
               dataColumn.locationMap[wid] = responseWorld;
               if (dataColumn.children.isEmpty) return;
