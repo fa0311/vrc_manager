@@ -20,7 +20,7 @@ import 'package:vrchat_mobile_client/widgets/share.dart';
 
 void errorDialog(BuildContext context, String text, {String log = ""}) {
   if (log.isNotEmpty) {
-    text += "\n${AppLocalizations.of(context)!.reportMessage1}\n${AppLocalizations.of(context)!.reportMessage2(AppLocalizations.of(context)!.report)}";
+    text += "\n${AppLocalizations.of(context)!.reportMessage1}\n${AppLocalizations.of(context)!.reportMessage2}";
   }
   showDialog(
     context: context,
