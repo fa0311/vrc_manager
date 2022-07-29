@@ -76,20 +76,59 @@ class _LoginHomeState extends State<VRChatMobileHome> {
               },
             );
             if (!["private", "offline"].contains(user.worldId)) {
-              VRChatAPI(cookie: cookie).worlds(user.worldId.split(":")[0]).then((VRChatWorld world) {
+              column.children[2] = TextButton(
+                style: ElevatedButton.styleFrom(
+                  onPrimary: Colors.grey,
+                ),
+                onPressed: () => VRChatAPI(cookie: cookie).selfInvite(user.location).then((VRChatStatus response) {
+                  showDialog(
+                    context: context,
+                    builder: (_) {
+                      return AlertDialog(
+                        title: Text(AppLocalizations.of(context)!.sendInvite),
+                        content: Text(AppLocalizations.of(context)!.selfInviteDetails),
+                        actions: <Widget>[
+                          TextButton(
+                            child: Text(AppLocalizations.of(context)!.close),
+                            onPressed: () => Navigator.pop(context),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                }).catchError((status) {
+                  apiError(context, status);
+                }),
+                child: Text(AppLocalizations.of(context)!.joinInstance),
+              );
+
+              VRChatAPI(cookie: cookie).worlds(user.location.split(":")[0]).then((world) {
                 setState(
                   () {
                     column = Column(children: column.children);
                     column.children[1] = Column(
                       children: [
-                        Container(
-                          padding: const EdgeInsets.only(top: 30),
-                        ),
-                        simpleWorld(context, world.toLimited())
+                        Container(padding: const EdgeInsets.only(top: 30)),
+                        simpleWorld(context, world.toLimited()),
                       ],
                     );
                   },
                 );
+                VRChatAPI(cookie: cookie).instances(user.location).then((instance) {
+                  setState(
+                    () {
+                      column = Column(children: column.children);
+                      column.children[1] = Column(
+                        children: [
+                          Container(padding: const EdgeInsets.only(top: 30)),
+                          simpleWorldPlus(context, world, instance),
+                        ],
+                      );
+                    },
+                  );
+                }).catchError((status) {
+                  apiError(context, status);
+                });
               }).catchError((status) {
                 apiError(context, status);
               });
