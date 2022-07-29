@@ -24,4 +24,4 @@ body:
       description: Please paste the log. Logs are automatically copied to the clipboard.
       render: shell
     validations:
-      required: false
+      required: true
