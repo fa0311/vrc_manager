@@ -19,7 +19,6 @@ import 'package:vrchat_mobile_client/assets/dialog.dart';
 import 'package:vrchat_mobile_client/assets/error.dart';
 import 'package:vrchat_mobile_client/assets/storage.dart';
 import 'package:vrchat_mobile_client/assets/vrchat/icon.dart';
-import 'package:vrchat_mobile_client/scenes/user.dart';
 import 'package:vrchat_mobile_client/widgets/share.dart';
 import 'package:vrchat_mobile_client/widgets/status.dart';
 
@@ -130,19 +129,13 @@ Column profile(BuildContext context, VRChatUser user) {
   );
 }
 
-Widget profileAction(BuildContext context, VRChatfriendStatus status, String uid) {
+Widget profileAction(BuildContext context, VRChatfriendStatus status, String uid, Function reload) {
   sendFriendRequest() {
     getLoginSession("login_session").then(
       (cookie) {
         VRChatAPI(cookie: cookie ?? "").sendFriendRequest(uid).then((response) {
           Navigator.pop(context);
-          Navigator.pop(context);
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (BuildContext context) => VRChatMobileUser(userId: uid),
-            ),
-          );
+          reload();
         }).catchError((status) {
           apiError(context, status);
         });
@@ -155,13 +148,7 @@ Widget profileAction(BuildContext context, VRChatfriendStatus status, String uid
       (cookie) {
         VRChatAPI(cookie: cookie ?? "").acceptFriendRequestByUid(uid).then((response) {
           Navigator.pop(context);
-          Navigator.pop(context);
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (BuildContext context) => VRChatMobileUser(userId: uid),
-            ),
-          );
+          reload();
         }).catchError((status) {
           apiError(context, status);
         });
@@ -174,13 +161,7 @@ Widget profileAction(BuildContext context, VRChatfriendStatus status, String uid
       (cookie) {
         VRChatAPI(cookie: cookie ?? "").deleteFriendRequest(uid).then((response) {
           Navigator.pop(context);
-          Navigator.pop(context);
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (BuildContext context) => VRChatMobileUser(userId: uid),
-            ),
-          );
+          reload();
         }).catchError((status) {
           apiError(context, status);
         });
@@ -198,13 +179,7 @@ Widget profileAction(BuildContext context, VRChatfriendStatus status, String uid
           VRChatAPI(cookie: cookie ?? "").deleteFriend(uid).then((response) {
             Navigator.pop(context);
             Navigator.pop(context);
-            Navigator.pop(context);
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (BuildContext context) => VRChatMobileUser(userId: uid),
-              ),
-            );
+            reload();
           }).catchError((status) {
             apiError(context, status);
           });

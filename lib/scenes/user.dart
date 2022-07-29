@@ -34,6 +34,10 @@ class _UserHomeState extends State<VRChatMobileUser> {
   late List<Widget> popupMenu = [share(context, "https://vrchat.com/home/user/${widget.userId}")];
 
   _UserHomeState() {
+    reload();
+  }
+
+  reload() {
     getLoginSession("login_session").then(
       (cookie) {
         VRChatAPI(cookie: cookie ?? "").users(widget.userId).then((VRChatUser user) {
@@ -62,7 +66,7 @@ class _UserHomeState extends State<VRChatMobileUser> {
           VRChatAPI(cookie: cookie ?? "").friendStatus(widget.userId).then((VRChatfriendStatus status) {
             setState(
               () {
-                popupMenu = <Widget>[profileAction(context, status, widget.userId), share(context, "https://vrchat.com/home/user/${widget.userId}")];
+                popupMenu = <Widget>[profileAction(context, status, widget.userId, reload), share(context, "https://vrchat.com/home/user/${widget.userId}")];
               },
             );
           }).catchError((status) {
