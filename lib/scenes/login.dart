@@ -250,7 +250,7 @@ class _LoginPageState extends State<VRChatMobileLogin> {
               ),
               TextButton(
                 child: Text(
-                  AppLocalizations.of(context)!.help,
+                  AppLocalizations.of(context)!.cantLogin,
                 ),
                 onPressed: () => showDialog(
                   context: context,
