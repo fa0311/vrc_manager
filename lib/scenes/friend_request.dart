@@ -203,7 +203,7 @@ class _FriendsPageRequestState extends State<VRChatMobileFriendRequest> {
           child: Column(
             children: <Widget>[
               ListTile(
-                title: Text(AppLocalizations.of(context)!.text1),
+                title: Text(AppLocalizations.of(context)!.display),
                 trailing: dataColumn.displayMode == "default" ? const Icon(Icons.check) : null,
                 onTap: () => setStateBuilder(() {
                   setStorage("friends_display_mode", dataColumn.displayMode = "default").then((value) {
@@ -215,7 +215,7 @@ class _FriendsPageRequestState extends State<VRChatMobileFriendRequest> {
                 }),
               ),
               ListTile(
-                title: Text(AppLocalizations.of(context)!.text3),
+                title: Text(AppLocalizations.of(context)!.textOnly),
                 trailing: dataColumn.displayMode == "simple" ? const Icon(Icons.check) : null,
                 onTap: () => setStateBuilder(() {
                   setStorage("friends_display_mode", dataColumn.displayMode = "simple").then((value) {
@@ -227,7 +227,7 @@ class _FriendsPageRequestState extends State<VRChatMobileFriendRequest> {
                 }),
               ),
               ListTile(
-                title: Text(AppLocalizations.of(context)!.text4),
+                title: Text(AppLocalizations.of(context)!.textOnly),
                 trailing: dataColumn.displayMode == "text_only" ? const Icon(Icons.check) : null,
                 onTap: () => setStateBuilder(() {
                   setStorage("friends_display_mode", dataColumn.displayMode = "text_only").then((value) {
@@ -251,7 +251,7 @@ class _FriendsPageRequestState extends State<VRChatMobileFriendRequest> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.friends),
+        title: Text(AppLocalizations.of(context)!.friendRequest),
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.more_vert),
@@ -283,11 +283,11 @@ class _FriendsPageRequestState extends State<VRChatMobileFriendRequest> {
                         onTap: () => setStateBuilder(() => sortModal(setStateBuilder)),
                       ),
                       ListTile(
-                        title: Text(AppLocalizations.of(context)!.text1),
+                        title: Text(AppLocalizations.of(context)!.display),
                         subtitle: {
-                              "default": Text(AppLocalizations.of(context)!.text1),
-                              "simple": Text(AppLocalizations.of(context)!.text3),
-                              "text_only": Text(AppLocalizations.of(context)!.text4),
+                              "default": Text(AppLocalizations.of(context)!.default_),
+                              "simple": Text(AppLocalizations.of(context)!.simple),
+                              "text_only": Text(AppLocalizations.of(context)!.textOnly),
                             }[dataColumn.displayMode] ??
                             Text(AppLocalizations.of(context)!.sortedByDefault),
                         onTap: () => setStateBuilder(() => displeyModeModal(setStateBuilder)),
