@@ -87,26 +87,32 @@ httpError(BuildContext context, HttpException error) {
 }
 
 standardError(BuildContext context, dynamic error) {
-  if (kDebugMode) {
-    print(error.stackTrace);
-  }
   PackageInfo.fromPlatform().then((PackageInfo packageInfo) {
     DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
     deviceInfoPlugin.deviceInfo.then((BaseDeviceInfo deviceInfo) {
-      String log = errorLog({
+      Map<String, dynamic> logs = {
+        "exceptionType": error.toString(),
         "version": packageInfo.version,
         "deviceInfo": deviceInfo.toMap(),
         "error": error.toString(),
-        "stackTrace": (error.stackTrace ?? "").toString(),
-      });
+      };
       if (error is TypeError) {
-        errorDialog(context, AppLocalizations.of(context)!.parseError, log: log);
+        logs.addAll({
+          "stackTrace": (error.stackTrace ?? "").toString(),
+        });
+        errorDialog(context, AppLocalizations.of(context)!.parseError, log: errorLog(logs));
       } else if (error is FormatException) {
-        errorDialog(context, AppLocalizations.of(context)!.parseError, log: log);
+        logs.addAll({
+          "message": error.message,
+        });
+        errorDialog(context, AppLocalizations.of(context)!.parseError, log: errorLog(logs));
       } else if (error is SocketException) {
-        errorDialog(context, AppLocalizations.of(context)!.socketException, log: log);
+        logs.addAll({
+          "message": error.message,
+        });
+        errorDialog(context, AppLocalizations.of(context)!.socketException, log: errorLog(logs));
       } else {
-        errorDialog(context, AppLocalizations.of(context)!.unknownError, log: log);
+        errorDialog(context, AppLocalizations.of(context)!.unknownError, log: errorLog(logs));
       }
     });
   });
@@ -118,18 +124,4 @@ apiError(BuildContext context, dynamic error) {
   } else {
     standardError(context, error);
   }
-}
-
-otherError(BuildContext context, String text, {Map? content}) {
-  PackageInfo.fromPlatform().then((PackageInfo packageInfo) {
-    DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
-    deviceInfoPlugin.deviceInfo.then((BaseDeviceInfo deviceInfo) {
-      String log = errorLog({
-        "version": packageInfo.version,
-        "deviceInfo": deviceInfo.toMap(),
-        "content": content,
-      });
-      errorDialog(context, text, log: log);
-    });
-  });
 }

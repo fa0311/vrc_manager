@@ -39,7 +39,8 @@ class _LoginPageState extends State<VRChatMobileLogin> {
       } else if (login.verified) {
         _save(session.vrchatSession.headers["cookie"] as String);
       } else {
-        otherError(context, AppLocalizations.of(context)!.unexpectedError, content: login.content);
+        login.content.addAll({"lastEndpoint": "api/1/auth/user"});
+        throw Exception(errorLog(login.content));
       }
     }).catchError((status) {
       apiError(context, status);
