@@ -256,8 +256,8 @@ class _LoginPageState extends State<VRChatMobileLogin> {
                   context: context,
                   builder: (_) {
                     return AlertDialog(
-                      title: Text(AppLocalizations.of(context)!.help),
-                      content: Text(AppLocalizations.of(context)!.cantLogin),
+                      title: Text(AppLocalizations.of(context)!.cantLogin),
+                      content: Text(AppLocalizations.of(context)!.cantLoginDetails),
                       actions: <Widget>[
                         TextButton(
                           child: Text(AppLocalizations.of(context)!.cancel),
