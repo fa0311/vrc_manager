@@ -174,6 +174,7 @@ class VRChatUser {
   late String? instanceId;
   late String? lastActivity;
   late DateTime? lastLogin;
+  late String? note;
   late String? state;
   late String? travelingToInstance;
   late String? travelingToLocation;
@@ -211,6 +212,7 @@ class VRChatUser {
     travelingToLocation = content['travelingToLocation'];
     travelingToWorld = content['travelingToWorld'];
     worldId = content['worldId'] == "" ? location : content['location'] ?? location;
+    note = content["note"];
   }
 }
 
