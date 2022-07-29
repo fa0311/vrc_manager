@@ -1,0 +1,27 @@
+name: "[en] 📓 Redirected from app"
+description: Report a bug in vrchat_mobile_client.
+labels: ["bug"]
+body:
+
+  - type: textarea
+    id: steps-to-reproduce
+    attributes:
+      label: Steps to reproduce
+      description: Provide detailed intructions to trigger the bug.
+      placeholder: |
+        Example:
+          1. Start with all application data deleted.
+          2. Login and open Home
+          3. ...
+          ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: error-message
+    attributes:
+      label: Relevant error message output
+      description: Please paste the log. Logs are automatically copied to the clipboard.
+      render: shell
+    validations:
+      required: false
