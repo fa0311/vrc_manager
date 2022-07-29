@@ -63,7 +63,7 @@ body:
     id: error-message
     attributes:
       label: Relevant error message output
-      description: Please paste any relevant  Relevant error message output output.
+      description: Please paste any relevant  Relevant error message output.
       render: shell
     validations:
       required: false
