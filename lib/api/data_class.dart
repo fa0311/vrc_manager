@@ -394,7 +394,9 @@ class VRChatInstance {
   late String photonRegion;
   late VRChatPlatforms platforms;
   late String region;
-  late String shortName;
+  late String secureName;
+  late String? shortName;
+  late bool strict;
   late List<String> tags;
   late String type;
   late String worldId;
@@ -418,7 +420,9 @@ class VRChatInstance {
     photonRegion = content['photonRegion'];
     platforms = VRChatPlatforms.fromJson(content['platforms']);
     region = content['region'];
+    secureName = content['secureName'];
     shortName = content['shortName'];
+    strict = content['strict'];
     tags = content['tags'].cast<String>();
     type = content['type'];
     worldId = content['worldId'];
