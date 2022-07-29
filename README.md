@@ -27,9 +27,27 @@ Flutter で作成されたシンプルな UI が特徴的です<br>
 
 ## 貢献
 
+### ブランチについて
+
+- **master** プロダクトリリース GooglePlay と同じ
+- **pre** プレリリース 大きな機能追加もしくは GooglePlay の審査
+- **develop** 開発バージョン PullRequest はここへ
+
 ### 翻訳
 
-[l10n](https://github.com/fa0311/vrchat_mobile_client/tree/develop/lib/l10n)
+[lib/l10n](https://github.com/fa0311/vrchat_mobile_client/tree/develop/lib/l10n)
+
+### セットアップ
+
+```
+flutter pub get
+```
+
+### ビルド
+
+```
+flutter run
+```
 
 ## 免責事項
 
