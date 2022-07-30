@@ -231,18 +231,18 @@ class Users {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          status(user.status, diameter: 14),
+                          status(user.status, diameter: 13),
                           Container(
                             width: 5,
                           ),
                           Text(
                             user.displayName,
-                            style: const TextStyle(fontSize: 14),
+                            style: const TextStyle(fontSize: 12),
                           ),
                         ],
                       ),
                       if (!["private", "offline", "traveling"].contains(user.location) && locationMap.containsKey(user.location.split(":")[0]))
-                        Text(locationMap[user.location.split(":")[0]]!.name, style: const TextStyle(fontSize: 14)),
+                        Text(locationMap[user.location.split(":")[0]]!.name, style: const TextStyle(fontSize: 12)),
                       if (!["private", "offline", "traveling"].contains(user.location) && !locationMap.containsKey(user.location.split(":")[0]))
                         const SizedBox(
                           height: 15.0,
@@ -252,12 +252,12 @@ class Users {
                       if (user.location == "private")
                         Text(
                           AppLocalizations.of(context)!.privateWorld,
-                          style: const TextStyle(fontSize: 14),
+                          style: const TextStyle(fontSize: 12),
                         ),
                       if (user.location == "traveling")
                         Text(
                           AppLocalizations.of(context)!.traveling,
-                          style: const TextStyle(fontSize: 14),
+                          style: const TextStyle(fontSize: 12),
                         ),
                     ],
                   ),
@@ -305,7 +305,7 @@ class Users {
                   ],
                 ),
                 if (!["private", "offline", "traveling"].contains(user.location) && locationMap.containsKey(user.location.split(":")[0]))
-                  Text(locationMap[user.location.split(":")[0]]!.name, style: const TextStyle(fontSize: 14)),
+                  Text(locationMap[user.location.split(":")[0]]!.name, style: const TextStyle(fontSize: 12)),
                 if (!["private", "offline", "traveling"].contains(user.location) && !locationMap.containsKey(user.location.split(":")[0]))
                   const SizedBox(
                     height: 15.0,
@@ -315,12 +315,12 @@ class Users {
                 if (user.location == "private")
                   Text(
                     AppLocalizations.of(context)!.privateWorld,
-                    style: const TextStyle(fontSize: 14),
+                    style: const TextStyle(fontSize: 12),
                   ),
                 if (user.location == "traveling")
                   Text(
                     AppLocalizations.of(context)!.traveling,
-                    style: const TextStyle(fontSize: 14),
+                    style: const TextStyle(fontSize: 12),
                   ),
               ],
             ),

@@ -99,10 +99,7 @@ Card simpleWorldPlus(BuildContext context, VRChatWorld world, VRChatInstance ins
                 fit: BoxFit.fitWidth,
                 progressIndicatorBuilder: (context, url, downloadProgress) => const SizedBox(
                   width: 100.0,
-                  child: Padding(
-                    padding: EdgeInsets.all(30),
-                    child: CircularProgressIndicator(),
-                  ),
+                  child: CircularProgressIndicator(),
                 ),
                 errorWidget: (context, url, error) => const SizedBox(
                   width: 100.0,

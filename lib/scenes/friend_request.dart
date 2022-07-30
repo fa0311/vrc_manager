@@ -215,7 +215,7 @@ class _FriendsPageRequestState extends State<VRChatMobileFriendRequest> {
                 }),
               ),
               ListTile(
-                title: Text(AppLocalizations.of(context)!.textOnly),
+                title: Text(AppLocalizations.of(context)!.simple),
                 trailing: dataColumn.displayMode == "simple" ? const Icon(Icons.check) : null,
                 onTap: () => setStateBuilder(() {
                   setStorage("friends_display_mode", dataColumn.displayMode = "simple").then((value) {

@@ -165,7 +165,6 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
                   setStorage("friends_sort", sortMode = "default").then((value) {
                     updateSortMode();
                     sort();
-                    setStateBuilderParent(() => Navigator.pop(context));
                   });
                 }),
               ),
@@ -176,7 +175,6 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
                   setStorage("friends_sort", sortMode = "name").then((value) {
                     updateSortMode();
                     sort();
-                    setStateBuilderParent(() => Navigator.pop(context));
                   });
                 }),
               ),
@@ -187,7 +185,6 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
                   setStorage("friends_sort", sortMode = "last_login").then((value) {
                     updateSortMode();
                     sort();
-                    setStateBuilderParent(() => Navigator.pop(context));
                   });
                 }),
               ),
@@ -199,7 +196,6 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
                     setStorage("friends_sort", sortMode = "friends_in_instance").then((value) {
                       updateSortMode();
                       sort();
-                      setStateBuilderParent(() => Navigator.pop(context));
                     });
                   }),
                 ),
@@ -246,7 +242,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
                 }),
               ),
               ListTile(
-                title: Text(AppLocalizations.of(context)!.textOnly),
+                title: Text(AppLocalizations.of(context)!.simple),
                 trailing: dataColumn.displayMode == "simple" ? const Icon(Icons.check) : null,
                 onTap: () => setStateBuilder(() {
                   setStorage("friends_display_mode", dataColumn.displayMode = "simple").then((value) {
