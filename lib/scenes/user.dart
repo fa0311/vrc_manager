@@ -56,7 +56,7 @@ class _UserHomeState extends State<VRChatMobileUser> {
                       style: ElevatedButton.styleFrom(
                         onPrimary: Colors.grey,
                         minimumSize: Size.zero,
-                        padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
+                        padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 0),
                       ),
                       onPressed: () => showDialog(
                         context: context,
@@ -92,7 +92,7 @@ class _UserHomeState extends State<VRChatMobileUser> {
                       style: ElevatedButton.styleFrom(
                         onPrimary: Colors.grey,
                         minimumSize: Size.zero,
-                        padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
+                        padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 0),
                       ),
                       onPressed: () {
                         Navigator.push(

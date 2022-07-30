@@ -145,7 +145,7 @@ Card simpleWorldPlus(BuildContext context, VRChatWorld world, VRChatInstance ins
                           style: ElevatedButton.styleFrom(
                             onPrimary: Colors.grey,
                             minimumSize: Size.zero,
-                            padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
+                            padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
                           ),
                           onPressed: () => getLoginSession("login_session").then(
                             (cookie) => VRChatAPI(cookie: cookie ?? "")
