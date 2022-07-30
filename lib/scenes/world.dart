@@ -159,25 +159,34 @@ class _WorldState extends State<VRChatMobileWorld> {
             () {
               column = Column(children: [
                 world(context, response),
-                TextButton(
-                  style: ElevatedButton.styleFrom(
-                    onPrimary: Colors.grey,
+                SizedBox(
+                  height: 30,
+                  child: TextButton(
+                    style: ElevatedButton.styleFrom(
+                      onPrimary: Colors.grey,
+                      minimumSize: Size.zero,
+                      padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
+                    ),
+                    onPressed: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (BuildContext context) => VRChatMobileJsonViewer(obj: response.content),
+                      ),
+                    ),
+                    child: Text(AppLocalizations.of(context)!.viewInJsonViewer),
                   ),
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (BuildContext context) => VRChatMobileJsonViewer(obj: response.content),
-                        ));
-                  },
-                  child: Text(AppLocalizations.of(context)!.viewInJsonViewer),
                 ),
-                TextButton(
-                  style: ElevatedButton.styleFrom(
-                    onPrimary: Colors.grey,
+                SizedBox(
+                  height: 30,
+                  child: TextButton(
+                    style: ElevatedButton.styleFrom(
+                      onPrimary: Colors.grey,
+                      minimumSize: Size.zero,
+                      padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
+                    ),
+                    onPressed: () => launchWorld(),
+                    child: Text(AppLocalizations.of(context)!.launchWorld),
                   ),
-                  onPressed: () => launchWorld(),
-                  child: Text(AppLocalizations.of(context)!.launchWorld),
                 ),
               ]);
             },

@@ -207,7 +207,7 @@ lunchWorldModalBottom(BuildContext context, String worldId, String instanceId) {
           if (Platform.isWindows)
             ListTile(
               leading: const Icon(Icons.laptop_windows),
-              title: const Text("launch World"),
+              title: Text(AppLocalizations.of(context)!.launchWorld),
               onTap: () {
                 Navigator.pop(context);
                 openInBrowser(context, "vrchat://launch?ref=vrchat.com&id=$worldId:$instanceId");

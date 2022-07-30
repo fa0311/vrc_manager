@@ -148,13 +148,12 @@ class _LoginHomeState extends State<VRChatMobileHome> {
                           minimumSize: Size.zero,
                           padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
                         ),
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (BuildContext context) => VRChatMobileJsonViewer(obj: user.content),
-                              ));
-                        },
+                        onPressed: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (BuildContext context) => VRChatMobileJsonViewer(obj: user.content),
+                          ),
+                        ),
                         child: Text(AppLocalizations.of(context)!.viewInJsonViewer),
                       ),
                     ),
