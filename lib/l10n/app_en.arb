@@ -116,6 +116,7 @@
     "updatedAt": "Updated at {data}",
     "addFavoriteWorlds": "Select a list to add",
     "launchWorld": "Launch world",
+    "openInVrchat": "Open in VRChat",
     "@____________________ACCOUNT_SWITCH____________________": {},
     "accountSwitch": "Account switching",
     "accountSwitchSetting": "Account switching settings",

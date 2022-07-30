@@ -116,6 +116,7 @@
     "updatedAt": "最終更新: {data}",
     "addFavoriteWorlds": "追加するリストの選択",
     "launchWorld": "インスタンス作成",
+    "openInVrchat": "VRChatで開く",
     "@____________________ACCOUNT_SWITCH____________________": {},
     "accountSwitch": "アカウント切り替え",
     "accountSwitchSetting": "アカウント切り替えの設定",

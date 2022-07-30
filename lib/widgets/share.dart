@@ -180,7 +180,6 @@ lunchWorldModalBottom(BuildContext context, String worldId, String instanceId) {
               title: Text(AppLocalizations.of(context)!.share),
               onTap: () {
                 Share.share("https://vrchat.com/home/launch?worldId=$worldId&instanceId=$instanceId");
-                Navigator.pop(context);
               }),
           ListTile(
               leading: const Icon(Icons.copy),
@@ -191,8 +190,9 @@ lunchWorldModalBottom(BuildContext context, String worldId, String instanceId) {
                   (_) {
                     if (Platform.isAndroid || Platform.isIOS) {
                       Fluttertoast.showToast(msg: AppLocalizations.of(context)!.copied);
+                    } else {
+                      Navigator.pop(context);
                     }
-                    Navigator.pop(context);
                   },
                 );
               }),
@@ -200,16 +200,14 @@ lunchWorldModalBottom(BuildContext context, String worldId, String instanceId) {
             leading: const Icon(Icons.open_in_browser),
             title: Text(AppLocalizations.of(context)!.openInExternalBrowser),
             onTap: () {
-              Navigator.pop(context);
               openInBrowser(context, "https://vrchat.com/home/launch?worldId=$worldId&instanceId=$instanceId");
             },
           ),
           if (Platform.isWindows)
             ListTile(
               leading: const Icon(Icons.laptop_windows),
-              title: Text(AppLocalizations.of(context)!.launchWorld),
+              title: Text(AppLocalizations.of(context)!.openInVrchat),
               onTap: () {
-                Navigator.pop(context);
                 openInBrowser(context, "vrchat://launch?ref=vrchat.com&id=$worldId:$instanceId");
               },
             ),
