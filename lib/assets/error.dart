@@ -110,7 +110,7 @@ standardError(BuildContext context, dynamic error) {
       };
       if (error is TypeError) {
         logs.addAll({
-          "stackTrace": (error.stackTrace ?? "").toString(),
+          "stackTrace": (error.stackTrace ?? "").toString().split("\n"),
         });
         errorDialog(context, AppLocalizations.of(context)!.parseError, log: errorLog(logs));
       } else if (error is FormatException) {
