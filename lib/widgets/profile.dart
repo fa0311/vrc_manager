@@ -95,6 +95,11 @@ Column profile(BuildContext context, VRChatUser user) {
         ],
       ),
       Text(user.statusDescription ?? ""),
+      if (user.note != null)
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 0),
+          child: Text(user.note ?? ""),
+        ),
       ConstrainedBox(
         constraints: const BoxConstraints(maxHeight: 200),
         child: SingleChildScrollView(

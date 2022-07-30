@@ -33,6 +33,8 @@ class _UserHomeState extends State<VRChatMobileUser> {
   );
   late List<Widget> popupMenu = [share(context, "https://vrchat.com/home/user/${widget.userId}")];
 
+  TextEditingController noteController = TextEditingController();
+
   _UserHomeState() {
     reload();
   }
@@ -43,24 +45,67 @@ class _UserHomeState extends State<VRChatMobileUser> {
         VRChatAPI(cookie: cookie ?? "").users(widget.userId).then((VRChatUser user) {
           setState(
             () {
-              column = Column(children: <Widget>[
-                profile(context, user),
-                Column(),
-                Column(),
-                TextButton(
-                  style: ElevatedButton.styleFrom(
-                    onPrimary: Colors.grey,
+              noteController.text = user.note ?? "";
+              column = Column(
+                children: <Widget>[
+                  profile(context, user),
+                  Column(),
+                  SizedBox(
+                    height: 30,
+                    child: TextButton(
+                      style: ElevatedButton.styleFrom(
+                        onPrimary: Colors.grey,
+                        minimumSize: Size.zero,
+                        padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
+                      ),
+                      onPressed: () => showDialog(
+                        context: context,
+                        builder: (_) {
+                          return AlertDialog(
+                            content: TextField(
+                              controller: noteController,
+                              decoration: InputDecoration(labelText: AppLocalizations.of(context)!.editNote),
+                            ),
+                            actions: <Widget>[
+                              TextButton(
+                                child: Text(AppLocalizations.of(context)!.close),
+                                onPressed: () => Navigator.pop(context),
+                              ),
+                              TextButton(
+                                  child: Text(AppLocalizations.of(context)!.ok),
+                                  onPressed: () => VRChatAPI(cookie: cookie ?? "").userNotes(user.id, noteController.text).then((VRChatUserNotes response) {
+                                        Navigator.pop(context);
+                                        reload();
+                                      }).catchError((status) {
+                                        apiError(context, status);
+                                      })),
+                            ],
+                          );
+                        },
+                      ),
+                      child: Text(AppLocalizations.of(context)!.editNote),
+                    ),
                   ),
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (BuildContext context) => VRChatMobileJsonViewer(obj: user.content),
-                        ));
-                  },
-                  child: Text(AppLocalizations.of(context)!.viewInJsonViewer),
-                ),
-              ]);
+                  SizedBox(
+                    height: 30,
+                    child: TextButton(
+                      style: ElevatedButton.styleFrom(
+                        onPrimary: Colors.grey,
+                        minimumSize: Size.zero,
+                        padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (BuildContext context) => VRChatMobileJsonViewer(obj: user.content),
+                            ));
+                      },
+                      child: Text(AppLocalizations.of(context)!.viewInJsonViewer),
+                    ),
+                  ),
+                ],
+              );
             },
           );
           VRChatAPI(cookie: cookie ?? "").friendStatus(widget.userId).then((VRChatfriendStatus status) {
@@ -89,36 +134,6 @@ class _UserHomeState extends State<VRChatMobileUser> {
               VRChatAPI(cookie: cookie ?? "").instances(user.location).then((instance) {
                 setState(
                   () {
-                    if ((instance.shortName ?? instance.secureName) != null) {
-                      column.children[2] = TextButton(
-                        style: ElevatedButton.styleFrom(
-                          onPrimary: Colors.grey,
-                        ),
-                        onPressed: () => VRChatAPI(cookie: cookie ?? "")
-                            .selfInvite(user.location, instance.shortName ?? instance.secureName ?? "")
-                            .then((VRChatNotificationsInvite response) {
-                          showDialog(
-                            context: context,
-                            builder: (_) {
-                              return AlertDialog(
-                                title: Text(AppLocalizations.of(context)!.sendInvite),
-                                content: Text(AppLocalizations.of(context)!.selfInviteDetails),
-                                actions: <Widget>[
-                                  TextButton(
-                                    child: Text(AppLocalizations.of(context)!.close),
-                                    onPressed: () => Navigator.pop(context),
-                                  ),
-                                ],
-                              );
-                            },
-                          );
-                        }).catchError((status) {
-                          apiError(context, status);
-                        }),
-                        child: Text(AppLocalizations.of(context)!.joinInstance),
-                      );
-                    }
-
                     column = Column(children: column.children);
                     column.children[1] = Column(
                       children: [

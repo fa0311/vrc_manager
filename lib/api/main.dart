@@ -310,13 +310,13 @@ class VRChatAPI {
     ).then((value) => VRChatUserOverload.fromJson(value));
   }
 
-  Future<VRChatUserOverload> changeBio(String uid, String bio) {
+  Future<VRChatUserPut> changeBio(String uid, String bio) {
     return vrchatSession.put(
       endpoint(
         'api/1/users/$uid',
         apiKey(),
       ),
       {"bio": bio},
-    ).then((value) => VRChatUserOverload.fromJson(value));
+    ).then((value) => VRChatUserPut.fromJson(value));
   }
 }

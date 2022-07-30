@@ -11,7 +11,10 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 // Project imports:
 import 'package:vrchat_mobile_client/api/data_class.dart';
+import 'package:vrchat_mobile_client/api/main.dart';
 import 'package:vrchat_mobile_client/assets/date.dart';
+import 'package:vrchat_mobile_client/assets/error.dart';
+import 'package:vrchat_mobile_client/assets/storage.dart';
 import 'package:vrchat_mobile_client/assets/vrchat/instance_type.dart';
 import 'package:vrchat_mobile_client/scenes/world.dart';
 import 'package:vrchat_mobile_client/widgets/region.dart';
@@ -74,7 +77,6 @@ Card simpleWorld(BuildContext context, VRChatLimitedWorld world) {
 }
 
 Card simpleWorldPlus(BuildContext context, VRChatWorld world, VRChatInstance instance) {
-  // instance is VRCinstance class
   return Card(
     elevation: 20.0,
     child: Container(
@@ -136,6 +138,41 @@ Card simpleWorldPlus(BuildContext context, VRChatWorld world, VRChatInstance ins
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ),
+                    if ((instance.shortName ?? instance.secureName) != null)
+                      SizedBox(
+                        height: 30,
+                        child: TextButton(
+                          style: ElevatedButton.styleFrom(
+                            onPrimary: Colors.grey,
+                            minimumSize: Size.zero,
+                            padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
+                          ),
+                          onPressed: () => getLoginSession("login_session").then(
+                            (cookie) => VRChatAPI(cookie: cookie ?? "")
+                                .selfInvite(instance.location, instance.shortName ?? "")
+                                .then((VRChatNotificationsInvite response) {
+                              showDialog(
+                                context: context,
+                                builder: (_) {
+                                  return AlertDialog(
+                                    title: Text(AppLocalizations.of(context)!.sendInvite),
+                                    content: Text(AppLocalizations.of(context)!.selfInviteDetails),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        child: Text(AppLocalizations.of(context)!.close),
+                                        onPressed: () => Navigator.pop(context),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            }).catchError((status) {
+                              apiError(context, status);
+                            }),
+                          ),
+                          child: Text(AppLocalizations.of(context)!.joinInstance),
+                        ),
+                      ),
                   ],
                 ),
               ),
