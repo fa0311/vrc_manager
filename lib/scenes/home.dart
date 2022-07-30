@@ -76,32 +76,6 @@ class _LoginHomeState extends State<VRChatMobileHome> {
               },
             );
             if (!["private", "offline", "traveling"].contains(user.worldId)) {
-              column.children[2] = TextButton(
-                style: ElevatedButton.styleFrom(
-                  onPrimary: Colors.grey,
-                ),
-                onPressed: () => VRChatAPI(cookie: cookie).selfInvite(user.location).then((VRChatStatus response) {
-                  showDialog(
-                    context: context,
-                    builder: (_) {
-                      return AlertDialog(
-                        title: Text(AppLocalizations.of(context)!.sendInvite),
-                        content: Text(AppLocalizations.of(context)!.selfInviteDetails),
-                        actions: <Widget>[
-                          TextButton(
-                            child: Text(AppLocalizations.of(context)!.close),
-                            onPressed: () => Navigator.pop(context),
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                }).catchError((status) {
-                  apiError(context, status);
-                }),
-                child: Text(AppLocalizations.of(context)!.joinInstance),
-              );
-
               VRChatAPI(cookie: cookie).worlds(user.location.split(":")[0]).then((world) {
                 setState(
                   () {
@@ -117,6 +91,35 @@ class _LoginHomeState extends State<VRChatMobileHome> {
                 VRChatAPI(cookie: cookie).instances(user.location).then((instance) {
                   setState(
                     () {
+                      if (instance.shortName != null) {
+                        column.children[2] = TextButton(
+                          style: ElevatedButton.styleFrom(
+                            onPrimary: Colors.grey,
+                          ),
+                          onPressed: () =>
+                              VRChatAPI(cookie: cookie).selfInvite(user.location, instance.shortName ?? "").then((VRChatNotificationsInvite response) {
+                            showDialog(
+                              context: context,
+                              builder: (_) {
+                                return AlertDialog(
+                                  title: Text(AppLocalizations.of(context)!.sendInvite),
+                                  content: Text(AppLocalizations.of(context)!.selfInviteDetails),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      child: Text(AppLocalizations.of(context)!.close),
+                                      onPressed: () => Navigator.pop(context),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          }).catchError((status) {
+                            apiError(context, status);
+                          }),
+                          child: Text(AppLocalizations.of(context)!.joinInstance),
+                        );
+                      }
+
                       column = Column(children: column.children);
                       column.children[1] = Column(
                         children: [

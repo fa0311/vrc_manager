@@ -4,6 +4,7 @@ class VRChatStatus {
   late String message;
 
   VRChatStatus.fromJson(this.content) {
+    print(content);
     message = content['success']['message'];
     statusCode = content['success']['status_code'];
   }
@@ -396,7 +397,7 @@ class VRChatInstance {
   late String photonRegion;
   late VRChatPlatforms platforms;
   late String region;
-  late String secureName;
+  late String? secureName;
   late String? shortName;
   late bool strict;
   late List<String> tags;
@@ -575,6 +576,30 @@ class VRChatNotifications {
     id = content['id'];
     message = content['message'];
     seen = content['seen'];
+    senderUserId = content['senderUserId'];
+    senderUsername = content['senderUsername'];
+    type = content['type'];
+  }
+}
+
+class VRChatNotificationsInvite {
+  dynamic content;
+
+  late DateTime createdAt;
+  late Map<String, String> details;
+  late String id;
+  late String message;
+  late String receiverUserId;
+  late String senderUserId;
+  late String senderUsername;
+  late String type;
+
+  VRChatNotificationsInvite.fromJson(this.content) {
+    createdAt = DateTime.parse(content['created_at']);
+    details = content['details'].cast<String, String>();
+    id = content['id'];
+    message = content['message'];
+    receiverUserId = content['message'];
     senderUserId = content['senderUserId'];
     senderUsername = content['senderUsername'];
     type = content['type'];
