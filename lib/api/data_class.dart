@@ -4,7 +4,6 @@ class VRChatStatus {
   late String message;
 
   VRChatStatus.fromJson(this.content) {
-    print(content);
     message = content['success']['message'];
     statusCode = content['success']['status_code'];
   }
@@ -214,6 +213,24 @@ class VRChatUser {
     travelingToWorld = content['travelingToWorld'];
     worldId = content['worldId'] == "" ? location : content['location'] ?? location;
     note = content["note"];
+  }
+}
+
+class VRChatUserNotes {
+  dynamic content;
+
+  late DateTime createdAt;
+  late String id;
+  late String note;
+  late String targetUserId;
+  late String userId;
+
+  VRChatUserNotes.fromJson(this.content) {
+    createdAt = DateTime.parse(content['createdAt']);
+    id = content['id'];
+    note = content['note'];
+    targetUserId = content['targetUserId'];
+    userId = content['userId'];
   }
 }
 
