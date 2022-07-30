@@ -10,6 +10,9 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:vrchat_mobile_client/api/data_class.dart';
+import 'package:vrchat_mobile_client/api/main.dart';
+import 'package:vrchat_mobile_client/assets/error.dart';
 
 // Project imports:
 import 'package:vrchat_mobile_client/assets/storage.dart';
@@ -202,6 +205,41 @@ lunchWorldModalBottom(BuildContext context, String worldId, String instanceId) {
             onTap: () {
               openInBrowser(context, "https://vrchat.com/home/launch?worldId=$worldId&instanceId=$instanceId");
             },
+          ),
+          ListTile(
+            leading: const Icon(Icons.mail),
+            title: Text(AppLocalizations.of(context)!.joinInstance),
+            onTap: () => getLoginSession("login_session").then(
+              (String? cookie) => VRChatAPI(cookie: cookie ?? "")
+                  .shortName("$worldId:$instanceId")
+                  .then(
+                    (VRChatSecureName secureId) => VRChatAPI(cookie: cookie ?? "")
+                        .selfInvite("$worldId:$instanceId", secureId.shortName ?? secureId.secureName ?? "")
+                        .then(
+                          (VRChatNotificationsInvite response) => showDialog(
+                            context: context,
+                            builder: (_) {
+                              return AlertDialog(
+                                title: Text(AppLocalizations.of(context)!.sendInvite),
+                                content: Text(AppLocalizations.of(context)!.selfInviteDetails),
+                                actions: <Widget>[
+                                  TextButton(
+                                    child: Text(AppLocalizations.of(context)!.close),
+                                    onPressed: () => Navigator.pop(context),
+                                  ),
+                                ],
+                              );
+                            },
+                          ),
+                        )
+                        .catchError((status) {
+                      apiError(context, status);
+                    }),
+                  )
+                  .catchError((status) {
+                apiError(context, status);
+              }),
+            ),
           ),
           if (Platform.isWindows)
             ListTile(

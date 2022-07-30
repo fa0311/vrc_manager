@@ -543,6 +543,17 @@ class VRChatInstance {
   }
 }
 
+class VRChatSecureName {
+  dynamic content;
+
+  late String? shortName;
+  late String? secureName;
+  VRChatSecureName.fromJson(this.content) {
+    shortName = content['shortName'];
+    secureName = content['secureName'];
+  }
+}
+
 class VRChatPlatforms {
   dynamic content;
 

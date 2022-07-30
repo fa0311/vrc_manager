@@ -287,6 +287,17 @@ class VRChatAPI {
     ).then((value) => VRChatNotificationsInvite.fromJson(value));
   }
 
+  Future<VRChatSecureName> shortName(String location) {
+    return vrchatSession
+        .get(
+          endpoint(
+            'api/1/instances/$location/shortName',
+            apiKey(),
+          ),
+        )
+        .then((value) => VRChatSecureName.fromJson(value));
+  }
+
   Future<VRChatStatus> selfInviteLegacy(String location) {
     return vrchatSession
         .post(
