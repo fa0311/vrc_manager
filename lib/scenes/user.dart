@@ -56,7 +56,7 @@ class _UserHomeState extends State<VRChatMobileUser> {
                       style: ElevatedButton.styleFrom(
                         onPrimary: Colors.grey,
                         minimumSize: Size.zero,
-                        padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 0),
+                        padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
                       ),
                       onPressed: () => showDialog(
                         context: context,
@@ -92,7 +92,7 @@ class _UserHomeState extends State<VRChatMobileUser> {
                       style: ElevatedButton.styleFrom(
                         onPrimary: Colors.grey,
                         minimumSize: Size.zero,
-                        padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 0),
+                        padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
                       ),
                       onPressed: () {
                         Navigator.push(
@@ -123,11 +123,9 @@ class _UserHomeState extends State<VRChatMobileUser> {
               setState(
                 () {
                   column = Column(children: column.children);
-                  column.children[1] = Column(
-                    children: [
-                      Container(padding: const EdgeInsets.only(top: 30)),
-                      simpleWorld(context, world.toLimited()),
-                    ],
+                  column.children[1] = Container(
+                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
+                    child: simpleWorld(context, world.toLimited()),
                   );
                 },
               );
@@ -135,11 +133,10 @@ class _UserHomeState extends State<VRChatMobileUser> {
                 setState(
                   () {
                     column = Column(children: column.children);
-                    column.children[1] = Column(
-                      children: [
-                        Container(padding: const EdgeInsets.only(top: 30)),
-                        simpleWorldPlus(context, world, instance),
-                      ],
+
+                    column.children[1] = Container(
+                      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
+                      child: simpleWorldPlus(context, world, instance),
                     );
                   },
                 );
