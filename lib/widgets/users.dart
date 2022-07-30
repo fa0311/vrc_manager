@@ -10,8 +10,12 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 // Project imports:
 import 'package:vrchat_mobile_client/api/data_class.dart';
+import 'package:vrchat_mobile_client/api/main.dart';
+import 'package:vrchat_mobile_client/assets/error.dart';
+import 'package:vrchat_mobile_client/assets/storage.dart';
 import 'package:vrchat_mobile_client/scenes/user.dart';
 import 'package:vrchat_mobile_client/widgets/status.dart';
+import 'package:vrchat_mobile_client/widgets/world.dart';
 
 class LocationDataClass {
   int id;
@@ -23,9 +27,11 @@ class Users {
   List<Widget> children = [];
   bool joinable = false;
   bool descending = false;
+  bool worldDetails = true;
   String displayMode = "default";
   late BuildContext context;
   Map<String, VRChatWorld> locationMap = {};
+  Map<String, VRChatInstance> instanceMap = {};
   List<VRChatUser> userList = [];
 
   List<Widget> reload() {
@@ -107,6 +113,7 @@ class Users {
   }
 
   defaultAdd(VRChatUser user) {
+    String worldId = user.location.split(":")[0];
     children.add(
       Card(
         elevation: 20.0,
@@ -121,66 +128,74 @@ class Users {
                   ));
             },
             behavior: HitTestBehavior.opaque,
-            child: Row(
-              children: <Widget>[
-                SizedBox(
-                  height: 100,
-                  child: CachedNetworkImage(
-                    imageUrl: user.profilePicOverride ?? user.currentAvatarThumbnailImageUrl,
-                    fit: BoxFit.fitWidth,
-                    progressIndicatorBuilder: (context, url, downloadProgress) => const SizedBox(
-                      width: 100,
-                      child: Padding(
-                        padding: EdgeInsets.all(30),
-                        child: CircularProgressIndicator(),
+            child: Column(
+              children: [
+                Row(
+                  children: <Widget>[
+                    SizedBox(
+                      height: 100,
+                      child: CachedNetworkImage(
+                        imageUrl: user.profilePicOverride ?? user.currentAvatarThumbnailImageUrl,
+                        fit: BoxFit.fitWidth,
+                        progressIndicatorBuilder: (context, url, downloadProgress) => const SizedBox(
+                          width: 100,
+                          child: Padding(
+                            padding: EdgeInsets.all(30),
+                            child: CircularProgressIndicator(),
+                          ),
+                        ),
+                        errorWidget: (context, url, error) => const SizedBox(
+                          width: 100,
+                          child: Icon(Icons.error),
+                        ),
                       ),
                     ),
-                    errorWidget: (context, url, error) => const SizedBox(
-                      width: 100,
-                      child: Icon(Icons.error),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Row(
+                    Expanded(
+                      child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          status(user.status, diameter: 20),
-                          Container(
-                            width: 5,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              status(user.status, diameter: 20),
+                              Container(
+                                width: 5,
+                              ),
+                              Text(user.displayName,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20,
+                                  )),
+                            ],
                           ),
-                          Text(user.displayName,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
-                              )),
+                          if (user.statusDescription != null) Text(user.statusDescription!, style: const TextStyle(fontSize: 14)),
+                          if (!["private", "offline", "traveling"].contains(user.location) && locationMap.containsKey(worldId))
+                            Text(locationMap[worldId]!.name, style: const TextStyle(fontSize: 14)),
+                          if (!["private", "offline", "traveling"].contains(user.location) && !locationMap.containsKey(worldId))
+                            const SizedBox(
+                              height: 15.0,
+                              width: 15.0,
+                              child: CircularProgressIndicator(),
+                            ),
+                          if (user.location == "private")
+                            Text(
+                              AppLocalizations.of(context)!.privateWorld,
+                              style: const TextStyle(fontSize: 14),
+                            ),
+                          if (user.location == "traveling")
+                            Text(
+                              AppLocalizations.of(context)!.traveling,
+                              style: const TextStyle(fontSize: 14),
+                            ),
                         ],
                       ),
-                      if (user.statusDescription != null) Text(user.statusDescription!, style: const TextStyle(fontSize: 14)),
-                      if (!["private", "offline", "traveling"].contains(user.location) && locationMap.containsKey(user.location.split(":")[0]))
-                        Text(locationMap[user.location.split(":")[0]]!.name, style: const TextStyle(fontSize: 14)),
-                      if (!["private", "offline", "traveling"].contains(user.location) && !locationMap.containsKey(user.location.split(":")[0]))
-                        const SizedBox(
-                          height: 15.0,
-                          width: 15.0,
-                          child: CircularProgressIndicator(),
-                        ),
-                      if (user.location == "private")
-                        Text(
-                          AppLocalizations.of(context)!.privateWorld,
-                          style: const TextStyle(fontSize: 14),
-                        ),
-                      if (user.location == "traveling")
-                        Text(
-                          AppLocalizations.of(context)!.traveling,
-                          style: const TextStyle(fontSize: 14),
-                        ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
+                if (worldDetails && locationMap[worldId] != null && instanceMap[user.location] == null)
+                  simpleWorld(context, locationMap[worldId]!.toLimited()).child!,
+                if (worldDetails && locationMap[worldId] != null && instanceMap[user.location] != null)
+                  simpleWorldPlus(context, locationMap[worldId]!, instanceMap[user.location]!).child!
               ],
             ),
           ),
@@ -190,6 +205,7 @@ class Users {
   }
 
   simpleAdd(VRChatUser user) {
+    String worldId = user.location.split(":")[0];
     children.add(
       Card(
         elevation: 20.0,
@@ -204,64 +220,72 @@ class Users {
                   ));
             },
             behavior: HitTestBehavior.opaque,
-            child: Row(
-              children: <Widget>[
-                SizedBox(
-                  height: 50,
-                  child: CachedNetworkImage(
-                    imageUrl: user.profilePicOverride ?? user.currentAvatarThumbnailImageUrl,
-                    fit: BoxFit.fitWidth,
-                    progressIndicatorBuilder: (context, url, downloadProgress) => const SizedBox(
-                      width: 50,
-                      child: Padding(
-                        padding: EdgeInsets.all(30),
-                        child: CircularProgressIndicator(),
+            child: Column(
+              children: [
+                Row(
+                  children: <Widget>[
+                    SizedBox(
+                      height: 50,
+                      child: CachedNetworkImage(
+                        imageUrl: user.profilePicOverride ?? user.currentAvatarThumbnailImageUrl,
+                        fit: BoxFit.fitWidth,
+                        progressIndicatorBuilder: (context, url, downloadProgress) => const SizedBox(
+                          width: 50,
+                          child: Padding(
+                            padding: EdgeInsets.all(30),
+                            child: CircularProgressIndicator(),
+                          ),
+                        ),
+                        errorWidget: (context, url, error) => const SizedBox(
+                          width: 50,
+                          child: Icon(Icons.error),
+                        ),
                       ),
                     ),
-                    errorWidget: (context, url, error) => const SizedBox(
-                      width: 50,
-                      child: Icon(Icons.error),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Row(
+                    Expanded(
+                      child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          status(user.status, diameter: 13),
-                          Container(
-                            width: 5,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              status(user.status, diameter: 13),
+                              Container(
+                                width: 5,
+                              ),
+                              Text(
+                                user.displayName,
+                                style: const TextStyle(fontSize: 12),
+                              ),
+                            ],
                           ),
-                          Text(
-                            user.displayName,
-                            style: const TextStyle(fontSize: 12),
-                          ),
+                          if (!["private", "offline", "traveling"].contains(user.location) && locationMap.containsKey(worldId))
+                            Text(locationMap[worldId]!.name, style: const TextStyle(fontSize: 12)),
+                          if (!["private", "offline", "traveling"].contains(user.location) && !locationMap.containsKey(worldId))
+                            const SizedBox(
+                              height: 15.0,
+                              width: 15.0,
+                              child: CircularProgressIndicator(),
+                            ),
+                          if (user.location == "private")
+                            Text(
+                              AppLocalizations.of(context)!.privateWorld,
+                              style: const TextStyle(fontSize: 12),
+                            ),
+                          if (user.location == "traveling")
+                            Text(
+                              AppLocalizations.of(context)!.traveling,
+                              style: const TextStyle(fontSize: 12),
+                            ),
                         ],
                       ),
-                      if (!["private", "offline", "traveling"].contains(user.location) && locationMap.containsKey(user.location.split(":")[0]))
-                        Text(locationMap[user.location.split(":")[0]]!.name, style: const TextStyle(fontSize: 12)),
-                      if (!["private", "offline", "traveling"].contains(user.location) && !locationMap.containsKey(user.location.split(":")[0]))
-                        const SizedBox(
-                          height: 15.0,
-                          width: 15.0,
-                          child: CircularProgressIndicator(),
-                        ),
-                      if (user.location == "private")
-                        Text(
-                          AppLocalizations.of(context)!.privateWorld,
-                          style: const TextStyle(fontSize: 12),
-                        ),
-                      if (user.location == "traveling")
-                        Text(
-                          AppLocalizations.of(context)!.traveling,
-                          style: const TextStyle(fontSize: 12),
-                        ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
+                if (worldDetails && locationMap[worldId] != null && instanceMap[user.location] == null)
+                  simpleWorldHalf(context, locationMap[worldId]!.toLimited()).child!,
+                if (worldDetails && locationMap[worldId] != null && instanceMap[user.location] != null)
+                  simpleWorldPlusHalf(context, locationMap[worldId]!, instanceMap[user.location]!).child!
               ],
             ),
           ),
@@ -271,6 +295,7 @@ class Users {
   }
 
   textOnlyAdd(VRChatUser user) {
+    String worldId = user.location.split(":")[0];
     children.add(
       Card(
         elevation: 20.0,
@@ -285,42 +310,88 @@ class Users {
                   ));
             },
             behavior: HitTestBehavior.opaque,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
+            child: Column(
+              children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    status(user.status, diameter: 12),
-                    Container(
-                      width: 5,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        status(user.status, diameter: 12),
+                        Container(
+                          width: 5,
+                        ),
+                        Text(user.displayName,
+                            style: const TextStyle(
+                              fontSize: 16,
+                            )),
+                        Container(
+                          width: 15,
+                        ),
+                      ],
                     ),
-                    Text(user.displayName,
-                        style: const TextStyle(
-                          fontSize: 16,
-                        )),
-                    Container(
-                      width: 15,
-                    ),
+                    if (!["private", "offline", "traveling"].contains(user.location) && locationMap.containsKey(worldId))
+                      Text(locationMap[worldId]!.name, style: const TextStyle(fontSize: 12)),
+                    if (!["private", "offline", "traveling"].contains(user.location) && !locationMap.containsKey(worldId))
+                      const SizedBox(
+                        height: 15.0,
+                        width: 15.0,
+                        child: CircularProgressIndicator(),
+                      ),
+                    if (user.location == "private")
+                      Text(
+                        AppLocalizations.of(context)!.privateWorld,
+                        style: const TextStyle(fontSize: 12),
+                      ),
+                    if (user.location == "traveling")
+                      Text(
+                        AppLocalizations.of(context)!.traveling,
+                        style: const TextStyle(fontSize: 12),
+                      ),
                   ],
                 ),
-                if (!["private", "offline", "traveling"].contains(user.location) && locationMap.containsKey(user.location.split(":")[0]))
-                  Text(locationMap[user.location.split(":")[0]]!.name, style: const TextStyle(fontSize: 12)),
-                if (!["private", "offline", "traveling"].contains(user.location) && !locationMap.containsKey(user.location.split(":")[0]))
-                  const SizedBox(
-                    height: 15.0,
-                    width: 15.0,
-                    child: CircularProgressIndicator(),
-                  ),
-                if (user.location == "private")
-                  Text(
-                    AppLocalizations.of(context)!.privateWorld,
-                    style: const TextStyle(fontSize: 12),
-                  ),
-                if (user.location == "traveling")
-                  Text(
-                    AppLocalizations.of(context)!.traveling,
-                    style: const TextStyle(fontSize: 12),
+                if (worldDetails && locationMap[worldId] != null && instanceMap[user.location] != null)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text("${instanceMap[user.location]!.nUsers}/${instanceMap[user.location]!.capacity}", style: const TextStyle(fontSize: 12)),
+                      if ((instanceMap[user.location]!.shortName ?? instanceMap[user.location]!.secureName) != null)
+                        SizedBox(
+                          height: 16,
+                          child: TextButton(
+                            style: ElevatedButton.styleFrom(
+                              onPrimary: Colors.grey,
+                              minimumSize: Size.zero,
+                              padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 4),
+                            ),
+                            onPressed: () => getLoginSession("login_session").then(
+                              (cookie) => VRChatAPI(cookie: cookie ?? "")
+                                  .selfInvite(instanceMap[user.location]!.location, instanceMap[user.location]!.shortName ?? "")
+                                  .then((VRChatNotificationsInvite response) {
+                                showDialog(
+                                  context: context,
+                                  builder: (_) {
+                                    return AlertDialog(
+                                      title: Text(AppLocalizations.of(context)!.sendInvite),
+                                      content: Text(AppLocalizations.of(context)!.selfInviteDetails),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          child: Text(AppLocalizations.of(context)!.close),
+                                          onPressed: () => Navigator.pop(context),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              }).catchError((status) {
+                                apiError(context, status);
+                              }),
+                            ),
+                            child: Text(AppLocalizations.of(context)!.joinInstance, style: const TextStyle(fontSize: 12)),
+                          ),
+                        ),
+                    ],
                   ),
               ],
             ),
@@ -335,15 +406,15 @@ class Users {
     int height = 0;
     int wrap = 0;
     if (displayMode == "default") {
-      height = 120;
+      height = worldDetails ? 240 : 130;
       wrap = 600;
     }
     if (displayMode == "simple") {
-      height = 80;
+      height = worldDetails ? 150 : 70;
       wrap = 300;
     }
     if (displayMode == "text_only") {
-      height = 40;
+      height = worldDetails ? 55 : 40;
       wrap = 400;
     }
 

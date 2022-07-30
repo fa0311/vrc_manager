@@ -139,6 +139,18 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
             }).catchError((status) {
               apiError(context, status);
             });
+
+            if (dataColumn.worldDetails) {
+              VRChatAPI(cookie: cookie ?? "").instances(user.location).then((VRChatInstance instance) {
+                dataColumn.instanceMap[user.location] = instance;
+                if (dataColumn.children.isEmpty) return;
+                setState(() => body = dataColumn.render(
+                      children: dataColumn.reload(),
+                    ));
+              }).catchError((status) {
+                apiError(context, status);
+              });
+            }
           }
           sort();
         }).catchError((status) {
