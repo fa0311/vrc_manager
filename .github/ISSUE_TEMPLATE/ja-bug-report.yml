@@ -37,8 +37,6 @@ body:
         - Github
         - Google Play Store
         - その他
-      validations:
-        required: false
 
   - type: dropdown
     id: reinstall
@@ -48,8 +46,6 @@ body:
       options:
         - はい
         - いいえ、恐らくその必要はない
-      validations:
-        required: false
 
   - type: textarea
     id: bug-description
