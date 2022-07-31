@@ -26,7 +26,6 @@
     "parseError": "Parse error",
     "socketException": "No Internet connection",
     "unknownError": "Unknown error",
-    "unexpectedError": "This request is not supported.",
     "reportMessage1": "Please report this to the developer.",
     "reportMessage2": "Tapping Report will copy the log to the clipboard and access the report page.",
     "@____________________ERROR_TRANSLATION____________________": {},
