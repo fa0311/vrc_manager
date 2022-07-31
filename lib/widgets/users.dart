@@ -195,6 +195,15 @@ class Users {
                     ),
                   ],
                 ),
+                if (worldDetails && locationMap[worldId] == null)
+                  const Padding(
+                    padding: EdgeInsets.only(top: 5),
+                    child: SizedBox(
+                      height: 30.0,
+                      width: 30.0,
+                      child: CircularProgressIndicator(),
+                    ),
+                  ),
                 if (worldDetails && locationMap[worldId] != null && instanceMap[user.location] == null)
                   Padding(
                     padding: const EdgeInsets.only(top: 5),
@@ -293,6 +302,15 @@ class Users {
                     ),
                   ],
                 ),
+                if (worldDetails && locationMap[worldId] == null)
+                  const Padding(
+                    padding: EdgeInsets.only(top: 5),
+                    child: SizedBox(
+                      height: 30.0,
+                      width: 30.0,
+                      child: CircularProgressIndicator(),
+                    ),
+                  ),
                 if (worldDetails && locationMap[worldId] != null && instanceMap[user.location] == null)
                   Padding(
                     padding: const EdgeInsets.only(top: 5),
@@ -368,6 +386,15 @@ class Users {
                       ),
                   ],
                 ),
+                if (worldDetails && locationMap[worldId] == null)
+                  const Padding(
+                    padding: EdgeInsets.only(top: 5),
+                    child: SizedBox(
+                      height: 10.0,
+                      width: 10.0,
+                      child: CircularProgressIndicator(),
+                    ),
+                  ),
                 if (worldDetails && locationMap[worldId] != null && instanceMap[user.location] != null)
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
