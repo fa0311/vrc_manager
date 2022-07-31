@@ -62,6 +62,7 @@ Card simpleWorld(BuildContext context, VRChatLimitedWorld world) {
                       width: double.infinity,
                       child: Text(
                         world.name,
+                        overflow: TextOverflow.ellipsis,
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ),
@@ -124,7 +125,10 @@ Card simpleWorldPlus(BuildContext context, VRChatWorld world, VRChatInstance ins
                       Expanded(
                         child: SizedBox(
                           width: double.infinity,
-                          child: Text(getVrchatInstanceType(context)[instance.type] ?? "?"),
+                          child: Text(
+                            getVrchatInstanceType(context)[instance.type] ?? "Error",
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ),
                       )
                     ]),
@@ -133,6 +137,7 @@ Card simpleWorldPlus(BuildContext context, VRChatWorld world, VRChatInstance ins
                       child: Text(
                         world.name,
                         style: const TextStyle(fontWeight: FontWeight.bold),
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
                     if ((instance.shortName ?? instance.secureName) != null)
@@ -224,6 +229,7 @@ Card simpleWorldHalf(BuildContext context, VRChatLimitedWorld world) {
                       width: double.infinity,
                       child: Text(
                         world.name,
+                        overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 12,
@@ -293,7 +299,8 @@ Card simpleWorldPlusHalf(BuildContext context, VRChatWorld world, VRChatInstance
                         child: SizedBox(
                           width: double.infinity,
                           child: Text(
-                            getVrchatInstanceType(context)[instance.type] ?? "?",
+                            getVrchatInstanceType(context)[instance.type] ?? "Error",
+                            overflow: TextOverflow.ellipsis,
                             style: const TextStyle(fontSize: 12),
                           ),
                         ),
@@ -303,6 +310,7 @@ Card simpleWorldPlusHalf(BuildContext context, VRChatWorld world, VRChatInstance
                       width: double.infinity,
                       child: Text(
                         world.name,
+                        overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 12,

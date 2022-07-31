@@ -171,7 +171,13 @@ class Users {
                               ),
                             ],
                           ),
-                          if (user.statusDescription != null) Text(user.statusDescription!, style: const TextStyle(fontSize: 14)),
+                          if (user.statusDescription != null)
+                            Text(
+                              user.statusDescription!,
+                              style: const TextStyle(
+                                fontSize: 14,
+                              ),
+                            ),
                           if (!["private", "offline", "traveling"].contains(user.location) && locationMap.containsKey(worldId))
                             Text(locationMap[worldId]!.name, style: const TextStyle(fontSize: 14)),
                           if (!["private", "offline", "traveling"].contains(user.location) && !locationMap.containsKey(worldId))
@@ -457,7 +463,7 @@ class Users {
     }
     if (displayMode == "simple") {
       height = worldDetails ? 123 : 70;
-      wrap = 300;
+      wrap = 320;
     }
     if (displayMode == "text_only") {
       height = worldDetails ? 57 : 41;
