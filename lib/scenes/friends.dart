@@ -405,7 +405,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
                       if (!widget.offline)
                         SwitchListTile(
                           value: dataColumn.worldDetails,
-                          title: const Text("ワールドの詳細"),
+                          title: Text(AppLocalizations.of(context)!.worldDetails),
                           onChanged: dataColumn.joinable
                               ? (bool e) => setStateBuilder(
                                     () {
