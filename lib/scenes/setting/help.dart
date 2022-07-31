@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 // Project imports:
 import 'package:vrchat_mobile_client/assets/licence.dart';
@@ -16,6 +17,15 @@ class VRChatMobileHelp extends StatefulWidget {
 }
 
 class _HelpPageState extends State<VRChatMobileHelp> {
+  String version = "";
+  _HelpPageState() {
+    PackageInfo.fromPlatform().then((PackageInfo packageInfo) {
+      setState(() {
+        version = packageInfo.version;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,6 +59,14 @@ class _HelpPageState extends State<VRChatMobileHelp> {
                     title: Text(AppLocalizations.of(context)!.rateTheApp),
                     subtitle: Text(AppLocalizations.of(context)!.rateTheAppDetails),
                     onTap: () => openInBrowser(context, "https://play.google.com/store/apps/details?id=com.yuki0311.vrchat_mobile_client"),
+                  ),
+                  const Divider(),
+                  ListTile(
+                    title: Text(AppLocalizations.of(context)!.version),
+                    subtitle: Text(AppLocalizations.of(context)!.versionDetails(version)),
+                    onTap: () => PackageInfo.fromPlatform().then((PackageInfo packageInfo) {
+                      openInBrowser(context, "https://github.com/fa0311/vrchat_mobile_client/releases");
+                    }),
                   ),
                   const Divider(),
                   ListTile(

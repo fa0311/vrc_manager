@@ -12,6 +12,9 @@ import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 // Project imports:
+import 'package:vrchat_mobile_client/api/data_class.dart';
+import 'package:vrchat_mobile_client/api/main.dart';
+import 'package:vrchat_mobile_client/assets/error.dart';
 import 'package:vrchat_mobile_client/assets/storage.dart';
 import 'package:vrchat_mobile_client/scenes/web_view.dart';
 
@@ -180,7 +183,6 @@ lunchWorldModalBottom(BuildContext context, String worldId, String instanceId) {
               title: Text(AppLocalizations.of(context)!.share),
               onTap: () {
                 Share.share("https://vrchat.com/home/launch?worldId=$worldId&instanceId=$instanceId");
-                Navigator.pop(context);
               }),
           ListTile(
               leading: const Icon(Icons.copy),
@@ -191,8 +193,9 @@ lunchWorldModalBottom(BuildContext context, String worldId, String instanceId) {
                   (_) {
                     if (Platform.isAndroid || Platform.isIOS) {
                       Fluttertoast.showToast(msg: AppLocalizations.of(context)!.copied);
+                    } else {
+                      Navigator.pop(context);
                     }
-                    Navigator.pop(context);
                   },
                 );
               }),
@@ -200,16 +203,49 @@ lunchWorldModalBottom(BuildContext context, String worldId, String instanceId) {
             leading: const Icon(Icons.open_in_browser),
             title: Text(AppLocalizations.of(context)!.openInExternalBrowser),
             onTap: () {
-              Navigator.pop(context);
               openInBrowser(context, "https://vrchat.com/home/launch?worldId=$worldId&instanceId=$instanceId");
             },
+          ),
+          ListTile(
+            leading: const Icon(Icons.mail),
+            title: Text(AppLocalizations.of(context)!.joinInstance),
+            onTap: () => getLoginSession("login_session").then(
+              (String? cookie) => VRChatAPI(cookie: cookie ?? "")
+                  .shortName("$worldId:$instanceId")
+                  .then(
+                    (VRChatSecureName secureId) => VRChatAPI(cookie: cookie ?? "")
+                        .selfInvite("$worldId:$instanceId", secureId.shortName ?? secureId.secureName ?? "")
+                        .then(
+                          (VRChatNotificationsInvite response) => showDialog(
+                            context: context,
+                            builder: (_) {
+                              return AlertDialog(
+                                title: Text(AppLocalizations.of(context)!.sendInvite),
+                                content: Text(AppLocalizations.of(context)!.selfInviteDetails),
+                                actions: <Widget>[
+                                  TextButton(
+                                    child: Text(AppLocalizations.of(context)!.close),
+                                    onPressed: () => Navigator.pop(context),
+                                  ),
+                                ],
+                              );
+                            },
+                          ),
+                        )
+                        .catchError((status) {
+                      apiError(context, status);
+                    }),
+                  )
+                  .catchError((status) {
+                apiError(context, status);
+              }),
+            ),
           ),
           if (Platform.isWindows)
             ListTile(
               leading: const Icon(Icons.laptop_windows),
-              title: const Text("launch World"),
+              title: Text(AppLocalizations.of(context)!.openInVrchat),
               onTap: () {
-                Navigator.pop(context);
                 openInBrowser(context, "vrchat://launch?ref=vrchat.com&id=$worldId:$instanceId");
               },
             ),

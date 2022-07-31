@@ -15,6 +15,7 @@ import 'package:vrchat_mobile_client/assets/storage.dart';
 import 'package:vrchat_mobile_client/main.dart';
 import 'package:vrchat_mobile_client/scenes/home.dart';
 import 'package:vrchat_mobile_client/widgets/drawer.dart';
+import 'package:vrchat_mobile_client/widgets/share.dart';
 
 class VRChatMobileLogin extends StatefulWidget {
   const VRChatMobileLogin({Key? key}) : super(key: key);
@@ -38,7 +39,8 @@ class _LoginPageState extends State<VRChatMobileLogin> {
       } else if (login.verified) {
         _save(session.vrchatSession.headers["cookie"] as String);
       } else {
-        otherError(context, AppLocalizations.of(context)!.unexpectedError, content: login.content);
+        login.content.addAll({"lastEndpoint": "api/1/auth/user"});
+        throw Exception(errorLog(login.content));
       }
     }).catchError((status) {
       apiError(context, status);
@@ -246,6 +248,30 @@ class _LoginPageState extends State<VRChatMobileLogin> {
                   AppLocalizations.of(context)!.login,
                 ),
                 onPressed: () => _onPressed(context),
+              ),
+              TextButton(
+                child: Text(
+                  AppLocalizations.of(context)!.cantLogin,
+                ),
+                onPressed: () => showDialog(
+                  context: context,
+                  builder: (_) {
+                    return AlertDialog(
+                      title: Text(AppLocalizations.of(context)!.cantLogin),
+                      content: Text(AppLocalizations.of(context)!.cantLoginDetails),
+                      actions: <Widget>[
+                        TextButton(
+                          child: Text(AppLocalizations.of(context)!.cancel),
+                          onPressed: () => Navigator.pop(context),
+                        ),
+                        TextButton(
+                          onPressed: () => openInBrowser(context, "https://vrchat.com/home/login"),
+                          child: Text(AppLocalizations.of(context)!.openInBrowser),
+                        ),
+                      ],
+                    );
+                  },
+                ),
               ),
             ],
           )),

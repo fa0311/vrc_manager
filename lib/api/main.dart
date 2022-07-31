@@ -73,6 +73,15 @@ class VRChatAPI {
         .then((value) => VRChatUser.fromJson(value));
   }
 
+  Future<VRChatUserNotes> userNotes(String uid, String note) {
+    return vrchatSession.post(
+        endpoint(
+          'api/1/userNotes',
+          apiKey(),
+        ),
+        {"targetUserId": uid, "note": note}).then((value) => VRChatUserNotes.fromJson(value));
+  }
+
   Future<VRChatfriendStatus> friendStatus(String uid) {
     return vrchatSession
         .get(
@@ -268,11 +277,32 @@ class VRChatAPI {
         .then((value) => VRChatInstance.fromJson(value));
   }
 
-  Future<VRChatStatus> selfInvite(String location) {
+  Future<VRChatNotificationsInvite> selfInvite(String location, String shortName) {
+    return vrchatSession.post(
+      endpoint(
+        'api/1/invite/myself/to/$location',
+        apiKey(),
+      ),
+      {"shortName": shortName},
+    ).then((value) => VRChatNotificationsInvite.fromJson(value));
+  }
+
+  Future<VRChatSecureName> shortName(String location) {
+    return vrchatSession
+        .get(
+          endpoint(
+            'api/1/instances/$location/shortName',
+            apiKey(),
+          ),
+        )
+        .then((value) => VRChatSecureName.fromJson(value));
+  }
+
+  Future<VRChatStatus> selfInviteLegacy(String location) {
     return vrchatSession
         .post(
           endpoint(
-            'api/1/instances/$location/invite',
+            'api/1/invite/myself/to/$location',
             apiKey(),
           ),
         )
@@ -291,13 +321,13 @@ class VRChatAPI {
     ).then((value) => VRChatUserOverload.fromJson(value));
   }
 
-  Future<VRChatUserOverload> changeBio(String uid, String bio) {
+  Future<VRChatUserPut> changeBio(String uid, String bio) {
     return vrchatSession.put(
       endpoint(
         'api/1/users/$uid',
         apiKey(),
       ),
       {"bio": bio},
-    ).then((value) => VRChatUserOverload.fromJson(value));
+    ).then((value) => VRChatUserPut.fromJson(value));
   }
 }

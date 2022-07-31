@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 // Project imports:
 import 'package:vrchat_mobile_client/scenes/user.dart';
 import 'package:vrchat_mobile_client/scenes/world.dart';
+import 'package:vrchat_mobile_client/widgets/share.dart';
 
 void urlParser(BuildContext context, String strUri) {
   final List<String> path = Uri.parse(strUri).path.split("/");
@@ -34,5 +35,7 @@ void urlParser(BuildContext context, String strUri) {
       ),
       (_) => false,
     );
+  } else {
+    openInBrowser(context, strUri);
   }
 }

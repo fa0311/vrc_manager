@@ -14,7 +14,6 @@
     "save": "Save",
     "saved": "Saved",
     "success": "Success",
-    "failure": "Failure",
     "delete": "Delete",
     "@____________________VRCHAT____________________": {},
     "vrchatPublic": "Public",
@@ -27,10 +26,9 @@
     "parseError": "Parse error",
     "socketException": "No Internet connection",
     "unknownError": "Unknown error",
-    "reportMessageEmpty": "There were no error messages.",
     "unexpectedError": "This request is not supported.",
     "reportMessage1": "Please report this to the developer.",
-    "reportMessage2": "Tapping {report} will copy the log to the clipboard and access the report page.",
+    "reportMessage2": "Tapping Report will copy the log to the clipboard and access the report page.",
     "@____________________ERROR_TRANSLATION____________________": {},
     "tooManyRequests": "Too many requests. Please wait a while and try again.",
     "invalidLoginInfo": "Invalid Username/Email or Password.",
@@ -55,13 +53,14 @@
     "@____________________LOGIN____________________": {},
     "login": "Login",
     "username": "Username",
-    "email": "Email",
     "usernameOrEmail": "Username / Email",
     "password": "Password",
     "rememberPassword": "Remember password",
     "twoFactorAuthentication": "Two Factor Authentication",
     "authenticationCode": "Authentication Code",
     "unknown": "Unknown",
+    "cantLogin": "Can't login",
+    "cantLoginDetails": "Please make sure you can log in via vrchat.com.",
     "@____________________LOGIN_ERROR_DIALOG____________________": {},
     "incorrectLogin": "Incorrect login information",
     "@____________________HOME____________________": {},
@@ -79,6 +78,10 @@
     "sortedByName": "Sort by Name",
     "sortedByLastLogin": "Sort by Last Login",
     "sortedByFriendsInInstance": "Sort by Number of friends of the instance",
+    "display": "display",
+    "default_": "default",
+    "simple": "simple",
+    "textOnly": "textOnly",
     "@____________________FRIEND_REQUEST____________________": {},
     "friendRequest": "Friend request ",
     "@____________________FAVORITE_WORLD____________________": {},
@@ -88,7 +91,9 @@
     "lastLogin": "Last login: {data}",
     "dateJoined": "Date joined: {data}",
     "viewInJsonViewer": "Display in JSON Viewer",
-    "joinInstance": "Join Instance",
+    "joinInstance": "Invite me",
+    "editBio": "Edit bio",
+    "editNote": "edit note",
     "@__USER_DIALOG__": {},
     "sendInvite": "Invitation sent.",
     "selfInviteDetails": "Please check the invitation field of the VRChat.",
@@ -103,6 +108,7 @@
     "@____________________WORLD____________________": {},
     "world": "World",
     "privateWorld": "Private World",
+    "traveling": "traveling",
     "occupants": "Number of users: {data}",
     "privateOccupants": "Number of private users: {data}",
     "favorites": "Favorites: {data}",
@@ -110,6 +116,7 @@
     "updatedAt": "Updated at {data}",
     "addFavoriteWorlds": "Select a list to add",
     "launchWorld": "Launch world",
+    "openInVrchat": "Open in VRChat",
     "@____________________ACCOUNT_SWITCH____________________": {},
     "accountSwitch": "Account switching",
     "accountSwitchSetting": "Account switching settings",
@@ -151,15 +158,11 @@
     "developerInfoDetails": "View developer information.",
     "rateTheApp": "Rate the app",
     "rateTheAppDetails": "Please rate us on Google PlayStore!",
+    "version": "Version",
+    "versionDetails": "Current Version: {version}",
     "licence": "Licence",
     "licenceDetails": "Check Licence information",
     "@____________________PLACEHOLDER____________________": {},
-    "@__PLACEHOLDER_ERROR_DIALOG__": {},
-    "@reportMessage2": {
-        "placeholders": {
-            "report": {}
-        }
-    },
     "@__PLACEHOLDER_DATE__": {},
     "@dateFormat1": {
         "placeholders": {
@@ -220,9 +223,16 @@
             "data": {}
         }
     },
+    "@__SETTING__": {},
     "@translaterDetails": {
         "placeholders": {
             "name": {}
+        }
+    },
+    "@__HELP__": {},
+    "@versionDetails": {
+        "placeholders": {
+            "version": {}
         }
     }
 }

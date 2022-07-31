@@ -12,7 +12,7 @@ import 'package:vrchat_mobile_client/api/main.dart';
 import 'package:vrchat_mobile_client/assets/error.dart';
 import 'package:vrchat_mobile_client/assets/storage.dart';
 import 'package:vrchat_mobile_client/widgets/drawer.dart';
-import 'package:vrchat_mobile_client/widgets/world.dart';
+import 'package:vrchat_mobile_client/widgets/worlds_favorite.dart';
 
 class VRChatMobileWorldsFavorite extends StatefulWidget {
   final bool offline;
@@ -25,9 +25,12 @@ class VRChatMobileWorldsFavorite extends StatefulWidget {
 
 class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
   List<int> offset = [];
-  List<Column> childrenList = [];
+  List<FavoriteWorlds> dataColumn = [];
 
-  late Column column = Column(
+  List<Widget> bodyList = [];
+  List<VRChatFavoriteGroup> favoriteList = [];
+
+  Widget body = Column(
     children: const [
       Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()),
     ],
@@ -40,7 +43,7 @@ class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
           VRChatFavoriteGroupList response,
         ) {
           if (response.group.isEmpty) {
-            setState(() => column = Column(
+            setState(() => body = Column(
                   children: <Widget>[
                     Text(AppLocalizations.of(context)!.none),
                   ],
@@ -54,12 +57,14 @@ class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
                 ],
               ));
             }
-            column = Column(children: children);
+            body = Column(children: children);
           }
           response.group.asMap().forEach((index, VRChatFavoriteGroup list) {
             offset.add(0);
-            childrenList.add(Column());
-            moreOver(list, index);
+            bodyList.add(Column());
+            dataColumn.add(FavoriteWorlds()..context = context);
+            favoriteList.add(list);
+            moreOver(index);
           });
         }).catchError((status) {
           apiError(context, status);
@@ -68,38 +73,20 @@ class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
     );
   }
 
-  moreOver(VRChatFavoriteGroup list, int index) {
+  bool canMoreOver(int index) {
+    return (dataColumn[index].worldList.length == offset[index]);
+  }
+
+  moreOver(int index) {
     getLoginSession("login_session").then(
       (cookie) {
-        VRChatAPI(cookie: cookie ?? "").favoritesWorlds(list.name, offset: offset[index]).then((VRChatFavoriteWorldList worlds) {
-          offset[index] += 50;
-          final List<Widget> worldList = [];
-          worldList.addAll(childrenList[index].children);
+        offset[index] += 50;
+        VRChatAPI(cookie: cookie ?? "").favoritesWorlds(favoriteList[index].name, offset: offset[index] - 50).then((VRChatFavoriteWorldList worlds) {
           for (VRChatFavoriteWorld world in worlds.world) {
-            worldList.add(simpleWorldFavorite(context, world));
+            dataColumn[index].add(world);
           }
-          childrenList[index] = Column(children: worldList);
-          column = Column(children: column.children);
-          setState(
-            () {
-              column.children[index] = Column(children: [
-                Text(list.displayName),
-                Column(children: childrenList[index].children),
-                if (childrenList[index].children.length == offset[index] && offset[index] > 0)
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width,
-                    child: Column(
-                      children: <Widget>[
-                        ElevatedButton(
-                          child: Text(AppLocalizations.of(context)!.readMore),
-                          onPressed: () => moreOver(list, index),
-                        ),
-                      ],
-                    ),
-                  )
-              ]);
-            },
-          );
+
+          setState(() => reload(index));
         }).catchError((status) {
           apiError(context, status);
         });
@@ -107,8 +94,34 @@ class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
     );
   }
 
+  reload(int index) {
+    bodyList[index] = Column(children: [
+      Text(favoriteList[index].displayName),
+      dataColumn[index].render(children: dataColumn[index].children),
+      if (canMoreOver(index))
+        SizedBox(
+          width: MediaQuery.of(context).size.width,
+          child: Column(
+            children: <Widget>[
+              ElevatedButton(
+                child: Text(AppLocalizations.of(context)!.readMore),
+                onPressed: () => moreOver(index),
+              ),
+            ],
+          ),
+        )
+    ]);
+  }
+
   @override
   Widget build(BuildContext context) {
+    dataColumn.asMap().forEach((index, FavoriteWorlds data) {
+      data.button = () => setState(() {
+            body = data.render(children: data.reload());
+            setState(() => reload(index));
+          });
+    });
+
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.favoriteWorlds),
@@ -117,7 +130,7 @@ class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
       body: SafeArea(
         child: SizedBox(
           width: MediaQuery.of(context).size.width,
-          child: SingleChildScrollView(child: column),
+          child: SingleChildScrollView(child: Column(children: bodyList)),
         ),
       ),
     );
