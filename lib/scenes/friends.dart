@@ -32,32 +32,30 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
   String sortMode = "default";
   String displayMode = "default";
   String? cookie;
-  String identification = "";
 
   Widget body = const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator());
 
   Users dataColumn = Users();
   _FriendsPageState() {
-    identification = widget.offline ? "offline" : "online";
     List<Future> futureStorageList = [];
     futureStorageList.add(getLoginSession("login_session").then(
       (response) {
         cookie = response;
       },
     ));
-    futureStorageList.add(getStorage("friends_joinable_$identification").then(
+    futureStorageList.add(getStorage("friends_joinable").then(
       (response) {
         dataColumn.joinable = response == "true" && !widget.offline;
       },
     ));
-    futureStorageList.add(getStorage("auto_read_more_$identification").then(
+    futureStorageList.add(getStorage("auto_read_more").then(
       (response) {
         setState(
           () => autoReadMore = (response == "true"),
         );
       },
     ));
-    futureStorageList.add(getStorage("friends_sort_$identification").then(
+    futureStorageList.add(getStorage("friends_sort").then(
       (response) {
         setState(() {
           sortMode = response ?? "default";
@@ -65,7 +63,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
         });
       },
     ));
-    futureStorageList.add(getStorage("friends_world_details_$identification").then(
+    futureStorageList.add(getStorage("friends_world_details").then(
       (response) {
         setState(
           () {
@@ -75,14 +73,14 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
         );
       },
     ));
-    futureStorageList.add(getStorage("friends_display_mode_$identification").then(
+    futureStorageList.add(getStorage("friends_display_mode").then(
       (response) {
         setState(
           () => dataColumn.displayMode = response ?? "default",
         );
       },
     ));
-    futureStorageList.add(getStorage("friends_descending_$identification").then(
+    futureStorageList.add(getStorage("friends_descending").then(
       (response) {
         setState(
           () => dataColumn.descending = (response == "true"),
@@ -211,7 +209,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
                 title: Text(AppLocalizations.of(context)!.sortedByDefault),
                 trailing: sortMode == "default" ? const Icon(Icons.check) : null,
                 onTap: () => setStateBuilder(() {
-                  setStorage("friends_sort_$identification", sortMode = "default").then((value) {
+                  setStorage("friends_sort", sortMode = "default").then((value) {
                     updateSwitch();
                     laterMoreOver();
                     setStateBuilderParent(() => sort());
@@ -222,7 +220,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
                 title: Text(AppLocalizations.of(context)!.sortedByName),
                 trailing: sortMode == "name" ? const Icon(Icons.check) : null,
                 onTap: () => setStateBuilder(() {
-                  setStorage("friends_sort_$identification", sortMode = "name").then((value) {
+                  setStorage("friends_sort", sortMode = "name").then((value) {
                     updateSwitch();
                     laterMoreOver();
                     setStateBuilderParent(() => sort());
@@ -233,7 +231,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
                 title: Text(AppLocalizations.of(context)!.sortedByLastLogin),
                 trailing: sortMode == "last_login" ? const Icon(Icons.check) : null,
                 onTap: () => setStateBuilder(() {
-                  setStorage("friends_sort_$identification", sortMode = "last_login").then((value) {
+                  setStorage("friends_sort", sortMode = "last_login").then((value) {
                     updateSwitch();
                     laterMoreOver();
                     setStateBuilderParent(() => sort());
@@ -245,7 +243,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
                   title: Text(AppLocalizations.of(context)!.sortedByFriendsInInstance),
                   trailing: sortMode == "friends_in_instance" ? const Icon(Icons.check) : null,
                   onTap: () => setStateBuilder(() {
-                    setStorage("friends_sort_$identification", sortMode = "friends_in_instance").then((value) {
+                    setStorage("friends_sort", sortMode = "friends_in_instance").then((value) {
                       updateSwitch();
                       laterMoreOver();
                       setStateBuilderParent(() => sort());
@@ -260,7 +258,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
                       ? null
                       : (bool e) => setStateBuilder(() {
                             dataColumn.descending = e;
-                            setStorage("friends_descending_$identification", e ? "true" : "false");
+                            setStorage("friends_descending", e ? "true" : "false");
                             updateSwitch();
                             laterMoreOver();
                             setStateBuilderParent(() => sort());
@@ -287,7 +285,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
                 title: Text(AppLocalizations.of(context)!.display),
                 trailing: dataColumn.displayMode == "default" ? const Icon(Icons.check) : null,
                 onTap: () => setStateBuilder(() {
-                  setStorage("friends_display_mode_$identification", dataColumn.displayMode = "default").then((value) {
+                  setStorage("friends_display_mode", dataColumn.displayMode = "default").then((value) {
                     setState(() => body = dataColumn.render(
                           children: dataColumn.reload(),
                         ));
@@ -299,7 +297,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
                 title: Text(AppLocalizations.of(context)!.simple),
                 trailing: dataColumn.displayMode == "simple" ? const Icon(Icons.check) : null,
                 onTap: () => setStateBuilder(() {
-                  setStorage("friends_display_mode_$identification", dataColumn.displayMode = "simple").then((value) {
+                  setStorage("friends_display_mode", dataColumn.displayMode = "simple").then((value) {
                     setState(() => body = dataColumn.render(
                           children: dataColumn.reload(),
                         ));
@@ -311,7 +309,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
                 title: Text(AppLocalizations.of(context)!.textOnly),
                 trailing: dataColumn.displayMode == "text_only" ? const Icon(Icons.check) : null,
                 onTap: () => setStateBuilder(() {
-                  setStorage("friends_display_mode_$identification", dataColumn.displayMode = "text_only").then((value) {
+                  setStorage("friends_display_mode", dataColumn.displayMode = "text_only").then((value) {
                     setState(() => body = dataColumn.render(
                           children: dataColumn.reload(),
                         ));
@@ -370,7 +368,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
                           title: Text(AppLocalizations.of(context)!.autoReadMore),
                           onChanged: sortMode == "default"
                               ? (bool e) => setStateBuilder(() {
-                                    setStorage("auto_read_more_$identification", e ? "true" : "false");
+                                    setStorage("auto_read_more", e ? "true" : "false");
                                     autoReadMore = e;
                                     updateSwitch();
                                     laterMoreOver();
@@ -387,7 +385,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
                           title: Text(AppLocalizations.of(context)!.showOnlyAvailable),
                           onChanged: (bool e) => setStateBuilder(
                             () {
-                              setStorage("friends_joinable_$identification", e ? "true" : "false");
+                              setStorage("friends_joinable", e ? "true" : "false");
                               dataColumn.joinable = e;
                               updateSwitch();
                               laterMoreOver();
@@ -406,7 +404,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
                           onChanged: dataColumn.joinable
                               ? (bool e) => setStateBuilder(
                                     () {
-                                      setStorage("friends_world_details_$identification", e ? "true" : "false");
+                                      setStorage("friends_world_details", e ? "true" : "false");
                                       worldDetails = e;
                                       updateSwitch();
                                       laterMoreOver();
