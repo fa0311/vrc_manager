@@ -124,7 +124,7 @@ Card simpleWorldPlus(BuildContext context, VRChatWorld world, VRChatInstance ins
                       Expanded(
                         child: SizedBox(
                           width: double.infinity,
-                          child: Text(getVrchatInstanceType()[instance.type] ?? "?"),
+                          child: Text(getVrchatInstanceType(context)[instance.type] ?? "?"),
                         ),
                       )
                     ]),
@@ -224,7 +224,11 @@ Card simpleWorldHalf(BuildContext context, VRChatLimitedWorld world) {
                       width: double.infinity,
                       child: Text(
                         world.name,
-                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12,
+                          height: 1,
+                        ),
                       ),
                     ),
                   ],
@@ -279,16 +283,19 @@ Card simpleWorldPlusHalf(BuildContext context, VRChatWorld world, VRChatInstance
                         padding: const EdgeInsets.only(right: 5),
                         child: region(
                           instance.region,
+                          size: 10,
                         ),
                       ),
-                      const Icon(Icons.groups),
                       Padding(
                           padding: const EdgeInsets.only(right: 5),
                           child: Text("${instance.nUsers}/${instance.capacity}", style: const TextStyle(fontSize: 12))),
                       Expanded(
                         child: SizedBox(
                           width: double.infinity,
-                          child: Text(getVrchatInstanceType()[instance.type] ?? "?", style: const TextStyle(fontSize: 12)),
+                          child: Text(
+                            getVrchatInstanceType(context)[instance.type] ?? "?",
+                            style: const TextStyle(fontSize: 12),
+                          ),
                         ),
                       )
                     ]),
@@ -296,12 +303,16 @@ Card simpleWorldPlusHalf(BuildContext context, VRChatWorld world, VRChatInstance
                       width: double.infinity,
                       child: Text(
                         world.name,
-                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12,
+                          height: 1,
+                        ),
                       ),
                     ),
                     if ((instance.shortName ?? instance.secureName) != null)
                       SizedBox(
-                        height: 30,
+                        height: 16,
                         child: TextButton(
                           style: ElevatedButton.styleFrom(
                             onPrimary: Colors.grey,
@@ -331,7 +342,7 @@ Card simpleWorldPlusHalf(BuildContext context, VRChatWorld world, VRChatInstance
                               apiError(context, status);
                             }),
                           ),
-                          child: Text(AppLocalizations.of(context)!.joinInstance, style: const TextStyle(fontSize: 12)),
+                          child: Text(AppLocalizations.of(context)!.joinInstance, style: const TextStyle(fontSize: 10)),
                         ),
                       ),
                   ],

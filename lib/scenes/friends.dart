@@ -126,7 +126,9 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
   }
 
   Future<void> moreOver() {
-    offset += 50;
+    setState(() {
+      offset += 50;
+    });
     return VRChatAPI(cookie: cookie ?? "").friends(offline: widget.offline, offset: offset - 50).then((VRChatUserList users) {
       for (VRChatUser user in users.users) {
         dataColumn.add(user);
@@ -389,6 +391,9 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
                               dataColumn.joinable = e;
                               updateSwitch();
                               laterMoreOver();
+                              if (dataColumn.instanceMap.isEmpty) {
+                                getInstance(dataColumn.userList);
+                              }
                               if (!canMoreOver()) {
                                 setState(
                                   () => body = dataColumn.render(children: dataColumn.reload()),
@@ -400,7 +405,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
                       if (!widget.offline)
                         SwitchListTile(
                           value: dataColumn.worldDetails,
-                          title: const Text("ワールドの詳細"),
+                          title: Text(AppLocalizations.of(context)!.worldDetails),
                           onChanged: dataColumn.joinable
                               ? (bool e) => setStateBuilder(
                                     () {
@@ -411,9 +416,11 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
                                       if (dataColumn.instanceMap.isEmpty) {
                                         getInstance(dataColumn.userList);
                                       }
-                                      setState(
-                                        () => body = dataColumn.render(children: dataColumn.reload()),
-                                      );
+                                      if (!canMoreOver()) {
+                                        setState(
+                                          () => body = dataColumn.render(children: dataColumn.reload()),
+                                        );
+                                      }
                                     },
                                   )
                               : null,
@@ -446,13 +453,11 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
                     width: MediaQuery.of(context).size.width,
                     child: Column(
                       children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.only(top: 10),
-                          child: ElevatedButton(
-                              child: Text(AppLocalizations.of(context)!.readMore),
-                              onPressed: () {
-                                moreOver().then((_) => setState(() => body = dataColumn.render(children: dataColumn.reload())));
-                              }),
+                        ElevatedButton(
+                          child: Text(AppLocalizations.of(context)!.readMore),
+                          onPressed: () {
+                            moreOver().then((_) => setState(() => body = dataColumn.render(children: dataColumn.reload())));
+                          },
                         ),
                       ],
                     ),
