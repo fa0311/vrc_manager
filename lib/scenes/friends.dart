@@ -32,12 +32,13 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
   String sortMode = "default";
   String displayMode = "default";
   String? cookie;
-  late String identification = widget.offline ? "offline" : "online";
+  String identification = "";
 
   Widget body = const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator());
 
   Users dataColumn = Users();
   _FriendsPageState() {
+    identification = widget.offline ? "offline" : "online";
     List<Future> futureStorageList = [];
     futureStorageList.add(getLoginSession("login_session").then(
       (response) {
