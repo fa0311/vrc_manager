@@ -36,6 +36,20 @@ body:
       options:
         - Github
         - Google Play Store
+        - その他
+      validations:
+        required: false
+
+  - type: dropdown
+    id: reinstall
+    attributes:
+      label: 再インストールしましたか？
+      multiple: false
+      options:
+        - はい
+        - いいえ、恐らくその必要はない
+      validations:
+        required: false
 
   - type: textarea
     id: bug-description
