@@ -284,7 +284,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
           child: Column(
             children: <Widget>[
               ListTile(
-                title: Text(AppLocalizations.of(context)!.display),
+                title: Text(AppLocalizations.of(context)!.default_),
                 trailing: dataColumn.displayMode == "default" ? const Icon(Icons.check) : null,
                 onTap: () => setStateBuilder(() {
                   setStorage("friends_display_mode", dataColumn.displayMode = "default").then((value) {

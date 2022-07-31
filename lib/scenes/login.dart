@@ -252,6 +252,9 @@ class _LoginPageState extends State<VRChatMobileLogin> {
               TextButton(
                 child: Text(
                   AppLocalizations.of(context)!.cantLogin,
+                  style: const TextStyle(
+                    fontSize: 14,
+                  ),
                 ),
                 onPressed: () => showDialog(
                   context: context,
@@ -265,7 +268,10 @@ class _LoginPageState extends State<VRChatMobileLogin> {
                           onPressed: () => Navigator.pop(context),
                         ),
                         TextButton(
-                          onPressed: () => openInBrowser(context, "https://vrchat.com/home/login"),
+                          onPressed: () {
+                            Navigator.pop(context);
+                            openInBrowser(context, "https://vrchat.com/home/login");
+                          },
                           child: Text(AppLocalizations.of(context)!.openInBrowser),
                         ),
                       ],

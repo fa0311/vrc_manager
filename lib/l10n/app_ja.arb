@@ -26,7 +26,6 @@
     "parseError": "構文解析エラー",
     "socketException": "インターネットに接続できませんでした",
     "unknownError": "不明なエラー",
-    "unexpectedError": "このリクエストは非対応です",
     "reportMessage1": "開発者に報告してください",
     "reportMessage2": "報告をタップするとログがクリップボードにコピーされ報告ページにアクセスします",
     "@____________________ERROR_TRANSLATION____________________": {},
