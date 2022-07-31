@@ -44,7 +44,7 @@ body:
       label: Have you reinstalled it ?
       multiple: false
       options:
-        - Yes
+        - "Yes"
         - No, perhaps that won't be necessary.
 
   - type: textarea
