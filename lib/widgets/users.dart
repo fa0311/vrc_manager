@@ -162,11 +162,13 @@ class Users {
                               Container(
                                 width: 5,
                               ),
-                              Text(user.displayName,
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20,
-                                  )),
+                              Text(
+                                user.displayName,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
+                                ),
+                              ),
                             ],
                           ),
                           if (user.statusDescription != null) Text(user.statusDescription!, style: const TextStyle(fontSize: 14)),
@@ -194,9 +196,15 @@ class Users {
                   ],
                 ),
                 if (worldDetails && locationMap[worldId] != null && instanceMap[user.location] == null)
-                  simpleWorld(context, locationMap[worldId]!.toLimited()).child!,
+                  Padding(
+                    padding: const EdgeInsets.only(top: 5),
+                    child: (simpleWorld(context, locationMap[worldId]!.toLimited()).child! as Container).child!,
+                  ),
                 if (worldDetails && locationMap[worldId] != null && instanceMap[user.location] != null)
-                  simpleWorldPlus(context, locationMap[worldId]!, instanceMap[user.location]!).child!
+                  Padding(
+                    padding: const EdgeInsets.only(top: 5),
+                    child: (simpleWorldPlus(context, locationMap[worldId]!, instanceMap[user.location]!).child! as Container).child!,
+                  ),
               ],
             ),
           ),
@@ -256,13 +264,15 @@ class Users {
                               ),
                               Text(
                                 user.displayName,
-                                style: const TextStyle(fontSize: 12),
+                                style: const TextStyle(
+                                  fontSize: 12,
+                                ),
                               ),
                             ],
                           ),
-                          if (!["private", "offline", "traveling"].contains(user.location) && locationMap.containsKey(worldId))
+                          if (!["private", "offline", "traveling"].contains(user.location) && locationMap.containsKey(worldId) && !worldDetails)
                             Text(locationMap[worldId]!.name, style: const TextStyle(fontSize: 12)),
-                          if (!["private", "offline", "traveling"].contains(user.location) && !locationMap.containsKey(worldId))
+                          if (!["private", "offline", "traveling"].contains(user.location) && !locationMap.containsKey(worldId) && !worldDetails)
                             const SizedBox(
                               height: 15.0,
                               width: 15.0,
@@ -284,9 +294,15 @@ class Users {
                   ],
                 ),
                 if (worldDetails && locationMap[worldId] != null && instanceMap[user.location] == null)
-                  simpleWorldHalf(context, locationMap[worldId]!.toLimited()).child!,
+                  Padding(
+                    padding: const EdgeInsets.only(top: 5),
+                    child: (simpleWorldHalf(context, locationMap[worldId]!.toLimited()).child! as Container).child!,
+                  ),
                 if (worldDetails && locationMap[worldId] != null && instanceMap[user.location] != null)
-                  simpleWorldPlusHalf(context, locationMap[worldId]!, instanceMap[user.location]!).child!
+                  Padding(
+                    padding: const EdgeInsets.only(top: 5),
+                    child: (simpleWorldPlusHalf(context, locationMap[worldId]!, instanceMap[user.location]!).child! as Container).child!,
+                  ),
               ],
             ),
           ),
@@ -336,8 +352,8 @@ class Users {
                       Text(locationMap[worldId]!.name, style: const TextStyle(fontSize: 12)),
                     if (!["private", "offline", "traveling"].contains(user.location) && !locationMap.containsKey(worldId))
                       const SizedBox(
-                        height: 15.0,
-                        width: 15.0,
+                        height: 12.0,
+                        width: 12.0,
                         child: CircularProgressIndicator(),
                       ),
                     if (user.location == "private")
@@ -389,7 +405,7 @@ class Users {
                                 apiError(context, status);
                               }),
                             ),
-                            child: Text(AppLocalizations.of(context)!.joinInstance, style: const TextStyle(fontSize: 12)),
+                            child: Text(AppLocalizations.of(context)!.joinInstance, style: const TextStyle(fontSize: 10)),
                           ),
                         ),
                     ],
@@ -409,15 +425,15 @@ class Users {
     int height = 0;
     int wrap = 0;
     if (displayMode == "default") {
-      height = worldDetails ? 240 : 130;
+      height = worldDetails ? 233 : 130;
       wrap = 600;
     }
     if (displayMode == "simple") {
-      height = worldDetails ? 150 : 70;
+      height = worldDetails ? 123 : 70;
       wrap = 300;
     }
     if (displayMode == "text_only") {
-      height = worldDetails ? 55 : 40;
+      height = worldDetails ? 57 : 41;
       wrap = 400;
     }
 
@@ -426,6 +442,7 @@ class Users {
       crossAxisSpacing: 0,
       mainAxisSpacing: 0,
       childAspectRatio: width / (width ~/ wrap + 1) / height,
+      padding: const EdgeInsets.only(bottom: 30),
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       children: children,
