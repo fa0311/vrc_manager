@@ -286,7 +286,7 @@ class Users {
                             ],
                           ),
                           if (!["private", "offline", "traveling"].contains(user.location) && locationMap.containsKey(worldId) && !worldDetails)
-                            Text(locationMap[worldId]!.name, style: const TextStyle(fontSize: 12)),
+                            Text(locationMap[worldId]!.name, style: const TextStyle(fontSize: 12), maxLines: 2, overflow: TextOverflow.ellipsis),
                           if (!["private", "offline", "traveling"].contains(user.location) && !locationMap.containsKey(worldId) && !worldDetails)
                             const SizedBox(
                               height: 15.0,
