@@ -212,7 +212,7 @@ class VRChatAPI {
       "after": after,
       "hidden": hidden.toString(),
       "offset": offset.toString(),
-      "n": "100",
+      "n": "50",
     }..addAll(
         apiKey(),
       );

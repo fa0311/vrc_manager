@@ -27,7 +27,7 @@ class Users {
   List<Widget> children = [];
   bool joinable = false;
   bool descending = false;
-  bool worldDetails = true;
+  bool worldDetails = false;
   bool wait = true;
   String displayMode = "default";
   late BuildContext context;
