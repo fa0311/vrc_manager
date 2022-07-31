@@ -28,6 +28,7 @@ class Users {
   bool joinable = false;
   bool descending = false;
   bool worldDetails = true;
+  bool wait = true;
   String displayMode = "default";
   late BuildContext context;
   Map<String, VRChatWorld> locationMap = {};
@@ -402,6 +403,8 @@ class Users {
   }
 
   Widget render({required List<Widget> children}) {
+    if (children.isEmpty) return Column(children: <Widget>[Text(AppLocalizations.of(context)!.none)]);
+    wait = false;
     double width = MediaQuery.of(context).size.width;
     int height = 0;
     int wrap = 0;
