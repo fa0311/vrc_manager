@@ -1,0 +1,79 @@
+name: "[en] 🐛 Report a bug"
+description: Report a bug in vrchat_mobile_client.
+labels: ["bug"]
+body:
+
+  - type: input
+    id: os
+    attributes:
+      label: OS
+      description: Please include the version.
+      placeholder: "Example: Android 12, Window 10"
+    validations:
+      required: true
+
+  - type: input
+    id: device-name
+    attributes:
+      label: Device name
+      placeholder: "Example: Samsung Galaxy S22 Ultra"
+    validations:
+      required: false
+
+  - type: input
+    id: country-of-origin
+    attributes:
+      label: Country of origin of connection
+      placeholder: "Example: Japan"
+    validations:
+      required: false
+
+  - type: dropdown
+    id: download-location
+    attributes:
+      label: Where you downloaded the app
+      multiple: true
+      options:
+        - Github
+        - Google Play Store
+        - Other
+
+  - type: dropdown
+    id: reinstall
+    attributes:
+      label: Have you reinstalled it ?
+      multiple: false
+      options:
+        - "Yes"
+        - No, perhaps that won't be necessary.
+
+  - type: textarea
+    id: bug-description
+    attributes:
+      label: Bug description
+      description: Describe in detail what the bug is about. Include the expected behaviour and actual behaviour. Please attach images if necessary.
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps-to-reproduce
+    attributes:
+      label: Steps to reproduce
+      description: Provide detailed intructions to trigger the bug.
+      placeholder: |
+        Example:
+          1. Start with all application data deleted.
+          2. Login and open Home
+          3. ...
+          ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: error-message
+    attributes:
+      label: Relevant error message output
+      description: Please paste any relevant  Relevant error message output.
+      render: shell
+    validations:
+      required: false
