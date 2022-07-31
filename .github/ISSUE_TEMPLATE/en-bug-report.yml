@@ -36,6 +36,16 @@ body:
       options:
         - Github
         - Google Play Store
+        - Other
+
+  - type: dropdown
+    id: reinstall
+    attributes:
+      label: Have you reinstalled it ?
+      multiple: false
+      options:
+        - Yes
+        - No, perhaps that won't be necessary.
 
   - type: textarea
     id: bug-description
