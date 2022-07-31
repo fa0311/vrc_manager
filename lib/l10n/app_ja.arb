@@ -161,11 +161,5 @@
     "version": "バージョン",
     "versionDetails": "現在のバージョン: {version}",
     "licence": "Licence",
-    "licenceDetails": "Licence情報を確認します",
-    "@____________________DEBUG____________________": {},
-    "text1": "テキスト1",
-    "text2": "テキスト2",
-    "text3": "テキスト3",
-    "text4": "テキスト4",
-    "textLong": "テキスト テキスト テキスト テキスト テキスト"
+    "licenceDetails": "Licence情報を確認します"
 }

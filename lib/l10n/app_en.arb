@@ -162,12 +162,6 @@
     "versionDetails": "Current Version: {version}",
     "licence": "Licence",
     "licenceDetails": "Check Licence information",
-    "@____________________DEBUG____________________": {},
-    "text1": "text1",
-    "text2": "text2",
-    "text3": "text3",
-    "text4": "text4",
-    "textLong": "text text text text text text",
     "@____________________PLACEHOLDER____________________": {},
     "@__PLACEHOLDER_DATE__": {},
     "@dateFormat1": {
