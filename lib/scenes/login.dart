@@ -1,5 +1,4 @@
 // Dart imports:
-import 'dart:convert';
 import 'dart:math';
 
 // Flutter imports:
@@ -9,11 +8,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 // Project imports:
+import 'package:vrchat_mobile_client/api/data_class.dart';
 import 'package:vrchat_mobile_client/api/main.dart';
 import 'package:vrchat_mobile_client/assets/error.dart';
 import 'package:vrchat_mobile_client/assets/storage.dart';
+import 'package:vrchat_mobile_client/main.dart';
 import 'package:vrchat_mobile_client/scenes/home.dart';
 import 'package:vrchat_mobile_client/widgets/drawer.dart';
+import 'package:vrchat_mobile_client/widgets/share.dart';
 
 class VRChatMobileLogin extends StatefulWidget {
   const VRChatMobileLogin({Key? key}) : super(key: key);
@@ -31,45 +33,30 @@ class _LoginPageState extends State<VRChatMobileLogin> {
   late VRChatAPI session = VRChatAPI();
 
   _onPressed(context) {
-    session.login(_userController.text, _passwordController.text).then(
-      (response) {
-        if (response.containsKey("error")) {
-          error(context, response["error"]["message"]);
-        } else if (response.containsKey("requiresTwoFactorAuth")) {
-          _totp();
-        } else if (response.containsKey("verified") && response["verified"]) {
-          _save(session.vrchatSession.headers["cookie"] as String);
-        } else if (response.containsKey("verified") && !response["verified"]) {
-          error(context, AppLocalizations.of(context)!.incorrectLogin);
-        } else if (response.containsKey("id")) {
-          _save(session.vrchatSession.headers["cookie"] as String);
-        } else {
-          error(context,
-              "${AppLocalizations.of(context)!.unexpectedError}\n${AppLocalizations.of(context)!.reportMessage1}\n${AppLocalizations.of(context)!.reportMessage2(AppLocalizations.of(context)!.report)}",
-              log: json.encode(response));
-        }
-      },
-    );
+    session.login(_userController.text, _passwordController.text).then((VRChatLogin login) {
+      if (login.requiresTwoFactorAuth) {
+        _totp();
+      } else if (login.verified) {
+        _save(session.vrchatSession.headers["cookie"] as String);
+      } else {
+        login.content.addAll({"lastEndpoint": "api/1/auth/user"});
+        throw Exception(errorLog(login.content));
+      }
+    }).catchError((status) {
+      apiError(context, status);
+    });
   }
 
   _onPressedTotp(context) {
-    session.loginTotp(_totpController.text).then(
-      (response) {
-        if (response.containsKey("error")) {
-          error(context, response["error"]["message"]);
-        } else if (response.containsKey("verified") && response["verified"]) {
-          _save(session.vrchatSession.headers["cookie"] as String);
-        } else if (response.containsKey("verified") && !response["verified"]) {
-          error(context, AppLocalizations.of(context)!.incorrectLogin);
-        } else if (response.containsKey("id")) {
-          _save(session.vrchatSession.headers["cookie"] as String);
-        } else {
-          error(context,
-              "${AppLocalizations.of(context)!.unexpectedError}\n${AppLocalizations.of(context)!.reportMessage1}\n${AppLocalizations.of(context)!.reportMessage2(AppLocalizations.of(context)!.report)}",
-              log: json.encode(response));
-        }
-      },
-    );
+    session.loginTotp(_totpController.text).then((VRChatLogin login) {
+      if (login.verified) {
+        _save(session.vrchatSession.headers["cookie"] as String);
+      } else {
+        errorDialog(context, AppLocalizations.of(context)!.incorrectLogin);
+      }
+    }).catchError((status) {
+      apiError(context, status);
+    });
   }
 
   _totp() {
@@ -165,59 +152,135 @@ class _LoginPageState extends State<VRChatMobileLogin> {
     );
   }
 
+  ListTile _changeLocaleDialogOption(BuildContext context, String title, String languageCode) {
+    return ListTile(
+      title: Text(title),
+      subtitle: Text(
+        AppLocalizations.of(context)!.translaterDetails(lookupAppLocalizations(
+          Locale(languageCode, ""),
+        ).contributor),
+      ),
+      onTap: () async {
+        setStorage("language_code", languageCode).then(
+          (_) {
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                builder: (BuildContext context) => const VRChatMobile(),
+              ),
+              (_) => false,
+            );
+          },
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.login),
+        actions: [
+          IconButton(
+            icon: const Icon(
+              Icons.translate,
+            ),
+            onPressed: () => showModalBottomSheet(
+              context: context,
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.vertical(
+                  top: Radius.circular(15),
+                ),
+              ),
+              builder: (BuildContext context) => SingleChildScrollView(
+                child: Column(
+                  children: <Widget>[
+                    _changeLocaleDialogOption(context, 'English', 'en'),
+                    _changeLocaleDialogOption(context, '日本語', 'ja'),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
       drawer: simpledrawer(context),
       body: Padding(
-        padding: const EdgeInsets.all(32.0),
-        child: Column(
-          children: <Widget>[
-            TextFormField(
-              controller: _userController,
-              decoration: InputDecoration(labelText: AppLocalizations.of(context)!.usernameOrEmail),
-            ),
-            TextFormField(
-              obscureText: _isPasswordObscure,
-              controller: _passwordController,
-              onFieldSubmitted: (String e) => _onPressed(context),
-              decoration: InputDecoration(
-                labelText: AppLocalizations.of(context)!.password,
-                suffixIcon: IconButton(
-                  icon: Icon(_isPasswordObscure ? Icons.visibility_off : Icons.visibility),
-                  onPressed: () {
-                    setState(
-                      () {
-                        _isPasswordObscure = !_isPasswordObscure;
-                      },
+          padding: const EdgeInsets.all(32.0),
+          child: Column(
+            children: <Widget>[
+              TextFormField(
+                controller: _userController,
+                decoration: InputDecoration(labelText: AppLocalizations.of(context)!.usernameOrEmail),
+              ),
+              TextFormField(
+                obscureText: _isPasswordObscure,
+                controller: _passwordController,
+                onFieldSubmitted: (String e) => _onPressed(context),
+                decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context)!.password,
+                  suffixIcon: IconButton(
+                    icon: Icon(_isPasswordObscure ? Icons.visibility_off : Icons.visibility),
+                    onPressed: () {
+                      setState(
+                        () {
+                          _isPasswordObscure = !_isPasswordObscure;
+                        },
+                      );
+                    },
+                  ),
+                ),
+              ),
+              SwitchListTile(
+                value: _rememberPassword,
+                title: Text(
+                  AppLocalizations.of(context)!.rememberPassword,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.primary,
+                    fontSize: 14,
+                  ),
+                ),
+                onChanged: _changeSwitchrememberPassword,
+              ),
+              ElevatedButton(
+                child: Text(
+                  AppLocalizations.of(context)!.login,
+                ),
+                onPressed: () => _onPressed(context),
+              ),
+              TextButton(
+                child: Text(
+                  AppLocalizations.of(context)!.cantLogin,
+                  style: const TextStyle(
+                    fontSize: 14,
+                  ),
+                ),
+                onPressed: () => showDialog(
+                  context: context,
+                  builder: (_) {
+                    return AlertDialog(
+                      title: Text(AppLocalizations.of(context)!.cantLogin),
+                      content: Text(AppLocalizations.of(context)!.cantLoginDetails),
+                      actions: <Widget>[
+                        TextButton(
+                          child: Text(AppLocalizations.of(context)!.cancel),
+                          onPressed: () => Navigator.pop(context),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                            openInBrowser(context, "https://vrchat.com/home/login");
+                          },
+                          child: Text(AppLocalizations.of(context)!.openInBrowser),
+                        ),
+                      ],
                     );
                   },
                 ),
               ),
-            ),
-            SwitchListTile(
-              value: _rememberPassword,
-              title: Text(
-                AppLocalizations.of(context)!.rememberPassword,
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.primary,
-                  fontSize: 14,
-                ),
-              ),
-              onChanged: _changeSwitchrememberPassword,
-            ),
-            ElevatedButton(
-              child: Text(
-                AppLocalizations.of(context)!.login,
-              ),
-              onPressed: () => _onPressed(context),
-            ),
-          ],
-        ),
-      ),
+            ],
+          )),
     );
   }
 }

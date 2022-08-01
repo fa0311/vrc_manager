@@ -1,5 +1,6 @@
 // Dart imports:
 import 'dart:convert';
+import 'dart:io';
 
 // Package imports:
 import 'package:http/http.dart' as http;
@@ -7,15 +8,15 @@ import 'package:http/http.dart' as http;
 class Session {
   Map<String, String> headers = <String, String>{'cookie': ''};
 
-  Future<Map> get(Uri url) async {
+  Future<dynamic> get(Uri url) async {
     http.Response response = await http.get(url, headers: headers);
+    if (response.statusCode != 200) throw HttpException(response.body, uri: url);
+    final dynamic body = json.decode(response.body);
     updateCookie(response);
-    final body = json.decode(response.body);
-    if (body is List) return {for (int i = 0; i < body.length; i++) i: body[i]};
     return body;
   }
 
-  Future<Map> basic(Uri url, String username, String password) async {
+  Future<dynamic> basic(Uri url, String username, String password) async {
     final headersAuth = Map<String, String>.from(headers)
       ..addAll(
         {
@@ -23,32 +24,33 @@ class Session {
         },
       );
     http.Response response = await http.get(url, headers: headersAuth);
+    if (response.statusCode != 200) throw HttpException(response.body, uri: url);
+    final dynamic body = json.decode(response.body);
     updateCookie(response);
-    final body = json.decode(response.body);
-    if (body is List) return {for (int i = 0; i < body.length; i++) i: body[i]};
     return body;
   }
 
-  Future<Map> post(Uri url, [Object? data]) async {
+  Future<dynamic> post(Uri url, [Object? data]) async {
     http.Response response = await http.post(url, body: data ?? {}, headers: headers);
+    if (response.statusCode != 200) throw HttpException(response.body, uri: url);
+    final dynamic body = json.decode(response.body);
     updateCookie(response);
-    final body = json.decode(response.body);
-    if (body is List) return {for (int i = 0; i < body.length; i++) i: body[i]};
     return body;
   }
 
-  Future<Map> put(Uri url, [Object? data]) async {
+  Future<dynamic> put(Uri url, [Object? data]) async {
     http.Response response = await http.put(url, body: data ?? {}, headers: headers);
+    if (response.statusCode != 200) throw HttpException(response.body, uri: url);
+    final dynamic body = json.decode(response.body);
     updateCookie(response);
-    final body = json.decode(response.body);
-    if (body is List) return {for (int i = 0; i < body.length; i++) i: body[i]};
     return body;
   }
 
-  Future<Map> delete(Uri url, [Object? data]) async {
+  Future<dynamic> delete(Uri url, [Object? data]) async {
     http.Response response = await http.delete(url, body: data ?? {}, headers: headers);
+    if (response.statusCode != 200) throw HttpException(response.body, uri: url);
+    final dynamic body = json.decode(response.body);
     updateCookie(response);
-    final body = json.decode(response.body);
     return body;
   }
 

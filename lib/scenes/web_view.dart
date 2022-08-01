@@ -39,10 +39,14 @@ class _WebViewPageState extends State<VRChatMobileWebView> {
     );
 
     late WebViewController controllerGlobal;
+    late int timeStamp = 0;
 
     Future<bool> _exitApp(BuildContext contex) async {
-      if (await controllerGlobal.canGoBack()) {
+      if (DateTime.now().millisecondsSinceEpoch - timeStamp < 200) {
+        return true;
+      } else if (await controllerGlobal.canGoBack()) {
         controllerGlobal.goBack();
+        timeStamp = DateTime.now().millisecondsSinceEpoch;
         return false;
       }
       return true;

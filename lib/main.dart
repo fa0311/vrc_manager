@@ -17,7 +17,7 @@ class VRChatMobile extends StatefulWidget {
   State<VRChatMobile> createState() => _PageState();
 }
 
-class _PageState extends State<VRChatMobile> {
+class _PageState extends State<VRChatMobile> with WidgetsBindingObserver {
   String theme = "light";
   String locale = "en";
 

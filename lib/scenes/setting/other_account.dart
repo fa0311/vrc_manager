@@ -22,6 +22,7 @@ class _SettingOtherAccountPageState extends State<VRChatMobileSettingsOtherAccou
   Column column = Column();
 
   _onPressedRemoveAccount(BuildContext context, String accountIndex) async {
+    removeLoginSession("displayname", accountIndex: accountIndex);
     removeLoginSession("userid", accountIndex: accountIndex);
     removeLoginSession("password", accountIndex: accountIndex);
     removeLoginSession("login_session", accountIndex: accountIndex);
@@ -29,17 +30,7 @@ class _SettingOtherAccountPageState extends State<VRChatMobileSettingsOtherAccou
     List<String> accountIndexList = await getStorageList("account_index_list");
 
     accountIndexList.remove(accountIndex);
-    setStorageList("account_index_list", accountIndexList).then(
-      (_) {
-        Navigator.pop(context);
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (BuildContext context) => const VRChatMobileSettingsOtherAccount(),
-          ),
-        );
-      },
-    );
+    setStorageList("account_index_list", accountIndexList);
 
     String? accountIndexNow = await getStorage("account_index");
     if (accountIndexNow == accountIndex) {
@@ -53,13 +44,18 @@ class _SettingOtherAccountPageState extends State<VRChatMobileSettingsOtherAccou
             (_) => false,
           ),
         );
+        return;
       } else {
         setStorage("account_index", accountIndexList[0]);
       }
     }
+    reload();
   }
 
   _SettingOtherAccountPageState() {
+    reload();
+  }
+  reload() {
     getStorageList("account_index_list").then(
       (response) {
         List<Widget> list = [
@@ -81,7 +77,7 @@ class _SettingOtherAccountPageState extends State<VRChatMobileSettingsOtherAccou
         ];
         response.asMap().forEach(
           (_, String accountIndex) {
-            getLoginSession("userid", accountIndex: accountIndex).then(
+            getLoginSession("displayname", accountIndex: accountIndex).then(
               (accountName) => list.insert(
                 0,
                 Card(

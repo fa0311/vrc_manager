@@ -8,6 +8,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:vrchat_mobile_client/scenes/setting/accessibility.dart';
 import 'package:vrchat_mobile_client/scenes/setting/account.dart';
 import 'package:vrchat_mobile_client/scenes/setting/help.dart';
+import 'package:vrchat_mobile_client/scenes/setting/permissions.dart';
 import 'package:vrchat_mobile_client/widgets/drawer.dart';
 
 class VRChatMobileSettings extends StatefulWidget {
@@ -65,6 +66,24 @@ class _SettingPageState extends State<VRChatMobileSettings> {
                       context,
                       MaterialPageRoute(
                         builder: (BuildContext context) => const VRChatMobileSettingsAccount(),
+                      ),
+                    ),
+                  ),
+                  const Divider(),
+                  ListTile(
+                    leading: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const <Widget>[
+                        Icon(
+                          Icons.admin_panel_settings,
+                        ),
+                      ],
+                    ),
+                    title: Text(AppLocalizations.of(context)!.permissions),
+                    onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (BuildContext context) => const VRChatMobileSettingsPermissions(),
                       ),
                     ),
                   ),
