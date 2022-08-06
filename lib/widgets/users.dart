@@ -64,8 +64,12 @@ class Users {
       String locationA = userA.location;
       String locationB = userB.location;
       if (locationA == locationB) return 0;
-      if (["private", "offline", "traveling"].contains(locationA)) return 1;
-      if (["private", "offline", "traveling"].contains(locationB)) return -1;
+      if (locationA == "offline") return 1;
+      if (locationB == "offline") return -1;
+      if (locationA == "private") return 1;
+      if (locationB == "private") return -1;
+      if (locationA == "traveling") return 1;
+      if (locationB == "traveling") return -1;
       if (inLocation[locationA]!.count > inLocation[locationB]!.count) return -1;
       if (inLocation[locationA]!.count < inLocation[locationB]!.count) return 1;
       if (inLocation[locationA]!.id > inLocation[locationB]!.id) return -1;
