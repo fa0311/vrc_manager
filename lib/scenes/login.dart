@@ -179,7 +179,6 @@ class _LoginPageState extends State<VRChatMobileLogin> {
 
   @override
   Widget build(BuildContext context) {
-    textStream(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.login),
