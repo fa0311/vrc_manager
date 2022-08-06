@@ -17,7 +17,7 @@ class VRChatMobile extends StatefulWidget {
   State<VRChatMobile> createState() => _PageState();
 }
 
-class _PageState extends State<VRChatMobile> with WidgetsBindingObserver {
+class _PageState extends State<VRChatMobile> {
   String theme = "light";
   String locale = "en";
 
@@ -29,7 +29,7 @@ class _PageState extends State<VRChatMobile> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     return getMaterialApp(
-      const VRChatMobileHome(),
+      const VRChatMobileHome(init: true),
       theme,
       Locale(locale, ''),
     );

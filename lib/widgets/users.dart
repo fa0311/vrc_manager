@@ -64,8 +64,12 @@ class Users {
       String locationA = userA.location;
       String locationB = userB.location;
       if (locationA == locationB) return 0;
-      if (["private", "offline", "traveling"].contains(locationA)) return 1;
-      if (["private", "offline", "traveling"].contains(locationB)) return -1;
+      if (locationA == "offline") return 1;
+      if (locationB == "offline") return -1;
+      if (locationA == "private") return 1;
+      if (locationB == "private") return -1;
+      if (locationA == "traveling") return 1;
+      if (locationB == "traveling") return -1;
       if (inLocation[locationA]!.count > inLocation[locationB]!.count) return -1;
       if (inLocation[locationA]!.count < inLocation[locationB]!.count) return 1;
       if (inLocation[locationA]!.id > inLocation[locationB]!.id) return -1;
@@ -201,7 +205,25 @@ class Users {
                     ),
                   ],
                 ),
-                if (worldDetails && locationMap[worldId] == null)
+                if (worldDetails && user.location == "private")
+                  Padding(
+                    padding: const EdgeInsets.only(top: 5),
+                    child: (privatesimpleWorld(context).child! as Container).child!,
+                  ),
+                if (worldDetails && user.location == "traveling")
+                  Padding(
+                    padding: const EdgeInsets.only(top: 5),
+                    child: (travelingWorld(context).child! as Container).child!,
+                  ),
+                if (worldDetails && user.location == "offline")
+                  Padding(
+                    padding: const EdgeInsets.only(top: 30),
+                    child: Text(
+                      AppLocalizations.of(context)!.onTheWebsite,
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                  ),
+                if (worldDetails && locationMap[worldId] == null && !["private", "offline", "traveling"].contains(user.location))
                   const Padding(
                     padding: EdgeInsets.only(top: 5),
                     child: SizedBox(
@@ -308,7 +330,25 @@ class Users {
                     ),
                   ],
                 ),
-                if (worldDetails && locationMap[worldId] == null)
+                if (worldDetails && user.location == "private")
+                  Padding(
+                    padding: const EdgeInsets.only(top: 5),
+                    child: (privatesimpleWorldHalf(context).child! as Container).child!,
+                  ),
+                if (worldDetails && user.location == "traveling")
+                  Padding(
+                    padding: const EdgeInsets.only(top: 5),
+                    child: (travelingWorldHalf(context).child! as Container).child!,
+                  ),
+                if (worldDetails && user.location == "offline")
+                  Padding(
+                    padding: const EdgeInsets.only(top: 20),
+                    child: Text(
+                      AppLocalizations.of(context)!.onTheWebsite,
+                      style: const TextStyle(fontSize: 12),
+                    ),
+                  ),
+                if (worldDetails && locationMap[worldId] == null && !["private", "offline", "traveling"].contains(user.location))
                   const Padding(
                     padding: EdgeInsets.only(top: 5),
                     child: SizedBox(

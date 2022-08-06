@@ -752,7 +752,7 @@ class VRChatFavorite {
   VRChatFavorite.fromJson(this.content) {
     favoriteId = content['favoriteId'];
     id = content['id'];
-    tags = content['tags'];
+    tags = content['tags'].cast<String>();
     type = content['type'];
   }
 }

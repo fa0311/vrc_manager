@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 // Project imports:
+import 'package:vrchat_mobile_client/assets/flutter/text_stream.dart';
 import 'package:vrchat_mobile_client/scenes/setting/accessibility.dart';
 import 'package:vrchat_mobile_client/scenes/setting/account.dart';
 import 'package:vrchat_mobile_client/scenes/setting/help.dart';
@@ -22,6 +23,7 @@ class VRChatMobileSettings extends StatefulWidget {
 class _SettingPageState extends State<VRChatMobileSettings> {
   @override
   Widget build(BuildContext context) {
+    textStream(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.setting),

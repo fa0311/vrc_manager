@@ -109,6 +109,7 @@
     "world": "World",
     "privateWorld": "Private World",
     "traveling": "traveling",
+    "onTheWebsite": "On the website",
     "occupants": "Number of users: {data}",
     "privateOccupants": "Number of private users: {data}",
     "favorites": "Favorites: {data}",

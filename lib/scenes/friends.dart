@@ -10,6 +10,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:vrchat_mobile_client/api/data_class.dart';
 import 'package:vrchat_mobile_client/api/main.dart';
 import 'package:vrchat_mobile_client/assets/error.dart';
+import 'package:vrchat_mobile_client/assets/flutter/text_stream.dart';
 import 'package:vrchat_mobile_client/assets/storage.dart';
 import 'package:vrchat_mobile_client/widgets/drawer.dart';
 import 'package:vrchat_mobile_client/widgets/share.dart';
@@ -94,7 +95,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
     if (widget.offline && sortMode == "friends_in_instance") sortMode = "default";
     delayedDisplay = (sortMode != "default");
     dataColumn.worldDetails = worldDetails;
-    if (!dataColumn.joinable) dataColumn.worldDetails = false;
+    if (widget.offline) dataColumn.worldDetails = false;
   }
 
   bool canMoreOver() {
@@ -328,6 +329,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
 
   @override
   Widget build(BuildContext context) {
+    textStream(context);
     dataColumn.context = context;
 
     return Scaffold(
@@ -404,27 +406,24 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
                         ),
                       if (!widget.offline)
                         SwitchListTile(
-                          value: dataColumn.worldDetails,
-                          title: Text(AppLocalizations.of(context)!.worldDetails),
-                          onChanged: dataColumn.joinable
-                              ? (bool e) => setStateBuilder(
-                                    () {
-                                      setStorage("friends_world_details", e ? "true" : "false");
-                                      worldDetails = e;
-                                      updateSwitch();
-                                      laterMoreOver();
-                                      if (dataColumn.instanceMap.isEmpty) {
-                                        getInstance(dataColumn.userList);
-                                      }
-                                      if (!canMoreOver()) {
-                                        setState(
-                                          () => body = dataColumn.render(children: dataColumn.reload()),
-                                        );
-                                      }
-                                    },
-                                  )
-                              : null,
-                        ),
+                            value: dataColumn.worldDetails,
+                            title: Text(AppLocalizations.of(context)!.worldDetails),
+                            onChanged: (bool e) => setStateBuilder(
+                                  () {
+                                    setStorage("friends_world_details", e ? "true" : "false");
+                                    worldDetails = e;
+                                    updateSwitch();
+                                    laterMoreOver();
+                                    if (dataColumn.instanceMap.isEmpty) {
+                                      getInstance(dataColumn.userList);
+                                    }
+                                    if (!canMoreOver()) {
+                                      setState(
+                                        () => body = dataColumn.render(children: dataColumn.reload()),
+                                      );
+                                    }
+                                  },
+                                )),
                       ListTile(
                         title: Text(AppLocalizations.of(context)!.openInBrowser),
                         onTap: () {
