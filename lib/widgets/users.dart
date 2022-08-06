@@ -216,11 +216,11 @@ class Users {
                     child: (travelingWorld(context).child! as Container).child!,
                   ),
                 if (worldDetails && user.location == "offline")
-                  const Padding(
-                    padding: EdgeInsets.only(top: 30),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 30),
                     child: Text(
-                      "On the Website",
-                      style: TextStyle(fontSize: 16),
+                      AppLocalizations.of(context)!.onTheWebsite,
+                      style: const TextStyle(fontSize: 16),
                     ),
                   ),
                 if (worldDetails && locationMap[worldId] == null && !["private", "offline", "traveling"].contains(user.location))
@@ -341,11 +341,11 @@ class Users {
                     child: (travelingWorldHalf(context).child! as Container).child!,
                   ),
                 if (worldDetails && user.location == "offline")
-                  const Padding(
-                    padding: EdgeInsets.only(top: 20),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 20),
                     child: Text(
-                      "On the Website",
-                      style: TextStyle(fontSize: 12),
+                      AppLocalizations.of(context)!.onTheWebsite,
+                      style: const TextStyle(fontSize: 12),
                     ),
                   ),
                 if (worldDetails && locationMap[worldId] == null && !["private", "offline", "traveling"].contains(user.location))
