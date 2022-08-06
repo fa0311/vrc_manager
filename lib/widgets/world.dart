@@ -527,8 +527,6 @@ Card travelingWorld(BuildContext context) {
   );
 }
 
-
-
 Card travelingWorldHalf(BuildContext context) {
   return Card(
     elevation: 20.0,
@@ -540,7 +538,7 @@ Card travelingWorldHalf(BuildContext context) {
             SizedBox(
               height: 50,
               child: CachedNetworkImage(
-                imageUrl: "https://assets.vrchat.com/www/images/default_between_image.png"",
+                imageUrl: "https://assets.vrchat.com/www/images/default_between_image.png",
                 fit: BoxFit.fitWidth,
                 progressIndicatorBuilder: (context, url, downloadProgress) => const SizedBox(
                   width: 50.0,
@@ -591,7 +589,6 @@ Card travelingWorldHalf(BuildContext context) {
     ),
   );
 }
-
 
 Column world(BuildContext context, VRChatWorld world) {
   return Column(children: <Widget>[
