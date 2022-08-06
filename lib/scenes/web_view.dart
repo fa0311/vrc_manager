@@ -1,4 +1,6 @@
 // Flutter imports:
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 // Package imports:
@@ -19,6 +21,35 @@ class VRChatMobileWebView extends StatefulWidget {
 }
 
 class _WebViewPageState extends State<VRChatMobileWebView> {
+  late bool openInExternalBrowser = false;
+  late WebViewController controllerGlobal;
+  late int timeStamp = 0;
+  late String url = widget.url;
+  late Widget body = WebView(
+    initialUrl: widget.url,
+    javascriptMode: JavascriptMode.unrestricted,
+    onWebViewCreated: (WebViewController webViewController) {
+      controllerGlobal = webViewController;
+    },
+    navigationDelegate: (NavigationRequest request) {
+      if (openInExternalBrowser && Uri.parse(url).host != "vrchat.com") {
+        openInBrowser(context, url);
+        return NavigationDecision.prevent;
+      } else {
+        setState(() => url = request.url);
+        return NavigationDecision.navigate;
+      }
+    },
+  );
+
+  _WebViewPageState() {
+    if (Platform.isAndroid || Platform.isIOS) {
+      getStorage("force_external_browser").then((response) async {
+        openInExternalBrowser = (response == "true");
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final cookieManager = CookieManager();
@@ -38,9 +69,6 @@ class _WebViewPageState extends State<VRChatMobileWebView> {
       },
     );
 
-    late WebViewController controllerGlobal;
-    late int timeStamp = 0;
-
     Future<bool> _exitApp(BuildContext contex) async {
       if (DateTime.now().millisecondsSinceEpoch - timeStamp < 200) {
         return true;
@@ -53,18 +81,13 @@ class _WebViewPageState extends State<VRChatMobileWebView> {
     }
 
     return WillPopScope(
-        onWillPop: () => _exitApp(context),
-        child: Scaffold(
-          appBar: AppBar(
-            actions: [simpleShare(context, widget.url)],
-          ),
-          body: WebView(
-            initialUrl: widget.url,
-            javascriptMode: JavascriptMode.unrestricted,
-            onWebViewCreated: (WebViewController webViewController) {
-              controllerGlobal = webViewController;
-            },
-          ),
-        ));
+      onWillPop: () => _exitApp(context),
+      child: Scaffold(
+        appBar: AppBar(
+          actions: [simpleShare(context, url)],
+        ),
+        body: body,
+      ),
+    );
   }
 }
