@@ -1,13 +1,14 @@
-// Flutter imports:
+// Dart imports:
 import 'dart:io';
 
+// Flutter imports:
 import 'package:flutter/material.dart';
-import 'package:vrchat_mobile_client/assets/flutter/text_stream.dart';
 
 // Package imports:
 import 'package:webview_flutter/webview_flutter.dart';
 
 // Project imports:
+import 'package:vrchat_mobile_client/assets/flutter/text_stream.dart';
 import 'package:vrchat_mobile_client/assets/session.dart';
 import 'package:vrchat_mobile_client/assets/storage.dart';
 import 'package:vrchat_mobile_client/widgets/share.dart';
