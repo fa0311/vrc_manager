@@ -95,6 +95,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
     if (widget.offline && sortMode == "friends_in_instance") sortMode = "default";
     delayedDisplay = (sortMode != "default");
     dataColumn.worldDetails = worldDetails;
+    if (widget.offline) dataColumn.worldDetails = false;
   }
 
   bool canMoreOver() {
