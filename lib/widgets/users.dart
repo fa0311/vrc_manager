@@ -201,7 +201,25 @@ class Users {
                     ),
                   ],
                 ),
-                if (worldDetails && locationMap[worldId] == null)
+                if (worldDetails && user.location == "private")
+                  Padding(
+                    padding: const EdgeInsets.only(top: 5),
+                    child: (privatesimpleWorld(context).child! as Container).child!,
+                  ),
+                if (worldDetails && user.location == "traveling")
+                  Padding(
+                    padding: const EdgeInsets.only(top: 5),
+                    child: (travelingWorld(context).child! as Container).child!,
+                  ),
+                if (worldDetails && user.location == "offline")
+                  const Padding(
+                    padding: EdgeInsets.only(top: 30),
+                    child: Text(
+                      "On the Website",
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ),
+                if (worldDetails && locationMap[worldId] == null && !["private", "offline", "traveling"].contains(user.location))
                   const Padding(
                     padding: EdgeInsets.only(top: 5),
                     child: SizedBox(
@@ -308,7 +326,25 @@ class Users {
                     ),
                   ],
                 ),
-                if (worldDetails && locationMap[worldId] == null)
+                if (worldDetails && user.location == "private")
+                  Padding(
+                    padding: const EdgeInsets.only(top: 5),
+                    child: (privatesimpleWorldHalf(context).child! as Container).child!,
+                  ),
+                if (worldDetails && user.location == "traveling")
+                  Padding(
+                    padding: const EdgeInsets.only(top: 5),
+                    child: (travelingWorldHalf(context).child! as Container).child!,
+                  ),
+                if (worldDetails && user.location == "offline")
+                  const Padding(
+                    padding: EdgeInsets.only(top: 20),
+                    child: Text(
+                      "On the Website",
+                      style: TextStyle(fontSize: 12),
+                    ),
+                  ),
+                if (worldDetails && locationMap[worldId] == null && !["private", "offline", "traveling"].contains(user.location))
                   const Padding(
                     padding: EdgeInsets.only(top: 5),
                     child: SizedBox(

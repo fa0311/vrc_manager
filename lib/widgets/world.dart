@@ -414,6 +414,69 @@ Card privatesimpleWorld(BuildContext context) {
   );
 }
 
+Card privatesimpleWorldHalf(BuildContext context) {
+  return Card(
+    elevation: 20.0,
+    child: Container(
+      padding: const EdgeInsets.all(10.0),
+      child: GestureDetector(
+        child: Row(
+          children: <Widget>[
+            SizedBox(
+              height: 50,
+              child: CachedNetworkImage(
+                imageUrl: "https://assets.vrchat.com/www/images/default_private_image.png",
+                fit: BoxFit.fitWidth,
+                progressIndicatorBuilder: (context, url, downloadProgress) => const SizedBox(
+                  width: 50.0,
+                  child: Padding(
+                    padding: EdgeInsets.all(30),
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
+                errorWidget: (context, url, error) => const SizedBox(
+                  width: 50.0,
+                  child: Icon(Icons.error),
+                ),
+              ),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: Column(
+                  children: <Widget>[
+                    const SizedBox(
+                        width: double.infinity,
+                        child: Text(
+                          "Private",
+                          style: TextStyle(
+                            fontSize: 12,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        )),
+                    SizedBox(
+                      width: double.infinity,
+                      child: Text(
+                        AppLocalizations.of(context)!.privateWorld,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          overflow: TextOverflow.ellipsis,
+                          fontSize: 12,
+                          height: 1,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    ),
+  );
+}
+
 Card travelingWorld(BuildContext context) {
   return Card(
     elevation: 20.0,
@@ -463,6 +526,72 @@ Card travelingWorld(BuildContext context) {
     ),
   );
 }
+
+
+
+Card travelingWorldHalf(BuildContext context) {
+  return Card(
+    elevation: 20.0,
+    child: Container(
+      padding: const EdgeInsets.all(10.0),
+      child: GestureDetector(
+        child: Row(
+          children: <Widget>[
+            SizedBox(
+              height: 50,
+              child: CachedNetworkImage(
+                imageUrl: "https://assets.vrchat.com/www/images/default_between_image.png"",
+                fit: BoxFit.fitWidth,
+                progressIndicatorBuilder: (context, url, downloadProgress) => const SizedBox(
+                  width: 50.0,
+                  child: Padding(
+                    padding: EdgeInsets.all(30),
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
+                errorWidget: (context, url, error) => const SizedBox(
+                  width: 50.0,
+                  child: Icon(Icons.error),
+                ),
+              ),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: Column(
+                  children: <Widget>[
+                    const SizedBox(
+                        width: double.infinity,
+                        child: Text(
+                          "Traveling",
+                          style: TextStyle(
+                            fontSize: 12,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        )),
+                    SizedBox(
+                      width: double.infinity,
+                      child: Text(
+                        AppLocalizations.of(context)!.traveling,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          overflow: TextOverflow.ellipsis,
+                          fontSize: 12,
+                          height: 1,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    ),
+  );
+}
+
 
 Column world(BuildContext context, VRChatWorld world) {
   return Column(children: <Widget>[
