@@ -10,6 +10,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:vrchat_mobile_client/api/data_class.dart';
 import 'package:vrchat_mobile_client/api/main.dart';
 import 'package:vrchat_mobile_client/assets/error.dart';
+import 'package:vrchat_mobile_client/assets/flutter/text_stream.dart';
 import 'package:vrchat_mobile_client/assets/storage.dart';
 import 'package:vrchat_mobile_client/widgets/drawer.dart';
 import 'package:vrchat_mobile_client/widgets/worlds_favorite.dart';
@@ -115,6 +116,7 @@ class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
 
   @override
   Widget build(BuildContext context) {
+    textStream(context);
     dataColumn.asMap().forEach((index, FavoriteWorlds data) {
       data.button = () => setState(() {
             body = data.render(children: data.reload());

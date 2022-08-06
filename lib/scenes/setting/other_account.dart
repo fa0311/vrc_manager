@@ -6,6 +6,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 // Project imports:
 import 'package:vrchat_mobile_client/assets/dialog.dart';
+import 'package:vrchat_mobile_client/assets/flutter/text_stream.dart';
 import 'package:vrchat_mobile_client/assets/storage.dart';
 import 'package:vrchat_mobile_client/scenes/home.dart';
 import 'package:vrchat_mobile_client/widgets/drawer.dart';
@@ -139,6 +140,7 @@ class _SettingOtherAccountPageState extends State<VRChatMobileSettingsOtherAccou
 
   @override
   Widget build(BuildContext context) {
+    textStream(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.accountSwitchSetting),

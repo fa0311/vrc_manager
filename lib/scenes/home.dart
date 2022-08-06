@@ -12,6 +12,7 @@ import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:vrchat_mobile_client/api/data_class.dart';
 import 'package:vrchat_mobile_client/api/main.dart';
 import 'package:vrchat_mobile_client/assets/error.dart';
+import 'package:vrchat_mobile_client/assets/flutter/text_stream.dart';
 import 'package:vrchat_mobile_client/assets/flutter/url_parser.dart';
 import 'package:vrchat_mobile_client/assets/storage.dart';
 import 'package:vrchat_mobile_client/scenes/json_viewer.dart';
@@ -22,8 +23,8 @@ import 'package:vrchat_mobile_client/widgets/share.dart';
 import 'package:vrchat_mobile_client/widgets/world.dart';
 
 class VRChatMobileHome extends StatefulWidget {
-  const VRChatMobileHome({Key? key}) : super(key: key);
-
+  final bool init;
+  const VRChatMobileHome({Key? key, this.init = false}) : super(key: key);
   @override
   State<VRChatMobileHome> createState() => _LoginHomeState();
 }
@@ -216,23 +217,17 @@ class _LoginHomeState extends State<VRChatMobileHome> {
                 },
               );
             }
+            if (widget.init && (Platform.isAndroid || Platform.isIOS)) {
+              ReceiveSharingIntent.getInitialText().then(
+                (String? value) {
+                  if (value == null) return;
+                  urlParser(context, value);
+                },
+              );
+            }
           }).catchError((status) {
             apiError(context, status);
           });
-
-          if (Platform.isAndroid || Platform.isIOS) {
-            ReceiveSharingIntent.getTextStream().listen(
-              (String value) {
-                urlParser(context, value);
-              },
-            );
-            ReceiveSharingIntent.getInitialText().then(
-              (String? value) {
-                if (value == null) return;
-                urlParser(context, value);
-              },
-            );
-          }
         }).catchError((status) {
           apiError(context, status);
         });
@@ -242,6 +237,7 @@ class _LoginHomeState extends State<VRChatMobileHome> {
 
   @override
   Widget build(BuildContext context) {
+    textStream(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.home),

@@ -8,6 +8,9 @@ import 'package:flutter/material.dart';
 import 'package:domain_verification_manager/domain_verification_manager.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+// Project imports:
+import 'package:vrchat_mobile_client/assets/flutter/text_stream.dart';
+
 class VRChatMobileSettingsPermissions extends StatefulWidget {
   const VRChatMobileSettingsPermissions({Key? key}) : super(key: key);
 
@@ -77,6 +80,7 @@ class _SettingPermissionsPageState extends State<VRChatMobileSettingsPermissions
 
   @override
   Widget build(BuildContext context) {
+    textStream(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.permissions),

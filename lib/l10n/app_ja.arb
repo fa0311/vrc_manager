@@ -109,6 +109,7 @@
     "world": "ワールド",
     "privateWorld": "プライベートワールド",
     "traveling": "移動中",
+    "onTheWebsite": "Webサイト上でオンライン",
     "occupants": "プレイヤー数: {data}",
     "privateOccupants": "プライベートのプレイヤー数: {data}",
     "favorites": "お気に入り: {data}",
