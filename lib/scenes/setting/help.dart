@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 // Package imports:
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:vrchat_mobile_client/assets/flutter/text_stream.dart';
 
 // Project imports:
 import 'package:vrchat_mobile_client/assets/licence.dart';
@@ -28,6 +29,7 @@ class _HelpPageState extends State<VRChatMobileHelp> {
 
   @override
   Widget build(BuildContext context) {
+    textStream(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.help),

@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 // Package imports:
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_json_viewer/flutter_json_viewer.dart';
+import 'package:vrchat_mobile_client/assets/flutter/text_stream.dart';
 
 // Project imports:
 import 'package:vrchat_mobile_client/widgets/share.dart';
@@ -22,6 +23,7 @@ class VRChatMobileJsonViewer extends StatefulWidget {
 class _JsonViewerPageState extends State<VRChatMobileJsonViewer> {
   @override
   Widget build(BuildContext context) {
+    textStream(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.jsonViewer),

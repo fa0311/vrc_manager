@@ -2,6 +2,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:vrchat_mobile_client/assets/flutter/text_stream.dart';
 
 // Package imports:
 import 'package:webview_flutter/webview_flutter.dart';
@@ -52,6 +53,7 @@ class _WebViewPageState extends State<VRChatMobileWebView> {
 
   @override
   Widget build(BuildContext context) {
+    textStream(context);
     final cookieManager = CookieManager();
 
     getLoginSession("login_session").then(

@@ -10,6 +10,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:vrchat_mobile_client/api/data_class.dart';
 import 'package:vrchat_mobile_client/api/main.dart';
 import 'package:vrchat_mobile_client/assets/error.dart';
+import 'package:vrchat_mobile_client/assets/flutter/text_stream.dart';
 import 'package:vrchat_mobile_client/assets/storage.dart';
 import 'package:vrchat_mobile_client/scenes/json_viewer.dart';
 import 'package:vrchat_mobile_client/widgets/drawer.dart';
@@ -183,6 +184,7 @@ class _UserHomeState extends State<VRChatMobileUser> {
 
   @override
   Widget build(BuildContext context) {
+    textStream(context);
     return Scaffold(
       appBar: AppBar(title: Text(AppLocalizations.of(context)!.user), actions: popupMenu),
       drawer: Navigator.of(context).canPop() ? null : drawer(context),
