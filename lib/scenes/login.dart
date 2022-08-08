@@ -12,8 +12,8 @@ import 'package:vrchat_mobile_client/api/data_class.dart';
 import 'package:vrchat_mobile_client/api/main.dart';
 import 'package:vrchat_mobile_client/assets/error.dart';
 import 'package:vrchat_mobile_client/assets/storage.dart';
-import 'package:vrchat_mobile_client/main.dart';
 import 'package:vrchat_mobile_client/scenes/home.dart';
+import 'package:vrchat_mobile_client/widgets/change_locale_dialog.dart';
 import 'package:vrchat_mobile_client/widgets/drawer.dart';
 import 'package:vrchat_mobile_client/widgets/share.dart';
 
@@ -152,30 +152,6 @@ class _LoginPageState extends State<VRChatMobileLogin> {
     );
   }
 
-  ListTile _changeLocaleDialogOption(BuildContext context, String title, String languageCode) {
-    return ListTile(
-      title: Text(title),
-      subtitle: Text(
-        AppLocalizations.of(context)!.translaterDetails(lookupAppLocalizations(
-          Locale(languageCode, ""),
-        ).contributor),
-      ),
-      onTap: () async {
-        setStorage("language_code", languageCode).then(
-          (_) {
-            Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(
-                builder: (BuildContext context) => const VRChatMobile(),
-              ),
-              (_) => false,
-            );
-          },
-        );
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -186,22 +162,7 @@ class _LoginPageState extends State<VRChatMobileLogin> {
             icon: const Icon(
               Icons.translate,
             ),
-            onPressed: () => showModalBottomSheet(
-              context: context,
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.vertical(
-                  top: Radius.circular(15),
-                ),
-              ),
-              builder: (BuildContext context) => SingleChildScrollView(
-                child: Column(
-                  children: <Widget>[
-                    _changeLocaleDialogOption(context, 'English', 'en'),
-                    _changeLocaleDialogOption(context, '日本語', 'ja'),
-                  ],
-                ),
-              ),
-            ),
+            onPressed: () => showLocaleModalBottomSheet(context),
           ),
         ],
       ),
