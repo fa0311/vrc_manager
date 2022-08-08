@@ -76,53 +76,56 @@ class _SettingOtherAccountPageState extends State<VRChatMobileSettingsOtherAccou
             child: Text(AppLocalizations.of(context)!.addAccount),
           )
         ];
+        List<Future> futureList = [];
         response.asMap().forEach(
           (_, String accountIndex) {
-            getLoginSession("displayname", accountIndex: accountIndex).then(
-              (accountName) => list.insert(
-                0,
-                Card(
-                  elevation: 20.0,
-                  child: Container(
-                    padding: const EdgeInsets.all(10.0),
-                    child: GestureDetector(
-                      onTap: () => setStorage("account_index", accountIndex).then(
-                        (_) => Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(
-                            builder: (BuildContext context) => const VRChatMobileHome(),
+            futureList.add(
+              getLoginSession("displayname", accountIndex: accountIndex).then(
+                (accountName) => list.insert(
+                  0,
+                  Card(
+                    elevation: 20.0,
+                    child: Container(
+                      padding: const EdgeInsets.all(10.0),
+                      child: GestureDetector(
+                        onTap: () => setStorage("account_index", accountIndex).then(
+                          (_) => Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                              builder: (BuildContext context) => const VRChatMobileHome(),
+                            ),
+                            (_) => false,
                           ),
-                          (_) => false,
                         ),
-                      ),
-                      behavior: HitTestBehavior.opaque,
-                      child: Row(
-                        children: <Widget>[
-                          Expanded(
-                            child: SizedBox(
-                              width: double.infinity,
-                              child: Text(
-                                accountName ?? AppLocalizations.of(context)!.unknown,
-                                style: const TextStyle(fontWeight: FontWeight.bold),
+                        behavior: HitTestBehavior.opaque,
+                        child: Row(
+                          children: <Widget>[
+                            Expanded(
+                              child: SizedBox(
+                                width: double.infinity,
+                                child: Text(
+                                  accountName ?? AppLocalizations.of(context)!.unknown,
+                                  style: const TextStyle(fontWeight: FontWeight.bold),
+                                ),
                               ),
                             ),
-                          ),
-                          SizedBox(
-                            width: 50,
-                            child: IconButton(
-                              onPressed: () => confirm(
-                                context,
-                                AppLocalizations.of(context)!.deleteLoginInfoConfirm,
-                                AppLocalizations.of(context)!.delete,
-                                () {
-                                  _onPressedRemoveAccount(context, accountIndex);
-                                  Navigator.pop(context);
-                                },
+                            SizedBox(
+                              width: 50,
+                              child: IconButton(
+                                onPressed: () => confirm(
+                                  context,
+                                  AppLocalizations.of(context)!.deleteLoginInfoConfirm,
+                                  AppLocalizations.of(context)!.delete,
+                                  () {
+                                    _onPressedRemoveAccount(context, accountIndex);
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                                icon: const Icon(Icons.delete),
                               ),
-                              icon: const Icon(Icons.delete),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -131,8 +134,10 @@ class _SettingOtherAccountPageState extends State<VRChatMobileSettingsOtherAccou
             );
           },
         );
-        setState(
-          () => column = Column(children: list),
+        Future.wait(futureList).then(
+          (value) => setState(
+            () => column = Column(children: list),
+          ),
         );
       },
     );
