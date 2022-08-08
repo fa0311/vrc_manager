@@ -11,6 +11,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:vrchat_mobile_client/assets/flutter/text_stream.dart';
 import 'package:vrchat_mobile_client/assets/storage.dart';
 import 'package:vrchat_mobile_client/main.dart';
+import 'package:vrchat_mobile_client/widgets/change_locale_dialog.dart';
 
 class VRChatMobileSettingsAccessibility extends StatefulWidget {
   const VRChatMobileSettingsAccessibility({Key? key}) : super(key: key);
@@ -38,30 +39,6 @@ class _SettingAccessibilityPageState extends State<VRChatMobileSettingsAccessibi
   _changeSwitchForceExternalBrowser(bool e) {
     setStorage("force_external_browser", e ? "true" : "false").then(
       (_) => setState(() => forceExternalBrowser = e),
-    );
-  }
-
-  ListTile _changeLocaleDialogOption(BuildContext context, String title, String languageCode) {
-    return ListTile(
-      title: Text(title),
-      subtitle: Text(
-        AppLocalizations.of(context)!.translaterDetails(lookupAppLocalizations(
-          Locale(languageCode, ""),
-        ).contributor),
-      ),
-      onTap: () async {
-        setStorage("language_code", languageCode).then(
-          (_) {
-            Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(
-                builder: (BuildContext context) => const VRChatMobile(),
-              ),
-              (_) => false,
-            );
-          },
-        );
-      },
     );
   }
 
@@ -99,22 +76,7 @@ class _SettingAccessibilityPageState extends State<VRChatMobileSettingsAccessibi
                   ListTile(
                     title: Text(AppLocalizations.of(context)!.language),
                     subtitle: Text(AppLocalizations.of(context)!.languageDetails),
-                    onTap: () => showModalBottomSheet(
-                      context: context,
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.vertical(
-                          top: Radius.circular(15),
-                        ),
-                      ),
-                      builder: (BuildContext context) => SingleChildScrollView(
-                        child: Column(
-                          children: <Widget>[
-                            _changeLocaleDialogOption(context, 'English', 'en'),
-                            _changeLocaleDialogOption(context, '日本語', 'ja'),
-                          ],
-                        ),
-                      ),
-                    ),
+                    onTap: () => showLocaleModalBottomSheet(context),
                   ),
                   const Divider(),
                   SwitchListTile(
