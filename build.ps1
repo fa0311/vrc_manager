@@ -1,2 +1,2 @@
-flutter pub run import_sorter:main
-flutter gen-l10n
+flutter build apk
+flutter build appbundle
