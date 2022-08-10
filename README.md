@@ -18,6 +18,8 @@ Flutter で作成されたシンプルな UI が特徴的です<br>
 ### Android
 
 [**play.google.com**](https://play.google.com/store/apps/details?id=com.yuki0311.vrchat_mobile_client)からダウンロード<br>
+[**appgallery.huawei.com**](https://appgallery.huawei.com/#/app/C106854219)からダウンロード<br>
+
 もしくは
 [**Releases**](https://github.com/fa0311/vrchat_mobile_client/releases)の**app-release.apk**をクリックしてダウンロード
 
@@ -30,7 +32,9 @@ Flutter で作成されたシンプルな UI が特徴的です<br>
 ### ブランチについて
 
 - **master** プロダクトリリース GooglePlay と同じ
+- **master-HMS** プロダクトリリース AppGallery と同じ
 - **pre** プレリリース 大きな機能追加もしくは GooglePlay の審査
+- **pre-HMS** プレリリース AppGallery の審査
 - **develop** 開発バージョン PullRequest はここへ
 
 ### 翻訳
@@ -47,6 +51,28 @@ flutter pub get
 
 ```
 flutter run
+```
+
+#### HMS
+
+```
+flutter run --no-sound-null-safety
+```
+
+`lib/init_hms.dart` が必要です
+
+```lib/init_hms.dart
+// ignore_for_file: import_of_legacy_library_into_null_safe
+
+// Package imports:
+import 'package:agconnect_core/agconnect_core.dart';
+
+Future<void> initAppGallery() async {
+  await AGCApp.instance.setClientId('client_id');
+  await AGCApp.instance.setClientSecret('client_secret');
+  await AGCApp.instance.setApiKey('api_key');
+}
+
 ```
 
 ## 免責事項
