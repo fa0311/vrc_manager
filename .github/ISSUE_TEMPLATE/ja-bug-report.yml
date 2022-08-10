@@ -34,9 +34,11 @@ body:
       label: アプリをダウンロードした場所
       multiple: true
       options:
-        - Github
+        - Github(GMS)
+        - Github(HMS)
         - Google Play Store
-        - その他
+        - AppGallery
+        - Other
 
   - type: dropdown
     id: reinstall
