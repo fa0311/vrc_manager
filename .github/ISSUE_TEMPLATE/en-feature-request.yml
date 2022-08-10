@@ -16,3 +16,22 @@ body:
       label: How is this feature useful to users?
     validations:
       required: true
+
+name: "[en] 💡 Request a feature"
+description: Please suggest features you would like to see in vrchat_mobile_client
+labels: ["enhancement"]
+body:
+
+  - type: textarea
+    id: feature-description
+    attributes:
+      label: Describe the feature
+    validations:
+      required: true
+
+  - type: textarea
+    id: feature-reasoning
+    attributes:
+      label: How is this feature useful to users?
+    validations:
+      required: true

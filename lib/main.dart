@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 // Project imports:
 import 'package:vrchat_mobile_client/assets/storage.dart';
+import 'package:vrchat_mobile_client/init_hms.dart';
 import 'package:vrchat_mobile_client/material.dart';
 import 'package:vrchat_mobile_client/scenes/home.dart';
 
@@ -24,6 +25,7 @@ class _PageState extends State<VRChatMobile> {
   _PageState() {
     getStorage("theme_brightness").then((response) => setState(() => theme = response ?? "light"));
     getStorage("language_code").then((response) => setState(() => locale = response ?? "en"));
+    initHMS();
   }
 
   @override
