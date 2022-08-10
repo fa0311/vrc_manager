@@ -1,2 +1,2 @@
-flutter pub run import_sorter:main
-flutter gen-l10n
+flutter build apk --no-sound-null-safety
+flutter build appbundle --no-sound-null-safety
