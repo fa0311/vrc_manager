@@ -34,8 +34,10 @@ body:
       label: Where you downloaded the app
       multiple: true
       options:
-        - Github
+        - Github(GMS)
+        - Github(HMS)
         - Google Play Store
+        - AppGallery
         - Other
 
   - type: dropdown
