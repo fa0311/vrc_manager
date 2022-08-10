@@ -8,7 +8,6 @@ import 'package:vrchat_mobile_client/material.dart';
 import 'package:vrchat_mobile_client/scenes/home.dart';
 
 main() {
-  initAppGallery();
   runApp(const VRChatMobile());
 }
 
@@ -26,6 +25,7 @@ class _PageState extends State<VRChatMobile> {
   _PageState() {
     getStorage("theme_brightness").then((response) => setState(() => theme = response ?? "light"));
     getStorage("language_code").then((response) => setState(() => locale = response ?? "en"));
+    initAppGallery();
   }
 
   @override
