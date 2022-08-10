@@ -67,7 +67,7 @@ flutter run --no-sound-null-safety
 // Package imports:
 import 'package:agconnect_core/agconnect_core.dart';
 
-Future<void> initAppGallery() async {
+Future<void> initHMS() async {
   await AGCApp.instance.setClientId('client_id');
   await AGCApp.instance.setClientSecret('client_secret');
   await AGCApp.instance.setApiKey('api_key');
