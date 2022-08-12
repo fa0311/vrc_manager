@@ -18,6 +18,15 @@ class VRChatError {
     message = content['error']['message'];
     statusCode = content['error']['status_code'];
   }
+  VRChatError.fromHtml(String this.content) {
+    Match match = RegExp(r'<head><title>([0-9]{3})\s?(.*?)</title></head>').firstMatch(content)!;
+    if (match.groupCount == 2) {
+      message = match.group(2)!;
+      statusCode = int.parse(match.group(1)!);
+    } else {
+      throw FormatException(message = "Could not decode html", content);
+    }
+  }
 }
 
 class VRChatLogin {
