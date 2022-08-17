@@ -9,6 +9,7 @@ import 'package:vrchat_mobile_client/assets/storage.dart';
 import 'package:vrchat_mobile_client/scenes/friend_request.dart';
 import 'package:vrchat_mobile_client/scenes/friends.dart';
 import 'package:vrchat_mobile_client/scenes/home.dart';
+import 'package:vrchat_mobile_client/scenes/search.dart';
 import 'package:vrchat_mobile_client/scenes/setting/other_account.dart';
 import 'package:vrchat_mobile_client/scenes/settings.dart';
 import 'package:vrchat_mobile_client/scenes/worlds_favorite.dart';
@@ -99,6 +100,17 @@ Drawer drawer(BuildContext context) {
                     ),
                     leading: const Icon(Icons.bedtime),
                     title: Text(AppLocalizations.of(context)!.offlinefriends),
+                  ),
+                  ListTile(
+                    onTap: () => Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                        builder: (BuildContext context) => const VRChatSearch(),
+                      ),
+                      (_) => false,
+                    ),
+                    leading: const Icon(Icons.search),
+                    title: Text(AppLocalizations.of(context)!.search),
                   ),
                   ListTile(
                     onTap: () => Navigator.pushAndRemoveUntil(
