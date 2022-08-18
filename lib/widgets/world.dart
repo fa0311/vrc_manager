@@ -57,6 +57,7 @@ Card simpleWorld(BuildContext context, VRChatLimitedWorld world) {
               child: Padding(
                 padding: const EdgeInsets.only(left: 10),
                 child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
                     SizedBox(
                       width: double.infinity,
@@ -66,6 +67,74 @@ Card simpleWorld(BuildContext context, VRChatLimitedWorld world) {
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
+}
+
+Card simpleWorldDescription(BuildContext context, VRChatWorld world) {
+  return Card(
+    elevation: 20.0,
+    child: Container(
+      padding: const EdgeInsets.all(10.0),
+      child: GestureDetector(
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id),
+              ));
+        },
+        behavior: HitTestBehavior.opaque,
+        child: Row(
+          children: <Widget>[
+            SizedBox(
+              height: 100,
+              child: CachedNetworkImage(
+                imageUrl: world.thumbnailImageUrl,
+                fit: BoxFit.fitWidth,
+                progressIndicatorBuilder: (context, url, downloadProgress) => const SizedBox(
+                  width: 100.0,
+                  child: Padding(
+                    padding: EdgeInsets.all(30),
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
+                errorWidget: (context, url, error) => const SizedBox(
+                  width: 100.0,
+                  child: Icon(Icons.error),
+                ),
+              ),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    SizedBox(
+                      width: double.infinity,
+                      child: Text(
+                        world.name,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    if (world.description != null)
+                      SizedBox(
+                        width: double.infinity,
+                        child: Text(
+                          world.description!,
+                          maxLines: 3,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
                   ],
                 ),
               ),

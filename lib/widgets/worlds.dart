@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 // Project imports:
 import 'package:vrchat_mobile_client/api/data_class.dart';
@@ -12,11 +13,115 @@ import 'package:vrchat_mobile_client/api/main.dart';
 import 'package:vrchat_mobile_client/assets/error.dart';
 import 'package:vrchat_mobile_client/assets/storage.dart';
 import 'package:vrchat_mobile_client/scenes/world.dart';
+import 'package:vrchat_mobile_client/widgets/world.dart';
+
+// Dart imports:
+
+// Flutter imports:
+
+
+
+class Worlds {
+  List<Widget> children = [];
+  late BuildContext context;
+  List<VRChatWorld> worldList = [];
+  String displayMode = "default";
+
+  List<Widget> reload() {
+    children = [];
+    List<VRChatWorld> tempworldList = worldList;
+    worldList = [];
+    for (VRChatWorld world in tempworldList) {
+      add(world);
+    }
+    return children;
+  }
+
+  List<Widget> add(VRChatWorld world) {
+    worldList.add(world);
+    if (displayMode == "default") defaultAdd(world);
+    return children;
+  }
+
+  defaultAdd(VRChatWorld world) {
+    children.add(simpleWorldDescription(context, world));
+  }
+
+  Widget render({required List<Widget> children}) {
+    if (children.isEmpty) return Column(children: <Widget>[Text(AppLocalizations.of(context)!.none)]);
+    double width = MediaQuery.of(context).size.width;
+    int height = 0;
+    int wrap = 0;
+    if (displayMode == "default") {
+      height = 120;
+      wrap = 600;
+    }
+
+    return GridView.count(
+      crossAxisCount: width ~/ wrap + 1,
+      crossAxisSpacing: 0,
+      mainAxisSpacing: 0,
+      childAspectRatio: width / (width ~/ wrap + 1) / height,
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      children: children,
+    );
+  }
+}
+
+class WorldsLimited {
+  List<Widget> children = [];
+  late BuildContext context;
+  List<VRChatLimitedWorld> worldList = [];
+  String displayMode = "default";
+
+  List<Widget> reload() {
+    children = [];
+    List<VRChatLimitedWorld> tempworldList = worldList;
+    worldList = [];
+    for (VRChatLimitedWorld world in tempworldList) {
+      add(world);
+    }
+    return children;
+  }
+
+  List<Widget> add(VRChatLimitedWorld world) {
+    worldList.add(world);
+    if (displayMode == "default") defaultAdd(world);
+    return children;
+  }
+
+  defaultAdd(VRChatLimitedWorld world) {
+    children.add(simpleWorld(context, world));
+  }
+
+  Widget render({required List<Widget> children}) {
+    if (children.isEmpty) return Column(children: <Widget>[Text(AppLocalizations.of(context)!.none)]);
+    double width = MediaQuery.of(context).size.width;
+    int height = 0;
+    int wrap = 0;
+    if (displayMode == "default") {
+      height = 120;
+      wrap = 600;
+    }
+
+    return GridView.count(
+      crossAxisCount: width ~/ wrap + 1,
+      crossAxisSpacing: 0,
+      mainAxisSpacing: 0,
+      childAspectRatio: width / (width ~/ wrap + 1) / height,
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      children: children,
+    );
+  }
+}
 
 class FavoriteWorlds {
   List<Widget> children = [];
   late BuildContext context;
   List<VRChatFavoriteWorld> worldList = [];
+  Map<String, String?> descriptionMap = {};
   String displayMode = "default";
   Function button = () {};
 
@@ -81,9 +186,22 @@ class FavoriteWorlds {
                           width: double.infinity,
                           child: Text(
                             world.name,
+                            overflow: TextOverflow.ellipsis,
                             style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
                         ),
+                        if (descriptionMap[world.id] != null)
+                          SizedBox(
+                            width: double.infinity,
+                            child: Text(
+                              descriptionMap[world.id]!,
+                              maxLines: 3,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                fontSize: 14,
+                              ),
+                            ),
+                          ),
                       ],
                     ),
                   ),
@@ -113,6 +231,7 @@ class FavoriteWorlds {
   }
 
   Widget render({required List<Widget> children}) {
+    if (children.isEmpty) return Column(children: <Widget>[Text(AppLocalizations.of(context)!.none)]);
     double width = MediaQuery.of(context).size.width;
     int height = 0;
     int wrap = 0;

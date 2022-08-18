@@ -63,8 +63,15 @@ String errorLog(Map log) {
 
 httpError(BuildContext context, HttpException error) {
   try {
-    dynamic message = json.decode(error.message);
-    VRChatError content = VRChatError.fromJson(message);
+    VRChatError content;
+    dynamic message;
+    if (error.message.startsWith('<html>')) {
+      content = VRChatError.fromHtml(error.message);
+      message = content.message;
+    } else {
+      message = json.decode(error.message);
+      content = VRChatError.fromJson(message);
+    }
     if (content.message == '"Missing Credentials"') {
       Navigator.pushAndRemoveUntil(
         context,

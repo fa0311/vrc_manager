@@ -34,9 +34,12 @@ body:
       label: アプリをダウンロードした場所
       multiple: true
       options:
-        - Github
+        - Github(GMS)
+        - Github(HMS)
+        - Github(Windows)
         - Google Play Store
-        - その他
+        - AppGallery
+        - Other
 
   - type: dropdown
     id: reinstall
@@ -62,8 +65,8 @@ body:
       description: バグを発生させるための詳細な手順を記述してください。
       placeholder: |
         例:
-          1. アプリのデータを全て削除した状態で起動します
-          2. ログインします
+          1. 「オンラインのフレンド」を開きます
+          2. 表示設定を「デフォルト」から「シンプル」に変更します
           3. ...
           ...
     validations:

@@ -16,22 +16,3 @@ body:
       label: この機能はユーザーにとってどのように役に立つのでしょうか？
     validations:
       required: true
-
-name: "[ja] 💡 機能を提案する"
-description: vrchat_mobile_clientに欲しい機能を提案して下さい
-labels: ["enhancement"]
-body:
-
-  - type: textarea
-    id: feature-description
-    attributes:
-      label: 機能を説明する
-    validations:
-      required: true
-
-  - type: textarea
-    id: feature-reasoning
-    attributes:
-      label: この機能はユーザーにとってどのように役に立つのでしょうか？
-    validations:
-      required: true
