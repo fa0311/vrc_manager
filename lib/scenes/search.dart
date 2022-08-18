@@ -134,7 +134,7 @@ class _SearchState extends State<VRChatSearch> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.setting),
+        title: Text(AppLocalizations.of(context)!.search),
       ),
       drawer: drawer(context),
       body: SafeArea(
