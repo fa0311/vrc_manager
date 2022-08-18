@@ -84,20 +84,19 @@ class _SearchState extends State<VRChatSearch> {
     searchBoxFocusNode.unfocus();
     if (searchMode == "worlds") {
       return VRChatAPI(cookie: cookie ?? "").searchWorlds(text, offset: offset - 12).then((VRChatLimitedWorldList worlds) {
-        if (worlds.world.isEmpty) {
-          setState(() => body = Column(
-                children: <Widget>[
-                  Text(AppLocalizations.of(context)!.none),
-                ],
-              ));
-        } else {
-          for (VRChatLimitedWorld world in worlds.world) {
+        List<Future> futureList = [];
+        for (VRChatLimitedWorld world in worlds.world) {
+          futureList.add(VRChatAPI(cookie: cookie ?? "").worlds(world.id).then((VRChatWorld world) {
             dataColumnWorlds.add(world);
-          }
+          }).catchError((status) {
+            apiError(context, status);
+          }));
+        }
+        Future.wait(futureList).then((value) {
           setState(
             () => body = dataColumnWorlds.render(children: dataColumnWorlds.reload()),
           );
-        }
+        });
       }).catchError((status) {
         apiError(context, status);
       });

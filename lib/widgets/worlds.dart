@@ -13,6 +13,54 @@ import 'package:vrchat_mobile_client/widgets/world.dart';
 class Worlds {
   List<Widget> children = [];
   late BuildContext context;
+  List<VRChatWorld> worldList = [];
+  String displayMode = "default";
+
+  List<Widget> reload() {
+    children = [];
+    List<VRChatWorld> tempworldList = worldList;
+    worldList = [];
+    for (VRChatWorld world in tempworldList) {
+      add(world);
+    }
+    return children;
+  }
+
+  List<Widget> add(VRChatWorld world) {
+    worldList.add(world);
+    if (displayMode == "default") defaultAdd(world);
+    return children;
+  }
+
+  defaultAdd(VRChatWorld world) {
+    children.add(simpleWorldDescription(context, world));
+  }
+
+  Widget render({required List<Widget> children}) {
+    if (children.isEmpty) return Column(children: <Widget>[Text(AppLocalizations.of(context)!.none)]);
+    double width = MediaQuery.of(context).size.width;
+    int height = 0;
+    int wrap = 0;
+    if (displayMode == "default") {
+      height = 120;
+      wrap = 600;
+    }
+
+    return GridView.count(
+      crossAxisCount: width ~/ wrap + 1,
+      crossAxisSpacing: 0,
+      mainAxisSpacing: 0,
+      childAspectRatio: width / (width ~/ wrap + 1) / height,
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      children: children,
+    );
+  }
+}
+
+class WorldsLimited {
+  List<Widget> children = [];
+  late BuildContext context;
   List<VRChatLimitedWorld> worldList = [];
   String displayMode = "default";
 
