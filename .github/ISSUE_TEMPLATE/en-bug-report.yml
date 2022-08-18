@@ -36,6 +36,7 @@ body:
       options:
         - Github(GMS)
         - Github(HMS)
+        - Github(Windows)
         - Google Play Store
         - AppGallery
         - Other
@@ -64,8 +65,8 @@ body:
       description: Provide detailed intructions to trigger the bug.
       placeholder: |
         Example:
-          1. Start with all application data deleted.
-          2. Login and open Home
+          1. Open "Online Friends"
+          2. Change the display setting from "Default" to "Simple"
           3. ...
           ...
     validations:
