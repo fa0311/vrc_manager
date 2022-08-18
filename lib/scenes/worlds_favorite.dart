@@ -13,7 +13,7 @@ import 'package:vrchat_mobile_client/assets/error.dart';
 import 'package:vrchat_mobile_client/assets/flutter/text_stream.dart';
 import 'package:vrchat_mobile_client/assets/storage.dart';
 import 'package:vrchat_mobile_client/widgets/drawer.dart';
-import 'package:vrchat_mobile_client/widgets/worlds_favorite.dart';
+import 'package:vrchat_mobile_client/widgets/worlds.dart';
 
 class VRChatMobileWorldsFavorite extends StatefulWidget {
   final bool offline;
@@ -30,35 +30,21 @@ class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
 
   List<Widget> bodyList = [];
   List<VRChatFavoriteGroup> favoriteList = [];
-
-  Widget body = Column(
-    children: const [
-      Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()),
-    ],
-  );
+  String? cookie;
 
   _WorldsFavoriteState() {
     getLoginSession("login_session").then(
-      (cookie) {
-        VRChatAPI(cookie: cookie ?? "").favoriteGroups("world", offset: 0).then((
+      (String? response) {
+        VRChatAPI(cookie: cookie = response ?? "").favoriteGroups("world", offset: 0).then((
           VRChatFavoriteGroupList response,
         ) {
-          if (response.group.isEmpty) {
-            setState(() => body = Column(
-                  children: <Widget>[
-                    Text(AppLocalizations.of(context)!.none),
-                  ],
-                ));
-          } else {
-            final List<Widget> children = [];
-            for (VRChatFavoriteGroup list in response.group) {
-              children.add(Column(
-                children: <Widget>[
-                  Text(list.displayName),
-                ],
-              ));
-            }
-            body = Column(children: children);
+          final List<Widget> children = [];
+          for (VRChatFavoriteGroup list in response.group) {
+            children.add(Column(
+              children: <Widget>[
+                Text(list.displayName),
+              ],
+            ));
           }
           response.group.asMap().forEach((index, VRChatFavoriteGroup list) {
             offset.add(0);
@@ -79,49 +65,59 @@ class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
   }
 
   moreOver(int index) {
-    getLoginSession("login_session").then(
-      (cookie) {
-        offset[index] += 50;
-        VRChatAPI(cookie: cookie ?? "").favoritesWorlds(favoriteList[index].name, offset: offset[index] - 50).then((VRChatFavoriteWorldList worlds) {
-          for (VRChatFavoriteWorld world in worlds.world) {
-            dataColumn[index].add(world);
-          }
-
-          setState(() => reload(index));
-        }).catchError((status) {
-          apiError(context, status);
-        });
-      },
-    );
+    offset[index] += 50;
+    VRChatAPI(cookie: cookie ?? "").favoritesWorlds(favoriteList[index].name, offset: offset[index] - 50).then((VRChatFavoriteWorldList worlds) {
+      List<Future> futureList = [];
+      for (VRChatFavoriteWorld world in worlds.world) {
+        dataColumn[index].add(world);
+        futureList.add(
+          VRChatAPI(cookie: cookie ?? "").worlds(world.id).then((VRChatWorld world) {
+            dataColumn[index].descriptionMap[world.id] = world.description;
+          }).catchError((status) {
+            apiError(context, status);
+          }),
+        );
+      }
+      Future.wait(futureList).then((value) {
+        setState(
+          () => reload(index),
+        );
+      });
+    }).catchError((status) {
+      apiError(context, status);
+    });
   }
 
   reload(int index) {
-    bodyList[index] = Column(children: [
-      Text(favoriteList[index].displayName),
-      dataColumn[index].render(children: dataColumn[index].children),
-      if (canMoreOver(index))
-        SizedBox(
-          width: MediaQuery.of(context).size.width,
-          child: Column(
-            children: <Widget>[
-              ElevatedButton(
-                child: Text(AppLocalizations.of(context)!.readMore),
-                onPressed: () => moreOver(index),
+    setState(
+      () => bodyList[index] = Column(
+        children: [
+          Text(favoriteList[index].displayName),
+          dataColumn[index].render(children: dataColumn[index].reload()),
+          if (canMoreOver(index))
+            SizedBox(
+              width: MediaQuery.of(context).size.width,
+              child: Column(
+                children: <Widget>[
+                  ElevatedButton(
+                    child: Text(AppLocalizations.of(context)!.readMore),
+                    onPressed: () => moreOver(index),
+                  ),
+                ],
               ),
-            ],
-          ),
-        )
-    ]);
+            )
+        ],
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     textStream(context);
     dataColumn.asMap().forEach((index, FavoriteWorlds data) {
-      data.button = () => setState(() {
-            body = data.render(children: data.reload());
-            setState(() => reload(index));
-          });
+      data.button = () {
+        reload(index);
+      };
     });
 
     return Scaffold(

@@ -30,7 +30,7 @@ class _SearchState extends State<VRChatSearch> {
   int offset = 0;
   String? cookie;
   Worlds dataColumnWorlds = Worlds();
-  Users dataColumnUsers = Users();
+  Users dataColumnUsers = Users()..displayMode = "default_description";
   Widget body = Column(
     children: const [],
   );
@@ -104,17 +104,21 @@ class _SearchState extends State<VRChatSearch> {
       return VRChatAPI(cookie: cookie ?? "").searchUsers(text, offset: offset - 12).then((VRChatUserLimitedList users) {
         List<Future> futureList = [];
         for (VRChatUserLimited user in users.users) {
-          futureList.add(VRChatAPI(cookie: cookie ?? "").users(user.id).then((VRChatUser user) {
-            dataColumnUsers.userList.add(user);
-          }).catchError((status) {
-            apiError(context, status);
-          }));
+          futureList.add(
+            VRChatAPI(cookie: cookie ?? "").users(user.id).then((VRChatUser user) {
+              dataColumnUsers.userList.add(user);
+            }).catchError((status) {
+              apiError(context, status);
+            }),
+          );
         }
         Future.wait(futureList).then((value) {
           setState(
             () => body = dataColumnUsers.render(children: dataColumnUsers.reload()),
           );
         });
+      }).catchError((status) {
+        apiError(context, status);
       });
     }
     throw Exception();
@@ -158,7 +162,7 @@ class _SearchState extends State<VRChatSearch> {
                           );
                           offset = 0;
                           dataColumnWorlds = Worlds();
-                          dataColumnUsers = Users();
+                          dataColumnUsers = Users()..displayMode = "default_description";
                           moreOver(searchBoxController.text, searchMode);
                         },
                       ),
