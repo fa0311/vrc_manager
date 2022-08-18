@@ -28,7 +28,10 @@ class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
   List<int> offset = [];
   List<FavoriteWorlds> dataColumn = [];
 
-  List<Widget> bodyList = [];
+  List<Widget> bodyList = const [
+    Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()),
+  ];
+
   List<VRChatFavoriteGroup> favoriteList = [];
   String? cookie;
 
@@ -38,6 +41,11 @@ class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
         VRChatAPI(cookie: cookie = response ?? "").favoriteGroups("world", offset: 0).then((
           VRChatFavoriteGroupList response,
         ) {
+          if (response.group.isEmpty) {
+            setState(
+              () => bodyList = [Text(AppLocalizations.of(context)!.none)],
+            );
+          }
           final List<Widget> children = [];
           for (VRChatFavoriteGroup list in response.group) {
             children.add(Column(
@@ -46,9 +54,10 @@ class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
               ],
             ));
           }
+          bodyList = [];
           response.group.asMap().forEach((index, VRChatFavoriteGroup list) {
             offset.add(0);
-            bodyList.add(Column());
+            bodyList.add(Column(children: const [Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator())]));
             dataColumn.add(FavoriteWorlds()..context = context);
             favoriteList.add(list);
             moreOver(index);

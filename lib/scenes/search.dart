@@ -79,11 +79,11 @@ class _SearchState extends State<VRChatSearch> {
 
   Future<void> moreOver(String text, String searchMode) {
     setState(() {
-      offset += 12;
+      offset += 50;
     });
     searchBoxFocusNode.unfocus();
     if (searchMode == "worlds") {
-      return VRChatAPI(cookie: cookie ?? "").searchWorlds(text, offset: offset - 12).then((VRChatLimitedWorldList worlds) {
+      return VRChatAPI(cookie: cookie ?? "").searchWorlds(text, offset: offset - 50).then((VRChatLimitedWorldList worlds) {
         List<Future> futureList = [];
         for (VRChatLimitedWorld world in worlds.world) {
           futureList.add(VRChatAPI(cookie: cookie ?? "").worlds(world.id).then((VRChatWorld world) {

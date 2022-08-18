@@ -173,7 +173,7 @@ class VRChatAPI {
       "fuzzy": fuzzy.toString(),
       "search": search,
       "offset": offset.toString(),
-      "n": "12",
+      "n": "50",
     }..addAll(
         apiKey(),
       );
@@ -193,7 +193,7 @@ class VRChatAPI {
       "fuzzy": fuzzy.toString(),
       "search": search,
       "offset": offset.toString(),
-      "n": "12",
+      "n": "50",
     }..addAll(
         apiKey(),
       );
