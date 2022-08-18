@@ -473,7 +473,7 @@ class VRChatWorld {
     authorName = content['authorName'];
     capacity = content['capacity'];
     createdAt = DateTime.parse(content['created_at']);
-    description = content['description'] == "" ? null : content['previewYoutubeId'];
+    description = content['description'] == "" ? null : content['description'];
     favorites = content['favorites'] ?? 0;
     featured = content['featured'] ?? false;
     heat = content['heat'];
