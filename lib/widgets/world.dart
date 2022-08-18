@@ -57,6 +57,7 @@ Card simpleWorld(BuildContext context, VRChatLimitedWorld world) {
               child: Padding(
                 padding: const EdgeInsets.only(left: 10),
                 child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
                     SizedBox(
                       width: double.infinity,
