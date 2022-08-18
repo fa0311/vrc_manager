@@ -165,6 +165,48 @@ class VRChatAPI {
         .then((value) => VRChatStatus.fromJson(value));
   }
 
+  // Search
+
+  Future<VRChatUserLimitedList> searchUsers(String search, {int offset = 0, String sort = "relevance", bool fuzzy = false}) {
+    final param = {
+      "sort": sort,
+      "fuzzy": fuzzy.toString(),
+      "search": search,
+      "offset": offset.toString(),
+      "n": "12",
+    }..addAll(
+        apiKey(),
+      );
+    return vrchatSession
+        .get(
+          endpoint(
+            'api/1/users',
+            param,
+          ),
+        )
+        .then((value) => VRChatUserLimitedList.fromJson(value));
+  }
+
+  Future<VRChatLimitedWorldList> searchWorlds(String search, {int offset = 0, String sort = "relevance", bool fuzzy = false}) {
+    final param = {
+      "sort": sort,
+      "fuzzy": fuzzy.toString(),
+      "search": search,
+      "offset": offset.toString(),
+      "n": "12",
+    }..addAll(
+        apiKey(),
+      );
+    return vrchatSession
+        .get(
+          endpoint(
+            'api/1/worlds',
+            param,
+          ),
+        )
+        .then((value) => VRChatLimitedWorldList.fromJson(value));
+  }
+
   // Favorite
 
   Future<VRChatFavoriteGroupList> favoriteGroups(String type, {int offset = 0}) {
