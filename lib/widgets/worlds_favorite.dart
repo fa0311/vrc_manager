@@ -3,6 +3,8 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 // Package imports:
 import 'package:cached_network_image/cached_network_image.dart';
 
@@ -113,6 +115,7 @@ class FavoriteWorlds {
   }
 
   Widget render({required List<Widget> children}) {
+    if (children.isEmpty) return Column(children: <Widget>[Text(AppLocalizations.of(context)!.none)]);
     double width = MediaQuery.of(context).size.width;
     int height = 0;
     int wrap = 0;
