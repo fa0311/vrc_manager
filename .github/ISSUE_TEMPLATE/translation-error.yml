@@ -4,9 +4,9 @@ labels: ["bug"]
 body:
 
   - type: dropdown
-    id: locale
+    id: language
     attributes:
-      label: Locale
+      label: Language
       options:
       - English
       - 日本語
@@ -20,7 +20,7 @@ body:
       required: true
 
   - type: dropdown
-    id: locale
+    id: locale-native-speaker
     attributes:
       label: Are you a native speaker of the language?
       options:
@@ -43,7 +43,7 @@ body:
 
 
   - type: input
-    id: display-location
+    id: incorrect-translation
     attributes:
       label: Incorrect translation
       description:  Please enter the incorrect translation.
@@ -52,7 +52,7 @@ body:
       required: true
 
   - type: input
-    id: display-location
+    id: correct-translation
     attributes:
       label: Correct translation
       description: Please enter the correct translation.
