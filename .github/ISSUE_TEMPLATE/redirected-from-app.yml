@@ -1,5 +1,5 @@
 name: "📓 Redirected from app"
-description: Report a bug in vrchat_mobile_client.
+description: Report error message in vrchat_mobile_client.
 labels: ["bug"]
 body:
 
@@ -21,13 +21,16 @@ body:
     id: download-location
     attributes:
       label: Where you downloaded the app
-      multiple: true
       options:
         - Github(GMS)
         - Github(HMS)
+        - Github(Windows)
         - Google Play Store
-        - AppGallery
+        - HUAWEI AppGallery
+        - Xiaomi GetApps
         - Other
+    validations:
+      required: true
 
   - type: textarea
     id: error-message
