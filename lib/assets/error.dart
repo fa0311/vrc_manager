@@ -15,6 +15,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 
 // Project imports:
 import 'package:vrchat_mobile_client/api/data_class.dart';
+import 'package:vrchat_mobile_client/assets/storage.dart';
 import 'package:vrchat_mobile_client/scenes/login.dart';
 import 'package:vrchat_mobile_client/widgets/share.dart';
 
@@ -23,37 +24,53 @@ void errorDialog(BuildContext context, String text, {String log = ""}) {
     text += "\n${AppLocalizations.of(context)!.reportMessage1}\n${AppLocalizations.of(context)!.reportMessage2}";
   }
   if (kDebugMode) {
-    print(json.decode(log));
+    print(errorLog(json.decode(log)));
   }
-  showDialog(
-    context: context,
-    builder: (_) {
-      return AlertDialog(
-        title: Text(AppLocalizations.of(context)!.errorDialog),
-        content: Text(text),
-        actions: [
-          if (log.isNotEmpty)
-            TextButton(
-                child: Text(AppLocalizations.of(context)!.report),
-                onPressed: () {
-                  ClipboardData data = ClipboardData(text: log);
-                  Clipboard.setData(data).then(
-                    (_) {
-                      if (Platform.isAndroid || Platform.isIOS) {
-                        Fluttertoast.showToast(msg: AppLocalizations.of(context)!.copied);
-                      }
-                      openInBrowser(context, "https://github.com/fa0311/vrchat_mobile_client/issues/new/choose");
-                    },
-                  );
-                }),
-          TextButton(
-            child: Text(AppLocalizations.of(context)!.ok),
-            onPressed: () => Navigator.pop(context),
-          ),
-        ],
+  getStorage("dont_show_error_dialog").then((sontShowErrorDialog) {
+    if (sontShowErrorDialog != "true" && log.isNotEmpty) {
+      showDialog(
+        context: context,
+        builder: (_) {
+          return AlertDialog(
+            title: Text(AppLocalizations.of(context)!.errorDialog),
+            content: Text(text),
+            actions: [
+              if (log.isNotEmpty)
+                TextButton(
+                  child: Text(
+                    AppLocalizations.of(context)!.dontShowAgain,
+                  ),
+                  onPressed: () {
+                    setStorage("dont_show_error_dialog", "true").then(
+                      (_) => Navigator.of(context).popUntil((Route route) => route.isFirst),
+                    );
+                  },
+                ),
+              if (log.isNotEmpty)
+                TextButton(
+                  child: Text(AppLocalizations.of(context)!.report),
+                  onPressed: () {
+                    ClipboardData data = ClipboardData(text: log);
+                    Clipboard.setData(data).then(
+                      (_) {
+                        if (Platform.isAndroid || Platform.isIOS) {
+                          Fluttertoast.showToast(msg: AppLocalizations.of(context)!.copied);
+                        }
+                        openInBrowser(context, "https://github.com/fa0311/vrchat_mobile_client/issues/new/choose");
+                      },
+                    );
+                  },
+                ),
+              TextButton(
+                child: Text(AppLocalizations.of(context)!.ok),
+                onPressed: () => Navigator.pop(context),
+              ),
+            ],
+          );
+        },
       );
-    },
-  );
+    }
+  });
 }
 
 String errorLog(Map log) {
@@ -63,8 +80,15 @@ String errorLog(Map log) {
 
 httpError(BuildContext context, HttpException error) {
   try {
-    dynamic message = json.decode(error.message);
-    VRChatError content = VRChatError.fromJson(message);
+    VRChatError content;
+    dynamic message;
+    if (error.message.startsWith('<html>')) {
+      content = VRChatError.fromHtml(error.message);
+      message = content.message;
+    } else {
+      message = json.decode(error.message);
+      content = VRChatError.fromJson(message);
+    }
     if (content.message == '"Missing Credentials"') {
       Navigator.pushAndRemoveUntil(
         context,
@@ -81,13 +105,19 @@ httpError(BuildContext context, HttpException error) {
       PackageInfo.fromPlatform().then((PackageInfo packageInfo) {
         DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
         deviceInfoPlugin.deviceInfo.then((BaseDeviceInfo deviceInfo) {
-          Map<String, dynamic> logs = {
-            "exceptionType": error.toString(),
-            "version": packageInfo.version,
-            "deviceInfo": deviceInfo.toMap(),
-            "error": error.toString(),
-            "message": message
-          };
+          Map<String, dynamic> logs = kDebugMode
+              ? {
+                  "exceptionType": error.toString(),
+                  "error": error.toString(),
+                  "message": message,
+                }
+              : {
+                  "exceptionType": error.toString(),
+                  "version": packageInfo.version,
+                  "deviceInfo": deviceInfo.toMap(),
+                  "error": error.toString(),
+                  "message": message,
+                };
           errorDialog(context, content.message, log: errorLog(logs));
         });
       });
@@ -102,12 +132,17 @@ standardError(BuildContext context, dynamic error) {
   PackageInfo.fromPlatform().then((PackageInfo packageInfo) {
     DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
     deviceInfoPlugin.deviceInfo.then((BaseDeviceInfo deviceInfo) {
-      Map<String, dynamic> logs = {
-        "exceptionType": error.toString(),
-        "version": packageInfo.version,
-        "deviceInfo": deviceInfo.toMap(),
-        "error": error.toString(),
-      };
+      Map<String, dynamic> logs = kDebugMode
+          ? {
+              "exceptionType": error.toString(),
+              "error": error.toString(),
+            }
+          : {
+              "exceptionType": error.toString(),
+              "version": packageInfo.version,
+              "deviceInfo": deviceInfo.toMap(),
+              "error": error.toString(),
+            };
       if (error is TypeError) {
         logs.addAll({
           "stackTrace": (error.stackTrace ?? "").toString().split("\n"),

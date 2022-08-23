@@ -11,7 +11,7 @@ Flutter で作成されたシンプルな UI が特徴的です<br>
 - **完全無料**
 - **オープンソース**
 
-<img width="20%" src="docs/img/screenshots1.jpg"><img width="20%" src="docs/img/screenshots2.jpg"><img width="20%" src="docs/img/screenshots3.jpg"><img width="20%" src="docs/img/screenshots4.jpg"><img width="20%" src="docs/img/screenshots5.jpg">
+<img width="20%" src="docs/img/screenshots1.png"><img width="20%" src="docs/img/screenshots2.png"><img width="20%" src="docs/img/screenshots3.png"><img width="20%" src="docs/img/screenshots4.png"><img width="20%" src="docs/img/screenshots5.png">
 
 ## インストール
 
@@ -72,7 +72,6 @@ Future<void> initHMS() async {
   await AGCApp.instance.setClientSecret('client_secret');
   await AGCApp.instance.setApiKey('api_key');
 }
-
 ```
 
 ## 免責事項

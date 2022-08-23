@@ -114,6 +114,7 @@ class Users {
     if (displayMode == "default") defaultAdd(user);
     if (displayMode == "simple") simpleAdd(user);
     if (displayMode == "text_only") textOnlyAdd(user);
+    if (displayMode == "default_description") defaultDescriptionAdd(user);
     return children;
   }
 
@@ -242,6 +243,93 @@ class Users {
                     padding: const EdgeInsets.only(top: 5),
                     child: (simpleWorldPlus(context, locationMap[worldId]!, instanceMap[user.location]!).child! as Container).child!,
                   ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  defaultDescriptionAdd(VRChatUser user) {
+    children.add(
+      Card(
+        elevation: 20.0,
+        child: Container(
+          padding: const EdgeInsets.all(10.0),
+          child: GestureDetector(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => VRChatMobileUser(userId: user.id),
+                  ));
+            },
+            behavior: HitTestBehavior.opaque,
+            child: Column(
+              children: [
+                Row(
+                  children: <Widget>[
+                    SizedBox(
+                      height: 100,
+                      child: CachedNetworkImage(
+                        imageUrl: user.profilePicOverride ?? user.currentAvatarThumbnailImageUrl,
+                        fit: BoxFit.fitWidth,
+                        progressIndicatorBuilder: (context, url, downloadProgress) => const SizedBox(
+                          width: 100,
+                          child: Padding(
+                            padding: EdgeInsets.all(30),
+                            child: CircularProgressIndicator(),
+                          ),
+                        ),
+                        errorWidget: (context, url, error) => const SizedBox(
+                          width: 100,
+                          child: Icon(Icons.error),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              status(user.status, diameter: 20),
+                              Container(
+                                width: 5,
+                              ),
+                              Text(
+                                user.displayName,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
+                                ),
+                              ),
+                            ],
+                          ),
+                          if (user.statusDescription != null)
+                            Text(
+                              user.statusDescription!,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                fontSize: 14,
+                              ),
+                            ),
+                          if (user.bio != null)
+                            Text(
+                              user.bio!,
+                              maxLines: 3,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                fontSize: 14,
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ],
             ),
           ),
@@ -508,6 +596,10 @@ class Users {
     if (displayMode == "text_only") {
       height = worldDetails ? 57 : 41;
       wrap = 400;
+    }
+    if (displayMode == "default_description") {
+      height = worldDetails ? 233 : 130;
+      wrap = 600;
     }
 
     return GridView.count(

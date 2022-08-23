@@ -253,20 +253,19 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
                     });
                   }),
                 ),
-              if (!widget.offline)
-                SwitchListTile(
-                  value: dataColumn.descending && sortMode != "default",
-                  title: Text(AppLocalizations.of(context)!.descending),
-                  onChanged: sortMode == "default"
-                      ? null
-                      : (bool e) => setStateBuilder(() {
-                            dataColumn.descending = e;
-                            setStorage("friends_descending", e ? "true" : "false");
-                            updateSwitch();
-                            laterMoreOver();
-                            setStateBuilderParent(() => sort());
-                          }),
-                ),
+              SwitchListTile(
+                value: dataColumn.descending && sortMode != "default",
+                title: Text(AppLocalizations.of(context)!.descending),
+                onChanged: sortMode == "default"
+                    ? null
+                    : (bool e) => setStateBuilder(() {
+                          dataColumn.descending = e;
+                          setStorage("friends_descending", e ? "true" : "false");
+                          updateSwitch();
+                          laterMoreOver();
+                          setStateBuilderParent(() => sort());
+                        }),
+              ),
             ],
           ),
         ),
