@@ -434,7 +434,6 @@ class VRChatWorld {
   dynamic content;
 
   late String assetUrl;
-  late Map assetUrlObject; //default {}
   late String authorId;
   late String authorName;
   late int capacity;
@@ -451,7 +450,6 @@ class VRChatWorld {
   late String namespace;
   late int occupants;
   late String organization;
-  late Map pluginUrlObject; //default {}
   late int popularity;
   late String? previewYoutubeId;
   late int privateOccupants;
@@ -460,7 +458,6 @@ class VRChatWorld {
   late String releaseStatus;
   late List<String> tags;
   late String thumbnailImageUrl;
-  late Map unityPackageUrlObject; //default {}
   late List<UnityPackages> unityPackages = [];
   late DateTime updatedAt;
   late int version;
@@ -468,7 +465,6 @@ class VRChatWorld {
 
   VRChatWorld.fromJson(this.content) {
     assetUrl = content['assetUrl'];
-    assetUrlObject = content['assetUrlObject'];
     authorId = content['authorId'];
     authorName = content['authorName'];
     capacity = content['capacity'];
@@ -485,7 +481,6 @@ class VRChatWorld {
     namespace = content['namespace'];
     occupants = content['occupants'];
     organization = content['organization'];
-    pluginUrlObject = content['pluginUrlObject'];
     popularity = content['popularity'];
     previewYoutubeId = content['previewYoutubeId'] == "" ? null : content['previewYoutubeId'];
     privateOccupants = content['privateOccupants'];
@@ -497,7 +492,6 @@ class VRChatWorld {
     for (dynamic unitypackage in content['unityPackages']) {
       unityPackages.add(UnityPackages.fromJson(unitypackage));
     }
-    unityPackageUrlObject = content['unityPackageUrlObject'];
     updatedAt = DateTime.parse(content['updated_at']);
     version = content['version'];
     visits = content['visits'];

@@ -23,7 +23,7 @@ void errorDialog(BuildContext context, String text, {String log = ""}) {
     text += "\n${AppLocalizations.of(context)!.reportMessage1}\n${AppLocalizations.of(context)!.reportMessage2}";
   }
   if (kDebugMode) {
-    print(json.decode(log));
+    print(errorLog(json.decode(log)));
   }
   showDialog(
     context: context,
@@ -88,13 +88,19 @@ httpError(BuildContext context, HttpException error) {
       PackageInfo.fromPlatform().then((PackageInfo packageInfo) {
         DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
         deviceInfoPlugin.deviceInfo.then((BaseDeviceInfo deviceInfo) {
-          Map<String, dynamic> logs = {
-            "exceptionType": error.toString(),
-            "version": packageInfo.version,
-            "deviceInfo": deviceInfo.toMap(),
-            "error": error.toString(),
-            "message": message
-          };
+          Map<String, dynamic> logs = kDebugMode
+              ? {
+                  "exceptionType": error.toString(),
+                  "error": error.toString(),
+                  "message": message,
+                }
+              : {
+                  "exceptionType": error.toString(),
+                  "version": packageInfo.version,
+                  "deviceInfo": deviceInfo.toMap(),
+                  "error": error.toString(),
+                  "message": message,
+                };
           errorDialog(context, content.message, log: errorLog(logs));
         });
       });
@@ -109,12 +115,17 @@ standardError(BuildContext context, dynamic error) {
   PackageInfo.fromPlatform().then((PackageInfo packageInfo) {
     DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
     deviceInfoPlugin.deviceInfo.then((BaseDeviceInfo deviceInfo) {
-      Map<String, dynamic> logs = {
-        "exceptionType": error.toString(),
-        "version": packageInfo.version,
-        "deviceInfo": deviceInfo.toMap(),
-        "error": error.toString(),
-      };
+      Map<String, dynamic> logs = kDebugMode
+          ? {
+              "exceptionType": error.toString(),
+              "error": error.toString(),
+            }
+          : {
+              "exceptionType": error.toString(),
+              "version": packageInfo.version,
+              "deviceInfo": deviceInfo.toMap(),
+              "error": error.toString(),
+            };
       if (error is TypeError) {
         logs.addAll({
           "stackTrace": (error.stackTrace ?? "").toString().split("\n"),
