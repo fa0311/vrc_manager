@@ -18,7 +18,7 @@ body:
       label: Device name
       placeholder: "Example: Samsung Galaxy S22 Ultra"
     validations:
-      required: false
+      required: true
 
   - type: input
     id: country-of-origin
@@ -26,29 +26,32 @@ body:
       label: Country of origin of connection
       placeholder: "Example: Japan"
     validations:
-      required: false
+      required: true
 
   - type: dropdown
     id: download-location
     attributes:
       label: Where you downloaded the app
-      multiple: true
       options:
         - Github(GMS)
         - Github(HMS)
         - Github(Windows)
         - Google Play Store
-        - AppGallery
+        - HUAWEI AppGallery
+        - Xiaomi GetApps
         - Other
+    validations:
+      required: true
 
   - type: dropdown
     id: reinstall
     attributes:
       label: Have you reinstalled it ?
-      multiple: false
       options:
         - "Yes"
         - No, perhaps that won't be necessary.
+    validations:
+      required: true
 
   - type: textarea
     id: bug-description

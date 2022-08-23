@@ -18,7 +18,7 @@ body:
       label: 端末名
       placeholder: "例: Samsung Galaxy S22 Ultra"
     validations:
-      required: false
+      required: true
 
   - type: input
     id: country-of-origin
@@ -26,29 +26,32 @@ body:
       label: 接続元の国名
       placeholder: "例: 日本"
     validations:
-      required: false
+      required: true
 
   - type: dropdown
     id: download-location
     attributes:
       label: アプリをダウンロードした場所
-      multiple: true
       options:
         - Github(GMS)
         - Github(HMS)
         - Github(Windows)
         - Google Play Store
-        - AppGallery
+        - HUAWEI AppGallery
+        - Xiaomi GetApps
         - Other
+    validations:
+      required: true
 
   - type: dropdown
     id: reinstall
     attributes:
       label: 再インストールしましたか？
-      multiple: false
       options:
         - はい
         - いいえ、恐らくその必要はない
+    validations:
+      required: true
 
   - type: textarea
     id: bug-description
