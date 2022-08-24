@@ -101,7 +101,7 @@ class _SearchState extends State<VRChatSearch> {
         apiError(context, status);
       });
     } else if (searchMode == "users") {
-      return VRChatAPI(cookie: cookie ?? "").searchUsers(text, offset: offset - 12).then((VRChatUserLimitedList users) {
+      return VRChatAPI(cookie: cookie ?? "").searchUsers(text, offset: offset - 50).then((VRChatUserLimitedList users) {
         List<Future> futureList = [];
         for (VRChatUserLimited user in users.users) {
           futureList.add(
