@@ -232,6 +232,14 @@ class _LoginHomeState extends State<VRChatMobileHome> {
           apiError(context, status);
         });
       }
+    }).catchError((status) {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (BuildContext context) => const VRChatMobileLogin(),
+        ),
+        (_) => false,
+      );
     });
   }
 
