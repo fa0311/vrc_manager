@@ -2,7 +2,10 @@ name: flutter-build
 
 on:
   pull_request:
-    branches: [ "master" ]
+    types: [closed]
+    branches:
+      - master
+      - pre
 
 jobs:
   build:
