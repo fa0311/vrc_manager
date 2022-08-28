@@ -106,7 +106,9 @@ class _LoginPageState extends State<VRChatMobileLogin> {
     return List.generate(length, (_) => charset[random.nextInt(charset.length)]).join();
   }
 
-  _LoginPageState() {
+  @override
+  initState() {
+    super.initState();
     getStorage("account_index").then(
       (response) {
         if (response == null) {
