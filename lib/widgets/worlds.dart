@@ -19,8 +19,6 @@ import 'package:vrchat_mobile_client/widgets/world.dart';
 
 // Flutter imports:
 
-
-
 class Worlds {
   List<Widget> children = [];
   late BuildContext context;
@@ -40,11 +38,16 @@ class Worlds {
   List<Widget> add(VRChatWorld world) {
     worldList.add(world);
     if (displayMode == "default") defaultAdd(world);
+    if (displayMode == "simple") simpleAdd(world);
     return children;
   }
 
   defaultAdd(VRChatWorld world) {
     children.add(simpleWorldDescription(context, world));
+  }
+
+  simpleAdd(VRChatWorld world) {
+    children.add(simpleWorldDescriptionHalf(context, world));
   }
 
   Widget render({required List<Widget> children}) {
@@ -55,6 +58,10 @@ class Worlds {
     if (displayMode == "default") {
       height = 120;
       wrap = 600;
+    }
+    if (displayMode == "simple") {
+      height = 70;
+      wrap = 320;
     }
 
     return GridView.count(
