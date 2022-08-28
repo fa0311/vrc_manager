@@ -500,8 +500,7 @@ class Users {
                         ),
                       ],
                     ),
-                    if (!["private", "offline", "traveling"].contains(user.location) && locationMap.containsKey(worldId))
-                      Text(locationMap[worldId]!.name, style: const TextStyle(fontSize: 12)),
+                    if (locationMap.containsKey(worldId)) Text(locationMap[worldId]!.name, style: const TextStyle(fontSize: 12)),
                     if (!["private", "offline", "traveling"].contains(user.location) && !locationMap.containsKey(worldId))
                       const SizedBox(
                         height: 12.0,
@@ -520,7 +519,7 @@ class Users {
                       ),
                   ],
                 ),
-                if (worldDetails && locationMap[worldId] == null)
+                if (!["private", "offline", "traveling"].contains(user.location) && worldDetails && locationMap[worldId] == null)
                   const Padding(
                     padding: EdgeInsets.only(top: 5),
                     child: SizedBox(
@@ -594,7 +593,7 @@ class Users {
       wrap = 320;
     }
     if (displayMode == "text_only") {
-      height = worldDetails ? 57 : 41;
+      height = worldDetails ? 52 : 41;
       wrap = 400;
     }
     if (displayMode == "default_description") {

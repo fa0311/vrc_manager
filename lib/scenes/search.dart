@@ -46,9 +46,14 @@ class _SearchState extends State<VRChatSearch> {
         cookie = response;
       },
     ));
-    futureStorageList.add(getStorage("search_${searchMode}_display_mode").then(
+    futureStorageList.add(getStorage("search_users_display_mode").then(
       (response) {
         dataColumnUsers.displayMode = response ?? "default_description";
+      },
+    ));
+    futureStorageList.add(getStorage("search_worlds_display_mode").then(
+      (response) {
+        dataColumnWorlds.displayMode = response ?? "default";
       },
     ));
     futureStorageList.add(getStorage("search_mode").then(
@@ -289,7 +294,7 @@ class _SearchState extends State<VRChatSearch> {
                         ListTile(
                           title: Text(AppLocalizations.of(context)!.display),
                           subtitle: {
-                                "default_description": Text(AppLocalizations.of(context)!.default_),
+                                "default": Text(AppLocalizations.of(context)!.default_),
                                 "simple": Text(AppLocalizations.of(context)!.simple),
                                 "text_only": Text(AppLocalizations.of(context)!.textOnly),
                               }[dataColumnWorlds.displayMode] ??

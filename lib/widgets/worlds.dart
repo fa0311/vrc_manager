@@ -39,6 +39,7 @@ class Worlds {
     worldList.add(world);
     if (displayMode == "default") defaultAdd(world);
     if (displayMode == "simple") simpleAdd(world);
+    if (displayMode == "text_only") textOnlyAdd(world);
     return children;
   }
 
@@ -48,6 +49,35 @@ class Worlds {
 
   simpleAdd(VRChatWorld world) {
     children.add(simpleWorldDescriptionHalf(context, world));
+  }
+
+  textOnlyAdd(VRChatWorld world) {
+    children.add(
+      Card(
+        elevation: 20.0,
+        child: Container(
+          padding: const EdgeInsets.all(5.0),
+          child: GestureDetector(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id),
+                  ));
+            },
+            behavior: HitTestBehavior.opaque,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text(world.name, style: const TextStyle(fontSize: 16)),
+                Container(width: 15),
+                if (world.description != null) Text(world.description!, style: const TextStyle(fontSize: 12)),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   Widget render({required List<Widget> children}) {
@@ -62,6 +92,10 @@ class Worlds {
     if (displayMode == "simple") {
       height = 70;
       wrap = 320;
+    }
+    if (displayMode == "text_only") {
+      height = 41;
+      wrap = 400;
     }
 
     return GridView.count(
