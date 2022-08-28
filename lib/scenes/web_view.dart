@@ -44,7 +44,9 @@ class _WebViewPageState extends State<VRChatMobileWebView> {
     },
   );
 
-  _WebViewPageState() {
+  @override
+  initState() {
+    super.initState();
     if (Platform.isAndroid || Platform.isIOS) {
       getStorage("force_external_browser").then((response) async {
         openInExternalBrowser = (response == "true");

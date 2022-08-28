@@ -37,7 +37,9 @@ class _SearchState extends State<VRChatSearch> {
     children: const [],
   );
 
-  _SearchState() {
+  @override
+  initState() {
+    super.initState();
     List<Future> futureStorageList = [];
     futureStorageList.add(getLoginSession("login_session").then(
       (response) {

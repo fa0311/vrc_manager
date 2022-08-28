@@ -152,7 +152,9 @@ class _WorldState extends State<VRChatMobileWorld> {
     );
   }
 
-  _WorldState() {
+  @override
+  initState() {
+    super.initState();
     getLoginSession("login_session").then(
       (cookie) {
         VRChatAPI(cookie: cookie ?? "").worlds(widget.worldId).then((VRChatWorld response) {
@@ -231,6 +233,7 @@ class _WorldState extends State<VRChatMobileWorld> {
       },
     );
   }
+
   @override
   Widget build(BuildContext context) {
     textStream(context);

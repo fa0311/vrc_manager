@@ -35,7 +35,9 @@ class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
   List<VRChatFavoriteGroup> favoriteList = [];
   String? cookie;
 
-  _WorldsFavoriteState() {
+  @override
+  initState() {
+    super.initState();
     getLoginSession("login_session").then(
       (String? response) {
         VRChatAPI(cookie: cookie = response ?? "").favoriteGroups("world", offset: 0).then((

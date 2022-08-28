@@ -41,11 +41,9 @@ class _LoginHomeState extends State<VRChatMobileHome> {
     ],
   );
 
-  _LoginHomeState() {
-    reload();
-  }
-
-  reload() {
+  @override
+  initState() {
+    super.initState();
     getLoginSession("login_session").then((cookie) {
       if (cookie == null) {
         Navigator.pushAndRemoveUntil(
@@ -93,7 +91,7 @@ class _LoginHomeState extends State<VRChatMobileHome> {
                                     child: Text(AppLocalizations.of(context)!.ok),
                                     onPressed: () => VRChatAPI(cookie: cookie).changeBio(user.id, bioController.text).then((VRChatUserPut response) {
                                           Navigator.pop(context);
-                                          reload();
+                                          initState();
                                         }).catchError((status) {
                                           apiError(context, status);
                                         })),
@@ -129,7 +127,7 @@ class _LoginHomeState extends State<VRChatMobileHome> {
                                   child: Text(AppLocalizations.of(context)!.ok),
                                   onPressed: () => VRChatAPI(cookie: cookie).userNotes(user.id, noteController.text).then((VRChatUserNotes response) {
                                     Navigator.pop(context);
-                                    reload();
+                                    initState();
                                   }).catchError((status) {
                                     apiError(context, status);
                                   }),
