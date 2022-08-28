@@ -46,7 +46,7 @@ class _SearchState extends State<VRChatSearch> {
         cookie = response;
       },
     ));
-    futureStorageList.add(getStorage("search_display_mode").then(
+    futureStorageList.add(getStorage("search_${searchMode}_display_mode").then(
       (response) {
         dataColumnUsers.displayMode = response ?? "default_description";
       },
@@ -142,7 +142,7 @@ class _SearchState extends State<VRChatSearch> {
     throw Exception();
   }
 
-  displeyModeModal(Function setStateBuilderParent) {
+  displeyModeModalUser(Function setStateBuilderParent) {
     showModalBottomSheet(
       context: context,
       shape: const RoundedRectangleBorder(
@@ -156,7 +156,7 @@ class _SearchState extends State<VRChatSearch> {
                 title: Text(AppLocalizations.of(context)!.default_),
                 trailing: dataColumnUsers.displayMode == "default" ? const Icon(Icons.check) : null,
                 onTap: () => setStateBuilder(() {
-                  setStorage("search_display_mode", dataColumnUsers.displayMode = "default").then((value) {
+                  setStorage("search_${searchMode}_display_mode", dataColumnUsers.displayMode = "default").then((value) {
                     setState(() => body = dataColumnUsers.render(
                           children: dataColumnUsers.reload(),
                         ));
@@ -168,7 +168,7 @@ class _SearchState extends State<VRChatSearch> {
                 title: Text(AppLocalizations.of(context)!.simple),
                 trailing: dataColumnUsers.displayMode == "simple" ? const Icon(Icons.check) : null,
                 onTap: () => setStateBuilder(() {
-                  setStorage("search_display_mode", dataColumnUsers.displayMode = "simple").then((value) {
+                  setStorage("search_${searchMode}_display_mode", dataColumnUsers.displayMode = "simple").then((value) {
                     setState(() => body = dataColumnUsers.render(
                           children: dataColumnUsers.reload(),
                         ));
@@ -180,9 +180,62 @@ class _SearchState extends State<VRChatSearch> {
                 title: Text(AppLocalizations.of(context)!.textOnly),
                 trailing: dataColumnUsers.displayMode == "text_only" ? const Icon(Icons.check) : null,
                 onTap: () => setStateBuilder(() {
-                  setStorage("search_display_mode", dataColumnUsers.displayMode = "text_only").then((value) {
+                  setStorage("search_${searchMode}_display_mode", dataColumnUsers.displayMode = "text_only").then((value) {
                     setState(() => body = dataColumnUsers.render(
                           children: dataColumnUsers.reload(),
+                        ));
+                    setStateBuilderParent(() {});
+                  });
+                }),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  displeyModeModalWorld(Function setStateBuilderParent) {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
+      ),
+      builder: (BuildContext context) => StatefulBuilder(
+        builder: (BuildContext context, setStateBuilder) => SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              ListTile(
+                title: Text(AppLocalizations.of(context)!.default_),
+                trailing: dataColumnWorlds.displayMode == "default" ? const Icon(Icons.check) : null,
+                onTap: () => setStateBuilder(() {
+                  setStorage("search_${searchMode}_display_mode", dataColumnWorlds.displayMode = "default").then((value) {
+                    setState(() => body = dataColumnWorlds.render(
+                          children: dataColumnWorlds.reload(),
+                        ));
+                    setStateBuilderParent(() {});
+                  });
+                }),
+              ),
+              ListTile(
+                title: Text(AppLocalizations.of(context)!.simple),
+                trailing: dataColumnWorlds.displayMode == "simple" ? const Icon(Icons.check) : null,
+                onTap: () => setStateBuilder(() {
+                  setStorage("search_${searchMode}_display_mode", dataColumnWorlds.displayMode = "simple").then((value) {
+                    setState(() => body = dataColumnWorlds.render(
+                          children: dataColumnWorlds.reload(),
+                        ));
+                    setStateBuilderParent(() {});
+                  });
+                }),
+              ),
+              ListTile(
+                title: Text(AppLocalizations.of(context)!.textOnly),
+                trailing: dataColumnWorlds.displayMode == "text_only" ? const Icon(Icons.check) : null,
+                onTap: () => setStateBuilder(() {
+                  setStorage("search_${searchMode}_display_mode", dataColumnWorlds.displayMode = "text_only").then((value) {
+                    setState(() => body = dataColumnWorlds.render(
+                          children: dataColumnWorlds.reload(),
                         ));
                     setStateBuilderParent(() {});
                   });
@@ -221,19 +274,28 @@ class _SearchState extends State<VRChatSearch> {
                 builder: (BuildContext context, Function setStateBuilder) => SingleChildScrollView(
                   child: Column(
                     children: <Widget>[
-                      ListTile(
-                        title: Text(AppLocalizations.of(context)!.display),
-                        subtitle: searchMode != "users"
-                            ? Text(AppLocalizations.of(context)!.default_)
-                            : {
-                                  "default_description": Text(AppLocalizations.of(context)!.default_),
-                                  "simple": Text(AppLocalizations.of(context)!.simple),
-                                  "text_only": Text(AppLocalizations.of(context)!.textOnly),
-                                }[dataColumnUsers.displayMode] ??
-                                Text(AppLocalizations.of(context)!.sortedByDefault),
-                        onTap: () => setStateBuilder(() => displeyModeModal(setStateBuilder)),
-                        enabled: searchMode == "users",
-                      ),
+                      if (searchMode == "users")
+                        ListTile(
+                          title: Text(AppLocalizations.of(context)!.display),
+                          subtitle: {
+                                "default_description": Text(AppLocalizations.of(context)!.default_),
+                                "simple": Text(AppLocalizations.of(context)!.simple),
+                                "text_only": Text(AppLocalizations.of(context)!.textOnly),
+                              }[dataColumnWorlds.displayMode] ??
+                              Text(AppLocalizations.of(context)!.sortedByDefault),
+                          onTap: () => setStateBuilder(() => displeyModeModalUser(setStateBuilder)),
+                        ),
+                      if (searchMode == "worlds")
+                        ListTile(
+                          title: Text(AppLocalizations.of(context)!.display),
+                          subtitle: {
+                                "default_description": Text(AppLocalizations.of(context)!.default_),
+                                "simple": Text(AppLocalizations.of(context)!.simple),
+                                "text_only": Text(AppLocalizations.of(context)!.textOnly),
+                              }[dataColumnWorlds.displayMode] ??
+                              Text(AppLocalizations.of(context)!.sortedByDefault),
+                          onTap: () => setStateBuilder(() => displeyModeModalWorld(setStateBuilder)),
+                        ),
                       ListTile(
                         title: Text(AppLocalizations.of(context)!.openInBrowser),
                         onTap: () {
