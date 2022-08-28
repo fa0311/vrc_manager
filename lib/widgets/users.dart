@@ -163,7 +163,7 @@ class Users {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
-                              status(user.status, diameter: 20),
+                              status(user.state == "offline" ? user.state! : user.status, diameter: 20),
                               Container(
                                 width: 5,
                               ),
@@ -295,7 +295,7 @@ class Users {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
-                              status(user.status, diameter: 20),
+                              status(user.state == "offline" ? user.state! : user.status, diameter: 20),
                               Container(
                                 width: 5,
                               ),
@@ -383,7 +383,7 @@ class Users {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
-                              status(user.status, diameter: 13),
+                              status(user.state == "offline" ? user.state! : user.status, diameter: 13),
                               Container(
                                 width: 5,
                               ),
@@ -487,7 +487,7 @@ class Users {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        status(user.status, diameter: 12),
+                        status(user.state == "offline" ? user.state! : user.status, diameter: 12),
                         Container(
                           width: 5,
                         ),
