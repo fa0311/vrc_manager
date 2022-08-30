@@ -115,6 +115,8 @@ class Users {
     if (displayMode == "simple") simpleAdd(user);
     if (displayMode == "text_only") textOnlyAdd(user);
     if (displayMode == "default_description") defaultDescriptionAdd(user);
+    if (displayMode == "simple_description") simpleDescriptionAdd(user);
+    if (displayMode == "text_only_description") textOnlyDescriptionAdd(user);
     return children;
   }
 
@@ -317,12 +319,15 @@ class Users {
                               ),
                             ),
                           if (user.bio != null)
-                            Text(
-                              user.bio!,
-                              maxLines: 3,
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                fontSize: 14,
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
+                              child: Text(
+                                user.bio!,
+                                maxLines: 3,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                ),
                               ),
                             ),
                         ],
@@ -463,6 +468,81 @@ class Users {
     );
   }
 
+  simpleDescriptionAdd(VRChatUser user) {
+    children.add(
+      Card(
+        elevation: 20.0,
+        child: Container(
+          padding: const EdgeInsets.all(5.0),
+          child: GestureDetector(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => VRChatMobileUser(userId: user.id),
+                  ));
+            },
+            behavior: HitTestBehavior.opaque,
+            child: Row(
+              children: [
+                SizedBox(
+                  height: 50,
+                  child: CachedNetworkImage(
+                    imageUrl: user.profilePicOverride ?? user.currentAvatarThumbnailImageUrl,
+                    fit: BoxFit.fitWidth,
+                    progressIndicatorBuilder: (context, url, downloadProgress) => const SizedBox(
+                      width: 50,
+                      child: Padding(
+                        padding: EdgeInsets.all(30),
+                        child: CircularProgressIndicator(),
+                      ),
+                    ),
+                    errorWidget: (context, url, error) => const SizedBox(
+                      width: 50,
+                      child: Icon(Icons.error),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          status(user.state == "offline" ? user.state! : user.status, diameter: 13),
+                          Container(width: 5),
+                          Text(
+                            user.displayName,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                              height: 1,
+                            ),
+                          ),
+                        ],
+                      ),
+                      if (user.bio != null)
+                        Text(
+                          user.bio!,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontSize: 12,
+                            height: 1,
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   textOnlyAdd(VRChatUser user) {
     String worldId = user.location.split(":")[0];
     children.add(
@@ -578,6 +658,54 @@ class Users {
     );
   }
 
+  textOnlyDescriptionAdd(VRChatUser user) {
+    children.add(
+      Card(
+        elevation: 20.0,
+        child: Container(
+          padding: const EdgeInsets.all(5.0),
+          child: GestureDetector(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => VRChatMobileUser(userId: user.id),
+                  ));
+            },
+            behavior: HitTestBehavior.opaque,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    status(user.state == "offline" ? user.state! : user.status, diameter: 12),
+                    Container(
+                      width: 5,
+                    ),
+                    Text(user.displayName,
+                        style: const TextStyle(
+                          fontSize: 16,
+                        )),
+                    Container(width: 15),
+                  ],
+                ),
+                if (user.statusDescription != null)
+                  Text(
+                    user.statusDescription!,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontSize: 12,
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget render({required List<Widget> children}) {
     if (children.isEmpty) return Column(children: <Widget>[Text(AppLocalizations.of(context)!.none)]);
     wait = false;
@@ -599,6 +727,14 @@ class Users {
     if (displayMode == "default_description") {
       height = worldDetails ? 233 : 130;
       wrap = 600;
+    }
+    if (displayMode == "simple_description") {
+      height = worldDetails ? 123 : 70;
+      wrap = 320;
+    }
+    if (displayMode == "text_only_description") {
+      height = worldDetails ? 52 : 41;
+      wrap = 400;
     }
 
     return GridView.count(
