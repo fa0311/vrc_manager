@@ -195,7 +195,7 @@ class _LoginHomeState extends State<VRChatMobileHome> {
                   column = Column(children: column.children);
                   column.children[1] = Container(
                     padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
-                    child: privatesimpleWorld(context),
+                    child: privateSimpleWorld(context),
                   );
                 },
               );

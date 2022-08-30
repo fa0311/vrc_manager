@@ -209,7 +209,7 @@ class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
                       ListTile(
                         title: Text(AppLocalizations.of(context)!.display),
                         subtitle: {
-                              "default_description": Text(AppLocalizations.of(context)!.default_),
+                              "default": Text(AppLocalizations.of(context)!.default_),
                               "simple": Text(AppLocalizations.of(context)!.simple),
                               "text_only": Text(AppLocalizations.of(context)!.textOnly),
                             }[dataColumn[0].displayMode] ??

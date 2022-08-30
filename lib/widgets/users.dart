@@ -211,7 +211,7 @@ class Users {
                 if (worldDetails && user.location == "private")
                   Padding(
                     padding: const EdgeInsets.only(top: 5),
-                    child: (privatesimpleWorld(context).child! as Container).child!,
+                    child: (privateSimpleWorld(context).child! as Container).child!,
                   ),
                 if (worldDetails && user.location == "traveling")
                   Padding(
@@ -426,7 +426,7 @@ class Users {
                 if (worldDetails && user.location == "private")
                   Padding(
                     padding: const EdgeInsets.only(top: 5),
-                    child: (privatesimpleWorldHalf(context).child! as Container).child!,
+                    child: (privateSimpleWorldHalf(context).child! as Container).child!,
                   ),
                 if (worldDetails && user.location == "traveling")
                   Padding(

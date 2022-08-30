@@ -278,7 +278,7 @@ class FavoriteWorlds {
       Card(
         elevation: 20.0,
         child: Container(
-          padding: const EdgeInsets.all(10.0),
+          padding: const EdgeInsets.all(5.0),
           child: GestureDetector(
             onTap: () {
               Navigator.push(
@@ -312,6 +312,7 @@ class FavoriteWorlds {
                   child: Padding(
                     padding: const EdgeInsets.only(left: 10),
                     child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         SizedBox(
                           width: double.infinity,
@@ -370,18 +371,7 @@ class FavoriteWorlds {
               children: <Widget>[
                 Text(world.name, style: const TextStyle(fontSize: 16)),
                 Container(width: 15),
-                if (descriptionMap[world.id] != null)
-                  SizedBox(
-                    width: double.infinity,
-                    child: Text(
-                      descriptionMap[world.id]!,
-                      maxLines: 3,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontSize: 14,
-                      ),
-                    ),
-                  ),
+                if (descriptionMap[world.id] != null) Text(descriptionMap[world.id]!, style: const TextStyle(fontSize: 12)),
               ],
             ),
           ),

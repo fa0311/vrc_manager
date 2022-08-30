@@ -150,7 +150,7 @@ Card simpleWorldDescriptionHalf(BuildContext context, VRChatWorld world) {
   return Card(
     elevation: 20.0,
     child: Container(
-      padding: const EdgeInsets.all(10.0),
+      padding: const EdgeInsets.all(5.0),
       child: GestureDetector(
         onTap: () {
           Navigator.push(
@@ -184,6 +184,7 @@ Card simpleWorldDescriptionHalf(BuildContext context, VRChatWorld world) {
               child: Padding(
                 padding: const EdgeInsets.only(left: 10),
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     SizedBox(
                       width: double.infinity,
@@ -334,7 +335,7 @@ Card simpleWorldHalf(BuildContext context, VRChatLimitedWorld world) {
   return Card(
     elevation: 20.0,
     child: Container(
-      padding: const EdgeInsets.all(10.0),
+      padding: const EdgeInsets.all(5.0),
       child: GestureDetector(
         onTap: () {
           Navigator.push(
@@ -396,7 +397,7 @@ Card simpleWorldPlusHalf(BuildContext context, VRChatWorld world, VRChatInstance
   return Card(
     elevation: 20.0,
     child: Container(
-      padding: const EdgeInsets.all(10.0),
+      padding: const EdgeInsets.all(5.0),
       child: GestureDetector(
         onTap: () {
           Navigator.push(
@@ -508,7 +509,7 @@ Card simpleWorldPlusHalf(BuildContext context, VRChatWorld world, VRChatInstance
   );
 }
 
-Card privatesimpleWorld(BuildContext context) {
+Card privateSimpleWorld(BuildContext context) {
   return Card(
     elevation: 20.0,
     child: Container(
@@ -558,11 +559,11 @@ Card privatesimpleWorld(BuildContext context) {
   );
 }
 
-Card privatesimpleWorldHalf(BuildContext context) {
+Card privateSimpleWorldHalf(BuildContext context) {
   return Card(
     elevation: 20.0,
     child: Container(
-      padding: const EdgeInsets.all(10.0),
+      padding: const EdgeInsets.all(5.0),
       child: GestureDetector(
         child: Row(
           children: <Widget>[
@@ -675,7 +676,7 @@ Card travelingWorldHalf(BuildContext context) {
   return Card(
     elevation: 20.0,
     child: Container(
-      padding: const EdgeInsets.all(10.0),
+      padding: const EdgeInsets.all(5.0),
       child: GestureDetector(
         child: Row(
           children: <Widget>[
