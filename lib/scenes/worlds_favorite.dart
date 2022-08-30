@@ -80,7 +80,9 @@ class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
   }
 
   moreOver(int index) {
-    offset[index] += 50;
+    setState(() {
+      offset[index] += 50;
+    });
     VRChatAPI(cookie: cookie ?? "").favoritesWorlds(favoriteList[index].name, offset: offset[index] - 50).then((VRChatFavoriteWorldList worlds) {
       List<Future> futureList = [];
       for (VRChatFavoriteWorld world in worlds.world) {
@@ -120,7 +122,7 @@ class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
                   ),
                 ],
               ),
-            )
+            ),
         ],
       ),
     );
@@ -209,7 +211,7 @@ class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
                       ListTile(
                         title: Text(AppLocalizations.of(context)!.display),
                         subtitle: {
-                              "default_description": Text(AppLocalizations.of(context)!.default_),
+                              "default": Text(AppLocalizations.of(context)!.default_),
                               "simple": Text(AppLocalizations.of(context)!.simple),
                               "text_only": Text(AppLocalizations.of(context)!.textOnly),
                             }[dataColumn[0].displayMode] ??
@@ -235,7 +237,9 @@ class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
       body: SafeArea(
         child: SizedBox(
           width: MediaQuery.of(context).size.width,
-          child: SingleChildScrollView(child: Column(children: bodyList)),
+          child: SingleChildScrollView(
+            child: Column(children: bodyList),
+          ),
         ),
       ),
     );

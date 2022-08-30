@@ -159,9 +159,9 @@ class _SearchState extends State<VRChatSearch> {
             children: <Widget>[
               ListTile(
                 title: Text(AppLocalizations.of(context)!.default_),
-                trailing: dataColumnUsers.displayMode == "default" ? const Icon(Icons.check) : null,
+                trailing: dataColumnUsers.displayMode == "default_description" ? const Icon(Icons.check) : null,
                 onTap: () => setStateBuilder(() {
-                  setStorage("search_${searchMode}_display_mode", dataColumnUsers.displayMode = "default").then((value) {
+                  setStorage("search_${searchMode}_display_mode", dataColumnUsers.displayMode = "default_description").then((value) {
                     setState(() => body = dataColumnUsers.render(
                           children: dataColumnUsers.reload(),
                         ));
@@ -171,9 +171,9 @@ class _SearchState extends State<VRChatSearch> {
               ),
               ListTile(
                 title: Text(AppLocalizations.of(context)!.simple),
-                trailing: dataColumnUsers.displayMode == "simple" ? const Icon(Icons.check) : null,
+                trailing: dataColumnUsers.displayMode == "simple_description" ? const Icon(Icons.check) : null,
                 onTap: () => setStateBuilder(() {
-                  setStorage("search_${searchMode}_display_mode", dataColumnUsers.displayMode = "simple").then((value) {
+                  setStorage("search_${searchMode}_display_mode", dataColumnUsers.displayMode = "simple_description").then((value) {
                     setState(() => body = dataColumnUsers.render(
                           children: dataColumnUsers.reload(),
                         ));
@@ -183,9 +183,9 @@ class _SearchState extends State<VRChatSearch> {
               ),
               ListTile(
                 title: Text(AppLocalizations.of(context)!.textOnly),
-                trailing: dataColumnUsers.displayMode == "text_only" ? const Icon(Icons.check) : null,
+                trailing: dataColumnUsers.displayMode == "text_only_description" ? const Icon(Icons.check) : null,
                 onTap: () => setStateBuilder(() {
-                  setStorage("search_${searchMode}_display_mode", dataColumnUsers.displayMode = "text_only").then((value) {
+                  setStorage("search_${searchMode}_display_mode", dataColumnUsers.displayMode = "text_only_description").then((value) {
                     setState(() => body = dataColumnUsers.render(
                           children: dataColumnUsers.reload(),
                         ));
@@ -284,9 +284,9 @@ class _SearchState extends State<VRChatSearch> {
                           title: Text(AppLocalizations.of(context)!.display),
                           subtitle: {
                                 "default_description": Text(AppLocalizations.of(context)!.default_),
-                                "simple": Text(AppLocalizations.of(context)!.simple),
-                                "text_only": Text(AppLocalizations.of(context)!.textOnly),
-                              }[dataColumnWorlds.displayMode] ??
+                                "simple_description": Text(AppLocalizations.of(context)!.simple),
+                                "text_only_description": Text(AppLocalizations.of(context)!.textOnly),
+                              }[dataColumnUsers.displayMode] ??
                               Text(AppLocalizations.of(context)!.sortedByDefault),
                           onTap: () => setStateBuilder(() => displeyModeModalUser(setStateBuilder)),
                         ),
