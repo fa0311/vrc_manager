@@ -34,7 +34,10 @@ class _FriendsPageState extends State<VRChatMobileFriendRequest> {
   Widget body = const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator());
 
   Users dataColumn = Users();
-  _FriendsPageState() {
+
+  @override
+  initState() {
+    super.initState();
     List<Future> futureStorageList = [];
     futureStorageList.add(getLoginSession("login_session").then(
       (response) {

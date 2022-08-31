@@ -23,6 +23,7 @@ class VRChatMobileSettingsAccessibility extends StatefulWidget {
 class _SettingAccessibilityPageState extends State<VRChatMobileSettingsAccessibility> {
   bool theme = false;
   bool forceExternalBrowser = false;
+  bool sontShowErrorDialog = false;
 
   _changeSwitchTheme(bool e) {
     setStorage("theme_brightness", e ? "dark" : "light").then(
@@ -42,6 +43,12 @@ class _SettingAccessibilityPageState extends State<VRChatMobileSettingsAccessibi
     );
   }
 
+  _changeSwitchShowErrorDialog(bool e) {
+    setStorage("dont_show_error_dialog", e ? "true" : "false").then(
+      (_) => setState(() => sontShowErrorDialog = e),
+    );
+  }
+
   _SettingAccessibilityPageState() {
     getStorage("theme_brightness").then(
       (response) {
@@ -54,6 +61,13 @@ class _SettingAccessibilityPageState extends State<VRChatMobileSettingsAccessibi
       (response) {
         setState(
           () => forceExternalBrowser = (response == "true"),
+        );
+      },
+    );
+    getStorage("dont_show_error_dialog").then(
+      (response) {
+        setState(
+          () => sontShowErrorDialog = (response == "true"),
         );
       },
     );
@@ -84,6 +98,13 @@ class _SettingAccessibilityPageState extends State<VRChatMobileSettingsAccessibi
                     title: Text(AppLocalizations.of(context)!.darkTheme),
                     subtitle: Text("${AppLocalizations.of(context)!.darkThemeDetails1}\n${AppLocalizations.of(context)!.darkThemeDetails2}"),
                     onChanged: _changeSwitchTheme,
+                  ),
+                  const Divider(),
+                  SwitchListTile(
+                    value: sontShowErrorDialog,
+                    title: Text(AppLocalizations.of(context)!.dontShowErrorDialog),
+                    subtitle: Text(AppLocalizations.of(context)!.dontShowErrorDialogDetails),
+                    onChanged: _changeSwitchShowErrorDialog,
                   ),
                   if (!Platform.isWindows) const Divider(),
                   if (!Platform.isWindows)

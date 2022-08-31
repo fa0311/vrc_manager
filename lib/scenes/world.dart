@@ -152,7 +152,9 @@ class _WorldState extends State<VRChatMobileWorld> {
     );
   }
 
-  _WorldState() {
+  @override
+  initState() {
+    super.initState();
     getLoginSession("login_session").then(
       (cookie) {
         VRChatAPI(cookie: cookie ?? "").worlds(widget.worldId).then((VRChatWorld response) {
@@ -197,10 +199,6 @@ class _WorldState extends State<VRChatMobileWorld> {
               VRChatAPI(cookie: cookie ?? "").favoriteGroups("world", offset: 0).then((VRChatFavoriteGroupList response) {
                 List<Widget> bottomSheet = [];
                 if (response.group.isEmpty) return;
-                bottomSheet.add(ListTile(
-                  title: Text(AppLocalizations.of(context)!.addFavoriteWorlds),
-                ));
-                bottomSheet.add(const Divider());
                 for (VRChatFavoriteGroup list in response.group) {
                   bottomSheet.add(ListTile(
                     title: Text(list.displayName),
@@ -212,9 +210,7 @@ class _WorldState extends State<VRChatMobileWorld> {
                       }),
                     },
                   ));
-                  bottomSheet.add(const Divider());
                 }
-                bottomSheet.removeLast();
                 setState(
                   () {
                     popupMenu = <Widget>[worldAction(context, widget.worldId, bottomSheet), share(context, "https://vrchat.com/home/world/${widget.worldId}")];
@@ -231,6 +227,7 @@ class _WorldState extends State<VRChatMobileWorld> {
       },
     );
   }
+
   @override
   Widget build(BuildContext context) {
     textStream(context);

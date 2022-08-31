@@ -25,6 +25,7 @@ MaterialApp getMaterialApp(home, String theme, Locale locale) {
 
   return MaterialApp(
     title: 'VRChat Mobile Client',
+    debugShowCheckedModeBanner: false,
     localizationsDelegates: const [
       AppLocalizations.delegate,
       GlobalMaterialLocalizations.delegate,

@@ -45,7 +45,7 @@ Column profile(BuildContext context, VRChatUser user) {
               if (matchTwitter != null) {
                 shareModalBottom(context, "https://twitter.com/${match.group(match.groupCount)}");
               } else if (matchDiscord != null) {
-                clipboardShareModalBottom(context, "${match.group(match.groupCount)}");
+                clipboardShareModalBottom(context, "${match.group(match.groupCount)}".replaceAll("＃", "#"));
               } else if (matchGithub != null) {
                 shareModalBottom(context, "https://github.com/${match.group(match.groupCount)}");
               } else if (matchUrl != null) {
