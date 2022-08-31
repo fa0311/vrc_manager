@@ -8,6 +8,7 @@ import 'package:vrchat_mobile_client/material.dart';
 import 'package:vrchat_mobile_client/scenes/home.dart';
 
 main() {
+  initAppGallery();
   runApp(const VRChatMobile());
 }
 
