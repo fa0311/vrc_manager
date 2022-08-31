@@ -36,11 +36,9 @@ class _UserHomeState extends State<VRChatMobileUser> {
 
   TextEditingController noteController = TextEditingController();
 
-  _UserHomeState() {
-    reload();
-  }
-
-  reload() {
+  @override
+  initState() {
+    super.initState();
     getLoginSession("login_session").then(
       (cookie) {
         VRChatAPI(cookie: cookie ?? "").users(widget.userId).then((VRChatUser user) {
@@ -76,7 +74,7 @@ class _UserHomeState extends State<VRChatMobileUser> {
                                   child: Text(AppLocalizations.of(context)!.ok),
                                   onPressed: () => VRChatAPI(cookie: cookie ?? "").userNotes(user.id, noteController.text).then((VRChatUserNotes response) {
                                         Navigator.pop(context);
-                                        reload();
+                                        initState();
                                       }).catchError((status) {
                                         apiError(context, status);
                                       })),
@@ -111,7 +109,7 @@ class _UserHomeState extends State<VRChatMobileUser> {
           VRChatAPI(cookie: cookie ?? "").friendStatus(widget.userId).then((VRChatfriendStatus status) {
             setState(
               () {
-                popupMenu = <Widget>[profileAction(context, status, widget.userId, reload), share(context, "https://vrchat.com/home/user/${widget.userId}")];
+                popupMenu = <Widget>[profileAction(context, status, widget.userId, initState), share(context, "https://vrchat.com/home/user/${widget.userId}")];
               },
             );
           }).catchError((status) {
@@ -154,7 +152,7 @@ class _UserHomeState extends State<VRChatMobileUser> {
                 column.children[1] = Column(
                   children: [
                     Container(padding: const EdgeInsets.only(top: 30)),
-                    privatesimpleWorld(context),
+                    privateSimpleWorld(context),
                   ],
                 );
               },

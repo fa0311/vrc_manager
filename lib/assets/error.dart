@@ -37,17 +37,6 @@ void errorDialog(BuildContext context, String text, {String log = ""}) {
             actions: [
               if (log.isNotEmpty)
                 TextButton(
-                  child: Text(
-                    AppLocalizations.of(context)!.dontShowAgain,
-                  ),
-                  onPressed: () {
-                    setStorage("dont_show_error_dialog", "true").then(
-                      (_) => Navigator.of(context).popUntil((Route route) => route.isFirst),
-                    );
-                  },
-                ),
-              if (log.isNotEmpty)
-                TextButton(
                   child: Text(AppLocalizations.of(context)!.report),
                   onPressed: () {
                     ClipboardData data = ClipboardData(text: log);

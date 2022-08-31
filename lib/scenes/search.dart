@@ -13,6 +13,7 @@ import 'package:vrchat_mobile_client/assets/error.dart';
 import 'package:vrchat_mobile_client/assets/flutter/text_stream.dart';
 import 'package:vrchat_mobile_client/assets/storage.dart';
 import 'package:vrchat_mobile_client/widgets/drawer.dart';
+import 'package:vrchat_mobile_client/widgets/share.dart';
 import 'package:vrchat_mobile_client/widgets/users.dart';
 import 'package:vrchat_mobile_client/widgets/worlds.dart';
 
@@ -27,21 +28,41 @@ class _SearchState extends State<VRChatSearch> {
   TextEditingController searchBoxController = TextEditingController();
   FocusNode searchBoxFocusNode = FocusNode();
   String searchMode = "users";
+  String searchModeSelected = "users";
   int offset = 0;
   String? cookie;
   Worlds dataColumnWorlds = Worlds();
-  Users dataColumnUsers = Users()..displayMode = "default_description";
+  Users dataColumnUsers = Users();
   Widget body = Column(
     children: const [],
   );
 
-  _SearchState() {
+  @override
+  initState() {
+    super.initState();
     List<Future> futureStorageList = [];
     futureStorageList.add(getLoginSession("login_session").then(
       (response) {
         cookie = response;
       },
     ));
+    futureStorageList.add(getStorage("search_users_display_mode").then(
+      (response) {
+        dataColumnUsers.displayMode = response ?? "default_description";
+      },
+    ));
+    futureStorageList.add(getStorage("search_worlds_display_mode").then(
+      (response) {
+        dataColumnWorlds.displayMode = response ?? "default";
+      },
+    ));
+    futureStorageList.add(getStorage("search_mode").then(
+      (response) {
+        searchMode = response ?? "users";
+        searchModeSelected = searchMode;
+      },
+    ));
+    Future.wait(futureStorageList).then(((value) => setState(() {})));
   }
 
   searchModeModal(Function setStateBuilderParent) {
@@ -56,18 +77,20 @@ class _SearchState extends State<VRChatSearch> {
             children: <Widget>[
               ListTile(
                 title: Text(AppLocalizations.of(context)!.user),
-                trailing: searchMode == "users" ? const Icon(Icons.check) : null,
+                trailing: searchModeSelected == "users" ? const Icon(Icons.check) : null,
                 onTap: () {
-                  setStateBuilder(() => searchMode = "users");
+                  setStateBuilder(() => searchModeSelected = "users");
                   setStateBuilderParent(() {});
+                  setStorage("search_mode", searchModeSelected);
                 },
               ),
               ListTile(
                 title: Text(AppLocalizations.of(context)!.world),
-                trailing: searchMode == "worlds" ? const Icon(Icons.check) : null,
+                trailing: searchModeSelected == "worlds" ? const Icon(Icons.check) : null,
                 onTap: () {
-                  setStateBuilder(() => searchMode = "worlds");
+                  setStateBuilder(() => searchModeSelected = "worlds");
                   setStateBuilderParent(() {});
+                  setStorage("search_mode", searchModeSelected);
                 },
               ),
             ],
@@ -77,7 +100,7 @@ class _SearchState extends State<VRChatSearch> {
     );
   }
 
-  Future<void> moreOver(String text, String searchMode) {
+  Future<void> moreOver(String text) {
     setState(() {
       offset += 50;
     });
@@ -101,7 +124,7 @@ class _SearchState extends State<VRChatSearch> {
         apiError(context, status);
       });
     } else if (searchMode == "users") {
-      return VRChatAPI(cookie: cookie ?? "").searchUsers(text, offset: offset - 12).then((VRChatUserLimitedList users) {
+      return VRChatAPI(cookie: cookie ?? "").searchUsers(text, offset: offset - 50).then((VRChatUserLimitedList users) {
         List<Future> futureList = [];
         for (VRChatUserLimited user in users.users) {
           futureList.add(
@@ -124,6 +147,112 @@ class _SearchState extends State<VRChatSearch> {
     throw Exception();
   }
 
+  displeyModeModalUser(Function setStateBuilderParent) {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
+      ),
+      builder: (BuildContext context) => StatefulBuilder(
+        builder: (BuildContext context, setStateBuilder) => SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              ListTile(
+                title: Text(AppLocalizations.of(context)!.default_),
+                trailing: dataColumnUsers.displayMode == "default_description" ? const Icon(Icons.check) : null,
+                onTap: () => setStateBuilder(() {
+                  setStorage("search_${searchMode}_display_mode", dataColumnUsers.displayMode = "default_description").then((value) {
+                    setState(() => body = dataColumnUsers.render(
+                          children: dataColumnUsers.reload(),
+                        ));
+                    setStateBuilderParent(() {});
+                  });
+                }),
+              ),
+              ListTile(
+                title: Text(AppLocalizations.of(context)!.simple),
+                trailing: dataColumnUsers.displayMode == "simple_description" ? const Icon(Icons.check) : null,
+                onTap: () => setStateBuilder(() {
+                  setStorage("search_${searchMode}_display_mode", dataColumnUsers.displayMode = "simple_description").then((value) {
+                    setState(() => body = dataColumnUsers.render(
+                          children: dataColumnUsers.reload(),
+                        ));
+                    setStateBuilderParent(() {});
+                  });
+                }),
+              ),
+              ListTile(
+                title: Text(AppLocalizations.of(context)!.textOnly),
+                trailing: dataColumnUsers.displayMode == "text_only_description" ? const Icon(Icons.check) : null,
+                onTap: () => setStateBuilder(() {
+                  setStorage("search_${searchMode}_display_mode", dataColumnUsers.displayMode = "text_only_description").then((value) {
+                    setState(() => body = dataColumnUsers.render(
+                          children: dataColumnUsers.reload(),
+                        ));
+                    setStateBuilderParent(() {});
+                  });
+                }),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  displeyModeModalWorld(Function setStateBuilderParent) {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
+      ),
+      builder: (BuildContext context) => StatefulBuilder(
+        builder: (BuildContext context, setStateBuilder) => SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              ListTile(
+                title: Text(AppLocalizations.of(context)!.default_),
+                trailing: dataColumnWorlds.displayMode == "default" ? const Icon(Icons.check) : null,
+                onTap: () => setStateBuilder(() {
+                  setStorage("search_${searchMode}_display_mode", dataColumnWorlds.displayMode = "default").then((value) {
+                    setState(() => body = dataColumnWorlds.render(
+                          children: dataColumnWorlds.reload(),
+                        ));
+                    setStateBuilderParent(() {});
+                  });
+                }),
+              ),
+              ListTile(
+                title: Text(AppLocalizations.of(context)!.simple),
+                trailing: dataColumnWorlds.displayMode == "simple" ? const Icon(Icons.check) : null,
+                onTap: () => setStateBuilder(() {
+                  setStorage("search_${searchMode}_display_mode", dataColumnWorlds.displayMode = "simple").then((value) {
+                    setState(() => body = dataColumnWorlds.render(
+                          children: dataColumnWorlds.reload(),
+                        ));
+                    setStateBuilderParent(() {});
+                  });
+                }),
+              ),
+              ListTile(
+                title: Text(AppLocalizations.of(context)!.textOnly),
+                trailing: dataColumnWorlds.displayMode == "text_only" ? const Icon(Icons.check) : null,
+                onTap: () => setStateBuilder(() {
+                  setStorage("search_${searchMode}_display_mode", dataColumnWorlds.displayMode = "text_only").then((value) {
+                    setState(() => body = dataColumnWorlds.render(
+                          children: dataColumnWorlds.reload(),
+                        ));
+                    setStateBuilderParent(() {});
+                  });
+                }),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     textStream(context);
@@ -138,6 +267,54 @@ class _SearchState extends State<VRChatSearch> {
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.search),
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(Icons.more_vert),
+            onPressed: () => showModalBottomSheet(
+              context: context,
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
+              ),
+              builder: (BuildContext context) => StatefulBuilder(
+                builder: (BuildContext context, Function setStateBuilder) => SingleChildScrollView(
+                  child: Column(
+                    children: <Widget>[
+                      if (searchMode == "users")
+                        ListTile(
+                          title: Text(AppLocalizations.of(context)!.display),
+                          subtitle: {
+                                "default_description": Text(AppLocalizations.of(context)!.default_),
+                                "simple_description": Text(AppLocalizations.of(context)!.simple),
+                                "text_only_description": Text(AppLocalizations.of(context)!.textOnly),
+                              }[dataColumnUsers.displayMode] ??
+                              Text(AppLocalizations.of(context)!.sortedByDefault),
+                          onTap: () => setStateBuilder(() => displeyModeModalUser(setStateBuilder)),
+                        ),
+                      if (searchMode == "worlds")
+                        ListTile(
+                          title: Text(AppLocalizations.of(context)!.display),
+                          subtitle: {
+                                "default": Text(AppLocalizations.of(context)!.default_),
+                                "simple": Text(AppLocalizations.of(context)!.simple),
+                                "text_only": Text(AppLocalizations.of(context)!.textOnly),
+                              }[dataColumnWorlds.displayMode] ??
+                              Text(AppLocalizations.of(context)!.sortedByDefault),
+                          onTap: () => setStateBuilder(() => displeyModeModalWorld(setStateBuilder)),
+                        ),
+                      ListTile(
+                        title: Text(AppLocalizations.of(context)!.openInBrowser),
+                        onTap: () {
+                          Navigator.pop(context);
+                          openInBrowser(context, "https://vrchat.com/home/search/${searchBoxController.text}");
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
       drawer: drawer(context),
       body: SafeArea(
@@ -161,9 +338,10 @@ class _SearchState extends State<VRChatSearch> {
                             ],
                           );
                           offset = 0;
-                          dataColumnWorlds = Worlds();
-                          dataColumnUsers = Users()..displayMode = "default_description";
-                          moreOver(searchBoxController.text, searchMode);
+                          searchMode = searchModeSelected;
+                          dataColumnWorlds.worldList = [];
+                          dataColumnUsers.userList = [];
+                          moreOver(searchBoxController.text);
                         },
                       ),
                     ),
@@ -178,7 +356,7 @@ class _SearchState extends State<VRChatSearch> {
                         trailing: {
                               "users": Text(AppLocalizations.of(context)!.user, style: selectedTextStyle),
                               "worlds": Text(AppLocalizations.of(context)!.world, style: selectedTextStyle),
-                            }[searchMode] ??
+                            }[searchModeSelected] ??
                             Text(AppLocalizations.of(context)!.user, style: selectedTextStyle),
                         onTap: () => setState(() => searchModeModal(setState)),
                       ),
@@ -193,7 +371,7 @@ class _SearchState extends State<VRChatSearch> {
                       children: <Widget>[
                         ElevatedButton(
                           child: Text(AppLocalizations.of(context)!.readMore),
-                          onPressed: () => moreOver(searchBoxController.text, searchMode).then(
+                          onPressed: () => moreOver(searchBoxController.text).then(
                             (_) => setState(
                               () => body = dataColumnUsers.render(children: dataColumnUsers.reload()),
                             ),
@@ -209,7 +387,7 @@ class _SearchState extends State<VRChatSearch> {
                       children: <Widget>[
                         ElevatedButton(
                           child: Text(AppLocalizations.of(context)!.readMore),
-                          onPressed: () => moreOver(searchBoxController.text, searchMode).then(
+                          onPressed: () => moreOver(searchBoxController.text).then(
                             (_) => setState(
                               () => body = dataColumnWorlds.render(children: dataColumnWorlds.reload()),
                             ),
