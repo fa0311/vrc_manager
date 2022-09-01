@@ -1,0 +1,70 @@
+name: "📓 Report a translation error"
+description: Report error message in vrchat_mobile_client.
+labels: ["bug"]
+body:
+
+  - type: dropdown
+    id: language
+    attributes:
+      label: Language
+      options:
+      - English
+      - 日本語
+      - español
+      - Português
+      - русский
+      - ไทย
+      - 简体中文
+      - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: locale-native-speaker
+    attributes:
+      label: Are you a native speaker of the language?
+      options:
+      - "True"
+      - "False"
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps-to-reproduce
+    attributes:
+      label: Steps to reproduce
+      description: Procedure for displaying translation errors.
+      placeholder: |
+        Example:
+          1. Open "Setting"
+          2. Open "Accessibility"
+    validations:
+      required: true
+
+
+  - type: input
+    id: incorrect-translation
+    attributes:
+      label: Incorrect translation
+      description:  Please enter the incorrect translation.
+      placeholder: "Example: 3 Billion Devices Run Coffee."
+    validations:
+      required: true
+
+  - type: input
+    id: correct-translation
+    attributes:
+      label: Correct translation
+      description: Please enter the correct translation.
+      placeholder: "Example: 3 Billion Devices Run Java."
+    validations:
+      required: true
+
+
+  - type: textarea
+    id: note
+    attributes:
+      label: Note
+      description: Please indicate anything else of note.
+    validations:
+      required: false
