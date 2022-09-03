@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "VRChatMobileClient"
-#define MyAppVersion "2.1.0"
+#define MyAppVersion "3.4.0"
 #define MyAppPublisher "yuki"
 #define MyAppURL "https://yuki0311.com/"
 #define MyAppExeName "vrchat_mobile_client.exe"
@@ -24,12 +24,12 @@ AppUpdatesURL={#MyAppURL}
 DefaultDirName={autopf}\{#MyAppName}
 ChangesAssociations=yes
 DisableProgramGroupPage=yes
-LicenseFile=C:\Project\flutter-project\vrchat_mobile_client\LICENSE
+LicenseFile=Z:\Project\flutter\vrchat_mobile_client\LICENSE
 ; Uncomment the following line to run in non administrative install mode (install for current user only.)
 ;PrivilegesRequired=lowest
-OutputDir=C:\Project\flutter-project\vrchat_mobile_client\build\windows
+OutputDir=Z:\Project\flutter\vrchat_mobile_client\build\windows
 OutputBaseFilename=VRChatMC-Setup
-SetupIconFile=C:\Project\flutter-project\vrchat_mobile_client\windows\runner\resources\app_icon.ico
+SetupIconFile=Z:\Project\flutter\vrchat_mobile_client\windows\runner\resources\app_icon.ico
 Compression=lzma
 SolidCompression=yes
 WizardStyle=modern
@@ -42,7 +42,7 @@ Name: "japanese"; MessagesFile: "compiler:Languages\Japanese.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "C:\Project\flutter-project\vrchat_mobile_client\build\windows\runner\Release\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "Z:\Project\flutter\vrchat_mobile_client\build\windows\runner\Release\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Registry]
