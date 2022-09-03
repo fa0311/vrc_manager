@@ -166,7 +166,7 @@ class _WorldState extends State<VRChatMobileWorld> {
                   height: 30,
                   child: TextButton(
                     style: ElevatedButton.styleFrom(
-                      onPrimary: Colors.grey,
+                      foregroundColor: Colors.grey,
                       minimumSize: Size.zero,
                       padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
                     ),
@@ -183,7 +183,7 @@ class _WorldState extends State<VRChatMobileWorld> {
                   height: 30,
                   child: TextButton(
                     style: ElevatedButton.styleFrom(
-                      onPrimary: Colors.grey,
+                      foregroundColor: Colors.grey,
                       minimumSize: Size.zero,
                       padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
                     ),

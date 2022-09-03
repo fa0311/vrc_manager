@@ -69,7 +69,7 @@ class _LoginHomeState extends State<VRChatMobileHome> {
                       height: 30,
                       child: TextButton(
                         style: ElevatedButton.styleFrom(
-                          onPrimary: Colors.grey,
+                          foregroundColor: Colors.grey,
                           minimumSize: Size.zero,
                           padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
                         ),
@@ -106,7 +106,7 @@ class _LoginHomeState extends State<VRChatMobileHome> {
                       height: 30,
                       child: TextButton(
                         style: ElevatedButton.styleFrom(
-                          onPrimary: Colors.grey,
+                          foregroundColor: Colors.grey,
                           minimumSize: Size.zero,
                           padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
                         ),
@@ -143,7 +143,7 @@ class _LoginHomeState extends State<VRChatMobileHome> {
                       height: 30,
                       child: TextButton(
                         style: ElevatedButton.styleFrom(
-                          onPrimary: Colors.grey,
+                          foregroundColor: Colors.grey,
                           minimumSize: Size.zero,
                           padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
                         ),

@@ -74,7 +74,7 @@ class _WebViewPageState extends State<VRChatMobileWebView> {
       },
     );
 
-    Future<bool> _exitApp(BuildContext contex) async {
+    Future<bool> exitApp(BuildContext contex) async {
       if (DateTime.now().millisecondsSinceEpoch - timeStamp < 200) {
         return true;
       } else if (await controllerGlobal.canGoBack()) {
@@ -86,7 +86,7 @@ class _WebViewPageState extends State<VRChatMobileWebView> {
     }
 
     return WillPopScope(
-      onWillPop: () => _exitApp(context),
+      onWillPop: () => exitApp(context),
       child: Scaffold(
         appBar: AppBar(
           actions: [simpleShare(context, url)],

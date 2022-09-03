@@ -62,7 +62,7 @@ class _SettingOtherAccountPageState extends State<VRChatMobileSettingsOtherAccou
         List<Widget> list = [
           TextButton(
             style: ElevatedButton.styleFrom(
-              onPrimary: Colors.grey,
+              foregroundColor: Colors.grey,
             ),
             onPressed: () => removeStorage("account_index").then(
               (_) => Navigator.pushAndRemoveUntil(

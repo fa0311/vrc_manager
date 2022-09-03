@@ -290,7 +290,7 @@ Card simpleWorldPlus(BuildContext context, VRChatWorld world, VRChatInstance ins
                         height: 30,
                         child: TextButton(
                           style: ElevatedButton.styleFrom(
-                            onPrimary: Colors.grey,
+                            foregroundColor: Colors.grey,
                             minimumSize: Size.zero,
                             padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
                           ),
@@ -468,7 +468,7 @@ Card simpleWorldPlusHalf(BuildContext context, VRChatWorld world, VRChatInstance
                         height: 16,
                         child: TextButton(
                           style: ElevatedButton.styleFrom(
-                            onPrimary: Colors.grey,
+                            foregroundColor: Colors.grey,
                             minimumSize: Size.zero,
                             padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
                           ),

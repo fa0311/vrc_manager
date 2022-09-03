@@ -618,7 +618,7 @@ class Users {
                           height: 16,
                           child: TextButton(
                             style: ElevatedButton.styleFrom(
-                              onPrimary: Colors.grey,
+                              foregroundColor: Colors.grey,
                               minimumSize: Size.zero,
                               padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 4),
                             ),
