@@ -11,7 +11,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:vrchat_mobile_client/api/data_class.dart';
 import 'package:vrchat_mobile_client/api/main.dart';
 import 'package:vrchat_mobile_client/assets/error.dart';
-import 'package:vrchat_mobile_client/assets/storage.dart';
+import 'package:vrchat_mobile_client/data_class/app_config.dart';
 import 'package:vrchat_mobile_client/scenes/world.dart';
 import 'package:vrchat_mobile_client/widgets/world.dart';
 
@@ -22,6 +22,8 @@ import 'package:vrchat_mobile_client/widgets/world.dart';
 class Worlds {
   List<Widget> children = [];
   late BuildContext context;
+  late AppConfig appConfig;
+  late VRChatAPI vrhatLoginSession;
   List<VRChatWorld> worldList = [];
   String displayMode = "default";
 
@@ -44,11 +46,11 @@ class Worlds {
   }
 
   defaultAdd(VRChatWorld world) {
-    children.add(simpleWorldDescription(context, world));
+    children.add(simpleWorldDescription(context, appConfig, vrhatLoginSession, world));
   }
 
   simpleAdd(VRChatWorld world) {
-    children.add(simpleWorldDescriptionHalf(context, world));
+    children.add(simpleWorldDescriptionHalf(context, appConfig, vrhatLoginSession, world));
   }
 
   textOnlyAdd(VRChatWorld world) {
@@ -62,7 +64,7 @@ class Worlds {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id),
+                    builder: (BuildContext context) => VRChatMobileWorld(appConfig, vrhatLoginSession, worldId: world.id),
                   ));
             },
             behavior: HitTestBehavior.opaque,
@@ -113,6 +115,8 @@ class Worlds {
 class WorldsLimited {
   List<Widget> children = [];
   late BuildContext context;
+  late AppConfig appConfig;
+  late VRChatAPI vrhatLoginSession;
   List<VRChatLimitedWorld> worldList = [];
   String displayMode = "default";
 
@@ -133,7 +137,7 @@ class WorldsLimited {
   }
 
   defaultAdd(VRChatLimitedWorld world) {
-    children.add(simpleWorld(context, world));
+    children.add(simpleWorld(context, appConfig, vrhatLoginSession, world));
   }
 
   Widget render({required List<Widget> children}) {
@@ -161,6 +165,8 @@ class WorldsLimited {
 class FavoriteWorlds {
   List<Widget> children = [];
   late BuildContext context;
+  late AppConfig appConfig;
+  late VRChatAPI vrhatLoginSession;
   List<VRChatFavoriteWorld> worldList = [];
   Map<String, String?> descriptionMap = {};
   String displayMode = "default";
@@ -195,7 +201,7 @@ class FavoriteWorlds {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id),
+                    builder: (BuildContext context) => VRChatMobileWorld(appConfig, vrhatLoginSession, worldId: world.id),
                   ));
             },
             behavior: HitTestBehavior.opaque,
@@ -252,16 +258,12 @@ class FavoriteWorlds {
                 SizedBox(
                   width: 50,
                   child: IconButton(
-                    onPressed: () {
-                      getLoginSession("login_session").then(
-                        (cookie) => VRChatAPI(cookie: cookie ?? "").deleteFavorites(world.favoriteId).then((response) {
-                          worldList.remove(world);
-                          button();
-                        }).catchError((status) {
-                          apiError(context, status);
-                        }),
-                      );
-                    },
+                    onPressed: () => vrhatLoginSession.deleteFavorites(world.favoriteId).then((response) {
+                      worldList.remove(world);
+                      button();
+                    }).catchError((status) {
+                      apiError(context, appConfig, vrhatLoginSession, status);
+                    }),
                     icon: const Icon(Icons.delete),
                   ),
                 ),
@@ -286,7 +288,7 @@ class FavoriteWorlds {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id),
+                        builder: (BuildContext context) => VRChatMobileWorld(appConfig, vrhatLoginSession, worldId: world.id),
                       ));
                 },
                 behavior: HitTestBehavior.opaque,
@@ -365,16 +367,12 @@ class FavoriteWorlds {
               iconSize: 15,
               constraints: const BoxConstraints(),
               padding: const EdgeInsets.all(0),
-              onPressed: () {
-                getLoginSession("login_session").then(
-                  (cookie) => VRChatAPI(cookie: cookie ?? "").deleteFavorites(world.favoriteId).then((response) {
-                    worldList.remove(world);
-                    button();
-                  }).catchError((status) {
-                    apiError(context, status);
-                  }),
-                );
-              },
+              onPressed: () => vrhatLoginSession.deleteFavorites(world.favoriteId).then((response) {
+                worldList.remove(world);
+                button();
+              }).catchError((status) {
+                apiError(context, appConfig, vrhatLoginSession, status);
+              }),
               icon: const Icon(Icons.delete),
             ),
           ],
@@ -394,7 +392,7 @@ class FavoriteWorlds {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id),
+                    builder: (BuildContext context) => VRChatMobileWorld(appConfig, vrhatLoginSession, worldId: world.id),
                   ));
             },
             behavior: HitTestBehavior.opaque,
@@ -406,16 +404,12 @@ class FavoriteWorlds {
                   child: IconButton(
                     iconSize: 20,
                     padding: const EdgeInsets.all(0),
-                    onPressed: () {
-                      getLoginSession("login_session").then(
-                        (cookie) => VRChatAPI(cookie: cookie ?? "").deleteFavorites(world.favoriteId).then((response) {
-                          worldList.remove(world);
-                          button();
-                        }).catchError((status) {
-                          apiError(context, status);
-                        }),
-                      );
-                    },
+                    onPressed: () => vrhatLoginSession.deleteFavorites(world.favoriteId).then((response) {
+                      worldList.remove(world);
+                      button();
+                    }).catchError((status) {
+                      apiError(context, appConfig, vrhatLoginSession, status);
+                    }),
                     icon: const Icon(Icons.delete),
                   ),
                 ),

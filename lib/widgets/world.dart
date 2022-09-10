@@ -14,12 +14,12 @@ import 'package:vrchat_mobile_client/api/data_class.dart';
 import 'package:vrchat_mobile_client/api/main.dart';
 import 'package:vrchat_mobile_client/assets/date.dart';
 import 'package:vrchat_mobile_client/assets/error.dart';
-import 'package:vrchat_mobile_client/assets/storage.dart';
 import 'package:vrchat_mobile_client/assets/vrchat/instance_type.dart';
+import 'package:vrchat_mobile_client/data_class/app_config.dart';
 import 'package:vrchat_mobile_client/scenes/world.dart';
 import 'package:vrchat_mobile_client/widgets/region.dart';
 
-Card simpleWorld(BuildContext context, VRChatLimitedWorld world) {
+Card simpleWorld(BuildContext context, AppConfig appConfig, VRChatAPI vrhatLoginSession, VRChatLimitedWorld world) {
   return Card(
     elevation: 20.0,
     child: Container(
@@ -29,7 +29,7 @@ Card simpleWorld(BuildContext context, VRChatLimitedWorld world) {
           Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id),
+                builder: (BuildContext context) => VRChatMobileWorld(appConfig, vrhatLoginSession, worldId: world.id),
               ));
         },
         behavior: HitTestBehavior.opaque,
@@ -78,7 +78,7 @@ Card simpleWorld(BuildContext context, VRChatLimitedWorld world) {
   );
 }
 
-Card simpleWorldDescription(BuildContext context, VRChatWorld world) {
+Card simpleWorldDescription(BuildContext context, appConfig, vrhatLoginSession, VRChatWorld world) {
   return Card(
     elevation: 20.0,
     child: Container(
@@ -88,7 +88,7 @@ Card simpleWorldDescription(BuildContext context, VRChatWorld world) {
           Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id),
+                builder: (BuildContext context) => VRChatMobileWorld(appConfig, vrhatLoginSession, worldId: world.id),
               ));
         },
         behavior: HitTestBehavior.opaque,
@@ -146,7 +146,7 @@ Card simpleWorldDescription(BuildContext context, VRChatWorld world) {
   );
 }
 
-Card simpleWorldDescriptionHalf(BuildContext context, VRChatWorld world) {
+Card simpleWorldDescriptionHalf(BuildContext context, appConfig, vrhatLoginSession, VRChatWorld world) {
   return Card(
     elevation: 20.0,
     child: Container(
@@ -156,7 +156,7 @@ Card simpleWorldDescriptionHalf(BuildContext context, VRChatWorld world) {
           Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id),
+                builder: (BuildContext context) => VRChatMobileWorld(appConfig, vrhatLoginSession, worldId: world.id),
               ));
         },
         behavior: HitTestBehavior.opaque,
@@ -222,7 +222,7 @@ Card simpleWorldDescriptionHalf(BuildContext context, VRChatWorld world) {
   );
 }
 
-Card simpleWorldPlus(BuildContext context, VRChatWorld world, VRChatInstance instance) {
+Card simpleWorldPlus(BuildContext context, AppConfig appConfig, VRChatAPI vrhatLoginSession, VRChatWorld world, VRChatInstance instance) {
   return Card(
     elevation: 20.0,
     child: Container(
@@ -232,7 +232,7 @@ Card simpleWorldPlus(BuildContext context, VRChatWorld world, VRChatInstance ins
           Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id),
+                builder: (BuildContext context) => VRChatMobileWorld(appConfig, vrhatLoginSession, worldId: world.id),
               ));
         },
         behavior: HitTestBehavior.opaque,
@@ -294,29 +294,25 @@ Card simpleWorldPlus(BuildContext context, VRChatWorld world, VRChatInstance ins
                             minimumSize: Size.zero,
                             padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
                           ),
-                          onPressed: () => getLoginSession("login_session").then(
-                            (cookie) => VRChatAPI(cookie: cookie ?? "")
-                                .selfInvite(instance.location, instance.shortName ?? "")
-                                .then((VRChatNotificationsInvite response) {
-                              showDialog(
-                                context: context,
-                                builder: (_) {
-                                  return AlertDialog(
-                                    title: Text(AppLocalizations.of(context)!.sendInvite),
-                                    content: Text(AppLocalizations.of(context)!.selfInviteDetails),
-                                    actions: <Widget>[
-                                      TextButton(
-                                        child: Text(AppLocalizations.of(context)!.close),
-                                        onPressed: () => Navigator.pop(context),
-                                      ),
-                                    ],
-                                  );
-                                },
-                              );
-                            }).catchError((status) {
-                              apiError(context, status);
-                            }),
-                          ),
+                          onPressed: () => vrhatLoginSession.selfInvite(instance.location, instance.shortName ?? "").then((VRChatNotificationsInvite response) {
+                            showDialog(
+                              context: context,
+                              builder: (_) {
+                                return AlertDialog(
+                                  title: Text(AppLocalizations.of(context)!.sendInvite),
+                                  content: Text(AppLocalizations.of(context)!.selfInviteDetails),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      child: Text(AppLocalizations.of(context)!.close),
+                                      onPressed: () => Navigator.pop(context),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          }).catchError((status) {
+                            apiError(context, appConfig, vrhatLoginSession, status);
+                          }),
                           child: Text(AppLocalizations.of(context)!.joinInstance),
                         ),
                       ),
@@ -331,7 +327,7 @@ Card simpleWorldPlus(BuildContext context, VRChatWorld world, VRChatInstance ins
   );
 }
 
-Card simpleWorldHalf(BuildContext context, VRChatLimitedWorld world) {
+Card simpleWorldHalf(BuildContext context, AppConfig appConfig, VRChatAPI vrhatLoginSession, VRChatLimitedWorld world) {
   return Card(
     elevation: 20.0,
     child: Container(
@@ -341,7 +337,7 @@ Card simpleWorldHalf(BuildContext context, VRChatLimitedWorld world) {
           Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id),
+                builder: (BuildContext context) => VRChatMobileWorld(appConfig, vrhatLoginSession, worldId: world.id),
               ));
         },
         behavior: HitTestBehavior.opaque,
@@ -393,7 +389,7 @@ Card simpleWorldHalf(BuildContext context, VRChatLimitedWorld world) {
   );
 }
 
-Card simpleWorldPlusHalf(BuildContext context, VRChatWorld world, VRChatInstance instance) {
+Card simpleWorldPlusHalf(BuildContext context, AppConfig appConfig, VRChatAPI vrhatLoginSession, VRChatWorld world, VRChatInstance instance) {
   return Card(
     elevation: 20.0,
     child: Container(
@@ -403,7 +399,7 @@ Card simpleWorldPlusHalf(BuildContext context, VRChatWorld world, VRChatInstance
           Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id),
+                builder: (BuildContext context) => VRChatMobileWorld(appConfig, vrhatLoginSession, worldId: world.id),
               ));
         },
         behavior: HitTestBehavior.opaque,
@@ -472,29 +468,25 @@ Card simpleWorldPlusHalf(BuildContext context, VRChatWorld world, VRChatInstance
                             minimumSize: Size.zero,
                             padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
                           ),
-                          onPressed: () => getLoginSession("login_session").then(
-                            (cookie) => VRChatAPI(cookie: cookie ?? "")
-                                .selfInvite(instance.location, instance.shortName ?? "")
-                                .then((VRChatNotificationsInvite response) {
-                              showDialog(
-                                context: context,
-                                builder: (_) {
-                                  return AlertDialog(
-                                    title: Text(AppLocalizations.of(context)!.sendInvite),
-                                    content: Text(AppLocalizations.of(context)!.selfInviteDetails),
-                                    actions: <Widget>[
-                                      TextButton(
-                                        child: Text(AppLocalizations.of(context)!.close),
-                                        onPressed: () => Navigator.pop(context),
-                                      ),
-                                    ],
-                                  );
-                                },
-                              );
-                            }).catchError((status) {
-                              apiError(context, status);
-                            }),
-                          ),
+                          onPressed: () => vrhatLoginSession.selfInvite(instance.location, instance.shortName ?? "").then((VRChatNotificationsInvite response) {
+                            showDialog(
+                              context: context,
+                              builder: (_) {
+                                return AlertDialog(
+                                  title: Text(AppLocalizations.of(context)!.sendInvite),
+                                  content: Text(AppLocalizations.of(context)!.selfInviteDetails),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      child: Text(AppLocalizations.of(context)!.close),
+                                      onPressed: () => Navigator.pop(context),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          }).catchError((status) {
+                            apiError(context, appConfig, vrhatLoginSession, status);
+                          }),
                           child: Text(AppLocalizations.of(context)!.joinInstance, style: const TextStyle(fontSize: 10)),
                         ),
                       ),

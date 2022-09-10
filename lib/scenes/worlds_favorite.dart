@@ -12,14 +12,16 @@ import 'package:vrchat_mobile_client/api/main.dart';
 import 'package:vrchat_mobile_client/assets/error.dart';
 import 'package:vrchat_mobile_client/assets/flutter/text_stream.dart';
 import 'package:vrchat_mobile_client/assets/storage.dart';
+import 'package:vrchat_mobile_client/data_class/app_config.dart';
 import 'package:vrchat_mobile_client/widgets/drawer.dart';
 import 'package:vrchat_mobile_client/widgets/share.dart';
 import 'package:vrchat_mobile_client/widgets/worlds.dart';
 
 class VRChatMobileWorldsFavorite extends StatefulWidget {
   final bool offline;
-
-  const VRChatMobileWorldsFavorite({Key? key, this.offline = true}) : super(key: key);
+  final AppConfig appConfig;
+  final VRChatAPI vrhatLoginSession;
+  const VRChatMobileWorldsFavorite(this.appConfig, this.vrhatLoginSession, {Key? key, this.offline = true}) : super(key: key);
 
   @override
   State<VRChatMobileWorldsFavorite> createState() => _WorldsFavoriteState();
@@ -34,43 +36,42 @@ class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
   ];
 
   List<VRChatFavoriteGroup> favoriteList = [];
-  String? cookie;
 
   @override
   initState() {
     super.initState();
 
     getStorage("worlds_favorite_display_mode").then((String? displayMode) {
-      getLoginSession("login_session").then((String? response) {
-        VRChatAPI(cookie: cookie = response ?? "").favoriteGroups("world", offset: 0).then((
-          VRChatFavoriteGroupList response,
-        ) {
-          if (response.group.isEmpty) {
-            setState(
-              () => bodyList = [Text(AppLocalizations.of(context)!.none)],
-            );
-          }
-          final List<Widget> children = [];
-          for (VRChatFavoriteGroup list in response.group) {
-            children.add(Column(
-              children: <Widget>[
-                Text(list.displayName),
-              ],
-            ));
-          }
-          bodyList = [];
-          response.group.asMap().forEach((index, VRChatFavoriteGroup list) {
-            offset.add(0);
-            bodyList.add(Column(children: const [Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator())]));
-            dataColumn.add(FavoriteWorlds()
-              ..context = context
-              ..displayMode = displayMode ?? "default");
-            favoriteList.add(list);
-            moreOver(index);
-          });
-        }).catchError((status) {
-          apiError(context, status);
+      widget.vrhatLoginSession.favoriteGroups("world", offset: 0).then((
+        VRChatFavoriteGroupList response,
+      ) {
+        if (response.group.isEmpty) {
+          setState(
+            () => bodyList = [Text(AppLocalizations.of(context)!.none)],
+          );
+        }
+        final List<Widget> children = [];
+        for (VRChatFavoriteGroup list in response.group) {
+          children.add(Column(
+            children: <Widget>[
+              Text(list.displayName),
+            ],
+          ));
+        }
+        bodyList = [];
+        response.group.asMap().forEach((index, VRChatFavoriteGroup list) {
+          offset.add(0);
+          bodyList.add(Column(children: const [Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator())]));
+          dataColumn.add(FavoriteWorlds()
+            ..context = context
+            ..appConfig = widget.appConfig
+            ..vrhatLoginSession = widget.vrhatLoginSession
+            ..displayMode = displayMode ?? "default");
+          favoriteList.add(list);
+          moreOver(index);
         });
+      }).catchError((status) {
+        apiError(context, widget.appConfig, widget.vrhatLoginSession, status);
       });
     });
   }
@@ -83,15 +84,15 @@ class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
     setState(() {
       offset[index] += 50;
     });
-    VRChatAPI(cookie: cookie ?? "").favoritesWorlds(favoriteList[index].name, offset: offset[index] - 50).then((VRChatFavoriteWorldList worlds) {
+    widget.vrhatLoginSession.favoritesWorlds(favoriteList[index].name, offset: offset[index] - 50).then((VRChatFavoriteWorldList worlds) {
       List<Future> futureList = [];
       for (VRChatFavoriteWorld world in worlds.world) {
         dataColumn[index].add(world);
         futureList.add(
-          VRChatAPI(cookie: cookie ?? "").worlds(world.id).then((VRChatWorld world) {
+          widget.vrhatLoginSession.worlds(world.id).then((VRChatWorld world) {
             dataColumn[index].descriptionMap[world.id] = world.description;
           }).catchError((status) {
-            apiError(context, status);
+            apiError(context, widget.appConfig, widget.vrhatLoginSession, status);
           }),
         );
       }
@@ -101,7 +102,7 @@ class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
         );
       });
     }).catchError((status) {
-      apiError(context, status);
+      apiError(context, widget.appConfig, widget.vrhatLoginSession, status);
     });
   }
 
@@ -186,7 +187,7 @@ class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
 
   @override
   Widget build(BuildContext context) {
-    textStream(context);
+    textStream(context, widget.appConfig, widget.vrhatLoginSession);
     dataColumn.asMap().forEach((index, FavoriteWorlds data) {
       data.button = () {
         reload(index);
@@ -222,7 +223,7 @@ class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
                         title: Text(AppLocalizations.of(context)!.openInBrowser),
                         onTap: () {
                           Navigator.pop(context);
-                          openInBrowser(context, "https://vrchat.com/home/worlds");
+                          openInBrowser(context, widget.appConfig, widget.vrhatLoginSession, "https://vrchat.com/home/worlds");
                         },
                       ),
                     ],
@@ -233,7 +234,7 @@ class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
           ),
         ],
       ),
-      drawer: drawer(context),
+      drawer: drawer(context, widget.appConfig, widget.vrhatLoginSession),
       body: SafeArea(
         child: SizedBox(
           width: MediaQuery.of(context).size.width,

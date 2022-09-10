@@ -4,14 +4,18 @@ import 'package:flutter/material.dart';
 // Package imports:
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:vrchat_mobile_client/api/main.dart';
 
 // Project imports:
 import 'package:vrchat_mobile_client/assets/flutter/text_stream.dart';
 import 'package:vrchat_mobile_client/assets/licence.dart';
+import 'package:vrchat_mobile_client/data_class/app_config.dart';
 import 'package:vrchat_mobile_client/widgets/share.dart';
 
 class VRChatMobileHelp extends StatefulWidget {
-  const VRChatMobileHelp({Key? key}) : super(key: key);
+  final AppConfig appConfig;
+  final VRChatAPI vrhatLoginSession;
+  const VRChatMobileHelp(this.appConfig, this.vrhatLoginSession, {Key? key}) : super(key: key);
 
   @override
   State<VRChatMobileHelp> createState() => _HelpPageState();
@@ -29,7 +33,7 @@ class _HelpPageState extends State<VRChatMobileHelp> {
 
   @override
   Widget build(BuildContext context) {
-    textStream(context);
+    textStream(context, widget.appConfig, widget.vrhatLoginSession);
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.help),
@@ -44,30 +48,32 @@ class _HelpPageState extends State<VRChatMobileHelp> {
                   ListTile(
                       title: Text(AppLocalizations.of(context)!.contribution),
                       subtitle: Text(AppLocalizations.of(context)!.contributionDetails),
-                      onTap: () => openInBrowser(context, "https://github.com/fa0311/vrchat_mobile_client")),
+                      onTap: () => openInBrowser(context, widget.appConfig, widget.vrhatLoginSession, "https://github.com/fa0311/vrchat_mobile_client")),
                   const Divider(),
                   ListTile(
                       title: Text(AppLocalizations.of(context)!.report),
                       subtitle: Text(AppLocalizations.of(context)!.reportDetails),
-                      onTap: () => openInBrowser(context, "https://github.com/fa0311/vrchat_mobile_client/issues/new/choose")),
+                      onTap: () => openInBrowser(
+                          context, widget.appConfig, widget.vrhatLoginSession, "https://github.com/fa0311/vrchat_mobile_client/issues/new/choose")),
                   const Divider(),
                   ListTile(
                     title: Text(AppLocalizations.of(context)!.developerInfo),
                     subtitle: Text(AppLocalizations.of(context)!.developerInfoDetails),
-                    onTap: () => openInBrowser(context, "https://twitter.com/faa0311"),
+                    onTap: () => openInBrowser(context, widget.appConfig, widget.vrhatLoginSession, "https://twitter.com/faa0311"),
                   ),
                   const Divider(),
                   ListTile(
                     title: Text(AppLocalizations.of(context)!.rateTheApp),
                     subtitle: Text(AppLocalizations.of(context)!.rateTheAppDetails),
-                    onTap: () => openInBrowser(context, "https://play.google.com/store/apps/details?id=com.yuki0311.vrchat_mobile_client"),
+                    onTap: () => openInBrowser(
+                        context, widget.appConfig, widget.vrhatLoginSession, "https://play.google.com/store/apps/details?id=com.yuki0311.vrchat_mobile_client"),
                   ),
                   const Divider(),
                   ListTile(
                     title: Text(AppLocalizations.of(context)!.version),
                     subtitle: Text(AppLocalizations.of(context)!.versionDetails(version)),
                     onTap: () => PackageInfo.fromPlatform().then((PackageInfo packageInfo) {
-                      openInBrowser(context, "https://github.com/fa0311/vrchat_mobile_client/releases");
+                      openInBrowser(context, widget.appConfig, widget.vrhatLoginSession, "https://github.com/fa0311/vrchat_mobile_client/releases");
                     }),
                   ),
                   const Divider(),

@@ -3,6 +3,8 @@ import 'dart:io';
 
 // Flutter imports:
 import 'package:flutter/material.dart';
+import 'package:vrchat_mobile_client/api/main.dart';
+import 'package:vrchat_mobile_client/data_class/app_config.dart';
 
 // Package imports:
 import 'package:webview_flutter/webview_flutter.dart';
@@ -15,8 +17,9 @@ import 'package:vrchat_mobile_client/widgets/share.dart';
 
 class VRChatMobileWebView extends StatefulWidget {
   final String url;
-
-  const VRChatMobileWebView({Key? key, required this.url}) : super(key: key);
+  final AppConfig appConfig;
+  final VRChatAPI vrhatLoginSession;
+  const VRChatMobileWebView(this.appConfig, this.vrhatLoginSession, {Key? key, required this.url}) : super(key: key);
 
   @override
   State<VRChatMobileWebView> createState() => _WebViewPageState();
@@ -35,7 +38,7 @@ class _WebViewPageState extends State<VRChatMobileWebView> {
     },
     navigationDelegate: (NavigationRequest request) {
       if (openInExternalBrowser && Uri.parse(url).host != "vrchat.com") {
-        openInBrowser(context, url);
+        openInBrowser(context, widget.appConfig, widget.vrhatLoginSession, url);
         return NavigationDecision.prevent;
       } else {
         setState(() => url = request.url);
@@ -56,23 +59,19 @@ class _WebViewPageState extends State<VRChatMobileWebView> {
 
   @override
   Widget build(BuildContext context) {
-    textStream(context);
+    textStream(context, widget.appConfig, widget.vrhatLoginSession);
     final cookieManager = CookieManager();
 
-    getLoginSession("login_session").then(
-      (cookie) {
-        final cookieMap = Session().decodeCookie(cookie ?? "");
-        for (String key in cookieMap.keys) {
-          cookieManager.setCookie(
-            WebViewCookie(
-              name: key,
-              value: cookieMap[key] ?? "",
-              domain: ".vrchat.com",
-            ),
-          );
-        }
-      },
-    );
+    final cookieMap = Session().decodeCookie(widget.vrhatLoginSession.vrchatSession.headers["cookie"] ?? "");
+    for (String key in cookieMap.keys) {
+      cookieManager.setCookie(
+        WebViewCookie(
+          name: key,
+          value: cookieMap[key] ?? "",
+          domain: ".vrchat.com",
+        ),
+      );
+    }
 
     Future<bool> exitApp(BuildContext contex) async {
       if (DateTime.now().millisecondsSinceEpoch - timeStamp < 200) {

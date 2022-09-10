@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 // Project imports:
 import 'package:vrchat_mobile_client/assets/storage.dart';
 import 'package:vrchat_mobile_client/material.dart';
-import 'package:vrchat_mobile_client/scenes/home.dart';
+import 'package:vrchat_mobile_client/scenes/splash.dart';
 
 main() {
   runApp(const VRChatMobile());
@@ -29,7 +29,7 @@ class _PageState extends State<VRChatMobile> {
   @override
   Widget build(BuildContext context) {
     return getMaterialApp(
-      const VRChatMobileHome(init: true),
+      const VRChatMobileSplash(init: true),
       theme,
       Locale(locale, ''),
     );

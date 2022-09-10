@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:vrchat_mobile_client/api/main.dart';
 
 // Project imports:
 import 'package:vrchat_mobile_client/assets/flutter/text_stream.dart';
+import 'package:vrchat_mobile_client/data_class/app_config.dart';
 import 'package:vrchat_mobile_client/scenes/setting/accessibility.dart';
 import 'package:vrchat_mobile_client/scenes/setting/account.dart';
 import 'package:vrchat_mobile_client/scenes/setting/help.dart';
@@ -14,7 +16,9 @@ import 'package:vrchat_mobile_client/widgets/drawer.dart';
 
 class VRChatMobileSettings extends StatefulWidget {
   final bool logged;
-  const VRChatMobileSettings({Key? key, this.logged = true}) : super(key: key);
+  final AppConfig appConfig;
+  final VRChatAPI vrhatLoginSession;
+  const VRChatMobileSettings(this.appConfig, this.vrhatLoginSession, {Key? key, this.logged = true}) : super(key: key);
 
   @override
   State<VRChatMobileSettings> createState() => _SettingPageState();
@@ -23,12 +27,12 @@ class VRChatMobileSettings extends StatefulWidget {
 class _SettingPageState extends State<VRChatMobileSettings> {
   @override
   Widget build(BuildContext context) {
-    textStream(context);
+    textStream(context, widget.appConfig, widget.vrhatLoginSession);
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.setting),
       ),
-      drawer: widget.logged ? drawer(context) : simpledrawer(context),
+      drawer: widget.logged ? drawer(context, widget.appConfig, widget.vrhatLoginSession) : simpledrawer(context, widget.appConfig, widget.vrhatLoginSession),
       body: SafeArea(
         child: SizedBox(
           child: SingleChildScrollView(
@@ -49,7 +53,7 @@ class _SettingPageState extends State<VRChatMobileSettings> {
                     onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (BuildContext context) => const VRChatMobileSettingsAccessibility(),
+                        builder: (BuildContext context) => VRChatMobileSettingsAccessibility(widget.appConfig, widget.vrhatLoginSession),
                       ),
                     ),
                   ),
@@ -67,7 +71,7 @@ class _SettingPageState extends State<VRChatMobileSettings> {
                     onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (BuildContext context) => const VRChatMobileSettingsAccount(),
+                        builder: (BuildContext context) => VRChatMobileSettingsAccount(widget.appConfig, widget.vrhatLoginSession),
                       ),
                     ),
                   ),
@@ -85,7 +89,7 @@ class _SettingPageState extends State<VRChatMobileSettings> {
                     onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (BuildContext context) => const VRChatMobileSettingsPermissions(),
+                        builder: (BuildContext context) => VRChatMobileSettingsPermissions(widget.appConfig, widget.vrhatLoginSession),
                       ),
                     ),
                   ),
@@ -103,7 +107,7 @@ class _SettingPageState extends State<VRChatMobileSettings> {
                     onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (BuildContext context) => const VRChatMobileHelp(),
+                        builder: (BuildContext context) => VRChatMobileHelp(widget.appConfig, widget.vrhatLoginSession),
                       ),
                     ),
                   )

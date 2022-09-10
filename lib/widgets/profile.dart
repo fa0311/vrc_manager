@@ -17,12 +17,12 @@ import 'package:vrchat_mobile_client/api/main.dart';
 import 'package:vrchat_mobile_client/assets/date.dart';
 import 'package:vrchat_mobile_client/assets/dialog.dart';
 import 'package:vrchat_mobile_client/assets/error.dart';
-import 'package:vrchat_mobile_client/assets/storage.dart';
 import 'package:vrchat_mobile_client/assets/vrchat/icon.dart';
+import 'package:vrchat_mobile_client/data_class/app_config.dart';
 import 'package:vrchat_mobile_client/widgets/share.dart';
 import 'package:vrchat_mobile_client/widgets/status.dart';
 
-Column profile(BuildContext context, VRChatUser user) {
+Column profile(BuildContext context, AppConfig appConfig, VRChatAPI vrhatLoginSession, VRChatUser user) {
   List<InlineSpan> lineList = [];
   for (String line in (user.bio ?? "").split('\n')) {
     Match? matchTwitter = RegExp(r'^(Twitter|twitter|TWITTER)([:˸：\s]{0,3})([@＠\s]{0,3})([0-9０-９a-zA-Z_]{1,15})$').firstMatch(line);
@@ -43,13 +43,14 @@ Column profile(BuildContext context, VRChatUser user) {
           recognizer: TapGestureRecognizer()
             ..onTap = () {
               if (matchTwitter != null) {
-                shareModalBottom(context, "https://twitter.com/${match.group(match.groupCount)}");
+                shareModalBottom(context, appConfig, vrhatLoginSession, "https://twitter.com/${match.group(match.groupCount)}");
               } else if (matchDiscord != null) {
                 clipboardShareModalBottom(context, "${match.group(match.groupCount)}".replaceAll("＃", "#"));
               } else if (matchGithub != null) {
-                shareModalBottom(context, "https://github.com/${match.group(match.groupCount)}");
+                shareModalBottom(context, appConfig, vrhatLoginSession, "https://github.com/${match.group(match.groupCount)}");
               } else if (matchUrl != null) {
-                shareModalBottom(context, "${match.group(match.groupCount)}".replaceAll("⁄", "/").replaceAll("˸", ":").replaceAll("․", "."));
+                shareModalBottom(
+                    context, appConfig, vrhatLoginSession, "${match.group(match.groupCount)}".replaceAll("⁄", "/").replaceAll("˸", ":").replaceAll("․", "."));
               }
             }));
     } else {
@@ -115,6 +116,8 @@ Column profile(BuildContext context, VRChatUser user) {
         mainAxisAlignment: MainAxisAlignment.center,
         children: _biolink(
           context,
+          appConfig,
+          vrhatLoginSession,
           user.bioLinks,
         ),
       ),
@@ -134,63 +137,46 @@ Column profile(BuildContext context, VRChatUser user) {
   );
 }
 
-Widget profileAction(BuildContext context, VRChatfriendStatus status, String uid, Function reload) {
+Widget profileAction(BuildContext context, AppConfig appConfig, VRChatAPI vrhatLoginSession, VRChatfriendStatus status, String uid, Function reload) {
   sendFriendRequest() {
-    getLoginSession("login_session").then(
-      (cookie) {
-        VRChatAPI(cookie: cookie ?? "").sendFriendRequest(uid).then((response) {
-          Navigator.pop(context);
-          reload();
-        }).catchError((status) {
-          apiError(context, status);
-        });
-      },
-    );
+    vrhatLoginSession.sendFriendRequest(uid).then((response) {
+      Navigator.pop(context);
+      reload();
+    }).catchError((status) {
+      apiError(context, appConfig, vrhatLoginSession, status);
+    });
   }
 
   acceptFriendRequest() {
-    getLoginSession("login_session").then(
-      (cookie) {
-        VRChatAPI(cookie: cookie ?? "").acceptFriendRequestByUid(uid).then((response) {
-          Navigator.pop(context);
-          reload();
-        }).catchError((status) {
-          apiError(context, status);
-        });
-      },
-    );
+    vrhatLoginSession.acceptFriendRequestByUid(uid).then((response) {
+      Navigator.pop(context);
+      reload();
+    }).catchError((status) {
+      apiError(context, appConfig, vrhatLoginSession, status);
+    });
   }
 
   deleteFriendRequest() {
-    getLoginSession("login_session").then(
-      (cookie) {
-        VRChatAPI(cookie: cookie ?? "").deleteFriendRequest(uid).then((response) {
-          Navigator.pop(context);
-          reload();
-        }).catchError((status) {
-          apiError(context, status);
-        });
-      },
-    );
+    vrhatLoginSession.deleteFriendRequest(uid).then((response) {
+      Navigator.pop(context);
+      reload();
+    }).catchError((status) {
+      apiError(context, appConfig, vrhatLoginSession, status);
+    });
   }
 
   deleteFriend() {
     confirm(
-      context,
-      AppLocalizations.of(context)!.unfriendConfirm,
-      AppLocalizations.of(context)!.unfriend,
-      () => getLoginSession("login_session").then(
-        (cookie) {
-          VRChatAPI(cookie: cookie ?? "").deleteFriend(uid).then((response) {
-            Navigator.pop(context);
-            Navigator.pop(context);
-            reload();
-          }).catchError((status) {
-            apiError(context, status);
-          });
-        },
-      ),
-    );
+        context,
+        AppLocalizations.of(context)!.unfriendConfirm,
+        AppLocalizations.of(context)!.unfriend,
+        () => vrhatLoginSession.deleteFriend(uid).then((response) {
+              Navigator.pop(context);
+              Navigator.pop(context);
+              reload();
+            }).catchError((status) {
+              apiError(context, appConfig, vrhatLoginSession, status);
+            }));
   }
 
   return IconButton(
@@ -242,7 +228,7 @@ Widget profileAction(BuildContext context, VRChatfriendStatus status, String uid
   );
 }
 
-List<Widget> _biolink(BuildContext context, List<dynamic> biolinks) {
+List<Widget> _biolink(BuildContext context, AppConfig appConfig, VRChatAPI vrhatLoginSession, List<dynamic> biolinks) {
   List<Widget> response = [];
   for (String link in biolinks) {
     if (link == "") continue;
@@ -250,7 +236,7 @@ List<Widget> _biolink(BuildContext context, List<dynamic> biolinks) {
       CircleAvatar(
         backgroundColor: const Color(0x00000000),
         child: IconButton(
-          onPressed: () => openInBrowser(context, link),
+          onPressed: () => openInBrowser(context, appConfig, vrhatLoginSession, link),
           icon: SvgPicture.asset("assets/svg/${getVrchatIconContains(link)}.svg",
               width: 20, height: 20, color: Color(getVrchatIcon()[getVrchatIconContains(link)] ?? 0xFFFFFFFF), semanticsLabel: link),
         ),

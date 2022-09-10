@@ -3,17 +3,21 @@ import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:vrchat_mobile_client/api/main.dart';
 
 // Project imports:
 import 'package:vrchat_mobile_client/assets/dialog.dart';
 import 'package:vrchat_mobile_client/assets/flutter/text_stream.dart';
 import 'package:vrchat_mobile_client/assets/storage.dart';
+import 'package:vrchat_mobile_client/data_class/app_config.dart';
 import 'package:vrchat_mobile_client/scenes/home.dart';
 import 'package:vrchat_mobile_client/widgets/drawer.dart';
 
 class VRChatMobileSettingsOtherAccount extends StatefulWidget {
   final bool drawer;
-  const VRChatMobileSettingsOtherAccount({Key? key, this.drawer = true}) : super(key: key);
+  final AppConfig appConfig;
+  final VRChatAPI vrhatLoginSession;
+  const VRChatMobileSettingsOtherAccount(this.appConfig, this.vrhatLoginSession, {Key? key, this.drawer = true}) : super(key: key);
 
   @override
   State<VRChatMobileSettingsOtherAccount> createState() => _SettingOtherAccountPageState();
@@ -37,12 +41,14 @@ class _SettingOtherAccountPageState extends State<VRChatMobileSettingsOtherAccou
     if (accountIndexNow == accountIndex) {
       if (accountIndexList.isEmpty) {
         removeStorage("account_index").then(
-          (_) => Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-              builder: (BuildContext context) => const VRChatMobileHome(),
+          (_) => getLoginSession("login_session").then(
+            (cookie) => Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                builder: (BuildContext context) => VRChatMobileHome(widget.appConfig, widget.vrhatLoginSession),
+              ),
+              (_) => false,
             ),
-            (_) => false,
           ),
         );
         return;
@@ -68,7 +74,7 @@ class _SettingOtherAccountPageState extends State<VRChatMobileSettingsOtherAccou
               (_) => Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(
-                  builder: (BuildContext context) => const VRChatMobileHome(),
+                  builder: (BuildContext context) => VRChatMobileHome(widget.appConfig, widget.vrhatLoginSession),
                 ),
                 (_) => false,
               ),
@@ -92,7 +98,7 @@ class _SettingOtherAccountPageState extends State<VRChatMobileSettingsOtherAccou
                           (_) => Navigator.pushAndRemoveUntil(
                             context,
                             MaterialPageRoute(
-                              builder: (BuildContext context) => const VRChatMobileHome(),
+                              builder: (BuildContext context) => VRChatMobileHome(widget.appConfig, widget.vrhatLoginSession),
                             ),
                             (_) => false,
                           ),
@@ -145,12 +151,12 @@ class _SettingOtherAccountPageState extends State<VRChatMobileSettingsOtherAccou
 
   @override
   Widget build(BuildContext context) {
-    textStream(context);
+    textStream(context, widget.appConfig, widget.vrhatLoginSession);
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.accountSwitchSetting),
       ),
-      drawer: widget.drawer ? drawer(context) : null,
+      drawer: widget.drawer ? drawer(context, widget.appConfig, widget.vrhatLoginSession) : null,
       body: SafeArea(
         child: SizedBox(
           width: MediaQuery.of(context).size.width,

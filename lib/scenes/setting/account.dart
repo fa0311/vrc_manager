@@ -3,17 +3,21 @@ import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:vrchat_mobile_client/api/main.dart';
 
 // Project imports:
 import 'package:vrchat_mobile_client/assets/dialog.dart';
 import 'package:vrchat_mobile_client/assets/flutter/text_stream.dart';
 import 'package:vrchat_mobile_client/assets/storage.dart';
+import 'package:vrchat_mobile_client/data_class/app_config.dart';
 import 'package:vrchat_mobile_client/scenes/login.dart';
 import 'package:vrchat_mobile_client/scenes/setting/other_account.dart';
 import 'package:vrchat_mobile_client/scenes/setting/token.dart';
 
 class VRChatMobileSettingsAccount extends StatefulWidget {
-  const VRChatMobileSettingsAccount({Key? key}) : super(key: key);
+  final AppConfig appConfig;
+  final VRChatAPI vrhatLoginSession;
+  const VRChatMobileSettingsAccount(this.appConfig, this.vrhatLoginSession, {Key? key}) : super(key: key);
 
   @override
   State<VRChatMobileSettingsAccount> createState() => _SettingAccountPageState();
@@ -33,7 +37,7 @@ class _SettingAccountPageState extends State<VRChatMobileSettingsAccount> {
 
   @override
   Widget build(BuildContext context) {
-    textStream(context);
+    textStream(context, widget.appConfig, widget.vrhatLoginSession);
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.setting),
@@ -56,7 +60,7 @@ class _SettingAccountPageState extends State<VRChatMobileSettingsAccount> {
                               Navigator.pushAndRemoveUntil(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (BuildContext context) => const VRChatMobileLogin(),
+                                  builder: (BuildContext context) => VRChatMobileLogin(widget.appConfig, widget.vrhatLoginSession),
                                 ),
                                 (_) => false,
                               );
@@ -85,7 +89,7 @@ class _SettingAccountPageState extends State<VRChatMobileSettingsAccount> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (BuildContext context) => const VRChatMobileTokenSetting(),
+                          builder: (BuildContext context) => VRChatMobileTokenSetting(widget.appConfig, widget.vrhatLoginSession),
                         ),
                       )
                     },
@@ -97,7 +101,7 @@ class _SettingAccountPageState extends State<VRChatMobileSettingsAccount> {
                     onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (BuildContext context) => const VRChatMobileSettingsOtherAccount(drawer: false),
+                        builder: (BuildContext context) => VRChatMobileSettingsOtherAccount(widget.appConfig, widget.vrhatLoginSession, drawer: false),
                       ),
                     ),
                   )

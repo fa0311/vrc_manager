@@ -12,14 +12,16 @@ import 'package:vrchat_mobile_client/api/main.dart';
 import 'package:vrchat_mobile_client/assets/error.dart';
 import 'package:vrchat_mobile_client/assets/flutter/text_stream.dart';
 import 'package:vrchat_mobile_client/assets/storage.dart';
+import 'package:vrchat_mobile_client/data_class/app_config.dart';
 import 'package:vrchat_mobile_client/widgets/drawer.dart';
 import 'package:vrchat_mobile_client/widgets/share.dart';
 import 'package:vrchat_mobile_client/widgets/users.dart';
 
 class VRChatMobileFriends extends StatefulWidget {
   final bool offline;
-
-  const VRChatMobileFriends({Key? key, this.offline = true}) : super(key: key);
+  final AppConfig appConfig;
+  final VRChatAPI vrhatLoginSession;
+  const VRChatMobileFriends(this.appConfig, this.vrhatLoginSession, {Key? key, this.offline = true}) : super(key: key);
 
   @override
   State<VRChatMobileFriends> createState() => _FriendsPageState();
@@ -32,7 +34,6 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
   bool worldDetails = false;
   String sortMode = "default";
   String displayMode = "default";
-  String? cookie;
 
   Widget body = const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator());
 
@@ -42,11 +43,6 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
   initState() {
     super.initState();
     List<Future> futureStorageList = [];
-    futureStorageList.add(getLoginSession("login_session").then(
-      (response) {
-        cookie = response;
-      },
-    ));
     futureStorageList.add(getStorage("${widget.offline}_friends_joinable").then(
       (response) {
         dataColumn.joinable = response == "true" && !widget.offline;
@@ -133,7 +129,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
     setState(() {
       offset += 50;
     });
-    return VRChatAPI(cookie: cookie ?? "").friends(offline: widget.offline, offset: offset - 50).then((VRChatUserList users) {
+    return widget.vrhatLoginSession.friends(offline: widget.offline, offset: offset - 50).then((VRChatUserList users) {
       for (VRChatUser user in users.users) {
         dataColumn.add(user);
       }
@@ -152,7 +148,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
       if (dataColumn.worldDetails) getInstance(users.users);
       sort();
     }).catchError((status) {
-      apiError(context, status);
+      apiError(context, widget.appConfig, widget.vrhatLoginSession, status);
     });
   }
 
@@ -162,10 +158,10 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
       String wid = user.location.split(":")[0];
       if (["private", "offline", "traveling"].contains(user.location) || dataColumn.locationMap.containsKey(wid)) continue;
       futureList.add(
-        VRChatAPI(cookie: cookie ?? "").worlds(wid).then((responseWorld) {
+        widget.vrhatLoginSession.worlds(wid).then((responseWorld) {
           dataColumn.locationMap[wid] = responseWorld;
         }).catchError((status) {
-          apiError(context, status);
+          apiError(context, widget.appConfig, widget.vrhatLoginSession, status);
         }),
       );
       Future.wait(futureList).then(
@@ -185,10 +181,10 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
     List<Future> futureList = [];
     for (VRChatUser user in users) {
       if (["private", "offline", "traveling"].contains(user.location) || dataColumn.instanceMap.containsKey(user.location)) continue;
-      futureList.add(VRChatAPI(cookie: cookie ?? "").instances(user.location).then((VRChatInstance instance) {
+      futureList.add(widget.vrhatLoginSession.instances(user.location).then((VRChatInstance instance) {
         dataColumn.instanceMap[user.location] = instance;
       }).catchError((status) {
-        apiError(context, status);
+        apiError(context, widget.appConfig, widget.vrhatLoginSession, status);
       }));
       Future.wait(futureList).then(
         (value) {
@@ -331,8 +327,10 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
 
   @override
   Widget build(BuildContext context) {
-    textStream(context);
+    textStream(context, widget.appConfig, widget.vrhatLoginSession);
     dataColumn.context = context;
+    dataColumn.appConfig = widget.appConfig;
+    dataColumn.vrhatLoginSession = widget.vrhatLoginSession;
 
     return Scaffold(
       appBar: AppBar(
@@ -430,7 +428,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
                         title: Text(AppLocalizations.of(context)!.openInBrowser),
                         onTap: () {
                           Navigator.pop(context);
-                          openInBrowser(context, "https://vrchat.com/home/locations");
+                          openInBrowser(context, widget.appConfig, widget.vrhatLoginSession, "https://vrchat.com/home/locations");
                         },
                       ),
                     ],
@@ -441,7 +439,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
           ),
         ],
       ),
-      drawer: drawer(context),
+      drawer: drawer(context, widget.appConfig, widget.vrhatLoginSession),
       body: SafeArea(
         child: SizedBox(
           width: MediaQuery.of(context).size.width,

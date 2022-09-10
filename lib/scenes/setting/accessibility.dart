@@ -6,15 +6,19 @@ import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:vrchat_mobile_client/api/main.dart';
 
 // Project imports:
 import 'package:vrchat_mobile_client/assets/flutter/text_stream.dart';
 import 'package:vrchat_mobile_client/assets/storage.dart';
+import 'package:vrchat_mobile_client/data_class/app_config.dart';
 import 'package:vrchat_mobile_client/main.dart';
 import 'package:vrchat_mobile_client/widgets/change_locale_dialog.dart';
 
 class VRChatMobileSettingsAccessibility extends StatefulWidget {
-  const VRChatMobileSettingsAccessibility({Key? key}) : super(key: key);
+  final AppConfig appConfig;
+  final VRChatAPI vrhatLoginSession;
+  const VRChatMobileSettingsAccessibility(this.appConfig, this.vrhatLoginSession, {Key? key}) : super(key: key);
 
   @override
   State<VRChatMobileSettingsAccessibility> createState() => _SettingAccessibilityPageState();
@@ -75,7 +79,7 @@ class _SettingAccessibilityPageState extends State<VRChatMobileSettingsAccessibi
 
   @override
   Widget build(BuildContext context) {
-    textStream(context);
+    textStream(context, widget.appConfig, widget.vrhatLoginSession);
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.setting),

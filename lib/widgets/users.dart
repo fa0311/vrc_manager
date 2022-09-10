@@ -12,7 +12,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:vrchat_mobile_client/api/data_class.dart';
 import 'package:vrchat_mobile_client/api/main.dart';
 import 'package:vrchat_mobile_client/assets/error.dart';
-import 'package:vrchat_mobile_client/assets/storage.dart';
+import 'package:vrchat_mobile_client/data_class/app_config.dart';
 import 'package:vrchat_mobile_client/scenes/user.dart';
 import 'package:vrchat_mobile_client/widgets/status.dart';
 import 'package:vrchat_mobile_client/widgets/world.dart';
@@ -31,6 +31,9 @@ class Users {
   bool wait = true;
   String displayMode = "default";
   late BuildContext context;
+  late AppConfig appConfig;
+  late VRChatAPI vrhatLoginSession;
+
   Map<String, VRChatWorld> locationMap = {};
   Map<String, VRChatInstance> instanceMap = {};
   List<VRChatUser> userList = [];
@@ -132,7 +135,7 @@ class Users {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (BuildContext context) => VRChatMobileUser(userId: user.id),
+                    builder: (BuildContext context) => VRChatMobileUser(appConfig, vrhatLoginSession, userId: user.id),
                   ));
             },
             behavior: HitTestBehavior.opaque,
@@ -238,12 +241,13 @@ class Users {
                 if (worldDetails && locationMap[worldId] != null && instanceMap[user.location] == null)
                   Padding(
                     padding: const EdgeInsets.only(top: 5),
-                    child: (simpleWorld(context, locationMap[worldId]!.toLimited()).child! as Container).child!,
+                    child: (simpleWorld(context, appConfig, vrhatLoginSession, locationMap[worldId]!.toLimited()).child! as Container).child!,
                   ),
                 if (worldDetails && locationMap[worldId] != null && instanceMap[user.location] != null)
                   Padding(
                     padding: const EdgeInsets.only(top: 5),
-                    child: (simpleWorldPlus(context, locationMap[worldId]!, instanceMap[user.location]!).child! as Container).child!,
+                    child:
+                        (simpleWorldPlus(context, appConfig, vrhatLoginSession, locationMap[worldId]!, instanceMap[user.location]!).child! as Container).child!,
                   ),
               ],
             ),
@@ -264,7 +268,7 @@ class Users {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (BuildContext context) => VRChatMobileUser(userId: user.id),
+                    builder: (BuildContext context) => VRChatMobileUser(appConfig, vrhatLoginSession, userId: user.id),
                   ));
             },
             behavior: HitTestBehavior.opaque,
@@ -355,7 +359,7 @@ class Users {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (BuildContext context) => VRChatMobileUser(userId: user.id),
+                    builder: (BuildContext context) => VRChatMobileUser(appConfig, vrhatLoginSession, userId: user.id),
                   ));
             },
             behavior: HitTestBehavior.opaque,
@@ -453,12 +457,13 @@ class Users {
                 if (worldDetails && locationMap[worldId] != null && instanceMap[user.location] == null)
                   Padding(
                     padding: const EdgeInsets.only(top: 5),
-                    child: (simpleWorldHalf(context, locationMap[worldId]!.toLimited()).child! as Container).child!,
+                    child: (simpleWorldHalf(context, appConfig, vrhatLoginSession, locationMap[worldId]!.toLimited()).child! as Container).child!,
                   ),
                 if (worldDetails && locationMap[worldId] != null && instanceMap[user.location] != null)
                   Padding(
                     padding: const EdgeInsets.only(top: 5),
-                    child: (simpleWorldPlusHalf(context, locationMap[worldId]!, instanceMap[user.location]!).child! as Container).child!,
+                    child: (simpleWorldPlusHalf(context, appConfig, vrhatLoginSession, locationMap[worldId]!, instanceMap[user.location]!).child! as Container)
+                        .child!,
                   ),
               ],
             ),
@@ -479,7 +484,7 @@ class Users {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (BuildContext context) => VRChatMobileUser(userId: user.id),
+                    builder: (BuildContext context) => VRChatMobileUser(appConfig, vrhatLoginSession, userId: user.id),
                   ));
             },
             behavior: HitTestBehavior.opaque,
@@ -555,7 +560,7 @@ class Users {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (BuildContext context) => VRChatMobileUser(userId: user.id),
+                    builder: (BuildContext context) => VRChatMobileUser(appConfig, vrhatLoginSession, userId: user.id),
                   ));
             },
             behavior: HitTestBehavior.opaque,
@@ -622,29 +627,27 @@ class Users {
                               minimumSize: Size.zero,
                               padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 4),
                             ),
-                            onPressed: () => getLoginSession("login_session").then(
-                              (cookie) => VRChatAPI(cookie: cookie ?? "")
-                                  .selfInvite(instanceMap[user.location]!.location, instanceMap[user.location]!.shortName ?? "")
-                                  .then((VRChatNotificationsInvite response) {
-                                showDialog(
-                                  context: context,
-                                  builder: (_) {
-                                    return AlertDialog(
-                                      title: Text(AppLocalizations.of(context)!.sendInvite),
-                                      content: Text(AppLocalizations.of(context)!.selfInviteDetails),
-                                      actions: <Widget>[
-                                        TextButton(
-                                          child: Text(AppLocalizations.of(context)!.close),
-                                          onPressed: () => Navigator.pop(context),
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                );
-                              }).catchError((status) {
-                                apiError(context, status);
-                              }),
-                            ),
+                            onPressed: () => vrhatLoginSession
+                                .selfInvite(instanceMap[user.location]!.location, instanceMap[user.location]!.shortName ?? "")
+                                .then((VRChatNotificationsInvite response) {
+                              showDialog(
+                                context: context,
+                                builder: (_) {
+                                  return AlertDialog(
+                                    title: Text(AppLocalizations.of(context)!.sendInvite),
+                                    content: Text(AppLocalizations.of(context)!.selfInviteDetails),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        child: Text(AppLocalizations.of(context)!.close),
+                                        onPressed: () => Navigator.pop(context),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            }).catchError((status) {
+                              apiError(context, appConfig, vrhatLoginSession, status);
+                            }),
                             child: Text(AppLocalizations.of(context)!.joinInstance, style: const TextStyle(fontSize: 10)),
                           ),
                         ),
@@ -669,7 +672,7 @@ class Users {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (BuildContext context) => VRChatMobileUser(userId: user.id),
+                    builder: (BuildContext context) => VRChatMobileUser(appConfig, vrhatLoginSession, userId: user.id),
                   ));
             },
             behavior: HitTestBehavior.opaque,

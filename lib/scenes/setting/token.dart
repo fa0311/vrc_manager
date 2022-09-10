@@ -12,11 +12,13 @@ import 'package:vrchat_mobile_client/api/main.dart';
 import 'package:vrchat_mobile_client/assets/error.dart';
 import 'package:vrchat_mobile_client/assets/flutter/text_stream.dart';
 import 'package:vrchat_mobile_client/assets/storage.dart';
+import 'package:vrchat_mobile_client/data_class/app_config.dart';
 
 class VRChatMobileTokenSetting extends StatefulWidget {
   final bool offline;
-
-  const VRChatMobileTokenSetting({Key? key, this.offline = true}) : super(key: key);
+  final AppConfig appConfig;
+  final VRChatAPI vrhatLoginSession;
+  const VRChatMobileTokenSetting(this.appConfig, this.vrhatLoginSession, {Key? key, this.offline = true}) : super(key: key);
 
   @override
   State<VRChatMobileTokenSetting> createState() => _TokenSettingPageState();
@@ -34,7 +36,7 @@ class _TokenSettingPageState extends State<VRChatMobileTokenSetting> {
   }
   @override
   Widget build(BuildContext context) {
-    textStream(context);
+    textStream(context, widget.appConfig, widget.vrhatLoginSession);
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.token),
@@ -90,7 +92,7 @@ class _TokenSettingPageState extends State<VRChatMobileTokenSetting> {
                           },
                         );
                       }).catchError((status) {
-                        apiError(context, status);
+                        apiError(context, widget.appConfig, widget.vrhatLoginSession, status);
                       });
                     },
                   ),

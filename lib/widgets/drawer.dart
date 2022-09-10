@@ -1,11 +1,14 @@
 // Flutter imports:
+
 import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:vrchat_mobile_client/api/main.dart';
 
 // Project imports:
 import 'package:vrchat_mobile_client/assets/storage.dart';
+import 'package:vrchat_mobile_client/data_class/app_config.dart';
 import 'package:vrchat_mobile_client/scenes/friend_request.dart';
 import 'package:vrchat_mobile_client/scenes/friends.dart';
 import 'package:vrchat_mobile_client/scenes/home.dart';
@@ -14,7 +17,7 @@ import 'package:vrchat_mobile_client/scenes/setting/other_account.dart';
 import 'package:vrchat_mobile_client/scenes/settings.dart';
 import 'package:vrchat_mobile_client/scenes/worlds_favorite.dart';
 
-Drawer drawer(BuildContext context) {
+Drawer drawer(BuildContext context, AppConfig appConfig, VRChatAPI vrhatLoginSession) {
   Column column = Column();
 
   getStorageList("account_index_list").then(
@@ -27,7 +30,7 @@ Drawer drawer(BuildContext context) {
           onTap: () => Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
-              builder: (BuildContext context) => const VRChatMobileSettingsOtherAccount(),
+              builder: (BuildContext context) => VRChatMobileSettingsOtherAccount(appConfig, vrhatLoginSession),
             ),
             (_) => false,
           ),
@@ -46,7 +49,7 @@ Drawer drawer(BuildContext context) {
                   (_) => Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
-                      builder: (BuildContext context) => const VRChatMobileHome(),
+                      builder: (BuildContext context) => VRChatMobileHome(appConfig, vrhatLoginSession),
                     ),
                     (_) => false,
                   ),
@@ -72,7 +75,7 @@ Drawer drawer(BuildContext context) {
                     onTap: () => Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
-                        builder: (BuildContext context) => const VRChatMobileHome(),
+                        builder: (BuildContext context) => VRChatMobileHome(appConfig, vrhatLoginSession),
                       ),
                       (_) => false,
                     ),
@@ -83,7 +86,7 @@ Drawer drawer(BuildContext context) {
                     onTap: () => Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
-                        builder: (BuildContext context) => const VRChatMobileFriends(offline: false),
+                        builder: (BuildContext context) => VRChatMobileFriends(appConfig, vrhatLoginSession, offline: false),
                       ),
                       (_) => false,
                     ),
@@ -94,7 +97,7 @@ Drawer drawer(BuildContext context) {
                     onTap: () => Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
-                        builder: (BuildContext context) => const VRChatMobileFriends(offline: true),
+                        builder: (BuildContext context) => VRChatMobileFriends(appConfig, vrhatLoginSession, offline: true),
                       ),
                       (_) => false,
                     ),
@@ -105,7 +108,7 @@ Drawer drawer(BuildContext context) {
                     onTap: () => Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
-                        builder: (BuildContext context) => const VRChatSearch(),
+                        builder: (BuildContext context) => VRChatSearch(appConfig, vrhatLoginSession),
                       ),
                       (_) => false,
                     ),
@@ -116,7 +119,7 @@ Drawer drawer(BuildContext context) {
                     onTap: () => Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
-                        builder: (BuildContext context) => const VRChatMobileFriendRequest(),
+                        builder: (BuildContext context) => VRChatMobileFriendRequest(appConfig, vrhatLoginSession),
                       ),
                       (_) => false,
                     ),
@@ -127,7 +130,7 @@ Drawer drawer(BuildContext context) {
                     onTap: () => Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
-                        builder: (BuildContext context) => const VRChatMobileWorldsFavorite(),
+                        builder: (BuildContext context) => VRChatMobileWorldsFavorite(appConfig, vrhatLoginSession),
                       ),
                       (_) => false,
                     ),
@@ -149,7 +152,7 @@ Drawer drawer(BuildContext context) {
                 onTap: () => Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(
-                    builder: (BuildContext context) => const VRChatMobileSettings(logged: true),
+                    builder: (BuildContext context) => VRChatMobileSettings(appConfig, vrhatLoginSession, logged: true),
                   ),
                   (_) => false,
                 ),
@@ -177,7 +180,7 @@ Drawer drawer(BuildContext context) {
                   onPressed: () => Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
-                      builder: (BuildContext context) => const VRChatMobileSettings(logged: true),
+                      builder: (BuildContext context) => VRChatMobileSettings(appConfig, vrhatLoginSession, logged: true),
                     ),
                     (_) => false,
                   ),
@@ -203,7 +206,7 @@ Drawer drawer(BuildContext context) {
   );
 }
 
-Drawer simpledrawer(BuildContext context) {
+Drawer simpledrawer(BuildContext context, AppConfig appConfig, VRChatAPI vrhatLoginSession) {
   Column column = Column();
 
   getStorageList("account_index_list").then(
@@ -216,7 +219,7 @@ Drawer simpledrawer(BuildContext context) {
           onTap: () => Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
-              builder: (BuildContext context) => const VRChatMobileSettingsOtherAccount(),
+              builder: (BuildContext context) => VRChatMobileSettingsOtherAccount(appConfig, vrhatLoginSession),
             ),
             (_) => false,
           ),
@@ -235,7 +238,7 @@ Drawer simpledrawer(BuildContext context) {
                   (_) => Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
-                      builder: (BuildContext context) => const VRChatMobileHome(),
+                      builder: (BuildContext context) => VRChatMobileHome(appConfig, vrhatLoginSession),
                     ),
                     (_) => false,
                   ),
@@ -259,7 +262,7 @@ Drawer simpledrawer(BuildContext context) {
                 onTap: () => Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(
-                    builder: (BuildContext context) => const VRChatMobileHome(),
+                    builder: (BuildContext context) => VRChatMobileHome(appConfig, vrhatLoginSession),
                   ),
                   (_) => false,
                 ),
@@ -281,7 +284,7 @@ Drawer simpledrawer(BuildContext context) {
                   onTap: () => Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
-                      builder: (BuildContext context) => const VRChatMobileSettings(logged: false),
+                      builder: (BuildContext context) => VRChatMobileSettings(appConfig, vrhatLoginSession, logged: false),
                     ),
                     (_) => false,
                   ),

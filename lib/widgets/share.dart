@@ -16,16 +16,17 @@ import 'package:vrchat_mobile_client/api/data_class.dart';
 import 'package:vrchat_mobile_client/api/main.dart';
 import 'package:vrchat_mobile_client/assets/error.dart';
 import 'package:vrchat_mobile_client/assets/storage.dart';
+import 'package:vrchat_mobile_client/data_class/app_config.dart';
 import 'package:vrchat_mobile_client/scenes/web_view.dart';
 
-IconButton share(BuildContext context, String url) {
+IconButton share(BuildContext context, AppConfig appConfig, VRChatAPI vrhatLoginSession, String url) {
   return IconButton(
     icon: const Icon(Icons.share),
-    onPressed: () => shareModalBottom(context, url),
+    onPressed: () => shareModalBottom(context, appConfig, vrhatLoginSession, url),
   );
 }
 
-shareModalBottom(BuildContext context, String url) {
+shareModalBottom(BuildContext context, AppConfig appConfig, VRChatAPI vrhatLoginSession, String url) {
   showModalBottomSheet(
     context: context,
     shape: const RoundedRectangleBorder(
@@ -62,7 +63,7 @@ shareModalBottom(BuildContext context, String url) {
             title: Text(AppLocalizations.of(context)!.openInBrowser),
             onTap: () {
               Navigator.pop(context);
-              openInBrowser(context, url);
+              openInBrowser(context, appConfig, vrhatLoginSession, url);
             },
           ),
         ],
@@ -167,7 +168,7 @@ clipboardShareModalBottom(BuildContext context, String text) {
   );
 }
 
-lunchWorldModalBottom(BuildContext context, String worldId, String instanceId) {
+lunchWorldModalBottom(BuildContext context, AppConfig appConfig, VRChatAPI vrhatLoginSession, String worldId, String instanceId) {
   showModalBottomSheet(
     context: context,
     shape: const RoundedRectangleBorder(
@@ -203,17 +204,17 @@ lunchWorldModalBottom(BuildContext context, String worldId, String instanceId) {
             leading: const Icon(Icons.open_in_browser),
             title: Text(AppLocalizations.of(context)!.openInExternalBrowser),
             onTap: () {
-              openInBrowser(context, "https://vrchat.com/home/launch?worldId=$worldId&instanceId=$instanceId");
+              openInBrowser(context, appConfig, vrhatLoginSession, "https://vrchat.com/home/launch?worldId=$worldId&instanceId=$instanceId");
             },
           ),
           ListTile(
             leading: const Icon(Icons.mail),
             title: Text(AppLocalizations.of(context)!.joinInstance),
             onTap: () => getLoginSession("login_session").then(
-              (String? cookie) => VRChatAPI(cookie: cookie ?? "")
+              (String? cookie) => vrhatLoginSession
                   .shortName("$worldId:$instanceId")
                   .then(
-                    (VRChatSecureName secureId) => VRChatAPI(cookie: cookie ?? "")
+                    (VRChatSecureName secureId) => vrhatLoginSession
                         .selfInvite("$worldId:$instanceId", secureId.shortName ?? secureId.secureName ?? "")
                         .then(
                           (VRChatNotificationsInvite response) => showDialog(
@@ -233,11 +234,11 @@ lunchWorldModalBottom(BuildContext context, String worldId, String instanceId) {
                           ),
                         )
                         .catchError((status) {
-                      apiError(context, status);
+                      apiError(context, appConfig, vrhatLoginSession, status);
                     }),
                   )
                   .catchError((status) {
-                apiError(context, status);
+                apiError(context, appConfig, vrhatLoginSession, status);
               }),
             ),
           ),
@@ -246,7 +247,7 @@ lunchWorldModalBottom(BuildContext context, String worldId, String instanceId) {
               leading: const Icon(Icons.laptop_windows),
               title: Text(AppLocalizations.of(context)!.openInVrchat),
               onTap: () {
-                openInBrowser(context, "vrchat://launch?ref=vrchat.com&id=$worldId:$instanceId");
+                openInBrowser(context, appConfig, vrhatLoginSession, "vrchat://launch?ref=vrchat.com&id=$worldId:$instanceId");
               },
             ),
         ],
@@ -255,7 +256,7 @@ lunchWorldModalBottom(BuildContext context, String worldId, String instanceId) {
   );
 }
 
-Future<void> openInBrowser(BuildContext context, String url) async {
+Future<void> openInBrowser(BuildContext context, AppConfig appConfig, VRChatAPI vrhatLoginSession, String url) async {
   if (Platform.isAndroid || Platform.isIOS) {
     getStorage("force_external_browser").then(
       (response) async {
@@ -267,7 +268,7 @@ Future<void> openInBrowser(BuildContext context, String url) async {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (BuildContext context) => VRChatMobileWebView(url: url),
+              builder: (BuildContext context) => VRChatMobileWebView(appConfig, vrhatLoginSession, url: url),
             ),
           );
         }

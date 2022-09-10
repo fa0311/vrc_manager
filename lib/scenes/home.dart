@@ -1,30 +1,28 @@
 // Dart imports:
-import 'dart:io';
 
 // Flutter imports:
 import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 
 // Project imports:
 import 'package:vrchat_mobile_client/api/data_class.dart';
 import 'package:vrchat_mobile_client/api/main.dart';
 import 'package:vrchat_mobile_client/assets/error.dart';
 import 'package:vrchat_mobile_client/assets/flutter/text_stream.dart';
-import 'package:vrchat_mobile_client/assets/flutter/url_parser.dart';
 import 'package:vrchat_mobile_client/assets/storage.dart';
+import 'package:vrchat_mobile_client/data_class/app_config.dart';
 import 'package:vrchat_mobile_client/scenes/json_viewer.dart';
-import 'package:vrchat_mobile_client/scenes/login.dart';
 import 'package:vrchat_mobile_client/widgets/drawer.dart';
 import 'package:vrchat_mobile_client/widgets/profile.dart';
 import 'package:vrchat_mobile_client/widgets/share.dart';
 import 'package:vrchat_mobile_client/widgets/world.dart';
 
 class VRChatMobileHome extends StatefulWidget {
-  final bool init;
-  const VRChatMobileHome({Key? key, this.init = false}) : super(key: key);
+  final VRChatAPI vrhatLoginSession;
+  final AppConfig appConfig;
+  const VRChatMobileHome(this.appConfig, this.vrhatLoginSession, {Key? key}) : super(key: key);
   @override
   State<VRChatMobileHome> createState() => _LoginHomeState();
 }
@@ -44,212 +42,189 @@ class _LoginHomeState extends State<VRChatMobileHome> {
   @override
   initState() {
     super.initState();
-    getLoginSession("login_session").then((cookie) {
-      if (cookie == null) {
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-            builder: (BuildContext context) => const VRChatMobileLogin(),
-          ),
-          (_) => false,
+    widget.vrhatLoginSession.user().then((VRChatUserOverload response) {
+      widget.vrhatLoginSession.users(response.id).then((VRChatUser user) {
+        bioController.text = user.bio ?? "";
+        noteController.text = user.note ?? "";
+        setLoginSession("displayname", user.displayName);
+        setState(
+          () {
+            column = Column(
+              children: <Widget>[
+                profile(context, widget.appConfig, widget.vrhatLoginSession, user),
+                Column(),
+                SizedBox(
+                  height: 30,
+                  child: TextButton(
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: Colors.grey,
+                      minimumSize: Size.zero,
+                      padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
+                    ),
+                    onPressed: () => showDialog(
+                      context: context,
+                      builder: (_) {
+                        return AlertDialog(
+                          content: TextField(
+                            controller: bioController,
+                            maxLines: null,
+                            decoration: InputDecoration(labelText: AppLocalizations.of(context)!.editBio),
+                          ),
+                          actions: <Widget>[
+                            TextButton(
+                              child: Text(AppLocalizations.of(context)!.close),
+                              onPressed: () => Navigator.pop(context),
+                            ),
+                            TextButton(
+                                child: Text(AppLocalizations.of(context)!.ok),
+                                onPressed: () => widget.vrhatLoginSession.changeBio(user.id, bioController.text).then((VRChatUserPut response) {
+                                      Navigator.pop(context);
+                                      initState();
+                                    }).catchError((status) {
+                                      apiError(context, widget.appConfig, widget.vrhatLoginSession, status);
+                                    })),
+                          ],
+                        );
+                      },
+                    ),
+                    child: Text(AppLocalizations.of(context)!.editBio),
+                  ),
+                ),
+                SizedBox(
+                  height: 30,
+                  child: TextButton(
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: Colors.grey,
+                      minimumSize: Size.zero,
+                      padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
+                    ),
+                    onPressed: () => showDialog(
+                      context: context,
+                      builder: (_) {
+                        return AlertDialog(
+                          content: TextField(
+                            controller: noteController,
+                            decoration: InputDecoration(labelText: AppLocalizations.of(context)!.editNote),
+                          ),
+                          actions: <Widget>[
+                            TextButton(
+                              child: Text(AppLocalizations.of(context)!.close),
+                              onPressed: () => Navigator.pop(context),
+                            ),
+                            TextButton(
+                              child: Text(AppLocalizations.of(context)!.ok),
+                              onPressed: () => widget.vrhatLoginSession.userNotes(user.id, noteController.text).then((VRChatUserNotes response) {
+                                Navigator.pop(context);
+                                initState();
+                              }).catchError((status) {
+                                apiError(context, widget.appConfig, widget.vrhatLoginSession, status);
+                              }),
+                            ),
+                          ],
+                        );
+                      },
+                    ),
+                    child: Text(AppLocalizations.of(context)!.editNote),
+                  ),
+                ),
+                SizedBox(
+                  height: 30,
+                  child: TextButton(
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: Colors.grey,
+                      minimumSize: Size.zero,
+                      padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
+                    ),
+                    onPressed: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (BuildContext context) => VRChatMobileJsonViewer(widget.appConfig, widget.vrhatLoginSession, obj: user.content),
+                      ),
+                    ),
+                    child: Text(AppLocalizations.of(context)!.viewInJsonViewer),
+                  ),
+                ),
+              ],
+            );
+            popupMenu = [share(context, widget.appConfig, widget.vrhatLoginSession, "https://vrchat.com/home/user/${response.id}")];
+          },
         );
-      } else {
-        VRChatAPI(cookie: cookie).user().then((VRChatUserOverload response) {
-          VRChatAPI(cookie: cookie).users(response.id).then((VRChatUser user) {
-            bioController.text = user.bio ?? "";
-            noteController.text = user.note ?? "";
-            setLoginSession("displayname", user.displayName);
+        if (!["private", "offline", "traveling"].contains(user.worldId)) {
+          widget.vrhatLoginSession.worlds(user.location.split(":")[0]).then((world) {
             setState(
               () {
-                column = Column(
-                  children: <Widget>[
-                    profile(context, user),
-                    Column(),
-                    SizedBox(
-                      height: 30,
-                      child: TextButton(
-                        style: ElevatedButton.styleFrom(
-                          foregroundColor: Colors.grey,
-                          minimumSize: Size.zero,
-                          padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
-                        ),
-                        onPressed: () => showDialog(
-                          context: context,
-                          builder: (_) {
-                            return AlertDialog(
-                              content: TextField(
-                                controller: bioController,
-                                maxLines: null,
-                                decoration: InputDecoration(labelText: AppLocalizations.of(context)!.editBio),
-                              ),
-                              actions: <Widget>[
-                                TextButton(
-                                  child: Text(AppLocalizations.of(context)!.close),
-                                  onPressed: () => Navigator.pop(context),
-                                ),
-                                TextButton(
-                                    child: Text(AppLocalizations.of(context)!.ok),
-                                    onPressed: () => VRChatAPI(cookie: cookie).changeBio(user.id, bioController.text).then((VRChatUserPut response) {
-                                          Navigator.pop(context);
-                                          initState();
-                                        }).catchError((status) {
-                                          apiError(context, status);
-                                        })),
-                              ],
-                            );
-                          },
-                        ),
-                        child: Text(AppLocalizations.of(context)!.editBio),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 30,
-                      child: TextButton(
-                        style: ElevatedButton.styleFrom(
-                          foregroundColor: Colors.grey,
-                          minimumSize: Size.zero,
-                          padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
-                        ),
-                        onPressed: () => showDialog(
-                          context: context,
-                          builder: (_) {
-                            return AlertDialog(
-                              content: TextField(
-                                controller: noteController,
-                                decoration: InputDecoration(labelText: AppLocalizations.of(context)!.editNote),
-                              ),
-                              actions: <Widget>[
-                                TextButton(
-                                  child: Text(AppLocalizations.of(context)!.close),
-                                  onPressed: () => Navigator.pop(context),
-                                ),
-                                TextButton(
-                                  child: Text(AppLocalizations.of(context)!.ok),
-                                  onPressed: () => VRChatAPI(cookie: cookie).userNotes(user.id, noteController.text).then((VRChatUserNotes response) {
-                                    Navigator.pop(context);
-                                    initState();
-                                  }).catchError((status) {
-                                    apiError(context, status);
-                                  }),
-                                ),
-                              ],
-                            );
-                          },
-                        ),
-                        child: Text(AppLocalizations.of(context)!.editNote),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 30,
-                      child: TextButton(
-                        style: ElevatedButton.styleFrom(
-                          foregroundColor: Colors.grey,
-                          minimumSize: Size.zero,
-                          padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
-                        ),
-                        onPressed: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (BuildContext context) => VRChatMobileJsonViewer(obj: user.content),
-                          ),
-                        ),
-                        child: Text(AppLocalizations.of(context)!.viewInJsonViewer),
-                      ),
-                    ),
-                  ],
+                column = Column(children: column.children);
+                column.children[1] = Container(
+                  padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
+                  child: simpleWorld(context, widget.appConfig, widget.vrhatLoginSession, world.toLimited()),
                 );
-                popupMenu = [share(context, "https://vrchat.com/home/user/${response.id}")];
               },
             );
-            if (!["private", "offline", "traveling"].contains(user.worldId)) {
-              VRChatAPI(cookie: cookie).worlds(user.location.split(":")[0]).then((world) {
-                setState(
-                  () {
-                    column = Column(children: column.children);
-                    column.children[1] = Container(
-                      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
-                      child: simpleWorld(context, world.toLimited()),
-                    );
-                  },
-                );
-                VRChatAPI(cookie: cookie).instances(user.location).then((instance) {
-                  setState(
-                    () {
-                      column = Column(children: column.children);
-                      column.children[1] = Container(
-                        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
-                        child: simpleWorldPlus(context, world, instance),
-                      );
-                    },
-                  );
-                }).catchError((status) {
-                  apiError(context, status);
-                });
-              }).catchError((status) {
-                apiError(context, status);
-              });
-            }
-            if (user.location == "private") {
+            widget.vrhatLoginSession.instances(user.location).then((instance) {
               setState(
                 () {
                   column = Column(children: column.children);
                   column.children[1] = Container(
                     padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
-                    child: privateSimpleWorld(context),
+                    child: simpleWorldPlus(context, widget.appConfig, widget.vrhatLoginSession, world, instance),
                   );
                 },
               );
-            }
-            if (user.location == "traveling") {
-              setState(
-                () {
-                  column = Column(children: column.children);
-                  column.children[1] = Column(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.only(top: 30),
-                      ),
-                      travelingWorld(context),
-                    ],
-                  );
-                },
-              );
-            }
-            if (widget.init && (Platform.isAndroid || Platform.isIOS)) {
-              ReceiveSharingIntent.getInitialText().then(
-                (String? value) {
-                  if (value == null) return;
-                  urlParser(context, value);
-                },
-              );
-            }
+            }).catchError((status) {
+              apiError(context, widget.appConfig, widget.vrhatLoginSession, status);
+            });
           }).catchError((status) {
-            apiError(context, status);
+            apiError(context, widget.appConfig, widget.vrhatLoginSession, status);
           });
-        }).catchError((status) {
-          apiError(context, status);
-        });
-      }
-    }).catchError((status) {
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(
-          builder: (BuildContext context) => const VRChatMobileLogin(),
-        ),
-        (_) => false,
-      );
+        }
+        if (user.location == "private") {
+          setState(
+            () {
+              column = Column(children: column.children);
+              column.children[1] = Container(
+                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
+                child: privateSimpleWorld(context),
+              );
+            },
+          );
+        }
+        if (user.location == "traveling") {
+          setState(
+            () {
+              column = Column(children: column.children);
+              column.children[1] = Column(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.only(top: 30),
+                  ),
+                  travelingWorld(context),
+                ],
+              );
+            },
+          );
+        }
+      }).catchError((status) {
+        apiError(context, widget.appConfig, widget.vrhatLoginSession, status);
+      });
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    textStream(context);
+    textStream(context, widget.appConfig, widget.vrhatLoginSession);
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.home),
         actions: popupMenu,
       ),
-      drawer: drawer(context),
+      bottomNavigationBar: SizedBox(
+        height: 50,
+        child: AppBar(
+          title: Text(AppLocalizations.of(context)!.home),
+          actions: popupMenu,
+        ),
+      ),
+      drawer: drawer(context, widget.appConfig, widget.vrhatLoginSession),
       body: SafeArea(
         child: SizedBox(
           width: MediaQuery.of(context).size.width,

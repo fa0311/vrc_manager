@@ -12,12 +12,15 @@ import 'package:vrchat_mobile_client/api/main.dart';
 import 'package:vrchat_mobile_client/assets/error.dart';
 import 'package:vrchat_mobile_client/assets/flutter/text_stream.dart';
 import 'package:vrchat_mobile_client/assets/storage.dart';
+import 'package:vrchat_mobile_client/data_class/app_config.dart';
 import 'package:vrchat_mobile_client/widgets/drawer.dart';
 import 'package:vrchat_mobile_client/widgets/share.dart';
 import 'package:vrchat_mobile_client/widgets/users.dart';
 
 class VRChatMobileFriendRequest extends StatefulWidget {
-  const VRChatMobileFriendRequest({Key? key}) : super(key: key);
+  final AppConfig appConfig;
+  final VRChatAPI vrhatLoginSession;
+  const VRChatMobileFriendRequest(this.appConfig, this.vrhatLoginSession, {Key? key}) : super(key: key);
 
   @override
   State<VRChatMobileFriendRequest> createState() => _FriendsPageState();
@@ -29,7 +32,6 @@ class _FriendsPageState extends State<VRChatMobileFriendRequest> {
   bool delayedDisplay = false;
   String sortMode = "default";
   String displayMode = "default";
-  String? cookie;
 
   Widget body = const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator());
 
@@ -39,11 +41,6 @@ class _FriendsPageState extends State<VRChatMobileFriendRequest> {
   initState() {
     super.initState();
     List<Future> futureStorageList = [];
-    futureStorageList.add(getLoginSession("login_session").then(
-      (response) {
-        cookie = response;
-      },
-    ));
     futureStorageList.add(getStorage("auto_read_more").then(
       (response) {
         setState(
@@ -109,13 +106,13 @@ class _FriendsPageState extends State<VRChatMobileFriendRequest> {
     setState(() {
       offset += 50;
     });
-    return VRChatAPI(cookie: cookie ?? "").notifications(type: "friendRequest", offset: offset - 50).then((VRChatNotificationsList response) {
+    return widget.vrhatLoginSession.notifications(type: "friendRequest", offset: offset - 50).then((VRChatNotificationsList response) {
       List<Future> futureList = [];
       for (VRChatNotifications requestUser in response.notifications) {
-        futureList.add(VRChatAPI(cookie: cookie ?? "").users(requestUser.senderUserId).then((VRChatUser user) {
+        futureList.add(widget.vrhatLoginSession.users(requestUser.senderUserId).then((VRChatUser user) {
           dataColumn.userList.add(user);
         }).catchError((status) {
-          apiError(context, status);
+          apiError(context, widget.appConfig, widget.vrhatLoginSession, status);
         }));
       }
       Future.wait(futureList).then((value) {
@@ -131,7 +128,7 @@ class _FriendsPageState extends State<VRChatMobileFriendRequest> {
         sort();
       });
     }).catchError((status) {
-      apiError(context, status);
+      apiError(context, widget.appConfig, widget.vrhatLoginSession, status);
     });
   }
 
@@ -229,8 +226,10 @@ class _FriendsPageState extends State<VRChatMobileFriendRequest> {
 
   @override
   Widget build(BuildContext context) {
-    textStream(context);
+    textStream(context, widget.appConfig, widget.vrhatLoginSession);
     dataColumn.context = context;
+    dataColumn.appConfig = widget.appConfig;
+    dataColumn.vrhatLoginSession = widget.vrhatLoginSession;
 
     return Scaffold(
       appBar: AppBar(
@@ -285,7 +284,7 @@ class _FriendsPageState extends State<VRChatMobileFriendRequest> {
                         title: Text(AppLocalizations.of(context)!.openInBrowser),
                         onTap: () {
                           Navigator.pop(context);
-                          openInBrowser(context, "https://vrchat.com/home/locations");
+                          openInBrowser(context, widget.appConfig, widget.vrhatLoginSession, "https://vrchat.com/home/locations");
                         },
                       ),
                     ],
@@ -296,7 +295,7 @@ class _FriendsPageState extends State<VRChatMobileFriendRequest> {
           ),
         ],
       ),
-      drawer: drawer(context),
+      drawer: drawer(context, widget.appConfig, widget.vrhatLoginSession),
       body: SafeArea(
         child: SizedBox(
           width: MediaQuery.of(context).size.width,
