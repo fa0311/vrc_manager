@@ -26,43 +26,39 @@ class VRChatMobileSettingsOtherAccount extends StatefulWidget {
 class _SettingOtherAccountPageState extends State<VRChatMobileSettingsOtherAccount> {
   Column column = Column();
 
-  _onPressedRemoveAccount(BuildContext context, String accountIndex) async {
-    removeLoginSession("displayname", accountIndex: accountIndex);
-    removeLoginSession("userid", accountIndex: accountIndex);
-    removeLoginSession("password", accountIndex: accountIndex);
-    removeLoginSession("login_session", accountIndex: accountIndex);
+  _onPressedRemoveAccount(BuildContext context, String accountUid) async {
+    removeLoginSession("displayname", accountUid);
+    removeLoginSession("userid", accountUid);
+    removeLoginSession("password", accountUid);
+    removeLoginSession("login_session", accountUid);
 
-    List<String> accountIndexList = await getStorageList("account_index_list");
-
-    accountIndexList.remove(accountIndex);
-    setStorageList("account_index_list", accountIndexList);
-
-    String? accountIndexNow = await getStorage("account_index");
-    if (accountIndexNow == accountIndex) {
-      if (accountIndexList.isEmpty) {
-        removeStorage("account_index").then(
-          (_) => getLoginSession("login_session").then(
-            (cookie) => Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(
-                builder: (BuildContext context) => VRChatMobileHome(widget.appConfig, widget.vrhatLoginSession),
-              ),
-              (_) => false,
-            ),
-          ),
-        );
-        return;
-      } else {
-        setStorage("account_index", accountIndexList[0]);
+    for (AccountConfig account in widget.appConfig.accountList) {
+      if (account.accountUid == accountUid) {
+        widget.appConfig.accountList.remove(account);
       }
     }
-    reload();
+
+    if (widget.appConfig.accountUid == accountUid) {
+      if (widget.appConfig.accountList.isEmpty) {
+        removeStorage("account_index").then(
+          (_) => Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+              builder: (BuildContext context) => VRChatMobileHome(widget.appConfig, widget.vrhatLoginSession),
+            ),
+            (_) => false,
+          ),
+        );
+      } else {
+        setStorage("account_index", widget.appConfig.accountList[0].accountUid);
+      }
+    }
+    initState();
   }
 
-  _SettingOtherAccountPageState() {
-    reload();
-  }
-  reload() {
+  @override
+  initState() {
+    super.initState();
     getStorageList("account_index_list").then(
       (response) {
         List<Widget> list = [
@@ -86,7 +82,7 @@ class _SettingOtherAccountPageState extends State<VRChatMobileSettingsOtherAccou
         response.asMap().forEach(
           (_, String accountIndex) {
             futureList.add(
-              getLoginSession("displayname", accountIndex: accountIndex).then(
+              getLoginSession("displayname", accountUid: accountIndex).then(
                 (accountName) => list.insert(
                   0,
                   Card(

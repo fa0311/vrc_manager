@@ -206,6 +206,8 @@ class _LoginHomeState extends State<VRChatMobileHome> {
       }).catchError((status) {
         apiError(context, widget.appConfig, widget.vrhatLoginSession, status);
       });
+    }).catchError((status) {
+      apiError(context, widget.appConfig, widget.vrhatLoginSession, status);
     });
   }
 

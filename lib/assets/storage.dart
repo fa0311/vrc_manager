@@ -2,11 +2,11 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-Future<String?> getLoginSession(String key, {String? accountIndex}) async {
-  accountIndex ??= await getStorage("account_index");
-  if (accountIndex == null) return null;
+Future<String?> getLoginSession(String key, {String? accountUid}) async {
+  accountUid ??= await getStorage("account_index");
+  if (accountUid == null) return null;
   const FlutterSecureStorage storage = FlutterSecureStorage();
-  return await storage.read(key: "$key$accountIndex");
+  return await storage.read(key: "$key$accountUid");
 }
 
 Future<void> setLoginSession(String key, String value, {String? accountIndex}) async {
@@ -15,10 +15,9 @@ Future<void> setLoginSession(String key, String value, {String? accountIndex}) a
   return await storage.write(key: "$key$accountIndex", value: value);
 }
 
-Future<void> removeLoginSession(String key, {String? accountIndex}) async {
-  accountIndex ??= await getStorage("account_index");
+Future<void> removeLoginSession(String key, accountUid) async {
   const FlutterSecureStorage storage = FlutterSecureStorage();
-  return await storage.delete(key: "$key$accountIndex");
+  return await storage.delete(key: "$key$accountUid");
 }
 
 Future<String?> getStorage(String key) async {

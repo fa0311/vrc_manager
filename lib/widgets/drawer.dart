@@ -37,15 +37,15 @@ Drawer drawer(BuildContext context, AppConfig appConfig, VRChatAPI vrhatLoginSes
         )
       ];
       response.asMap().forEach(
-        (_, String accountIndex) {
-          getLoginSession("displayname", accountIndex: accountIndex).then(
+        (_, String accountUid) {
+          getLoginSession("displayname", accountUid: accountUid).then(
             (accountName) => list.insert(
               0,
               ListTile(
                 title: Text(
                   accountName ?? AppLocalizations.of(context)!.unknown,
                 ),
-                onTap: () => setStorage("account_index", accountIndex).then(
+                onTap: () => setStorage("account_index", accountUid).then(
                   (_) => Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
@@ -226,15 +226,15 @@ Drawer simpledrawer(BuildContext context, AppConfig appConfig, VRChatAPI vrhatLo
         )
       ];
       response.asMap().forEach(
-        (_, String accountIndex) {
-          getLoginSession("displayname", accountIndex: accountIndex).then(
+        (_, String accountUid) {
+          getLoginSession("displayname", accountUid: accountUid).then(
             (accountName) => list.insert(
               0,
               ListTile(
                 title: Text(
                   accountName ?? AppLocalizations.of(context)!.unknown,
                 ),
-                onTap: () => setStorage("account_index", accountIndex).then(
+                onTap: () => setStorage("account_index", accountUid).then(
                   (_) => Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(

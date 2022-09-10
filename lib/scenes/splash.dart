@@ -27,23 +27,33 @@ class _SplashState extends State<VRChatMobileSplash> {
   initState() {
     super.initState();
     List<Future> futureList = [];
+    List<Future> futureList2 = [];
 
-    String? cookie;
     String? initialText;
+    AppConfig appConfig = AppConfig();
 
-    futureList.add(getLoginSession("login_session").then((value) => cookie = value).catchError((status) {}));
+    futureList.add(getStorage("account_index").then((value) => appConfig.accountUid = value));
+    futureList.add(getStorageList("account_index_list").then((List<String> accountList) {
+      for (String uid in accountList) {
+        AccountConfig accountConfig = AccountConfig(uid);
+        futureList2.add(getLoginSession("login_session", accountUid: uid).then((value) => accountConfig.cookie = value));
+        futureList2.add(getLoginSession("userid", accountUid: uid).then((value) => accountConfig.userid = value ?? ""));
+        futureList2.add(getLoginSession("password", accountUid: uid).then((value) => accountConfig.password = value ?? ""));
+        futureList2.add(getLoginSession("remember_login_info", accountUid: uid).then((value) => accountConfig.rememberLoginInfo = (value == "true")));
+        appConfig.accountList.add(accountConfig);
+      }
+    }));
+
     if (widget.init && (Platform.isAndroid || Platform.isIOS)) {
       futureList.add(ReceiveSharingIntent.getInitialText().then((String? value) => initialText = value));
     }
-
     Future.wait(futureList).then((value) {
-      VRChatAPI vrhatLoginSession = VRChatAPI(cookie: cookie!);
-      AppConfig appConfig = AppConfig();
+      Future.wait(futureList2).then((value) {
+        VRChatAPI vrhatLoginSession = VRChatAPI(cookie: appConfig.getLoggedAccount()?.cookie ?? "");
 
-      if (initialText != null) {
-        urlParser(context, appConfig, vrhatLoginSession, initialText!);
-      } else {
-        if (cookie == null) {
+        if (initialText != null) {
+          urlParser(context, appConfig, vrhatLoginSession, initialText!);
+        } else if (appConfig.getLoggedAccount()?.cookie == null) {
           Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
@@ -51,15 +61,16 @@ class _SplashState extends State<VRChatMobileSplash> {
             ),
             (_) => false,
           );
+        } else {
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+              builder: (BuildContext context) => VRChatMobileHome(appConfig, vrhatLoginSession),
+            ),
+            (_) => false,
+          );
         }
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-            builder: (BuildContext context) => VRChatMobileHome(appConfig, vrhatLoginSession),
-          ),
-          (_) => false,
-        );
-      }
+      });
     });
   }
 

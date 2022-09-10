@@ -112,36 +112,17 @@ class _LoginPageState extends State<VRChatMobileLogin> {
   @override
   initState() {
     super.initState();
-    getStorage("account_index").then(
-      (response) {
-        if (response == null) {
-          String key = _generateNonce();
-          setStorage("account_index", key);
-          getStorageList("account_index_list").then(
-            (accountIndexList) {
-              accountIndexList.add(key);
-              setStorageList("account_index_list", accountIndexList);
-            },
-          );
-        } else {
-          getLoginSession("userid").then(
-            (response) {
-              setState(() => _userController.text = response ?? "");
-            },
-          );
-          getLoginSession("password").then(
-            (response) {
-              setState(() => _passwordController.text = response ?? "");
-            },
-          );
-          getStorage("remember_login_info").then(
-            (response) {
-              setState(() => _rememberPassword = (response == "true"));
-            },
-          );
-        }
-      },
-    );
+
+    if (widget.appConfig.accountUid == null) {
+      String key = _generateNonce();
+      setStorage("account_index", key);
+      getStorageList("account_index_list").then(
+        (accountIndexList) {
+          accountIndexList.add(key);
+          setStorageList("account_index_list", accountIndexList);
+        },
+      );
+    }
   }
 
   _changeSwitchrememberPassword(bool e) {
