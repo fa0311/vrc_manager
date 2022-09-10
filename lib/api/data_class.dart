@@ -607,7 +607,7 @@ class VRChatInstance {
     region = content['region'];
     secureName = content['secureName'];
     shortName = content['shortName'];
-    strict = content['strict'];
+    strict = content['strict'] ?? false;
     tags = content['tags'].cast<String>();
     type = content['type'];
     worldId = content['worldId'];
