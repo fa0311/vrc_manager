@@ -29,10 +29,10 @@ class _SettingOtherAccountPageState extends State<VRChatMobileSettingsOtherAccou
     removeLoginSession("displayname", accountUid);
     removeLoginSession("userid", accountUid);
     removeLoginSession("password", accountUid);
-    removeLoginSession("login_session", accountUid);
+    removeLoginSession("cookie", accountUid);
 
     for (AccountConfig account in widget.appConfig.accountList) {
-      if (account.accountUid == accountUid) {
+      if (account.uid == accountUid) {
         widget.appConfig.accountList.remove(account);
       }
     }
@@ -51,7 +51,7 @@ class _SettingOtherAccountPageState extends State<VRChatMobileSettingsOtherAccou
           ),
         );
       } else {
-        setStorage("account_index", widget.appConfig.accountList[0].accountUid);
+        setStorage("account_index", widget.appConfig.accountList[0].uid);
       }
     }
     initState();
@@ -87,7 +87,7 @@ class _SettingOtherAccountPageState extends State<VRChatMobileSettingsOtherAccou
           child: Container(
             padding: const EdgeInsets.all(10.0),
             child: GestureDetector(
-              onTap: () => setStorage("account_index", account.accountUid).then(
+              onTap: () => setStorage("account_index", account.uid).then(
                 (_) => Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(
@@ -105,7 +105,7 @@ class _SettingOtherAccountPageState extends State<VRChatMobileSettingsOtherAccou
                     child: SizedBox(
                       width: double.infinity,
                       child: Text(
-                        account.username ?? AppLocalizations.of(context)!.unknown,
+                        account.displayname ?? AppLocalizations.of(context)!.unknown,
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ),
@@ -118,7 +118,7 @@ class _SettingOtherAccountPageState extends State<VRChatMobileSettingsOtherAccou
                         AppLocalizations.of(context)!.deleteLoginInfoConfirm,
                         AppLocalizations.of(context)!.delete,
                         () {
-                          _onPressedRemoveAccount(context, account.accountUid);
+                          _onPressedRemoveAccount(context, account.uid);
                           Navigator.pop(context);
                         },
                       ),

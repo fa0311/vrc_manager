@@ -11,7 +11,6 @@ import 'package:vrchat_mobile_client/api/data_class.dart';
 import 'package:vrchat_mobile_client/api/main.dart';
 import 'package:vrchat_mobile_client/assets/error.dart';
 import 'package:vrchat_mobile_client/assets/flutter/text_stream.dart';
-import 'package:vrchat_mobile_client/assets/storage.dart';
 import 'package:vrchat_mobile_client/data_class/app_config.dart';
 import 'package:vrchat_mobile_client/scenes/json_viewer.dart';
 import 'package:vrchat_mobile_client/widgets/drawer.dart';
@@ -46,7 +45,8 @@ class _LoginHomeState extends State<VRChatMobileHome> {
       vrhatLoginSession.users(response.id).then((VRChatUser user) {
         bioController.text = user.bio ?? "";
         noteController.text = user.note ?? "";
-        setLoginSession("displayname", user.displayName);
+        widget.appConfig.getLoggedAccount()?.setDisplayName(user.displayName);
+
         setState(
           () {
             column = Column(

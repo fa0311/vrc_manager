@@ -2,20 +2,17 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-Future<String?> getLoginSession(String key, {String? accountUid}) async {
-  accountUid ??= await getStorage("account_index");
-  if (accountUid == null) return null;
+Future<String?> getLoginSession(String key, String accountUid) async {
   const FlutterSecureStorage storage = FlutterSecureStorage();
   return await storage.read(key: "$key$accountUid");
 }
 
-Future<void> setLoginSession(String key, String value, {String? accountIndex}) async {
-  accountIndex ??= await getStorage("account_index");
+Future<void> setLoginSession(String key, String value, String accountUid) async {
   const FlutterSecureStorage storage = FlutterSecureStorage();
-  return await storage.write(key: "$key$accountIndex", value: value);
+  return await storage.write(key: "$key$accountUid", value: value);
 }
 
-Future<void> removeLoginSession(String key, accountUid) async {
+Future<void> removeLoginSession(String key, String accountUid) async {
   const FlutterSecureStorage storage = FlutterSecureStorage();
   return await storage.delete(key: "$key$accountUid");
 }

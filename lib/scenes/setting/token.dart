@@ -11,7 +11,6 @@ import 'package:vrchat_mobile_client/api/data_class.dart';
 import 'package:vrchat_mobile_client/api/main.dart';
 import 'package:vrchat_mobile_client/assets/error.dart';
 import 'package:vrchat_mobile_client/assets/flutter/text_stream.dart';
-import 'package:vrchat_mobile_client/assets/storage.dart';
 import 'package:vrchat_mobile_client/data_class/app_config.dart';
 
 class VRChatMobileTokenSetting extends StatefulWidget {
@@ -25,7 +24,7 @@ class VRChatMobileTokenSetting extends StatefulWidget {
 }
 
 class _TokenSettingPageState extends State<VRChatMobileTokenSetting> {
-  late final TextEditingController _tokenController = TextEditingController(text: widget.appConfig.getLoggedAccount()!.cookie);
+  late final TextEditingController _tokenController = TextEditingController(text: widget.appConfig.getLoggedAccount()?.cookie);
 
   @override
   Widget build(BuildContext context) {
@@ -53,20 +52,21 @@ class _TokenSettingPageState extends State<VRChatMobileTokenSetting> {
                   ElevatedButton(
                     child: Text(AppLocalizations.of(context)!.save),
                     onPressed: () {
-                      setLoginSession("login_session", _tokenController.text).then((_) => showDialog(
-                            context: context,
-                            builder: (_) {
-                              return AlertDialog(
-                                title: Text(AppLocalizations.of(context)!.saved),
-                                actions: <Widget>[
-                                  TextButton(
-                                    child: Text(AppLocalizations.of(context)!.close),
-                                    onPressed: () => Navigator.pop(context),
-                                  ),
-                                ],
-                              );
-                            },
-                          ));
+                      widget.appConfig.getLoggedAccount()?.setCookie(_tokenController.text);
+                      showDialog(
+                        context: context,
+                        builder: (_) {
+                          return AlertDialog(
+                            title: Text(AppLocalizations.of(context)!.saved),
+                            actions: <Widget>[
+                              TextButton(
+                                child: Text(AppLocalizations.of(context)!.close),
+                                onPressed: () => Navigator.pop(context),
+                              ),
+                            ],
+                          );
+                        },
+                      );
                     },
                   ),
                   ElevatedButton(

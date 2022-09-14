@@ -9,7 +9,6 @@ import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 
 // Project imports:
 import 'package:vrchat_mobile_client/assets/flutter/url_parser.dart';
-import 'package:vrchat_mobile_client/assets/storage.dart';
 import 'package:vrchat_mobile_client/data_class/app_config.dart';
 import 'package:vrchat_mobile_client/scenes/home.dart';
 import 'package:vrchat_mobile_client/scenes/login.dart';
@@ -25,53 +24,36 @@ class _SplashState extends State<VRChatMobileSplash> {
   @override
   initState() {
     super.initState();
-    List<Future> futureList = [];
-    List<Future> futureListLogin = [];
 
-    String? initialText;
     AppConfig appConfig = AppConfig();
-
-    futureList.add(getStorage("account_index").then((value) => appConfig.accountUid = value));
-    futureList.add(getStorageList("account_index_list").then((List<String> accountList) {
-      for (String uid in accountList) {
-        AccountConfig accountConfig = AccountConfig(uid);
-        futureListLogin.add(getLoginSession("login_session", accountUid: uid).then((value) => accountConfig.cookie = value ?? ""));
-        futureListLogin.add(getLoginSession("userid", accountUid: uid).then((value) => accountConfig.userid = value ?? ""));
-        futureListLogin.add(getLoginSession("password", accountUid: uid).then((value) => accountConfig.password = value ?? ""));
-        futureListLogin.add(getLoginSession("remember_login_info", accountUid: uid).then((value) => accountConfig.rememberLoginInfo = (value == "true")));
-        appConfig.accountList.add(accountConfig);
+    appConfig.get().then((_) {
+      if (widget.init && (Platform.isAndroid || Platform.isIOS)) {
+        ReceiveSharingIntent.getInitialText().then((String? initialText) {
+          if (initialText != null) {
+            urlParser(context, appConfig, initialText);
+          } else if (appConfig.getLoggedAccount()?.cookie == null) {
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                builder: (BuildContext context) => VRChatMobileLogin(
+                  appConfig,
+                ),
+              ),
+              (_) => false,
+            );
+          } else {
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                builder: (BuildContext context) => VRChatMobileHome(
+                  appConfig,
+                ),
+              ),
+              (_) => false,
+            );
+          }
+        });
       }
-    }));
-
-    if (widget.init && (Platform.isAndroid || Platform.isIOS)) {
-      futureList.add(ReceiveSharingIntent.getInitialText().then((String? value) => initialText = value));
-    }
-    Future.wait(futureList).then((value) {
-      Future.wait(futureListLogin).then((value) {
-        if (initialText != null) {
-          urlParser(context, appConfig, initialText!);
-        } else if (appConfig.getLoggedAccount()?.cookie == null) {
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-              builder: (BuildContext context) => VRChatMobileLogin(
-                appConfig,
-              ),
-            ),
-            (_) => false,
-          );
-        } else {
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-              builder: (BuildContext context) => VRChatMobileHome(
-                appConfig,
-              ),
-            ),
-            (_) => false,
-          );
-        }
-      });
     });
   }
 

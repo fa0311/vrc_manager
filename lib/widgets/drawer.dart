@@ -39,17 +39,21 @@ Drawer drawer(BuildContext context, AppConfig appConfig) {
       0,
       ListTile(
         title: Text(
-          account.username ?? AppLocalizations.of(context)!.unknown,
+          account.displayname ?? AppLocalizations.of(context)!.unknown,
         ),
-        onTap: () => setStorage("account_index", account.accountUid).then(
-          (_) => Navigator.pushAndRemoveUntil(
+        onTap: () {
+          setStorage("account_index", account.uid);
+          appConfig.accountUid = account.uid;
+          Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
-              builder: (BuildContext context) => VRChatMobileHome(appConfig),
+              builder: (BuildContext context) => VRChatMobileHome(
+                appConfig,
+              ),
             ),
             (_) => false,
-          ),
-        ),
+          );
+        },
       ),
     );
   }
@@ -229,10 +233,12 @@ Drawer simpledrawer(BuildContext context, AppConfig appConfig) {
       0,
       ListTile(
         title: Text(
-          account.username ?? AppLocalizations.of(context)!.unknown,
+          account.displayname ?? AppLocalizations.of(context)!.unknown,
         ),
-        onTap: () => setStorage("account_index", account.accountUid).then(
-          (_) => Navigator.pushAndRemoveUntil(
+        onTap: () {
+          setStorage("account_index", account.uid);
+          appConfig.accountUid = account.uid;
+          Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
               builder: (BuildContext context) => VRChatMobileHome(
@@ -240,8 +246,8 @@ Drawer simpledrawer(BuildContext context, AppConfig appConfig) {
               ),
             ),
             (_) => false,
-          ),
-        ),
+          );
+        },
       ),
     );
   }

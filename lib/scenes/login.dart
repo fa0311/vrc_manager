@@ -87,19 +87,16 @@ class _LoginPageState extends State<VRChatMobileLogin> {
 
   _save(String cookie) {
     if (_rememberPassword) {
-      setLoginSession("password", _passwordController.text);
+      widget.appConfig.getLoggedAccount()?.setPassword(_passwordController.text);
     }
-    setLoginSession("userid", _userController.text);
-    setLoginSession("login_session", cookie).then(
-      (_) {
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-            builder: (BuildContext context) => VRChatMobileHome(widget.appConfig),
-          ),
-          (_) => false,
-        );
-      },
+    widget.appConfig.getLoggedAccount()?.setUserId(_userController.text);
+    widget.appConfig.getLoggedAccount()?.setCookie(cookie);
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(
+        builder: (BuildContext context) => VRChatMobileHome(widget.appConfig),
+      ),
+      (_) => false,
     );
   }
 

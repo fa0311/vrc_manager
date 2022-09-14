@@ -24,7 +24,7 @@ class VRChatMobileSettingsAccount extends StatefulWidget {
 
 class _SettingAccountPageState extends State<VRChatMobileSettingsAccount> {
   _removeLoginSession() async {
-    removeLoginSession("login_session", "");
+    removeLoginSession("cookie", "");
   }
 
   _removeLoginInfo() async {
@@ -36,10 +36,7 @@ class _SettingAccountPageState extends State<VRChatMobileSettingsAccount> {
 
   @override
   Widget build(BuildContext context) {
-    textStream(
-      context,
-      widget.appConfig,
-    );
+    textStream(context, widget.appConfig);
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.setting),
