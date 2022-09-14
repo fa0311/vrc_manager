@@ -22,7 +22,7 @@ import 'package:vrchat_mobile_client/data_class/app_config.dart';
 import 'package:vrchat_mobile_client/widgets/share.dart';
 import 'package:vrchat_mobile_client/widgets/status.dart';
 
-Column profile(BuildContext context, AppConfig appConfig, VRChatAPI vrhatLoginSession, VRChatUser user) {
+Column profile(BuildContext context, AppConfig appConfig, VRChatUser user) {
   List<InlineSpan> lineList = [];
   for (String line in (user.bio ?? "").split('\n')) {
     Match? matchTwitter = RegExp(r'^(Twitter|twitter|TWITTER)([:˸：\s]{0,3})([@＠\s]{0,3})([0-9０-９a-zA-Z_]{1,15})$').firstMatch(line);
@@ -43,14 +43,13 @@ Column profile(BuildContext context, AppConfig appConfig, VRChatAPI vrhatLoginSe
           recognizer: TapGestureRecognizer()
             ..onTap = () {
               if (matchTwitter != null) {
-                shareModalBottom(context, appConfig, vrhatLoginSession, "https://twitter.com/${match.group(match.groupCount)}");
+                shareModalBottom(context, appConfig, "https://twitter.com/${match.group(match.groupCount)}");
               } else if (matchDiscord != null) {
                 clipboardShareModalBottom(context, "${match.group(match.groupCount)}".replaceAll("＃", "#"));
               } else if (matchGithub != null) {
-                shareModalBottom(context, appConfig, vrhatLoginSession, "https://github.com/${match.group(match.groupCount)}");
+                shareModalBottom(context, appConfig, "https://github.com/${match.group(match.groupCount)}");
               } else if (matchUrl != null) {
-                shareModalBottom(
-                    context, appConfig, vrhatLoginSession, "${match.group(match.groupCount)}".replaceAll("⁄", "/").replaceAll("˸", ":").replaceAll("․", "."));
+                shareModalBottom(context, appConfig, "${match.group(match.groupCount)}".replaceAll("⁄", "/").replaceAll("˸", ":").replaceAll("․", "."));
               }
             }));
     } else {
@@ -117,7 +116,6 @@ Column profile(BuildContext context, AppConfig appConfig, VRChatAPI vrhatLoginSe
         children: _biolink(
           context,
           appConfig,
-          vrhatLoginSession,
           user.bioLinks,
         ),
       ),
@@ -137,13 +135,14 @@ Column profile(BuildContext context, AppConfig appConfig, VRChatAPI vrhatLoginSe
   );
 }
 
-Widget profileAction(BuildContext context, AppConfig appConfig, VRChatAPI vrhatLoginSession, VRChatfriendStatus status, String uid, Function reload) {
+Widget profileAction(BuildContext context, AppConfig appConfig, VRChatfriendStatus status, String uid, Function reload) {
+  late VRChatAPI vrhatLoginSession = VRChatAPI(cookie: appConfig.getLoggedAccount()!.cookie);
   sendFriendRequest() {
     vrhatLoginSession.sendFriendRequest(uid).then((response) {
       Navigator.pop(context);
       reload();
     }).catchError((status) {
-      apiError(context, appConfig, vrhatLoginSession, status);
+      apiError(context, appConfig, status);
     });
   }
 
@@ -152,7 +151,7 @@ Widget profileAction(BuildContext context, AppConfig appConfig, VRChatAPI vrhatL
       Navigator.pop(context);
       reload();
     }).catchError((status) {
-      apiError(context, appConfig, vrhatLoginSession, status);
+      apiError(context, appConfig, status);
     });
   }
 
@@ -161,7 +160,7 @@ Widget profileAction(BuildContext context, AppConfig appConfig, VRChatAPI vrhatL
       Navigator.pop(context);
       reload();
     }).catchError((status) {
-      apiError(context, appConfig, vrhatLoginSession, status);
+      apiError(context, appConfig, status);
     });
   }
 
@@ -175,7 +174,7 @@ Widget profileAction(BuildContext context, AppConfig appConfig, VRChatAPI vrhatL
               Navigator.pop(context);
               reload();
             }).catchError((status) {
-              apiError(context, appConfig, vrhatLoginSession, status);
+              apiError(context, appConfig, status);
             }));
   }
 
@@ -228,7 +227,7 @@ Widget profileAction(BuildContext context, AppConfig appConfig, VRChatAPI vrhatL
   );
 }
 
-List<Widget> _biolink(BuildContext context, AppConfig appConfig, VRChatAPI vrhatLoginSession, List<dynamic> biolinks) {
+List<Widget> _biolink(BuildContext context, AppConfig appConfig, List<dynamic> biolinks) {
   List<Widget> response = [];
   for (String link in biolinks) {
     if (link == "") continue;
@@ -236,7 +235,7 @@ List<Widget> _biolink(BuildContext context, AppConfig appConfig, VRChatAPI vrhat
       CircleAvatar(
         backgroundColor: const Color(0x00000000),
         child: IconButton(
-          onPressed: () => openInBrowser(context, appConfig, vrhatLoginSession, link),
+          onPressed: () => openInBrowser(context, appConfig, link),
           icon: SvgPicture.asset("assets/svg/${getVrchatIconContains(link)}.svg",
               width: 20, height: 20, color: Color(getVrchatIcon()[getVrchatIconContains(link)] ?? 0xFFFFFFFF), semanticsLabel: link),
         ),

@@ -17,26 +17,22 @@ import 'package:vrchat_mobile_client/data_class/app_config.dart';
 class VRChatMobileTokenSetting extends StatefulWidget {
   final bool offline;
   final AppConfig appConfig;
-  final VRChatAPI vrhatLoginSession;
-  const VRChatMobileTokenSetting(this.appConfig, this.vrhatLoginSession, {Key? key, this.offline = true}) : super(key: key);
+
+  const VRChatMobileTokenSetting(this.appConfig, {Key? key, this.offline = true}) : super(key: key);
 
   @override
   State<VRChatMobileTokenSetting> createState() => _TokenSettingPageState();
 }
 
 class _TokenSettingPageState extends State<VRChatMobileTokenSetting> {
-  TextEditingController _tokenController = TextEditingController();
+  late final TextEditingController _tokenController = TextEditingController(text: widget.appConfig.getLoggedAccount()!.cookie);
 
-  _TokenSettingPageState() {
-    getLoginSession("login_session").then(
-      (cookie) {
-        setState(() => _tokenController = TextEditingController(text: cookie));
-      },
-    );
-  }
   @override
   Widget build(BuildContext context) {
-    textStream(context, widget.appConfig, widget.vrhatLoginSession);
+    textStream(
+      context,
+      widget.appConfig,
+    );
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.token),
@@ -92,7 +88,7 @@ class _TokenSettingPageState extends State<VRChatMobileTokenSetting> {
                           },
                         );
                       }).catchError((status) {
-                        apiError(context, widget.appConfig, widget.vrhatLoginSession, status);
+                        apiError(context, widget.appConfig, status);
                       });
                     },
                   ),

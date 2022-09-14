@@ -20,8 +20,8 @@ import 'package:vrchat_mobile_client/widgets/share.dart';
 
 class VRChatMobileLogin extends StatefulWidget {
   final AppConfig appConfig;
-  final VRChatAPI vrhatLoginSession;
-  const VRChatMobileLogin(this.appConfig, this.vrhatLoginSession, {Key? key}) : super(key: key);
+
+  const VRChatMobileLogin(this.appConfig, {Key? key}) : super(key: key);
 
   @override
   State<VRChatMobileLogin> createState() => _LoginPageState();
@@ -46,7 +46,7 @@ class _LoginPageState extends State<VRChatMobileLogin> {
         throw Exception(errorLog(login.content));
       }
     }).catchError((status) {
-      apiError(context, widget.appConfig, widget.vrhatLoginSession, status);
+      apiError(context, widget.appConfig, status);
     });
   }
 
@@ -55,10 +55,10 @@ class _LoginPageState extends State<VRChatMobileLogin> {
       if (login.verified) {
         _save(session.vrchatSession.headers["cookie"] as String);
       } else {
-        errorDialog(context, widget.appConfig, widget.vrhatLoginSession, AppLocalizations.of(context)!.incorrectLogin);
+        errorDialog(context, widget.appConfig, AppLocalizations.of(context)!.incorrectLogin);
       }
     }).catchError((status) {
-      apiError(context, widget.appConfig, widget.vrhatLoginSession, status);
+      apiError(context, widget.appConfig, status);
     });
   }
 
@@ -95,7 +95,7 @@ class _LoginPageState extends State<VRChatMobileLogin> {
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
-            builder: (BuildContext context) => VRChatMobileHome(widget.appConfig, VRChatAPI(cookie: cookie)),
+            builder: (BuildContext context) => VRChatMobileHome(widget.appConfig),
           ),
           (_) => false,
         );
@@ -147,7 +147,7 @@ class _LoginPageState extends State<VRChatMobileLogin> {
           ),
         ],
       ),
-      drawer: simpledrawer(context, widget.appConfig, widget.vrhatLoginSession),
+      drawer: simpledrawer(context, widget.appConfig),
       body: Padding(
           padding: const EdgeInsets.all(32.0),
           child: Column(
@@ -212,7 +212,7 @@ class _LoginPageState extends State<VRChatMobileLogin> {
                         TextButton(
                           onPressed: () {
                             Navigator.pop(context);
-                            openInBrowser(context, widget.appConfig, widget.vrhatLoginSession, "https://vrchat.com/home/login");
+                            openInBrowser(context, widget.appConfig, "https://vrchat.com/home/login");
                           },
                           child: Text(AppLocalizations.of(context)!.openInBrowser),
                         ),

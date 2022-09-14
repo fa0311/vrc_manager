@@ -19,7 +19,7 @@ import 'package:vrchat_mobile_client/data_class/app_config.dart';
 import 'package:vrchat_mobile_client/scenes/world.dart';
 import 'package:vrchat_mobile_client/widgets/region.dart';
 
-Card simpleWorld(BuildContext context, AppConfig appConfig, VRChatAPI vrhatLoginSession, VRChatLimitedWorld world) {
+Card simpleWorld(BuildContext context, AppConfig appConfig, VRChatLimitedWorld world) {
   return Card(
     elevation: 20.0,
     child: Container(
@@ -29,7 +29,7 @@ Card simpleWorld(BuildContext context, AppConfig appConfig, VRChatAPI vrhatLogin
           Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (BuildContext context) => VRChatMobileWorld(appConfig, vrhatLoginSession, worldId: world.id),
+                builder: (BuildContext context) => VRChatMobileWorld(appConfig, worldId: world.id),
               ));
         },
         behavior: HitTestBehavior.opaque,
@@ -78,7 +78,7 @@ Card simpleWorld(BuildContext context, AppConfig appConfig, VRChatAPI vrhatLogin
   );
 }
 
-Card simpleWorldDescription(BuildContext context, appConfig, vrhatLoginSession, VRChatWorld world) {
+Card simpleWorldDescription(BuildContext context, appConfig, VRChatWorld world) {
   return Card(
     elevation: 20.0,
     child: Container(
@@ -88,7 +88,7 @@ Card simpleWorldDescription(BuildContext context, appConfig, vrhatLoginSession, 
           Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (BuildContext context) => VRChatMobileWorld(appConfig, vrhatLoginSession, worldId: world.id),
+                builder: (BuildContext context) => VRChatMobileWorld(appConfig, worldId: world.id),
               ));
         },
         behavior: HitTestBehavior.opaque,
@@ -146,7 +146,7 @@ Card simpleWorldDescription(BuildContext context, appConfig, vrhatLoginSession, 
   );
 }
 
-Card simpleWorldDescriptionHalf(BuildContext context, appConfig, vrhatLoginSession, VRChatWorld world) {
+Card simpleWorldDescriptionHalf(BuildContext context, appConfig, VRChatWorld world) {
   return Card(
     elevation: 20.0,
     child: Container(
@@ -156,7 +156,7 @@ Card simpleWorldDescriptionHalf(BuildContext context, appConfig, vrhatLoginSessi
           Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (BuildContext context) => VRChatMobileWorld(appConfig, vrhatLoginSession, worldId: world.id),
+                builder: (BuildContext context) => VRChatMobileWorld(appConfig, worldId: world.id),
               ));
         },
         behavior: HitTestBehavior.opaque,
@@ -222,7 +222,9 @@ Card simpleWorldDescriptionHalf(BuildContext context, appConfig, vrhatLoginSessi
   );
 }
 
-Card simpleWorldPlus(BuildContext context, AppConfig appConfig, VRChatAPI vrhatLoginSession, VRChatWorld world, VRChatInstance instance) {
+Card simpleWorldPlus(BuildContext context, AppConfig appConfig, VRChatWorld world, VRChatInstance instance) {
+  late VRChatAPI vrhatLoginSession = VRChatAPI(cookie: appConfig.getLoggedAccount()!.cookie);
+
   return Card(
     elevation: 20.0,
     child: Container(
@@ -232,7 +234,7 @@ Card simpleWorldPlus(BuildContext context, AppConfig appConfig, VRChatAPI vrhatL
           Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (BuildContext context) => VRChatMobileWorld(appConfig, vrhatLoginSession, worldId: world.id),
+                builder: (BuildContext context) => VRChatMobileWorld(appConfig, worldId: world.id),
               ));
         },
         behavior: HitTestBehavior.opaque,
@@ -311,7 +313,7 @@ Card simpleWorldPlus(BuildContext context, AppConfig appConfig, VRChatAPI vrhatL
                               },
                             );
                           }).catchError((status) {
-                            apiError(context, appConfig, vrhatLoginSession, status);
+                            apiError(context, appConfig, status);
                           }),
                           child: Text(AppLocalizations.of(context)!.joinInstance),
                         ),
@@ -327,7 +329,7 @@ Card simpleWorldPlus(BuildContext context, AppConfig appConfig, VRChatAPI vrhatL
   );
 }
 
-Card simpleWorldHalf(BuildContext context, AppConfig appConfig, VRChatAPI vrhatLoginSession, VRChatLimitedWorld world) {
+Card simpleWorldHalf(BuildContext context, AppConfig appConfig, VRChatLimitedWorld world) {
   return Card(
     elevation: 20.0,
     child: Container(
@@ -337,7 +339,7 @@ Card simpleWorldHalf(BuildContext context, AppConfig appConfig, VRChatAPI vrhatL
           Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (BuildContext context) => VRChatMobileWorld(appConfig, vrhatLoginSession, worldId: world.id),
+                builder: (BuildContext context) => VRChatMobileWorld(appConfig, worldId: world.id),
               ));
         },
         behavior: HitTestBehavior.opaque,
@@ -389,7 +391,9 @@ Card simpleWorldHalf(BuildContext context, AppConfig appConfig, VRChatAPI vrhatL
   );
 }
 
-Card simpleWorldPlusHalf(BuildContext context, AppConfig appConfig, VRChatAPI vrhatLoginSession, VRChatWorld world, VRChatInstance instance) {
+Card simpleWorldPlusHalf(BuildContext context, AppConfig appConfig, VRChatWorld world, VRChatInstance instance) {
+  late VRChatAPI vrhatLoginSession = VRChatAPI(cookie: appConfig.getLoggedAccount()!.cookie);
+
   return Card(
     elevation: 20.0,
     child: Container(
@@ -399,7 +403,7 @@ Card simpleWorldPlusHalf(BuildContext context, AppConfig appConfig, VRChatAPI vr
           Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (BuildContext context) => VRChatMobileWorld(appConfig, vrhatLoginSession, worldId: world.id),
+                builder: (BuildContext context) => VRChatMobileWorld(appConfig, worldId: world.id),
               ));
         },
         behavior: HitTestBehavior.opaque,
@@ -485,7 +489,7 @@ Card simpleWorldPlusHalf(BuildContext context, AppConfig appConfig, VRChatAPI vr
                               },
                             );
                           }).catchError((status) {
-                            apiError(context, appConfig, vrhatLoginSession, status);
+                            apiError(context, appConfig, status);
                           }),
                           child: Text(AppLocalizations.of(context)!.joinInstance, style: const TextStyle(fontSize: 10)),
                         ),

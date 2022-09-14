@@ -46,11 +46,11 @@ class Worlds {
   }
 
   defaultAdd(VRChatWorld world) {
-    children.add(simpleWorldDescription(context, appConfig, vrhatLoginSession, world));
+    children.add(simpleWorldDescription(context, appConfig, world));
   }
 
   simpleAdd(VRChatWorld world) {
-    children.add(simpleWorldDescriptionHalf(context, appConfig, vrhatLoginSession, world));
+    children.add(simpleWorldDescriptionHalf(context, appConfig, world));
   }
 
   textOnlyAdd(VRChatWorld world) {
@@ -64,7 +64,7 @@ class Worlds {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (BuildContext context) => VRChatMobileWorld(appConfig, vrhatLoginSession, worldId: world.id),
+                    builder: (BuildContext context) => VRChatMobileWorld(appConfig, worldId: world.id),
                   ));
             },
             behavior: HitTestBehavior.opaque,
@@ -137,7 +137,7 @@ class WorldsLimited {
   }
 
   defaultAdd(VRChatLimitedWorld world) {
-    children.add(simpleWorld(context, appConfig, vrhatLoginSession, world));
+    children.add(simpleWorld(context, appConfig, world));
   }
 
   Widget render({required List<Widget> children}) {
@@ -201,7 +201,7 @@ class FavoriteWorlds {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (BuildContext context) => VRChatMobileWorld(appConfig, vrhatLoginSession, worldId: world.id),
+                    builder: (BuildContext context) => VRChatMobileWorld(appConfig, worldId: world.id),
                   ));
             },
             behavior: HitTestBehavior.opaque,
@@ -262,7 +262,7 @@ class FavoriteWorlds {
                       worldList.remove(world);
                       button();
                     }).catchError((status) {
-                      apiError(context, appConfig, vrhatLoginSession, status);
+                      apiError(context, appConfig, status);
                     }),
                     icon: const Icon(Icons.delete),
                   ),
@@ -288,7 +288,7 @@ class FavoriteWorlds {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (BuildContext context) => VRChatMobileWorld(appConfig, vrhatLoginSession, worldId: world.id),
+                        builder: (BuildContext context) => VRChatMobileWorld(appConfig, worldId: world.id),
                       ));
                 },
                 behavior: HitTestBehavior.opaque,
@@ -371,7 +371,7 @@ class FavoriteWorlds {
                 worldList.remove(world);
                 button();
               }).catchError((status) {
-                apiError(context, appConfig, vrhatLoginSession, status);
+                apiError(context, appConfig, status);
               }),
               icon: const Icon(Icons.delete),
             ),
@@ -392,7 +392,7 @@ class FavoriteWorlds {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (BuildContext context) => VRChatMobileWorld(appConfig, vrhatLoginSession, worldId: world.id),
+                    builder: (BuildContext context) => VRChatMobileWorld(appConfig, worldId: world.id),
                   ));
             },
             behavior: HitTestBehavior.opaque,
@@ -408,7 +408,7 @@ class FavoriteWorlds {
                       worldList.remove(world);
                       button();
                     }).catchError((status) {
-                      apiError(context, appConfig, vrhatLoginSession, status);
+                      apiError(context, appConfig, status);
                     }),
                     icon: const Icon(Icons.delete),
                   ),

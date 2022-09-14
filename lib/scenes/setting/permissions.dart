@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 // Package imports:
 import 'package:domain_verification_manager/domain_verification_manager.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:vrchat_mobile_client/api/main.dart';
 
 // Project imports:
 import 'package:vrchat_mobile_client/assets/flutter/text_stream.dart';
@@ -15,8 +14,8 @@ import 'package:vrchat_mobile_client/data_class/app_config.dart';
 
 class VRChatMobileSettingsPermissions extends StatefulWidget {
   final AppConfig appConfig;
-  final VRChatAPI vrhatLoginSession;
-  const VRChatMobileSettingsPermissions(this.appConfig, this.vrhatLoginSession, {Key? key}) : super(key: key);
+
+  const VRChatMobileSettingsPermissions(this.appConfig, {Key? key}) : super(key: key);
 
   @override
   State<VRChatMobileSettingsPermissions> createState() => _SettingPermissionsPageState();
@@ -84,7 +83,10 @@ class _SettingPermissionsPageState extends State<VRChatMobileSettingsPermissions
 
   @override
   Widget build(BuildContext context) {
-    textStream(context, widget.appConfig, widget.vrhatLoginSession);
+    textStream(
+      context,
+      widget.appConfig,
+    );
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.permissions),

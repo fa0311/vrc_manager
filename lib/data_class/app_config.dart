@@ -13,10 +13,11 @@ class AppConfig {
 }
 
 class AccountConfig {
-  late String accountUid;
-  late String? cookie;
-  late String userid;
-  late String password;
-  late bool rememberLoginInfo;
-  AccountConfig(this.accountUid);
+  String accountUid;
+  String cookie;
+  String? userid;
+  String? username;
+  String? password;
+  bool rememberLoginInfo = false;
+  AccountConfig(this.accountUid, {this.cookie = ""});
 }

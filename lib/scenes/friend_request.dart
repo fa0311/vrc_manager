@@ -19,14 +19,15 @@ import 'package:vrchat_mobile_client/widgets/users.dart';
 
 class VRChatMobileFriendRequest extends StatefulWidget {
   final AppConfig appConfig;
-  final VRChatAPI vrhatLoginSession;
-  const VRChatMobileFriendRequest(this.appConfig, this.vrhatLoginSession, {Key? key}) : super(key: key);
+
+  const VRChatMobileFriendRequest(this.appConfig, {Key? key}) : super(key: key);
 
   @override
   State<VRChatMobileFriendRequest> createState() => _FriendsPageState();
 }
 
 class _FriendsPageState extends State<VRChatMobileFriendRequest> {
+  late VRChatAPI vrhatLoginSession = VRChatAPI(cookie: widget.appConfig.getLoggedAccount()!.cookie);
   int offset = 0;
   bool autoReadMore = false;
   bool delayedDisplay = false;
@@ -106,13 +107,13 @@ class _FriendsPageState extends State<VRChatMobileFriendRequest> {
     setState(() {
       offset += 50;
     });
-    return widget.vrhatLoginSession.notifications(type: "friendRequest", offset: offset - 50).then((VRChatNotificationsList response) {
+    return vrhatLoginSession.notifications(type: "friendRequest", offset: offset - 50).then((VRChatNotificationsList response) {
       List<Future> futureList = [];
       for (VRChatNotifications requestUser in response.notifications) {
-        futureList.add(widget.vrhatLoginSession.users(requestUser.senderUserId).then((VRChatUser user) {
+        futureList.add(vrhatLoginSession.users(requestUser.senderUserId).then((VRChatUser user) {
           dataColumn.userList.add(user);
         }).catchError((status) {
-          apiError(context, widget.appConfig, widget.vrhatLoginSession, status);
+          apiError(context, widget.appConfig, status);
         }));
       }
       Future.wait(futureList).then((value) {
@@ -128,7 +129,7 @@ class _FriendsPageState extends State<VRChatMobileFriendRequest> {
         sort();
       });
     }).catchError((status) {
-      apiError(context, widget.appConfig, widget.vrhatLoginSession, status);
+      apiError(context, widget.appConfig, status);
     });
   }
 
@@ -226,10 +227,10 @@ class _FriendsPageState extends State<VRChatMobileFriendRequest> {
 
   @override
   Widget build(BuildContext context) {
-    textStream(context, widget.appConfig, widget.vrhatLoginSession);
+    textStream(context, widget.appConfig);
     dataColumn.context = context;
     dataColumn.appConfig = widget.appConfig;
-    dataColumn.vrhatLoginSession = widget.vrhatLoginSession;
+    dataColumn.vrhatLoginSession = vrhatLoginSession;
 
     return Scaffold(
       appBar: AppBar(
@@ -284,7 +285,7 @@ class _FriendsPageState extends State<VRChatMobileFriendRequest> {
                         title: Text(AppLocalizations.of(context)!.openInBrowser),
                         onTap: () {
                           Navigator.pop(context);
-                          openInBrowser(context, widget.appConfig, widget.vrhatLoginSession, "https://vrchat.com/home/locations");
+                          openInBrowser(context, widget.appConfig, "https://vrchat.com/home/locations");
                         },
                       ),
                     ],
@@ -295,7 +296,7 @@ class _FriendsPageState extends State<VRChatMobileFriendRequest> {
           ),
         ],
       ),
-      drawer: drawer(context, widget.appConfig, widget.vrhatLoginSession),
+      drawer: drawer(context, widget.appConfig),
       body: SafeArea(
         child: SizedBox(
           width: MediaQuery.of(context).size.width,

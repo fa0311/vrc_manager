@@ -15,13 +15,12 @@ import 'package:package_info_plus/package_info_plus.dart';
 
 // Project imports:
 import 'package:vrchat_mobile_client/api/data_class.dart';
-import 'package:vrchat_mobile_client/api/main.dart';
 import 'package:vrchat_mobile_client/assets/storage.dart';
 import 'package:vrchat_mobile_client/data_class/app_config.dart';
 import 'package:vrchat_mobile_client/scenes/login.dart';
 import 'package:vrchat_mobile_client/widgets/share.dart';
 
-void errorDialog(BuildContext context, AppConfig appConfig, VRChatAPI vrhatLoginSession, String text, {String log = ""}) {
+void errorDialog(BuildContext context, AppConfig appConfig, String text, {String log = ""}) {
   if (log.isNotEmpty) {
     text += "\n${AppLocalizations.of(context)!.reportMessage1}\n${AppLocalizations.of(context)!.reportMessage2}";
   }
@@ -47,7 +46,7 @@ void errorDialog(BuildContext context, AppConfig appConfig, VRChatAPI vrhatLogin
                         if (Platform.isAndroid || Platform.isIOS) {
                           Fluttertoast.showToast(msg: AppLocalizations.of(context)!.copied);
                         }
-                        openInBrowser(context, appConfig, vrhatLoginSession, "https://github.com/fa0311/vrchat_mobile_client/issues/new/choose");
+                        openInBrowser(context, appConfig, "https://github.com/fa0311/vrchat_mobile_client/issues/new/choose");
                       },
                     );
                   },
@@ -69,7 +68,7 @@ String errorLog(Map log) {
   return encoder.convert(log);
 }
 
-httpError(BuildContext context, AppConfig appConfig, VRChatAPI vrhatLoginSession, HttpException error) {
+httpError(BuildContext context, AppConfig appConfig, HttpException error) {
   try {
     VRChatError content;
     dynamic message;
@@ -84,14 +83,14 @@ httpError(BuildContext context, AppConfig appConfig, VRChatAPI vrhatLoginSession
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
-          builder: (BuildContext context) => VRChatMobileLogin(appConfig, vrhatLoginSession),
+          builder: (BuildContext context) => VRChatMobileLogin(appConfig),
         ),
         (_) => false,
       );
     } else if (content.message == 'Too many requests') {
-      errorDialog(context, appConfig, vrhatLoginSession, AppLocalizations.of(context)!.tooManyRequests);
+      errorDialog(context, appConfig, AppLocalizations.of(context)!.tooManyRequests);
     } else if (content.message == '"Invalid Username/Email or Password"') {
-      errorDialog(context, appConfig, vrhatLoginSession, AppLocalizations.of(context)!.invalidLoginInfo);
+      errorDialog(context, appConfig, AppLocalizations.of(context)!.invalidLoginInfo);
     } else {
       PackageInfo.fromPlatform().then((PackageInfo packageInfo) {
         DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
@@ -109,17 +108,17 @@ httpError(BuildContext context, AppConfig appConfig, VRChatAPI vrhatLoginSession
                   "error": error.toString(),
                   "message": message,
                 };
-          errorDialog(context, appConfig, vrhatLoginSession, content.message, log: errorLog(logs));
+          errorDialog(context, appConfig, content.message, log: errorLog(logs));
         });
       });
     }
   } catch (e) {
-    standardError(context, appConfig, vrhatLoginSession, e);
+    standardError(context, appConfig, e);
     return;
   }
 }
 
-standardError(BuildContext context, AppConfig appConfig, VRChatAPI vrhatLoginSession, dynamic error) {
+standardError(BuildContext context, AppConfig appConfig, dynamic error) {
   PackageInfo.fromPlatform().then((PackageInfo packageInfo) {
     DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
     deviceInfoPlugin.deviceInfo.then((BaseDeviceInfo deviceInfo) {
@@ -138,28 +137,28 @@ standardError(BuildContext context, AppConfig appConfig, VRChatAPI vrhatLoginSes
         logs.addAll({
           "stackTrace": (error.stackTrace ?? "").toString().split("\n"),
         });
-        errorDialog(context, appConfig, vrhatLoginSession, AppLocalizations.of(context)!.parseError, log: errorLog(logs));
+        errorDialog(context, appConfig, AppLocalizations.of(context)!.parseError, log: errorLog(logs));
       } else if (error is FormatException) {
         logs.addAll({
           "message": error.message,
         });
-        errorDialog(context, appConfig, vrhatLoginSession, AppLocalizations.of(context)!.parseError, log: errorLog(logs));
+        errorDialog(context, appConfig, AppLocalizations.of(context)!.parseError, log: errorLog(logs));
       } else if (error is SocketException) {
         logs.addAll({
           "message": error.message,
         });
-        errorDialog(context, appConfig, vrhatLoginSession, AppLocalizations.of(context)!.socketException, log: errorLog(logs));
+        errorDialog(context, appConfig, AppLocalizations.of(context)!.socketException, log: errorLog(logs));
       } else {
-        errorDialog(context, appConfig, vrhatLoginSession, AppLocalizations.of(context)!.unknownError, log: errorLog(logs));
+        errorDialog(context, appConfig, AppLocalizations.of(context)!.unknownError, log: errorLog(logs));
       }
     });
   });
 }
 
-apiError(BuildContext context, AppConfig appConfig, VRChatAPI vrhatLoginSession, dynamic error) {
+apiError(BuildContext context, AppConfig appConfig, dynamic error) {
   if (error is HttpException) {
-    httpError(context, appConfig, vrhatLoginSession, error);
+    httpError(context, appConfig, error);
   } else {
-    standardError(context, appConfig, vrhatLoginSession, error);
+    standardError(context, appConfig, error);
   }
 }

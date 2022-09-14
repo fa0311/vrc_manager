@@ -18,14 +18,15 @@ import 'package:vrchat_mobile_client/widgets/share.dart';
 class VRChatMobileWebView extends StatefulWidget {
   final String url;
   final AppConfig appConfig;
-  final VRChatAPI vrhatLoginSession;
-  const VRChatMobileWebView(this.appConfig, this.vrhatLoginSession, {Key? key, required this.url}) : super(key: key);
+
+  const VRChatMobileWebView(this.appConfig, {Key? key, required this.url}) : super(key: key);
 
   @override
   State<VRChatMobileWebView> createState() => _WebViewPageState();
 }
 
 class _WebViewPageState extends State<VRChatMobileWebView> {
+  late VRChatAPI vrhatLoginSession = VRChatAPI(cookie: widget.appConfig.getLoggedAccount()!.cookie);
   late bool openInExternalBrowser = false;
   late WebViewController controllerGlobal;
   late int timeStamp = 0;
@@ -38,7 +39,7 @@ class _WebViewPageState extends State<VRChatMobileWebView> {
     },
     navigationDelegate: (NavigationRequest request) {
       if (openInExternalBrowser && Uri.parse(url).host != "vrchat.com") {
-        openInBrowser(context, widget.appConfig, widget.vrhatLoginSession, url);
+        openInBrowser(context, widget.appConfig, url);
         return NavigationDecision.prevent;
       } else {
         setState(() => url = request.url);
@@ -59,10 +60,10 @@ class _WebViewPageState extends State<VRChatMobileWebView> {
 
   @override
   Widget build(BuildContext context) {
-    textStream(context, widget.appConfig, widget.vrhatLoginSession);
+    textStream(context, widget.appConfig);
     final cookieManager = CookieManager();
 
-    final cookieMap = Session().decodeCookie(widget.vrhatLoginSession.vrchatSession.headers["cookie"] ?? "");
+    final cookieMap = Session().decodeCookie(vrhatLoginSession.vrchatSession.headers["cookie"] ?? "");
     for (String key in cookieMap.keys) {
       cookieManager.setCookie(
         WebViewCookie(

@@ -135,7 +135,7 @@ class Users {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (BuildContext context) => VRChatMobileUser(appConfig, vrhatLoginSession, userId: user.id),
+                    builder: (BuildContext context) => VRChatMobileUser(appConfig, userId: user.id),
                   ));
             },
             behavior: HitTestBehavior.opaque,
@@ -241,13 +241,12 @@ class Users {
                 if (worldDetails && locationMap[worldId] != null && instanceMap[user.location] == null)
                   Padding(
                     padding: const EdgeInsets.only(top: 5),
-                    child: (simpleWorld(context, appConfig, vrhatLoginSession, locationMap[worldId]!.toLimited()).child! as Container).child!,
+                    child: (simpleWorld(context, appConfig, locationMap[worldId]!.toLimited()).child! as Container).child!,
                   ),
                 if (worldDetails && locationMap[worldId] != null && instanceMap[user.location] != null)
                   Padding(
                     padding: const EdgeInsets.only(top: 5),
-                    child:
-                        (simpleWorldPlus(context, appConfig, vrhatLoginSession, locationMap[worldId]!, instanceMap[user.location]!).child! as Container).child!,
+                    child: (simpleWorldPlus(context, appConfig, locationMap[worldId]!, instanceMap[user.location]!).child! as Container).child!,
                   ),
               ],
             ),
@@ -268,7 +267,7 @@ class Users {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (BuildContext context) => VRChatMobileUser(appConfig, vrhatLoginSession, userId: user.id),
+                    builder: (BuildContext context) => VRChatMobileUser(appConfig, userId: user.id),
                   ));
             },
             behavior: HitTestBehavior.opaque,
@@ -359,7 +358,7 @@ class Users {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (BuildContext context) => VRChatMobileUser(appConfig, vrhatLoginSession, userId: user.id),
+                    builder: (BuildContext context) => VRChatMobileUser(appConfig, userId: user.id),
                   ));
             },
             behavior: HitTestBehavior.opaque,
@@ -457,13 +456,12 @@ class Users {
                 if (worldDetails && locationMap[worldId] != null && instanceMap[user.location] == null)
                   Padding(
                     padding: const EdgeInsets.only(top: 5),
-                    child: (simpleWorldHalf(context, appConfig, vrhatLoginSession, locationMap[worldId]!.toLimited()).child! as Container).child!,
+                    child: (simpleWorldHalf(context, appConfig, locationMap[worldId]!.toLimited()).child! as Container).child!,
                   ),
                 if (worldDetails && locationMap[worldId] != null && instanceMap[user.location] != null)
                   Padding(
                     padding: const EdgeInsets.only(top: 5),
-                    child: (simpleWorldPlusHalf(context, appConfig, vrhatLoginSession, locationMap[worldId]!, instanceMap[user.location]!).child! as Container)
-                        .child!,
+                    child: (simpleWorldPlusHalf(context, appConfig, locationMap[worldId]!, instanceMap[user.location]!).child! as Container).child!,
                   ),
               ],
             ),
@@ -484,7 +482,7 @@ class Users {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (BuildContext context) => VRChatMobileUser(appConfig, vrhatLoginSession, userId: user.id),
+                    builder: (BuildContext context) => VRChatMobileUser(appConfig, userId: user.id),
                   ));
             },
             behavior: HitTestBehavior.opaque,
@@ -560,7 +558,7 @@ class Users {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (BuildContext context) => VRChatMobileUser(appConfig, vrhatLoginSession, userId: user.id),
+                    builder: (BuildContext context) => VRChatMobileUser(appConfig, userId: user.id),
                   ));
             },
             behavior: HitTestBehavior.opaque,
@@ -646,7 +644,7 @@ class Users {
                                 },
                               );
                             }).catchError((status) {
-                              apiError(context, appConfig, vrhatLoginSession, status);
+                              apiError(context, appConfig, status);
                             }),
                             child: Text(AppLocalizations.of(context)!.joinInstance, style: const TextStyle(fontSize: 10)),
                           ),
@@ -672,7 +670,7 @@ class Users {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (BuildContext context) => VRChatMobileUser(appConfig, vrhatLoginSession, userId: user.id),
+                    builder: (BuildContext context) => VRChatMobileUser(appConfig, userId: user.id),
                   ));
             },
             behavior: HitTestBehavior.opaque,

@@ -20,14 +20,15 @@ import 'package:vrchat_mobile_client/widgets/worlds.dart';
 
 class VRChatSearch extends StatefulWidget {
   final AppConfig appConfig;
-  final VRChatAPI vrhatLoginSession;
-  const VRChatSearch(this.appConfig, this.vrhatLoginSession, {Key? key}) : super(key: key);
+
+  const VRChatSearch(this.appConfig, {Key? key}) : super(key: key);
 
   @override
   State<VRChatSearch> createState() => _SearchState();
 }
 
 class _SearchState extends State<VRChatSearch> {
+  late VRChatAPI vrhatLoginSession = VRChatAPI(cookie: widget.appConfig.getLoggedAccount()!.cookie);
   TextEditingController searchBoxController = TextEditingController();
   FocusNode searchBoxFocusNode = FocusNode();
   String searchMode = "users";
@@ -103,13 +104,13 @@ class _SearchState extends State<VRChatSearch> {
     });
     searchBoxFocusNode.unfocus();
     if (searchMode == "worlds") {
-      return widget.vrhatLoginSession.searchWorlds(text, offset: offset - 50).then((VRChatLimitedWorldList worlds) {
+      return vrhatLoginSession.searchWorlds(text, offset: offset - 50).then((VRChatLimitedWorldList worlds) {
         List<Future> futureList = [];
         for (VRChatLimitedWorld world in worlds.world) {
-          futureList.add(widget.vrhatLoginSession.worlds(world.id).then((VRChatWorld world) {
+          futureList.add(vrhatLoginSession.worlds(world.id).then((VRChatWorld world) {
             dataColumnWorlds.add(world);
           }).catchError((status) {
-            apiError(context, widget.appConfig, widget.vrhatLoginSession, status);
+            apiError(context, widget.appConfig, status);
           }));
         }
         Future.wait(futureList).then((value) {
@@ -118,17 +119,17 @@ class _SearchState extends State<VRChatSearch> {
           );
         });
       }).catchError((status) {
-        apiError(context, widget.appConfig, widget.vrhatLoginSession, status);
+        apiError(context, widget.appConfig, status);
       });
     } else if (searchMode == "users") {
-      return widget.vrhatLoginSession.searchUsers(text, offset: offset - 50).then((VRChatUserLimitedList users) {
+      return vrhatLoginSession.searchUsers(text, offset: offset - 50).then((VRChatUserLimitedList users) {
         List<Future> futureList = [];
         for (VRChatUserLimited user in users.users) {
           futureList.add(
-            widget.vrhatLoginSession.users(user.id).then((VRChatUser user) {
+            vrhatLoginSession.users(user.id).then((VRChatUser user) {
               dataColumnUsers.userList.add(user);
             }).catchError((status) {
-              apiError(context, widget.appConfig, widget.vrhatLoginSession, status);
+              apiError(context, widget.appConfig, status);
             }),
           );
         }
@@ -138,7 +139,7 @@ class _SearchState extends State<VRChatSearch> {
           );
         });
       }).catchError((status) {
-        apiError(context, widget.appConfig, widget.vrhatLoginSession, status);
+        apiError(context, widget.appConfig, status);
       });
     }
     throw Exception();
@@ -252,13 +253,13 @@ class _SearchState extends State<VRChatSearch> {
 
   @override
   Widget build(BuildContext context) {
-    textStream(context, widget.appConfig, widget.vrhatLoginSession);
+    textStream(context, widget.appConfig);
     dataColumnUsers.context = context;
     dataColumnUsers.appConfig = widget.appConfig;
-    dataColumnUsers.vrhatLoginSession = widget.vrhatLoginSession;
+    dataColumnUsers.vrhatLoginSession = vrhatLoginSession;
     dataColumnWorlds.context = context;
     dataColumnWorlds.appConfig = widget.appConfig;
-    dataColumnWorlds.vrhatLoginSession = widget.vrhatLoginSession;
+    dataColumnWorlds.vrhatLoginSession = vrhatLoginSession;
 
     const selectedTextStyle = TextStyle(
       color: Colors.grey,
@@ -306,7 +307,7 @@ class _SearchState extends State<VRChatSearch> {
                         title: Text(AppLocalizations.of(context)!.openInBrowser),
                         onTap: () {
                           Navigator.pop(context);
-                          openInBrowser(context, widget.appConfig, widget.vrhatLoginSession, "https://vrchat.com/home/search/${searchBoxController.text}");
+                          openInBrowser(context, widget.appConfig, "https://vrchat.com/home/search/${searchBoxController.text}");
                         },
                       ),
                     ],
@@ -317,7 +318,7 @@ class _SearchState extends State<VRChatSearch> {
           ),
         ],
       ),
-      drawer: drawer(context, widget.appConfig, widget.vrhatLoginSession),
+      drawer: drawer(context, widget.appConfig),
       body: SafeArea(
         child: SizedBox(
           child: SingleChildScrollView(

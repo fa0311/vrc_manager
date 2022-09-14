@@ -10,12 +10,11 @@ import 'package:vrchat_mobile_client/assets/flutter/url_parser.dart';
 textStream(
   context,
   appConfig,
-  vrhatLoginSession,
 ) {
   if (Platform.isAndroid || Platform.isIOS) {
     ReceiveSharingIntent.getTextStream().listen(
       (String value) {
-        urlParser(context, appConfig, vrhatLoginSession, value);
+        urlParser(context, appConfig, value);
       },
     );
   }

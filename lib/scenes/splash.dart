@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
-import 'package:vrchat_mobile_client/api/main.dart';
 
 // Project imports:
 import 'package:vrchat_mobile_client/assets/flutter/url_parser.dart';
@@ -27,7 +26,7 @@ class _SplashState extends State<VRChatMobileSplash> {
   initState() {
     super.initState();
     List<Future> futureList = [];
-    List<Future> futureList2 = [];
+    List<Future> futureListLogin = [];
 
     String? initialText;
     AppConfig appConfig = AppConfig();
@@ -36,10 +35,10 @@ class _SplashState extends State<VRChatMobileSplash> {
     futureList.add(getStorageList("account_index_list").then((List<String> accountList) {
       for (String uid in accountList) {
         AccountConfig accountConfig = AccountConfig(uid);
-        futureList2.add(getLoginSession("login_session", accountUid: uid).then((value) => accountConfig.cookie = value));
-        futureList2.add(getLoginSession("userid", accountUid: uid).then((value) => accountConfig.userid = value ?? ""));
-        futureList2.add(getLoginSession("password", accountUid: uid).then((value) => accountConfig.password = value ?? ""));
-        futureList2.add(getLoginSession("remember_login_info", accountUid: uid).then((value) => accountConfig.rememberLoginInfo = (value == "true")));
+        futureListLogin.add(getLoginSession("login_session", accountUid: uid).then((value) => accountConfig.cookie = value ?? ""));
+        futureListLogin.add(getLoginSession("userid", accountUid: uid).then((value) => accountConfig.userid = value ?? ""));
+        futureListLogin.add(getLoginSession("password", accountUid: uid).then((value) => accountConfig.password = value ?? ""));
+        futureListLogin.add(getLoginSession("remember_login_info", accountUid: uid).then((value) => accountConfig.rememberLoginInfo = (value == "true")));
         appConfig.accountList.add(accountConfig);
       }
     }));
@@ -48,16 +47,16 @@ class _SplashState extends State<VRChatMobileSplash> {
       futureList.add(ReceiveSharingIntent.getInitialText().then((String? value) => initialText = value));
     }
     Future.wait(futureList).then((value) {
-      Future.wait(futureList2).then((value) {
-        VRChatAPI vrhatLoginSession = VRChatAPI(cookie: appConfig.getLoggedAccount()?.cookie ?? "");
-
+      Future.wait(futureListLogin).then((value) {
         if (initialText != null) {
-          urlParser(context, appConfig, vrhatLoginSession, initialText!);
+          urlParser(context, appConfig, initialText!);
         } else if (appConfig.getLoggedAccount()?.cookie == null) {
           Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
-              builder: (BuildContext context) => VRChatMobileLogin(appConfig, vrhatLoginSession),
+              builder: (BuildContext context) => VRChatMobileLogin(
+                appConfig,
+              ),
             ),
             (_) => false,
           );
@@ -65,7 +64,9 @@ class _SplashState extends State<VRChatMobileSplash> {
           Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
-              builder: (BuildContext context) => VRChatMobileHome(appConfig, vrhatLoginSession),
+              builder: (BuildContext context) => VRChatMobileHome(
+                appConfig,
+              ),
             ),
             (_) => false,
           );

@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:vrchat_mobile_client/api/main.dart';
 
 // Project imports:
 import 'package:vrchat_mobile_client/assets/storage.dart';
@@ -17,51 +16,44 @@ import 'package:vrchat_mobile_client/scenes/setting/other_account.dart';
 import 'package:vrchat_mobile_client/scenes/settings.dart';
 import 'package:vrchat_mobile_client/scenes/worlds_favorite.dart';
 
-Drawer drawer(BuildContext context, AppConfig appConfig, VRChatAPI vrhatLoginSession) {
+Drawer drawer(BuildContext context, AppConfig appConfig) {
   Column column = Column();
 
-  getStorageList("account_index_list").then(
-    (response) {
-      List<Widget> list = [
-        const Divider(),
-        ListTile(
-          leading: const Icon(Icons.settings),
-          title: Text(AppLocalizations.of(context)!.accountSwitchSetting),
-          onTap: () => Navigator.pushAndRemoveUntil(
+  List<Widget> list = [
+    const Divider(),
+    ListTile(
+      leading: const Icon(Icons.settings),
+      title: Text(AppLocalizations.of(context)!.accountSwitchSetting),
+      onTap: () => Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (BuildContext context) => VRChatMobileSettingsOtherAccount(appConfig),
+        ),
+        (_) => false,
+      ),
+    )
+  ];
+
+  for (AccountConfig account in appConfig.accountList) {
+    list.insert(
+      0,
+      ListTile(
+        title: Text(
+          account.username ?? AppLocalizations.of(context)!.unknown,
+        ),
+        onTap: () => setStorage("account_index", account.accountUid).then(
+          (_) => Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
-              builder: (BuildContext context) => VRChatMobileSettingsOtherAccount(appConfig, vrhatLoginSession),
+              builder: (BuildContext context) => VRChatMobileHome(appConfig),
             ),
             (_) => false,
           ),
-        )
-      ];
-      response.asMap().forEach(
-        (_, String accountUid) {
-          getLoginSession("displayname", accountUid: accountUid).then(
-            (accountName) => list.insert(
-              0,
-              ListTile(
-                title: Text(
-                  accountName ?? AppLocalizations.of(context)!.unknown,
-                ),
-                onTap: () => setStorage("account_index", accountUid).then(
-                  (_) => Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                      builder: (BuildContext context) => VRChatMobileHome(appConfig, vrhatLoginSession),
-                    ),
-                    (_) => false,
-                  ),
-                ),
-              ),
-            ),
-          );
-        },
-      );
-      column = Column(children: list);
-    },
-  );
+        ),
+      ),
+    );
+  }
+  column = Column(children: list);
 
   return Drawer(
     child: SafeArea(
@@ -75,7 +67,7 @@ Drawer drawer(BuildContext context, AppConfig appConfig, VRChatAPI vrhatLoginSes
                     onTap: () => Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
-                        builder: (BuildContext context) => VRChatMobileHome(appConfig, vrhatLoginSession),
+                        builder: (BuildContext context) => VRChatMobileHome(appConfig),
                       ),
                       (_) => false,
                     ),
@@ -86,7 +78,7 @@ Drawer drawer(BuildContext context, AppConfig appConfig, VRChatAPI vrhatLoginSes
                     onTap: () => Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
-                        builder: (BuildContext context) => VRChatMobileFriends(appConfig, vrhatLoginSession, offline: false),
+                        builder: (BuildContext context) => VRChatMobileFriends(appConfig, offline: false),
                       ),
                       (_) => false,
                     ),
@@ -97,7 +89,7 @@ Drawer drawer(BuildContext context, AppConfig appConfig, VRChatAPI vrhatLoginSes
                     onTap: () => Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
-                        builder: (BuildContext context) => VRChatMobileFriends(appConfig, vrhatLoginSession, offline: true),
+                        builder: (BuildContext context) => VRChatMobileFriends(appConfig, offline: true),
                       ),
                       (_) => false,
                     ),
@@ -108,7 +100,9 @@ Drawer drawer(BuildContext context, AppConfig appConfig, VRChatAPI vrhatLoginSes
                     onTap: () => Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
-                        builder: (BuildContext context) => VRChatSearch(appConfig, vrhatLoginSession),
+                        builder: (BuildContext context) => VRChatSearch(
+                          appConfig,
+                        ),
                       ),
                       (_) => false,
                     ),
@@ -119,7 +113,9 @@ Drawer drawer(BuildContext context, AppConfig appConfig, VRChatAPI vrhatLoginSes
                     onTap: () => Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
-                        builder: (BuildContext context) => VRChatMobileFriendRequest(appConfig, vrhatLoginSession),
+                        builder: (BuildContext context) => VRChatMobileFriendRequest(
+                          appConfig,
+                        ),
                       ),
                       (_) => false,
                     ),
@@ -130,7 +126,9 @@ Drawer drawer(BuildContext context, AppConfig appConfig, VRChatAPI vrhatLoginSes
                     onTap: () => Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
-                        builder: (BuildContext context) => VRChatMobileWorldsFavorite(appConfig, vrhatLoginSession),
+                        builder: (BuildContext context) => VRChatMobileWorldsFavorite(
+                          appConfig,
+                        ),
                       ),
                       (_) => false,
                     ),
@@ -152,7 +150,7 @@ Drawer drawer(BuildContext context, AppConfig appConfig, VRChatAPI vrhatLoginSes
                 onTap: () => Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(
-                    builder: (BuildContext context) => VRChatMobileSettings(appConfig, vrhatLoginSession, logged: true),
+                    builder: (BuildContext context) => VRChatMobileSettings(appConfig, logged: true),
                   ),
                   (_) => false,
                 ),
@@ -180,7 +178,7 @@ Drawer drawer(BuildContext context, AppConfig appConfig, VRChatAPI vrhatLoginSes
                   onPressed: () => Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
-                      builder: (BuildContext context) => VRChatMobileSettings(appConfig, vrhatLoginSession, logged: true),
+                      builder: (BuildContext context) => VRChatMobileSettings(appConfig, logged: true),
                     ),
                     (_) => false,
                   ),
@@ -206,51 +204,48 @@ Drawer drawer(BuildContext context, AppConfig appConfig, VRChatAPI vrhatLoginSes
   );
 }
 
-Drawer simpledrawer(BuildContext context, AppConfig appConfig, VRChatAPI vrhatLoginSession) {
+Drawer simpledrawer(BuildContext context, AppConfig appConfig) {
   Column column = Column();
 
-  getStorageList("account_index_list").then(
-    (response) {
-      List<Widget> list = [
-        const Divider(),
-        ListTile(
-          leading: const Icon(Icons.settings),
-          title: Text(AppLocalizations.of(context)!.accountSwitchSetting),
-          onTap: () => Navigator.pushAndRemoveUntil(
+  List<Widget> list = [
+    const Divider(),
+    ListTile(
+      leading: const Icon(Icons.settings),
+      title: Text(AppLocalizations.of(context)!.accountSwitchSetting),
+      onTap: () => Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (BuildContext context) => VRChatMobileSettingsOtherAccount(
+            appConfig,
+          ),
+        ),
+        (_) => false,
+      ),
+    )
+  ];
+
+  for (AccountConfig account in appConfig.accountList) {
+    list.insert(
+      0,
+      ListTile(
+        title: Text(
+          account.username ?? AppLocalizations.of(context)!.unknown,
+        ),
+        onTap: () => setStorage("account_index", account.accountUid).then(
+          (_) => Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
-              builder: (BuildContext context) => VRChatMobileSettingsOtherAccount(appConfig, vrhatLoginSession),
+              builder: (BuildContext context) => VRChatMobileHome(
+                appConfig,
+              ),
             ),
             (_) => false,
           ),
-        )
-      ];
-      response.asMap().forEach(
-        (_, String accountUid) {
-          getLoginSession("displayname", accountUid: accountUid).then(
-            (accountName) => list.insert(
-              0,
-              ListTile(
-                title: Text(
-                  accountName ?? AppLocalizations.of(context)!.unknown,
-                ),
-                onTap: () => setStorage("account_index", accountUid).then(
-                  (_) => Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                      builder: (BuildContext context) => VRChatMobileHome(appConfig, vrhatLoginSession),
-                    ),
-                    (_) => false,
-                  ),
-                ),
-              ),
-            ),
-          );
-        },
-      );
-      column = Column(children: list);
-    },
-  );
+        ),
+      ),
+    );
+  }
+  column = Column(children: list);
 
   return Drawer(
     child: SafeArea(
@@ -262,7 +257,9 @@ Drawer simpledrawer(BuildContext context, AppConfig appConfig, VRChatAPI vrhatLo
                 onTap: () => Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(
-                    builder: (BuildContext context) => VRChatMobileHome(appConfig, vrhatLoginSession),
+                    builder: (BuildContext context) => VRChatMobileHome(
+                      appConfig,
+                    ),
                   ),
                   (_) => false,
                 ),
@@ -284,7 +281,7 @@ Drawer simpledrawer(BuildContext context, AppConfig appConfig, VRChatAPI vrhatLo
                   onTap: () => Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
-                      builder: (BuildContext context) => VRChatMobileSettings(appConfig, vrhatLoginSession, logged: false),
+                      builder: (BuildContext context) => VRChatMobileSettings(appConfig, logged: false),
                     ),
                     (_) => false,
                   ),
