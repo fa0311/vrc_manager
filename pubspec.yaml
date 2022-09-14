@@ -36,9 +36,9 @@ dependencies:
   cupertino_icons: ^1.0.4
   http: ^0.13.4
   shared_preferences: ^2.0.15
-  flutter_secure_storage: ^5.0.2
+  flutter_secure_storage: ^6.0.0
   url_launcher: ^6.1.2
-  flutter_launcher_icons: ^0.9.2
+  flutter_launcher_icons: ^0.10.0
   package_info_plus: ^1.4.2
   flutter_svg: ^1.1.0
   receive_sharing_intent: ^1.4.5
@@ -50,7 +50,7 @@ dependencies:
   intl: ^0.17.0
   webview_flutter: ^3.0.4
   flutter_inappwebview: ^5.4.3+7
-  domain_verification_manager: ^0.0.9
+  domain_verification_manager: ^1.0.0
   device_info_plus: ^4.0.0
   fluttertoast: ^8.0.9
   cached_network_image: ^3.2.1

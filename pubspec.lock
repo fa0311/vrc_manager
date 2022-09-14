@@ -57,6 +57,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.2.1"
+  checked_yaml:
+    dependency: transitive
+    description:
+      name: checked_yaml
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.1"
+  cli_util:
+    dependency: transitive
+    description:
+      name: cli_util
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.3.5"
   clock:
     dependency: transitive
     description:
@@ -133,7 +147,7 @@ packages:
       name: domain_verification_manager
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.0.9"
+    version: "1.0.0"
   fake_async:
     dependency: transitive
     description:
@@ -194,7 +208,7 @@ packages:
       name: flutter_launcher_icons
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.9.3"
+    version: "0.10.0"
   flutter_lints:
     dependency: "direct dev"
     description:
@@ -213,7 +227,7 @@ packages:
       name: flutter_secure_storage
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.1.2"
+    version: "6.0.0"
   flutter_secure_storage_linux:
     dependency: transitive
     description:
@@ -315,6 +329,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.6.4"
+  json_annotation:
+    dependency: transitive
+    description:
+      name: json_annotation
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "4.6.0"
   lints:
     dependency: transitive
     description:
