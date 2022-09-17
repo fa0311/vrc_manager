@@ -21,38 +21,46 @@ class VRChatMobileSplash extends StatefulWidget {
 }
 
 class _SplashState extends State<VRChatMobileSplash> {
+  push(AppConfig appConfig) {
+    if (appConfig.getLoggedAccount()?.cookie == null) {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (BuildContext context) => VRChatMobileLogin(
+            appConfig,
+          ),
+        ),
+        (_) => false,
+      );
+    } else {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (BuildContext context) => VRChatMobileHome(
+            appConfig,
+          ),
+        ),
+        (_) => false,
+      );
+    }
+  }
+
   @override
   initState() {
     super.initState();
 
     AppConfig appConfig = AppConfig();
-    appConfig.get().then((_) {
+    appConfig.get().then((_) async {
       if (widget.init && (Platform.isAndroid || Platform.isIOS)) {
         ReceiveSharingIntent.getInitialText().then((String? initialText) {
           if (initialText != null) {
             urlParser(context, appConfig, initialText);
-          } else if (appConfig.getLoggedAccount()?.cookie == null) {
-            Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(
-                builder: (BuildContext context) => VRChatMobileLogin(
-                  appConfig,
-                ),
-              ),
-              (_) => false,
-            );
           } else {
-            Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(
-                builder: (BuildContext context) => VRChatMobileHome(
-                  appConfig,
-                ),
-              ),
-              (_) => false,
-            );
+            push(appConfig);
           }
         });
+      } else {
+        push(appConfig);
       }
     });
   }
