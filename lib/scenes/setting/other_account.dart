@@ -27,14 +27,14 @@ class _SettingOtherAccountPageState extends State<VRChatMobileSettingsOtherAccou
 
   List<Widget> getAccountList() {
     List<Widget> list = [];
-    widget.appConfig.accountList.forEach((String uid, AccountConfig account) {
+    for (AccountConfig account in widget.appConfig.accountList) {
       list.add(
         Card(
           elevation: 20.0,
           child: Container(
             padding: const EdgeInsets.all(10.0),
             child: GestureDetector(
-              onTap: () => setStorage("account_index", uid).then(
+              onTap: () => setStorage("account_index", account.uid).then(
                 (_) => Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(
@@ -65,7 +65,7 @@ class _SettingOtherAccountPageState extends State<VRChatMobileSettingsOtherAccou
                         AppLocalizations.of(context)!.deleteLoginInfoConfirm,
                         AppLocalizations.of(context)!.delete,
                         () {
-                          widget.appConfig.removeAccount(uid);
+                          widget.appConfig.removeAccount(account);
                           setState(() {});
                           Navigator.pop(context);
                         },
@@ -79,7 +79,7 @@ class _SettingOtherAccountPageState extends State<VRChatMobileSettingsOtherAccou
           ),
         ),
       );
-    });
+    }
     return list.reversed.toList();
   }
 

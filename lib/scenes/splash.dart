@@ -10,6 +10,7 @@ import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 // Project imports:
 import 'package:vrchat_mobile_client/assets/flutter/url_parser.dart';
 import 'package:vrchat_mobile_client/data_class/app_config.dart';
+import 'package:vrchat_mobile_client/main.dart';
 import 'package:vrchat_mobile_client/scenes/home.dart';
 import 'package:vrchat_mobile_client/scenes/login.dart';
 
@@ -49,7 +50,6 @@ class _SplashState extends State<VRChatMobileSplash> {
   initState() {
     super.initState();
 
-    AppConfig appConfig = AppConfig();
     appConfig.get().then((_) async {
       if (widget.init && (Platform.isAndroid || Platform.isIOS)) {
         ReceiveSharingIntent.getInitialText().then((String? initialText) {

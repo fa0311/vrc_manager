@@ -2,16 +2,16 @@
 import 'package:vrchat_mobile_client/assets/storage.dart';
 
 class AppConfig {
-  late String? _accountUid;
-  late Map<String, AccountConfig> accountList = {};
-  late Map<String, GridConfig> listConfig = {};
+  late AccountConfig? loggedAccount;
+  late List<AccountConfig> accountList = [];
 
   Future get() async {
     List<Future> futureList = [];
     List<Future> futureListLogin = [];
     List uidList = [];
+    late String? accountUid;
 
-    futureList.add(getStorage("account_index").then((value) => _accountUid = value));
+    futureList.add(getStorage("account_index").then((value) => accountUid = value));
     futureList.add(getStorageList("account_index_list").then((List<String> value) => uidList = value));
 
     await Future.wait(futureList).then((value) {
@@ -22,128 +22,116 @@ class AppConfig {
         futureListLogin.add(getLoginSession("password", uid).then((value) => accountConfig.password = value ?? ""));
         futureListLogin.add(getLoginSession("displayname", uid).then((value) => accountConfig.displayname = value ?? ""));
         futureListLogin.add(getLoginSession("remember_login_info", uid).then((value) => accountConfig.rememberLoginInfo = (value == "true")));
-        accountList[uid] = accountConfig;
+        accountList.add(accountConfig);
+        if (uid == accountUid) {
+          loggedAccount = accountConfig;
+        }
       }
     });
     return Future.wait(futureListLogin);
   }
 
-  Future removeAccount(String uid) async {
+  Future removeAccount(AccountConfig account) async {
     List<Future> futureList = [];
-    accountList.remove(uid);
 
-    futureList.add(setStorageList("account_index_list", getAccountList()));
-    AccountConfig? account = accountList[uid];
-    if (account == null) return Future;
-
-    futureList.add(removeLoginSession("userid", uid));
-    futureList.add(removeLoginSession("remember_login_info", uid));
+    futureList.add(removeLoginSession("userid", account.uid));
+    futureList.add(removeLoginSession("remember_login_info", account.uid));
     futureList.add(account.removeCookie());
     futureList.add(account.removePassword());
     futureList.add(account.removeDisplayName());
-    accountList.remove(uid);
+    accountList.remove(account);
 
     futureList.add(setStorageList("account_index_list", getAccountList()));
 
-    if (_accountUid == uid) {
-      if (accountList.keys.isEmpty) {
+    if (loggedAccount == account) {
+      if (accountList.isEmpty) {
         futureList.add(logout());
       } else {
-        _accountUid = accountList.keys.first;
+        loggedAccount = accountList.first;
       }
     }
     return Future.wait(futureList);
   }
 
   Future<bool> logout() async {
-    _accountUid = null;
+    loggedAccount = null;
     return await removeStorage("account_index");
   }
 
-  bool isLogined() {
-    return _accountUid != null;
+  Future<bool> login(AccountConfig accountConfig) async {
+    loggedAccount = accountConfig;
+    return await setStorage("account_index", accountConfig.uid);
   }
 
-  setAccount(String uid) {
-    if (accountList.containsKey(uid)) {
-      _accountUid = uid;
-    } else {
-      throw ArgumentError.value(uid, "uid $uid did not exist", "uid");
-    }
+  bool isLogined() {
+    return loggedAccount != null;
   }
 
   List<String> getAccountList() {
     List<String> uidList = [];
-    accountList.forEach((String uid, AccountConfig account) {
-      uidList.add(uid);
-    });
+    for (AccountConfig account in accountList) {
+      uidList.add(account.uid);
+    }
     return uidList;
   }
 
   Future addAccount(AccountConfig accountConfig) async {
-    accountList[accountConfig._uid] = accountConfig;
+    accountList.add(accountConfig);
     await setStorageList("account_index_list", getAccountList());
   }
 
-  AccountConfig getLoggedAccount() {
-    if (accountList.containsKey(_accountUid)) {
-      return accountList[_accountUid]!;
-    } else {
-      throw ArgumentError.value(_accountUid, "uid $_accountUid did not exist", "_accountUid");
+  AccountConfig? getAccount(String uid) {
+    for (AccountConfig account in accountList) {
+      if (uid == account.uid) {
+        return account;
+      }
     }
-  }
-
-  AccountConfig getAccount(String uid) {
-    if (accountList.containsKey(uid)) {
-      return accountList[uid]!;
-    } else {
-      throw ArgumentError.value(uid, "uid $uid did not exist", "uid");
-    }
+    return null;
   }
 }
 
 class AccountConfig {
-  final String _uid;
-  String cookie = "";
+  final String uid;
+  String? cookie;
   String? userid;
   String? password;
   String? displayname;
   bool rememberLoginInfo = false;
-  AccountConfig(this._uid);
+  AccountConfig(this.uid);
 
   Future setCookie(String value) async {
-    return await setLoginSession("cookie", cookie = value, _uid);
+    return await setLoginSession("cookie", cookie = value, uid);
   }
 
   Future setUserId(String value) async {
-    return await setLoginSession("userid", userid = value, _uid);
+    return await setLoginSession("userid", userid = value, uid);
   }
 
   Future setPassword(String value) async {
-    await setLoginSession("password", password = value, _uid);
+    await setLoginSession("password", password = value, uid);
   }
 
   Future setDisplayName(String value) async {
-    return await setLoginSession("displayname", userid = value, _uid);
+    return await setLoginSession("displayname", userid = value, uid);
   }
 
   Future setRememberLoginInfo(bool value) async {
-    return await setLoginSession("remember_login_info", (rememberLoginInfo = value) ? "true" : "false", _uid);
+    return await setLoginSession("remember_login_info", (rememberLoginInfo = value) ? "true" : "false", uid);
   }
 
   Future removeCookie() async {
     cookie = "";
-    return await removeLoginSession("cookie", _uid);
+    return await removeLoginSession("cookie", uid);
   }
 
   Future removePassword() async {
     password = null;
-    return await removeLoginSession("password", _uid);
+    return await removeLoginSession("password", uid);
   }
 
   Future removeDisplayName() async {
     displayname = null;
-    return await removeLoginSession("displayname", _uid);
+    return await removeLoginSession("displayname", uid);
   }
 }
 

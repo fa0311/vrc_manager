@@ -27,7 +27,7 @@ class VRChatMobileFriendRequest extends StatefulWidget {
 }
 
 class _FriendsPageState extends State<VRChatMobileFriendRequest> {
-  late VRChatAPI vrhatLoginSession = VRChatAPI(cookie: widget.appConfig.getLoggedAccount().cookie);
+  late VRChatAPI vrhatLoginSession = VRChatAPI(cookie: widget.appConfig.loggedAccount?.cookie ?? "");
   int offset = 0;
   bool autoReadMore = false;
   bool delayedDisplay = false;

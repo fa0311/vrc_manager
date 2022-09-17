@@ -28,7 +28,7 @@ class VRChatSearch extends StatefulWidget {
 }
 
 class _SearchState extends State<VRChatSearch> {
-  late VRChatAPI vrhatLoginSession = VRChatAPI(cookie: widget.appConfig.getLoggedAccount().cookie);
+  late VRChatAPI vrhatLoginSession = VRChatAPI(cookie: widget.appConfig.loggedAccount?.cookie ?? "");
   TextEditingController searchBoxController = TextEditingController();
   FocusNode searchBoxFocusNode = FocusNode();
   String searchMode = "users";

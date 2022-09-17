@@ -169,7 +169,7 @@ clipboardShareModalBottom(BuildContext context, String text) {
 }
 
 lunchWorldModalBottom(BuildContext context, AppConfig appConfig, String worldId, String instanceId) {
-  late VRChatAPI vrhatLoginSession = VRChatAPI(cookie: appConfig.getLoggedAccount().cookie);
+  late VRChatAPI vrhatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
 
   showModalBottomSheet(
     context: context,

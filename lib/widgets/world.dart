@@ -223,7 +223,7 @@ Card simpleWorldDescriptionHalf(BuildContext context, appConfig, VRChatWorld wor
 }
 
 Card simpleWorldPlus(BuildContext context, AppConfig appConfig, VRChatWorld world, VRChatInstance instance) {
-  late VRChatAPI vrhatLoginSession = VRChatAPI(cookie: appConfig.getLoggedAccount().cookie);
+  late VRChatAPI vrhatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
 
   return Card(
     elevation: 20.0,
@@ -392,7 +392,7 @@ Card simpleWorldHalf(BuildContext context, AppConfig appConfig, VRChatLimitedWor
 }
 
 Card simpleWorldPlusHalf(BuildContext context, AppConfig appConfig, VRChatWorld world, VRChatInstance instance) {
-  late VRChatAPI vrhatLoginSession = VRChatAPI(cookie: appConfig.getLoggedAccount().cookie);
+  late VRChatAPI vrhatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
 
   return Card(
     elevation: 20.0,

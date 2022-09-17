@@ -94,7 +94,7 @@ class _LoginPageState extends State<VRChatMobileLogin> {
     accountConfig.setCookie(cookie);
     accountConfig.setRememberLoginInfo(_rememberPassword);
     widget.appConfig.addAccount(accountConfig);
-    widget.appConfig.setAccount(uid);
+    widget.appConfig.login(accountConfig);
 
     Navigator.pushAndRemoveUntil(
       context,

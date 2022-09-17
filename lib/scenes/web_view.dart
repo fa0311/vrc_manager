@@ -26,7 +26,7 @@ class VRChatMobileWebView extends StatefulWidget {
 }
 
 class _WebViewPageState extends State<VRChatMobileWebView> {
-  late VRChatAPI vrhatLoginSession = VRChatAPI(cookie: widget.appConfig.getLoggedAccount().cookie);
+  late VRChatAPI vrhatLoginSession = VRChatAPI(cookie: widget.appConfig.loggedAccount?.cookie ?? "");
   late bool openInExternalBrowser = false;
   late WebViewController controllerGlobal;
   late int timeStamp = 0;

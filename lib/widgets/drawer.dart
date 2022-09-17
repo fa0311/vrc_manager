@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 // Project imports:
-import 'package:vrchat_mobile_client/assets/storage.dart';
 import 'package:vrchat_mobile_client/data_class/app_config.dart';
 import 'package:vrchat_mobile_client/scenes/friend_request.dart';
 import 'package:vrchat_mobile_client/scenes/friends.dart';
@@ -17,11 +16,31 @@ import 'package:vrchat_mobile_client/scenes/settings.dart';
 import 'package:vrchat_mobile_client/scenes/worlds_favorite.dart';
 
 Drawer drawer(BuildContext context, AppConfig appConfig) {
-  Column column = Column();
-
-  List<Widget> list = [
-    const Divider(),
-    ListTile(
+  List<Widget> getAccountList() {
+    List<Widget> list = [];
+    for (AccountConfig account in appConfig.accountList) {
+      list.add(
+        ListTile(
+          title: Text(
+            account.displayname ?? AppLocalizations.of(context)!.unknown,
+          ),
+          onTap: () {
+            appConfig.login(account);
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                builder: (BuildContext context) => VRChatMobileHome(
+                  appConfig,
+                ),
+              ),
+              (_) => false,
+            );
+          },
+        ),
+      );
+    }
+    list.add(const Divider());
+    list.add(ListTile(
       leading: const Icon(Icons.settings),
       title: Text(AppLocalizations.of(context)!.accountSwitchSetting),
       onTap: () => Navigator.pushAndRemoveUntil(
@@ -31,33 +50,10 @@ Drawer drawer(BuildContext context, AppConfig appConfig) {
         ),
         (_) => false,
       ),
-    )
-  ];
+    ));
 
-  appConfig.accountList.forEach((String uid, AccountConfig account) {
-    list.insert(
-      0,
-      ListTile(
-        title: Text(
-          account.displayname ?? AppLocalizations.of(context)!.unknown,
-        ),
-        onTap: () {
-          setStorage("account_index", uid);
-          appConfig.setAccount(uid);
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-              builder: (BuildContext context) => VRChatMobileHome(
-                appConfig,
-              ),
-            ),
-            (_) => false,
-          );
-        },
-      ),
-    );
-  });
-  column = Column(children: list);
+    return list;
+  }
 
   return Drawer(
     child: SafeArea(
@@ -169,7 +165,9 @@ Drawer drawer(BuildContext context, AppConfig appConfig) {
                       top: Radius.circular(15),
                     ),
                   ),
-                  builder: (BuildContext context) => SingleChildScrollView(child: column),
+                  builder: (BuildContext context) => SingleChildScrollView(
+                    child: Column(children: getAccountList()),
+                  ),
                 ),
                 leading: const Icon(Icons.account_circle),
                 title: Text(AppLocalizations.of(context)!.accountSwitch),
@@ -196,7 +194,9 @@ Drawer drawer(BuildContext context, AppConfig appConfig) {
                         top: Radius.circular(15),
                       ),
                     ),
-                    builder: (BuildContext context) => SingleChildScrollView(child: column),
+                    builder: (BuildContext context) => SingleChildScrollView(
+                      child: Column(children: getAccountList()),
+                    ),
                   ),
                   icon: const Icon(Icons.account_circle),
                 ),
@@ -209,11 +209,31 @@ Drawer drawer(BuildContext context, AppConfig appConfig) {
 }
 
 Drawer simpledrawer(BuildContext context, AppConfig appConfig) {
-  Column column = Column();
-
-  List<Widget> list = [
-    const Divider(),
-    ListTile(
+  List<Widget> getAccountList() {
+    List<Widget> list = [];
+    for (AccountConfig account in appConfig.accountList) {
+      list.add(
+        ListTile(
+          title: Text(
+            account.displayname ?? AppLocalizations.of(context)!.unknown,
+          ),
+          onTap: () {
+            appConfig.login(account);
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                builder: (BuildContext context) => VRChatMobileHome(
+                  appConfig,
+                ),
+              ),
+              (_) => false,
+            );
+          },
+        ),
+      );
+    }
+    list.add(const Divider());
+    list.add(ListTile(
       leading: const Icon(Icons.settings),
       title: Text(AppLocalizations.of(context)!.accountSwitchSetting),
       onTap: () => Navigator.pushAndRemoveUntil(
@@ -223,33 +243,10 @@ Drawer simpledrawer(BuildContext context, AppConfig appConfig) {
         ),
         (_) => false,
       ),
-    )
-  ];
+    ));
 
-  appConfig.accountList.forEach((String uid, AccountConfig account) {
-    list.insert(
-      0,
-      ListTile(
-        title: Text(
-          account.displayname ?? AppLocalizations.of(context)!.unknown,
-        ),
-        onTap: () {
-          setStorage("account_index", uid);
-          appConfig.setAccount(uid);
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-              builder: (BuildContext context) => VRChatMobileHome(
-                appConfig,
-              ),
-            ),
-            (_) => false,
-          );
-        },
-      ),
-    );
-  });
-  column = Column(children: list);
+    return list;
+  }
 
   return Drawer(
     child: SafeArea(
@@ -300,7 +297,9 @@ Drawer simpledrawer(BuildContext context, AppConfig appConfig) {
                         top: Radius.circular(15),
                       ),
                     ),
-                    builder: (BuildContext context) => SingleChildScrollView(child: column),
+                    builder: (BuildContext context) => SingleChildScrollView(
+                      child: Column(children: getAccountList()),
+                    ),
                   ),
                   leading: const Icon(Icons.account_circle),
                   title: Text(AppLocalizations.of(context)!.accountSwitch),

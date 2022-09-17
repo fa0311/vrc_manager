@@ -136,7 +136,8 @@ Column profile(BuildContext context, AppConfig appConfig, VRChatUser user) {
 }
 
 Widget profileAction(BuildContext context, AppConfig appConfig, VRChatfriendStatus status, String uid, Function reload) {
-  late VRChatAPI vrhatLoginSession = VRChatAPI(cookie: appConfig.getLoggedAccount().cookie);
+  late VRChatAPI vrhatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
+
   sendFriendRequest() {
     vrhatLoginSession.sendFriendRequest(uid).then((response) {
       Navigator.pop(context);
