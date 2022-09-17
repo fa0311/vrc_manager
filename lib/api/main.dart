@@ -7,6 +7,14 @@ class VRChatAPI {
     vrchatSession.headers["cookie"] = cookie;
   }
 
+  String getCookie() {
+    return vrchatSession.headers["cookie"] ?? "";
+  }
+
+  setCookie(String? cookie) {
+    vrchatSession.headers["cookie"] = cookie ?? "";
+  }
+
   Map<String, String> apiKey() {
     return <String, String>{"apiKey": "JlE5Jldo5Jibnk5O5hTx6XVqsJu4WJ26"};
   }

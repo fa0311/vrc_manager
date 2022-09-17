@@ -7,7 +7,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 // Project imports:
 import 'package:vrchat_mobile_client/assets/dialog.dart';
 import 'package:vrchat_mobile_client/assets/flutter/text_stream.dart';
-import 'package:vrchat_mobile_client/assets/storage.dart';
 import 'package:vrchat_mobile_client/data_class/app_config.dart';
 import 'package:vrchat_mobile_client/scenes/login.dart';
 import 'package:vrchat_mobile_client/scenes/setting/other_account.dart';
@@ -23,17 +22,6 @@ class VRChatMobileSettingsAccount extends StatefulWidget {
 }
 
 class _SettingAccountPageState extends State<VRChatMobileSettingsAccount> {
-  _removeLoginSession() async {
-    removeLoginSession("cookie", "");
-  }
-
-  _removeLoginInfo() async {
-    removeLoginSession("userid", "");
-    removeLoginSession("password", "");
-    removeLoginSession("displayname", "");
-    setStorage("remember_login_info", "false");
-  }
-
   @override
   Widget build(BuildContext context) {
     textStream(context, widget.appConfig);
@@ -65,7 +53,7 @@ class _SettingAccountPageState extends State<VRChatMobileSettingsAccount> {
                                 ),
                                 (_) => false,
                               );
-                              _removeLoginSession();
+                              widget.appConfig.loggedAccount?.removeCookie();
                             },
                           )),
                   const Divider(),
@@ -77,7 +65,10 @@ class _SettingAccountPageState extends State<VRChatMobileSettingsAccount> {
                       AppLocalizations.of(context)!.deleteLoginInfoConfirm,
                       AppLocalizations.of(context)!.delete,
                       () {
-                        _removeLoginInfo();
+                        widget.appConfig.loggedAccount?.removeUserId();
+                        widget.appConfig.loggedAccount?.removePassword();
+                        widget.appConfig.loggedAccount?.removeDisplayName();
+                        widget.appConfig.loggedAccount?.setRememberLoginInfo(false);
                         Navigator.pop(context);
                       },
                     ),

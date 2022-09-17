@@ -27,19 +27,35 @@ class VRChatMobileLogin extends StatefulWidget {
 }
 
 class _LoginPageState extends State<VRChatMobileLogin> {
-  VRChatAPI session = VRChatAPI();
+  late VRChatAPI session;
+  late AccountConfig accountConfig;
   bool _isPasswordObscure = true;
   bool _rememberPassword = false;
   final TextEditingController _userController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _totpController = TextEditingController();
 
+  @override
+  initState() {
+    super.initState();
+    if (widget.appConfig.isLogined()) {
+      accountConfig = widget.appConfig.loggedAccount!;
+      session = VRChatAPI(cookie: accountConfig.cookie);
+      _userController.text = accountConfig.userid ?? "";
+      _passwordController.text = accountConfig.password ?? "";
+      _rememberPassword = accountConfig.rememberLoginInfo;
+    } else {
+      accountConfig = AccountConfig(genUid());
+      session = VRChatAPI(cookie: accountConfig.cookie);
+    }
+  }
+
   _onPressed(context) {
     session.login(_userController.text, _passwordController.text).then((VRChatLogin login) {
       if (login.requiresTwoFactorAuth) {
         _totp();
       } else if (login.verified) {
-        _save(session.vrchatSession.headers["cookie"]!);
+        _save(session.getCookie());
       } else {
         login.content.addAll({"lastEndpoint": "api/1/auth/user"});
         throw Exception(errorLog(login.content));
@@ -52,7 +68,7 @@ class _LoginPageState extends State<VRChatMobileLogin> {
   _onPressedTotp(context) {
     session.loginTotp(_totpController.text).then((VRChatLogin login) {
       if (login.verified) {
-        _save(session.vrchatSession.headers["cookie"]!);
+        _save(session.getCookie());
       } else {
         errorDialog(context, widget.appConfig, AppLocalizations.of(context)!.incorrectLogin);
       }
@@ -85,12 +101,11 @@ class _LoginPageState extends State<VRChatMobileLogin> {
   }
 
   _save(String cookie) {
-    String uid = genUid();
-    AccountConfig accountConfig = AccountConfig(uid);
-    if (_rememberPassword) {
-      accountConfig.setPassword(_passwordController.text);
+    if (!_rememberPassword) {
+      _passwordController.text = "";
     }
     accountConfig.setUserId(_userController.text);
+    accountConfig.setPassword(_passwordController.text);
     accountConfig.setCookie(cookie);
     accountConfig.setRememberLoginInfo(_rememberPassword);
     widget.appConfig.addAccount(accountConfig);

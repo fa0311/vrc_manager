@@ -92,7 +92,7 @@ class AppConfig {
 
 class AccountConfig {
   final String uid;
-  String? cookie;
+  String cookie = "";
   String? userid;
   String? password;
   String? displayname;
@@ -112,7 +112,7 @@ class AccountConfig {
   }
 
   Future setDisplayName(String value) async {
-    return await setLoginSession("displayname", userid = value, uid);
+    return await setLoginSession("displayname", displayname = value, uid);
   }
 
   Future setRememberLoginInfo(bool value) async {
@@ -122,6 +122,11 @@ class AccountConfig {
   Future removeCookie() async {
     cookie = "";
     return await removeLoginSession("cookie", uid);
+  }
+
+  Future removeUserId() async {
+    userid = null;
+    return await removeLoginSession("userid", uid);
   }
 
   Future removePassword() async {

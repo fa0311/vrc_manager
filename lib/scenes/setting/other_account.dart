@@ -80,7 +80,7 @@ class _SettingOtherAccountPageState extends State<VRChatMobileSettingsOtherAccou
         ),
       );
     }
-    return list.reversed.toList();
+    return list;
   }
 
   @override
