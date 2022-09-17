@@ -10,6 +10,7 @@ import 'package:vrchat_mobile_client/assets/flutter/text_stream.dart';
 import 'package:vrchat_mobile_client/assets/storage.dart';
 import 'package:vrchat_mobile_client/data_class/app_config.dart';
 import 'package:vrchat_mobile_client/scenes/home.dart';
+import 'package:vrchat_mobile_client/scenes/login.dart';
 import 'package:vrchat_mobile_client/widgets/drawer.dart';
 
 class VRChatMobileSettingsOtherAccount extends StatefulWidget {
@@ -64,7 +65,8 @@ class _SettingOtherAccountPageState extends State<VRChatMobileSettingsOtherAccou
                         AppLocalizations.of(context)!.deleteLoginInfoConfirm,
                         AppLocalizations.of(context)!.delete,
                         () {
-                          //   _onPressedRemoveAccount(context, uid);
+                          widget.appConfig.removeAccount(uid);
+                          setState(() {});
                           Navigator.pop(context);
                         },
                       ),
@@ -104,17 +106,18 @@ class _SettingOtherAccountPageState extends State<VRChatMobileSettingsOtherAccou
               style: ElevatedButton.styleFrom(
                 foregroundColor: Colors.grey,
               ),
-              onPressed: () => removeStorage("account_index").then(
-                (_) => Navigator.pushAndRemoveUntil(
+              onPressed: () {
+                widget.appConfig.logout();
+                Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(
-                    builder: (BuildContext context) => VRChatMobileHome(
+                    builder: (BuildContext context) => VRChatMobileLogin(
                       widget.appConfig,
                     ),
                   ),
                   (_) => false,
-                ),
-              ),
+                );
+              },
               child: Text(AppLocalizations.of(context)!.addAccount),
             ),
           ])),

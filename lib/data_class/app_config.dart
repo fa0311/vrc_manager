@@ -1,3 +1,4 @@
+// Dart imports:
 import 'package:vrchat_mobile_client/assets/storage.dart';
 
 class AppConfig {
@@ -29,6 +30,9 @@ class AppConfig {
 
   Future removeAccount(String uid) async {
     List<Future> futureList = [];
+    accountList.remove(uid);
+
+    futureList.add(setStorageList("account_index_list", getAccountList()));
     AccountConfig? account = accountList[uid];
     if (account == null) return Future;
 
@@ -42,10 +46,18 @@ class AppConfig {
     futureList.add(setStorageList("account_index_list", getAccountList()));
 
     if (_accountUid == uid) {
-      _accountUid = accountList.keys.first;
+      if (accountList.keys.isEmpty) {
+        futureList.add(logout());
+      } else {
+        _accountUid = accountList.keys.first;
+      }
     }
-
     return Future.wait(futureList);
+  }
+
+  Future<bool> logout() async {
+    _accountUid = null;
+    return await removeStorage("account_index");
   }
 
   bool isLogined() {
@@ -68,25 +80,36 @@ class AppConfig {
     return uidList;
   }
 
-  void addAccount() {}
-
-  AccountConfig getLoggedAccount() {
-    return accountList[_accountUid]!;
+  Future addAccount(AccountConfig accountConfig) async {
+    accountList[accountConfig._uid] = accountConfig;
+    await setStorageList("account_index_list", getAccountList());
   }
 
-  AccountConfig getAccount(uid) {
-    return accountList[uid]!;
+  AccountConfig getLoggedAccount() {
+    if (accountList.containsKey(_accountUid)) {
+      return accountList[_accountUid]!;
+    } else {
+      throw ArgumentError.value(_accountUid, "uid $_accountUid did not exist", "_accountUid");
+    }
+  }
+
+  AccountConfig getAccount(String uid) {
+    if (accountList.containsKey(uid)) {
+      return accountList[uid]!;
+    } else {
+      throw ArgumentError.value(uid, "uid $uid did not exist", "uid");
+    }
   }
 }
 
 class AccountConfig {
   final String _uid;
-  String cookie;
+  String cookie = "";
   String? userid;
   String? password;
   String? displayname;
   bool rememberLoginInfo = false;
-  AccountConfig(this._uid, {this.cookie = ""});
+  AccountConfig(this._uid);
 
   Future setCookie(String value) async {
     return await setLoginSession("cookie", cookie = value, _uid);

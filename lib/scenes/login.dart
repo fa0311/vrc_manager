@@ -11,7 +11,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:vrchat_mobile_client/api/data_class.dart';
 import 'package:vrchat_mobile_client/api/main.dart';
 import 'package:vrchat_mobile_client/assets/error.dart';
-import 'package:vrchat_mobile_client/assets/storage.dart';
 import 'package:vrchat_mobile_client/data_class/app_config.dart';
 import 'package:vrchat_mobile_client/scenes/home.dart';
 import 'package:vrchat_mobile_client/widgets/change_locale_dialog.dart';
@@ -28,19 +27,19 @@ class VRChatMobileLogin extends StatefulWidget {
 }
 
 class _LoginPageState extends State<VRChatMobileLogin> {
+  VRChatAPI session = VRChatAPI();
   bool _isPasswordObscure = true;
   bool _rememberPassword = false;
-  final _userController = TextEditingController();
-  final _passwordController = TextEditingController();
-  final _totpController = TextEditingController();
-  late VRChatAPI session = VRChatAPI();
+  final TextEditingController _userController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _totpController = TextEditingController();
 
   _onPressed(context) {
     session.login(_userController.text, _passwordController.text).then((VRChatLogin login) {
       if (login.requiresTwoFactorAuth) {
         _totp();
       } else if (login.verified) {
-        _save(session.vrchatSession.headers["cookie"] as String);
+        _save(session.vrchatSession.headers["cookie"]!);
       } else {
         login.content.addAll({"lastEndpoint": "api/1/auth/user"});
         throw Exception(errorLog(login.content));
@@ -53,7 +52,7 @@ class _LoginPageState extends State<VRChatMobileLogin> {
   _onPressedTotp(context) {
     session.loginTotp(_totpController.text).then((VRChatLogin login) {
       if (login.verified) {
-        _save(session.vrchatSession.headers["cookie"] as String);
+        _save(session.vrchatSession.headers["cookie"]!);
       } else {
         errorDialog(context, widget.appConfig, AppLocalizations.of(context)!.incorrectLogin);
       }
@@ -86,11 +85,17 @@ class _LoginPageState extends State<VRChatMobileLogin> {
   }
 
   _save(String cookie) {
+    String uid = genUid();
+    AccountConfig accountConfig = AccountConfig(uid);
     if (_rememberPassword) {
-      widget.appConfig.getLoggedAccount().setPassword(_passwordController.text);
+      accountConfig.setPassword(_passwordController.text);
     }
-    widget.appConfig.getLoggedAccount().setUserId(_userController.text);
-    widget.appConfig.getLoggedAccount().setCookie(cookie);
+    accountConfig.setUserId(_userController.text);
+    accountConfig.setCookie(cookie);
+    accountConfig.setRememberLoginInfo(_rememberPassword);
+    widget.appConfig.addAccount(accountConfig);
+    widget.appConfig.setAccount(uid);
+
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(
@@ -100,34 +105,10 @@ class _LoginPageState extends State<VRChatMobileLogin> {
     );
   }
 
-  String _generateNonce([int length = 64]) {
+  String genUid([int length = 64]) {
     const charset = '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._';
     final Random random = Random.secure();
     return List.generate(length, (_) => charset[random.nextInt(charset.length)]).join();
-  }
-
-  @override
-  initState() {
-    super.initState();
-
-    if (!widget.appConfig.isLogined()) {
-      String key = _generateNonce();
-      setStorage("account_index", key);
-      getStorageList("account_index_list").then(
-        (accountIndexList) {
-          accountIndexList.add(key);
-          setStorageList("account_index_list", accountIndexList);
-        },
-      );
-    }
-  }
-
-  _changeSwitchrememberPassword(bool e) {
-    setStorage("remember_login_info", e ? "true" : "false").then(
-      (_) {
-        setState(() => _rememberPassword = e);
-      },
-    );
   }
 
   @override
@@ -161,13 +142,7 @@ class _LoginPageState extends State<VRChatMobileLogin> {
                   labelText: AppLocalizations.of(context)!.password,
                   suffixIcon: IconButton(
                     icon: Icon(_isPasswordObscure ? Icons.visibility_off : Icons.visibility),
-                    onPressed: () {
-                      setState(
-                        () {
-                          _isPasswordObscure = !_isPasswordObscure;
-                        },
-                      );
-                    },
+                    onPressed: () => setState(() => _isPasswordObscure = !_isPasswordObscure),
                   ),
                 ),
               ),
@@ -180,7 +155,7 @@ class _LoginPageState extends State<VRChatMobileLogin> {
                     fontSize: 14,
                   ),
                 ),
-                onChanged: _changeSwitchrememberPassword,
+                onChanged: (e) => setState(() => _rememberPassword = e),
               ),
               ElevatedButton(
                 child: Text(
