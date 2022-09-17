@@ -13,10 +13,9 @@ import 'package:vrchat_mobile_client/scenes/home.dart';
 import 'package:vrchat_mobile_client/widgets/drawer.dart';
 
 class VRChatMobileSettingsOtherAccount extends StatefulWidget {
-  final bool drawer;
   final AppConfig appConfig;
 
-  const VRChatMobileSettingsOtherAccount(this.appConfig, {Key? key, this.drawer = true}) : super(key: key);
+  const VRChatMobileSettingsOtherAccount(this.appConfig, {Key? key}) : super(key: key);
 
   @override
   State<VRChatMobileSettingsOtherAccount> createState() => _SettingOtherAccountPageState();
@@ -25,63 +24,10 @@ class VRChatMobileSettingsOtherAccount extends StatefulWidget {
 class _SettingOtherAccountPageState extends State<VRChatMobileSettingsOtherAccount> {
   Column column = Column();
 
-  _onPressedRemoveAccount(BuildContext context, String accountUid) async {
-    removeLoginSession("displayname", accountUid);
-    removeLoginSession("userid", accountUid);
-    removeLoginSession("password", accountUid);
-    removeLoginSession("cookie", accountUid);
-
-    // for (AccountConfig account in widget.appConfig.accountList) {
-    //   if (account.uid == accountUid) {
-    //     widget.appConfig.accountList.remove(account);
-    //   }
-    // }
-
-    // if (widget.appConfig.accountUid == accountUid) {
-    //   if (widget.appConfig.accountList.isEmpty) {
-    //     removeStorage("account_index").then(
-    //       (_) => Navigator.pushAndRemoveUntil(
-    //         context,
-    //         MaterialPageRoute(
-    //           builder: (BuildContext context) => VRChatMobileHome(
-    //             widget.appConfig,
-    //           ),
-    //         ),
-    //         (_) => false,
-    //       ),
-    //     );
-    //   } else {
-    //     setStorage("account_index", widget.appConfig.accountList[0].uid);
-    //   }
-    // }
-    initState();
-  }
-
-  @override
-  initState() {
-    super.initState();
-    List<Widget> list = [
-      TextButton(
-        style: ElevatedButton.styleFrom(
-          foregroundColor: Colors.grey,
-        ),
-        onPressed: () => removeStorage("account_index").then(
-          (_) => Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-              builder: (BuildContext context) => VRChatMobileHome(
-                widget.appConfig,
-              ),
-            ),
-            (_) => false,
-          ),
-        ),
-        child: Text(AppLocalizations.of(context)!.addAccount),
-      )
-    ];
+  List<Widget> getAccountList() {
+    List<Widget> list = [];
     widget.appConfig.accountList.forEach((String uid, AccountConfig account) {
-      list.insert(
-        0,
+      list.add(
         Card(
           elevation: 20.0,
           child: Container(
@@ -118,7 +64,7 @@ class _SettingOtherAccountPageState extends State<VRChatMobileSettingsOtherAccou
                         AppLocalizations.of(context)!.deleteLoginInfoConfirm,
                         AppLocalizations.of(context)!.delete,
                         () {
-                          _onPressedRemoveAccount(context, uid);
+                          //   _onPressedRemoveAccount(context, uid);
                           Navigator.pop(context);
                         },
                       ),
@@ -132,22 +78,17 @@ class _SettingOtherAccountPageState extends State<VRChatMobileSettingsOtherAccou
         ),
       );
     });
-    setState(
-      () => column = Column(children: list),
-    );
+    return list.reversed.toList();
   }
 
   @override
   Widget build(BuildContext context) {
-    textStream(
-      context,
-      widget.appConfig,
-    );
+    textStream(context, widget.appConfig);
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.accountSwitchSetting),
       ),
-      drawer: widget.drawer
+      drawer: widget.appConfig.isLogined()
           ? drawer(
               context,
               widget.appConfig,
@@ -156,7 +97,27 @@ class _SettingOtherAccountPageState extends State<VRChatMobileSettingsOtherAccou
       body: SafeArea(
         child: SizedBox(
           width: MediaQuery.of(context).size.width,
-          child: SingleChildScrollView(child: column),
+          child: SingleChildScrollView(
+              child: Column(children: [
+            ...getAccountList(),
+            TextButton(
+              style: ElevatedButton.styleFrom(
+                foregroundColor: Colors.grey,
+              ),
+              onPressed: () => removeStorage("account_index").then(
+                (_) => Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => VRChatMobileHome(
+                      widget.appConfig,
+                    ),
+                  ),
+                  (_) => false,
+                ),
+              ),
+              child: Text(AppLocalizations.of(context)!.addAccount),
+            ),
+          ])),
         ),
       ),
     );

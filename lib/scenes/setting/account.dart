@@ -104,7 +104,7 @@ class _SettingAccountPageState extends State<VRChatMobileSettingsAccount> {
                     onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (BuildContext context) => VRChatMobileSettingsOtherAccount(widget.appConfig, drawer: false),
+                        builder: (BuildContext context) => VRChatMobileSettingsOtherAccount(widget.appConfig),
                       ),
                     ),
                   )

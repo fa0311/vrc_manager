@@ -219,9 +219,7 @@ Drawer simpledrawer(BuildContext context, AppConfig appConfig) {
       onTap: () => Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
-          builder: (BuildContext context) => VRChatMobileSettingsOtherAccount(
-            appConfig,
-          ),
+          builder: (BuildContext context) => VRChatMobileSettingsOtherAccount(appConfig),
         ),
         (_) => false,
       ),
