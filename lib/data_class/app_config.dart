@@ -2,7 +2,7 @@
 import 'package:vrchat_mobile_client/assets/storage.dart';
 
 class AppConfig {
-  late AccountConfig? loggedAccount;
+  AccountConfig? loggedAccount;
   late List<AccountConfig> accountList = [];
 
   Future get() async {

@@ -14,10 +14,9 @@ import 'package:vrchat_mobile_client/scenes/setting/permissions.dart';
 import 'package:vrchat_mobile_client/widgets/drawer.dart';
 
 class VRChatMobileSettings extends StatefulWidget {
-  final bool logged;
   final AppConfig appConfig;
 
-  const VRChatMobileSettings(this.appConfig, {Key? key, this.logged = true}) : super(key: key);
+  const VRChatMobileSettings(this.appConfig, {Key? key}) : super(key: key);
 
   @override
   State<VRChatMobileSettings> createState() => _SettingPageState();
@@ -31,7 +30,7 @@ class _SettingPageState extends State<VRChatMobileSettings> {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.setting),
       ),
-      drawer: widget.logged ? drawer(context, widget.appConfig) : simpledrawer(context, widget.appConfig),
+      drawer: widget.appConfig.isLogined() ? drawer(context, widget.appConfig) : simpledrawer(context, widget.appConfig),
       body: SafeArea(
         child: SizedBox(
           child: SingleChildScrollView(

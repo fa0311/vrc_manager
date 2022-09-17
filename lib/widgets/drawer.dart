@@ -150,7 +150,7 @@ Drawer drawer(BuildContext context, AppConfig appConfig) {
                 onTap: () => Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(
-                    builder: (BuildContext context) => VRChatMobileSettings(appConfig, logged: true),
+                    builder: (BuildContext context) => VRChatMobileSettings(appConfig),
                   ),
                   (_) => false,
                 ),
@@ -180,7 +180,7 @@ Drawer drawer(BuildContext context, AppConfig appConfig) {
                   onPressed: () => Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
-                      builder: (BuildContext context) => VRChatMobileSettings(appConfig, logged: true),
+                      builder: (BuildContext context) => VRChatMobileSettings(appConfig),
                     ),
                     (_) => false,
                   ),
@@ -282,7 +282,7 @@ Drawer simpledrawer(BuildContext context, AppConfig appConfig) {
                   onTap: () => Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
-                      builder: (BuildContext context) => VRChatMobileSettings(appConfig, logged: false),
+                      builder: (BuildContext context) => VRChatMobileSettings(appConfig),
                     ),
                     (_) => false,
                   ),
