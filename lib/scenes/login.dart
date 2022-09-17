@@ -87,10 +87,10 @@ class _LoginPageState extends State<VRChatMobileLogin> {
 
   _save(String cookie) {
     if (_rememberPassword) {
-      widget.appConfig.getLoggedAccount()?.setPassword(_passwordController.text);
+      widget.appConfig.getLoggedAccount().setPassword(_passwordController.text);
     }
-    widget.appConfig.getLoggedAccount()?.setUserId(_userController.text);
-    widget.appConfig.getLoggedAccount()?.setCookie(cookie);
+    widget.appConfig.getLoggedAccount().setUserId(_userController.text);
+    widget.appConfig.getLoggedAccount().setCookie(cookie);
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(
@@ -110,7 +110,7 @@ class _LoginPageState extends State<VRChatMobileLogin> {
   initState() {
     super.initState();
 
-    if (widget.appConfig.accountUid == null) {
+    if (!widget.appConfig.isLogined()) {
       String key = _generateNonce();
       setStorage("account_index", key);
       getStorageList("account_index_list").then(

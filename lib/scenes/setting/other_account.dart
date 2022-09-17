@@ -31,29 +31,29 @@ class _SettingOtherAccountPageState extends State<VRChatMobileSettingsOtherAccou
     removeLoginSession("password", accountUid);
     removeLoginSession("cookie", accountUid);
 
-    for (AccountConfig account in widget.appConfig.accountList) {
-      if (account.uid == accountUid) {
-        widget.appConfig.accountList.remove(account);
-      }
-    }
+    // for (AccountConfig account in widget.appConfig.accountList) {
+    //   if (account.uid == accountUid) {
+    //     widget.appConfig.accountList.remove(account);
+    //   }
+    // }
 
-    if (widget.appConfig.accountUid == accountUid) {
-      if (widget.appConfig.accountList.isEmpty) {
-        removeStorage("account_index").then(
-          (_) => Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-              builder: (BuildContext context) => VRChatMobileHome(
-                widget.appConfig,
-              ),
-            ),
-            (_) => false,
-          ),
-        );
-      } else {
-        setStorage("account_index", widget.appConfig.accountList[0].uid);
-      }
-    }
+    // if (widget.appConfig.accountUid == accountUid) {
+    //   if (widget.appConfig.accountList.isEmpty) {
+    //     removeStorage("account_index").then(
+    //       (_) => Navigator.pushAndRemoveUntil(
+    //         context,
+    //         MaterialPageRoute(
+    //           builder: (BuildContext context) => VRChatMobileHome(
+    //             widget.appConfig,
+    //           ),
+    //         ),
+    //         (_) => false,
+    //       ),
+    //     );
+    //   } else {
+    //     setStorage("account_index", widget.appConfig.accountList[0].uid);
+    //   }
+    // }
     initState();
   }
 
@@ -79,7 +79,7 @@ class _SettingOtherAccountPageState extends State<VRChatMobileSettingsOtherAccou
         child: Text(AppLocalizations.of(context)!.addAccount),
       )
     ];
-    for (AccountConfig account in widget.appConfig.accountList) {
+    widget.appConfig.accountList.forEach((String uid, AccountConfig account) {
       list.insert(
         0,
         Card(
@@ -87,7 +87,7 @@ class _SettingOtherAccountPageState extends State<VRChatMobileSettingsOtherAccou
           child: Container(
             padding: const EdgeInsets.all(10.0),
             child: GestureDetector(
-              onTap: () => setStorage("account_index", account.uid).then(
+              onTap: () => setStorage("account_index", uid).then(
                 (_) => Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(
@@ -118,7 +118,7 @@ class _SettingOtherAccountPageState extends State<VRChatMobileSettingsOtherAccou
                         AppLocalizations.of(context)!.deleteLoginInfoConfirm,
                         AppLocalizations.of(context)!.delete,
                         () {
-                          _onPressedRemoveAccount(context, account.uid);
+                          _onPressedRemoveAccount(context, uid);
                           Navigator.pop(context);
                         },
                       ),
@@ -131,7 +131,7 @@ class _SettingOtherAccountPageState extends State<VRChatMobileSettingsOtherAccou
           ),
         ),
       );
-    }
+    });
     setState(
       () => column = Column(children: list),
     );

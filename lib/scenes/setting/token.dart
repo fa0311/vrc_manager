@@ -24,7 +24,7 @@ class VRChatMobileTokenSetting extends StatefulWidget {
 }
 
 class _TokenSettingPageState extends State<VRChatMobileTokenSetting> {
-  late final TextEditingController _tokenController = TextEditingController(text: widget.appConfig.getLoggedAccount()?.cookie);
+  late final TextEditingController _tokenController = TextEditingController(text: widget.appConfig.getLoggedAccount().cookie);
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +52,7 @@ class _TokenSettingPageState extends State<VRChatMobileTokenSetting> {
                   ElevatedButton(
                     child: Text(AppLocalizations.of(context)!.save),
                     onPressed: () {
-                      widget.appConfig.getLoggedAccount()?.setCookie(_tokenController.text);
+                      widget.appConfig.getLoggedAccount().setCookie(_tokenController.text);
                       showDialog(
                         context: context,
                         builder: (_) {

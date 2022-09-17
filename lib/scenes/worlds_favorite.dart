@@ -28,7 +28,7 @@ class VRChatMobileWorldsFavorite extends StatefulWidget {
 }
 
 class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
-  late VRChatAPI vrhatLoginSession = VRChatAPI(cookie: widget.appConfig.getLoggedAccount()!.cookie);
+  late VRChatAPI vrhatLoginSession = VRChatAPI(cookie: widget.appConfig.getLoggedAccount().cookie);
   List<int> offset = [];
   List<FavoriteWorlds> dataColumn = [];
 

@@ -26,7 +26,7 @@ class VRChatMobileHome extends StatefulWidget {
 }
 
 class _LoginHomeState extends State<VRChatMobileHome> {
-  late VRChatAPI vrhatLoginSession = VRChatAPI(cookie: widget.appConfig.getLoggedAccount()!.cookie);
+  late VRChatAPI vrhatLoginSession = VRChatAPI(cookie: widget.appConfig.getLoggedAccount().cookie);
   List<Widget> popupMenu = [];
 
   TextEditingController bioController = TextEditingController();
@@ -45,7 +45,7 @@ class _LoginHomeState extends State<VRChatMobileHome> {
       vrhatLoginSession.users(response.id).then((VRChatUser user) {
         bioController.text = user.bio ?? "";
         noteController.text = user.note ?? "";
-        widget.appConfig.getLoggedAccount()?.setDisplayName(user.displayName);
+        widget.appConfig.getLoggedAccount().setDisplayName(user.displayName);
 
         setState(
           () {

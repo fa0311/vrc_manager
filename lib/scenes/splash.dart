@@ -22,7 +22,7 @@ class VRChatMobileSplash extends StatefulWidget {
 
 class _SplashState extends State<VRChatMobileSplash> {
   push(AppConfig appConfig) {
-    if (appConfig.getLoggedAccount()?.cookie == null) {
+    if (!appConfig.isLogined()) {
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(

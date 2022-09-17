@@ -29,7 +29,7 @@ class VRChatMobileUser extends StatefulWidget {
 }
 
 class _UserHomeState extends State<VRChatMobileUser> {
-  late VRChatAPI vrhatLoginSession = VRChatAPI(cookie: widget.appConfig.getLoggedAccount()!.cookie);
+  late VRChatAPI vrhatLoginSession = VRChatAPI(cookie: widget.appConfig.getLoggedAccount().cookie);
   late Column column = Column(
     children: const [
       Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()),

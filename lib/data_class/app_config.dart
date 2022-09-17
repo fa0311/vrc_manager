@@ -1,15 +1,16 @@
 import 'package:vrchat_mobile_client/assets/storage.dart';
 
 class AppConfig {
-  late String? accountUid;
-  late List<String> uidList;
-  late List<AccountConfig> accountList = [];
+  late String? _accountUid;
+  late Map<String, AccountConfig> accountList = {};
+  late Map<String, GridConfig> listConfig = {};
 
   Future get() async {
     List<Future> futureList = [];
     List<Future> futureListLogin = [];
+    List uidList = [];
 
-    futureList.add(getStorage("account_index").then((value) => accountUid = value));
+    futureList.add(getStorage("account_index").then((value) => _accountUid = value));
     futureList.add(getStorageList("account_index_list").then((List<String> value) => uidList = value));
 
     await Future.wait(futureList).then((value) {
@@ -20,7 +21,7 @@ class AppConfig {
         futureListLogin.add(getLoginSession("password", uid).then((value) => accountConfig.password = value ?? ""));
         futureListLogin.add(getLoginSession("displayname", uid).then((value) => accountConfig.displayname = value ?? ""));
         futureListLogin.add(getLoginSession("remember_login_info", uid).then((value) => accountConfig.rememberLoginInfo = (value == "true")));
-        accountList.add(accountConfig);
+        accountList[uid] = accountConfig;
       }
     });
     return Future.wait(futureListLogin);
@@ -28,86 +29,109 @@ class AppConfig {
 
   Future removeAccount(String uid) async {
     List<Future> futureList = [];
-    for (AccountConfig account in accountList) {
-      if (account.uid == uid) {
-        futureList.add(removeLoginSession("userid", uid));
-        futureList.add(removeLoginSession("remember_login_info", uid));
-        futureList.add(account.removeCookie());
-        futureList.add(account.removePassword());
-        futureList.add(account.removeDisplayName());
-        uidList.remove(uid);
-        accountList.remove(account);
-      }
+    AccountConfig? account = accountList[uid];
+    if (account == null) return Future;
+
+    futureList.add(removeLoginSession("userid", uid));
+    futureList.add(removeLoginSession("remember_login_info", uid));
+    futureList.add(account.removeCookie());
+    futureList.add(account.removePassword());
+    futureList.add(account.removeDisplayName());
+    accountList.remove(uid);
+
+    futureList.add(setStorageList("account_index_list", getAccountList()));
+
+    if (_accountUid == uid) {
+      _accountUid = accountList.keys.first;
     }
-    futureList.add(setStorageList("account_index_list", uidList));
+
     return Future.wait(futureList);
+  }
+
+  bool isLogined() {
+    return _accountUid != null;
+  }
+
+  setAccount(String uid) {
+    if (accountList.containsKey(uid)) {
+      _accountUid = uid;
+    } else {
+      throw ArgumentError.value(uid, "uid $uid did not exist", "uid");
+    }
+  }
+
+  List<String> getAccountList() {
+    List<String> uidList = [];
+    accountList.forEach((String uid, AccountConfig account) {
+      uidList.add(uid);
+    });
+    return uidList;
   }
 
   void addAccount() {}
 
-  AccountConfig? getLoggedAccount() {
-    for (AccountConfig account in accountList) {
-      if (account.uid == accountUid) {
-        return account;
-      }
-    }
-    return null;
+  AccountConfig getLoggedAccount() {
+    return accountList[_accountUid]!;
+  }
+
+  AccountConfig getAccount(uid) {
+    return accountList[uid]!;
   }
 }
 
 class AccountConfig {
-  String uid;
+  final String _uid;
   String cookie;
   String? userid;
   String? password;
   String? displayname;
   bool rememberLoginInfo = false;
-  AccountConfig(this.uid, {this.cookie = ""});
+  AccountConfig(this._uid, {this.cookie = ""});
 
   Future setCookie(String value) async {
-    return await setLoginSession("cookie", cookie = value, uid);
+    return await setLoginSession("cookie", cookie = value, _uid);
   }
 
   Future setUserId(String value) async {
-    return await setLoginSession("userid", userid = value, uid);
+    return await setLoginSession("userid", userid = value, _uid);
   }
 
   Future setPassword(String value) async {
-    await setLoginSession("password", password = value, uid);
+    await setLoginSession("password", password = value, _uid);
   }
 
   Future setDisplayName(String value) async {
-    return await setLoginSession("displayname", userid = value, uid);
+    return await setLoginSession("displayname", userid = value, _uid);
   }
 
   Future setRememberLoginInfo(bool value) async {
-    return await setLoginSession("remember_login_info", (rememberLoginInfo = value) ? "true" : "false", uid);
+    return await setLoginSession("remember_login_info", (rememberLoginInfo = value) ? "true" : "false", _uid);
   }
 
   Future removeCookie() async {
     cookie = "";
-    return await removeLoginSession("cookie", uid);
+    return await removeLoginSession("cookie", _uid);
   }
 
   Future removePassword() async {
     password = null;
-    return await removeLoginSession("password", uid);
+    return await removeLoginSession("password", _uid);
   }
 
   Future removeDisplayName() async {
     displayname = null;
-    return await removeLoginSession("displayname", uid);
+    return await removeLoginSession("displayname", _uid);
   }
 }
 
-class ListConfig {
+class GridConfig {
   late String key;
   late bool friendsAutoReadMore;
   late String friendsSort;
   late String friendsDisplayMode;
   late bool friendsDescending;
 
-  ListConfig(this.key);
+  GridConfig(this.key);
 
   Future setConfig() async {
     List<Future> futureList = [];

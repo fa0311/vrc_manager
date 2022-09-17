@@ -34,7 +34,7 @@ Drawer drawer(BuildContext context, AppConfig appConfig) {
     )
   ];
 
-  for (AccountConfig account in appConfig.accountList) {
+  appConfig.accountList.forEach((String uid, AccountConfig account) {
     list.insert(
       0,
       ListTile(
@@ -42,8 +42,8 @@ Drawer drawer(BuildContext context, AppConfig appConfig) {
           account.displayname ?? AppLocalizations.of(context)!.unknown,
         ),
         onTap: () {
-          setStorage("account_index", account.uid);
-          appConfig.accountUid = account.uid;
+          setStorage("account_index", uid);
+          appConfig.setAccount(uid);
           Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
@@ -56,7 +56,7 @@ Drawer drawer(BuildContext context, AppConfig appConfig) {
         },
       ),
     );
-  }
+  });
   column = Column(children: list);
 
   return Drawer(
@@ -228,7 +228,7 @@ Drawer simpledrawer(BuildContext context, AppConfig appConfig) {
     )
   ];
 
-  for (AccountConfig account in appConfig.accountList) {
+  appConfig.accountList.forEach((String uid, AccountConfig account) {
     list.insert(
       0,
       ListTile(
@@ -236,8 +236,8 @@ Drawer simpledrawer(BuildContext context, AppConfig appConfig) {
           account.displayname ?? AppLocalizations.of(context)!.unknown,
         ),
         onTap: () {
-          setStorage("account_index", account.uid);
-          appConfig.accountUid = account.uid;
+          setStorage("account_index", uid);
+          appConfig.setAccount(uid);
           Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
@@ -250,7 +250,7 @@ Drawer simpledrawer(BuildContext context, AppConfig appConfig) {
         },
       ),
     );
-  }
+  });
   column = Column(children: list);
 
   return Drawer(
