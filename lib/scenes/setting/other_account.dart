@@ -7,7 +7,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 // Project imports:
 import 'package:vrchat_mobile_client/assets/dialog.dart';
 import 'package:vrchat_mobile_client/assets/flutter/text_stream.dart';
-import 'package:vrchat_mobile_client/assets/storage.dart';
 import 'package:vrchat_mobile_client/data_class/app_config.dart';
 import 'package:vrchat_mobile_client/scenes/home.dart';
 import 'package:vrchat_mobile_client/scenes/login.dart';
@@ -34,17 +33,16 @@ class _SettingOtherAccountPageState extends State<VRChatMobileSettingsOtherAccou
           child: Container(
             padding: const EdgeInsets.all(10.0),
             child: GestureDetector(
-              onTap: () => setStorage("account_index", account.uid).then(
-                (_) => Navigator.pushAndRemoveUntil(
+              onTap: () {
+                widget.appConfig.login(account);
+                Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(
-                    builder: (BuildContext context) => VRChatMobileHome(
-                      widget.appConfig,
-                    ),
+                    builder: (BuildContext context) => VRChatMobileHome(widget.appConfig),
                   ),
                   (_) => false,
-                ),
-              ),
+                );
+              },
               behavior: HitTestBehavior.opaque,
               child: Row(
                 children: <Widget>[

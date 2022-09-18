@@ -29,9 +29,7 @@ Drawer drawer(BuildContext context, AppConfig appConfig) {
             Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(
-                builder: (BuildContext context) => VRChatMobileHome(
-                  appConfig,
-                ),
+                builder: (BuildContext context) => VRChatMobileHome(appConfig),
               ),
               (_) => false,
             );
@@ -222,9 +220,7 @@ Drawer simpledrawer(BuildContext context, AppConfig appConfig) {
             Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(
-                builder: (BuildContext context) => VRChatMobileHome(
-                  appConfig,
-                ),
+                builder: (BuildContext context) => VRChatMobileHome(appConfig),
               ),
               (_) => false,
             );
