@@ -167,7 +167,8 @@ class GridConfig {
   late String sort;
   late String displayMode;
   late bool descending;
-  late bool autoReadMore;
+  late bool joinable;
+  late bool worldDetails;
 
   GridConfig(this.id);
 
@@ -176,7 +177,9 @@ class GridConfig {
     futureList.add(getStorage("sort", id: id).then((String? value) => sort = (value ?? "default")));
     futureList.add(getStorage("display_mode", id: id).then((String? value) => displayMode = (value ?? "default")));
     futureList.add(getStorage("descending", id: id).then((String? value) => descending = (value == "true")));
-    futureList.add(getStorage("auto_read_more", id: id).then((String? value) => autoReadMore = (value == "true")));
+    futureList.add(getStorage("joinable", id: id).then((String? value) => joinable = (value == "true")));
+    futureList.add(getStorage("world_details", id: id).then((String? value) => worldDetails = (value == "true")));
+
     return Future.wait(futureList);
   }
 
@@ -192,7 +195,11 @@ class GridConfig {
     return await setStorage("descending", (descending = value) ? "true" : "false", id: id);
   }
 
-  Future setAutoReadMore(bool value) async {
-    return await setStorage("auto_read_more", (autoReadMore = value) ? "true" : "false", id: id);
+  Future setJoinable(bool value) async {
+    return await setStorage("joinable", (joinable = value) ? "true" : "false", id: id);
+  }
+
+  Future setWorldDetails(bool value) async {
+    return await setStorage("world_details", (worldDetails = value) ? "true" : "false", id: id);
   }
 }
