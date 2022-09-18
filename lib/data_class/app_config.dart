@@ -3,16 +3,18 @@ import 'package:vrchat_mobile_client/assets/storage.dart';
 
 class AppConfig {
   AccountConfig? loggedAccount;
-  late List<AccountConfig> accountList = [];
+  List<AccountConfig> accountList = [];
+  GridConfigList gridConfigList = GridConfigList();
 
   Future get() async {
     List<Future> futureList = [];
     List<Future> futureListLogin = [];
     List uidList = [];
-    late String? accountUid;
+    String? accountUid;
 
     futureList.add(getStorage("account_index").then((value) => accountUid = value));
     futureList.add(getStorageList("account_index_list").then((List<String> value) => uidList = value));
+    futureList.add(gridConfigList.setConfig());
 
     await Future.wait(futureList).then((value) {
       for (String uid in uidList) {
@@ -140,21 +142,57 @@ class AccountConfig {
   }
 }
 
-class GridConfig {
-  late String key;
-  late bool friendsAutoReadMore;
-  late String friendsSort;
-  late String friendsDisplayMode;
-  late bool friendsDescending;
-
-  GridConfig(this.key);
+class GridConfigList {
+  GridConfig onlineFriends = GridConfig("online_friends_config");
+  GridConfig offlineFriends = GridConfig("offline_friends_config");
+  GridConfig friendsRequest = GridConfig("friends_request_config");
+  GridConfig searcUsers = GridConfig("search_users_config");
+  GridConfig searcWorlds = GridConfig("search_worlds_config");
+  GridConfig favoriteWorlds = GridConfig("favorite_worlds_config");
 
   Future setConfig() async {
     List<Future> futureList = [];
-    futureList.add(getStorage("auto_read_more").then((String? value) => friendsAutoReadMore = (value == "true")));
-    futureList.add(getStorage("friends_sort").then((String? value) => friendsSort = (value ?? "default")));
-    futureList.add(getStorage("friends_display_mode").then((String? value) => friendsDisplayMode = (value ?? "default")));
-    futureList.add(getStorage("friends_descending").then((String? value) => friendsDescending = (value == "true")));
+    futureList.add(onlineFriends.setConfig());
+    futureList.add(offlineFriends.setConfig());
+    futureList.add(friendsRequest.setConfig());
+    futureList.add(searcUsers.setConfig());
+    futureList.add(searcWorlds.setConfig());
+    futureList.add(favoriteWorlds.setConfig());
     return Future.wait(futureList);
+  }
+}
+
+class GridConfig {
+  late String id;
+  late String sort;
+  late String displayMode;
+  late bool descending;
+  late bool autoReadMore;
+
+  GridConfig(this.id);
+
+  Future setConfig() async {
+    List<Future> futureList = [];
+    futureList.add(getStorage("sort", id: id).then((String? value) => sort = (value ?? "default")));
+    futureList.add(getStorage("display_mode", id: id).then((String? value) => displayMode = (value ?? "default")));
+    futureList.add(getStorage("descending", id: id).then((String? value) => descending = (value == "true")));
+    futureList.add(getStorage("auto_read_more", id: id).then((String? value) => autoReadMore = (value == "true")));
+    return Future.wait(futureList);
+  }
+
+  Future setSort(String value) async {
+    return await setStorage("sort", sort = value, id: sort);
+  }
+
+  Future setDisplayMode(String value) async {
+    return await setStorage("display_mode", displayMode = value, id: id);
+  }
+
+  Future setDescending(bool value) async {
+    return await setStorage("descending", (descending = value) ? "true" : "false", id: id);
+  }
+
+  Future setAutoReadMore(bool value) async {
+    return await setStorage("auto_read_more", (autoReadMore = value) ? "true" : "false", id: id);
   }
 }
