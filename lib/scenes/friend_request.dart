@@ -29,10 +29,8 @@ class VRChatMobileFriendRequest extends StatefulWidget {
 class _FriendsPageState extends State<VRChatMobileFriendRequest> {
   late VRChatAPI vrhatLoginSession = VRChatAPI(cookie: widget.appConfig.loggedAccount?.cookie ?? "");
   int offset = 0;
-  bool autoReadMore = false;
+  late GridConfig config = widget.appConfig.gridConfigList.friendsRequest;
   bool delayedDisplay = false;
-  String sortMode = "default";
-  String displayMode = "default";
 
   Widget body = const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator());
 
@@ -41,42 +39,12 @@ class _FriendsPageState extends State<VRChatMobileFriendRequest> {
   @override
   initState() {
     super.initState();
-    List<Future> futureStorageList = [];
-    futureStorageList.add(getStorage("auto_read_more").then(
-      (response) {
-        setState(
-          () => autoReadMore = (response == "true"),
-        );
-      },
-    ));
-    futureStorageList.add(getStorage("friends_sort").then(
-      (response) {
-        setState(() {
-          sortMode = response ?? "default";
-          updateSwitch();
-        });
-      },
-    ));
-    futureStorageList.add(getStorage("friends_display_mode").then(
-      (response) {
-        setState(
-          () => dataColumn.displayMode = response ?? "default",
-        );
-      },
-    ));
-    futureStorageList.add(getStorage("friends_descending").then(
-      (response) {
-        setState(
-          () => dataColumn.descending = (response == "true"),
-        );
-      },
-    ));
-    Future.wait(futureStorageList).then(((value) => moreOver()));
+    moreOver();
   }
 
   updateSwitch() {
-    if (!["default", "name"].contains(sortMode)) sortMode = "default";
-    delayedDisplay = (sortMode != "default");
+    if (!["default", "name"].contains(config.sort)) config.sort = "default";
+    delayedDisplay = (config.sort != "default");
   }
 
   bool canMoreOver() {
@@ -85,18 +53,18 @@ class _FriendsPageState extends State<VRChatMobileFriendRequest> {
 
   sort() {
     if (dataColumn.wait) return;
-    if (canMoreOver() && (autoReadMore || delayedDisplay)) return;
+    if (canMoreOver() && (config.autoReadMore || delayedDisplay)) return;
     if (!delayedDisplay) return;
 
     List<Widget> children = [];
-    if (sortMode == "name") {
+    if (config.sort == "name") {
       children = dataColumn.sortByName();
     }
     setState(() => body = dataColumn.render(children: children));
   }
 
   laterMoreOver() {
-    if (canMoreOver() && (autoReadMore || delayedDisplay)) {
+    if (canMoreOver() && (config.autoReadMore || delayedDisplay)) {
       dataColumn.wait = true;
       setState(() => body = const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()));
       moreOver();
@@ -117,7 +85,7 @@ class _FriendsPageState extends State<VRChatMobileFriendRequest> {
         }));
       }
       Future.wait(futureList).then((value) {
-        if (canMoreOver() && (autoReadMore || delayedDisplay)) {
+        if (canMoreOver() && (config.autoReadMore || delayedDisplay)) {
           moreOver();
         } else {
           setState(
@@ -145,9 +113,9 @@ class _FriendsPageState extends State<VRChatMobileFriendRequest> {
             children: <Widget>[
               ListTile(
                 title: Text(AppLocalizations.of(context)!.sortedByDefault),
-                trailing: sortMode == "default" ? const Icon(Icons.check) : null,
+                trailing: config.sort == "default" ? const Icon(Icons.check) : null,
                 onTap: () => setStateBuilder(() {
-                  setStorage("friends_sort", sortMode = "default").then((value) {
+                  setStorage("friends_sort", config.sort = "default").then((value) {
                     updateSwitch();
                     laterMoreOver();
                     setStateBuilderParent(() => sort());
@@ -156,9 +124,9 @@ class _FriendsPageState extends State<VRChatMobileFriendRequest> {
               ),
               ListTile(
                 title: Text(AppLocalizations.of(context)!.sortedByName),
-                trailing: sortMode == "name" ? const Icon(Icons.check) : null,
+                trailing: config.sort == "name" ? const Icon(Icons.check) : null,
                 onTap: () => setStateBuilder(() {
-                  setStorage("friends_sort", sortMode = "name").then((value) {
+                  setStorage("friends_sort", config.sort = "name").then((value) {
                     updateSwitch();
                     laterMoreOver();
                     setStateBuilderParent(() => sort());
@@ -251,7 +219,7 @@ class _FriendsPageState extends State<VRChatMobileFriendRequest> {
                         title: Text(AppLocalizations.of(context)!.sort),
                         subtitle: {
                               "name": Text(AppLocalizations.of(context)!.sortedByName),
-                            }[sortMode] ??
+                            }[config.sort] ??
                             Text(AppLocalizations.of(context)!.sortedByDefault),
                         onTap: () => setStateBuilder(() => sortModal(setStateBuilder)),
                       ),
@@ -266,12 +234,12 @@ class _FriendsPageState extends State<VRChatMobileFriendRequest> {
                         onTap: () => setStateBuilder(() => displeyModeModal(setStateBuilder)),
                       ),
                       SwitchListTile(
-                          value: autoReadMore || sortMode != "default",
+                          value: config.autoReadMore || config.sort != "default",
                           title: Text(AppLocalizations.of(context)!.autoReadMore),
-                          onChanged: sortMode == "default"
+                          onChanged: config.sort == "default"
                               ? (bool e) => setStateBuilder(() {
                                     setStorage("auto_read_more", e ? "true" : "false");
-                                    autoReadMore = e;
+                                    config.autoReadMore = e;
                                     updateSwitch();
                                     laterMoreOver();
                                     if (!canMoreOver()) {
