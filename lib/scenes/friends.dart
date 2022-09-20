@@ -12,8 +12,11 @@ import 'package:vrchat_mobile_client/api/main.dart';
 import 'package:vrchat_mobile_client/assets/error.dart';
 import 'package:vrchat_mobile_client/assets/flutter/text_stream.dart';
 import 'package:vrchat_mobile_client/data_class/app_config.dart';
+import 'package:vrchat_mobile_client/main.dart';
 import 'package:vrchat_mobile_client/widgets/drawer.dart';
 import 'package:vrchat_mobile_client/widgets/modal.dart';
+import 'package:vrchat_mobile_client/widgets/new_users.dart';
+import 'package:vrchat_mobile_client/widgets/status.dart';
 
 class VRChatMobileFriends extends StatefulWidget {
   final bool offline;
@@ -37,7 +40,49 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
   @override
   initState() {
     super.initState();
-    get().then((value) => null);
+    get().then((value) => setState(() {
+          body = renderGrid(context, width: 600, height: 233, children: [
+            for (VRChatUser user in userList) extraction(user),
+          ]);
+        }));
+  }
+
+  Card extraction(VRChatUser user) {
+    String worldId = user.location.split(":")[0];
+    return defaultAdd(
+      context,
+      appConfig,
+      user.profilePicOverride ?? user.currentAvatarThumbnailImageUrl,
+      [
+        username(user),
+        ...toTextWidget([
+          if (user.statusDescription != null) user.statusDescription!,
+          if (!["private", "offline", "traveling"].contains(user.location) && locationMap.containsKey(worldId)) locationMap[worldId]!.name,
+          if (!["private", "offline", "traveling"].contains(user.location) && !locationMap.containsKey(worldId)) "エラー",
+          if (user.location == "private") AppLocalizations.of(context)!.privateWorld,
+          if (user.location == "traveling") AppLocalizations.of(context)!.traveling,
+        ])
+      ],
+    );
+  }
+
+  Row username(user) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        status(user.state == "offline" ? user.state! : user.status, diameter: 20),
+        Container(
+          width: 5,
+        ),
+        Text(
+          user.displayName,
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+          ),
+        ),
+      ],
+    );
   }
 
   Future get() async {
