@@ -35,16 +35,10 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
   Map<String, VRChatInstance?> instanceMap = {};
   List<VRChatUser> userList = [];
 
-  Widget body = const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator());
-
   @override
   initState() {
     super.initState();
-    get().then((value) => setState(() {
-          body = renderGrid(context, width: 600, height: 233, children: [
-            for (VRChatUser user in userList) extraction(user),
-          ]);
-        }));
+    get().then((value) => setState(() {}));
   }
 
   Card extraction(VRChatUser user) {
@@ -66,7 +60,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
     );
   }
 
-  Row username(user) {
+  Row username(VRChatUser user) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
@@ -86,9 +80,10 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
   }
 
   Future get() async {
-    int offset = 0;
     List<Future> futureList = [];
+    int len;
     do {
+      int offset = userList.length;
       VRChatUserList users = await vrhatLoginSession.friends(offline: widget.offline, offset: offset).catchError((status) {
         apiError(context, widget.appConfig, status);
       });
@@ -97,8 +92,8 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
       for (VRChatUser user in users.users) {
         userList.add(user);
       }
-      offset += 50;
-    } while (userList.length % 50 == 0);
+      len = users.users.length;
+    } while (len == 50);
 
     return Future.wait(futureList);
   }
@@ -135,6 +130,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
   @override
   Widget build(BuildContext context) {
     textStream(context, widget.appConfig);
+    print("build");
 
     return Scaffold(
       appBar: AppBar(
@@ -151,7 +147,13 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
         child: SizedBox(
           width: MediaQuery.of(context).size.width,
           child: SingleChildScrollView(
-            child: body,
+            child: Column(children: <Widget>[
+              if (userList.isEmpty) const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()),
+              if (userList.isNotEmpty)
+                renderGrid(context, width: 600, height: config.worldDetails ? 233 : 130, children: [
+                  for (VRChatUser user in userList) extraction(user),
+                ]),
+            ]),
           ),
         ),
       ),
