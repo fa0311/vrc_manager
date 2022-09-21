@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:vrchat_mobile_client/data_class/app_config.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 GridView renderGrid(
   BuildContext context, {
@@ -22,7 +23,14 @@ GridView renderGrid(
   );
 }
 
-Card defaultAdd(BuildContext context, AppConfig appConfig, String imageUrl, List<Widget> children, {void Function()? onTap, Widget? bottom}) {
+Card defaultAdd(
+  BuildContext context,
+  AppConfig appConfig, {
+  required List<Widget> children,
+  required String imageUrl,
+  void Function()? onTap,
+  Widget? bottom,
+}) {
   return Card(
     elevation: 20.0,
     child: Container(
@@ -53,9 +61,12 @@ Card defaultAdd(BuildContext context, AppConfig appConfig, String imageUrl, List
                   ),
                 ),
                 Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: children,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 10),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: children,
+                    ),
                   ),
                 ),
               ],
@@ -80,4 +91,22 @@ List<Text> toTextWidget(List<String> textList, {double fontSize = 14}) {
         style: TextStyle(fontSize: fontSize),
       ),
   ];
+}
+
+Card privateSimpleWorld(BuildContext context, AppConfig appConfig) {
+  return defaultAdd(
+    context,
+    appConfig,
+    children: [
+      const SizedBox(width: double.infinity, child: Text("Private")),
+      SizedBox(
+        width: double.infinity,
+        child: Text(
+          AppLocalizations.of(context)!.privateWorld,
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
+      ),
+    ],
+    imageUrl: "https://assets.vrchat.com/www/images/default_private_image.png",
+  );
 }

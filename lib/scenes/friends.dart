@@ -13,6 +13,7 @@ import 'package:vrchat_mobile_client/assets/error.dart';
 import 'package:vrchat_mobile_client/assets/flutter/text_stream.dart';
 import 'package:vrchat_mobile_client/data_class/app_config.dart';
 import 'package:vrchat_mobile_client/main.dart';
+import 'package:vrchat_mobile_client/scenes/user.dart';
 import 'package:vrchat_mobile_client/widgets/drawer.dart';
 import 'package:vrchat_mobile_client/widgets/modal.dart';
 import 'package:vrchat_mobile_client/widgets/new_users.dart';
@@ -41,13 +42,25 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
     get().then((value) => setState(() {}));
   }
 
-  Card extraction(VRChatUser user) {
+  GridView render() {
+    return renderGrid(context, width: 600, height: config.worldDetails ? 233 : 130, children: [
+      for (VRChatUser user in userList) extractionDefault(user),
+    ]);
+  }
+
+  Card extractionDefault(VRChatUser user) {
     String worldId = user.location.split(":")[0];
     return defaultAdd(
       context,
       appConfig,
-      user.profilePicOverride ?? user.currentAvatarThumbnailImageUrl,
-      [
+      imageUrl: user.profilePicOverride ?? user.currentAvatarThumbnailImageUrl,
+      onTap: () => Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (BuildContext context) => VRChatMobileUser(appConfig, userId: user.id),
+          )),
+      bottom: config.worldDetails ? (privateSimpleWorld(context, appConfig).child! as Container).child! : null,
+      children: [
         username(user),
         ...toTextWidget([
           if (user.statusDescription != null) user.statusDescription!,
@@ -149,10 +162,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
           child: SingleChildScrollView(
             child: Column(children: <Widget>[
               if (userList.isEmpty) const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()),
-              if (userList.isNotEmpty)
-                renderGrid(context, width: 600, height: config.worldDetails ? 233 : 130, children: [
-                  for (VRChatUser user in userList) extraction(user),
-                ]),
+              if (userList.isNotEmpty) render(),
             ]),
           ),
         ),
