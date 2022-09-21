@@ -48,9 +48,9 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
     ]);
   }
 
-  Card extractionDefault(VRChatUser user) {
+  Widget extractionDefault(VRChatUser user) {
     String worldId = user.location.split(":")[0];
-    return defaultAdd(
+    return genericTemplate(
       context,
       appConfig,
       imageUrl: user.profilePicOverride ?? user.currentAvatarThumbnailImageUrl,
@@ -59,13 +59,19 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
           MaterialPageRoute(
             builder: (BuildContext context) => VRChatMobileUser(appConfig, userId: user.id),
           )),
-      bottom: config.worldDetails ? (privateSimpleWorld(context, appConfig).child! as Container).child! : null,
+      bottom: () {
+        if (!config.worldDetails) return null;
+        if (user.location == "private") return privateWorld(context, appConfig, card: false);
+        if (user.location == "traveling") return privateWorld(context, appConfig, card: false);
+        if (!["private", "offline", "traveling"].contains(user.location)) {
+          return instance(context, appConfig, locationMap[worldId]!, instanceMap[user.location]!, card: false);
+        }
+      }(),
       children: [
         username(user),
         ...toTextWidget([
           if (user.statusDescription != null) user.statusDescription!,
-          if (!["private", "offline", "traveling"].contains(user.location) && locationMap.containsKey(worldId)) locationMap[worldId]!.name,
-          if (!["private", "offline", "traveling"].contains(user.location) && !locationMap.containsKey(worldId)) "エラー",
+          if (!["private", "offline", "traveling"].contains(user.location)) locationMap[worldId]!.name,
           if (user.location == "private") AppLocalizations.of(context)!.privateWorld,
           if (user.location == "traveling") AppLocalizations.of(context)!.traveling,
         ])
@@ -77,9 +83,9 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        status(user.state == "offline" ? user.state! : user.status, diameter: 20),
-        Container(
-          width: 5,
+        Padding(
+          padding: const EdgeInsets.only(right: 5),
+          child: status(user.state == "offline" ? user.state! : user.status, diameter: 20),
         ),
         Text(
           user.displayName,
