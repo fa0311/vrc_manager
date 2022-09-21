@@ -42,56 +42,91 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
     get().then((value) => setState(() {}));
   }
 
-  GridView render() {
+  GridView extractionDefault() {
     return renderGrid(context, width: 600, height: config.worldDetails ? 233 : 130, children: [
-      for (VRChatUser user in userList) extractionDefault(user),
+      for (VRChatUser user in userList)
+        () {
+          String worldId = user.location.split(":")[0];
+          return genericTemplate(
+            context,
+            appConfig,
+            imageUrl: user.profilePicOverride ?? user.currentAvatarThumbnailImageUrl,
+            onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (BuildContext context) => VRChatMobileUser(appConfig, userId: user.id),
+                )),
+            bottom: () {
+              if (!config.worldDetails) return null;
+              if (user.location == "private") return privateWorld(context, appConfig, card: false);
+              if (user.location == "traveling") return privateWorld(context, appConfig, card: false);
+              if (!["private", "offline", "traveling"].contains(user.location)) {
+                return instanceWidget(context, appConfig, locationMap[worldId]!, instanceMap[user.location]!, card: false);
+              }
+            }(),
+            children: [
+              username(user),
+              ...toTextWidget([
+                if (user.statusDescription != null) user.statusDescription!,
+                if (!["private", "offline", "traveling"].contains(user.location)) locationMap[worldId]!.name,
+                if (user.location == "private") AppLocalizations.of(context)!.privateWorld,
+                if (user.location == "traveling") AppLocalizations.of(context)!.traveling,
+              ])
+            ],
+          );
+        }(),
     ]);
   }
 
-  Widget extractionDefault(VRChatUser user) {
-    String worldId = user.location.split(":")[0];
-    return genericTemplate(
-      context,
-      appConfig,
-      imageUrl: user.profilePicOverride ?? user.currentAvatarThumbnailImageUrl,
-      onTap: () => Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (BuildContext context) => VRChatMobileUser(appConfig, userId: user.id),
-          )),
-      bottom: () {
-        if (!config.worldDetails) return null;
-        if (user.location == "private") return privateWorld(context, appConfig, card: false);
-        if (user.location == "traveling") return privateWorld(context, appConfig, card: false);
-        if (!["private", "offline", "traveling"].contains(user.location)) {
-          return instance(context, appConfig, locationMap[worldId]!, instanceMap[user.location]!, card: false);
-        }
-      }(),
-      children: [
-        username(user),
-        ...toTextWidget([
-          if (user.statusDescription != null) user.statusDescription!,
-          if (!["private", "offline", "traveling"].contains(user.location)) locationMap[worldId]!.name,
-          if (user.location == "private") AppLocalizations.of(context)!.privateWorld,
-          if (user.location == "traveling") AppLocalizations.of(context)!.traveling,
-        ])
-      ],
-    );
+  GridView extractionSimple() {
+    return renderGrid(context, width: 320, height: config.worldDetails ? 124 : 70, children: [
+      for (VRChatUser user in userList)
+        () {
+          String worldId = user.location.split(":")[0];
+          return genericTemplate(
+            context,
+            appConfig,
+            imageUrl: user.profilePicOverride ?? user.currentAvatarThumbnailImageUrl,
+            half: true,
+            onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (BuildContext context) => VRChatMobileUser(appConfig, userId: user.id),
+                )),
+            bottom: () {
+              if (!config.worldDetails) return null;
+              if (user.location == "private") return privateWorld(context, appConfig, card: false, half: true);
+              if (user.location == "traveling") return privateWorld(context, appConfig, card: false, half: true);
+              if (!["private", "offline", "traveling"].contains(user.location)) {
+                return instanceWidget(context, appConfig, locationMap[worldId]!, instanceMap[user.location]!, card: false, half: true);
+              }
+            }(),
+            children: [
+              username(user, half: true),
+              ...toTextWidget([
+                if (!["private", "offline", "traveling"].contains(user.location)) locationMap[worldId]!.name,
+                if (user.location == "private") AppLocalizations.of(context)!.privateWorld,
+                if (user.location == "traveling") AppLocalizations.of(context)!.traveling,
+              ], fontSize: 10)
+            ],
+          );
+        }(),
+    ]);
   }
 
-  Row username(VRChatUser user) {
+  Row username(VRChatUser user, {half = false}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Padding(
           padding: const EdgeInsets.only(right: 5),
-          child: status(user.state == "offline" ? user.state! : user.status, diameter: 20),
+          child: status(user.state == "offline" ? user.state! : user.status, diameter: half ? 12 : 20),
         ),
         Text(
           user.displayName,
-          style: const TextStyle(
+          style: TextStyle(
             fontWeight: FontWeight.bold,
-            fontSize: 20,
+            fontSize: half ? 12 : 20,
           ),
         ),
       ],
@@ -168,7 +203,8 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
           child: SingleChildScrollView(
             child: Column(children: <Widget>[
               if (userList.isEmpty) const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()),
-              if (userList.isNotEmpty) render(),
+              if (userList.isNotEmpty && config.displayMode == "default") extractionDefault(),
+              if (userList.isNotEmpty && config.displayMode == "simple") extractionSimple(),
             ]),
           ),
         ),

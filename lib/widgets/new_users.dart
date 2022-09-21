@@ -29,6 +29,16 @@ GridView renderGrid(
   );
 }
 
+List<Text> toTextWidget(List<String> textList, {double fontSize = 15}) {
+  return [
+    for (String text in textList)
+      Text(
+        text,
+        style: TextStyle(fontSize: fontSize),
+      ),
+  ];
+}
+
 Widget genericTemplate(
   BuildContext context,
   AppConfig appConfig, {
@@ -37,80 +47,125 @@ Widget genericTemplate(
   void Function()? onTap,
   Widget? bottom,
   bool card = true,
+  bool half = false,
 }) {
-  Widget content = GestureDetector(
-    onTap: onTap,
-    behavior: HitTestBehavior.opaque,
-    child: Column(
-      children: [
-        Row(
-          children: <Widget>[
-            SizedBox(
-              height: 100,
-              child: CachedNetworkImage(
-                imageUrl: imageUrl,
-                fit: BoxFit.fitWidth,
-                progressIndicatorBuilder: (context, url, downloadProgress) => const SizedBox(
-                  width: 100,
-                  child: Padding(
-                    padding: EdgeInsets.all(30),
-                    child: CircularProgressIndicator(),
+  if (half) {
+    Widget content = GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: Column(
+        children: [
+          Row(
+            children: <Widget>[
+              SizedBox(
+                height: 50,
+                child: CachedNetworkImage(
+                  imageUrl: imageUrl,
+                  fit: BoxFit.fitWidth,
+                  progressIndicatorBuilder: (context, url, downloadProgress) => const SizedBox(
+                    width: 50,
+                    child: Padding(
+                      padding: EdgeInsets.all(30),
+                      child: CircularProgressIndicator(),
+                    ),
+                  ),
+                  errorWidget: (context, url, error) => const SizedBox(
+                    width: 50,
+                    child: Icon(Icons.error),
                   ),
                 ),
-                errorWidget: (context, url, error) => const SizedBox(
-                  width: 100,
-                  child: Icon(Icons.error),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 10),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: children,
+                  ),
                 ),
               ),
-            ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(left: 10),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: children,
-                ),
-              ),
-            ),
-          ],
-        ),
-        if (bottom != null)
-          Padding(
-            padding: const EdgeInsets.only(top: 5),
-            child: bottom,
+            ],
           ),
-      ],
-    ),
-  );
-  if (card) {
-    return Card(elevation: 20.0, child: Container(padding: const EdgeInsets.all(10.0), child: content));
+          if (bottom != null)
+            Padding(
+              padding: const EdgeInsets.only(top: 5),
+              child: bottom,
+            ),
+        ],
+      ),
+    );
+    if (card) {
+      return Card(elevation: 20.0, child: Container(padding: const EdgeInsets.all(5.0), child: content));
+    } else {
+      return content;
+    }
   } else {
-    return content;
+    Widget content = GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: Column(
+        children: [
+          Row(
+            children: <Widget>[
+              SizedBox(
+                height: 100,
+                child: CachedNetworkImage(
+                  imageUrl: imageUrl,
+                  fit: BoxFit.fitWidth,
+                  progressIndicatorBuilder: (context, url, downloadProgress) => const SizedBox(
+                    width: 100,
+                    child: Padding(
+                      padding: EdgeInsets.all(30),
+                      child: CircularProgressIndicator(),
+                    ),
+                  ),
+                  errorWidget: (context, url, error) => const SizedBox(
+                    width: 100,
+                    child: Icon(Icons.error),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 15),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: children,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          if (bottom != null)
+            Padding(
+              padding: const EdgeInsets.only(top: 5),
+              child: bottom,
+            ),
+        ],
+      ),
+    );
+    if (card) {
+      return Card(elevation: 20.0, child: Container(padding: const EdgeInsets.all(10.0), child: content));
+    } else {
+      return content;
+    }
   }
 }
 
-List<Text> toTextWidget(List<String> textList) {
-  return [
-    for (String text in textList)
-      Text(
-        text,
-        style: const TextStyle(fontSize: 15),
-      ),
-  ];
-}
-
-Widget instance(
+Widget instanceWidget(
   BuildContext context,
   AppConfig appConfig,
   VRChatWorld world,
   VRChatInstance instance, {
-  bool card = true,
+  bool card = false,
+  bool half = false,
 }) {
   return genericTemplate(
     context,
     appConfig,
     imageUrl: world.thumbnailImageUrl,
     card: card,
+    half: half,
     onTap: () => Navigator.push(
         context,
         MaterialPageRoute(
@@ -118,20 +173,27 @@ Widget instance(
         )),
     children: [
       Row(children: <Widget>[
-        region(instance.region),
+        region(instance.region, size: half ? 12 : 15),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 5),
           child: Row(
-            children: [const Icon(Icons.groups), Text("${instance.nUsers}/${instance.capacity}")],
+            children: [
+              Icon(Icons.groups, size: half ? 17 : 25),
+              Text("${instance.nUsers}/${instance.capacity}",
+                  style: TextStyle(
+                    fontSize: half ? 10 : 15,
+                  )),
+            ],
           ),
         ),
         Expanded(
           child: SizedBox(
             width: double.infinity,
-            child: Text(
-              getVrchatInstanceType(context)[instance.type] ?? "Error",
-              overflow: TextOverflow.ellipsis,
-            ),
+            child: Text(getVrchatInstanceType(context)[instance.type] ?? "Error",
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontSize: half ? 10 : 15,
+                )),
           ),
         )
       ]),
@@ -140,29 +202,45 @@ Widget instance(
         child: Text(
           world.name,
           overflow: TextOverflow.ellipsis,
-          style: const TextStyle(
+          style: TextStyle(
             fontWeight: FontWeight.bold,
+            fontSize: half ? 10 : 15,
             height: 1,
           ),
         ),
       ),
-      if ((instance.shortName ?? instance.secureName) != null) selfInviteButton(context, appConfig, instance),
+      if ((instance.shortName ?? instance.secureName) != null) selfInviteButton(context, appConfig, instance, half: half),
     ],
   );
 }
 
-Widget privateWorld(BuildContext context, AppConfig appConfig, {bool card = true}) {
+Widget privateWorld(
+  BuildContext context,
+  AppConfig appConfig, {
+  bool card = true,
+  bool half = false,
+}) {
   return genericTemplate(
     context,
     appConfig,
     card: card,
+    half: half,
     children: [
-      const SizedBox(width: double.infinity, child: Text("Private")),
+      SizedBox(
+        width: double.infinity,
+        child: Text("Private",
+            style: TextStyle(
+              fontSize: half ? 10 : 15,
+            )),
+      ),
       SizedBox(
         width: double.infinity,
         child: Text(
           AppLocalizations.of(context)!.privateWorld,
-          style: const TextStyle(fontWeight: FontWeight.bold),
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: half ? 10 : 15,
+          ),
         ),
       ),
     ],
@@ -170,19 +248,32 @@ Widget privateWorld(BuildContext context, AppConfig appConfig, {bool card = true
   );
 }
 
-Widget travelingWorld(BuildContext context, AppConfig appConfig, {bool card = true}) {
+Widget travelingWorld(
+  BuildContext context,
+  AppConfig appConfig, {
+  bool card = true,
+  bool half = false,
+}) {
   return genericTemplate(
     context,
     appConfig,
     card: card,
+    half: half,
     children: [
-      const SizedBox(width: double.infinity, child: Text("Private")),
+      SizedBox(
+        width: double.infinity,
+        child: Text("Traveling",
+            style: TextStyle(
+              fontSize: half ? 10 : 15,
+            )),
+      ),
       SizedBox(
         width: double.infinity,
         child: Text(
           AppLocalizations.of(context)!.privateWorld,
-          style: const TextStyle(
+          style: TextStyle(
             fontWeight: FontWeight.bold,
+            fontSize: half ? 10 : 15,
           ),
         ),
       ),
@@ -191,10 +282,15 @@ Widget travelingWorld(BuildContext context, AppConfig appConfig, {bool card = tr
   );
 }
 
-Widget selfInviteButton(BuildContext context, AppConfig appConfig, VRChatInstance instance) {
+Widget selfInviteButton(
+  BuildContext context,
+  AppConfig appConfig,
+  VRChatInstance instance, {
+  bool half = false,
+}) {
   late VRChatAPI vrhatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
   return SizedBox(
-    height: 30,
+    height: half ? 15 : 30,
     child: TextButton(
       style: ElevatedButton.styleFrom(
         foregroundColor: Colors.grey,
@@ -220,7 +316,7 @@ Widget selfInviteButton(BuildContext context, AppConfig appConfig, VRChatInstanc
       }).catchError((status) {
         apiError(context, appConfig, status);
       }),
-      child: Text(AppLocalizations.of(context)!.joinInstance, style: const TextStyle(fontSize: 15)),
+      child: Text(AppLocalizations.of(context)!.joinInstance, style: TextStyle(fontSize: half ? 8 : 15)),
     ),
   );
 }
