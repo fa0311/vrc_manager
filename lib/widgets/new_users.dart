@@ -49,106 +49,54 @@ Widget genericTemplate(
   bool card = true,
   bool half = false,
 }) {
-  if (half) {
-    Widget content = GestureDetector(
-      onTap: onTap,
-      behavior: HitTestBehavior.opaque,
-      child: Column(
-        children: [
-          Row(
-            children: <Widget>[
-              SizedBox(
-                height: 50,
-                child: CachedNetworkImage(
-                  imageUrl: imageUrl,
-                  fit: BoxFit.fitWidth,
-                  progressIndicatorBuilder: (context, url, downloadProgress) => const SizedBox(
-                    width: 50,
-                    child: Padding(
-                      padding: EdgeInsets.all(30),
-                      child: CircularProgressIndicator(),
-                    ),
-                  ),
-                  errorWidget: (context, url, error) => const SizedBox(
-                    width: 50,
-                    child: Icon(Icons.error),
+  Widget content = GestureDetector(
+    onTap: onTap,
+    behavior: HitTestBehavior.opaque,
+    child: Column(
+      children: [
+        Row(
+          children: <Widget>[
+            SizedBox(
+              height: half ? 50 : 100,
+              child: CachedNetworkImage(
+                imageUrl: imageUrl,
+                fit: BoxFit.fitWidth,
+                progressIndicatorBuilder: (context, url, downloadProgress) => SizedBox(
+                  width: half ? 50 : 100,
+                  child: const Padding(
+                    padding: EdgeInsets.all(30),
+                    child: CircularProgressIndicator(),
                   ),
                 ),
-              ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 10),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: children,
-                  ),
+                errorWidget: (context, url, error) => SizedBox(
+                  width: half ? 50 : 100,
+                  child: const Icon(Icons.error),
                 ),
               ),
-            ],
-          ),
-          if (bottom != null)
-            Padding(
-              padding: const EdgeInsets.only(top: 5),
-              child: bottom,
             ),
-        ],
-      ),
-    );
-    if (card) {
-      return Card(elevation: 20.0, child: Container(padding: const EdgeInsets.all(5.0), child: content));
-    } else {
-      return content;
-    }
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.only(left: half ? 10 : 15),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: children,
+                ),
+              ),
+            ),
+          ],
+        ),
+        if (bottom != null)
+          Padding(
+            padding: const EdgeInsets.only(top: 5),
+            child: bottom,
+          ),
+      ],
+    ),
+  );
+  if (card) {
+    return Card(elevation: 20.0, child: Container(padding: EdgeInsets.all(half ? 5 : 10), child: content));
   } else {
-    Widget content = GestureDetector(
-      onTap: onTap,
-      behavior: HitTestBehavior.opaque,
-      child: Column(
-        children: [
-          Row(
-            children: <Widget>[
-              SizedBox(
-                height: 100,
-                child: CachedNetworkImage(
-                  imageUrl: imageUrl,
-                  fit: BoxFit.fitWidth,
-                  progressIndicatorBuilder: (context, url, downloadProgress) => const SizedBox(
-                    width: 100,
-                    child: Padding(
-                      padding: EdgeInsets.all(30),
-                      child: CircularProgressIndicator(),
-                    ),
-                  ),
-                  errorWidget: (context, url, error) => const SizedBox(
-                    width: 100,
-                    child: Icon(Icons.error),
-                  ),
-                ),
-              ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 15),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: children,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          if (bottom != null)
-            Padding(
-              padding: const EdgeInsets.only(top: 5),
-              child: bottom,
-            ),
-        ],
-      ),
-    );
-    if (card) {
-      return Card(elevation: 20.0, child: Container(padding: const EdgeInsets.all(10.0), child: content));
-    } else {
-      return content;
-    }
+    return content;
   }
 }
 
