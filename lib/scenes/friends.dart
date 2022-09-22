@@ -35,6 +35,8 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
   Map<String, VRChatWorld?> locationMap = {};
   Map<String, VRChatInstance?> instanceMap = {};
   List<VRChatUser> userList = [];
+  String sortedModeCache = "default";
+  bool sortedDescendCache = false;
 
   @override
   initState() {
@@ -43,75 +45,87 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
   }
 
   GridView extractionDefault() {
-    return renderGrid(context, width: 600, height: config.worldDetails ? 233 : 130, children: [
-      for (VRChatUser user in userList)
-        () {
-          String worldId = user.location.split(":")[0];
-          return genericTemplate(
-            context,
-            appConfig,
-            imageUrl: user.profilePicOverride ?? user.currentAvatarThumbnailImageUrl,
-            onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (BuildContext context) => VRChatMobileUser(appConfig, userId: user.id),
-                )),
-            bottom: () {
-              if (!config.worldDetails) return null;
-              if (user.location == "private") return privateWorld(context, appConfig, card: false);
-              if (user.location == "traveling") return privateWorld(context, appConfig, card: false);
-              if (!["private", "offline", "traveling"].contains(user.location)) {
-                return instanceWidget(context, appConfig, locationMap[worldId]!, instanceMap[user.location]!, card: false);
-              }
-            }(),
-            children: [
-              username(user),
-              ...toTextWidget([
-                if (user.statusDescription != null) user.statusDescription!,
-                if (!["private", "offline", "traveling"].contains(user.location)) locationMap[worldId]!.name,
-                if (user.location == "private") AppLocalizations.of(context)!.privateWorld,
-                if (user.location == "traveling") AppLocalizations.of(context)!.traveling,
-              ])
-            ],
-          );
-        }(),
-    ]);
+    return renderGrid(
+      context,
+      width: 600,
+      height: config.worldDetails ? 233 : 130,
+      children: [
+        for (VRChatUser user in userList)
+          () {
+            if (["private", "offline", "traveling"].contains(user.location) && config.joinable) return null;
+            String worldId = user.location.split(":")[0];
+            return genericTemplate(
+              context,
+              appConfig,
+              imageUrl: user.profilePicOverride ?? user.currentAvatarThumbnailImageUrl,
+              onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => VRChatMobileUser(appConfig, userId: user.id),
+                  )),
+              bottom: () {
+                if (!config.worldDetails) return null;
+                if (user.location == "private") return privateWorld(context, appConfig, card: false);
+                if (user.location == "traveling") return privateWorld(context, appConfig, card: false);
+                if (!["private", "offline", "traveling"].contains(user.location)) {
+                  return instanceWidget(context, appConfig, locationMap[worldId]!, instanceMap[user.location]!, card: false);
+                }
+              }(),
+              children: [
+                username(user),
+                ...toTextWidget([
+                  if (user.statusDescription != null) user.statusDescription!,
+                  if (!["private", "offline", "traveling"].contains(user.location)) locationMap[worldId]!.name,
+                  if (user.location == "private") AppLocalizations.of(context)!.privateWorld,
+                  if (user.location == "traveling") AppLocalizations.of(context)!.traveling,
+                ])
+              ],
+            );
+          }(),
+      ].whereType<Widget>().toList(),
+    );
   }
 
   GridView extractionSimple() {
-    return renderGrid(context, width: 320, height: config.worldDetails ? 124 : 70, children: [
-      for (VRChatUser user in userList)
-        () {
-          String worldId = user.location.split(":")[0];
-          return genericTemplate(
-            context,
-            appConfig,
-            imageUrl: user.profilePicOverride ?? user.currentAvatarThumbnailImageUrl,
-            half: true,
-            onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (BuildContext context) => VRChatMobileUser(appConfig, userId: user.id),
-                )),
-            bottom: () {
-              if (!config.worldDetails) return null;
-              if (user.location == "private") return privateWorld(context, appConfig, card: false, half: true);
-              if (user.location == "traveling") return privateWorld(context, appConfig, card: false, half: true);
-              if (!["private", "offline", "traveling"].contains(user.location)) {
-                return instanceWidget(context, appConfig, locationMap[worldId]!, instanceMap[user.location]!, card: false, half: true);
-              }
-            }(),
-            children: [
-              username(user, half: true),
-              ...toTextWidget([
-                if (!["private", "offline", "traveling"].contains(user.location)) locationMap[worldId]!.name,
-                if (user.location == "private") AppLocalizations.of(context)!.privateWorld,
-                if (user.location == "traveling") AppLocalizations.of(context)!.traveling,
-              ], fontSize: 10)
-            ],
-          );
-        }(),
-    ]);
+    return renderGrid(
+      context,
+      width: 320,
+      height: config.worldDetails ? 124 : 70,
+      children: [
+        for (VRChatUser user in userList)
+          () {
+            if (["private", "offline", "traveling"].contains(user.location) && config.joinable) return null;
+            String worldId = user.location.split(":")[0];
+            return genericTemplate(
+              context,
+              appConfig,
+              imageUrl: user.profilePicOverride ?? user.currentAvatarThumbnailImageUrl,
+              half: true,
+              onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => VRChatMobileUser(appConfig, userId: user.id),
+                  )),
+              bottom: () {
+                if (!config.worldDetails) return null;
+                if (user.location == "private") return privateWorld(context, appConfig, card: false, half: true);
+                if (user.location == "traveling") return privateWorld(context, appConfig, card: false, half: true);
+                if (!["private", "offline", "traveling"].contains(user.location)) {
+                  return instanceWidget(context, appConfig, locationMap[worldId]!, instanceMap[user.location]!, card: false, half: true);
+                }
+              }(),
+              children: [
+                username(user, half: true),
+                ...toTextWidget([
+                  if (!["private", "offline", "traveling"].contains(user.location)) locationMap[worldId]!.name,
+                  if (user.location == "private") AppLocalizations.of(context)!.privateWorld,
+                  if (user.location == "traveling") AppLocalizations.of(context)!.traveling,
+                ], fontSize: 10)
+              ],
+            );
+          }(),
+      ].whereType<Widget>().toList(),
+    );
   }
 
   Row username(VRChatUser user, {half = false}) {
@@ -185,8 +199,16 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
   Widget build(BuildContext context) {
     textStream(context, widget.appConfig);
     GridModalConfig gridConfig = GridModalConfig();
-    print("build");
+    if (config.sort != sortedModeCache) {
+      sort(config, userList);
+      sortedModeCache = config.sort;
+    }
+    if (config.descending != sortedDescendCache) {
+      userList = userList.reversed.toList();
+      sortedDescendCache = config.descending;
+    }
 
+    print("build");
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.friends),

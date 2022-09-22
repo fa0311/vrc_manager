@@ -76,15 +76,18 @@ gridModal(BuildContext context, AppConfig appConfig, Function setState, GridConf
                 title: Text(AppLocalizations.of(context)!.showOnlyAvailable),
                 onChanged: (bool e) => setStateBuilder(() {
                   config.setJoinable(e);
+                  setState(() {});
                 }),
               ),
             if (gridModalConfig.worldDetails)
               SwitchListTile(
-                  value: config.worldDetails,
-                  title: Text(AppLocalizations.of(context)!.worldDetails),
-                  onChanged: (bool e) => setStateBuilder(() {
-                        config.setWorldDetails(e);
-                      })),
+                value: config.worldDetails,
+                title: Text(AppLocalizations.of(context)!.worldDetails),
+                onChanged: (bool e) => setStateBuilder(() {
+                  config.setWorldDetails(e);
+                  setState(() {});
+                }),
+              ),
             if (gridModalConfig.url != null)
               ListTile(
                 title: Text(AppLocalizations.of(context)!.openInBrowser),
@@ -122,7 +125,7 @@ gridSortModal(BuildContext context, Function setState, GridConfig config, GridSo
                       trailing: config.sort == e.key ? const Icon(Icons.check) : null,
                       onTap: () => setStateBuilder(() {
                         config.setSort(e.key);
-                        setState(() => {});
+                        setState(() {});
                       }),
                     ))
                 .toList(),
@@ -162,7 +165,7 @@ gridDispleyModeModal(BuildContext context, Function setState, GridConfig config,
                       trailing: config.displayMode == e.key ? const Icon(Icons.check) : null,
                       onTap: () => setStateBuilder(() {
                         config.setDisplayMode(e.key);
-                        setState(() => {});
+                        setState(() {});
                       }),
                     ))
                 .toList(),
