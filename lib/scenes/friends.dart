@@ -184,6 +184,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
   @override
   Widget build(BuildContext context) {
     textStream(context, widget.appConfig);
+    GridModalConfig gridConfig = GridModalConfig();
     print("build");
 
     return Scaffold(
@@ -192,7 +193,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.more_vert),
-            onPressed: () => gridModal(context, widget.appConfig, config),
+            onPressed: () => gridModal(context, widget.appConfig, config, gridConfig),
           ),
         ],
       ),

@@ -192,7 +192,7 @@ Widget privateWorld(
         ),
       ),
     ],
-    imageUrl: "https://assets.vrchat.com/www/images/default_private_image.png",
+    imageUrl: "https://assets.vrchat.com/www/images/normalprivate_image.png",
   );
 }
 
@@ -226,7 +226,7 @@ Widget travelingWorld(
         ),
       ),
     ],
-    imageUrl: "https://assets.vrchat.com/www/images/default_between_image.png",
+    imageUrl: "https://assets.vrchat.com/www/images/normalbetween_image.png",
   );
 }
 

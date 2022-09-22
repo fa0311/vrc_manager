@@ -5,24 +5,25 @@ import 'package:vrchat_mobile_client/data_class/app_config.dart';
 import 'package:vrchat_mobile_client/widgets/share.dart';
 
 class GridModalConfig {
-  late String name;
-  late String lastLogin;
-  late String frendsInInstance;
+  GridSortConfig sort = GridSortConfig();
+  GridDispleyModeConfig displayMode = GridDispleyModeConfig();
+  bool worldDetails = true;
+  String? url;
 }
 
-class GridDispleyModeModalConfig {
-  bool normal = true;
-  bool simple = true;
-  bool textOnly = true;
-}
-
-class GridSortModalConfig {
+class GridSortConfig {
   bool name = true;
   bool lastLogin = true;
   bool frendsInInstance = true;
 }
 
-gridModal(BuildContext context, AppConfig appConfig, GridConfig config) {
+class GridDispleyModeConfig {
+  bool normal = true;
+  bool simple = true;
+  bool textOnly = true;
+}
+
+gridModal(BuildContext context, AppConfig appConfig, GridConfig config, GridModalConfig gridModalConfig) {
   showModalBottomSheet(
     context: context,
     shape: const RoundedRectangleBorder(
@@ -40,7 +41,7 @@ gridModal(BuildContext context, AppConfig appConfig, GridConfig config) {
                     "friends_in_instance": Text(AppLocalizations.of(context)!.sortedByFriendsInInstance),
                   }[config.sort] ??
                   Text(AppLocalizations.of(context)!.sortedByDefault),
-              onTap: () => setStateBuilder(() => gridSortModal(context, setStateBuilder, config)),
+              onTap: () => setStateBuilder(() => gridSortModal(context, setStateBuilder, config, gridModalConfig.sort)),
             ),
             ListTile(
               title: Text(AppLocalizations.of(context)!.display),
@@ -50,7 +51,7 @@ gridModal(BuildContext context, AppConfig appConfig, GridConfig config) {
                     "text_only": Text(AppLocalizations.of(context)!.textOnly),
                   }[config.displayMode] ??
                   Text(AppLocalizations.of(context)!.sortedByDefault),
-              onTap: () => setStateBuilder(() => gridDispleyModeModal(context, setStateBuilder, config)),
+              onTap: () => setStateBuilder(() => gridDispleyModeModal(context, setStateBuilder, config, gridModalConfig.displayMode)),
             ),
             SwitchListTile(
               value: config.joinable,
@@ -79,7 +80,7 @@ gridModal(BuildContext context, AppConfig appConfig, GridConfig config) {
   );
 }
 
-gridSortModal(BuildContext context, Function setState, GridConfig config) {
+gridSortModal(BuildContext context, Function setState, GridConfig config, GridSortConfig gridSortConfig) {
   showModalBottomSheet(
     context: context,
     shape: const RoundedRectangleBorder(
@@ -136,7 +137,7 @@ gridSortModal(BuildContext context, Function setState, GridConfig config) {
   );
 }
 
-gridDispleyModeModal(BuildContext context, Function setStateBuilderParent, GridConfig config) {
+gridDispleyModeModal(BuildContext context, Function setStateBuilderParent, GridConfig config, GridDispleyModeConfig gridDisplayModeConfig) {
   showModalBottomSheet(
     context: context,
     shape: const RoundedRectangleBorder(
