@@ -80,7 +80,7 @@
     "sortedByLastLogin": "Sort by Last Login",
     "sortedByFriendsInInstance": "Sort by Number of friends of the instance",
     "display": "Display",
-    "default_": "Default",
+    "normal": "Default",
     "simple": "Simple",
     "textOnly": "Text only",
     "@____________________SEARCH____________________": {},

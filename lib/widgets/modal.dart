@@ -4,6 +4,24 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:vrchat_mobile_client/data_class/app_config.dart';
 import 'package:vrchat_mobile_client/widgets/share.dart';
 
+class GridModalConfig {
+  late String name;
+  late String lastLogin;
+  late String frendsInInstance;
+}
+
+class GridDispleyModeModalConfig {
+  bool normal = true;
+  bool simple = true;
+  bool textOnly = true;
+}
+
+class GridSortModalConfig {
+  bool name = true;
+  bool lastLogin = true;
+  bool frendsInInstance = true;
+}
+
 gridModal(BuildContext context, AppConfig appConfig, GridConfig config) {
   showModalBottomSheet(
     context: context,
@@ -27,12 +45,12 @@ gridModal(BuildContext context, AppConfig appConfig, GridConfig config) {
             ListTile(
               title: Text(AppLocalizations.of(context)!.display),
               subtitle: {
-                    "default": Text(AppLocalizations.of(context)!.default_),
+                    "normal": Text(AppLocalizations.of(context)!.normal),
                     "simple": Text(AppLocalizations.of(context)!.simple),
                     "text_only": Text(AppLocalizations.of(context)!.textOnly),
                   }[config.displayMode] ??
                   Text(AppLocalizations.of(context)!.sortedByDefault),
-              onTap: () => setStateBuilder(() => gridSortModal(context, setStateBuilder, config)),
+              onTap: () => setStateBuilder(() => gridDispleyModeModal(context, setStateBuilder, config)),
             ),
             SwitchListTile(
               value: config.joinable,
@@ -73,9 +91,9 @@ gridSortModal(BuildContext context, Function setState, GridConfig config) {
           children: <Widget>[
             ListTile(
               title: Text(AppLocalizations.of(context)!.sortedByDefault),
-              trailing: config.sort == "default" ? const Icon(Icons.check) : null,
+              trailing: config.sort == "normal" ? const Icon(Icons.check) : null,
               onTap: () => setStateBuilder(() {
-                config.setSort("default");
+                config.setSort("normal");
                 setState(() => {});
               }),
             ),
@@ -129,10 +147,10 @@ gridDispleyModeModal(BuildContext context, Function setStateBuilderParent, GridC
         child: Column(
           children: <Widget>[
             ListTile(
-              title: Text(AppLocalizations.of(context)!.default_),
-              trailing: config.displayMode == "default" ? const Icon(Icons.check) : null,
+              title: Text(AppLocalizations.of(context)!.normal),
+              trailing: config.displayMode == "normal" ? const Icon(Icons.check) : null,
               onTap: () => setStateBuilder(() {
-                config.setDisplayMode("default");
+                config.setDisplayMode("normal");
                 setStateBuilderParent(() {});
               }),
             ),

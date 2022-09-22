@@ -29,7 +29,7 @@ class Users {
   bool descending = false;
   bool worldDetails = false;
   bool wait = true;
-  String displayMode = "default";
+  String displayMode = "normal";
   late BuildContext context;
   late AppConfig appConfig;
   late VRChatAPI vrhatLoginSession;
@@ -114,10 +114,10 @@ class Users {
   List<Widget> add(VRChatUser user) {
     userList.add(user);
     if (["private", "offline", "traveling"].contains(user.location) && joinable) return children;
-    if (displayMode == "default") defaultAdd(user);
+    if (displayMode == "normal") defaultAdd(user);
     if (displayMode == "simple") simpleAdd(user);
     if (displayMode == "text_only") textOnlyAdd(user);
-    if (displayMode == "default_description") defaultDescriptionAdd(user);
+    if (displayMode == "normaldescription") defaultDescriptionAdd(user);
     if (displayMode == "simple_description") simpleDescriptionAdd(user);
     if (displayMode == "text_only_description") textOnlyDescriptionAdd(user);
     return children;
@@ -713,7 +713,7 @@ class Users {
     double width = MediaQuery.of(context).size.width;
     int height = 0;
     int wrap = 0;
-    if (displayMode == "default") {
+    if (displayMode == "normal") {
       height = worldDetails ? 233 : 130;
       wrap = 600;
     }
@@ -725,7 +725,7 @@ class Users {
       height = worldDetails ? 52 : 41;
       wrap = 400;
     }
-    if (displayMode == "default_description") {
+    if (displayMode == "normaldescription") {
       height = worldDetails ? 233 : 130;
       wrap = 600;
     }

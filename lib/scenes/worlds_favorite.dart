@@ -67,7 +67,7 @@ class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
             ..context = context
             ..appConfig = widget.appConfig
             ..vrhatLoginSession = vrhatLoginSession
-            ..displayMode = displayMode ?? "default");
+            ..displayMode = displayMode ?? "normal");
           favoriteList.add(list);
           moreOver(index);
         });
@@ -141,12 +141,12 @@ class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
           child: Column(
             children: <Widget>[
               ListTile(
-                title: Text(AppLocalizations.of(context)!.default_),
-                trailing: dataColumn[0].displayMode == "default" ? const Icon(Icons.check) : null,
+                title: Text(AppLocalizations.of(context)!.normal),
+                trailing: dataColumn[0].displayMode == "normal" ? const Icon(Icons.check) : null,
                 onTap: () => setStateBuilder(() {
-                  setStorage("worlds_favorite_display_mode", "default").then((value) {
+                  setStorage("worlds_favorite_display_mode", "normal").then((value) {
                     for (FavoriteWorlds world in dataColumn) {
-                      world.displayMode = "default";
+                      world.displayMode = "normal";
                     }
                     setState(() => dataColumn.asMap().forEach((int i, _) => reload(i)));
                     setStateBuilderParent(() {});
@@ -216,7 +216,7 @@ class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
                       ListTile(
                         title: Text(AppLocalizations.of(context)!.display),
                         subtitle: {
-                              "default": Text(AppLocalizations.of(context)!.default_),
+                              "normal": Text(AppLocalizations.of(context)!.normal),
                               "simple": Text(AppLocalizations.of(context)!.simple),
                               "text_only": Text(AppLocalizations.of(context)!.textOnly),
                             }[dataColumn[0].displayMode] ??

@@ -174,8 +174,8 @@ class GridConfig {
 
   Future setConfig() async {
     List<Future> futureList = [];
-    futureList.add(getStorage("sort", id: id).then((String? value) => sort = (value ?? "default")));
-    futureList.add(getStorage("display_mode", id: id).then((String? value) => displayMode = (value ?? "default")));
+    futureList.add(getStorage("sort", id: id).then((String? value) => sort = (value ?? "normal")));
+    futureList.add(getStorage("display_mode", id: id).then((String? value) => displayMode = (value ?? "normal")));
     futureList.add(getStorage("descending", id: id).then((String? value) => descending = (value == "true")));
     futureList.add(getStorage("joinable", id: id).then((String? value) => joinable = (value == "true")));
     futureList.add(getStorage("world_details", id: id).then((String? value) => worldDetails = (value == "true")));

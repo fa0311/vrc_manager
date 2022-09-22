@@ -25,7 +25,7 @@ class Worlds {
   late AppConfig appConfig;
   late VRChatAPI vrhatLoginSession;
   List<VRChatWorld> worldList = [];
-  String displayMode = "default";
+  String displayMode = "normal";
 
   List<Widget> reload() {
     children = [];
@@ -39,7 +39,7 @@ class Worlds {
 
   List<Widget> add(VRChatWorld world) {
     worldList.add(world);
-    if (displayMode == "default") defaultAdd(world);
+    if (displayMode == "normal") defaultAdd(world);
     if (displayMode == "simple") simpleAdd(world);
     if (displayMode == "text_only") textOnlyAdd(world);
     return children;
@@ -87,7 +87,7 @@ class Worlds {
     double width = MediaQuery.of(context).size.width;
     int height = 0;
     int wrap = 0;
-    if (displayMode == "default") {
+    if (displayMode == "normal") {
       height = 120;
       wrap = 600;
     }
@@ -118,7 +118,7 @@ class WorldsLimited {
   late AppConfig appConfig;
   late VRChatAPI vrhatLoginSession;
   List<VRChatLimitedWorld> worldList = [];
-  String displayMode = "default";
+  String displayMode = "normal";
 
   List<Widget> reload() {
     children = [];
@@ -132,7 +132,7 @@ class WorldsLimited {
 
   List<Widget> add(VRChatLimitedWorld world) {
     worldList.add(world);
-    if (displayMode == "default") defaultAdd(world);
+    if (displayMode == "normal") defaultAdd(world);
     return children;
   }
 
@@ -145,7 +145,7 @@ class WorldsLimited {
     double width = MediaQuery.of(context).size.width;
     int height = 0;
     int wrap = 0;
-    if (displayMode == "default") {
+    if (displayMode == "normal") {
       height = 120;
       wrap = 600;
     }
@@ -169,7 +169,7 @@ class FavoriteWorlds {
   late VRChatAPI vrhatLoginSession;
   List<VRChatFavoriteWorld> worldList = [];
   Map<String, String?> descriptionMap = {};
-  String displayMode = "default";
+  String displayMode = "normal";
   Function button = () {};
 
   List<Widget> reload() {
@@ -184,7 +184,7 @@ class FavoriteWorlds {
 
   List<Widget> add(VRChatFavoriteWorld world) {
     worldList.add(world);
-    if (displayMode == "default") defaultAdd(world);
+    if (displayMode == "normal") defaultAdd(world);
     if (displayMode == "simple") simpleAdd(world);
     if (displayMode == "text_only") textOnlyAdd(world);
     return children;
@@ -429,7 +429,7 @@ class FavoriteWorlds {
     double width = MediaQuery.of(context).size.width;
     int height = 0;
     int wrap = 0;
-    if (displayMode == "default") {
+    if (displayMode == "normal") {
       height = 120;
       wrap = 600;
     }

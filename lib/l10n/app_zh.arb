@@ -79,7 +79,7 @@
     "sortedByLastLogin": "按最后一次登录的顺序",
     "sortedByFriendsInInstance": "按实例中的朋友数量排序",
     "display": "显示",
-    "default_": "默认情况下",
+    "normal": "默认情况下",
     "simple": "简单",
     "textOnly": "仅限文本",
     "@____________________FRIEND_REQUEST____________________": {},

@@ -80,7 +80,7 @@
     "sortedByLastLogin": "最終ログイン順",
     "sortedByFriendsInInstance": "インスタンス内のフレンド数順",
     "display": "表示",
-    "default_": "デフォルト",
+    "normal": "デフォルト",
     "simple": "シンプル",
     "textOnly": "文字のみ",
     "@____________________SEARCH____________________": {},

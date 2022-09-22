@@ -46,12 +46,12 @@ class _SearchState extends State<VRChatSearch> {
     List<Future> futureStorageList = [];
     futureStorageList.add(getStorage("search_users_display_mode").then(
       (response) {
-        dataColumnUsers.displayMode = response ?? "default_description";
+        dataColumnUsers.displayMode = response ?? "normaldescription";
       },
     ));
     futureStorageList.add(getStorage("search_worlds_display_mode").then(
       (response) {
-        dataColumnWorlds.displayMode = response ?? "default";
+        dataColumnWorlds.displayMode = response ?? "normal";
       },
     ));
     futureStorageList.add(getStorage("search_mode").then(
@@ -156,10 +156,10 @@ class _SearchState extends State<VRChatSearch> {
           child: Column(
             children: <Widget>[
               ListTile(
-                title: Text(AppLocalizations.of(context)!.default_),
-                trailing: dataColumnUsers.displayMode == "default_description" ? const Icon(Icons.check) : null,
+                title: Text(AppLocalizations.of(context)!.normal),
+                trailing: dataColumnUsers.displayMode == "normaldescription" ? const Icon(Icons.check) : null,
                 onTap: () => setStateBuilder(() {
-                  setStorage("search_${searchMode}_display_mode", dataColumnUsers.displayMode = "default_description").then((value) {
+                  setStorage("search_${searchMode}_display_mode", dataColumnUsers.displayMode = "normaldescription").then((value) {
                     setState(() => body = dataColumnUsers.render(
                           children: dataColumnUsers.reload(),
                         ));
@@ -209,10 +209,10 @@ class _SearchState extends State<VRChatSearch> {
           child: Column(
             children: <Widget>[
               ListTile(
-                title: Text(AppLocalizations.of(context)!.default_),
-                trailing: dataColumnWorlds.displayMode == "default" ? const Icon(Icons.check) : null,
+                title: Text(AppLocalizations.of(context)!.normal),
+                trailing: dataColumnWorlds.displayMode == "normal" ? const Icon(Icons.check) : null,
                 onTap: () => setStateBuilder(() {
-                  setStorage("search_${searchMode}_display_mode", dataColumnWorlds.displayMode = "default").then((value) {
+                  setStorage("search_${searchMode}_display_mode", dataColumnWorlds.displayMode = "normal").then((value) {
                     setState(() => body = dataColumnWorlds.render(
                           children: dataColumnWorlds.reload(),
                         ));
@@ -285,7 +285,7 @@ class _SearchState extends State<VRChatSearch> {
                         ListTile(
                           title: Text(AppLocalizations.of(context)!.display),
                           subtitle: {
-                                "default_description": Text(AppLocalizations.of(context)!.default_),
+                                "normaldescription": Text(AppLocalizations.of(context)!.normal),
                                 "simple_description": Text(AppLocalizations.of(context)!.simple),
                                 "text_only_description": Text(AppLocalizations.of(context)!.textOnly),
                               }[dataColumnUsers.displayMode] ??
@@ -296,7 +296,7 @@ class _SearchState extends State<VRChatSearch> {
                         ListTile(
                           title: Text(AppLocalizations.of(context)!.display),
                           subtitle: {
-                                "default": Text(AppLocalizations.of(context)!.default_),
+                                "normal": Text(AppLocalizations.of(context)!.normal),
                                 "simple": Text(AppLocalizations.of(context)!.simple),
                                 "text_only": Text(AppLocalizations.of(context)!.textOnly),
                               }[dataColumnWorlds.displayMode] ??

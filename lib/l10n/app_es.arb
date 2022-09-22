@@ -79,7 +79,7 @@
     "sortedByLastLogin": "Por orden de último ingreso",
     "sortedByFriendsInInstance": "Ordenar por número de amigos en la instancia",
     "display": "Mostrar",
-    "default_": "Por defecto",
+    "normal": "Por defecto",
     "simple": "Simple",
     "textOnly": "Sólo texto",
     "@____________________FRIEND_REQUEST____________________": {},
