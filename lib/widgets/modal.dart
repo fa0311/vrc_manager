@@ -159,9 +159,9 @@ gridDispleyModeModal(BuildContext context, Function setState, GridConfig config,
                 .entries
                 .map((e) => ListTile(
                       title: Text(e.value),
-                      trailing: config.sort == e.key ? const Icon(Icons.check) : null,
+                      trailing: config.displayMode == e.key ? const Icon(Icons.check) : null,
                       onTap: () => setStateBuilder(() {
-                        config.setSort(e.key);
+                        config.setDisplayMode(e.key);
                         setState(() => {});
                       }),
                     ))
