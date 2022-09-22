@@ -197,7 +197,7 @@ Widget privateWorld(
         ),
       ),
     ],
-    imageUrl: "https://assets.vrchat.com/www/images/normalprivate_image.png",
+    imageUrl: "https://assets.vrchat.com/www/images/default_private_image.png",
   );
 }
 
