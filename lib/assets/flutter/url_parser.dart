@@ -1,8 +1,8 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
-import 'package:vrchat_mobile_client/data_class/app_config.dart';
 
 // Project imports:
+import 'package:vrchat_mobile_client/data_class/app_config.dart';
 import 'package:vrchat_mobile_client/scenes/user.dart';
 import 'package:vrchat_mobile_client/scenes/world.dart';
 import 'package:vrchat_mobile_client/widgets/share.dart';

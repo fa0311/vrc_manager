@@ -1,4 +1,4 @@
-// Dart imports:
+// Project imports:
 import 'package:vrchat_mobile_client/assets/storage.dart';
 
 class AppConfig {
