@@ -48,7 +48,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
     return renderGrid(
       context,
       width: 600,
-      height: config.worldDetails ? 233 : 130,
+      height: config.worldDetails ? 235 : 130,
       children: [
         for (VRChatUser user in userList)
           () {
@@ -82,7 +82,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
                   if (user.location == "private") AppLocalizations.of(context)!.privateWorld,
                   if (user.location == "traveling") AppLocalizations.of(context)!.traveling,
                 ].whereType<String>()) ...[
-                  Text(text, style: const TextStyle(fontSize: 10)),
+                  Text(text, style: const TextStyle(fontSize: 15)),
                 ],
               ],
             );
@@ -95,7 +95,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
     return renderGrid(
       context,
       width: 320,
-      height: config.worldDetails ? 125 : 70,
+      height: config.worldDetails ? 119 : 64,
       children: [
         for (VRChatUser user in userList)
           () {

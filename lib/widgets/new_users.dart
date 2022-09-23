@@ -88,7 +88,7 @@ Widget genericTemplate(
     ),
   );
   if (card) {
-    return Card(elevation: 20.0, child: Container(padding: EdgeInsets.all(half ? 5 : 10), child: content));
+    return Card(elevation: 20.0, margin: EdgeInsets.all(half ? 2 : 5), child: Container(padding: EdgeInsets.all(half ? 5 : 10), child: content));
   } else {
     return content;
   }
