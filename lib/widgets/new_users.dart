@@ -9,8 +9,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 // Project imports:
 import 'package:vrchat_mobile_client/api/data_class.dart';
-import 'package:vrchat_mobile_client/api/main.dart';
-import 'package:vrchat_mobile_client/assets/error.dart';
 import 'package:vrchat_mobile_client/assets/vrchat/instance_type.dart';
 import 'package:vrchat_mobile_client/data_class/app_config.dart';
 import 'package:vrchat_mobile_client/scenes/world.dart';
@@ -29,21 +27,10 @@ GridView renderGrid(
     crossAxisSpacing: 0,
     mainAxisSpacing: 0,
     childAspectRatio: screenSize / (screenSize ~/ width + 1) / height,
-    padding: const EdgeInsets.only(bottom: 30),
     shrinkWrap: true,
     physics: const NeverScrollableScrollPhysics(),
     children: children,
   );
-}
-
-List<Text> toTextWidget(List<String> textList, {double fontSize = 15}) {
-  return [
-    for (String text in textList)
-      Text(
-        text,
-        style: TextStyle(fontSize: fontSize),
-      ),
-  ];
 }
 
 Widget genericTemplate(
@@ -157,6 +144,7 @@ Widget instanceWidget(
         child: Text(
           world.name,
           overflow: TextOverflow.ellipsis,
+          maxLines: 2,
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: half ? 10 : 15,
@@ -164,7 +152,6 @@ Widget instanceWidget(
           ),
         ),
       ),
-      if ((instance.shortName ?? instance.secureName) != null) selfInviteButton(context, appConfig, instance, half: half),
     ],
   );
 }
@@ -237,22 +224,27 @@ Widget travelingWorld(
   );
 }
 
-Widget selfInviteButton(
+Widget genericTemplateText(
   BuildContext context,
-  AppConfig appConfig,
-  VRChatInstance instance, {
-  bool half = false,
+  AppConfig appConfig, {
+  required List<Widget> children,
+  void Function()? onTap,
 }) {
-  late VRChatAPI vrhatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
-  return SizedBox(
-    height: half ? 15 : 30,
-    child: TextButton(
-      style: ElevatedButton.styleFrom(
-        foregroundColor: Colors.grey,
-        minimumSize: Size.zero,
-        padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
+  return Card(
+    margin: const EdgeInsets.all(2),
+    elevation: 20.0,
+    child: GestureDetector(
+      onTap: () => onTap,
+      behavior: HitTestBehavior.opaque,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: children,
       ),
-      onPressed: () => vrhatLoginSession.selfInvite(instance.location, instance.shortName ?? "").then((VRChatNotificationsInvite response) {
+    ),
+  );
+}
+/*
+vrhatLoginSession.selfInvite(instance.location, instance.shortName ?? "").then((VRChatNotificationsInvite response) {
         showDialog(
           context: context,
           builder: (_) {
@@ -271,10 +263,7 @@ Widget selfInviteButton(
       }).catchError((status) {
         apiError(context, appConfig, status);
       }),
-      child: Text(AppLocalizations.of(context)!.joinInstance, style: TextStyle(fontSize: half ? 8 : 15)),
-    ),
-  );
-}
+      */
 
 sort(GridConfig config, List<VRChatUser> userList) {
   if (config.sort == "name") {

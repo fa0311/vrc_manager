@@ -67,18 +67,23 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
                 if (!config.worldDetails) return null;
                 if (user.location == "private") return privateWorld(context, appConfig, card: false);
                 if (user.location == "traveling") return privateWorld(context, appConfig, card: false);
-                if (!["private", "offline", "traveling"].contains(user.location)) {
+                if (user.location == "offline") null;
+                if (locationMap[worldId] != null) {
                   return instanceWidget(context, appConfig, locationMap[worldId]!, instanceMap[user.location]!, card: false);
+                } else {
+                  return null;
                 }
               }(),
               children: [
                 username(user),
-                ...toTextWidget([
+                for (String text in [
                   if (user.statusDescription != null) user.statusDescription!,
                   if (!["private", "offline", "traveling"].contains(user.location)) locationMap[worldId]!.name,
                   if (user.location == "private") AppLocalizations.of(context)!.privateWorld,
                   if (user.location == "traveling") AppLocalizations.of(context)!.traveling,
-                ])
+                ].whereType<String>()) ...[
+                  Text(text, style: const TextStyle(fontSize: 10)),
+                ],
               ],
             );
           }(),
@@ -90,7 +95,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
     return renderGrid(
       context,
       width: 320,
-      height: config.worldDetails ? 124 : 70,
+      height: config.worldDetails ? 125 : 70,
       children: [
         for (VRChatUser user in userList)
           () {
@@ -110,17 +115,22 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
                 if (!config.worldDetails) return null;
                 if (user.location == "private") return privateWorld(context, appConfig, card: false, half: true);
                 if (user.location == "traveling") return privateWorld(context, appConfig, card: false, half: true);
-                if (!["private", "offline", "traveling"].contains(user.location)) {
+                if (user.location == "offline") null;
+                if (locationMap[worldId] != null) {
                   return instanceWidget(context, appConfig, locationMap[worldId]!, instanceMap[user.location]!, card: false, half: true);
+                } else {
+                  return null;
                 }
               }(),
               children: [
-                username(user, half: true),
-                ...toTextWidget([
+                username(user, diameter: 12),
+                for (String text in [
                   if (!["private", "offline", "traveling"].contains(user.location)) locationMap[worldId]!.name,
                   if (user.location == "private") AppLocalizations.of(context)!.privateWorld,
                   if (user.location == "traveling") AppLocalizations.of(context)!.traveling,
-                ], fontSize: 10)
+                ].whereType<String>()) ...[
+                  Text(text, style: const TextStyle(fontSize: 10)),
+                ],
               ],
             );
           }(),
@@ -128,19 +138,60 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
     );
   }
 
-  Row username(VRChatUser user, {half = false}) {
+  GridView extractionText() {
+    return renderGrid(
+      context,
+      width: 400,
+      height: config.worldDetails ? 39 : 26,
+      children: [
+        for (VRChatUser user in userList)
+          () {
+            if (["private", "offline", "traveling"].contains(user.location) && config.joinable) return null;
+            String worldId = user.location.split(":")[0];
+            return genericTemplateText(
+              context,
+              appConfig,
+              onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => VRChatMobileUser(appConfig, userId: user.id),
+                  )),
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    username(user, diameter: 15),
+                    if (user.statusDescription != null) Text(user.statusDescription!, style: const TextStyle(fontSize: 10)),
+                  ],
+                ),
+                if (config.worldDetails)
+                  Text(() {
+                    if (user.location == "private") return AppLocalizations.of(context)!.privateWorld;
+                    if (user.location == "traveling") return AppLocalizations.of(context)!.traveling;
+                    if (user.location == "offline") null;
+                    if (locationMap[worldId] != null) return locationMap[worldId]!.name;
+                    return "";
+                  }(), style: const TextStyle(fontSize: 12, height: 1)),
+              ],
+            );
+          }(),
+      ].whereType<Widget>().toList(),
+    );
+  }
+
+  Row username(VRChatUser user, {double diameter = 20}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
+        status(user.state == "offline" ? user.state! : user.status, diameter: diameter - 2),
         Padding(
-          padding: const EdgeInsets.only(right: 5),
-          child: status(user.state == "offline" ? user.state! : user.status, diameter: half ? 12 : 20),
-        ),
-        Text(
-          user.displayName,
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: half ? 12 : 20,
+          padding: const EdgeInsets.only(left: 2, right: 5),
+          child: Text(
+            user.displayName,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: diameter,
+            ),
           ),
         ),
       ],
@@ -228,6 +279,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
               if (userList.isEmpty) const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()),
               if (userList.isNotEmpty && config.displayMode == "normal") extractionDefault(),
               if (userList.isNotEmpty && config.displayMode == "simple") extractionSimple(),
+              if (userList.isNotEmpty && config.displayMode == "text_only") extractionText(),
             ]),
           ),
         ),

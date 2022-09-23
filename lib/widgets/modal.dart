@@ -157,7 +157,7 @@ gridDispleyModeModal(BuildContext context, Function setState, GridConfig config,
             ...<String, String>{
               "normal": AppLocalizations.of(context)!.normal,
               "simple": AppLocalizations.of(context)!.simple,
-              "textOnly": AppLocalizations.of(context)!.textOnly,
+              "text_only": AppLocalizations.of(context)!.textOnly,
             }
                 .entries
                 .map((e) => ListTile(
