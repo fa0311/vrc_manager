@@ -11,16 +11,22 @@ import 'package:vrchat_mobile_client/widgets/share.dart';
 class GridModalConfig {
   GridSortConfig? sort = GridSortConfig();
   GridDispleyModeConfig? displayMode = GridDispleyModeConfig();
-  bool worldDetails = true;
-  bool joinable = true;
+  bool worldDetails = false;
+  bool joinable = false;
   String? url;
   GridModalConfig();
 }
 
 class GridSortConfig {
   bool name = true;
-  bool lastLogin = true;
-  bool frendsInInstance = true;
+
+  bool lastLogin = false;
+  bool frendsInInstance = false;
+  bool updatedDate = false;
+  bool labsPublicationDate = false;
+  bool heat = false;
+  bool capacity = false;
+  bool occupants = false;
 }
 
 class GridDispleyModeConfig {
@@ -119,6 +125,11 @@ gridSortModal(BuildContext context, Function setState, GridConfig config, GridSo
               if (gridSortConfig.name) "name": AppLocalizations.of(context)!.sortedByName,
               if (gridSortConfig.lastLogin) "last_login": AppLocalizations.of(context)!.sortedByLastLogin,
               if (gridSortConfig.frendsInInstance) "friends_in_instance": AppLocalizations.of(context)!.sortedByFriendsInInstance,
+              if (gridSortConfig.updatedDate) "updated_date": AppLocalizations.of(context)!.sortedByUpdatedDate,
+              if (gridSortConfig.labsPublicationDate) "labs_publication_date": AppLocalizations.of(context)!.sortedByLabsPublicationDate,
+              if (gridSortConfig.heat) "heat": AppLocalizations.of(context)!.sortedByHeat,
+              if (gridSortConfig.capacity) "capacity": AppLocalizations.of(context)!.sortedByCapacity,
+              if (gridSortConfig.occupants) "occupants": AppLocalizations.of(context)!.sortedByOccupants,
             }
                 .entries
                 .map((e) => ListTile(

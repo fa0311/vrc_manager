@@ -45,6 +45,10 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
   @override
   initState() {
     super.initState();
+    gridConfig.joinable = true;
+    gridConfig.worldDetails = true;
+    gridConfig.url = "https://vrchat.com/home/locations";
+    gridConfig.sort?.frendsInInstance = true;
     get().then((value) => setState(() {}));
   }
 

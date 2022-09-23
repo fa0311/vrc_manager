@@ -39,10 +39,12 @@ class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
   @override
   initState() {
     super.initState();
-    gridConfig.joinable = false;
-    gridConfig.worldDetails = false;
     gridConfig.url = "https://vrchat.com/home/worlds";
-    gridConfig.sort?.frendsInInstance = false;
+    gridConfig.sort?.updatedDate = true;
+    gridConfig.sort?.labsPublicationDate = true;
+    gridConfig.sort?.heat = true;
+    gridConfig.sort?.capacity = true;
+    gridConfig.sort?.occupants = true;
   }
 
   GridView extractionDefault(List<VRChatFavoriteWorld> favoriteWorld) {
