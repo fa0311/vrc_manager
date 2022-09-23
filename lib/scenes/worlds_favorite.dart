@@ -11,13 +11,13 @@ import 'package:vrchat_mobile_client/api/data_class.dart';
 import 'package:vrchat_mobile_client/api/main.dart';
 import 'package:vrchat_mobile_client/assets/error.dart';
 import 'package:vrchat_mobile_client/assets/flutter/text_stream.dart';
+import 'package:vrchat_mobile_client/assets/sort/worlds_favorite.dart';
 import 'package:vrchat_mobile_client/data_class/app_config.dart';
 import 'package:vrchat_mobile_client/main.dart';
 import 'package:vrchat_mobile_client/scenes/world.dart';
 import 'package:vrchat_mobile_client/widgets/drawer.dart';
 import 'package:vrchat_mobile_client/widgets/modal.dart';
-import 'package:vrchat_mobile_client/widgets/new_users.dart';
-import 'package:vrchat_mobile_client/widgets/new_world.dart';
+import 'package:vrchat_mobile_client/widgets/template.dart';
 
 class VRChatMobileWorldsFavorite extends StatefulWidget {
   final bool offline;

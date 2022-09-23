@@ -22,7 +22,7 @@ import 'package:vrchat_mobile_client/scenes/json_viewer.dart';
 import 'package:vrchat_mobile_client/widgets/drawer.dart';
 import 'package:vrchat_mobile_client/widgets/region.dart';
 import 'package:vrchat_mobile_client/widgets/share.dart';
-import 'package:vrchat_mobile_client/widgets/world.dart';
+import 'package:vrchat_mobile_client/widgets/legacy_world.dart';
 
 class VRChatMobileWorld extends StatefulWidget {
   final String worldId;

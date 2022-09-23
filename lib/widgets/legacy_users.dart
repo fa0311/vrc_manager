@@ -15,7 +15,7 @@ import 'package:vrchat_mobile_client/assets/error.dart';
 import 'package:vrchat_mobile_client/data_class/app_config.dart';
 import 'package:vrchat_mobile_client/scenes/user.dart';
 import 'package:vrchat_mobile_client/widgets/status.dart';
-import 'package:vrchat_mobile_client/widgets/world.dart';
+import 'package:vrchat_mobile_client/widgets/legacy_world.dart';
 
 class LocationDataClass {
   int id;
