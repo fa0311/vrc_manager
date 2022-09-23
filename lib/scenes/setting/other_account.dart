@@ -34,7 +34,7 @@ class _SettingOtherAccountPageState extends State<VRChatMobileSettingsOtherAccou
             padding: const EdgeInsets.all(10.0),
             child: GestureDetector(
               onTap: () {
-                widget.appConfig.login(account);
+                widget.appConfig.login(context, account);
                 Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(

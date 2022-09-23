@@ -1,4 +1,9 @@
 // Project imports:
+
+import 'package:flutter/cupertino.dart';
+import 'package:vrchat_mobile_client/api/data_class.dart';
+import 'package:vrchat_mobile_client/api/main.dart';
+import 'package:vrchat_mobile_client/assets/error.dart';
 import 'package:vrchat_mobile_client/assets/storage.dart';
 
 class AppConfig {
@@ -6,9 +11,8 @@ class AppConfig {
   List<AccountConfig> accountList = [];
   GridConfigList gridConfigList = GridConfigList();
 
-  Future get() async {
+  Future get(BuildContext context) async {
     List<Future> futureList = [];
-    List<Future> futureListLogin = [];
     List uidList = [];
     String? accountUid;
 
@@ -16,21 +20,25 @@ class AppConfig {
     futureList.add(getStorageList("account_index_list").then((List<String> value) => uidList = value));
     futureList.add(gridConfigList.setConfig());
 
-    await Future.wait(futureList).then((value) {
-      for (String uid in uidList) {
-        AccountConfig accountConfig = AccountConfig(uid);
-        futureListLogin.add(getLoginSession("cookie", uid).then((value) => accountConfig.cookie = value ?? ""));
-        futureListLogin.add(getLoginSession("userid", uid).then((value) => accountConfig.userid = value ?? ""));
-        futureListLogin.add(getLoginSession("password", uid).then((value) => accountConfig.password = value ?? ""));
-        futureListLogin.add(getLoginSession("displayname", uid).then((value) => accountConfig.displayname = value ?? ""));
-        futureListLogin.add(getLoginSession("remember_login_info", uid).then((value) => accountConfig.rememberLoginInfo = (value == "true")));
-        accountList.add(accountConfig);
-        if (uid == accountUid) {
-          loggedAccount = accountConfig;
-        }
+    await Future.wait(futureList);
+    futureList = [];
+    for (String uid in uidList) {
+      AccountConfig accountConfig = AccountConfig(uid);
+      futureList.add(getLoginSession("cookie", uid).then((value) => accountConfig.cookie = value ?? ""));
+      futureList.add(getLoginSession("userid", uid).then((value) => accountConfig.userid = value ?? ""));
+      futureList.add(getLoginSession("password", uid).then((value) => accountConfig.password = value ?? ""));
+      futureList.add(getLoginSession("displayname", uid).then((value) => accountConfig.displayname = value ?? ""));
+      futureList.add(getLoginSession("remember_login_info", uid).then((value) => accountConfig.rememberLoginInfo = (value == "true")));
+      accountList.add(accountConfig);
+      if (uid == accountUid) {
+        loggedAccount = accountConfig;
       }
+    }
+    await Future.wait(futureList).then((value) {
+      futureList = [];
+      futureList.add(loggedAccount!.getFavoriteWorldGroups(context, this));
     });
-    return Future.wait(futureListLogin);
+    return Future.wait(futureList);
   }
 
   Future removeAccount(AccountConfig account) async {
@@ -60,9 +68,13 @@ class AppConfig {
     return await removeStorage("account_index");
   }
 
-  Future<bool> login(AccountConfig accountConfig) async {
+  Future login(BuildContext context, AccountConfig accountConfig) {
+    List<Future> futureList = [];
     loggedAccount = accountConfig;
-    return await setStorage("account_index", accountConfig.uid);
+    accountConfig.favoriteWorld = [];
+    futureList.add(accountConfig.getFavoriteWorldGroups(context, this));
+    futureList.add(setStorage("account_index", accountConfig.uid));
+    return Future.wait(futureList);
   }
 
   bool isLogined() {
@@ -99,6 +111,7 @@ class AccountConfig {
   String? password;
   String? displayname;
   bool rememberLoginInfo = false;
+  List<FavoriteWorld> favoriteWorld = [];
   AccountConfig(this.uid);
 
   Future setCookie(String value) async {
@@ -140,6 +153,51 @@ class AccountConfig {
     displayname = null;
     return await removeLoginSession("displayname", uid);
   }
+
+  Future getFavoriteWorldGroups(BuildContext context, AppConfig appConfig) async {
+    late VRChatAPI vrhatLoginSession = VRChatAPI(cookie: cookie);
+    List<Future> futureList = [];
+    int len;
+    do {
+      int offset = favoriteWorld.length;
+      VRChatFavoriteGroupList favoriteGroupList = await vrhatLoginSession.favoriteGroups("world", offset: offset).catchError((status) {
+        apiError(context, appConfig, status);
+      });
+      for (VRChatFavoriteGroup group in favoriteGroupList.group) {
+        FavoriteWorld favorite = FavoriteWorld(group);
+        /*
+         * To be fixed in the next stable version.
+         * if(context.mounted)
+         */
+        // ignore: use_build_context_synchronously
+        futureList.add(getFavoriteWorld(context, appConfig, favorite));
+        favoriteWorld.add(favorite);
+      }
+      len = favoriteGroupList.group.length;
+    } while (len == 50);
+  }
+
+  Future getFavoriteWorld(BuildContext context, AppConfig appConfig, FavoriteWorld favoriteWorld) async {
+    late VRChatAPI vrhatLoginSession = VRChatAPI(cookie: cookie);
+    int len;
+    do {
+      int offset = favoriteWorld.list.length;
+      VRChatFavoriteWorldList worlds = await vrhatLoginSession.favoritesWorlds(favoriteWorld.group.name, offset: offset).catchError((status) {
+        apiError(context, appConfig, status);
+      });
+      for (VRChatFavoriteWorld world in worlds.world) {
+        favoriteWorld.list.add(world);
+      }
+      len = worlds.world.length;
+    } while (len == 50);
+  }
+}
+
+class FavoriteWorld {
+  VRChatFavoriteGroup group;
+  List<VRChatFavoriteWorld> list = [];
+
+  FavoriteWorld(this.group);
 }
 
 class GridConfigList {

@@ -26,7 +26,7 @@ Drawer drawer(BuildContext context, AppConfig appConfig) {
             account.displayname ?? AppLocalizations.of(context)!.unknown,
           ),
           onTap: () {
-            appConfig.login(account);
+            appConfig.login(context, account);
             Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(
@@ -217,7 +217,7 @@ Drawer simpledrawer(BuildContext context, AppConfig appConfig) {
             account.displayname ?? AppLocalizations.of(context)!.unknown,
           ),
           onTap: () {
-            appConfig.login(account);
+            appConfig.login(context, account);
             Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(

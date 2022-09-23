@@ -17,6 +17,7 @@ import 'package:vrchat_mobile_client/scenes/user.dart';
 import 'package:vrchat_mobile_client/widgets/drawer.dart';
 import 'package:vrchat_mobile_client/widgets/modal.dart';
 import 'package:vrchat_mobile_client/widgets/new_users.dart';
+import 'package:vrchat_mobile_client/widgets/new_world.dart';
 import 'package:vrchat_mobile_client/widgets/status.dart';
 
 class VRChatMobileFriends extends StatefulWidget {
@@ -34,6 +35,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
   late GridConfig config = widget.offline ? widget.appConfig.gridConfigList.offlineFriends : widget.appConfig.gridConfigList.onlineFriends;
   Map<String, VRChatWorld?> locationMap = {};
   Map<String, VRChatInstance?> instanceMap = {};
+  GridModalConfig gridConfig = GridModalConfig();
   List<VRChatUser> userList = [];
   String sortedModeCache = "default";
   bool sortedDescendCache = false;
@@ -204,8 +206,9 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
       VRChatUserList users = await vrhatLoginSession.friends(offline: widget.offline, offset: offset).catchError((status) {
         apiError(context, widget.appConfig, status);
       });
-      futureList.add(getWorld(users));
-      futureList.add(getInstance(users));
+      if (!mounted) return;
+      futureList.add(getWorld(context, appConfig, users.users, locationMap));
+      futureList.add(getInstance(context, appConfig, users.users, instanceMap));
       for (VRChatUser user in users.users) {
         userList.add(user);
       }
@@ -215,39 +218,9 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
     return Future.wait(futureList);
   }
 
-  Future getWorld(VRChatUserList users) {
-    List<Future> futureList = [];
-    for (VRChatUser user in users.users) {
-      String wid = user.location.split(":")[0];
-      if (["private", "offline", "traveling"].contains(user.location) || locationMap.containsKey(wid)) continue;
-      locationMap[wid] = null;
-      futureList.add(vrhatLoginSession.worlds(wid).then((VRChatWorld world) {
-        locationMap[wid] = world;
-      }).catchError((status) {
-        apiError(context, widget.appConfig, status);
-      }));
-    }
-    return Future.wait(futureList);
-  }
-
-  Future getInstance(VRChatUserList users) {
-    List<Future> futureList = [];
-    for (VRChatUser user in users.users) {
-      if (["private", "offline", "traveling"].contains(user.location) || instanceMap.containsKey(user.location)) continue;
-      instanceMap[user.location] = null;
-      futureList.add(vrhatLoginSession.instances(user.location).then((VRChatInstance instance) {
-        instanceMap[user.location] = instance;
-      }).catchError((status) {
-        apiError(context, widget.appConfig, status);
-      }));
-    }
-    return Future.wait(futureList);
-  }
-
   @override
   Widget build(BuildContext context) {
     textStream(context, widget.appConfig);
-    GridModalConfig gridConfig = GridModalConfig();
     if (config.sort != sortedModeCache) {
       sort(config, userList);
       sortedModeCache = config.sort;
@@ -257,7 +230,6 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
       sortedDescendCache = config.descending;
     }
 
-    print("build");
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.friends),

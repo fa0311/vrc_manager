@@ -14,6 +14,7 @@ class GridModalConfig {
   bool worldDetails = true;
   bool joinable = true;
   String? url;
+  GridModalConfig();
 }
 
 class GridSortConfig {
@@ -115,9 +116,9 @@ gridSortModal(BuildContext context, Function setState, GridConfig config, GridSo
           children: <Widget>[
             ...<String, String>{
               "normal": AppLocalizations.of(context)!.sortedByDefault,
-              "name": AppLocalizations.of(context)!.sortedByName,
-              "last_login": AppLocalizations.of(context)!.sortedByLastLogin,
-              "friends_in_instance": AppLocalizations.of(context)!.sortedByFriendsInInstance,
+              if (gridSortConfig.name) "name": AppLocalizations.of(context)!.sortedByName,
+              if (gridSortConfig.lastLogin) "last_login": AppLocalizations.of(context)!.sortedByLastLogin,
+              if (gridSortConfig.frendsInInstance) "friends_in_instance": AppLocalizations.of(context)!.sortedByFriendsInInstance,
             }
                 .entries
                 .map((e) => ListTile(
@@ -156,8 +157,8 @@ gridDispleyModeModal(BuildContext context, Function setState, GridConfig config,
           children: <Widget>[
             ...<String, String>{
               "normal": AppLocalizations.of(context)!.normal,
-              "simple": AppLocalizations.of(context)!.simple,
-              "text_only": AppLocalizations.of(context)!.textOnly,
+              if (gridDisplayModeConfig.simple) "simple": AppLocalizations.of(context)!.simple,
+              if (gridDisplayModeConfig.textOnly) "text_only": AppLocalizations.of(context)!.textOnly,
             }
                 .entries
                 .map((e) => ListTile(

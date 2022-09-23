@@ -50,7 +50,7 @@ class _SplashState extends State<VRChatMobileSplash> {
   initState() {
     super.initState();
 
-    appConfig.get().then((_) async {
+    appConfig.get(context).then((_) async {
       if (widget.init && (Platform.isAndroid || Platform.isIOS)) {
         ReceiveSharingIntent.getInitialText().then((String? initialText) {
           if (initialText != null) {

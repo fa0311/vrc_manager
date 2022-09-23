@@ -40,6 +40,7 @@ Widget genericTemplate(
   required String imageUrl,
   void Function()? onTap,
   Widget? bottom,
+  List<Widget>? stack,
   bool card = true,
   bool half = false,
 }) {
@@ -87,8 +88,26 @@ Widget genericTemplate(
       ],
     ),
   );
-  if (card) {
-    return Card(elevation: 20.0, margin: EdgeInsets.all(half ? 2 : 5), child: Container(padding: EdgeInsets.all(half ? 5 : 10), child: content));
+  if (card && stack != null) {
+    return Card(
+      elevation: 20.0,
+      margin: EdgeInsets.all(half ? 2 : 5),
+      child: Stack(
+        children: <Widget>[
+          Container(padding: EdgeInsets.all(half ? 5 : 10), child: content),
+          ...stack,
+        ],
+      ),
+    );
+  } else if (card) {
+    return Card(
+      elevation: 20.0,
+      margin: EdgeInsets.all(half ? 2 : 5),
+      child: Container(
+        padding: EdgeInsets.all(half ? 5 : 10),
+        child: content,
+      ),
+    );
   } else {
     return content;
   }
