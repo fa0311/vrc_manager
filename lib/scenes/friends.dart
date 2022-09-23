@@ -125,9 +125,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
               children: [
                 username(user, diameter: 12),
                 for (String text in [
-                  if (!["private", "offline", "traveling"].contains(user.location)) locationMap[worldId]!.name,
-                  if (user.location == "private") AppLocalizations.of(context)!.privateWorld,
-                  if (user.location == "traveling") AppLocalizations.of(context)!.traveling,
+                  if (user.statusDescription != null) user.statusDescription!,
                 ].whereType<String>()) ...[
                   Text(text, style: const TextStyle(fontSize: 10)),
                 ],
