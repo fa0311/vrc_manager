@@ -79,15 +79,19 @@ class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
                   ),
                 ),
               ],
-              right: [
-                SizedBox(
-                  width: 50,
-                  child: IconButton(
-                    onPressed: () => delete(world, favoriteWorld),
-                    icon: const Icon(Icons.delete),
-                  ),
-                ),
-              ],
+              right: config.removeButton
+                  ? [
+                      SizedBox(
+                        width: 50,
+                        child: IconButton(
+                          constraints: const BoxConstraints(),
+                          padding: const EdgeInsets.all(0),
+                          onPressed: () => delete(world, favoriteWorld),
+                          icon: const Icon(Icons.delete),
+                        ),
+                      ),
+                    ]
+                  : null,
             );
           }(),
       ],
