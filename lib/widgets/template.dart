@@ -33,72 +33,70 @@ Widget genericTemplate(
   bool card = true,
   bool half = false,
 }) {
-  Widget content = GestureDetector(
-    onTap: onTap,
-    behavior: HitTestBehavior.opaque,
-    child: Column(
-      children: [
-        Row(
-          children: <Widget>[
-            SizedBox(
-              height: half ? 50 : 100,
-              child: CachedNetworkImage(
-                imageUrl: imageUrl,
-                fit: BoxFit.fitWidth,
-                progressIndicatorBuilder: (context, url, downloadProgress) => SizedBox(
-                  width: half ? 50 : 100,
-                  child: const Padding(
-                    padding: EdgeInsets.all(30),
-                    child: CircularProgressIndicator(),
-                  ),
-                ),
-                errorWidget: (context, url, error) => SizedBox(
-                  width: half ? 50 : 100,
-                  child: const Icon(Icons.error),
-                ),
-              ),
-            ),
-            Expanded(
-              child: Padding(
-                padding: EdgeInsets.only(left: half ? 10 : 15),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: children,
-                ),
-              ),
-            ),
-            if (right != null) ...right,
-          ],
-        ),
-        if (bottom != null)
-          Padding(
-            padding: const EdgeInsets.only(top: 5),
-            child: bottom,
-          ),
-      ],
-    ),
-  );
-  if (card && stack != null) {
-    return Card(
-      elevation: 20.0,
-      margin: EdgeInsets.all(half ? 2 : 5),
-      child: Stack(
+  Widget content = Column(
+    children: [
+      Row(
         children: <Widget>[
-          Container(padding: EdgeInsets.all(half ? 5 : 10), child: content),
-          ...stack,
+          SizedBox(
+            height: half ? 50 : 100,
+            child: CachedNetworkImage(
+              imageUrl: imageUrl,
+              fit: BoxFit.fitWidth,
+              progressIndicatorBuilder: (context, url, downloadProgress) => SizedBox(
+                width: half ? 50 : 100,
+                child: const Padding(
+                  padding: EdgeInsets.all(30),
+                  child: CircularProgressIndicator(),
+                ),
+              ),
+              errorWidget: (context, url, error) => SizedBox(
+                width: half ? 50 : 100,
+                child: const Icon(Icons.error),
+              ),
+            ),
+          ),
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.only(left: half ? 10 : 15),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: children,
+              ),
+            ),
+          ),
+          if (right != null) ...right,
         ],
       ),
-    );
-  } else if (card) {
-    return Card(
-      elevation: 20.0,
-      margin: EdgeInsets.all(half ? 2 : 5),
-      child: Container(
-        padding: EdgeInsets.all(half ? 5 : 10),
-        child: content,
-      ),
+      if (bottom != null)
+        Padding(
+          padding: const EdgeInsets.only(top: 5),
+          child: bottom,
+        ),
+    ],
+  );
+  if (!card) {
+    return content;
+  } else if (stack != null) {
+    content = Stack(
+      children: <Widget>[
+        Container(padding: EdgeInsets.all(half ? 5 : 10), child: content),
+        ...stack,
+      ],
     );
   } else {
-    return content;
+    content = Container(
+      padding: EdgeInsets.all(half ? 5 : 10),
+      child: content,
+    );
   }
+
+  if (onTap != null) {
+    content = InkWell(
+      borderRadius: BorderRadius.circular(5),
+      onTap: onTap,
+      child: content,
+    );
+  }
+  content = Card(elevation: 20.0, margin: EdgeInsets.all(half ? 2 : 5), child: content);
+  return content;
 }
