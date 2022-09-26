@@ -182,10 +182,11 @@ class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
           width: MediaQuery.of(context).size.width,
           child: SingleChildScrollView(
             child: Column(children: [
-              if (config.displayMode == "normal")
-                for (FavoriteWorld favoriteWorld in widget.appConfig.loggedAccount?.favoriteWorld ?? []) extractionDefault(favoriteWorld.list),
-              if (config.displayMode == "simple")
-                for (FavoriteWorld favoriteWorld in widget.appConfig.loggedAccount?.favoriteWorld ?? []) extractionSimple(favoriteWorld.list),
+              for (FavoriteWorld favoriteWorld in widget.appConfig.loggedAccount?.favoriteWorld ?? []) ...[
+                Text(favoriteWorld.group.displayName),
+                if (config.displayMode == "normal") extractionDefault(favoriteWorld.list),
+                if (config.displayMode == "simple") extractionSimple(favoriteWorld.list),
+              ],
             ]),
           ),
         ),
