@@ -13,6 +13,7 @@ class GridModalConfig {
   GridDispleyModeConfig? displayMode = GridDispleyModeConfig();
   bool worldDetails = false;
   bool joinable = false;
+  bool removeButton = false;
   String? url;
   GridModalConfig();
 }
@@ -92,6 +93,15 @@ gridModal(BuildContext context, AppConfig appConfig, Function setState, GridConf
                 title: Text(AppLocalizations.of(context)!.worldDetails),
                 onChanged: (bool e) => setStateBuilder(() {
                   config.setWorldDetails(e);
+                  setState(() {});
+                }),
+              ),
+            if (gridModalConfig.removeButton)
+              SwitchListTile(
+                value: config.removeButton,
+                title: Text(AppLocalizations.of(context)!.worldDetails),
+                onChanged: (bool e) => setStateBuilder(() {
+                  config.setRemoveButton(e);
                   setState(() {});
                 }),
               ),

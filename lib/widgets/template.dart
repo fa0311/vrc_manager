@@ -28,6 +28,7 @@ Widget genericTemplate(
   required String imageUrl,
   void Function()? onTap,
   Widget? bottom,
+  List<Widget>? right,
   List<Widget>? stack,
   bool card = true,
   bool half = false,
@@ -66,6 +67,7 @@ Widget genericTemplate(
                 ),
               ),
             ),
+            if (right != null) ...right,
           ],
         ),
         if (bottom != null)

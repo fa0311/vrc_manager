@@ -40,6 +40,7 @@ class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
   initState() {
     super.initState();
     gridConfig.url = "https://vrchat.com/home/worlds";
+    gridConfig.removeButton = true;
     gridConfig.sort?.updatedDate = true;
     gridConfig.sort?.labsPublicationDate = true;
     gridConfig.sort?.heat = true;
@@ -66,7 +67,6 @@ class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
                   )),
               children: [
                 SizedBox(
-                  width: double.infinity,
                   child: Text(
                     world.name,
                     overflow: TextOverflow.ellipsis,
@@ -76,6 +76,15 @@ class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
                       fontSize: 15,
                       height: 1,
                     ),
+                  ),
+                ),
+              ],
+              right: [
+                SizedBox(
+                  width: 50,
+                  child: IconButton(
+                    onPressed: () => delete(world, favoriteWorld),
+                    icon: const Icon(Icons.delete),
                   ),
                 ),
               ],
@@ -118,35 +127,41 @@ class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
                   ),
                 ),
               ],
-              stack: [
-                SizedBox(
-                  height: 17,
-                  width: 17,
-                  child: Container(
-                    decoration: const BoxDecoration(
-                      color: Colors.red,
-                      borderRadius: BorderRadius.only(
-                        bottomRight: Radius.circular(10),
+              stack: config.removeButton
+                  ? [
+                      SizedBox(
+                        height: 17,
+                        width: 17,
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            color: Colors.red,
+                            borderRadius: BorderRadius.only(
+                              bottomRight: Radius.circular(10),
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                ),
-                IconButton(
-                  iconSize: 15,
-                  constraints: const BoxConstraints(),
-                  padding: const EdgeInsets.all(0),
-                  onPressed: () => vrhatLoginSession.deleteFavorites(world.favoriteId).then((response) {
-                    setState(() => favoriteWorld.remove(world));
-                  }).catchError((status) {
-                    apiError(context, appConfig, status);
-                  }),
-                  icon: const Icon(Icons.delete),
-                ),
-              ],
+                      IconButton(
+                        iconSize: 15,
+                        constraints: const BoxConstraints(),
+                        padding: const EdgeInsets.all(0),
+                        onPressed: () => delete(world, favoriteWorld),
+                        icon: const Icon(Icons.delete),
+                      ),
+                    ]
+                  : null,
             );
           }(),
       ],
     );
+  }
+
+  delete(VRChatFavoriteWorld world, List<VRChatFavoriteWorld> favoriteWorld) {
+    vrhatLoginSession.deleteFavorites(world.favoriteId).then((response) {
+      setState(() => favoriteWorld.remove(world));
+    }).catchError((status) {
+      apiError(context, appConfig, status);
+    });
   }
 
   @override

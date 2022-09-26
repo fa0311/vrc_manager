@@ -227,6 +227,7 @@ class GridConfig {
   late bool descending;
   late bool joinable;
   late bool worldDetails;
+  late bool removeButton;
 
   GridConfig(this.id);
 
@@ -237,6 +238,7 @@ class GridConfig {
     futureList.add(getStorage("descending", id: id).then((String? value) => descending = (value == "true")));
     futureList.add(getStorage("joinable", id: id).then((String? value) => joinable = (value == "true")));
     futureList.add(getStorage("world_details", id: id).then((String? value) => worldDetails = (value == "true")));
+    futureList.add(getStorage("remove_button", id: id).then((String? value) => removeButton = (value == "true")));
 
     return Future.wait(futureList);
   }
@@ -259,5 +261,9 @@ class GridConfig {
 
   Future setWorldDetails(bool value) async {
     return await setStorage("world_details", (worldDetails = value) ? "true" : "false", id: id);
+  }
+
+  Future setRemoveButton(bool value) async {
+    return await setStorage("remove_button", (removeButton = value) ? "true" : "false", id: id);
   }
 }
