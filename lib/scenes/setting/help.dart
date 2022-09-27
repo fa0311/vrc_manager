@@ -60,7 +60,7 @@ class _HelpPageState extends State<VRChatMobileHelp> {
                   ListTile(
                     title: Text(AppLocalizations.of(context)!.rateTheApp),
                     subtitle: Text(AppLocalizations.of(context)!.rateTheAppDetails),
-                    onTap: () => openInBrowser(context, "https://play.google.com/store/apps/details?id=com.yuki0311.vrchat_mobile_client"),
+                    onTap: () => openInBrowser(context, "https://play.google.com/store/apps/details?id=com.yuki0311.vrc_manager"),
                   ),
                   const Divider(),
                   ListTile(

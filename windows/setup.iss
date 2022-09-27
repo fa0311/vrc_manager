@@ -28,7 +28,7 @@ LicenseFile=C:\Project\flutter-project\vrchat_mobile_client\LICENSE
 ; Uncomment the following line to run in non administrative install mode (install for current user only.)
 ;PrivilegesRequired=lowest
 OutputDir=C:\Project\flutter-project\vrchat_mobile_client\build\windows
-OutputBaseFilename=VRChatMC-Setup
+OutputBaseFilename=VRCManager-Setup
 SetupIconFile=C:\Project\flutter-project\vrchat_mobile_client\windows\runner\resources\app_icon.ico
 Compression=lzma
 SolidCompression=yes

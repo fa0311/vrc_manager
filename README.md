@@ -1,4 +1,4 @@
-# VRChatMC
+# VRCManager
 
 VRChat の非公式な API を利用した VRChat のモバイルクライアント<br>
 Flutter で作成されたシンプルな UI が特徴的です<br>
@@ -17,7 +17,7 @@ Flutter で作成されたシンプルな UI が特徴的です<br>
 
 ### Android
 
-[**play.google.com**](https://play.google.com/store/apps/details?id=com.yuki0311.vrchat_mobile_client)からダウンロード<br>
+[**play.google.com**](https://play.google.com/store/apps/details?id=com.yuki0311.vrc_manager)からダウンロード<br>
 [**appgallery.huawei.com**](https://appgallery.huawei.com/#/app/C106854219)からダウンロード<br>
 
 もしくは
@@ -25,7 +25,7 @@ Flutter で作成されたシンプルな UI が特徴的です<br>
 
 ### Windows
 
-[**Releases**](https://github.com/fa0311/vrchat_mobile_client/releases)の**VRChatMC-Setup.exe**をクリックしてダウンロード
+[**Releases**](https://github.com/fa0311/vrchat_mobile_client/releases)の**VRCManager-Setup.exe**をクリックしてダウンロード
 
 ## 貢献
 
