@@ -74,22 +74,19 @@ Widget genericTemplate(
         ),
     ],
   );
-  if (!card) {
-    return content;
-  } else if (stack != null) {
-    content = Stack(
-      children: <Widget>[
-        Container(padding: EdgeInsets.all(half ? 5 : 10), child: content),
-        ...stack,
-      ],
-    );
-  } else {
+  if (card && stack == null) {
     content = Container(
       padding: EdgeInsets.all(half ? 5 : 10),
       child: content,
     );
+  } else if (card) {
+    content = Stack(
+      children: <Widget>[
+        Container(padding: EdgeInsets.all(half ? 5 : 10), child: content),
+        ...stack!,
+      ],
+    );
   }
-
   if (onTap != null) {
     content = InkWell(
       borderRadius: BorderRadius.circular(5),
@@ -97,6 +94,8 @@ Widget genericTemplate(
       child: content,
     );
   }
-  content = Card(elevation: 20.0, margin: EdgeInsets.all(half ? 2 : 5), child: content);
+  if (card) {
+    content = Card(elevation: 20.0, margin: EdgeInsets.all(half ? 2 : 5), child: content);
+  }
   return content;
 }
