@@ -27,6 +27,7 @@ Widget genericTemplate(
   required List<Widget> children,
   required String imageUrl,
   void Function()? onTap,
+  void Function()? onLongPress,
   Widget? bottom,
   List<Widget>? right,
   List<Widget>? stack,
@@ -87,10 +88,11 @@ Widget genericTemplate(
       ],
     );
   }
-  if (onTap != null) {
+  if (onTap != null || onLongPress != null) {
     content = InkWell(
       borderRadius: BorderRadius.circular(5),
       onTap: onTap,
+      onLongPress: onLongPress,
       child: content,
     );
   }
@@ -98,4 +100,26 @@ Widget genericTemplate(
     content = Card(elevation: 20.0, margin: EdgeInsets.all(half ? 2 : 5), child: content);
   }
   return content;
+}
+
+Widget genericTemplateText(
+  BuildContext context,
+  AppConfig appConfig, {
+  required List<Widget> children,
+  void Function()? onTap,
+  void Function()? onLongPress,
+}) {
+  return Card(
+    margin: const EdgeInsets.all(2),
+    elevation: 20.0,
+    child: GestureDetector(
+      onTap: onTap,
+      onLongPress: onLongPress,
+      behavior: HitTestBehavior.opaque,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: children,
+      ),
+    ),
+  );
 }
