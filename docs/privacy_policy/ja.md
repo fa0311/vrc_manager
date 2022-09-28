@@ -32,7 +32,7 @@ yuki0311 (以下，「私達」) は、スマートフォンおよびモバイ�
 ## 本サービスの透明性
 
 本サービスのプログラムはすべて Github 上で公開されています。
-詳細は[こちら](https://github.com/fa0311/vrchat_mobile_client)をご覧ください。
+詳細は[こちら](https://github.com/fa0311/vrc_manager)をご覧ください。
 
 ## お問い合わせ方法
 

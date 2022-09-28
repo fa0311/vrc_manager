@@ -31,7 +31,7 @@ We may update our Privacy Policy from time to time. The Privacy Policy is mainta
 ## Transparency of the Service
 
 All programmes of the Service are publicly available on Github.
-For more information, see [here](https://github.com/fa0311/vrchat_mobile_client).
+For more information, see [here](https://github.com/fa0311/vrc_manager).
 
 ## How to contact us.
 
