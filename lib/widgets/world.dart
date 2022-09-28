@@ -191,3 +191,34 @@ void selfInvite(BuildContext context, AppConfig appConfig, VRChatInstance instan
     apiError(context, appConfig, status);
   });
 }
+
+Widget favoriteAction(BuildContext context, AppConfig appConfig, String wid) {
+  late VRChatAPI vrhatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
+  return IconButton(
+    icon: const Icon(Icons.favorite),
+    onPressed: () => showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
+      ),
+      builder: (BuildContext context) => SingleChildScrollView(
+        child: Column(
+          children: [
+            for (FavoriteWorld favoriteWorld in appConfig.loggedAccount?.favoriteWorld ?? [])
+              ListTile(
+                title: Text(favoriteWorld.group.displayName),
+//                 trailing: config.displayMode == e.key ? const Icon(Icons.check) : null,
+                onTap: () => {
+                  vrhatLoginSession.addFavorites("world", wid, favoriteWorld.group.name).then((response) {
+                    Navigator.pop(context);
+                  }).catchError((status) {
+                    apiError(context, appConfig, status);
+                  }),
+                },
+              ),
+          ],
+        ),
+      ),
+    ),
+  );
+}

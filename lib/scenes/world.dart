@@ -18,11 +18,13 @@ import 'package:vrchat_mobile_client/assets/error.dart';
 import 'package:vrchat_mobile_client/assets/flutter/text_stream.dart';
 import 'package:vrchat_mobile_client/assets/vrchat/region.dart';
 import 'package:vrchat_mobile_client/data_class/app_config.dart';
+import 'package:vrchat_mobile_client/main.dart';
 import 'package:vrchat_mobile_client/scenes/json_viewer.dart';
 import 'package:vrchat_mobile_client/widgets/drawer.dart';
 import 'package:vrchat_mobile_client/widgets/region.dart';
 import 'package:vrchat_mobile_client/widgets/share.dart';
 import 'package:vrchat_mobile_client/widgets/legacy_world.dart';
+import 'package:vrchat_mobile_client/widgets/world.dart';
 
 class VRChatMobileWorld extends StatefulWidget {
   final String worldId;
@@ -40,7 +42,6 @@ class _WorldState extends State<VRChatMobileWorld> {
       Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()),
     ],
   );
-  late List<Widget> popupMenu = [share(context, widget.appConfig, "https://vrchat.com/home/world/${widget.worldId}")];
 
   String genRandHex([int length = 32]) {
     const charset = '0123456789ABCDEF';
@@ -195,32 +196,6 @@ class _WorldState extends State<VRChatMobileWorld> {
           ]);
         },
       );
-      vrhatLoginSession.favoriteGroups("world", offset: 0).then((VRChatFavoriteGroupList response) {
-        List<Widget> bottomSheet = [];
-        if (response.group.isEmpty) return;
-        for (VRChatFavoriteGroup list in response.group) {
-          bottomSheet.add(ListTile(
-            title: Text(list.displayName),
-            onTap: () => {
-              vrhatLoginSession.addFavorites("world", widget.worldId, list.name).then((response) {
-                Navigator.pop(context);
-              }).catchError((status) {
-                apiError(context, widget.appConfig, status);
-              }),
-            },
-          ));
-        }
-        setState(
-          () {
-            popupMenu = <Widget>[
-              worldAction(context, widget.worldId, bottomSheet),
-              share(context, widget.appConfig, "https://vrchat.com/home/world/${widget.worldId}")
-            ];
-          },
-        );
-      }).catchError((status) {
-        apiError(context, widget.appConfig, status);
-      });
     }).catchError((status) {
       apiError(context, widget.appConfig, status);
     });
@@ -233,7 +208,10 @@ class _WorldState extends State<VRChatMobileWorld> {
       widget.appConfig,
     );
     return Scaffold(
-      appBar: AppBar(title: Text(AppLocalizations.of(context)!.world), actions: popupMenu),
+      appBar: AppBar(title: Text(AppLocalizations.of(context)!.world), actions: [
+        favoriteAction(context, appConfig, widget.worldId),
+        share(context, widget.appConfig, "https://vrchat.com/home/world/${widget.worldId}"),
+      ]),
       drawer: Navigator.of(context).canPop()
           ? null
           : drawer(
