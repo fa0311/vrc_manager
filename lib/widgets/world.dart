@@ -7,6 +7,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 // Project imports:
 import 'package:vrchat_mobile_client/api/data_class.dart';
+import 'package:vrchat_mobile_client/api/main.dart';
+import 'package:vrchat_mobile_client/assets/error.dart';
 import 'package:vrchat_mobile_client/assets/vrchat/instance_type.dart';
 import 'package:vrchat_mobile_client/data_class/app_config.dart';
 import 'package:vrchat_mobile_client/scenes/world.dart';
@@ -32,6 +34,7 @@ Widget instanceWidget(
         MaterialPageRoute(
           builder: (BuildContext context) => VRChatMobileWorld(appConfig, worldId: world.id),
         )),
+    onLongPress: () => showWorldLongPressModal(context, appConfig, instance),
     children: [
       Row(children: <Widget>[
         region(instance.region, size: half ? 12 : 15),
@@ -143,43 +146,48 @@ Widget travelingWorld(
   );
 }
 
-Widget genericTemplateText(
-  BuildContext context,
-  AppConfig appConfig, {
-  required List<Widget> children,
-  void Function()? onTap,
-}) {
-  return Card(
-    margin: const EdgeInsets.all(2),
-    elevation: 20.0,
-    child: GestureDetector(
-      onTap: () => onTap,
-      behavior: HitTestBehavior.opaque,
+showWorldLongPressModal(BuildContext context, AppConfig appConfig, VRChatInstance instance) {
+  return showModalBottomSheet(
+    context: context,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(
+        top: Radius.circular(15),
+      ),
+    ),
+    builder: (BuildContext context) => SingleChildScrollView(
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: children,
+        children: <Widget>[
+          ListTile(
+            title: Text(AppLocalizations.of(context)!.joinInstance),
+            onTap: () {
+              selfInvite(context, appConfig, instance);
+            },
+          ),
+        ],
       ),
     ),
   );
 }
-/*
-vrhatLoginSession.selfInvite(instance.location, instance.shortName ?? "").then((VRChatNotificationsInvite response) {
-        showDialog(
-          context: context,
-          builder: (_) {
-            return AlertDialog(
-              title: Text(AppLocalizations.of(context)!.sendInvite),
-              content: Text(AppLocalizations.of(context)!.selfInviteDetails),
-              actions: <Widget>[
-                TextButton(
-                  child: Text(AppLocalizations.of(context)!.close),
-                  onPressed: () => Navigator.pop(context),
-                ),
-              ],
-            );
-          },
+
+void selfInvite(BuildContext context, AppConfig appConfig, VRChatInstance instance) {
+  late VRChatAPI vrhatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
+  vrhatLoginSession.selfInvite(instance.location, instance.shortName ?? "").then((VRChatNotificationsInvite response) {
+    showDialog(
+      context: context,
+      builder: (_) {
+        return AlertDialog(
+          title: Text(AppLocalizations.of(context)!.sendInvite),
+          content: Text(AppLocalizations.of(context)!.selfInviteDetails),
+          actions: <Widget>[
+            TextButton(
+              child: Text(AppLocalizations.of(context)!.close),
+              onPressed: () => Navigator.pop(context),
+            ),
+          ],
         );
-      }).catchError((status) {
-        apiError(context, appConfig, status);
-      }),
-      */
+      },
+    );
+  }).catchError((status) {
+    apiError(context, appConfig, status);
+  });
+}
