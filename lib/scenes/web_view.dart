@@ -8,10 +8,10 @@ import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 // Project imports:
-import 'package:vrchat_mobile_client/assets/flutter/text_stream.dart';
-import 'package:vrchat_mobile_client/assets/session.dart';
-import 'package:vrchat_mobile_client/assets/storage.dart';
-import 'package:vrchat_mobile_client/widgets/share.dart';
+import 'package:vrc_manager/assets/flutter/text_stream.dart';
+import 'package:vrc_manager/assets/session.dart';
+import 'package:vrc_manager/assets/storage.dart';
+import 'package:vrc_manager/widgets/share.dart';
 
 class VRChatMobileWebView extends StatefulWidget {
   final String url;

@@ -14,10 +14,10 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 // Project imports:
-import 'package:vrchat_mobile_client/api/data_class.dart';
-import 'package:vrchat_mobile_client/assets/storage.dart';
-import 'package:vrchat_mobile_client/scenes/login.dart';
-import 'package:vrchat_mobile_client/widgets/share.dart';
+import 'package:vrc_manager/api/data_class.dart';
+import 'package:vrc_manager/assets/storage.dart';
+import 'package:vrc_manager/scenes/login.dart';
+import 'package:vrc_manager/widgets/share.dart';
 
 void errorDialog(BuildContext context, String text, {String log = ""}) {
   if (log.isNotEmpty) {
@@ -45,7 +45,7 @@ void errorDialog(BuildContext context, String text, {String log = ""}) {
                         if (Platform.isAndroid || Platform.isIOS) {
                           Fluttertoast.showToast(msg: AppLocalizations.of(context)!.copied);
                         }
-                        openInBrowser(context, "https://github.com/fa0311/vrchat_mobile_client/issues/new/choose");
+                        openInBrowser(context, "https://github.com/fa0311/vrc_manager/issues/new/choose");
                       },
                     );
                   },

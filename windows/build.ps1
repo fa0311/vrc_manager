@@ -1,1 +1,1 @@
-Start-Process "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" "C:\Project\flutter-project\vrchat_mobile_client\windows\setup.iss"
+Start-Process "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" "C:\Project\flutter-project\vrc_manager\windows\setup.iss"

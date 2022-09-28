@@ -12,11 +12,11 @@ import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 // Project imports:
-import 'package:vrchat_mobile_client/api/data_class.dart';
-import 'package:vrchat_mobile_client/api/main.dart';
-import 'package:vrchat_mobile_client/assets/error.dart';
-import 'package:vrchat_mobile_client/assets/storage.dart';
-import 'package:vrchat_mobile_client/scenes/web_view.dart';
+import 'package:vrc_manager/api/data_class.dart';
+import 'package:vrc_manager/api/main.dart';
+import 'package:vrc_manager/assets/error.dart';
+import 'package:vrc_manager/assets/storage.dart';
+import 'package:vrc_manager/scenes/web_view.dart';
 
 IconButton share(BuildContext context, String url) {
   return IconButton(
