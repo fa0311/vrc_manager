@@ -12,17 +12,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 // Project imports:
-import 'package:vrchat_mobile_client/api/data_class.dart';
-import 'package:vrchat_mobile_client/api/main.dart';
-import 'package:vrchat_mobile_client/assets/error.dart';
-import 'package:vrchat_mobile_client/assets/flutter/text_stream.dart';
-import 'package:vrchat_mobile_client/assets/storage.dart';
-import 'package:vrchat_mobile_client/assets/vrchat/region.dart';
-import 'package:vrchat_mobile_client/scenes/json_viewer.dart';
-import 'package:vrchat_mobile_client/widgets/drawer.dart';
-import 'package:vrchat_mobile_client/widgets/region.dart';
-import 'package:vrchat_mobile_client/widgets/share.dart';
-import 'package:vrchat_mobile_client/widgets/world.dart';
+import 'package:vrc_manager/api/data_class.dart';
+import 'package:vrc_manager/api/main.dart';
+import 'package:vrc_manager/assets/error.dart';
+import 'package:vrc_manager/assets/flutter/text_stream.dart';
+import 'package:vrc_manager/assets/storage.dart';
+import 'package:vrc_manager/assets/vrchat/region.dart';
+import 'package:vrc_manager/scenes/json_viewer.dart';
+import 'package:vrc_manager/widgets/drawer.dart';
+import 'package:vrc_manager/widgets/region.dart';
+import 'package:vrc_manager/widgets/share.dart';
+import 'package:vrc_manager/widgets/world.dart';
 
 class VRChatMobileWorld extends StatefulWidget {
   final String worldId;

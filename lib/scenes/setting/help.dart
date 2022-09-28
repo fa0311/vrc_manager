@@ -6,9 +6,9 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 // Project imports:
-import 'package:vrchat_mobile_client/assets/flutter/text_stream.dart';
-import 'package:vrchat_mobile_client/assets/licence.dart';
-import 'package:vrchat_mobile_client/widgets/share.dart';
+import 'package:vrc_manager/assets/flutter/text_stream.dart';
+import 'package:vrc_manager/assets/licence.dart';
+import 'package:vrc_manager/widgets/share.dart';
 
 class VRChatMobileHelp extends StatefulWidget {
   const VRChatMobileHelp({Key? key}) : super(key: key);
@@ -44,12 +44,12 @@ class _HelpPageState extends State<VRChatMobileHelp> {
                   ListTile(
                       title: Text(AppLocalizations.of(context)!.contribution),
                       subtitle: Text(AppLocalizations.of(context)!.contributionDetails),
-                      onTap: () => openInBrowser(context, "https://github.com/fa0311/vrchat_mobile_client")),
+                      onTap: () => openInBrowser(context, "https://github.com/fa0311/vrc_manager")),
                   const Divider(),
                   ListTile(
                       title: Text(AppLocalizations.of(context)!.report),
                       subtitle: Text(AppLocalizations.of(context)!.reportDetails),
-                      onTap: () => openInBrowser(context, "https://github.com/fa0311/vrchat_mobile_client/issues/new/choose")),
+                      onTap: () => openInBrowser(context, "https://github.com/fa0311/vrc_manager/issues/new/choose")),
                   const Divider(),
                   ListTile(
                     title: Text(AppLocalizations.of(context)!.developerInfo),
@@ -60,14 +60,14 @@ class _HelpPageState extends State<VRChatMobileHelp> {
                   ListTile(
                     title: Text(AppLocalizations.of(context)!.rateTheApp),
                     subtitle: Text(AppLocalizations.of(context)!.rateTheAppDetails),
-                    onTap: () => openInBrowser(context, "https://play.google.com/store/apps/details?id=com.yuki0311.vrchat_mobile_client"),
+                    onTap: () => openInBrowser(context, "https://play.google.com/store/apps/details?id=com.yuki0311.vrc_manager"),
                   ),
                   const Divider(),
                   ListTile(
                     title: Text(AppLocalizations.of(context)!.version),
                     subtitle: Text(AppLocalizations.of(context)!.versionDetails(version)),
                     onTap: () => PackageInfo.fromPlatform().then((PackageInfo packageInfo) {
-                      openInBrowser(context, "https://github.com/fa0311/vrchat_mobile_client/releases");
+                      openInBrowser(context, "https://github.com/fa0311/vrc_manager/releases");
                     }),
                   ),
                   const Divider(),

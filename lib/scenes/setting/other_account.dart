@@ -5,11 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 // Project imports:
-import 'package:vrchat_mobile_client/assets/dialog.dart';
-import 'package:vrchat_mobile_client/assets/flutter/text_stream.dart';
-import 'package:vrchat_mobile_client/assets/storage.dart';
-import 'package:vrchat_mobile_client/scenes/home.dart';
-import 'package:vrchat_mobile_client/widgets/drawer.dart';
+import 'package:vrc_manager/assets/dialog.dart';
+import 'package:vrc_manager/assets/flutter/text_stream.dart';
+import 'package:vrc_manager/assets/storage.dart';
+import 'package:vrc_manager/scenes/home.dart';
+import 'package:vrc_manager/widgets/drawer.dart';
 
 class VRChatMobileSettingsOtherAccount extends StatefulWidget {
   final bool drawer;

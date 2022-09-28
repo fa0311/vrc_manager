@@ -9,13 +9,13 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 // Project imports:
-import 'package:vrchat_mobile_client/api/data_class.dart';
-import 'package:vrchat_mobile_client/api/main.dart';
-import 'package:vrchat_mobile_client/assets/error.dart';
-import 'package:vrchat_mobile_client/assets/storage.dart';
-import 'package:vrchat_mobile_client/scenes/user.dart';
-import 'package:vrchat_mobile_client/widgets/status.dart';
-import 'package:vrchat_mobile_client/widgets/world.dart';
+import 'package:vrc_manager/api/data_class.dart';
+import 'package:vrc_manager/api/main.dart';
+import 'package:vrc_manager/assets/error.dart';
+import 'package:vrc_manager/assets/storage.dart';
+import 'package:vrc_manager/scenes/user.dart';
+import 'package:vrc_manager/widgets/status.dart';
+import 'package:vrc_manager/widgets/world.dart';
 
 class LocationDataClass {
   int id;

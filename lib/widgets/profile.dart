@@ -12,15 +12,15 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 // Project imports:
-import 'package:vrchat_mobile_client/api/data_class.dart';
-import 'package:vrchat_mobile_client/api/main.dart';
-import 'package:vrchat_mobile_client/assets/date.dart';
-import 'package:vrchat_mobile_client/assets/dialog.dart';
-import 'package:vrchat_mobile_client/assets/error.dart';
-import 'package:vrchat_mobile_client/assets/storage.dart';
-import 'package:vrchat_mobile_client/assets/vrchat/icon.dart';
-import 'package:vrchat_mobile_client/widgets/share.dart';
-import 'package:vrchat_mobile_client/widgets/status.dart';
+import 'package:vrc_manager/api/data_class.dart';
+import 'package:vrc_manager/api/main.dart';
+import 'package:vrc_manager/assets/date.dart';
+import 'package:vrc_manager/assets/dialog.dart';
+import 'package:vrc_manager/assets/error.dart';
+import 'package:vrc_manager/assets/storage.dart';
+import 'package:vrc_manager/assets/vrchat/icon.dart';
+import 'package:vrc_manager/widgets/share.dart';
+import 'package:vrc_manager/widgets/status.dart';
 
 Column profile(BuildContext context, VRChatUser user) {
   List<InlineSpan> lineList = [];

@@ -1,4 +1,4 @@
-package com.example.vrchat_mobile_client
+package com.example.vrc_manager
 
 import io.flutter.embedding.android.FlutterActivity
 

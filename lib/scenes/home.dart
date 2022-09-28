@@ -9,18 +9,18 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 
 // Project imports:
-import 'package:vrchat_mobile_client/api/data_class.dart';
-import 'package:vrchat_mobile_client/api/main.dart';
-import 'package:vrchat_mobile_client/assets/error.dart';
-import 'package:vrchat_mobile_client/assets/flutter/text_stream.dart';
-import 'package:vrchat_mobile_client/assets/flutter/url_parser.dart';
-import 'package:vrchat_mobile_client/assets/storage.dart';
-import 'package:vrchat_mobile_client/scenes/json_viewer.dart';
-import 'package:vrchat_mobile_client/scenes/login.dart';
-import 'package:vrchat_mobile_client/widgets/drawer.dart';
-import 'package:vrchat_mobile_client/widgets/profile.dart';
-import 'package:vrchat_mobile_client/widgets/share.dart';
-import 'package:vrchat_mobile_client/widgets/world.dart';
+import 'package:vrc_manager/api/data_class.dart';
+import 'package:vrc_manager/api/main.dart';
+import 'package:vrc_manager/assets/error.dart';
+import 'package:vrc_manager/assets/flutter/text_stream.dart';
+import 'package:vrc_manager/assets/flutter/url_parser.dart';
+import 'package:vrc_manager/assets/storage.dart';
+import 'package:vrc_manager/scenes/json_viewer.dart';
+import 'package:vrc_manager/scenes/login.dart';
+import 'package:vrc_manager/widgets/drawer.dart';
+import 'package:vrc_manager/widgets/profile.dart';
+import 'package:vrc_manager/widgets/share.dart';
+import 'package:vrc_manager/widgets/world.dart';
 
 class VRChatMobileHome extends StatefulWidget {
   final bool init;

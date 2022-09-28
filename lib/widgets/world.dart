@@ -10,14 +10,14 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 // Project imports:
-import 'package:vrchat_mobile_client/api/data_class.dart';
-import 'package:vrchat_mobile_client/api/main.dart';
-import 'package:vrchat_mobile_client/assets/date.dart';
-import 'package:vrchat_mobile_client/assets/error.dart';
-import 'package:vrchat_mobile_client/assets/storage.dart';
-import 'package:vrchat_mobile_client/assets/vrchat/instance_type.dart';
-import 'package:vrchat_mobile_client/scenes/world.dart';
-import 'package:vrchat_mobile_client/widgets/region.dart';
+import 'package:vrc_manager/api/data_class.dart';
+import 'package:vrc_manager/api/main.dart';
+import 'package:vrc_manager/assets/date.dart';
+import 'package:vrc_manager/assets/error.dart';
+import 'package:vrc_manager/assets/storage.dart';
+import 'package:vrc_manager/assets/vrchat/instance_type.dart';
+import 'package:vrc_manager/scenes/world.dart';
+import 'package:vrc_manager/widgets/region.dart';
 
 Card simpleWorld(BuildContext context, VRChatLimitedWorld world) {
   return Card(

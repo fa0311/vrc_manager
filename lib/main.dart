@@ -2,9 +2,9 @@
 import 'package:flutter/material.dart';
 
 // Project imports:
-import 'package:vrchat_mobile_client/assets/storage.dart';
-import 'package:vrchat_mobile_client/material.dart';
-import 'package:vrchat_mobile_client/scenes/home.dart';
+import 'package:vrc_manager/assets/storage.dart';
+import 'package:vrc_manager/material.dart';
+import 'package:vrc_manager/scenes/home.dart';
 
 main() {
   runApp(const VRChatMobile());

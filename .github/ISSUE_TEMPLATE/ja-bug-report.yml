@@ -1,5 +1,5 @@
 name: "[ja] 🐛 バグを報告する"
-description: vrchat_mobile_clientの不具合を報告する。
+description: vrc_managerの不具合を報告する。
 labels: ["bug"]
 body:
 
