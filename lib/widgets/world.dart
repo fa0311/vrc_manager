@@ -194,6 +194,15 @@ void selfInvite(BuildContext context, AppConfig appConfig, VRChatInstance instan
 
 Widget favoriteAction(BuildContext context, AppConfig appConfig, String wid) {
   late VRChatAPI vrhatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
+  FavoriteWorld? favoritedWorld = () {
+    for (FavoriteWorld favoriteWorld in appConfig.loggedAccount?.favoriteWorld ?? []) {
+      for (VRChatFavoriteWorld world in favoriteWorld.list) {
+        if (world.id == wid) {
+          return favoriteWorld;
+        }
+      }
+    }
+  }();
   return IconButton(
     icon: const Icon(Icons.favorite),
     onPressed: () => showModalBottomSheet(
@@ -207,13 +216,15 @@ Widget favoriteAction(BuildContext context, AppConfig appConfig, String wid) {
             for (FavoriteWorld favoriteWorld in appConfig.loggedAccount?.favoriteWorld ?? [])
               ListTile(
                 title: Text(favoriteWorld.group.displayName),
-//                 trailing: config.displayMode == e.key ? const Icon(Icons.check) : null,
-                onTap: () => {
-                  vrhatLoginSession.addFavorites("world", wid, favoriteWorld.group.name).then((response) {
-                    Navigator.pop(context);
-                  }).catchError((status) {
-                    apiError(context, appConfig, status);
-                  }),
+                trailing: favoritedWorld == favoriteWorld ? const Icon(Icons.check) : null,
+                onTap: () {
+                  if (favoritedWorld == null) {
+                    vrhatLoginSession.addFavorites("world", wid, favoriteWorld.group.name).then((response) {
+                      Navigator.pop(context);
+                    }).catchError((status) {
+                      apiError(context, appConfig, status);
+                    });
+                  }
                 },
               ),
           ],
