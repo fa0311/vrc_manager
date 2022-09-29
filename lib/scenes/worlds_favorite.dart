@@ -180,7 +180,7 @@ class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
     }
     if (config.descending != sortedDescendCache) {
       for (FavoriteWorld favoriteWorld in widget.appConfig.loggedAccount?.favoriteWorld ?? []) {
-        favoriteWorld.list = favoriteWorld.list.reversed.toList();
+        favoriteWorld.list.reversed.toList();
         sortedDescendCache = config.descending;
       }
     }

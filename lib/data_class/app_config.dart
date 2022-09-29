@@ -7,9 +7,11 @@ import 'package:vrchat_mobile_client/assets/error.dart';
 import 'package:vrchat_mobile_client/assets/storage.dart';
 
 class AppConfig {
-  AccountConfig? loggedAccount;
+  AccountConfig? _loggedAccount;
   List<AccountConfig> accountList = [];
   GridConfigList gridConfigList = GridConfigList();
+
+  AccountConfig? get loggedAccount => _loggedAccount;
 
   Future get(BuildContext context) async {
     List<Future> futureList = [];
@@ -31,12 +33,12 @@ class AppConfig {
       futureList.add(getLoginSession("remember_login_info", uid).then((value) => accountConfig.rememberLoginInfo = (value == "true")));
       accountList.add(accountConfig);
       if (uid == accountUid) {
-        loggedAccount = accountConfig;
+        _loggedAccount = accountConfig;
       }
     }
     await Future.wait(futureList).then((value) {
       futureList = [];
-      futureList.add(loggedAccount!.getFavoriteWorldGroups(context, this));
+      futureList.add(_loggedAccount!.getFavoriteWorldGroups(context, this));
     });
     return Future.wait(futureList);
   }
@@ -53,24 +55,24 @@ class AppConfig {
 
     futureList.add(setStorageList("account_index_list", getAccountList()));
 
-    if (loggedAccount == account) {
+    if (_loggedAccount == account) {
       if (accountList.isEmpty) {
         futureList.add(logout());
       } else {
-        loggedAccount = accountList.first;
+        _loggedAccount = accountList.first;
       }
     }
     return Future.wait(futureList);
   }
 
   Future<bool> logout() async {
-    loggedAccount = null;
+    _loggedAccount = null;
     return await removeStorage("account_index");
   }
 
   Future login(BuildContext context, AccountConfig accountConfig) {
     List<Future> futureList = [];
-    loggedAccount = accountConfig;
+    _loggedAccount = accountConfig;
     accountConfig.favoriteWorld = [];
     futureList.add(accountConfig.getFavoriteWorldGroups(context, this));
     futureList.add(setStorage("account_index", accountConfig.uid));
@@ -78,7 +80,7 @@ class AppConfig {
   }
 
   bool isLogined() {
-    return loggedAccount != null;
+    return _loggedAccount != null;
   }
 
   List<String> getAccountList() {
@@ -194,10 +196,13 @@ class AccountConfig {
 }
 
 class FavoriteWorld {
-  VRChatFavoriteGroup group;
-  List<VRChatFavoriteWorld> list = [];
+  final VRChatFavoriteGroup _group;
+  final List<VRChatFavoriteWorld> _list = [];
 
-  FavoriteWorld(this.group);
+  VRChatFavoriteGroup get group => _group;
+  List<VRChatFavoriteWorld> get list => _list;
+
+  FavoriteWorld(this._group);
 }
 
 class GridConfigList {
