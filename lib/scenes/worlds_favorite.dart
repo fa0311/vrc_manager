@@ -173,13 +173,13 @@ class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
     textStream(context, widget.appConfig);
 
     if (config.sort != sortedModeCache) {
-      for (FavoriteWorld favoriteWorld in widget.appConfig.loggedAccount?.favoriteWorld ?? []) {
+      for (FavoriteWorldData favoriteWorld in widget.appConfig.loggedAccount?.favoriteWorld ?? []) {
         sortFavoriteWorlds(config, favoriteWorld.list);
       }
       sortedModeCache = config.sort;
     }
     if (config.descending != sortedDescendCache) {
-      for (FavoriteWorld favoriteWorld in widget.appConfig.loggedAccount?.favoriteWorld ?? []) {
+      for (FavoriteWorldData favoriteWorld in widget.appConfig.loggedAccount?.favoriteWorld ?? []) {
         favoriteWorld.list.reversed.toList();
         sortedDescendCache = config.descending;
       }
@@ -201,7 +201,7 @@ class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
           width: MediaQuery.of(context).size.width,
           child: SingleChildScrollView(
             child: Column(children: [
-              for (FavoriteWorld favoriteWorld in widget.appConfig.loggedAccount?.favoriteWorld ?? []) ...[
+              for (FavoriteWorldData favoriteWorld in widget.appConfig.loggedAccount?.favoriteWorld ?? []) ...[
                 Text(favoriteWorld.group.displayName),
                 if (config.displayMode == "normal") extractionDefault(favoriteWorld.list),
                 if (config.displayMode == "simple") extractionSimple(favoriteWorld.list),

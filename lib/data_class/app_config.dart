@@ -113,7 +113,7 @@ class AccountConfig {
   String? password;
   String? displayname;
   bool rememberLoginInfo = false;
-  List<FavoriteWorld> favoriteWorld = [];
+  List<FavoriteWorldData> favoriteWorld = [];
   AccountConfig(this.uid);
 
   Future setCookie(String value) async {
@@ -166,7 +166,7 @@ class AccountConfig {
         apiError(context, appConfig, status);
       });
       for (VRChatFavoriteGroup group in favoriteGroupList.group) {
-        FavoriteWorld favorite = FavoriteWorld(group);
+        FavoriteWorldData favorite = FavoriteWorldData(group);
         /*
          * To be fixed in the next stable version.
          * if(context.mounted)
@@ -179,7 +179,7 @@ class AccountConfig {
     } while (len == 50);
   }
 
-  Future getFavoriteWorld(BuildContext context, AppConfig appConfig, FavoriteWorld favoriteWorld) async {
+  Future getFavoriteWorld(BuildContext context, AppConfig appConfig, FavoriteWorldData favoriteWorld) async {
     late VRChatAPI vrhatLoginSession = VRChatAPI(cookie: cookie);
     int len;
     do {
@@ -195,14 +195,14 @@ class AccountConfig {
   }
 }
 
-class FavoriteWorld {
+class FavoriteWorldData {
   final VRChatFavoriteGroup _group;
   final List<VRChatFavoriteWorld> _list = [];
 
   VRChatFavoriteGroup get group => _group;
   List<VRChatFavoriteWorld> get list => _list;
 
-  FavoriteWorld(this._group);
+  FavoriteWorldData(this._group);
 }
 
 class GridConfigList {

@@ -6,6 +6,7 @@
 import 'dart:math';
 
 // Flutter imports:
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 // Package imports:
@@ -14,6 +15,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 // Project imports:
 import 'package:vrchat_mobile_client/api/data_class.dart';
 import 'package:vrchat_mobile_client/api/main.dart';
+import 'package:vrchat_mobile_client/assets/date.dart';
 import 'package:vrchat_mobile_client/assets/error.dart';
 import 'package:vrchat_mobile_client/assets/flutter/text_stream.dart';
 import 'package:vrchat_mobile_client/assets/vrchat/region.dart';
@@ -23,7 +25,6 @@ import 'package:vrchat_mobile_client/scenes/json_viewer.dart';
 import 'package:vrchat_mobile_client/widgets/drawer.dart';
 import 'package:vrchat_mobile_client/widgets/region.dart';
 import 'package:vrchat_mobile_client/widgets/share.dart';
-import 'package:vrchat_mobile_client/widgets/legacy_world.dart';
 import 'package:vrchat_mobile_client/widgets/world.dart';
 
 class VRChatMobileWorld extends StatefulWidget {
@@ -37,11 +38,7 @@ class VRChatMobileWorld extends StatefulWidget {
 
 class _WorldState extends State<VRChatMobileWorld> {
   late VRChatAPI vrhatLoginSession = VRChatAPI(cookie: widget.appConfig.loggedAccount?.cookie ?? "");
-  late Column column = Column(
-    children: const [
-      Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()),
-    ],
-  );
+  VRChatWorld? world;
 
   String genRandHex([int length = 32]) {
     const charset = '0123456789ABCDEF';
@@ -159,44 +156,11 @@ class _WorldState extends State<VRChatMobileWorld> {
   @override
   initState() {
     super.initState();
-    vrhatLoginSession.worlds(widget.worldId).then((VRChatWorld response) {
-      setState(
-        () {
-          column = Column(children: [
-            world(context, response),
-            SizedBox(
-              height: 30,
-              child: TextButton(
-                style: ElevatedButton.styleFrom(
-                  foregroundColor: Colors.grey,
-                  minimumSize: Size.zero,
-                  padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
-                ),
-                onPressed: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (BuildContext context) => VRChatMobileJsonViewer(widget.appConfig, obj: response.content),
-                  ),
-                ),
-                child: Text(AppLocalizations.of(context)!.viewInJsonViewer),
-              ),
-            ),
-            SizedBox(
-              height: 30,
-              child: TextButton(
-                style: ElevatedButton.styleFrom(
-                  foregroundColor: Colors.grey,
-                  minimumSize: Size.zero,
-                  padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
-                ),
-                onPressed: () => launchWorld(),
-                child: Text(AppLocalizations.of(context)!.launchWorld),
-              ),
-            ),
-          ]);
-        },
-      );
-    }).catchError((status) {
+    get().then((value) => setState(() {}));
+  }
+
+  Future get() async {
+    world = await vrhatLoginSession.worlds(widget.worldId).catchError((status) {
       apiError(context, widget.appConfig, status);
     });
   }
@@ -209,7 +173,7 @@ class _WorldState extends State<VRChatMobileWorld> {
     );
     return Scaffold(
       appBar: AppBar(title: Text(AppLocalizations.of(context)!.world), actions: [
-        favoriteAction(context, appConfig, widget.worldId),
+        if (world != null) favoriteAction(context, appConfig, world!),
         share(context, widget.appConfig, "https://vrchat.com/home/world/${widget.worldId}"),
       ]),
       drawer: Navigator.of(context).canPop()
@@ -223,13 +187,105 @@ class _WorldState extends State<VRChatMobileWorld> {
           width: MediaQuery.of(context).size.width,
           child: SingleChildScrollView(
             child: Container(
-                padding: const EdgeInsets.only(
-                  top: 10,
-                  bottom: 0,
-                  right: 30,
-                  left: 30,
-                ),
-                child: column),
+              padding: const EdgeInsets.only(
+                top: 10,
+                bottom: 0,
+                right: 30,
+                left: 30,
+              ),
+              child: Column(
+                children: [
+                  if (world == null) const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()),
+                  if (world != null) ...[
+                    SizedBox(
+                      height: 250,
+                      child: CachedNetworkImage(
+                        imageUrl: world!.imageUrl,
+                        fit: BoxFit.fitWidth,
+                        progressIndicatorBuilder: (context, url, downloadProgress) => const SizedBox(
+                          width: 250.0,
+                          child: Padding(
+                            padding: EdgeInsets.all(30),
+                            child: CircularProgressIndicator(
+                              strokeWidth: 10,
+                            ),
+                          ),
+                        ),
+                        errorWidget: (context, url, error) => const SizedBox(
+                          width: 250.0,
+                          child: Icon(Icons.error),
+                        ),
+                      ),
+                    ),
+                    Text(world!.name,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                        )),
+                    ConstrainedBox(
+                      constraints: const BoxConstraints(maxHeight: 200),
+                      child: SingleChildScrollView(
+                        child: Text(world!.description ?? ""),
+                      ),
+                    ),
+                    Text(
+                      AppLocalizations.of(context)!.occupants(
+                        world!.occupants,
+                      ),
+                    ),
+                    Text(
+                      AppLocalizations.of(context)!.privateOccupants(
+                        world!.privateOccupants,
+                      ),
+                    ),
+                    Text(
+                      AppLocalizations.of(context)!.favorites(
+                        world!.favorites,
+                      ),
+                    ),
+                    Text(
+                      AppLocalizations.of(context)!.createdAt(
+                        generalDateDifference(context, world!.createdAt),
+                      ),
+                    ),
+                    Text(
+                      AppLocalizations.of(context)!.updatedAt(
+                        generalDateDifference(context, world!.updatedAt),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 30,
+                      child: TextButton(
+                        style: ElevatedButton.styleFrom(
+                          foregroundColor: Colors.grey,
+                          minimumSize: Size.zero,
+                          padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
+                        ),
+                        onPressed: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (BuildContext context) => VRChatMobileJsonViewer(widget.appConfig, obj: world!.content),
+                          ),
+                        ),
+                        child: Text(AppLocalizations.of(context)!.viewInJsonViewer),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 30,
+                      child: TextButton(
+                        style: ElevatedButton.styleFrom(
+                          foregroundColor: Colors.grey,
+                          minimumSize: Size.zero,
+                          padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
+                        ),
+                        onPressed: () => launchWorld(),
+                        child: Text(AppLocalizations.of(context)!.launchWorld),
+                      ),
+                    ),
+                  ]
+                ],
+              ),
+            ),
           ),
         ),
       ),

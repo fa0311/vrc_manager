@@ -445,7 +445,7 @@ class VRChatWorld {
   late String id;
   late String imageUrl;
   late List<Map<String, int>> instances = [];
-  late String labsPublicationDate;
+  late DateTime? labsPublicationDate;
   late String name;
   late String namespace;
   late int occupants;
@@ -454,7 +454,7 @@ class VRChatWorld {
   late String? previewYoutubeId;
   late int privateOccupants;
   late int publicOccupants;
-  late String publicationDate;
+  late DateTime? publicationDate;
   late String releaseStatus;
   late List<String> tags;
   late String thumbnailImageUrl;
@@ -476,7 +476,7 @@ class VRChatWorld {
     id = content['id'];
     imageUrl = content['imageUrl'];
     instances = content['instances'].cast<Map<String, int>>();
-    labsPublicationDate = content['labsPublicationDate'];
+    labsPublicationDate = content['labsPublicationDate'] == "none" ? null : DateTime.parse(content['labsPublicationDate']);
     name = content['name'];
     namespace = content['namespace'];
     occupants = content['occupants'];
@@ -484,7 +484,7 @@ class VRChatWorld {
     popularity = content['popularity'];
     previewYoutubeId = content['previewYoutubeId'] == "" ? null : content['previewYoutubeId'];
     privateOccupants = content['privateOccupants'];
-    publicationDate = content['publicationDate'];
+    publicationDate = content['publicationDate'] == "none" ? null : DateTime.parse(content['publicationDate']);
     publicOccupants = content['publicOccupants'];
     releaseStatus = content['releaseStatus'];
     tags = content['tags'].cast<String>();
@@ -668,7 +668,7 @@ class VRChatFavoriteWorld {
   late int occupants;
   late String organization;
   late int popularity;
-  late DateTime publicationDate;
+  late DateTime? publicationDate;
   late String releaseStatus;
   late List<String> tags;
   late String thumbnailImageUrl;
@@ -691,7 +691,7 @@ class VRChatFavoriteWorld {
     occupants = content['occupants'];
     organization = content['organization'];
     popularity = content['popularity'];
-    publicationDate = DateTime.parse(content['publicationDate']);
+    publicationDate = content['publicationDate'] == "none" ? null : DateTime.parse(content['publicationDate']);
     releaseStatus = content['releaseStatus'];
     tags = content['tags'].cast<String>();
     thumbnailImageUrl = content['thumbnailImageUrl'];
@@ -701,6 +701,33 @@ class VRChatFavoriteWorld {
     updatedAt = DateTime.parse(content['updated_at']);
     favoriteId = content['favoriteId'];
     favoriteGroup = content['favoriteGroup'];
+  }
+
+  VRChatFavoriteWorld.fromFavorite(VRChatWorld world, VRChatFavorite favorite, String favoriteGroup) {
+    if (world.id != favorite.favoriteId) throw ArgumentError();
+    authorId = world.authorId;
+    authorName = world.authorName;
+    capacity = world.capacity;
+    createdAt = world.createdAt;
+    favorites = world.favorites;
+    heat = world.heat;
+    id = world.id;
+    imageUrl = world.imageUrl;
+    labsPublicationDate = world.labsPublicationDate;
+    name = world.name;
+    occupants = world.occupants;
+    organization = world.organization;
+    popularity = world.popularity;
+    publicationDate = world.publicationDate!;
+    releaseStatus = world.releaseStatus;
+    tags = world.tags;
+    thumbnailImageUrl = world.thumbnailImageUrl;
+    for (UnityPackages unityPackage in world.unityPackages) {
+      unityPackages.add(LimitedUnityPackages.fromUnityPackages(unityPackage));
+    }
+    updatedAt = world.updatedAt;
+    favoriteId = favorite.id;
+    favoriteGroup = favoriteGroup;
   }
 }
 
@@ -868,5 +895,10 @@ class LimitedUnityPackages {
   LimitedUnityPackages.fromJson(this.content) {
     unityVersion = content['unityVersion'];
     platform = content['platform'];
+  }
+
+  LimitedUnityPackages.fromUnityPackages(UnityPackages unityPackages) {
+    unityVersion = unityPackages.unityVersion;
+    platform = unityPackages.platform;
   }
 }

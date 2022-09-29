@@ -192,13 +192,17 @@ void selfInvite(BuildContext context, AppConfig appConfig, VRChatInstance instan
   });
 }
 
-Widget favoriteAction(BuildContext context, AppConfig appConfig, String wid) {
+Widget favoriteAction(BuildContext context, AppConfig appConfig, VRChatWorld world) {
   late VRChatAPI vrhatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
-  FavoriteWorld? favoritedWorld = () {
-    for (FavoriteWorld favoriteWorld in appConfig.loggedAccount?.favoriteWorld ?? []) {
-      for (VRChatFavoriteWorld world in favoriteWorld.list) {
-        if (world.id == wid) {
-          return favoriteWorld;
+  VRChatFavoriteWorld? favoritedWorld;
+  FavoriteWorldData? favoritedWorldData;
+
+  () {
+    for (FavoriteWorldData favoriteWorldData in appConfig.loggedAccount?.favoriteWorld ?? []) {
+      for (VRChatFavoriteWorld favoriteWorld in favoriteWorldData.list) {
+        if (world.id == favoriteWorld.id) {
+          favoritedWorld = favoriteWorld;
+          return favoritedWorldData = favoriteWorldData;
         }
       }
     }
@@ -210,24 +214,38 @@ Widget favoriteAction(BuildContext context, AppConfig appConfig, String wid) {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
       ),
-      builder: (BuildContext context) => SingleChildScrollView(
-        child: Column(
-          children: [
-            for (FavoriteWorld favoriteWorld in appConfig.loggedAccount?.favoriteWorld ?? [])
-              ListTile(
-                title: Text(favoriteWorld.group.displayName),
-                trailing: favoritedWorld == favoriteWorld ? const Icon(Icons.check) : null,
-                onTap: () {
-                  if (favoritedWorld == null) {
-                    vrhatLoginSession.addFavorites("world", wid, favoriteWorld.group.name).then((response) {
-                      Navigator.pop(context);
-                    }).catchError((status) {
-                      apiError(context, appConfig, status);
-                    });
-                  }
-                },
-              ),
-          ],
+      builder: (BuildContext context) => StatefulBuilder(
+        builder: (BuildContext context, Function setStateBuilder) => SingleChildScrollView(
+          child: Column(
+            children: [
+              for (FavoriteWorldData favoriteWorldData in appConfig.loggedAccount?.favoriteWorld ?? [])
+                ListTile(
+                  title: Text(favoriteWorldData.group.displayName),
+                  trailing: favoritedWorldData == favoriteWorldData ? const Icon(Icons.check) : null,
+                  onTap: () async {
+                    if (favoritedWorldData == favoriteWorldData || favoritedWorld != null) {
+                      await vrhatLoginSession.deleteFavorites(favoritedWorld!.favoriteId).catchError((status) {
+                        apiError(context, appConfig, status);
+                      });
+                      favoritedWorldData!.list.remove(favoritedWorld!);
+                    }
+                    if (favoritedWorldData != favoriteWorldData) {
+                      await vrhatLoginSession.addFavorites("world", world.id, favoriteWorldData.group.name).then((VRChatFavorite favoriteWorld) {
+                        favoriteWorldData.list.add(VRChatFavoriteWorld.fromFavorite(world, favoriteWorld, favoriteWorldData.group.name));
+                      }).catchError((status) {
+                        apiError(context, appConfig, status);
+                      });
+                    }
+                    /*
+                    * To be fixed in the next stable version.
+                    * if(context.mounted)
+                    */
+                    // ignore: use_build_context_synchronously
+                    Navigator.pop(context);
+                  },
+                ),
+            ],
+          ),
         ),
       ),
     ),
