@@ -75,8 +75,8 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
                 if (!config.worldDetails) return null;
                 if (user.location == "private") return privateWorld(context, appConfig, card: false);
                 if (user.location == "traveling") return privateWorld(context, appConfig, card: false);
-                if (user.location == "offline") return Text(AppLocalizations.of(context)!.onTheWebsite);
-                if (locationMap[worldId] != null) return null;
+                if (user.location == "offline") return onTheWebsite(context);
+                if (locationMap[worldId] == null) return null;
                 return instanceWidget(context, appConfig, locationMap[worldId]!, instanceMap[user.location]!, card: false);
               }(),
               children: [
@@ -120,7 +120,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
                 if (!config.worldDetails) return null;
                 if (user.location == "private") return privateWorld(context, appConfig, card: false, half: true);
                 if (user.location == "traveling") return privateWorld(context, appConfig, card: false, half: true);
-                if (user.location == "offline") return Text(AppLocalizations.of(context)!.onTheWebsite, style: const TextStyle(fontSize: 10));
+                if (user.location == "offline") return onTheWebsite(context, half: true);
                 if (locationMap[worldId] == null) return null;
                 return instanceWidget(context, appConfig, locationMap[worldId]!, instanceMap[user.location]!, card: false, half: true);
               }(),

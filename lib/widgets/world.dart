@@ -61,16 +61,19 @@ Widget instanceWidget(
           ),
         )
       ]),
-      SizedBox(
-        width: double.infinity,
-        child: Text(
-          world.name,
-          overflow: TextOverflow.ellipsis,
-          maxLines: 2,
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: half ? 10 : 15,
-            height: 1,
+      Padding(
+        padding: const EdgeInsets.symmetric(vertical: 2),
+        child: SizedBox(
+          width: double.infinity,
+          child: Text(
+            world.name,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 2,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: half ? 10 : 15,
+              height: 1,
+            ),
           ),
         ),
       ),
@@ -97,13 +100,16 @@ Widget privateWorld(
               fontSize: half ? 10 : 15,
             )),
       ),
-      SizedBox(
-        width: double.infinity,
-        child: Text(
-          AppLocalizations.of(context)!.privateWorld,
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: half ? 10 : 15,
+      Padding(
+        padding: const EdgeInsets.symmetric(vertical: 2),
+        child: SizedBox(
+          width: double.infinity,
+          child: Text(
+            AppLocalizations.of(context)!.privateWorld,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: half ? 10 : 15,
+            ),
           ),
         ),
       ),
@@ -131,18 +137,32 @@ Widget travelingWorld(
               fontSize: half ? 10 : 15,
             )),
       ),
-      SizedBox(
-        width: double.infinity,
-        child: Text(
-          AppLocalizations.of(context)!.privateWorld,
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: half ? 10 : 15,
+      Padding(
+        padding: const EdgeInsets.symmetric(vertical: 2),
+        child: SizedBox(
+          width: double.infinity,
+          child: Text(
+            AppLocalizations.of(context)!.privateWorld,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: half ? 10 : 15,
+            ),
           ),
         ),
       ),
     ],
     imageUrl: "https://assets.vrchat.com/www/images/normalbetween_image.png",
+  );
+}
+
+Widget onTheWebsite(
+  BuildContext context, {
+  bool half = false,
+}) {
+  return Container(
+    alignment: Alignment.center,
+    height: half ? 50 : 100,
+    child: Text(AppLocalizations.of(context)!.onTheWebsite, style: TextStyle(fontSize: half ? 10 : 15)),
   );
 }
 
