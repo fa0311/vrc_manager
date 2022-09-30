@@ -15,8 +15,7 @@ import 'package:vrchat_mobile_client/scenes/home.dart';
 import 'package:vrchat_mobile_client/scenes/login.dart';
 
 class VRChatMobileSplash extends StatefulWidget {
-  final bool init;
-  const VRChatMobileSplash({Key? key, this.init = false}) : super(key: key);
+  const VRChatMobileSplash({Key? key}) : super(key: key);
   @override
   State<VRChatMobileSplash> createState() => _SplashState();
 }
@@ -51,7 +50,7 @@ class _SplashState extends State<VRChatMobileSplash> {
     super.initState();
 
     appConfig.get(context).then((_) async {
-      if (widget.init && (Platform.isAndroid || Platform.isIOS)) {
+      if (Platform.isAndroid || Platform.isIOS) {
         ReceiveSharingIntent.getInitialText().then((String? initialText) {
           if (initialText != null) {
             urlParser(context, appConfig, initialText);

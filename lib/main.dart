@@ -31,7 +31,7 @@ class _PageState extends State<VRChatMobile> {
   @override
   Widget build(BuildContext context) {
     return getMaterialApp(
-      const VRChatMobileSplash(init: true),
+      const VRChatMobileSplash(),
       theme,
       Locale(locale, ''),
     );

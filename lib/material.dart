@@ -6,7 +6,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 MaterialApp getMaterialApp(home, String theme, Locale locale) {
-  Map themeMap = {
+  Map<String, ThemeData> themeMap = {
     "dark": ThemeData(
       brightness: Brightness.dark,
       textTheme: const TextTheme(
