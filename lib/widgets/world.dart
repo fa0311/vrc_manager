@@ -20,7 +20,7 @@ Widget instanceWidget(
   AppConfig appConfig,
   VRChatWorld world,
   VRChatInstance instance, {
-  bool card = false,
+  bool card = true,
   bool half = false,
 }) {
   return genericTemplate(

@@ -75,12 +75,9 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
                 if (!config.worldDetails) return null;
                 if (user.location == "private") return privateWorld(context, appConfig, card: false);
                 if (user.location == "traveling") return privateWorld(context, appConfig, card: false);
-                if (user.location == "offline") null;
-                if (locationMap[worldId] != null) {
-                  return instanceWidget(context, appConfig, locationMap[worldId]!, instanceMap[user.location]!, card: false);
-                } else {
-                  return null;
-                }
+                if (user.location == "offline") return Text(AppLocalizations.of(context)!.onTheWebsite);
+                if (locationMap[worldId] != null) return null;
+                return instanceWidget(context, appConfig, locationMap[worldId]!, instanceMap[user.location]!, card: false);
               }(),
               children: [
                 username(user),
@@ -123,12 +120,9 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
                 if (!config.worldDetails) return null;
                 if (user.location == "private") return privateWorld(context, appConfig, card: false, half: true);
                 if (user.location == "traveling") return privateWorld(context, appConfig, card: false, half: true);
-                if (user.location == "offline") null;
-                if (locationMap[worldId] != null) {
-                  return instanceWidget(context, appConfig, locationMap[worldId]!, instanceMap[user.location]!, card: false, half: true);
-                } else {
-                  return null;
-                }
+                if (user.location == "offline") return Text(AppLocalizations.of(context)!.onTheWebsite, style: const TextStyle(fontSize: 10));
+                if (locationMap[worldId] == null) return null;
+                return instanceWidget(context, appConfig, locationMap[worldId]!, instanceMap[user.location]!, card: false, half: true);
               }(),
               children: [
                 username(user, diameter: 12),
@@ -174,9 +168,9 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
                   Text(() {
                     if (user.location == "private") return AppLocalizations.of(context)!.privateWorld;
                     if (user.location == "traveling") return AppLocalizations.of(context)!.traveling;
-                    if (user.location == "offline") null;
-                    if (locationMap[worldId] != null) return locationMap[worldId]!.name;
-                    return "";
+                    if (user.location == "offline") return AppLocalizations.of(context)!.onTheWebsite;
+                    if (locationMap[worldId] == null) return "";
+                    return locationMap[worldId]!.name;
                   }(), style: const TextStyle(fontSize: 12, height: 1)),
               ],
             );

@@ -12,11 +12,12 @@ import 'package:vrchat_mobile_client/api/main.dart';
 import 'package:vrchat_mobile_client/assets/error.dart';
 import 'package:vrchat_mobile_client/assets/flutter/text_stream.dart';
 import 'package:vrchat_mobile_client/data_class/app_config.dart';
+import 'package:vrchat_mobile_client/main.dart';
 import 'package:vrchat_mobile_client/scenes/json_viewer.dart';
 import 'package:vrchat_mobile_client/widgets/drawer.dart';
 import 'package:vrchat_mobile_client/widgets/profile.dart';
 import 'package:vrchat_mobile_client/widgets/share.dart';
-import 'package:vrchat_mobile_client/widgets/legacy_world.dart';
+import 'package:vrchat_mobile_client/widgets/world.dart';
 
 class VRChatMobileUser extends StatefulWidget {
   final String userId;
@@ -30,176 +31,143 @@ class VRChatMobileUser extends StatefulWidget {
 
 class _UserHomeState extends State<VRChatMobileUser> {
   late VRChatAPI vrhatLoginSession = VRChatAPI(cookie: widget.appConfig.loggedAccount?.cookie ?? "");
-  late Column column = Column(
-    children: const [
-      Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()),
-    ],
-  );
-  late List<Widget> popupMenu = [share(context, widget.appConfig, "https://vrchat.com/home/user/${widget.userId}")];
+  VRChatUser? user;
+  VRChatfriendStatus? status;
+  VRChatWorld? world;
+  VRChatInstance? instance;
 
   TextEditingController noteController = TextEditingController();
 
   @override
   initState() {
     super.initState();
-    vrhatLoginSession.users(widget.userId).then((VRChatUser user) {
-      setState(
-        () {
-          noteController.text = user.note ?? "";
-          column = Column(
-            children: <Widget>[
-              profile(context, widget.appConfig, user),
-              Column(),
-              SizedBox(
-                height: 30,
-                child: TextButton(
-                  style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.grey,
-                    minimumSize: Size.zero,
-                    padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
-                  ),
-                  onPressed: () => showDialog(
-                    context: context,
-                    builder: (_) {
-                      return AlertDialog(
-                        content: TextField(
-                          controller: noteController,
-                          decoration: InputDecoration(labelText: AppLocalizations.of(context)!.editNote),
-                        ),
-                        actions: <Widget>[
-                          TextButton(
-                            child: Text(AppLocalizations.of(context)!.close),
-                            onPressed: () => Navigator.pop(context),
-                          ),
-                          TextButton(
-                              child: Text(AppLocalizations.of(context)!.ok),
-                              onPressed: () => vrhatLoginSession.userNotes(user.id, noteController.text).then((VRChatUserNotes response) {
-                                    Navigator.pop(context);
-                                    initState();
-                                  }).catchError((status) {
-                                    apiError(context, widget.appConfig, status);
-                                  })),
-                        ],
-                      );
-                    },
-                  ),
-                  child: Text(AppLocalizations.of(context)!.editNote),
-                ),
-              ),
-              SizedBox(
-                height: 30,
-                child: TextButton(
-                  style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.grey,
-                    minimumSize: Size.zero,
-                    padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
-                  ),
-                  onPressed: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (BuildContext context) => VRChatMobileJsonViewer(widget.appConfig, obj: user.content),
-                    ),
-                  ),
-                  child: Text(AppLocalizations.of(context)!.viewInJsonViewer),
-                ),
-              ),
-            ],
-          );
-        },
-      );
-      vrhatLoginSession.friendStatus(widget.userId).then((VRChatfriendStatus status) {
-        setState(
-          () {
-            popupMenu = <Widget>[
-              profileAction(context, widget.appConfig, status, widget.userId, initState),
-              share(context, widget.appConfig, "https://vrchat.com/home/user/${widget.userId}")
-            ];
-          },
-        );
-      }).catchError((status) {
-        apiError(context, widget.appConfig, status);
-      });
+    get();
+  }
 
-      if (!["private", "offline", "traveling"].contains(user.location)) {
-        vrhatLoginSession.worlds(user.location.split(":")[0]).then((world) {
-          setState(
-            () {
-              column = Column(children: column.children);
-              column.children[1] = Container(
-                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
-                child: simpleWorld(context, widget.appConfig, world.toLimited()),
-              );
-            },
-          );
-          vrhatLoginSession.instances(user.location).then((instance) {
-            setState(
-              () {
-                column = Column(children: column.children);
+  Future get() async {
+    await getUser().then((value) => setState(() {}));
+    await getWorld().then((value) => setState(() {}));
+  }
 
-                column.children[1] = Container(
-                  padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
-                  child: simpleWorldPlus(context, widget.appConfig, world, instance),
-                );
-              },
-            );
-          }).catchError((status) {
-            apiError(context, widget.appConfig, status);
-          });
-        }).catchError((status) {
-          apiError(context, widget.appConfig, status);
-        });
-      }
-      if (user.location == "private") {
-        setState(
-          () {
-            column = Column(children: column.children);
-            column.children[1] = Column(
-              children: [
-                Container(padding: const EdgeInsets.only(top: 30)),
-                privateSimpleWorld(context),
-              ],
-            );
-          },
-        );
-      }
-      if (user.location == "traveling") {
-        setState(
-          () {
-            column = Column(children: column.children);
-            column.children[1] = Column(
-              children: [
-                Container(
-                  padding: const EdgeInsets.only(top: 30),
-                ),
-                travelingWorld(context),
-              ],
-            );
-          },
-        );
-      }
-    }).catchError((status) {
+  Future getUser() async {
+    user = await vrhatLoginSession.users(widget.userId).catchError((status) {
       apiError(context, widget.appConfig, status);
     });
+    if (user == null) return;
+    noteController.text = user!.note ?? "";
+    status = await vrhatLoginSession.friendStatus(widget.userId).catchError((status) {
+      apiError(context, widget.appConfig, status);
+    });
+  }
+
+  Future getWorld() async {
+    if (!["private", "offline", "traveling"].contains(user!.location)) {
+      world = await vrhatLoginSession.worlds(user!.location.split(":")[0]).catchError((status) {
+        apiError(context, widget.appConfig, status);
+      });
+      instance = await vrhatLoginSession.instances(user!.location).catchError((status) {
+        apiError(context, widget.appConfig, status);
+      });
+    }
+  }
+
+  editNote() {
+    showDialog(
+      context: context,
+      builder: (_) {
+        return AlertDialog(
+          content: TextField(
+            controller: noteController,
+            decoration: InputDecoration(labelText: AppLocalizations.of(context)!.editNote),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text(AppLocalizations.of(context)!.close),
+              onPressed: () => Navigator.pop(context),
+            ),
+            TextButton(
+                child: Text(AppLocalizations.of(context)!.ok),
+                onPressed: () => vrhatLoginSession.userNotes(user!.id, user!.note = noteController.text).then((VRChatUserNotes response) {
+                      Navigator.pop(context);
+                      setState(() => user!.note = user!.note == "" ? null : user!.note);
+                    }).catchError((status) {
+                      apiError(context, widget.appConfig, status);
+                    })),
+          ],
+        );
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     textStream(context, widget.appConfig);
     return Scaffold(
-      appBar: AppBar(title: Text(AppLocalizations.of(context)!.user), actions: popupMenu),
+      appBar: AppBar(title: Text(AppLocalizations.of(context)!.user), actions: <Widget>[
+        if (status != null) profileAction(context, widget.appConfig, status!, widget.userId, initState),
+        share(context, widget.appConfig, "https://vrchat.com/home/user/${widget.userId}")
+      ]),
       drawer: Navigator.of(context).canPop() ? null : drawer(context, widget.appConfig),
       body: SafeArea(
         child: SizedBox(
           width: MediaQuery.of(context).size.width,
           child: SingleChildScrollView(
             child: Container(
-                padding: const EdgeInsets.only(
-                  top: 10,
-                  bottom: 0,
-                  right: 30,
-                  left: 30,
-                ),
-                child: column),
+              padding: const EdgeInsets.only(
+                top: 10,
+                bottom: 0,
+                right: 30,
+                left: 30,
+              ),
+              child: Column(
+                children: <Widget>[
+                  if (user == null)
+                    const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator())
+                  else ...[
+                    profile(context, widget.appConfig, user!),
+                    SizedBox(
+                      height: 30,
+                      child: TextButton(
+                        style: ElevatedButton.styleFrom(
+                          foregroundColor: Colors.grey,
+                          minimumSize: Size.zero,
+                          padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
+                        ),
+                        onPressed: () => editNote(),
+                        child: Text(AppLocalizations.of(context)!.editNote),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 30,
+                      child: TextButton(
+                        style: ElevatedButton.styleFrom(
+                          foregroundColor: Colors.grey,
+                          minimumSize: Size.zero,
+                          padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
+                        ),
+                        onPressed: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (BuildContext context) => VRChatMobileJsonViewer(widget.appConfig, obj: user!.content),
+                          ),
+                        ),
+                        child: Text(AppLocalizations.of(context)!.viewInJsonViewer),
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
+                      child: () {
+                        if (user!.location == "private") return privateWorld(context, appConfig);
+                        if (user!.location == "traveling") return privateWorld(context, appConfig);
+                        if (user!.location == "offline") return null;
+                        if (world == null) return const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator());
+                        return instanceWidget(context, appConfig, world!, instance!);
+                      }(),
+                    ),
+                  ]
+                ],
+              ),
+            ),
           ),
         ),
       ),
