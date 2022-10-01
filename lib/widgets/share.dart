@@ -59,8 +59,8 @@ Widget shereListTileWidget(BuildContext context, String text) {
     leading: const Icon(Icons.share),
     title: Text(AppLocalizations.of(context)!.share),
     onTap: () {
-      Share.share(text);
       Navigator.pop(context);
+      Share.share(text);
     },
   );
 }
@@ -70,15 +70,8 @@ Widget copyListTileWidget(BuildContext context, String text) {
       leading: const Icon(Icons.copy),
       title: Text(AppLocalizations.of(context)!.copy),
       onTap: () {
-        final ClipboardData data = ClipboardData(text: text);
-        Clipboard.setData(data).then(
-          (_) {
-            if (Platform.isAndroid || Platform.isIOS) {
-              Fluttertoast.showToast(msg: AppLocalizations.of(context)!.copied);
-            }
-            Navigator.pop(context);
-          },
-        );
+        Navigator.pop(context);
+        copyToClipboard(context, text);
       });
 }
 
@@ -178,5 +171,18 @@ Future openInBrowser(BuildContext context, AppConfig appConfig, String url) asyn
     if (await canLaunchUrl(Uri.parse(url))) {
       await launchUrl(Uri.parse(url));
     }
+  }
+}
+
+Future copyToClipboard(BuildContext context, String text) async {
+  final ClipboardData data = ClipboardData(text: text);
+  await Clipboard.setData(data);
+  if (Platform.isAndroid || Platform.isIOS) {
+    /*
+    * To be fixed in the next stable version.
+    * if(context.mounted)
+    */
+    // ignore: use_build_context_synchronously
+    Fluttertoast.showToast(msg: AppLocalizations.of(context)!.copied);
   }
 }
