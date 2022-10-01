@@ -5,12 +5,10 @@ import 'dart:io';
 // Flutter imports:
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 // Package imports:
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 // Project imports:
@@ -39,16 +37,14 @@ void errorDialog(BuildContext context, AppConfig appConfig, String text, {String
               if (log.isNotEmpty)
                 TextButton(
                   child: Text(AppLocalizations.of(context)!.report),
-                  onPressed: () {
-                    ClipboardData data = ClipboardData(text: log);
-                    Clipboard.setData(data).then(
-                      (_) {
-                        if (Platform.isAndroid || Platform.isIOS) {
-                          Fluttertoast.showToast(msg: AppLocalizations.of(context)!.copied);
-                        }
-                        openInBrowser(context, appConfig, "https://github.com/fa0311/vrchat_mobile_client/issues/new/choose");
-                      },
-                    );
+                  onPressed: () async {
+                    await copyToClipboard(context, log);
+                    /*
+                    * To be fixed in the next stable version.
+                    * if(context.mounted)
+                    */
+                    // ignore: use_build_context_synchronously
+                    openInBrowser(context, appConfig, "https://github.com/fa0311/vrchat_mobile_client/issues/new/choose");
                   },
                 ),
               TextButton(
