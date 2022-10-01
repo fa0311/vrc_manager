@@ -105,7 +105,10 @@ class _UserHomeState extends State<VRChatMobileUser> {
     return Scaffold(
       appBar: AppBar(title: Text(AppLocalizations.of(context)!.user), actions: <Widget>[
         if (status != null) profileAction(context, widget.appConfig, status!, widget.userId, initState),
-        share(context, widget.appConfig, "https://vrchat.com/home/user/${widget.userId}")
+        IconButton(
+          icon: const Icon(Icons.share),
+          onPressed: () => modalBottom(context, shareUrlListTile(context, widget.appConfig, "https://vrchat.com/home/user/${widget.userId}")),
+        )
       ]),
       drawer: Navigator.of(context).canPop() ? null : drawer(context, widget.appConfig),
       body: SafeArea(

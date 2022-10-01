@@ -146,7 +146,12 @@ class _LoginHomeState extends State<VRChatMobileHome> {
                 ),
               ],
             );
-            popupMenu = [share(context, widget.appConfig, "https://vrchat.com/home/user/${response.id}")];
+            popupMenu = [
+              IconButton(
+                icon: const Icon(Icons.share),
+                onPressed: () => modalBottom(context, shareUrlListTile(context, widget.appConfig, "https://vrchat.com/home/user/${response.id}")),
+              )
+            ];
           },
         );
         if (!["private", "offline", "traveling"].contains(user.worldId)) {

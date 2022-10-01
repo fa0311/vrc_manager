@@ -89,7 +89,12 @@ class _WebViewPageState extends State<VRChatMobileWebView> {
       onWillPop: () => exitApp(context),
       child: Scaffold(
         appBar: AppBar(
-          actions: [simpleShare(context, url)],
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.share),
+              onPressed: () => modalBottom(context, shareUrlListTile(context, widget.appConfig, url, browserExternalForce: true)),
+            )
+          ],
         ),
         body: body,
       ),

@@ -31,10 +31,10 @@ class _JsonViewerPageState extends State<VRChatMobileJsonViewer> {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.jsonViewer),
         actions: [
-          clipboardShare(
-            context,
-            jsonEncode(widget.obj),
-          ),
+          IconButton(
+            icon: const Icon(Icons.share),
+            onPressed: () => modalBottom(context, [copyListTileWidget(context, jsonEncode(widget.obj))]),
+          )
         ],
       ),
       body: Container(

@@ -22,41 +22,48 @@ import 'package:vrchat_mobile_client/data_class/app_config.dart';
 import 'package:vrchat_mobile_client/widgets/share.dart';
 import 'package:vrchat_mobile_client/widgets/status.dart';
 
-Column profile(BuildContext context, AppConfig appConfig, VRChatUser user) {
-  List<InlineSpan> lineList = [];
-  for (String line in (user.bio ?? "").split('\n')) {
-    Match? matchTwitter = RegExp(r'^(Twitter|twitter|TWITTER)([:˸：\s]{0,3})([@＠\s]{0,3})([0-9０-９a-zA-Z_]{1,15})$').firstMatch(line);
-    Match? matchDiscord = RegExp(r'^(Discord|discord|DISCORD)([:˸：\s]{1,3})(.{1,16}[#＃][0-9０-９]{4})$').firstMatch(line);
-    Match? matchGithub = RegExp(r'^(Github|github|GITHUB)([:˸：\s]{1,3})([0-9０-９a-zA-Z_]{1,38})$').firstMatch(line);
-    Match? matchUrl = RegExp(r'^([0-9０-９a-zA-Z_]{2,16})([:˸：\s]{1,3})(https?[:˸][/⁄]{2}.+)$').firstMatch(line);
-    Match? match = matchTwitter ?? matchDiscord ?? matchGithub ?? matchUrl;
-    if (match != null) {
-      String text = "";
-      lineList.add(TextSpan(text: match.group(1)));
-      lineList.add(TextSpan(text: match.group(2)));
-      for (int i = 3; i <= match.groupCount; i++) {
-        text += match.group(i)!;
-      }
-      lineList.add(TextSpan(
-          text: "$text\n",
-          style: const TextStyle(color: Colors.blue),
-          recognizer: TapGestureRecognizer()
-            ..onTap = () {
-              if (matchTwitter != null) {
-                shareModalBottom(context, appConfig, "https://twitter.com/${match.group(match.groupCount)}");
-              } else if (matchDiscord != null) {
-                clipboardShareModalBottom(context, "${match.group(match.groupCount)}".replaceAll("＃", "#"));
-              } else if (matchGithub != null) {
-                shareModalBottom(context, appConfig, "https://github.com/${match.group(match.groupCount)}");
-              } else if (matchUrl != null) {
-                shareModalBottom(context, appConfig, "${match.group(match.groupCount)}".replaceAll("⁄", "/").replaceAll("˸", ":").replaceAll("․", "."));
-              }
-            }));
-    } else {
-      lineList.add(TextSpan(text: "$line\n"));
-    }
-  }
+List<InlineSpan> textToAnchor(BuildContext context, AppConfig appConfig, String text) {
+  return [
+    for (String line in text.split('\n')) ...[
+      ...() {
+        Match? matchTwitter = RegExp(r'^(Twitter|twitter|TWITTER)([:˸：\s]{0,3})([@＠\s]{0,3})([0-9０-９a-zA-Z_]{1,15})$').firstMatch(line);
+        Match? matchDiscord = RegExp(r'^(Discord|discord|DISCORD)([:˸：\s]{1,3})(.{1,16}[#＃][0-9０-９]{4})$').firstMatch(line);
+        Match? matchGithub = RegExp(r'^(Github|github|GITHUB)([:˸：\s]{1,3})([0-9０-９a-zA-Z_]{1,38})$').firstMatch(line);
+        Match? matchUrl = RegExp(r'^([0-9０-９a-zA-Z_]{2,16})([:˸：\s]{1,3})(https?[:˸][/⁄]{2}.+)$').firstMatch(line);
+        Match? match = matchTwitter ?? matchDiscord ?? matchGithub ?? matchUrl;
 
+        if (match != null) {
+          return [
+            TextSpan(text: "${match.group(1)}${match.group(2)}"),
+            TextSpan(
+              text: "${[for (int i = 3; i <= match.groupCount; i++) match.group(i)!].join()}\n",
+              style: const TextStyle(color: Colors.blue),
+              recognizer: LongPressGestureRecognizer()
+                ..onLongPress = () {}
+                ..onLongPressCancel = () {
+                  if (matchTwitter != null) {
+                    modalBottom(context, shareUrlListTile(context, appConfig, "https://twitter.com/${match.group(match.groupCount)}"));
+                  } else if (matchDiscord != null) {
+                    modalBottom(context, [copyListTileWidget(context, "${match.group(match.groupCount)}".replaceAll("＃", "#"))]);
+                  } else if (matchGithub != null) {
+                    modalBottom(context, shareUrlListTile(context, appConfig, "https://github.com/${match.group(match.groupCount)}"));
+                  } else if (matchUrl != null) {
+                    modalBottom(
+                      context,
+                      shareUrlListTile(context, appConfig, "${match.group(match.groupCount)}".replaceAll("⁄", "/").replaceAll("˸", ":").replaceAll("․", ".")),
+                    );
+                  }
+                },
+            )
+          ];
+        }
+        return [TextSpan(text: "$line\n")];
+      }(),
+    ],
+  ];
+}
+
+Column profile(BuildContext context, AppConfig appConfig, VRChatUser user) {
   return Column(
     children: <Widget>[
       SizedBox(
@@ -105,7 +112,7 @@ Column profile(BuildContext context, AppConfig appConfig, VRChatUser user) {
         child: SingleChildScrollView(
           child: RichText(
             text: TextSpan(
-              children: lineList,
+              children: textToAnchor(context, appConfig, user.bio ?? ""),
               style: TextStyle(color: Theme.of(context).textTheme.bodyText2?.color),
             ),
           ),

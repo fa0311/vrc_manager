@@ -19,15 +19,8 @@ import 'package:vrchat_mobile_client/assets/storage.dart';
 import 'package:vrchat_mobile_client/data_class/app_config.dart';
 import 'package:vrchat_mobile_client/scenes/web_view.dart';
 
-IconButton share(BuildContext context, AppConfig appConfig, String url) {
-  return IconButton(
-    icon: const Icon(Icons.share),
-    onPressed: () => shareModalBottom(context, appConfig, url),
-  );
-}
-
-shareModalBottom(BuildContext context, AppConfig appConfig, String url) {
-  showModalBottomSheet(
+Future modalBottom(BuildContext context, List<Widget> children) {
+  return showModalBottomSheet(
     context: context,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(
@@ -36,227 +29,134 @@ shareModalBottom(BuildContext context, AppConfig appConfig, String url) {
     ),
     builder: (BuildContext context) => SingleChildScrollView(
       child: Column(
-        children: <Widget>[
-          ListTile(
-              leading: const Icon(Icons.share),
-              title: Text(AppLocalizations.of(context)!.share),
-              onTap: () {
-                Share.share(url);
-                Navigator.pop(context);
-              }),
-          ListTile(
-              leading: const Icon(Icons.copy),
-              title: Text(AppLocalizations.of(context)!.copy),
-              onTap: () {
-                final ClipboardData data = ClipboardData(text: url);
-                Clipboard.setData(data).then(
-                  (_) {
-                    if (Platform.isAndroid || Platform.isIOS) {
-                      Fluttertoast.showToast(msg: AppLocalizations.of(context)!.copied);
-                    }
-                    Navigator.pop(context);
-                  },
-                );
-              }),
-          ListTile(
-            leading: const Icon(Icons.open_in_browser),
-            title: Text(AppLocalizations.of(context)!.openInBrowser),
-            onTap: () {
-              Navigator.pop(context);
-              openInBrowser(context, appConfig, url);
-            },
-          ),
-        ],
+        children: children,
       ),
     ),
   );
 }
 
-IconButton simpleShare(BuildContext context, String url) {
-  return IconButton(
-    icon: const Icon(Icons.share),
-    onPressed: () => simpleShareModalBottom(context, url),
+List<Widget> shareUrlListTile(BuildContext context, AppConfig appConfig, String url, {bool browserExternalForce = false}) {
+  return [
+    shereListTileWidget(context, url),
+    copyListTileWidget(context, url),
+    if (!browserExternalForce) openInBrowserListTileWidget(context, appConfig, url),
+    if (Uri.parse(url).host != "vrchat.com" && browserExternalForce) openInBrowserExternalForceListTileWidget(context, appConfig, url),
+  ];
+}
+
+List<Widget> shareWorldListTile(BuildContext context, AppConfig appConfig, String worldId, String instanceId) {
+  String url = "https://vrchat.com/home/launch?worldId=$worldId&instanceId=$instanceId";
+  return [
+    shereListTileWidget(context, url),
+    copyListTileWidget(context, url),
+    openInBrowserListTileWidget(context, appConfig, url),
+    if (Platform.isWindows) openInWindowsListTileWidget(context, appConfig, "vrchat://launch?ref=vrchat.com&id=$worldId:$instanceId"),
+  ];
+}
+
+Widget shereListTileWidget(BuildContext context, String text) {
+  return ListTile(
+    leading: const Icon(Icons.share),
+    title: Text(AppLocalizations.of(context)!.share),
+    onTap: () {
+      Share.share(text);
+      Navigator.pop(context);
+    },
   );
 }
 
-simpleShareModalBottom(BuildContext context, String url) {
-  showModalBottomSheet(
-    context: context,
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(
-        top: Radius.circular(15),
-      ),
-    ),
-    builder: (BuildContext context) => SingleChildScrollView(
-      child: Column(
-        children: <Widget>[
-          ListTile(
-              leading: const Icon(Icons.share),
-              title: Text(AppLocalizations.of(context)!.share),
-              onTap: () {
-                Share.share(url);
-                Navigator.pop(context);
-              }),
-          ListTile(
-              leading: const Icon(Icons.copy),
-              title: Text(AppLocalizations.of(context)!.copy),
-              onTap: () {
-                final ClipboardData data = ClipboardData(text: url);
-                Clipboard.setData(data).then(
-                  (_) {
-                    if (Platform.isAndroid || Platform.isIOS) {
-                      Fluttertoast.showToast(msg: AppLocalizations.of(context)!.copied);
-                    }
-                    Navigator.pop(context);
-                  },
-                );
-              }),
-          if (Uri.parse(url).host != "vrchat.com")
-            ListTile(
-              leading: const Icon(Icons.open_in_browser),
-              title: Text(AppLocalizations.of(context)!.openInExternalBrowser),
-              onTap: () async {
-                Navigator.pop(context);
-                if (await canLaunchUrl(
-                  Uri.parse(url),
-                )) {
-                  await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
-                }
-              },
-            ),
-        ],
-      ),
-    ),
+Widget copyListTileWidget(BuildContext context, String text) {
+  return ListTile(
+      leading: const Icon(Icons.copy),
+      title: Text(AppLocalizations.of(context)!.copy),
+      onTap: () {
+        final ClipboardData data = ClipboardData(text: text);
+        Clipboard.setData(data).then(
+          (_) {
+            if (Platform.isAndroid || Platform.isIOS) {
+              Fluttertoast.showToast(msg: AppLocalizations.of(context)!.copied);
+            }
+            Navigator.pop(context);
+          },
+        );
+      });
+}
+
+Widget openInBrowserListTileWidget(BuildContext context, AppConfig appConfig, String url) {
+  return ListTile(
+    leading: const Icon(Icons.open_in_browser),
+    title: Text(AppLocalizations.of(context)!.openInBrowser),
+    onTap: () {
+      Navigator.pop(context);
+      openInBrowser(context, appConfig, url);
+    },
   );
 }
 
-IconButton clipboardShare(BuildContext context, String text) {
-  return IconButton(
-    icon: const Icon(Icons.share),
-    onPressed: () => clipboardShareModalBottom(context, text),
+Widget openInBrowserExternalForceListTileWidget(BuildContext context, AppConfig appConfig, String url) {
+  return ListTile(
+    leading: const Icon(Icons.open_in_browser),
+    title: Text(AppLocalizations.of(context)!.openInExternalBrowser),
+    onTap: () async {
+      Navigator.pop(context);
+      if (await canLaunchUrl(
+        Uri.parse(url),
+      )) {
+        await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+      }
+    },
   );
 }
 
-clipboardShareModalBottom(BuildContext context, String text) {
-  showModalBottomSheet(
-    context: context,
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(
-        top: Radius.circular(15),
-      ),
-    ),
-    builder: (BuildContext context) => SingleChildScrollView(
-      child: Column(
-        children: <Widget>[
-          ListTile(
-              leading: const Icon(Icons.copy),
-              title: Text(AppLocalizations.of(context)!.copy),
-              onTap: () {
-                final ClipboardData data = ClipboardData(text: text);
-                Clipboard.setData(data).then(
-                  (_) {
-                    if (Platform.isAndroid || Platform.isIOS) {
-                      Fluttertoast.showToast(msg: AppLocalizations.of(context)!.copied);
-                    }
-                    Navigator.pop(context);
-                  },
-                );
-              }),
-        ],
-      ),
-    ),
-  );
-}
-
-lunchWorldModalBottom(BuildContext context, AppConfig appConfig, String worldId, String instanceId) {
+Widget inviteVrchatListTileWidget(BuildContext context, AppConfig appConfig, String location) {
   late VRChatAPI vrhatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
-
-  showModalBottomSheet(
-    context: context,
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(
-        top: Radius.circular(15),
-      ),
-    ),
-    builder: (BuildContext context) => SingleChildScrollView(
-      child: Column(
-        children: <Widget>[
-          ListTile(
-              leading: const Icon(Icons.share),
-              title: Text(AppLocalizations.of(context)!.share),
-              onTap: () {
-                Share.share("https://vrchat.com/home/launch?worldId=$worldId&instanceId=$instanceId");
-              }),
-          ListTile(
-              leading: const Icon(Icons.copy),
-              title: Text(AppLocalizations.of(context)!.copy),
-              onTap: () {
-                final ClipboardData data = ClipboardData(text: "https://vrchat.com/home/launch?worldId=$worldId&instanceId=$instanceId");
-                Clipboard.setData(data).then(
-                  (_) {
-                    if (Platform.isAndroid || Platform.isIOS) {
-                      Fluttertoast.showToast(msg: AppLocalizations.of(context)!.copied);
-                    } else {
-                      Navigator.pop(context);
-                    }
-                  },
-                );
-              }),
-          ListTile(
-            leading: const Icon(Icons.open_in_browser),
-            title: Text(AppLocalizations.of(context)!.openInExternalBrowser),
-            onTap: () {
-              openInBrowser(context, appConfig, "https://vrchat.com/home/launch?worldId=$worldId&instanceId=$instanceId");
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.mail),
-            title: Text(AppLocalizations.of(context)!.joinInstance),
-            onTap: () => vrhatLoginSession
-                .shortName("$worldId:$instanceId")
-                .then(
-                  (VRChatSecureName secureId) => vrhatLoginSession
-                      .selfInvite("$worldId:$instanceId", secureId.shortName ?? secureId.secureName ?? "")
-                      .then(
-                        (VRChatNotificationsInvite response) => showDialog(
-                          context: context,
-                          builder: (_) {
-                            return AlertDialog(
-                              title: Text(AppLocalizations.of(context)!.sendInvite),
-                              content: Text(AppLocalizations.of(context)!.selfInviteDetails),
-                              actions: <Widget>[
-                                TextButton(
-                                  child: Text(AppLocalizations.of(context)!.close),
-                                  onPressed: () => Navigator.pop(context),
-                                ),
-                              ],
-                            );
-                          },
+  return ListTile(
+    leading: const Icon(Icons.mail),
+    title: Text(AppLocalizations.of(context)!.joinInstance),
+    onTap: () => vrhatLoginSession
+        .shortName(location)
+        .then(
+          (VRChatSecureName secureId) => vrhatLoginSession
+              .selfInvite(location, secureId.shortName ?? secureId.secureName ?? "")
+              .then(
+                (VRChatNotificationsInvite response) => showDialog(
+                  context: context,
+                  builder: (_) {
+                    return AlertDialog(
+                      title: Text(AppLocalizations.of(context)!.sendInvite),
+                      content: Text(AppLocalizations.of(context)!.selfInviteDetails),
+                      actions: <Widget>[
+                        TextButton(
+                          child: Text(AppLocalizations.of(context)!.close),
+                          onPressed: () => Navigator.pop(context),
                         ),
-                      )
-                      .catchError((status) {
-                    apiError(context, appConfig, status);
-                  }),
-                )
-                .catchError((status) {
-              apiError(context, appConfig, status);
-            }),
-          ),
-          if (Platform.isWindows)
-            ListTile(
-              leading: const Icon(Icons.laptop_windows),
-              title: Text(AppLocalizations.of(context)!.openInVrchat),
-              onTap: () {
-                openInBrowser(context, appConfig, "vrchat://launch?ref=vrchat.com&id=$worldId:$instanceId");
-              },
-            ),
-        ],
-      ),
-    ),
+                      ],
+                    );
+                  },
+                ),
+              )
+              .catchError((status) {
+            apiError(context, appConfig, status);
+          }),
+        )
+        .catchError((status) {
+      apiError(context, appConfig, status);
+    }),
   );
 }
 
-Future<void> openInBrowser(BuildContext context, AppConfig appConfig, String url) async {
+Widget openInWindowsListTileWidget(BuildContext context, AppConfig appConfig, String url) {
+  return ListTile(
+    leading: const Icon(Icons.laptop_windows),
+    title: Text(AppLocalizations.of(context)!.openInVrchat),
+    onTap: () {
+      Navigator.pop(context);
+      openInBrowser(context, appConfig, url);
+    },
+  );
+}
+
+Future openInBrowser(BuildContext context, AppConfig appConfig, String url) async {
   if (Platform.isAndroid || Platform.isIOS) {
     getStorage("force_external_browser").then(
       (response) async {

@@ -112,7 +112,8 @@ class _WorldState extends State<VRChatMobileWorld> {
               onTap: () {
                 Navigator.pop(context);
                 Navigator.pop(context);
-                genInstanceId(regionText, "public", false).then((instanceId) => lunchWorldModalBottom(context, widget.appConfig, widget.worldId, instanceId));
+                genInstanceId(regionText, "public", false)
+                    .then((instanceId) => modalBottom(context, shareWorldListTile(context, appConfig, widget.worldId, instanceId)));
               },
             ),
             ListTile(
@@ -121,7 +122,8 @@ class _WorldState extends State<VRChatMobileWorld> {
                   Navigator.pop(context);
                   Navigator.pop(context);
 
-                  genInstanceId(regionText, "hidden", false).then((instanceId) => lunchWorldModalBottom(context, widget.appConfig, widget.worldId, instanceId));
+                  genInstanceId(regionText, "hidden", false)
+                      .then((instanceId) => modalBottom(context, shareWorldListTile(context, appConfig, widget.worldId, instanceId)));
                 }),
             ListTile(
                 title: Text(AppLocalizations.of(context)!.vrchatFriends),
@@ -130,14 +132,15 @@ class _WorldState extends State<VRChatMobileWorld> {
                   Navigator.pop(context);
 
                   genInstanceId(regionText, "friends", false)
-                      .then((instanceId) => lunchWorldModalBottom(context, widget.appConfig, widget.worldId, instanceId));
+                      .then((instanceId) => modalBottom(context, shareWorldListTile(context, appConfig, widget.worldId, instanceId)));
                 }),
             ListTile(
                 title: Text(AppLocalizations.of(context)!.vrchatInvitePlus),
                 onTap: () {
                   Navigator.pop(context);
                   Navigator.pop(context);
-                  genInstanceId(regionText, "private", true).then((instanceId) => lunchWorldModalBottom(context, widget.appConfig, widget.worldId, instanceId));
+                  genInstanceId(regionText, "private", true)
+                      .then((instanceId) => modalBottom(context, shareWorldListTile(context, appConfig, widget.worldId, instanceId)));
                 }),
             ListTile(
                 title: Text(AppLocalizations.of(context)!.vrchatInvite),
@@ -145,7 +148,7 @@ class _WorldState extends State<VRChatMobileWorld> {
                   Navigator.pop(context);
                   Navigator.pop(context);
                   genInstanceId(regionText, "private", false)
-                      .then((instanceId) => lunchWorldModalBottom(context, widget.appConfig, widget.worldId, instanceId));
+                      .then((instanceId) => modalBottom(context, shareWorldListTile(context, appConfig, widget.worldId, instanceId)));
                 })
           ],
         ),
@@ -174,7 +177,10 @@ class _WorldState extends State<VRChatMobileWorld> {
     return Scaffold(
       appBar: AppBar(title: Text(AppLocalizations.of(context)!.world), actions: [
         if (world != null) favoriteAction(context, appConfig, world!),
-        share(context, widget.appConfig, "https://vrchat.com/home/world/${widget.worldId}"),
+        IconButton(
+          icon: const Icon(Icons.share),
+          onPressed: () => modalBottom(context, shareUrlListTile(context, widget.appConfig, "https://vrchat.com/home/world/${widget.worldId}")),
+        )
       ]),
       drawer: Navigator.of(context).canPop()
           ? null
