@@ -1,5 +1,3 @@
-import 'dart:collection';
-
 class VRChatStatus {
   dynamic content;
   late int statusCode;
@@ -107,27 +105,6 @@ class VRChatUserSelf extends VRChatUser {
   }
 }
 
-class VRChatFriendsList extends ListBase<VRChatFriends> {
-  dynamic content;
-  late List<VRChatFriends> _list = [];
-
-  @override
-  set length(int newLength) => _list.length = newLength;
-
-  @override
-  int get length => _list.length;
-
-  @override
-  VRChatFriends operator [](int index) => _list[index];
-
-  @override
-  operator []=(int index, VRChatFriends value) => _list[index] = value;
-
-  VRChatFriendsList.fromJson(content) {
-    _list = [for (dynamic u in content) VRChatFriends.fromJson(u)];
-  }
-}
-
 class VRChatFriends extends VRChatUser {
   late String friendKey;
   late String? travelingToInstance;
@@ -141,27 +118,6 @@ class VRChatFriends extends VRChatUser {
     travelingToLocation = content['travelingToLocation'];
     travelingToWorld = content['travelingToWorld'];
     worldId = content['worldId'] == "" ? location : content['location'] ?? location;
-  }
-}
-
-class VRChatUserList extends ListBase<VRChatUser> {
-  dynamic content;
-  late List<VRChatUser> _list = [];
-
-  @override
-  set length(int newLength) => _list.length = newLength;
-
-  @override
-  int get length => _list.length;
-
-  @override
-  VRChatUser operator [](int index) => _list[index];
-
-  @override
-  operator []=(int index, VRChatUser value) => _list[index] = value;
-
-  VRChatUserList.fromJson(content) {
-    _list = [for (dynamic u in content) VRChatUser.fromJson(u)];
   }
 }
 
@@ -258,27 +214,6 @@ class VRChatfriendStatus {
   }
 }
 
-class VRChatWorldList extends ListBase<VRChatWorld> {
-  dynamic content;
-  late List<VRChatWorld> _list = [];
-
-  @override
-  set length(int newLength) => _list.length = newLength;
-
-  @override
-  int get length => _list.length;
-
-  @override
-  VRChatWorld operator [](int index) => _list[index];
-
-  @override
-  operator []=(int index, VRChatWorld value) => _list[index] = value;
-
-  VRChatWorldList.fromJson(content) {
-    _list = [for (dynamic u in content) VRChatWorld.fromJson(u)];
-  }
-}
-
 class VRChatWorld {
   dynamic content;
 
@@ -347,27 +282,6 @@ class VRChatWorld {
   }
   VRChatLimitedWorld toLimited() {
     return VRChatLimitedWorld.fromJson(content);
-  }
-}
-
-class VRChatLimitedWorldList extends ListBase<VRChatLimitedWorld> {
-  dynamic content;
-  late List<VRChatLimitedWorld> _list = [];
-
-  @override
-  set length(int newLength) => _list.length = newLength;
-
-  @override
-  int get length => _list.length;
-
-  @override
-  VRChatLimitedWorld operator [](int index) => _list[index];
-
-  @override
-  operator []=(int index, VRChatLimitedWorld value) => _list[index] = value;
-
-  VRChatLimitedWorldList.fromJson(content) {
-    _list = [for (dynamic u in content) VRChatLimitedWorld.fromJson(u)];
   }
 }
 
@@ -498,27 +412,6 @@ class VRChatPlatforms {
   }
 }
 
-class VRChatFavoriteWorldList extends ListBase<VRChatFavoriteWorld> {
-  dynamic content;
-  late List<VRChatFavoriteWorld> _list = [];
-
-  @override
-  set length(int newLength) => _list.length = newLength;
-
-  @override
-  int get length => _list.length;
-
-  @override
-  VRChatFavoriteWorld operator [](int index) => _list[index];
-
-  @override
-  operator []=(int index, VRChatFavoriteWorld value) => _list[index] = value;
-
-  VRChatFavoriteWorldList.fromJson(content) {
-    _list = [for (dynamic u in content) VRChatFavoriteWorld.fromJson(u)];
-  }
-}
-
 class VRChatFavoriteWorld {
   dynamic content;
 
@@ -598,27 +491,6 @@ class VRChatFavoriteWorld {
   }
 }
 
-class VRChatFavoriteGroupList extends ListBase<VRChatFavoriteGroup> {
-  dynamic content;
-  late List<VRChatFavoriteGroup> _list = [];
-
-  @override
-  set length(int newLength) => _list.length = newLength;
-
-  @override
-  int get length => _list.length;
-
-  @override
-  VRChatFavoriteGroup operator [](int index) => _list[index];
-
-  @override
-  operator []=(int index, VRChatFavoriteGroup value) => _list[index] = value;
-
-  VRChatFavoriteGroupList.fromJson(content) {
-    _list = [for (dynamic u in content) VRChatFavoriteGroup.fromJson(u)];
-  }
-}
-
 class VRChatFavoriteGroup {
   dynamic content;
 
@@ -640,27 +512,6 @@ class VRChatFavoriteGroup {
     type = content['type'];
     visibility = content['visibility'];
     tags = content['tags'].cast<Map<String, int>>();
-  }
-}
-
-class VRChatNotificationsList extends ListBase<VRChatNotifications> {
-  dynamic content;
-  late List<VRChatNotifications> _list = [];
-
-  @override
-  set length(int newLength) => _list.length = newLength;
-
-  @override
-  int get length => _list.length;
-
-  @override
-  VRChatNotifications operator [](int index) => _list[index];
-
-  @override
-  operator []=(int index, VRChatNotifications value) => _list[index] = value;
-
-  VRChatNotificationsList.fromJson(content) {
-    _list = [for (dynamic u in content) VRChatNotifications.fromJson(u)];
   }
 }
 

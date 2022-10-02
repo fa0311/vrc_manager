@@ -203,7 +203,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
     int len;
     do {
       int offset = userList.length;
-      VRChatFriendsList users = await vrhatLoginSession.friends(offline: widget.offline, offset: offset).catchError((status) {
+      List<VRChatFriends> users = await vrhatLoginSession.friends(offline: widget.offline, offset: offset).catchError((status) {
         apiError(context, widget.appConfig, status);
       });
       if (!mounted) return;

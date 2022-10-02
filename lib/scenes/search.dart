@@ -104,7 +104,7 @@ class _SearchState extends State<VRChatSearch> {
     });
     searchBoxFocusNode.unfocus();
     if (searchMode == "worlds") {
-      return vrhatLoginSession.searchWorlds(text, offset: offset - 50).then((VRChatLimitedWorldList worlds) {
+      return vrhatLoginSession.searchWorlds(text, offset: offset - 50).then((List<VRChatLimitedWorld> worlds) {
         List<Future> futureList = [];
         for (VRChatLimitedWorld world in worlds) {
           futureList.add(vrhatLoginSession.worlds(world.id).then((VRChatWorld world) {
@@ -122,7 +122,7 @@ class _SearchState extends State<VRChatSearch> {
         apiError(context, widget.appConfig, status);
       });
     } else if (searchMode == "users") {
-      return vrhatLoginSession.searchUsers(text, offset: offset - 50).then((VRChatUserList users) {
+      return vrhatLoginSession.searchUsers(text, offset: offset - 50).then((List<VRChatUser> users) {
         List<Future> futureList = [];
         for (VRChatUser user in users) {
           futureList.add(

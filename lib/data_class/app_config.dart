@@ -162,7 +162,7 @@ class AccountConfig {
     int len;
     do {
       int offset = favoriteWorld.length;
-      VRChatFavoriteGroupList favoriteGroupList = await vrhatLoginSession.favoriteGroups("world", offset: offset).catchError((status) {
+      List<VRChatFavoriteGroup> favoriteGroupList = await vrhatLoginSession.favoriteGroups("world", offset: offset).catchError((status) {
         apiError(context, appConfig, status);
       });
       for (VRChatFavoriteGroup group in favoriteGroupList) {
@@ -184,7 +184,7 @@ class AccountConfig {
     int len;
     do {
       int offset = favoriteWorld.list.length;
-      VRChatFavoriteWorldList worlds = await vrhatLoginSession.favoritesWorlds(favoriteWorld.group.name, offset: offset).catchError((status) {
+      List<VRChatFavoriteWorld> worlds = await vrhatLoginSession.favoritesWorlds(favoriteWorld.group.name, offset: offset).catchError((status) {
         apiError(context, appConfig, status);
       });
       for (VRChatFavoriteWorld world in worlds) {
