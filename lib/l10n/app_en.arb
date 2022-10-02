@@ -61,6 +61,8 @@
     "unknown": "Unknown",
     "cantLogin": "Can't login",
     "cantLoginDetails": "Please make sure you can log in via vrchat.com.",
+    "agreeToTheUserPolicy": "Agree to the user policy",
+    "openUserPolicy": "Open user policy",
     "@____________________LOGIN_ERROR_DIALOG____________________": {},
     "incorrectLogin": "Incorrect login information",
     "@____________________HOME____________________": {},

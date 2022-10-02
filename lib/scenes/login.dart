@@ -27,6 +27,7 @@ class VRChatMobileLogin extends StatefulWidget {
 class _LoginPageState extends State<VRChatMobileLogin> {
   bool _isPasswordObscure = true;
   bool _rememberPassword = false;
+  bool _agreeUserPolicy = false;
   final _userController = TextEditingController();
   final _passwordController = TextEditingController();
   final _totpController = TextEditingController();
@@ -170,80 +171,103 @@ class _LoginPageState extends State<VRChatMobileLogin> {
       ),
       drawer: simpledrawer(context),
       body: Padding(
-          padding: const EdgeInsets.all(32.0),
-          child: Column(
-            children: <Widget>[
-              TextFormField(
-                controller: _userController,
-                decoration: InputDecoration(labelText: AppLocalizations.of(context)!.usernameOrEmail),
-              ),
-              TextFormField(
-                obscureText: _isPasswordObscure,
-                controller: _passwordController,
-                onFieldSubmitted: (String e) => _onPressed(context),
-                decoration: InputDecoration(
-                  labelText: AppLocalizations.of(context)!.password,
-                  suffixIcon: IconButton(
-                    icon: Icon(_isPasswordObscure ? Icons.visibility_off : Icons.visibility),
-                    onPressed: () {
-                      setState(
-                        () {
-                          _isPasswordObscure = !_isPasswordObscure;
-                        },
-                      );
-                    },
-                  ),
-                ),
-              ),
-              SwitchListTile(
-                value: _rememberPassword,
-                title: Text(
-                  AppLocalizations.of(context)!.rememberPassword,
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.primary,
-                    fontSize: 14,
-                  ),
-                ),
-                onChanged: _changeSwitchrememberPassword,
-              ),
-              ElevatedButton(
-                child: Text(
-                  AppLocalizations.of(context)!.login,
-                ),
-                onPressed: () => _onPressed(context),
-              ),
-              TextButton(
-                child: Text(
-                  AppLocalizations.of(context)!.cantLogin,
-                  style: const TextStyle(
-                    fontSize: 14,
-                  ),
-                ),
-                onPressed: () => showDialog(
-                  context: context,
-                  builder: (_) {
-                    return AlertDialog(
-                      title: Text(AppLocalizations.of(context)!.cantLogin),
-                      content: Text(AppLocalizations.of(context)!.cantLoginDetails),
-                      actions: <Widget>[
-                        TextButton(
-                          child: Text(AppLocalizations.of(context)!.cancel),
-                          onPressed: () => Navigator.pop(context),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                            openInBrowser(context, "https://vrchat.com/home/login");
-                          },
-                          child: Text(AppLocalizations.of(context)!.openInBrowser),
-                        ),
-                      ],
+        padding: const EdgeInsets.all(32.0),
+        child: Column(
+          children: <Widget>[
+            TextFormField(
+              controller: _userController,
+              decoration: InputDecoration(labelText: AppLocalizations.of(context)!.usernameOrEmail),
+            ),
+            TextFormField(
+              obscureText: _isPasswordObscure,
+              controller: _passwordController,
+              onFieldSubmitted: (String e) => _onPressed(context),
+              decoration: InputDecoration(
+                labelText: AppLocalizations.of(context)!.password,
+                suffixIcon: IconButton(
+                  icon: Icon(_isPasswordObscure ? Icons.visibility_off : Icons.visibility),
+                  onPressed: () {
+                    setState(
+                      () {
+                        _isPasswordObscure = !_isPasswordObscure;
+                      },
                     );
                   },
                 ),
               ),
-            ],
-          )),
+            ),
+            SwitchListTile(
+              value: _rememberPassword,
+              title: Text(
+                AppLocalizations.of(context)!.rememberPassword,
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.primary,
+                  fontSize: 14,
+                ),
+              ),
+              onChanged: _changeSwitchrememberPassword,
+              visualDensity: const VisualDensity(horizontal: 0, vertical: -4),
+            ),
+            SwitchListTile(
+              value: _agreeUserPolicy,
+              title: Text(
+                AppLocalizations.of(context)!.agreeToTheUserPolicy,
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.primary,
+                  fontSize: 14,
+                ),
+              ),
+              onChanged: (value) => setState(() => _agreeUserPolicy = value),
+              visualDensity: const VisualDensity(horizontal: 0, vertical: -4),
+            ),
+            TextButton(
+              child: Text(
+                AppLocalizations.of(context)!.openUserPolicy,
+                style: const TextStyle(
+                  fontSize: 14,
+                ),
+              ),
+              onPressed: () => openInBrowser(context, "https://github.com/fa0311/vrc_manager/blob/master/docs/user_policies/ja.md"),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 32),
+                  child: ElevatedButton(
+                    onPressed: _agreeUserPolicy ? () => _onPressed(context) : null,
+                    child: Text(
+                      AppLocalizations.of(context)!.login,
+                    ),
+                  ),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.help, color: Colors.grey),
+                  onPressed: () => showDialog(
+                    context: context,
+                    builder: (_) {
+                      return AlertDialog(
+                        title: Text(AppLocalizations.of(context)!.cantLogin),
+                        content: Text(AppLocalizations.of(context)!.cantLoginDetails),
+                        actions: <Widget>[
+                          TextButton(
+                            child: Text(AppLocalizations.of(context)!.cancel),
+                            onPressed: () => Navigator.pop(context),
+                          ),
+                          TextButton(
+                            onPressed: () => openInBrowser(context, "https://vrchat.com/home/login"),
+                            child: Text(AppLocalizations.of(context)!.openInBrowser),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
