@@ -55,7 +55,7 @@ class _WorldState extends State<VRChatMobileWorld> {
   }
 
   genInstanceId(String region, String type, bool canRequestInvite) async {
-    VRChatUserOverload user = await vrhatLoginSession.user().catchError((status) {
+    VRChatUserSelfOverload user = await vrhatLoginSession.user().catchError((status) {
       apiError(context, widget.appConfig, status);
     });
     String url = genRandNumber();

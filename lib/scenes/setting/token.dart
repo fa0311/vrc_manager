@@ -72,7 +72,7 @@ class _TokenSettingPageState extends State<VRChatMobileTokenSetting> {
                   ElevatedButton(
                     child: Text(AppLocalizations.of(context)!.login),
                     onPressed: () {
-                      VRChatAPI(cookie: _tokenController.text).user().then((VRChatUserOverload response) {
+                      VRChatAPI(cookie: _tokenController.text).user().then((VRChatUserSelfOverload response) {
                         showDialog(
                           context: context,
                           builder: (_) {

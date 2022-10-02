@@ -68,7 +68,7 @@ List<InlineSpan> textToAnchor(BuildContext context, AppConfig appConfig, String 
   ];
 }
 
-Column profile(BuildContext context, AppConfig appConfig, VRChatUser user) {
+Column profile(BuildContext context, AppConfig appConfig, VRChatFriends user) {
   return Column(
     children: <Widget>[
       SizedBox(

@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:vrchat_mobile_client/api/data_class.dart';
 import 'package:vrchat_mobile_client/data_class/app_config.dart';
 
-sortUser(GridConfig config, List<VRChatUser> userList) {
+sortUser(GridConfig config, List<VRChatFriends> userList) {
   if (config.sort == "name") {
     sortByNameFromUser(userList);
   } else if (config.sort == "last_login") {
@@ -19,10 +19,10 @@ class LocationDataClass {
   LocationDataClass(this.id);
 }
 
-Map<String, LocationDataClass> numberOfFriendsInLocation(List<VRChatUser> userList) {
+Map<String, LocationDataClass> numberOfFriendsInLocation(List<VRChatFriends> userList) {
   Map<String, LocationDataClass> inLocation = {};
   int id = 0;
-  for (VRChatUser user in userList) {
+  for (VRChatFriends user in userList) {
     String location = user.location;
     inLocation[location] ??= LocationDataClass(++id);
     inLocation[location]!.count++;
@@ -30,7 +30,7 @@ Map<String, LocationDataClass> numberOfFriendsInLocation(List<VRChatUser> userLi
   return inLocation;
 }
 
-sortByLocationMapFromUser(List<VRChatUser> userList) {
+sortByLocationMapFromUser(List<VRChatFriends> userList) {
   Map<String, LocationDataClass> inLocation = numberOfFriendsInLocation(userList);
   userList.sort((userA, userB) {
     String locationA = userA.location;
@@ -50,7 +50,7 @@ sortByLocationMapFromUser(List<VRChatUser> userList) {
   });
 }
 
-sortByNameFromUser(List<VRChatUser> userList) {
+sortByNameFromUser(List<VRChatFriends> userList) {
   userList.sort((userA, userB) {
     List<int> userBytesA = utf8.encode(userA.displayName);
     List<int> userBytesB = utf8.encode(userB.displayName);
@@ -64,7 +64,7 @@ sortByNameFromUser(List<VRChatUser> userList) {
   });
 }
 
-sortByLastLoginFromUser(List<VRChatUser> userList) {
+sortByLastLoginFromUser(List<VRChatFriends> userList) {
   userList.sort((userA, userB) {
     if (userA.lastLogin == null) return 1;
     if (userB.lastLogin == null) return -1;

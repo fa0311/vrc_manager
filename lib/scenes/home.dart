@@ -41,8 +41,8 @@ class _LoginHomeState extends State<VRChatMobileHome> {
   @override
   initState() {
     super.initState();
-    vrhatLoginSession.user().then((VRChatUserOverload response) {
-      vrhatLoginSession.users(response.id).then((VRChatUser user) {
+    vrhatLoginSession.user().then((VRChatUserSelfOverload response) {
+      vrhatLoginSession.users(response.id).then((VRChatFriends user) {
         bioController.text = user.bio ?? "";
         noteController.text = user.note ?? "";
         widget.appConfig.loggedAccount?.setDisplayName(user.displayName);
@@ -77,7 +77,7 @@ class _LoginHomeState extends State<VRChatMobileHome> {
                             ),
                             TextButton(
                                 child: Text(AppLocalizations.of(context)!.ok),
-                                onPressed: () => vrhatLoginSession.changeBio(user.id, bioController.text).then((VRChatUserPut response) {
+                                onPressed: () => vrhatLoginSession.changeBio(user.id, bioController.text).then((VRChatUserSelf response) {
                                       Navigator.pop(context);
                                       initState();
                                     }).catchError((status) {

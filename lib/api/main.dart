@@ -57,7 +57,7 @@ class VRChatAPI {
 
   // Self
 
-  Future<VRChatUserOverload> user() {
+  Future<VRChatUserSelfOverload> user() {
     return vrchatSession
         .get(
           endpoint(
@@ -65,12 +65,12 @@ class VRChatAPI {
             apiKey(),
           ),
         )
-        .then((value) => VRChatUserOverload.fromJson(value));
+        .then((value) => VRChatUserSelfOverload.fromJson(value));
   }
 
   // User
 
-  Future<VRChatUser> users(String uid) {
+  Future<VRChatFriends> users(String uid) {
     return vrchatSession
         .get(
           endpoint(
@@ -78,7 +78,7 @@ class VRChatAPI {
             apiKey(),
           ),
         )
-        .then((value) => VRChatUser.fromJson(value));
+        .then((value) => VRChatFriends.fromJson(value));
   }
 
   Future<VRChatUserNotes> userNotes(String uid, String note) {
@@ -147,7 +147,7 @@ class VRChatAPI {
 
   // Friends
 
-  Future<VRChatUserList> friends({int offset = 0, bool offline = false}) {
+  Future<VRChatFriendsList> friends({int offset = 0, bool offline = false}) {
     final param = {
       "offline": offline.toString(),
       "offset": offset.toString(),
@@ -159,7 +159,7 @@ class VRChatAPI {
         .get(
           endpoint('api/1/auth/user/friends', param),
         )
-        .then((value) => VRChatUserList.fromJson(value));
+        .then((value) => VRChatFriendsList.fromJson(value));
   }
 
   Future<VRChatStatus> deleteFriend(String uid) {
@@ -175,7 +175,7 @@ class VRChatAPI {
 
   // Search
 
-  Future<VRChatUserLimitedList> searchUsers(String search, {int offset = 0, String sort = "relevance", bool fuzzy = false}) {
+  Future<VRChatUserList> searchUsers(String search, {int offset = 0, String sort = "relevance", bool fuzzy = false}) {
     final param = {
       "sort": sort,
       "fuzzy": fuzzy.toString(),
@@ -192,7 +192,7 @@ class VRChatAPI {
             param,
           ),
         )
-        .then((value) => VRChatUserLimitedList.fromJson(value));
+        .then((value) => VRChatUserList.fromJson(value));
   }
 
   Future<VRChatLimitedWorldList> searchWorlds(String search, {int offset = 0, String sort = "relevance", bool fuzzy = false}) {
@@ -361,23 +361,23 @@ class VRChatAPI {
 
   // Change
 
-  Future<VRChatUserOverload> changeName(String uid, String username, String password) {
+  Future<VRChatUserSelfOverload> changeName(String uid, String username, String password) {
     return vrchatSession.put(
       endpoint(
         'api/1/users/$uid',
         apiKey(),
       ),
       {"currentPassword": password, "displayName": username},
-    ).then((value) => VRChatUserOverload.fromJson(value));
+    ).then((value) => VRChatUserSelfOverload.fromJson(value));
   }
 
-  Future<VRChatUserPut> changeBio(String uid, String bio) {
+  Future<VRChatUserSelf> changeBio(String uid, String bio) {
     return vrchatSession.put(
       endpoint(
         'api/1/users/$uid',
         apiKey(),
       ),
       {"bio": bio},
-    ).then((value) => VRChatUserPut.fromJson(value));
+    ).then((value) => VRChatUserSelf.fromJson(value));
   }
 }

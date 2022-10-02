@@ -38,7 +38,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
   Map<String, VRChatWorld?> locationMap = {};
   Map<String, VRChatInstance?> instanceMap = {};
   GridModalConfig gridConfig = GridModalConfig();
-  List<VRChatUser> userList = [];
+  List<VRChatFriends> userList = [];
   String sortedModeCache = "default";
   bool sortedDescendCache = false;
 
@@ -58,7 +58,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
       width: 600,
       height: config.worldDetails ? 235 : 130,
       children: [
-        for (VRChatUser user in userList)
+        for (VRChatFriends user in userList)
           () {
             if (["private", "offline", "traveling"].contains(user.location) && config.joinable) return null;
             String worldId = user.location.split(":")[0];
@@ -102,7 +102,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
       width: 320,
       height: config.worldDetails ? 119 : 64,
       children: [
-        for (VRChatUser user in userList)
+        for (VRChatFriends user in userList)
           () {
             if (["private", "offline", "traveling"].contains(user.location) && config.joinable) return null;
             String worldId = user.location.split(":")[0];
@@ -144,7 +144,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
       width: 400,
       height: config.worldDetails ? 39 : 26,
       children: [
-        for (VRChatUser user in userList)
+        for (VRChatFriends user in userList)
           () {
             if (["private", "offline", "traveling"].contains(user.location) && config.joinable) return null;
             String worldId = user.location.split(":")[0];
@@ -179,7 +179,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
     );
   }
 
-  Row username(VRChatUser user, {double diameter = 20}) {
+  Row username(VRChatFriends user, {double diameter = 20}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
@@ -203,13 +203,13 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
     int len;
     do {
       int offset = userList.length;
-      VRChatUserList users = await vrhatLoginSession.friends(offline: widget.offline, offset: offset).catchError((status) {
+      VRChatFriendsList users = await vrhatLoginSession.friends(offline: widget.offline, offset: offset).catchError((status) {
         apiError(context, widget.appConfig, status);
       });
       if (!mounted) return;
       futureList.add(getWorld(context, appConfig, users, locationMap));
       futureList.add(getInstance(context, appConfig, users, instanceMap));
-      for (VRChatUser user in users) {
+      for (VRChatFriends user in users) {
         userList.add(user);
       }
       len = users.length;

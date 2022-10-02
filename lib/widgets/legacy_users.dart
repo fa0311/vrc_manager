@@ -36,13 +36,13 @@ class Users {
 
   Map<String, VRChatWorld> locationMap = {};
   Map<String, VRChatInstance> instanceMap = {};
-  List<VRChatUser> userList = [];
+  List<VRChatFriends> userList = [];
 
   List<Widget> reload() {
     children = [];
-    List<VRChatUser> tempUserList = userList;
+    List<VRChatFriends> tempUserList = userList;
     userList = [];
-    for (VRChatUser user in tempUserList) {
+    for (VRChatFriends user in tempUserList) {
       add(user);
     }
     return children;
@@ -51,7 +51,7 @@ class Users {
   Map<String, LocationDataClass> numberOfFriendsInLocation() {
     Map<String, LocationDataClass> inLocation = {};
     int id = 0;
-    for (VRChatUser user in userList) {
+    for (VRChatFriends user in userList) {
       String location = user.location;
       if (["private", "offline", "traveling"].contains(location) && joinable) continue;
 
@@ -111,7 +111,7 @@ class Users {
     return reload();
   }
 
-  List<Widget> add(VRChatUser user) {
+  List<Widget> add(VRChatFriends user) {
     userList.add(user);
     if (["private", "offline", "traveling"].contains(user.location) && joinable) return children;
     if (displayMode == "normal") defaultAdd(user);
@@ -123,7 +123,7 @@ class Users {
     return children;
   }
 
-  defaultAdd(VRChatUser user) {
+  defaultAdd(VRChatFriends user) {
     String worldId = user.location.split(":")[0];
     children.add(
       Card(
@@ -256,7 +256,7 @@ class Users {
     );
   }
 
-  defaultDescriptionAdd(VRChatUser user) {
+  defaultDescriptionAdd(VRChatFriends user) {
     children.add(
       Card(
         elevation: 20.0,
@@ -346,7 +346,7 @@ class Users {
     );
   }
 
-  simpleAdd(VRChatUser user) {
+  simpleAdd(VRChatFriends user) {
     String worldId = user.location.split(":")[0];
     children.add(
       Card(
@@ -471,7 +471,7 @@ class Users {
     );
   }
 
-  simpleDescriptionAdd(VRChatUser user) {
+  simpleDescriptionAdd(VRChatFriends user) {
     children.add(
       Card(
         elevation: 20.0,
@@ -546,7 +546,7 @@ class Users {
     );
   }
 
-  textOnlyAdd(VRChatUser user) {
+  textOnlyAdd(VRChatFriends user) {
     String worldId = user.location.split(":")[0];
     children.add(
       Card(
@@ -659,7 +659,7 @@ class Users {
     );
   }
 
-  textOnlyDescriptionAdd(VRChatUser user) {
+  textOnlyDescriptionAdd(VRChatFriends user) {
     children.add(
       Card(
         elevation: 20.0,

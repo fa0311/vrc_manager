@@ -31,7 +31,7 @@ class VRChatMobileUser extends StatefulWidget {
 
 class _UserHomeState extends State<VRChatMobileUser> {
   late VRChatAPI vrhatLoginSession = VRChatAPI(cookie: widget.appConfig.loggedAccount?.cookie ?? "");
-  VRChatUser? user;
+  VRChatFriends? user;
   VRChatfriendStatus? status;
   VRChatWorld? world;
   VRChatInstance? instance;

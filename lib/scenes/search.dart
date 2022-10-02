@@ -122,11 +122,11 @@ class _SearchState extends State<VRChatSearch> {
         apiError(context, widget.appConfig, status);
       });
     } else if (searchMode == "users") {
-      return vrhatLoginSession.searchUsers(text, offset: offset - 50).then((VRChatUserLimitedList users) {
+      return vrhatLoginSession.searchUsers(text, offset: offset - 50).then((VRChatUserList users) {
         List<Future> futureList = [];
-        for (VRChatUserLimited user in users) {
+        for (VRChatUser user in users) {
           futureList.add(
-            vrhatLoginSession.users(user.id).then((VRChatUser user) {
+            vrhatLoginSession.users(user.id).then((VRChatFriends user) {
               dataColumnUsers.userList.add(user);
             }).catchError((status) {
               apiError(context, widget.appConfig, status);

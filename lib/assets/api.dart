@@ -4,10 +4,10 @@ import 'package:vrchat_mobile_client/api/main.dart';
 import 'package:vrchat_mobile_client/assets/error.dart';
 import 'package:vrchat_mobile_client/data_class/app_config.dart';
 
-Future getWorld(BuildContext context, AppConfig appConfig, List<VRChatUser> users, Map<String, VRChatWorld?> locationMap) {
+Future getWorld(BuildContext context, AppConfig appConfig, List<VRChatFriends> users, Map<String, VRChatWorld?> locationMap) {
   late VRChatAPI vrhatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
   List<Future> futureList = [];
-  for (VRChatUser user in users) {
+  for (VRChatFriends user in users) {
     String wid = user.location.split(":")[0];
     if (["private", "offline", "traveling"].contains(user.location) || locationMap.containsKey(wid)) continue;
     locationMap[wid] = null;
@@ -36,10 +36,10 @@ Future getWorldFromFavorite(BuildContext context, AppConfig appConfig, List<VRCh
   return Future.wait(futureList);
 }
 
-Future getInstance(BuildContext context, AppConfig appConfig, List<VRChatUser> users, Map<String, VRChatInstance?> instanceMap) {
+Future getInstance(BuildContext context, AppConfig appConfig, List<VRChatFriends> users, Map<String, VRChatInstance?> instanceMap) {
   late VRChatAPI vrhatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
   List<Future> futureList = [];
-  for (VRChatUser user in users) {
+  for (VRChatFriends user in users) {
     if (["private", "offline", "traveling"].contains(user.location) || instanceMap.containsKey(user.location)) continue;
     instanceMap[user.location] = null;
     futureList.add(vrhatLoginSession.instances(user.location).then((VRChatInstance instance) {
