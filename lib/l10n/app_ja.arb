@@ -61,6 +61,8 @@
     "unknown": "名無し",
     "cantLogin": "ログインできない",
     "cantLoginDetails": "vrchat.com でログインできるか確認してください",
+    "agreeToTheUserPolicy": "ユーザーポリシーに同意する",
+    "openUserPolicy": "ユーザーポリシーを開く",
     "@____________________LOGIN_ERROR_DIALOG____________________": {},
     "incorrectLogin": "ログイン情報が間違っています",
     "@____________________HOME____________________": {},
