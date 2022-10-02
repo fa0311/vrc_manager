@@ -38,5 +38,3 @@ For more information, see [here](https://github.com/fa0311/vrc_manager).
 If you have any questions about this Privacy Policy, please contact us at the following email address.
 
 yuki@yuki0311.com
-
-Last edited 29 Sep 2022
