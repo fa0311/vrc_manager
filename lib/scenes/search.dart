@@ -106,7 +106,7 @@ class _SearchState extends State<VRChatSearch> {
     if (searchMode == "worlds") {
       return vrhatLoginSession.searchWorlds(text, offset: offset - 50).then((VRChatLimitedWorldList worlds) {
         List<Future> futureList = [];
-        for (VRChatLimitedWorld world in worlds.world) {
+        for (VRChatLimitedWorld world in worlds) {
           futureList.add(vrhatLoginSession.worlds(world.id).then((VRChatWorld world) {
             dataColumnWorlds.add(world);
           }).catchError((status) {
@@ -124,7 +124,7 @@ class _SearchState extends State<VRChatSearch> {
     } else if (searchMode == "users") {
       return vrhatLoginSession.searchUsers(text, offset: offset - 50).then((VRChatUserLimitedList users) {
         List<Future> futureList = [];
-        for (VRChatUserLimited user in users.users) {
+        for (VRChatUserLimited user in users) {
           futureList.add(
             vrhatLoginSession.users(user.id).then((VRChatUser user) {
               dataColumnUsers.userList.add(user);

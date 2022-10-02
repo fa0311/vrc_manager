@@ -43,7 +43,7 @@ class _FriendsPageState extends State<VRChatMobileFriendRequest> {
       VRChatNotificationsList response = await vrhatLoginSession.notifications(type: "friendRequest", offset: offset).catchError((status) {
         apiError(context, widget.appConfig, status);
       });
-      for (VRChatNotifications requestUser in response.notifications) {
+      for (VRChatNotifications requestUser in response) {
         futureList.add(vrhatLoginSession.users(requestUser.senderUserId).then((VRChatUser user) {
           userList.add(user);
         }).catchError((status) {

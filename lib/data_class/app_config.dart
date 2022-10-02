@@ -165,7 +165,7 @@ class AccountConfig {
       VRChatFavoriteGroupList favoriteGroupList = await vrhatLoginSession.favoriteGroups("world", offset: offset).catchError((status) {
         apiError(context, appConfig, status);
       });
-      for (VRChatFavoriteGroup group in favoriteGroupList.group) {
+      for (VRChatFavoriteGroup group in favoriteGroupList) {
         FavoriteWorldData favorite = FavoriteWorldData(group);
         /*
          * To be fixed in the next stable version.
@@ -175,7 +175,7 @@ class AccountConfig {
         futureList.add(getFavoriteWorld(context, appConfig, favorite));
         favoriteWorld.add(favorite);
       }
-      len = favoriteGroupList.group.length;
+      len = favoriteGroupList.length;
     } while (len == 50);
   }
 
@@ -187,10 +187,10 @@ class AccountConfig {
       VRChatFavoriteWorldList worlds = await vrhatLoginSession.favoritesWorlds(favoriteWorld.group.name, offset: offset).catchError((status) {
         apiError(context, appConfig, status);
       });
-      for (VRChatFavoriteWorld world in worlds.world) {
+      for (VRChatFavoriteWorld world in worlds) {
         favoriteWorld.list.add(world);
       }
-      len = worlds.world.length;
+      len = worlds.length;
     } while (len == 50);
   }
 }
