@@ -18,8 +18,8 @@ import 'package:vrchat_mobile_client/main.dart';
 import 'package:vrchat_mobile_client/scenes/user.dart';
 import 'package:vrchat_mobile_client/widgets/drawer.dart';
 import 'package:vrchat_mobile_client/widgets/modal.dart';
-import 'package:vrchat_mobile_client/widgets/template.dart';
 import 'package:vrchat_mobile_client/widgets/status.dart';
+import 'package:vrchat_mobile_client/widgets/template.dart';
 import 'package:vrchat_mobile_client/widgets/world.dart';
 
 class VRChatMobileFriends extends StatefulWidget {

@@ -14,9 +14,9 @@ import 'package:vrchat_mobile_client/assets/flutter/text_stream.dart';
 import 'package:vrchat_mobile_client/assets/storage.dart';
 import 'package:vrchat_mobile_client/data_class/app_config.dart';
 import 'package:vrchat_mobile_client/widgets/drawer.dart';
-import 'package:vrchat_mobile_client/widgets/share.dart';
 import 'package:vrchat_mobile_client/widgets/legacy_users.dart';
 import 'package:vrchat_mobile_client/widgets/legacy_worlds.dart';
+import 'package:vrchat_mobile_client/widgets/share.dart';
 
 class VRChatSearch extends StatefulWidget {
   final AppConfig appConfig;
