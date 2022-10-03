@@ -209,9 +209,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
       if (!mounted) return;
       futureList.add(getWorld(context, appConfig, users, locationMap));
       futureList.add(getInstance(context, appConfig, users, instanceMap));
-      for (VRChatFriends user in users) {
-        userList.add(user);
-      }
+      userList.addAll(users);
       len = users.length;
     } while (len == 50);
 
