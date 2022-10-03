@@ -25,38 +25,36 @@ void errorDialog(BuildContext context, AppConfig appConfig, String text, {String
   if (kDebugMode) {
     print(errorLog(json.decode(log)));
   }
-  getStorage("dont_show_error_dialog").then((sontShowErrorDialog) {
-    if (sontShowErrorDialog != "true" && log.isNotEmpty) {
-      showDialog(
-        context: context,
-        builder: (_) {
-          return AlertDialog(
-            title: Text(AppLocalizations.of(context)!.errorDialog),
-            content: Text(text),
-            actions: [
-              if (log.isNotEmpty)
-                TextButton(
-                  child: Text(AppLocalizations.of(context)!.report),
-                  onPressed: () async {
-                    await copyToClipboard(context, log);
-                    /*
+  if (!appConfig.dontShowErrorDialog && log.isNotEmpty) {
+    showDialog(
+      context: context,
+      builder: (_) {
+        return AlertDialog(
+          title: Text(AppLocalizations.of(context)!.errorDialog),
+          content: Text(text),
+          actions: [
+            if (log.isNotEmpty)
+              TextButton(
+                child: Text(AppLocalizations.of(context)!.report),
+                onPressed: () async {
+                  await copyToClipboard(context, log);
+                  /*
                     * To be fixed in the next stable version.
                     * if(context.mounted)
                     */
-                    // ignore: use_build_context_synchronously
-                    openInBrowser(context, appConfig, "https://github.com/fa0311/vrchat_mobile_client/issues/new/choose");
-                  },
-                ),
-              TextButton(
-                child: Text(AppLocalizations.of(context)!.ok),
-                onPressed: () => Navigator.pop(context),
+                  // ignore: use_build_context_synchronously
+                  openInBrowser(context, appConfig, "https://github.com/fa0311/vrchat_mobile_client/issues/new/choose");
+                },
               ),
-            ],
-          );
-        },
-      );
-    }
-  });
+            TextButton(
+              child: Text(AppLocalizations.of(context)!.ok),
+              onPressed: () => Navigator.pop(context),
+            ),
+          ],
+        );
+      },
+    );
+  }
 }
 
 String errorLog(Map log) {

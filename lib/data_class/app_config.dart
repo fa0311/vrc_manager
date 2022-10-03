@@ -10,6 +10,7 @@ class AppConfig {
   AccountConfig? _loggedAccount;
   List<AccountConfig> accountList = [];
   GridConfigList gridConfigList = GridConfigList();
+  bool dontShowErrorDialog = false;
 
   AccountConfig? get loggedAccount => _loggedAccount;
 
@@ -20,6 +21,7 @@ class AppConfig {
 
     futureList.add(getStorage("account_index").then((value) => accountUid = value));
     futureList.add(getStorageList("account_index_list").then((List<String> value) => uidList = value));
+    futureList.add(getStorage("dont_show_error_dialog").then((value) => dontShowErrorDialog = (value == "true")));
     futureList.add(gridConfigList.setConfig());
 
     await Future.wait(futureList);
