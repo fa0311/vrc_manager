@@ -68,7 +68,7 @@ List<InlineSpan> textToAnchor(BuildContext context, AppConfig appConfig, String 
   ];
 }
 
-Row username(VRChatFriends user, {double diameter = 20}) {
+Row username(VRChatUser user, {double diameter = 20}) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.center,
     children: <Widget>[

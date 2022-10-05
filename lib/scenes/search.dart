@@ -14,9 +14,11 @@ import 'package:vrchat_mobile_client/assets/flutter/text_stream.dart';
 import 'package:vrchat_mobile_client/assets/storage.dart';
 import 'package:vrchat_mobile_client/data_class/app_config.dart';
 import 'package:vrchat_mobile_client/main.dart';
+import 'package:vrchat_mobile_client/scenes/user.dart';
 import 'package:vrchat_mobile_client/scenes/world.dart';
 import 'package:vrchat_mobile_client/widgets/drawer.dart';
 import 'package:vrchat_mobile_client/widgets/modal.dart';
+import 'package:vrchat_mobile_client/widgets/profile.dart';
 import 'package:vrchat_mobile_client/widgets/template.dart';
 
 class VRChatSearch extends StatefulWidget {
@@ -53,6 +55,107 @@ class _SearchState extends State<VRChatSearch> {
     gridConfig.worldDetails = true;
     gridConfig.url = "https://vrchat.com/home/search/$text";
     gridConfig.sort?.frendsInInstance = true;
+  }
+
+  GridView extractionUserDefault() {
+    return renderGrid(
+      context,
+      width: 600,
+      height: config.worldDetails ? 235 : 130,
+      children: [
+        for (VRChatUser user in userList)
+          () {
+            if (["private", "offline", "traveling"].contains(user.location) && config.joinable) return null;
+            String worldId = user.location.split(":")[0];
+            return genericTemplate(
+              context,
+              appConfig,
+              imageUrl: user.profilePicOverride ?? user.currentAvatarThumbnailImageUrl,
+              onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => VRChatMobileUser(appConfig, userId: user.id),
+                  )),
+              children: [
+                username(user),
+                for (String text in [
+                  if (user.statusDescription != null) user.statusDescription!,
+                  if (!["private", "offline", "traveling"].contains(user.location)) locationMap[worldId]!.name,
+                  if (user.location == "private") AppLocalizations.of(context)!.privateWorld,
+                  if (user.location == "traveling") AppLocalizations.of(context)!.traveling,
+                ].whereType<String>()) ...[
+                  Text(text, style: const TextStyle(fontSize: 15)),
+                ],
+              ],
+            );
+          }(),
+      ].whereType<Widget>().toList(),
+    );
+  }
+
+  GridView extractionUserSimple() {
+    return renderGrid(
+      context,
+      width: 320,
+      height: config.worldDetails ? 119 : 64,
+      children: [
+        for (VRChatUser user in userList)
+          () {
+            if (["private", "offline", "traveling"].contains(user.location) && config.joinable) return null;
+            return genericTemplate(
+              context,
+              appConfig,
+              imageUrl: user.profilePicOverride ?? user.currentAvatarThumbnailImageUrl,
+              half: true,
+              onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => VRChatMobileUser(appConfig, userId: user.id),
+                  )),
+              children: [
+                username(user, diameter: 12),
+                for (String text in [
+                  if (user.statusDescription != null) user.statusDescription!,
+                ].whereType<String>()) ...[
+                  Text(text, style: const TextStyle(fontSize: 10)),
+                ],
+              ],
+            );
+          }(),
+      ].whereType<Widget>().toList(),
+    );
+  }
+
+  GridView extractionUserText() {
+    return renderGrid(
+      context,
+      width: 400,
+      height: config.worldDetails ? 39 : 26,
+      children: [
+        for (VRChatUser user in userList)
+          () {
+            if (["private", "offline", "traveling"].contains(user.location) && config.joinable) return null;
+            return genericTemplateText(
+              context,
+              appConfig,
+              onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => VRChatMobileUser(appConfig, userId: user.id),
+                  )),
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    username(user, diameter: 15),
+                    if (user.statusDescription != null) Text(user.statusDescription!, style: const TextStyle(fontSize: 10)),
+                  ],
+                ),
+              ],
+            );
+          }(),
+      ].whereType<Widget>().toList(),
+    );
   }
 
   GridView extractionWorldDefault() {
@@ -128,6 +231,36 @@ class _SearchState extends State<VRChatSearch> {
             );
           }(),
       ],
+    );
+  }
+
+  GridView extractionWoldrText() {
+    return renderGrid(
+      context,
+      width: 400,
+      height: config.worldDetails ? 39 : 26,
+      children: [
+        for (VRChatLimitedWorld world in worldList)
+          () {
+            return genericTemplateText(
+              context,
+              appConfig,
+              onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => VRChatMobileWorld(appConfig, worldId: world.id),
+                  )),
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(world.name, style: const TextStyle(fontSize: 10)),
+                  ],
+                ),
+              ],
+            );
+          }(),
+      ].whereType<Widget>().toList(),
     );
   }
 
@@ -228,7 +361,7 @@ class _SearchState extends State<VRChatSearch> {
                           worldList = [];
                           userList = [];
                           setState(() {});
-                          get().then((value) => setState(() => print("aaa")));
+                          get().then((value) => setState(() {}));
                         },
                       ),
                     ),
@@ -252,12 +385,14 @@ class _SearchState extends State<VRChatSearch> {
                 ),
                 if (userList.isEmpty && worldList.isEmpty && text != null) const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()),
                 if (userList.isNotEmpty) ...[
-                  if (config.displayMode == "normal") extractionWorldDefault(),
-                  if (config.displayMode == "simple") extractionWorldSimple(),
+                  if (config.displayMode == "normal") extractionUserDefault(),
+                  if (config.displayMode == "simple") extractionUserSimple(),
+                  if (config.displayMode == "text_only") extractionUserText(),
                 ],
-                if (userList.isNotEmpty) ...[
+                if (worldList.isNotEmpty) ...[
                   if (config.displayMode == "normal") extractionWorldDefault(),
                   if (config.displayMode == "simple") extractionWorldSimple(),
+                  if (config.displayMode == "text_only") extractionWoldrText(),
                 ],
                 /*
                 if (dataColumnWorlds.worldList.length == offset && offset > 0)
