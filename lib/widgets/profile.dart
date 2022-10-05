@@ -68,6 +68,25 @@ List<InlineSpan> textToAnchor(BuildContext context, AppConfig appConfig, String 
   ];
 }
 
+Row username(VRChatFriends user, {double diameter = 20}) {
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: <Widget>[
+      status(user.state == "offline" ? user.state! : user.status, diameter: diameter - 2),
+      Padding(
+        padding: const EdgeInsets.only(left: 2, right: 5),
+        child: Text(
+          user.displayName,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: diameter,
+          ),
+        ),
+      ),
+    ],
+  );
+}
+
 Column profile(BuildContext context, AppConfig appConfig, VRChatFriends user) {
   return Column(
     children: <Widget>[

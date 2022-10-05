@@ -18,7 +18,7 @@ import 'package:vrchat_mobile_client/main.dart';
 import 'package:vrchat_mobile_client/scenes/user.dart';
 import 'package:vrchat_mobile_client/widgets/drawer.dart';
 import 'package:vrchat_mobile_client/widgets/modal.dart';
-import 'package:vrchat_mobile_client/widgets/status.dart';
+import 'package:vrchat_mobile_client/widgets/profile.dart';
 import 'package:vrchat_mobile_client/widgets/template.dart';
 import 'package:vrchat_mobile_client/widgets/world.dart';
 
@@ -176,25 +176,6 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
             );
           }(),
       ].whereType<Widget>().toList(),
-    );
-  }
-
-  Row username(VRChatFriends user, {double diameter = 20}) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        status(user.state == "offline" ? user.state! : user.status, diameter: diameter - 2),
-        Padding(
-          padding: const EdgeInsets.only(left: 2, right: 5),
-          child: Text(
-            user.displayName,
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: diameter,
-            ),
-          ),
-        ),
-      ],
     );
   }
 
