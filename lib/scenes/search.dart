@@ -11,6 +11,7 @@ import 'package:vrchat_mobile_client/api/data_class.dart';
 import 'package:vrchat_mobile_client/api/main.dart';
 import 'package:vrchat_mobile_client/assets/error.dart';
 import 'package:vrchat_mobile_client/assets/flutter/text_stream.dart';
+import 'package:vrchat_mobile_client/assets/sort/worlds_favorite.dart';
 import 'package:vrchat_mobile_client/assets/storage.dart';
 import 'package:vrchat_mobile_client/data_class/app_config.dart';
 import 'package:vrchat_mobile_client/main.dart';
@@ -47,14 +48,25 @@ class _SearchState extends State<VRChatSearch> {
   String? text;
   SearchMode searchingMode = SearchMode.users;
   SearchMode searchModeSelected = SearchMode.users;
+  String sortedModeCache = "default";
+  bool sortedDescendCache = false;
 
   @override
   initState() {
     super.initState();
-    gridConfig.joinable = true;
-    gridConfig.worldDetails = true;
+    init();
+  }
+
+  init() {
+    gridConfig = GridModalConfig();
     gridConfig.url = "https://vrchat.com/home/search/$text";
-    gridConfig.sort?.frendsInInstance = true;
+    if (searchingMode == SearchMode.worlds) {
+      gridConfig.sort?.updatedDate = true;
+      gridConfig.sort?.labsPublicationDate = true;
+      gridConfig.sort?.heat = true;
+      gridConfig.sort?.capacity = true;
+      gridConfig.sort?.occupants = true;
+    }
   }
 
   GridView extractionUserDefault() {
@@ -302,16 +314,7 @@ class _SearchState extends State<VRChatSearch> {
   Future get() async {
     int len;
     searchBoxFocusNode.unfocus();
-    if (searchingMode == SearchMode.worlds) {
-      do {
-        int offset = worldList.length;
-        List<VRChatLimitedWorld> worlds = await vrhatLoginSession.searchWorlds(text ?? "", offset: offset).catchError((status) {
-          apiError(context, widget.appConfig, status);
-        });
-        worldList.addAll(worlds);
-        len = worlds.length;
-      } while (len == 50 && worldList.length % 50 != 0);
-    } else if (searchingMode == SearchMode.users) {
+    if (searchingMode == SearchMode.users) {
       do {
         int offset = userList.length;
         List<VRChatUser> users = await vrhatLoginSession.searchUsers(text ?? "", offset: offset).catchError((status) {
@@ -319,13 +322,34 @@ class _SearchState extends State<VRChatSearch> {
         });
         userList.addAll(users);
         len = users.length;
-      } while (len == 50 && userList.length % 50 != 0);
+      } while (len == 50 && userList.length < 200);
+    } else if (searchingMode == SearchMode.worlds) {
+      do {
+        int offset = worldList.length;
+        List<VRChatLimitedWorld> worlds = await vrhatLoginSession.searchWorlds(text ?? "", offset: offset).catchError((status) {
+          apiError(context, widget.appConfig, status);
+        });
+        worldList.addAll(worlds);
+        len = worlds.length;
+      } while (len == 50 && worldList.length < 200);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     textStream(context, widget.appConfig);
+    if (config.sort != sortedModeCache) {
+      for (FavoriteWorldData favoriteWorld in widget.appConfig.loggedAccount?.favoriteWorld ?? []) {
+        sortFavoriteWorlds(config, favoriteWorld.list);
+      }
+      sortedModeCache = config.sort;
+    }
+    if (config.descending != sortedDescendCache) {
+      for (FavoriteWorldData favoriteWorld in widget.appConfig.loggedAccount?.favoriteWorld ?? []) {
+        favoriteWorld.list.reversed.toList();
+        sortedDescendCache = config.descending;
+      }
+    }
     const selectedTextStyle = TextStyle(
       color: Colors.grey,
       fontSize: 16,
@@ -394,24 +418,6 @@ class _SearchState extends State<VRChatSearch> {
                   if (config.displayMode == "simple") extractionWorldSimple(),
                   if (config.displayMode == "text_only") extractionWoldrText(),
                 ],
-                /*
-                if (dataColumnWorlds.worldList.length == offset && offset > 0)
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width,
-                    child: Column(
-                      children: <Widget>[
-                        ElevatedButton(
-                          child: Text(AppLocalizations.of(context)!.readMore),
-                          onPressed: () => moreOver(searchBoxController.text).then(
-                            (_) => setState(
-                              () => body = dataColumnWorlds.render(children: dataColumnWorlds.reload()),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  */
               ],
             ),
           ),
