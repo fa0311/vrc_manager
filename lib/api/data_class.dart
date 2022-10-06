@@ -214,74 +214,33 @@ class VRChatfriendStatus {
   }
 }
 
-class VRChatWorld {
-  dynamic content;
-
+class VRChatWorld extends VRChatLimitedWorld {
   late String assetUrl;
-  late String authorId;
-  late String authorName;
-  late int capacity;
-  late DateTime createdAt;
   late String? description;
-  late int favorites;
   late bool featured;
-  late int heat;
-  late String id;
-  late String imageUrl;
   late List<Map<String, int>> instances = [];
-  late DateTime? labsPublicationDate;
-  late String name;
   late String namespace;
-  late int occupants;
-  late String organization;
-  late int popularity;
   late String? previewYoutubeId;
   late int privateOccupants;
   late int publicOccupants;
-  late DateTime? publicationDate;
-  late String releaseStatus;
-  late List<String> tags;
-  late String thumbnailImageUrl;
   late List<UnityPackages> unityPackages = [];
-  late DateTime updatedAt;
   late int version;
   late int visits;
 
-  VRChatWorld.fromJson(this.content) {
+  VRChatWorld.fromJson(content) : super.fromJson(content) {
     assetUrl = content['assetUrl'];
-    authorId = content['authorId'];
-    authorName = content['authorName'];
-    capacity = content['capacity'];
-    createdAt = DateTime.parse(content['created_at']);
     description = content['description'] == "" ? null : content['description'];
-    favorites = content['favorites'] ?? 0;
     featured = content['featured'] ?? false;
-    heat = content['heat'];
-    id = content['id'];
-    imageUrl = content['imageUrl'];
     instances = content['instances'].cast<Map<String, int>>();
-    labsPublicationDate = content['labsPublicationDate'] == "none" ? null : DateTime.parse(content['labsPublicationDate']);
-    name = content['name'];
     namespace = content['namespace'];
-    occupants = content['occupants'];
-    organization = content['organization'];
-    popularity = content['popularity'];
     previewYoutubeId = content['previewYoutubeId'] == "" ? null : content['previewYoutubeId'];
     privateOccupants = content['privateOccupants'];
-    publicationDate = content['publicationDate'] == "none" ? null : DateTime.parse(content['publicationDate']);
     publicOccupants = content['publicOccupants'];
-    releaseStatus = content['releaseStatus'];
-    tags = content['tags'].cast<String>();
-    thumbnailImageUrl = content['thumbnailImageUrl'];
     for (dynamic unitypackage in content['unityPackages']) {
       unityPackages.add(UnityPackages.fromJson(unitypackage));
     }
-    updatedAt = DateTime.parse(content['updated_at']);
     version = content['version'];
     visits = content['visits'];
-  }
-  VRChatLimitedWorld toLimited() {
-    return VRChatLimitedWorld.fromJson(content);
   }
 }
 
@@ -296,16 +255,16 @@ class VRChatLimitedWorld {
   late int heat;
   late String id;
   late String imageUrl;
-  late String labsPublicationDate;
+  late DateTime? labsPublicationDate;
   late String name;
   late int occupants;
   late String organization;
   late int popularity;
-  late String publicationDate;
+  late DateTime? publicationDate;
   late String releaseStatus;
   late List<String> tags;
   late String thumbnailImageUrl;
-  late List<LimitedUnityPackages> unityPackages = [];
+  late List<LimitedUnityPackages> limitedUnityPackages = [];
   late DateTime updatedAt;
 
   VRChatLimitedWorld.fromJson(this.content) {
@@ -317,17 +276,17 @@ class VRChatLimitedWorld {
     heat = content['heat'];
     id = content['id'];
     imageUrl = content['imageUrl'];
-    labsPublicationDate = content['labsPublicationDate'];
+    labsPublicationDate = content['labsPublicationDate'] == "none" ? null : DateTime.parse(content['labsPublicationDate']);
     name = content['name'];
     occupants = content['occupants'];
     organization = content['organization'];
     popularity = content['popularity'];
-    publicationDate = content['publicationDate'];
+    publicationDate = content['publicationDate'] == "none" ? null : DateTime.parse(content['publicationDate']);
     releaseStatus = content['releaseStatus'];
     tags = content['tags'].cast<String>();
     thumbnailImageUrl = content['thumbnailImageUrl'];
     for (dynamic unityPackage in content['unityPackages']) {
-      unityPackages.add(LimitedUnityPackages.fromJson(unityPackage));
+      limitedUnityPackages.add(LimitedUnityPackages.fromJson(unityPackage));
     }
     updatedAt = DateTime.parse(content['updated_at']);
   }
@@ -412,80 +371,17 @@ class VRChatPlatforms {
   }
 }
 
-class VRChatFavoriteWorld {
-  dynamic content;
-
-  late String authorId;
-  late String authorName;
-  late int capacity;
-  late DateTime createdAt;
-  late int favorites;
-  late int heat;
-  late String id;
-  late String imageUrl;
-  late DateTime? labsPublicationDate;
-  late String name;
-  late int occupants;
-  late String organization;
-  late int popularity;
-  late DateTime? publicationDate;
-  late String releaseStatus;
-  late List<String> tags;
-  late String thumbnailImageUrl;
-  late List<LimitedUnityPackages> unityPackages = [];
-  late DateTime updatedAt;
+class VRChatFavoriteWorld extends VRChatLimitedWorld {
   late String favoriteId;
   late String favoriteGroup;
 
-  VRChatFavoriteWorld.fromJson(this.content) {
-    authorId = content['authorId'];
-    authorName = content['authorName'];
-    capacity = content['capacity'];
-    createdAt = DateTime.parse(content['created_at']);
-    favorites = content['favorites'];
-    heat = content['heat'];
-    id = content['id'];
-    imageUrl = content['imageUrl'];
-    labsPublicationDate = content['labsPublicationDate'] == "none" ? null : DateTime.parse(content['labsPublicationDate']);
-    name = content['name'];
-    occupants = content['occupants'];
-    organization = content['organization'];
-    popularity = content['popularity'];
-    publicationDate = content['publicationDate'] == "none" ? null : DateTime.parse(content['publicationDate']);
-    releaseStatus = content['releaseStatus'];
-    tags = content['tags'].cast<String>();
-    thumbnailImageUrl = content['thumbnailImageUrl'];
-    for (dynamic unityPackage in content['unityPackages']) {
-      unityPackages.add(LimitedUnityPackages.fromJson(unityPackage));
-    }
-    updatedAt = DateTime.parse(content['updated_at']);
+  VRChatFavoriteWorld.fromJson(content) : super.fromJson(content) {
     favoriteId = content['favoriteId'];
     favoriteGroup = content['favoriteGroup'];
   }
 
-  VRChatFavoriteWorld.fromFavorite(VRChatWorld world, VRChatFavorite favorite, String favoriteGroup) {
+  VRChatFavoriteWorld.fromFavorite(VRChatWorld world, VRChatFavorite favorite, String favoriteGroup) : super.fromJson(world.content) {
     if (world.id != favorite.favoriteId) throw ArgumentError();
-    authorId = world.authorId;
-    authorName = world.authorName;
-    capacity = world.capacity;
-    createdAt = world.createdAt;
-    favorites = world.favorites;
-    heat = world.heat;
-    id = world.id;
-    imageUrl = world.imageUrl;
-    labsPublicationDate = world.labsPublicationDate;
-    name = world.name;
-    occupants = world.occupants;
-    organization = world.organization;
-    popularity = world.popularity;
-    publicationDate = world.publicationDate!;
-    releaseStatus = world.releaseStatus;
-    tags = world.tags;
-    thumbnailImageUrl = world.thumbnailImageUrl;
-    for (UnityPackages unityPackage in world.unityPackages) {
-      unityPackages.add(LimitedUnityPackages.fromUnityPackages(unityPackage));
-    }
-    updatedAt = world.updatedAt;
     favoriteId = favorite.id;
     favoriteGroup = favoriteGroup;
   }

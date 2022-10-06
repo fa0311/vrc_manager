@@ -241,7 +241,7 @@ class Users {
                 if (worldDetails && locationMap[worldId] != null && instanceMap[user.location] == null)
                   Padding(
                     padding: const EdgeInsets.only(top: 5),
-                    child: (simpleWorld(context, appConfig, locationMap[worldId]!.toLimited()).child! as Container).child!,
+                    child: (simpleWorld(context, appConfig, locationMap[worldId]!).child! as Container).child!,
                   ),
                 if (worldDetails && locationMap[worldId] != null && instanceMap[user.location] != null)
                   Padding(
@@ -456,7 +456,7 @@ class Users {
                 if (worldDetails && locationMap[worldId] != null && instanceMap[user.location] == null)
                   Padding(
                     padding: const EdgeInsets.only(top: 5),
-                    child: (simpleWorldHalf(context, appConfig, locationMap[worldId]!.toLimited()).child! as Container).child!,
+                    child: (simpleWorldHalf(context, appConfig, locationMap[worldId]!).child! as Container).child!,
                   ),
                 if (worldDetails && locationMap[worldId] != null && instanceMap[user.location] != null)
                   Padding(
