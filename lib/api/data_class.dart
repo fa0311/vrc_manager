@@ -464,7 +464,7 @@ class VRChatWorld {
   late int visits;
 
   VRChatWorld.fromJson(this.content) {
-    assetUrl = content['assetUrl'];
+    // assetUrl = content['assetUrl'];
     authorId = content['authorId'];
     authorName = content['authorName'];
     capacity = content['capacity'];
