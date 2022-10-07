@@ -228,7 +228,6 @@ class VRChatWorld extends VRChatLimitedWorld {
   late int visits;
 
   VRChatWorld.fromJson(content) : super.fromJson(content) {
-    assetUrl = content['assetUrl'];
     description = content['description'] == "" ? null : content['description'];
     featured = content['featured'] ?? false;
     instances = content['instances'].cast<Map<String, int>>();
