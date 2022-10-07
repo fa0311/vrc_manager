@@ -214,7 +214,7 @@ class GridConfigList {
   GridConfig onlineFriends = GridConfig("online_friends_config");
   GridConfig offlineFriends = GridConfig("offline_friends_config");
   GridConfig friendsRequest = GridConfig("friends_request_config");
-  GridConfig searcUsers = GridConfig("search_users_config");
+  GridConfig searchUsers = GridConfig("search_users_config");
   GridConfig searcWorlds = GridConfig("search_worlds_config");
   GridConfig favoriteWorlds = GridConfig("favorite_worlds_config");
 
@@ -223,7 +223,7 @@ class GridConfigList {
     futureList.add(onlineFriends.setConfig());
     futureList.add(offlineFriends.setConfig());
     futureList.add(friendsRequest.setConfig());
-    futureList.add(searcUsers.setConfig());
+    futureList.add(searchUsers.setConfig());
     futureList.add(searcWorlds.setConfig());
     futureList.add(favoriteWorlds.setConfig());
     return Future.wait(futureList);

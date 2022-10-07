@@ -174,7 +174,7 @@ class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
 
     if (config.sort != sortedModeCache) {
       for (FavoriteWorldData favoriteWorld in widget.appConfig.loggedAccount?.favoriteWorld ?? []) {
-        sortFavoriteWorlds(config, favoriteWorld.list);
+        sortWorlds(config, favoriteWorld.list);
       }
       sortedModeCache = config.sort;
     }

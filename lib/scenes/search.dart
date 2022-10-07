@@ -38,7 +38,7 @@ enum SearchMode {
 
 class _SearchState extends State<VRChatSearch> {
   late VRChatAPI vrhatLoginSession = VRChatAPI(cookie: widget.appConfig.loggedAccount?.cookie ?? "");
-  late GridConfig config = widget.appConfig.gridConfigList.searcUsers;
+  late GridConfig config = widget.appConfig.gridConfigList.searchUsers;
   GridModalConfig gridConfig = GridModalConfig();
   List<VRChatLimitedWorld> worldList = [];
   Map<String, VRChatWorld?> locationMap = {};
@@ -57,7 +57,7 @@ class _SearchState extends State<VRChatSearch> {
     init();
   }
 
-  init() {
+  void init() {
     gridConfig = GridModalConfig();
     gridConfig.url = "https://vrchat.com/home/search/$text";
     if (searchingMode == SearchMode.worlds) {
@@ -246,7 +246,7 @@ class _SearchState extends State<VRChatSearch> {
     );
   }
 
-  GridView extractionWoldrText() {
+  GridView extractionWorldText() {
     return renderGrid(
       context,
       width: 400,
@@ -338,10 +338,9 @@ class _SearchState extends State<VRChatSearch> {
   @override
   Widget build(BuildContext context) {
     textStream(context, widget.appConfig);
+    print("build");
     if (config.sort != sortedModeCache) {
-      for (FavoriteWorldData favoriteWorld in widget.appConfig.loggedAccount?.favoriteWorld ?? []) {
-        sortFavoriteWorlds(config, favoriteWorld.list);
-      }
+      sortWorlds(config, worldList);
       sortedModeCache = config.sort;
     }
     if (config.descending != sortedDescendCache) {
@@ -386,6 +385,7 @@ class _SearchState extends State<VRChatSearch> {
                           userList = [];
                           setState(() {});
                           get().then((value) => setState(() {}));
+                          init();
                         },
                       ),
                     ),
@@ -416,7 +416,7 @@ class _SearchState extends State<VRChatSearch> {
                 if (worldList.isNotEmpty) ...[
                   if (config.displayMode == "normal") extractionWorldDefault(),
                   if (config.displayMode == "simple") extractionWorldSimple(),
-                  if (config.displayMode == "text_only") extractionWoldrText(),
+                  if (config.displayMode == "text_only") extractionWorldText(),
                 ],
               ],
             ),
