@@ -1,6 +1,6 @@
 // Project imports:
-import 'package:vrchat_mobile_client/api/data_class.dart';
-import 'package:vrchat_mobile_client/assets/session.dart';
+import 'package:vrc_manager/api/data_class.dart';
+import 'package:vrc_manager/assets/session.dart';
 
 class VRChatAPI {
   VRChatAPI({String cookie = ""}) {

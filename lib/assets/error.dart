@@ -12,10 +12,10 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 // Project imports:
-import 'package:vrchat_mobile_client/api/data_class.dart';
-import 'package:vrchat_mobile_client/data_class/app_config.dart';
-import 'package:vrchat_mobile_client/scenes/login.dart';
-import 'package:vrchat_mobile_client/widgets/share.dart';
+import 'package:vrc_manager/api/data_class.dart';
+import 'package:vrc_manager/data_class/app_config.dart';
+import 'package:vrc_manager/scenes/login.dart';
+import 'package:vrc_manager/widgets/share.dart';
 
 void errorDialog(BuildContext context, AppConfig appConfig, String text, {String log = ""}) {
   if (log.isNotEmpty) {
@@ -43,7 +43,7 @@ void errorDialog(BuildContext context, AppConfig appConfig, String text, {String
                     * if(context.mounted)
                     */
                   // ignore: use_build_context_synchronously
-                  openInBrowser(context, appConfig, "https://github.com/fa0311/vrchat_mobile_client/issues/new/choose");
+                  openInBrowser(context, appConfig, "https://github.com/fa0311/vrc_manager/issues/new/choose");
                 },
               ),
             TextButton(

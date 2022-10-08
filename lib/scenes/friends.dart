@@ -7,20 +7,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 // Project imports:
-import 'package:vrchat_mobile_client/api/data_class.dart';
-import 'package:vrchat_mobile_client/api/main.dart';
-import 'package:vrchat_mobile_client/assets/api.dart';
-import 'package:vrchat_mobile_client/assets/error.dart';
-import 'package:vrchat_mobile_client/assets/flutter/text_stream.dart';
-import 'package:vrchat_mobile_client/assets/sort/users.dart';
-import 'package:vrchat_mobile_client/data_class/app_config.dart';
-import 'package:vrchat_mobile_client/main.dart';
-import 'package:vrchat_mobile_client/scenes/user.dart';
-import 'package:vrchat_mobile_client/widgets/drawer.dart';
-import 'package:vrchat_mobile_client/widgets/modal.dart';
-import 'package:vrchat_mobile_client/widgets/profile.dart';
-import 'package:vrchat_mobile_client/widgets/template.dart';
-import 'package:vrchat_mobile_client/widgets/world.dart';
+import 'package:vrc_manager/api/data_class.dart';
+import 'package:vrc_manager/api/main.dart';
+import 'package:vrc_manager/assets/api.dart';
+import 'package:vrc_manager/assets/error.dart';
+import 'package:vrc_manager/assets/flutter/text_stream.dart';
+import 'package:vrc_manager/assets/sort/users.dart';
+import 'package:vrc_manager/data_class/app_config.dart';
+import 'package:vrc_manager/main.dart';
+import 'package:vrc_manager/scenes/user.dart';
+import 'package:vrc_manager/widgets/drawer.dart';
+import 'package:vrc_manager/widgets/modal.dart';
+import 'package:vrc_manager/widgets/profile.dart';
+import 'package:vrc_manager/widgets/template.dart';
+import 'package:vrc_manager/widgets/world.dart';
 
 class VRChatMobileFriends extends StatefulWidget {
   final bool offline;

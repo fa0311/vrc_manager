@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 // Project imports:
-import 'package:vrchat_mobile_client/assets/storage.dart';
-import 'package:vrchat_mobile_client/main.dart';
+import 'package:vrc_manager/assets/storage.dart';
+import 'package:vrc_manager/main.dart';
 
 ListTile changeLocaleDialogOption(BuildContext context, String title, String languageCode) {
   return ListTile(

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 // Project imports:
-import 'package:vrchat_mobile_client/assets/vrchat/region.dart';
+import 'package:vrc_manager/assets/vrchat/region.dart';
 
 SizedBox region(String region, {double size = 15}) {
   return SizedBox(

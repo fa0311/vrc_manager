@@ -2,10 +2,10 @@
 import 'package:flutter/material.dart';
 
 // Project imports:
-import 'package:vrchat_mobile_client/data_class/app_config.dart';
-import 'package:vrchat_mobile_client/scenes/user.dart';
-import 'package:vrchat_mobile_client/scenes/world.dart';
-import 'package:vrchat_mobile_client/widgets/share.dart';
+import 'package:vrc_manager/data_class/app_config.dart';
+import 'package:vrc_manager/scenes/user.dart';
+import 'package:vrc_manager/scenes/world.dart';
+import 'package:vrc_manager/widgets/share.dart';
 
 void urlParser(BuildContext context, AppConfig appConfig, String strUri) {
   final List<String> path = Uri.parse(strUri).path.split("/");

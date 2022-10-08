@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.14)
-project(vrchat_mobile_client LANGUAGES CXX)
+project(vrc_manager LANGUAGES CXX)
 
-set(BINARY_NAME "vrchat_mobile_client")
+set(BINARY_NAME "vrc_manager")
 
 cmake_policy(SET CMP0063 NEW)
 

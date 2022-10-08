@@ -5,13 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 // Project imports:
-import 'package:vrchat_mobile_client/assets/flutter/text_stream.dart';
-import 'package:vrchat_mobile_client/data_class/app_config.dart';
-import 'package:vrchat_mobile_client/scenes/setting/accessibility.dart';
-import 'package:vrchat_mobile_client/scenes/setting/account.dart';
-import 'package:vrchat_mobile_client/scenes/setting/help.dart';
-import 'package:vrchat_mobile_client/scenes/setting/permissions.dart';
-import 'package:vrchat_mobile_client/widgets/drawer.dart';
+import 'package:vrc_manager/assets/flutter/text_stream.dart';
+import 'package:vrc_manager/data_class/app_config.dart';
+import 'package:vrc_manager/scenes/setting/accessibility.dart';
+import 'package:vrc_manager/scenes/setting/account.dart';
+import 'package:vrc_manager/scenes/setting/help.dart';
+import 'package:vrc_manager/scenes/setting/permissions.dart';
+import 'package:vrc_manager/widgets/drawer.dart';
 
 class VRChatMobileSettings extends StatefulWidget {
   final AppConfig appConfig;

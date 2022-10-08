@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 // Project imports:
-import 'package:vrchat_mobile_client/data_class/app_config.dart';
+import 'package:vrc_manager/data_class/app_config.dart';
 
 GridView renderGrid(
   BuildContext context, {

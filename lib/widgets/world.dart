@@ -7,14 +7,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 // Project imports:
-import 'package:vrchat_mobile_client/api/data_class.dart';
-import 'package:vrchat_mobile_client/api/main.dart';
-import 'package:vrchat_mobile_client/assets/error.dart';
-import 'package:vrchat_mobile_client/assets/vrchat/instance_type.dart';
-import 'package:vrchat_mobile_client/data_class/app_config.dart';
-import 'package:vrchat_mobile_client/scenes/world.dart';
-import 'package:vrchat_mobile_client/widgets/region.dart';
-import 'package:vrchat_mobile_client/widgets/template.dart';
+import 'package:vrc_manager/api/data_class.dart';
+import 'package:vrc_manager/api/main.dart';
+import 'package:vrc_manager/assets/error.dart';
+import 'package:vrc_manager/assets/vrchat/instance_type.dart';
+import 'package:vrc_manager/data_class/app_config.dart';
+import 'package:vrc_manager/scenes/world.dart';
+import 'package:vrc_manager/widgets/region.dart';
+import 'package:vrc_manager/widgets/template.dart';
 
 Widget instanceWidget(
   BuildContext context,

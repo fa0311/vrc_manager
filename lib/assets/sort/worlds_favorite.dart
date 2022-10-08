@@ -2,8 +2,8 @@
 import 'dart:convert';
 
 // Project imports:
-import 'package:vrchat_mobile_client/api/data_class.dart';
-import 'package:vrchat_mobile_client/data_class/app_config.dart';
+import 'package:vrc_manager/api/data_class.dart';
+import 'package:vrc_manager/data_class/app_config.dart';
 
 sortWorlds(GridConfig config, List<VRChatLimitedWorld> worldList) {
   if (config.sort == "name") {

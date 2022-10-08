@@ -2,10 +2,10 @@
 import 'package:flutter/material.dart';
 
 // Project imports:
-import 'package:vrchat_mobile_client/assets/storage.dart';
-import 'package:vrchat_mobile_client/data_class/app_config.dart';
-import 'package:vrchat_mobile_client/material.dart';
-import 'package:vrchat_mobile_client/scenes/splash.dart';
+import 'package:vrc_manager/assets/storage.dart';
+import 'package:vrc_manager/data_class/app_config.dart';
+import 'package:vrc_manager/material.dart';
+import 'package:vrc_manager/scenes/splash.dart';
 
 AppConfig appConfig = AppConfig();
 main() {

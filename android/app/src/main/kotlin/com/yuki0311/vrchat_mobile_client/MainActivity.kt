@@ -1,4 +1,4 @@
-package com.yuki0311.vrchat_mobile_client
+package com.yuki0311.vrc_manager
 
 import io.flutter.embedding.android.FlutterActivity
 

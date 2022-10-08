@@ -9,8 +9,8 @@ import 'package:domain_verification_manager/domain_verification_manager.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 // Project imports:
-import 'package:vrchat_mobile_client/assets/flutter/text_stream.dart';
-import 'package:vrchat_mobile_client/data_class/app_config.dart';
+import 'package:vrc_manager/assets/flutter/text_stream.dart';
+import 'package:vrc_manager/data_class/app_config.dart';
 
 class VRChatMobileSettingsPermissions extends StatefulWidget {
   final AppConfig appConfig;

@@ -8,11 +8,11 @@ import 'package:flutter/material.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 
 // Project imports:
-import 'package:vrchat_mobile_client/assets/flutter/url_parser.dart';
-import 'package:vrchat_mobile_client/data_class/app_config.dart';
-import 'package:vrchat_mobile_client/main.dart';
-import 'package:vrchat_mobile_client/scenes/home.dart';
-import 'package:vrchat_mobile_client/scenes/login.dart';
+import 'package:vrc_manager/assets/flutter/url_parser.dart';
+import 'package:vrc_manager/data_class/app_config.dart';
+import 'package:vrc_manager/main.dart';
+import 'package:vrc_manager/scenes/home.dart';
+import 'package:vrc_manager/scenes/login.dart';
 
 class VRChatMobileSplash extends StatefulWidget {
   const VRChatMobileSplash({Key? key}) : super(key: key);
