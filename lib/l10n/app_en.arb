@@ -67,8 +67,8 @@
     "home": "Home",
     "@____________________FRIEND____________________": {},
     "friends": "Friends",
-    "onlinefriends": "Online Friends",
-    "offlinefriends": "Offline Friends",
+    "onlineFriends": "Online Friends",
+    "offlineFriends": "Offline Friends",
     "@__FRIEND_SETTING__": {},
     "autoReadMore": "Automatic continuation loading",
     "showOnlyAvailable": "Show only available participants",
@@ -108,7 +108,7 @@
     "@__USER_FRIEND__": {},
     "unfriend": "Unfriend",
     "unfriendConfirm": "Do you want to unfriend me?",
-    "unrequested": "Unrequested",
+    "requestCancel": "Unrequested",
     "allowFriends": "Friends allow",
     "denyFriends": "Friends deny",
     "@____________________JSON_VIEWER____________________": {},
@@ -136,7 +136,7 @@
     "accessibility": "Accessibility",
     "language": "Language",
     "languageDetails": "Switch language",
-    "translaterDetails": "Translated by {name}",
+    "translatorDetails": "Translated by {name}",
     "darkTheme": "Dark theme",
     "darkThemeDetails1": "Switch to a dark theme that is easy on the eyes.",
     "darkThemeDetails2": "The theme setting of the device takes precedence.",
@@ -172,8 +172,8 @@
     "rateTheAppDetails": "Please rate us on Google PlayStore!",
     "version": "Version",
     "versionDetails": "Current Version: {version}",
-    "licence": "Licence",
-    "licenceDetails": "Check Licence information",
+    "license": "License",
+    "licenseDetails": "Check License information",
     "@____________________PLACEHOLDER____________________": {},
     "@__PLACEHOLDER_DATE__": {},
     "@dateFormat1": {
@@ -236,7 +236,7 @@
         }
     },
     "@__SETTING__": {},
-    "@translaterDetails": {
+    "@translatorDetails": {
         "placeholders": {
             "name": {}
         }

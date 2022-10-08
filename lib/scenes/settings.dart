@@ -30,7 +30,7 @@ class _SettingPageState extends State<VRChatMobileSettings> {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.setting),
       ),
-      drawer: widget.appConfig.isLogined() ? drawer(context, widget.appConfig) : simpledrawer(context, widget.appConfig),
+      drawer: widget.appConfig.isLogout() ? drawer(context, widget.appConfig) : simpleDrawer(context, widget.appConfig),
       body: SafeArea(
         child: SizedBox(
           child: SingleChildScrollView(

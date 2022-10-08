@@ -50,7 +50,7 @@ class _SettingOtherAccountPageState extends State<VRChatMobileSettingsOtherAccou
                     child: SizedBox(
                       width: double.infinity,
                       child: Text(
-                        account.displayname ?? AppLocalizations.of(context)!.unknown,
+                        account.displayName ?? AppLocalizations.of(context)!.unknown,
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ),
@@ -88,7 +88,7 @@ class _SettingOtherAccountPageState extends State<VRChatMobileSettingsOtherAccou
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.accountSwitchSetting),
       ),
-      drawer: widget.appConfig.isLogined() ? drawer(context, widget.appConfig) : simpledrawer(context, widget.appConfig),
+      drawer: widget.appConfig.isLogout() ? drawer(context, widget.appConfig) : simpleDrawer(context, widget.appConfig),
       body: SafeArea(
         child: SizedBox(
           width: MediaQuery.of(context).size.width,

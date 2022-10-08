@@ -32,7 +32,7 @@ class Users {
   String displayMode = "normal";
   late BuildContext context;
   late AppConfig appConfig;
-  late VRChatAPI vrhatLoginSession;
+  late VRChatAPI vrchatLoginSession;
 
   Map<String, VRChatWorld> locationMap = {};
   Map<String, VRChatInstance> instanceMap = {};
@@ -117,7 +117,7 @@ class Users {
     if (displayMode == "normal") defaultAdd(user);
     if (displayMode == "simple") simpleAdd(user);
     if (displayMode == "text_only") textOnlyAdd(user);
-    if (displayMode == "normaldescription") defaultDescriptionAdd(user);
+    if (displayMode == "normal_description") defaultDescriptionAdd(user);
     if (displayMode == "simple_description") simpleDescriptionAdd(user);
     if (displayMode == "text_only_description") textOnlyDescriptionAdd(user);
     return children;
@@ -625,7 +625,7 @@ class Users {
                               minimumSize: Size.zero,
                               padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 4),
                             ),
-                            onPressed: () => vrhatLoginSession
+                            onPressed: () => vrchatLoginSession
                                 .selfInvite(instanceMap[user.location]!.location, instanceMap[user.location]!.shortName ?? "")
                                 .then((VRChatNotificationsInvite response) {
                               showDialog(
@@ -725,7 +725,7 @@ class Users {
       height = worldDetails ? 52 : 41;
       wrap = 400;
     }
-    if (displayMode == "normaldescription") {
+    if (displayMode == "normal_description") {
       height = worldDetails ? 233 : 130;
       wrap = 600;
     }

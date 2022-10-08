@@ -66,8 +66,8 @@
     "home": "Início",
     "@____________________FRIEND____________________": {},
     "friends": "Amigos",
-    "onlinefriends": "Amigos on-line",
-    "offlinefriends": "Amigos fora de linha",
+    "onlineFriends": "Amigos on-line",
+    "offlineFriends": "Amigos fora de linha",
     "@__FRIEND_SETTING__": {},
     "autoReadMore": "Carregamento contínuo automático",
     "showOnlyAvailable": "Mostrar apenas disponível",
@@ -100,7 +100,7 @@
     "@__USER_FRIEND__": {},
     "unfriend": "Inamigo",
     "unfriendConfirm": "Você quer me desamparar?",
-    "unrequested": "Solicitação de não amizade",
+    "requestCancel": "Solicitação de não amizade",
     "allowFriends": "Aceitar amigo",
     "denyFriends": "Rejeitar amigo",
     "@____________________JSON_VIEWER____________________": {},
@@ -128,7 +128,7 @@
     "accessibility": "Acessibilidade",
     "language": "Idioma",
     "languageDetails": "Trocar o idioma",
-    "translaterDetails": "Tradução por {name}",
+    "translatorDetails": "Tradução por {name}",
     "darkTheme": "Tema sombrio",
     "darkThemeDetails1": "Mudar para um tema escuro que seja mais fácil para os olhos",
     "darkThemeDetails2": "A definição do tema do dispositivo tem precedência",
@@ -161,6 +161,6 @@
     "rateTheAppDetails": "Por favor, classifique-nos na Google PlayStore",
     "version": "Versão",
     "versionDetails": "Versão atual: {version}",
-    "licence": "Licença",
-    "licenceDetails": "Verificar informações sobre a licença"
+    "license": "Licença",
+    "licenseDetails": "Verificar informações sobre a licença"
 }

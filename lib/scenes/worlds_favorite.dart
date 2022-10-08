@@ -30,7 +30,7 @@ class VRChatMobileWorldsFavorite extends StatefulWidget {
 }
 
 class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
-  late VRChatAPI vrhatLoginSession = VRChatAPI(cookie: widget.appConfig.loggedAccount?.cookie ?? "");
+  late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: widget.appConfig.loggedAccount?.cookie ?? "");
   late GridConfig config = widget.appConfig.gridConfigList.favoriteWorlds;
   GridModalConfig gridConfig = GridModalConfig();
   String sortedModeCache = "default";
@@ -161,7 +161,7 @@ class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
   }
 
   delete(VRChatFavoriteWorld world, List<VRChatFavoriteWorld> favoriteWorld) {
-    vrhatLoginSession.deleteFavorites(world.favoriteId).then((response) {
+    vrchatLoginSession.deleteFavorites(world.favoriteId).then((response) {
       setState(() => favoriteWorld.remove(world));
     }).catchError((status) {
       apiError(context, appConfig, status);

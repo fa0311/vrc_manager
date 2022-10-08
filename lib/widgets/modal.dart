@@ -10,7 +10,7 @@ import 'package:vrchat_mobile_client/widgets/share.dart';
 
 class GridModalConfig {
   GridSortConfig? sort = GridSortConfig();
-  GridDispleyModeConfig? displayMode = GridDispleyModeConfig();
+  GridDisplayModeConfig? displayMode = GridDisplayModeConfig();
   bool worldDetails = false;
   bool joinable = false;
   bool removeButton = false;
@@ -22,7 +22,7 @@ class GridSortConfig {
   bool name = true;
 
   bool lastLogin = false;
-  bool frendsInInstance = false;
+  bool friendsInInstance = false;
   bool updatedDate = false;
   bool labsPublicationDate = false;
   bool heat = false;
@@ -30,7 +30,7 @@ class GridSortConfig {
   bool occupants = false;
 }
 
-class GridDispleyModeConfig {
+class GridDisplayModeConfig {
   bool normal = true;
   bool simple = true;
   bool textOnly = true;
@@ -71,7 +71,7 @@ gridModal(BuildContext context, AppConfig appConfig, Function setState, GridConf
                       "text_only": Text(AppLocalizations.of(context)!.textOnly),
                     }[config.displayMode] ??
                     Text(AppLocalizations.of(context)!.sortedByDefault),
-                onTap: () => setStateBuilder(() => gridDispleyModeModal(
+                onTap: () => setStateBuilder(() => gridDisplayModeModal(
                       context,
                       (VoidCallback fn) => setStateBuilder(() => setState(fn)),
                       config,
@@ -134,7 +134,7 @@ gridSortModal(BuildContext context, Function setState, GridConfig config, GridSo
               "normal": AppLocalizations.of(context)!.sortedByDefault,
               if (gridSortConfig.name) "name": AppLocalizations.of(context)!.sortedByName,
               if (gridSortConfig.lastLogin) "last_login": AppLocalizations.of(context)!.sortedByLastLogin,
-              if (gridSortConfig.frendsInInstance) "friends_in_instance": AppLocalizations.of(context)!.sortedByFriendsInInstance,
+              if (gridSortConfig.friendsInInstance) "friends_in_instance": AppLocalizations.of(context)!.sortedByFriendsInInstance,
               if (gridSortConfig.updatedDate) "updated_date": AppLocalizations.of(context)!.sortedByUpdatedDate,
               if (gridSortConfig.labsPublicationDate) "labs_publication_date": AppLocalizations.of(context)!.sortedByLabsPublicationDate,
               if (gridSortConfig.heat) "heat": AppLocalizations.of(context)!.sortedByHeat,
@@ -166,7 +166,7 @@ gridSortModal(BuildContext context, Function setState, GridConfig config, GridSo
   );
 }
 
-gridDispleyModeModal(BuildContext context, Function setState, GridConfig config, GridDispleyModeConfig gridDisplayModeConfig) {
+gridDisplayModeModal(BuildContext context, Function setState, GridConfig config, GridDisplayModeConfig gridDisplayModeConfig) {
   showModalBottomSheet(
     context: context,
     shape: const RoundedRectangleBorder(

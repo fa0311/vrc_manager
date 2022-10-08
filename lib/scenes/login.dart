@@ -38,10 +38,10 @@ class _LoginPageState extends State<VRChatMobileLogin> {
   @override
   initState() {
     super.initState();
-    if (widget.appConfig.isLogined()) {
+    if (widget.appConfig.isLogout()) {
       accountConfig = widget.appConfig.loggedAccount!;
       session = VRChatAPI(cookie: accountConfig.cookie);
-      _userController.text = accountConfig.userid ?? "";
+      _userController.text = accountConfig.userId ?? "";
       _passwordController.text = accountConfig.password ?? "";
       _rememberPassword = accountConfig.rememberLoginInfo;
     } else {
@@ -121,6 +121,7 @@ class _LoginPageState extends State<VRChatMobileLogin> {
   }
 
   String genUid([int length = 64]) {
+    // cspell:disable-next-line
     const charset = '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._';
     final Random random = Random.secure();
     return List.generate(length, (_) => charset[random.nextInt(charset.length)]).join();
@@ -140,7 +141,7 @@ class _LoginPageState extends State<VRChatMobileLogin> {
           ),
         ],
       ),
-      drawer: simpledrawer(context, widget.appConfig),
+      drawer: simpleDrawer(context, widget.appConfig),
       body: Padding(
           padding: const EdgeInsets.all(32.0),
           child: Column(

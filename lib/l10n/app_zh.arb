@@ -66,8 +66,8 @@
     "home": "首页",
     "@____________________FRIEND____________________": {},
     "friends": "朋友们",
-    "onlinefriends": "在线朋友",
-    "offlinefriends": "离线朋友",
+    "onlineFriends": "在线朋友",
+    "offlineFriends": "离线朋友",
     "@__FRIEND_SETTING__": {},
     "autoReadMore": "自动继续加载",
     "showOnlyAvailable": "仅供展示",
@@ -100,7 +100,7 @@
     "@__USER_FRIEND__": {},
     "unfriend": "解除友谊",
     "unfriendConfirm": "你想取消我的好友吗？",
-    "unrequested": "解除友谊请求",
+    "requestCancel": "解除友谊请求",
     "allowFriends": "接受朋友",
     "denyFriends": "拒绝朋友",
     "@____________________JSON_VIEWER____________________": {},
@@ -128,7 +128,7 @@
     "accessibility": "无障碍设施",
     "language": "语言",
     "languageDetails": "切换语言",
-    "translaterDetails": "译者: {name}",
+    "translatorDetails": "译者: {name}",
     "darkTheme": "深色主题",
     "darkThemeDetails1": "切换到一个更容易让人注意的深色主题",
     "darkThemeDetails2": "设备的主题设置具有优先权",
@@ -161,6 +161,6 @@
     "rateTheAppDetails": "请在Google PlayStore为我们评分",
     "version": "版本",
     "versionDetails": "当前版本: {version}",
-    "licence": "许可证",
-    "licenceDetails": "检查许可证信息"
+    "license": "许可证",
+    "licenseDetails": "检查许可证信息"
 }

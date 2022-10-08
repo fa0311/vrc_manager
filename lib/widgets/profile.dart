@@ -144,7 +144,7 @@ Column profile(BuildContext context, AppConfig appConfig, VRChatFriends user) {
       ),
       Row(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: _biolink(
+        children: _bioLink(
           context,
           appConfig,
           user.bioLinks,
@@ -166,11 +166,11 @@ Column profile(BuildContext context, AppConfig appConfig, VRChatFriends user) {
   );
 }
 
-Widget profileAction(BuildContext context, AppConfig appConfig, VRChatfriendStatus status, String uid, Function reload) {
-  late VRChatAPI vrhatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
+Widget profileAction(BuildContext context, AppConfig appConfig, VRChatFriendStatus status, String uid, Function reload) {
+  late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
 
   sendFriendRequest() {
-    vrhatLoginSession.sendFriendRequest(uid).then((response) {
+    vrchatLoginSession.sendFriendRequest(uid).then((response) {
       Navigator.pop(context);
       reload();
     }).catchError((status) {
@@ -179,7 +179,7 @@ Widget profileAction(BuildContext context, AppConfig appConfig, VRChatfriendStat
   }
 
   acceptFriendRequest() {
-    vrhatLoginSession.acceptFriendRequestByUid(uid).then((response) {
+    vrchatLoginSession.acceptFriendRequestByUid(uid).then((response) {
       Navigator.pop(context);
       reload();
     }).catchError((status) {
@@ -188,7 +188,7 @@ Widget profileAction(BuildContext context, AppConfig appConfig, VRChatfriendStat
   }
 
   deleteFriendRequest() {
-    vrhatLoginSession.deleteFriendRequest(uid).then((response) {
+    vrchatLoginSession.deleteFriendRequest(uid).then((response) {
       Navigator.pop(context);
       reload();
     }).catchError((status) {
@@ -201,7 +201,7 @@ Widget profileAction(BuildContext context, AppConfig appConfig, VRChatfriendStat
         context,
         AppLocalizations.of(context)!.unfriendConfirm,
         AppLocalizations.of(context)!.unfriend,
-        () => vrhatLoginSession.deleteFriend(uid).then((response) {
+        () => vrchatLoginSession.deleteFriend(uid).then((response) {
               Navigator.pop(context);
               Navigator.pop(context);
               reload();
@@ -236,7 +236,7 @@ Widget profileAction(BuildContext context, AppConfig appConfig, VRChatfriendStat
               if (!status.isFriend && status.outgoingRequest)
                 ListTile(
                   leading: const Icon(Icons.person_remove),
-                  title: Text(AppLocalizations.of(context)!.unrequested),
+                  title: Text(AppLocalizations.of(context)!.requestCancel),
                   onTap: deleteFriendRequest,
                 ),
               if (!status.isFriend && status.incomingRequest)
@@ -259,9 +259,9 @@ Widget profileAction(BuildContext context, AppConfig appConfig, VRChatfriendStat
   );
 }
 
-List<Widget> _biolink(BuildContext context, AppConfig appConfig, List<dynamic> biolinks) {
+List<Widget> _bioLink(BuildContext context, AppConfig appConfig, List<dynamic> bioLinks) {
   List<Widget> response = [];
-  for (String link in biolinks) {
+  for (String link in bioLinks) {
     if (link == "") continue;
     response.add(
       CircleAvatar(

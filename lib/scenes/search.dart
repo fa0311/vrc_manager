@@ -37,7 +37,7 @@ enum SearchMode {
 }
 
 class _SearchState extends State<VRChatSearch> {
-  late VRChatAPI vrhatLoginSession = VRChatAPI(cookie: widget.appConfig.loggedAccount?.cookie ?? "");
+  late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: widget.appConfig.loggedAccount?.cookie ?? "");
   late GridConfig config = widget.appConfig.gridConfigList.searchUsers;
   GridModalConfig gridConfig = GridModalConfig();
   List<VRChatLimitedWorld> worldList = [];
@@ -326,7 +326,7 @@ class _SearchState extends State<VRChatSearch> {
     if (searchingMode == SearchMode.users) {
       do {
         int offset = userList.length;
-        List<VRChatUser> users = await vrhatLoginSession.searchUsers(text ?? "", offset: offset).catchError((status) {
+        List<VRChatUser> users = await vrchatLoginSession.searchUsers(text ?? "", offset: offset).catchError((status) {
           apiError(context, widget.appConfig, status);
         });
         for (VRChatUser user in users) {
@@ -337,7 +337,7 @@ class _SearchState extends State<VRChatSearch> {
     } else if (searchingMode == SearchMode.worlds) {
       do {
         int offset = worldList.length;
-        List<VRChatLimitedWorld> worlds = await vrhatLoginSession.searchWorlds(text ?? "", offset: offset).catchError((status) {
+        List<VRChatLimitedWorld> worlds = await vrchatLoginSession.searchWorlds(text ?? "", offset: offset).catchError((status) {
           apiError(context, widget.appConfig, status);
         });
         for (VRChatLimitedWorld world in worlds) {

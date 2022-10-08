@@ -33,7 +33,7 @@ class VRChatMobileFriends extends StatefulWidget {
 }
 
 class _FriendsPageState extends State<VRChatMobileFriends> {
-  late VRChatAPI vrhatLoginSession = VRChatAPI(cookie: widget.appConfig.loggedAccount?.cookie ?? "");
+  late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: widget.appConfig.loggedAccount?.cookie ?? "");
   late GridConfig config = widget.offline ? widget.appConfig.gridConfigList.offlineFriends : widget.appConfig.gridConfigList.onlineFriends;
   Map<String, VRChatWorld?> locationMap = {};
   Map<String, VRChatInstance?> instanceMap = {};
@@ -48,7 +48,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
     gridConfig.joinable = true;
     gridConfig.worldDetails = true;
     gridConfig.url = "https://vrchat.com/home/locations";
-    gridConfig.sort?.frendsInInstance = true;
+    gridConfig.sort?.friendsInInstance = true;
     get().then((value) => setState(() {}));
   }
 
@@ -184,7 +184,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
     int len;
     do {
       int offset = userList.length;
-      List<VRChatFriends> users = await vrhatLoginSession.friends(offline: widget.offline, offset: offset).catchError((status) {
+      List<VRChatFriends> users = await vrchatLoginSession.friends(offline: widget.offline, offset: offset).catchError((status) {
         apiError(context, widget.appConfig, status);
       });
       if (!mounted) return;

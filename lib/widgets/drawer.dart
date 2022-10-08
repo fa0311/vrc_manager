@@ -23,7 +23,7 @@ Drawer drawer(BuildContext context, AppConfig appConfig) {
       list.add(
         ListTile(
           title: Text(
-            account.displayname ?? AppLocalizations.of(context)!.unknown,
+            account.displayName ?? AppLocalizations.of(context)!.unknown,
           ),
           onTap: () {
             appConfig.login(context, account);
@@ -82,7 +82,7 @@ Drawer drawer(BuildContext context, AppConfig appConfig) {
                       (_) => false,
                     ),
                     leading: const Icon(Icons.wb_sunny),
-                    title: Text(AppLocalizations.of(context)!.onlinefriends),
+                    title: Text(AppLocalizations.of(context)!.onlineFriends),
                   ),
                   ListTile(
                     onTap: () => Navigator.pushAndRemoveUntil(
@@ -93,7 +93,7 @@ Drawer drawer(BuildContext context, AppConfig appConfig) {
                       (_) => false,
                     ),
                     leading: const Icon(Icons.bedtime),
-                    title: Text(AppLocalizations.of(context)!.offlinefriends),
+                    title: Text(AppLocalizations.of(context)!.offlineFriends),
                   ),
                   ListTile(
                     onTap: () => Navigator.pushAndRemoveUntil(
@@ -207,14 +207,14 @@ Drawer drawer(BuildContext context, AppConfig appConfig) {
   );
 }
 
-Drawer simpledrawer(BuildContext context, AppConfig appConfig) {
+Drawer simpleDrawer(BuildContext context, AppConfig appConfig) {
   List<Widget> getAccountList() {
     List<Widget> list = [];
     for (AccountConfig account in appConfig.accountList) {
       list.add(
         ListTile(
           title: Text(
-            account.displayname ?? AppLocalizations.of(context)!.unknown,
+            account.displayName ?? AppLocalizations.of(context)!.unknown,
           ),
           onTap: () {
             appConfig.login(context, account);

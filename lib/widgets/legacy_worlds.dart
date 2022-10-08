@@ -23,15 +23,15 @@ class Worlds {
   List<Widget> children = [];
   late BuildContext context;
   late AppConfig appConfig;
-  late VRChatAPI vrhatLoginSession;
+  late VRChatAPI vrchatLoginSession;
   List<VRChatWorld> worldList = [];
   String displayMode = "normal";
 
   List<Widget> reload() {
     children = [];
-    List<VRChatWorld> tempworldList = worldList;
+    List<VRChatWorld> tmpWorldList = worldList;
     worldList = [];
-    for (VRChatWorld world in tempworldList) {
+    for (VRChatWorld world in tmpWorldList) {
       add(world);
     }
     return children;
@@ -116,15 +116,15 @@ class WorldsLimited {
   List<Widget> children = [];
   late BuildContext context;
   late AppConfig appConfig;
-  late VRChatAPI vrhatLoginSession;
+  late VRChatAPI vrchatLoginSession;
   List<VRChatLimitedWorld> worldList = [];
   String displayMode = "normal";
 
   List<Widget> reload() {
     children = [];
-    List<VRChatLimitedWorld> tempworldList = worldList;
+    List<VRChatLimitedWorld> tmpWorldList = worldList;
     worldList = [];
-    for (VRChatLimitedWorld world in tempworldList) {
+    for (VRChatLimitedWorld world in tmpWorldList) {
       add(world);
     }
     return children;
@@ -166,7 +166,7 @@ class FavoriteWorlds {
   List<Widget> children = [];
   late BuildContext context;
   late AppConfig appConfig;
-  late VRChatAPI vrhatLoginSession;
+  late VRChatAPI vrchatLoginSession;
   List<VRChatFavoriteWorld> worldList = [];
   Map<String, String?> descriptionMap = {};
   String displayMode = "normal";
@@ -174,9 +174,9 @@ class FavoriteWorlds {
 
   List<Widget> reload() {
     children = [];
-    List<VRChatFavoriteWorld> tempworldList = worldList;
+    List<VRChatFavoriteWorld> tmpWorldList = worldList;
     worldList = [];
-    for (VRChatFavoriteWorld world in tempworldList) {
+    for (VRChatFavoriteWorld world in tmpWorldList) {
       add(world);
     }
     return children;
@@ -258,7 +258,7 @@ class FavoriteWorlds {
                 SizedBox(
                   width: 50,
                   child: IconButton(
-                    onPressed: () => vrhatLoginSession.deleteFavorites(world.favoriteId).then((response) {
+                    onPressed: () => vrchatLoginSession.deleteFavorites(world.favoriteId).then((response) {
                       worldList.remove(world);
                       button();
                     }).catchError((status) {
@@ -367,7 +367,7 @@ class FavoriteWorlds {
               iconSize: 15,
               constraints: const BoxConstraints(),
               padding: const EdgeInsets.all(0),
-              onPressed: () => vrhatLoginSession.deleteFavorites(world.favoriteId).then((response) {
+              onPressed: () => vrchatLoginSession.deleteFavorites(world.favoriteId).then((response) {
                 worldList.remove(world);
                 button();
               }).catchError((status) {
@@ -404,7 +404,7 @@ class FavoriteWorlds {
                   child: IconButton(
                     iconSize: 20,
                     padding: const EdgeInsets.all(0),
-                    onPressed: () => vrhatLoginSession.deleteFavorites(world.favoriteId).then((response) {
+                    onPressed: () => vrchatLoginSession.deleteFavorites(world.favoriteId).then((response) {
                       worldList.remove(world);
                       button();
                     }).catchError((status) {

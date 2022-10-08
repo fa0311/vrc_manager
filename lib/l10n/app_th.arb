@@ -66,8 +66,8 @@
     "home": "หน้าแรก",
     "@____________________FRIEND____________________": {},
     "friends": "เพื่อน",
-    "onlinefriends": "ออนไลน์ เพื่อน",
-    "offlinefriends": "ออฟไลน์ เพื่อน",
+    "onlineFriends": "ออนไลน์ เพื่อน",
+    "offlineFriends": "ออฟไลน์ เพื่อน",
     "@__FRIEND_SETTING__": {},
     "autoReadMore": "โหลดโดยอัตโนมัติ",
     "showOnlyAvailable": "แสดงเฉพาะ",
@@ -100,7 +100,7 @@
     "@__USER_FRIEND__": {},
     "unfriend": "คุณ ต้องการเลิกเป็นเพื่อน",
     "unfriendConfirm": "หรือไม่?",
-    "unrequested": "ลบคำขอ ยอมรับ",
+    "requestCancel": "ลบคำขอ ยอมรับ",
     "allowFriends": "เพื่อน",
     "denyFriends": "ปฏิเสธเพื่อน",
     "@____________________JSON_VIEWER____________________": {},
@@ -128,7 +128,7 @@
     "accessibility": "การเข้าถึง",
     "language": "ภาษา สลับ",
     "languageDetails": "ภาษา",
-    "translaterDetails": "แปลโดย {name}",
+    "translatorDetails": "แปลโดย {name}",
     "darkTheme": "ธีมสีเข้ม เปลี่ยน",
     "darkThemeDetails1": "เป็นธีมสีเข้มที่เป็นมิตรกับดวงตา",
     "darkThemeDetails2": "การตั้งค่าธีมอุปกรณ์จะมีผล",
@@ -161,6 +161,6 @@
     "rateTheAppDetails": "โปรดให้คะแนนเราบน GooglePlayStore",
     "version": "เวอร์ชัน เวอร์ชัน",
     "versionDetails": "ปัจจุบัน: {version} ตรวจสอบใบ",
-    "licence": "อนุญาต",
-    "licenceDetails": "ตรวจสอบข้อมูลใบอนุญาต"
+    "license": "อนุญาต",
+    "licenseDetails": "ตรวจสอบข้อมูลใบอนุญาต"
 }

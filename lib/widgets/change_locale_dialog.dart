@@ -12,7 +12,7 @@ ListTile changeLocaleDialogOption(BuildContext context, String title, String lan
   return ListTile(
     title: Text(title),
     subtitle: Text(
-      AppLocalizations.of(context)!.translaterDetails(lookupAppLocalizations(
+      AppLocalizations.of(context)!.translatorDetails(lookupAppLocalizations(
         Locale(languageCode, ""),
       ).contributor),
     ),

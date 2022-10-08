@@ -26,7 +26,7 @@ class VRChatMobileHome extends StatefulWidget {
 }
 
 class _LoginHomeState extends State<VRChatMobileHome> {
-  late VRChatAPI vrhatLoginSession = VRChatAPI(cookie: widget.appConfig.loggedAccount?.cookie ?? "");
+  late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: widget.appConfig.loggedAccount?.cookie ?? "");
   List<Widget> popupMenu = [];
 
   TextEditingController bioController = TextEditingController();
@@ -41,8 +41,8 @@ class _LoginHomeState extends State<VRChatMobileHome> {
   @override
   initState() {
     super.initState();
-    vrhatLoginSession.user().then((VRChatUserSelfOverload response) {
-      vrhatLoginSession.users(response.id).then((VRChatFriends user) {
+    vrchatLoginSession.user().then((VRChatUserSelfOverload response) {
+      vrchatLoginSession.users(response.id).then((VRChatFriends user) {
         bioController.text = user.bio ?? "";
         noteController.text = user.note ?? "";
         widget.appConfig.loggedAccount?.setDisplayName(user.displayName);
@@ -77,7 +77,7 @@ class _LoginHomeState extends State<VRChatMobileHome> {
                             ),
                             TextButton(
                                 child: Text(AppLocalizations.of(context)!.ok),
-                                onPressed: () => vrhatLoginSession.changeBio(user.id, bioController.text).then((VRChatUserSelf response) {
+                                onPressed: () => vrchatLoginSession.changeBio(user.id, bioController.text).then((VRChatUserSelf response) {
                                       Navigator.pop(context);
                                       initState();
                                     }).catchError((status) {
@@ -113,7 +113,7 @@ class _LoginHomeState extends State<VRChatMobileHome> {
                             ),
                             TextButton(
                               child: Text(AppLocalizations.of(context)!.ok),
-                              onPressed: () => vrhatLoginSession.userNotes(user.id, noteController.text).then((VRChatUserNotes response) {
+                              onPressed: () => vrchatLoginSession.userNotes(user.id, noteController.text).then((VRChatUserNotes response) {
                                 Navigator.pop(context);
                                 initState();
                               }).catchError((status) {
@@ -155,7 +155,7 @@ class _LoginHomeState extends State<VRChatMobileHome> {
           },
         );
         if (!["private", "offline", "traveling"].contains(user.worldId)) {
-          vrhatLoginSession.worlds(user.location.split(":")[0]).then((world) {
+          vrchatLoginSession.worlds(user.location.split(":")[0]).then((world) {
             setState(
               () {
                 column = Column(children: column.children);
@@ -165,7 +165,7 @@ class _LoginHomeState extends State<VRChatMobileHome> {
                 );
               },
             );
-            vrhatLoginSession.instances(user.location).then((instance) {
+            vrchatLoginSession.instances(user.location).then((instance) {
               setState(
                 () {
                   column = Column(children: column.children);

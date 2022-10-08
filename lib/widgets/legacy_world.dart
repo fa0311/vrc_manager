@@ -223,7 +223,7 @@ Card simpleWorldDescriptionHalf(BuildContext context, appConfig, VRChatWorld wor
 }
 
 Card simpleWorldPlus(BuildContext context, AppConfig appConfig, VRChatWorld world, VRChatInstance instance) {
-  late VRChatAPI vrhatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
+  late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
 
   return Card(
     elevation: 20.0,
@@ -296,7 +296,8 @@ Card simpleWorldPlus(BuildContext context, AppConfig appConfig, VRChatWorld worl
                             minimumSize: Size.zero,
                             padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
                           ),
-                          onPressed: () => vrhatLoginSession.selfInvite(instance.location, instance.shortName ?? "").then((VRChatNotificationsInvite response) {
+                          onPressed: () =>
+                              vrchatLoginSession.selfInvite(instance.location, instance.shortName ?? "").then((VRChatNotificationsInvite response) {
                             showDialog(
                               context: context,
                               builder: (_) {
@@ -392,7 +393,7 @@ Card simpleWorldHalf(BuildContext context, AppConfig appConfig, VRChatLimitedWor
 }
 
 Card simpleWorldPlusHalf(BuildContext context, AppConfig appConfig, VRChatWorld world, VRChatInstance instance) {
-  late VRChatAPI vrhatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
+  late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
 
   return Card(
     elevation: 20.0,
@@ -472,7 +473,8 @@ Card simpleWorldPlusHalf(BuildContext context, AppConfig appConfig, VRChatWorld 
                             minimumSize: Size.zero,
                             padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
                           ),
-                          onPressed: () => vrhatLoginSession.selfInvite(instance.location, instance.shortName ?? "").then((VRChatNotificationsInvite response) {
+                          onPressed: () =>
+                              vrchatLoginSession.selfInvite(instance.location, instance.shortName ?? "").then((VRChatNotificationsInvite response) {
                             showDialog(
                               context: context,
                               builder: (_) {

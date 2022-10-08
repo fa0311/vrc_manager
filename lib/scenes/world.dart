@@ -37,7 +37,7 @@ class VRChatMobileWorld extends StatefulWidget {
 }
 
 class _WorldState extends State<VRChatMobileWorld> {
-  late VRChatAPI vrhatLoginSession = VRChatAPI(cookie: widget.appConfig.loggedAccount?.cookie ?? "");
+  late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: widget.appConfig.loggedAccount?.cookie ?? "");
   VRChatWorld? world;
 
   String genRandHex([int length = 32]) {
@@ -55,7 +55,7 @@ class _WorldState extends State<VRChatMobileWorld> {
   }
 
   genInstanceId(String region, String type, bool canRequestInvite) async {
-    VRChatUserSelfOverload user = await vrhatLoginSession.user().catchError((status) {
+    VRChatUserSelfOverload user = await vrchatLoginSession.user().catchError((status) {
       apiError(context, widget.appConfig, status);
     });
     String url = genRandNumber();
@@ -163,7 +163,7 @@ class _WorldState extends State<VRChatMobileWorld> {
   }
 
   Future get() async {
-    world = await vrhatLoginSession.worlds(widget.worldId).catchError((status) {
+    world = await vrchatLoginSession.worlds(widget.worldId).catchError((status) {
       apiError(context, widget.appConfig, status);
     });
   }

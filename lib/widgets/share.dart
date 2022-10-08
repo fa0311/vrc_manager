@@ -37,7 +37,7 @@ Future modalBottom(BuildContext context, List<Widget> children) {
 
 List<Widget> shareUrlListTile(BuildContext context, AppConfig appConfig, String url, {bool browserExternalForce = false}) {
   return [
-    shereListTileWidget(context, url),
+    shareListTileWidget(context, url),
     copyListTileWidget(context, url),
     if (!browserExternalForce) openInBrowserListTileWidget(context, appConfig, url),
     if (Uri.parse(url).host != "vrchat.com" && browserExternalForce) openInBrowserExternalForceListTileWidget(context, appConfig, url),
@@ -47,14 +47,14 @@ List<Widget> shareUrlListTile(BuildContext context, AppConfig appConfig, String 
 List<Widget> shareWorldListTile(BuildContext context, AppConfig appConfig, String worldId, String instanceId) {
   String url = "https://vrchat.com/home/launch?worldId=$worldId&instanceId=$instanceId";
   return [
-    shereListTileWidget(context, url),
+    shareListTileWidget(context, url),
     copyListTileWidget(context, url),
     openInBrowserListTileWidget(context, appConfig, url),
     if (Platform.isWindows) openInWindowsListTileWidget(context, appConfig, "vrchat://launch?ref=vrchat.com&id=$worldId:$instanceId"),
   ];
 }
 
-Widget shereListTileWidget(BuildContext context, String text) {
+Widget shareListTileWidget(BuildContext context, String text) {
   return ListTile(
     leading: const Icon(Icons.share),
     title: Text(AppLocalizations.of(context)!.share),
@@ -102,14 +102,14 @@ Widget openInBrowserExternalForceListTileWidget(BuildContext context, AppConfig 
 }
 
 Widget inviteVrchatListTileWidget(BuildContext context, AppConfig appConfig, String location) {
-  late VRChatAPI vrhatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
+  late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
   return ListTile(
     leading: const Icon(Icons.mail),
     title: Text(AppLocalizations.of(context)!.joinInstance),
-    onTap: () => vrhatLoginSession
+    onTap: () => vrchatLoginSession
         .shortName(location)
         .then(
-          (VRChatSecureName secureId) => vrhatLoginSession
+          (VRChatSecureName secureId) => vrchatLoginSession
               .selfInvite(location, secureId.shortName ?? secureId.secureName ?? "")
               .then(
                 (VRChatNotificationsInvite response) => showDialog(

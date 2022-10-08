@@ -66,8 +66,8 @@
     "home": "Главная",
     "@____________________FRIEND____________________": {},
     "friends": "Друзья",
-    "onlinefriends": "Онлайн-друзья",
-    "offlinefriends": "Друзья вне сети",
+    "onlineFriends": "Онлайн-друзья",
+    "offlineFriends": "Друзья вне сети",
     "@__FRIEND_SETTING__": {},
     "autoReadMore": "Автоматическое продолжение загрузки",
     "showOnlyAvailable": "Доступно только для показа",
@@ -100,7 +100,7 @@
     "@__USER_FRIEND__": {},
     "unfriend": "Не дружить",
     "unfriendConfirm": "Ты хочешь меня исключить из друзей?",
-    "unrequested": "Запрос на отказ от дружбы",
+    "requestCancel": "Запрос на отказ от дружбы",
     "allowFriends": "Принять друга",
     "denyFriends": "Отвергнуть друга",
     "@____________________JSON_VIEWER____________________": {},
@@ -128,7 +128,7 @@
     "accessibility": "Доступность",
     "language": "Язык",
     "languageDetails": "Переключение языка",
-    "translaterDetails": "Перевод от {name}",
+    "translatorDetails": "Перевод от {name}",
     "darkTheme": "Темная тема",
     "darkThemeDetails1": "Перейдите на темную тему, которая легче для глаз",
     "darkThemeDetails2": "Тематическая настройка устройства имеет приоритет",
@@ -161,6 +161,6 @@
     "rateTheAppDetails": "Пожалуйста, оцените нас в Google PlayStore",
     "version": "Версия",
     "versionDetails": "Текущая версия: {version}",
-    "licence": "Лицензия",
-    "licenceDetails": "Проверьте информацию о лицензии"
+    "license": "Лицензия",
+    "licenseDetails": "Проверьте информацию о лицензии"
 }

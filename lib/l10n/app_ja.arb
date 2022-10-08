@@ -67,8 +67,8 @@
     "home": "ホーム",
     "@____________________FRIEND____________________": {},
     "friends": "フレンド",
-    "onlinefriends": "オンラインのフレンド",
-    "offlinefriends": "オフラインのフレンド",
+    "onlineFriends": "オンラインのフレンド",
+    "offlineFriends": "オフラインのフレンド",
     "@__FRIEND_SETTING__": {},
     "autoReadMore": "自動で続きを読み込む",
     "showOnlyAvailable": "参加可能のみ表示",
@@ -103,7 +103,7 @@
     "@__USER_FRIEND__": {},
     "unfriend": "フレンド解除",
     "unfriendConfirm": "フレンドを解除しますか？",
-    "unrequested": "リクエスト解除",
+    "requestCancel": "リクエスト解除",
     "allowFriends": "フレンド許可",
     "denyFriends": "フレンド拒否",
     "@____________________JSON_VIEWER____________________": {},
@@ -131,7 +131,7 @@
     "accessibility": "アクセシビリティ",
     "language": "言語",
     "languageDetails": "言語を切り替えます",
-    "translaterDetails": "{name}による翻訳",
+    "translatorDetails": "{name}による翻訳",
     "darkTheme": "ダークテーマ",
     "darkThemeDetails1": "目に優しいダークテーマに切り替えます",
     "darkThemeDetails2": "端末のテーマの設定が優先されます",
@@ -167,6 +167,6 @@
     "rateTheAppDetails": "GooglePlayStoreでの評価をお願いします",
     "version": "バージョン",
     "versionDetails": "現在のバージョン: {version}",
-    "licence": "Licence",
-    "licenceDetails": "Licence情報を確認します"
+    "license": "License",
+    "licenseDetails": "License情報を確認します"
 }

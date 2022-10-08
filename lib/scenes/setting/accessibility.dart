@@ -26,7 +26,7 @@ class VRChatMobileSettingsAccessibility extends StatefulWidget {
 class _SettingAccessibilityPageState extends State<VRChatMobileSettingsAccessibility> {
   bool theme = false;
   bool forceExternalBrowser = false;
-  bool sontShowErrorDialog = false;
+  bool sortShowErrorDialog = false;
 
   _changeSwitchTheme(bool e) {
     setStorage("theme_brightness", e ? "dark" : "light").then(
@@ -48,7 +48,7 @@ class _SettingAccessibilityPageState extends State<VRChatMobileSettingsAccessibi
 
   _changeSwitchShowErrorDialog(bool e) {
     setStorage("dont_show_error_dialog", e ? "true" : "false").then(
-      (_) => setState(() => sontShowErrorDialog = e),
+      (_) => setState(() => sortShowErrorDialog = e),
     );
   }
 
@@ -70,7 +70,7 @@ class _SettingAccessibilityPageState extends State<VRChatMobileSettingsAccessibi
     getStorage("dont_show_error_dialog").then(
       (response) {
         setState(
-          () => sontShowErrorDialog = (response == "true"),
+          () => sortShowErrorDialog = (response == "true"),
         );
       },
     );
@@ -107,7 +107,7 @@ class _SettingAccessibilityPageState extends State<VRChatMobileSettingsAccessibi
                   ),
                   const Divider(),
                   SwitchListTile(
-                    value: sontShowErrorDialog,
+                    value: sortShowErrorDialog,
                     title: Text(AppLocalizations.of(context)!.dontShowErrorDialog),
                     subtitle: Text(AppLocalizations.of(context)!.dontShowErrorDialogDetails),
                     onChanged: _changeSwitchShowErrorDialog,

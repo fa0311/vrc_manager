@@ -32,9 +32,9 @@ class AppConfig {
     for (String uid in uidList) {
       AccountConfig accountConfig = AccountConfig(uid);
       futureList.add(getLoginSession("cookie", uid).then((value) => accountConfig.cookie = value ?? ""));
-      futureList.add(getLoginSession("userid", uid).then((value) => accountConfig.userid = value ?? ""));
+      futureList.add(getLoginSession("user_id", uid).then((value) => accountConfig.userId = value ?? ""));
       futureList.add(getLoginSession("password", uid).then((value) => accountConfig.password = value ?? ""));
-      futureList.add(getLoginSession("displayname", uid).then((value) => accountConfig.displayname = value ?? ""));
+      futureList.add(getLoginSession("display_name", uid).then((value) => accountConfig.displayName = value ?? ""));
       futureList.add(getLoginSession("remember_login_info", uid).then((value) => accountConfig.rememberLoginInfo = (value == "true")));
       accountList.add(accountConfig);
       if (uid == accountUid) {
@@ -51,7 +51,7 @@ class AppConfig {
   Future removeAccount(AccountConfig account) async {
     List<Future> futureList = [];
 
-    futureList.add(removeLoginSession("userid", account.uid));
+    futureList.add(removeLoginSession("user_id", account.uid));
     futureList.add(removeLoginSession("remember_login_info", account.uid));
     futureList.add(account.removeCookie());
     futureList.add(account.removePassword());
@@ -84,7 +84,7 @@ class AppConfig {
     return Future.wait(futureList);
   }
 
-  bool isLogined() {
+  bool isLogout() {
     return _loggedAccount != null;
   }
 
@@ -114,9 +114,9 @@ class AppConfig {
 class AccountConfig {
   final String uid;
   String cookie = "";
-  String? userid;
+  String? userId;
   String? password;
-  String? displayname;
+  String? displayName;
   bool rememberLoginInfo = false;
   List<FavoriteWorldData> favoriteWorld = [];
   AccountConfig(this.uid);
@@ -126,7 +126,7 @@ class AccountConfig {
   }
 
   Future setUserId(String value) async {
-    return await setLoginSession("userid", userid = value, uid);
+    return await setLoginSession("user_id", userId = value, uid);
   }
 
   Future setPassword(String value) async {
@@ -134,7 +134,7 @@ class AccountConfig {
   }
 
   Future setDisplayName(String value) async {
-    return await setLoginSession("displayname", displayname = value, uid);
+    return await setLoginSession("display_name", displayName = value, uid);
   }
 
   Future setRememberLoginInfo(bool value) async {
@@ -147,8 +147,8 @@ class AccountConfig {
   }
 
   Future removeUserId() async {
-    userid = null;
-    return await removeLoginSession("userid", uid);
+    userId = null;
+    return await removeLoginSession("user_id", uid);
   }
 
   Future removePassword() async {
@@ -157,17 +157,17 @@ class AccountConfig {
   }
 
   Future removeDisplayName() async {
-    displayname = null;
-    return await removeLoginSession("displayname", uid);
+    displayName = null;
+    return await removeLoginSession("display_name", uid);
   }
 
   Future getFavoriteWorldGroups(BuildContext context, AppConfig appConfig) async {
-    late VRChatAPI vrhatLoginSession = VRChatAPI(cookie: cookie);
+    late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: cookie);
     List<Future> futureList = [];
     int len;
     do {
       int offset = favoriteWorld.length;
-      List<VRChatFavoriteGroup> favoriteGroupList = await vrhatLoginSession.favoriteGroups("world", offset: offset).catchError((status) {
+      List<VRChatFavoriteGroup> favoriteGroupList = await vrchatLoginSession.favoriteGroups("world", offset: offset).catchError((status) {
         apiError(context, appConfig, status);
       });
       for (VRChatFavoriteGroup group in favoriteGroupList) {
@@ -185,11 +185,11 @@ class AccountConfig {
   }
 
   Future getFavoriteWorld(BuildContext context, AppConfig appConfig, FavoriteWorldData favoriteWorld) async {
-    late VRChatAPI vrhatLoginSession = VRChatAPI(cookie: cookie);
+    late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: cookie);
     int len;
     do {
       int offset = favoriteWorld.list.length;
-      List<VRChatFavoriteWorld> worlds = await vrhatLoginSession.favoritesWorlds(favoriteWorld.group.name, offset: offset).catchError((status) {
+      List<VRChatFavoriteWorld> worlds = await vrchatLoginSession.favoritesWorlds(favoriteWorld.group.name, offset: offset).catchError((status) {
         apiError(context, appConfig, status);
       });
       for (VRChatFavoriteWorld world in worlds) {
@@ -215,7 +215,7 @@ class GridConfigList {
   GridConfig offlineFriends = GridConfig("offline_friends_config");
   GridConfig friendsRequest = GridConfig("friends_request_config");
   GridConfig searchUsers = GridConfig("search_users_config");
-  GridConfig searcWorlds = GridConfig("search_worlds_config");
+  GridConfig searchWorlds = GridConfig("search_worlds_config");
   GridConfig favoriteWorlds = GridConfig("favorite_worlds_config");
 
   Future setConfig() async {
@@ -224,7 +224,7 @@ class GridConfigList {
     futureList.add(offlineFriends.setConfig());
     futureList.add(friendsRequest.setConfig());
     futureList.add(searchUsers.setConfig());
-    futureList.add(searcWorlds.setConfig());
+    futureList.add(searchWorlds.setConfig());
     futureList.add(favoriteWorlds.setConfig());
     return Future.wait(futureList);
   }

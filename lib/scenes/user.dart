@@ -30,9 +30,9 @@ class VRChatMobileUser extends StatefulWidget {
 }
 
 class _UserHomeState extends State<VRChatMobileUser> {
-  late VRChatAPI vrhatLoginSession = VRChatAPI(cookie: widget.appConfig.loggedAccount?.cookie ?? "");
+  late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: widget.appConfig.loggedAccount?.cookie ?? "");
   VRChatFriends? user;
-  VRChatfriendStatus? status;
+  VRChatFriendStatus? status;
   VRChatWorld? world;
   VRChatInstance? instance;
 
@@ -50,22 +50,22 @@ class _UserHomeState extends State<VRChatMobileUser> {
   }
 
   Future getUser() async {
-    user = await vrhatLoginSession.users(widget.userId).catchError((status) {
+    user = await vrchatLoginSession.users(widget.userId).catchError((status) {
       apiError(context, widget.appConfig, status);
     });
     if (user == null) return;
     noteController.text = user!.note ?? "";
-    status = await vrhatLoginSession.friendStatus(widget.userId).catchError((status) {
+    status = await vrchatLoginSession.friendStatus(widget.userId).catchError((status) {
       apiError(context, widget.appConfig, status);
     });
   }
 
   Future getWorld() async {
     if (!["private", "offline", "traveling"].contains(user!.location)) {
-      world = await vrhatLoginSession.worlds(user!.location.split(":")[0]).catchError((status) {
+      world = await vrchatLoginSession.worlds(user!.location.split(":")[0]).catchError((status) {
         apiError(context, widget.appConfig, status);
       });
-      instance = await vrhatLoginSession.instances(user!.location).catchError((status) {
+      instance = await vrchatLoginSession.instances(user!.location).catchError((status) {
         apiError(context, widget.appConfig, status);
       });
     }
@@ -87,7 +87,7 @@ class _UserHomeState extends State<VRChatMobileUser> {
             ),
             TextButton(
                 child: Text(AppLocalizations.of(context)!.ok),
-                onPressed: () => vrhatLoginSession.userNotes(user!.id, user!.note = noteController.text).then((VRChatUserNotes response) {
+                onPressed: () => vrchatLoginSession.userNotes(user!.id, user!.note = noteController.text).then((VRChatUserNotes response) {
                       Navigator.pop(context);
                       setState(() => user!.note = user!.note == "" ? null : user!.note);
                     }).catchError((status) {

@@ -26,7 +26,7 @@ class VRChatMobileWebView extends StatefulWidget {
 }
 
 class _WebViewPageState extends State<VRChatMobileWebView> {
-  late VRChatAPI vrhatLoginSession = VRChatAPI(cookie: widget.appConfig.loggedAccount?.cookie ?? "");
+  late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: widget.appConfig.loggedAccount?.cookie ?? "");
   late bool openInExternalBrowser = false;
   late WebViewController controllerGlobal;
   late int timeStamp = 0;
@@ -63,7 +63,7 @@ class _WebViewPageState extends State<VRChatMobileWebView> {
     textStream(context, widget.appConfig);
     final cookieManager = CookieManager();
 
-    final cookieMap = Session().decodeCookie(vrhatLoginSession.getCookie());
+    final cookieMap = Session().decodeCookie(vrchatLoginSession.getCookie());
     for (String key in cookieMap.keys) {
       cookieManager.setCookie(
         WebViewCookie(
@@ -74,7 +74,7 @@ class _WebViewPageState extends State<VRChatMobileWebView> {
       );
     }
 
-    Future<bool> exitApp(BuildContext contex) async {
+    Future<bool> exitApp(BuildContext context) async {
       if (DateTime.now().millisecondsSinceEpoch - timeStamp < 200) {
         return true;
       } else if (await controllerGlobal.canGoBack()) {

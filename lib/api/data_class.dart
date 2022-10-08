@@ -200,14 +200,14 @@ class VRChatUserNotes {
   }
 }
 
-class VRChatfriendStatus {
+class VRChatFriendStatus {
   dynamic content;
 
   late bool incomingRequest;
   late bool isFriend;
   late bool outgoingRequest;
 
-  VRChatfriendStatus.fromJson(this.content) {
+  VRChatFriendStatus.fromJson(this.content) {
     incomingRequest = content['incomingRequest'];
     isFriend = content['isFriend'];
     outgoingRequest = content['outgoingRequest'];
@@ -235,8 +235,8 @@ class VRChatWorld extends VRChatLimitedWorld {
     previewYoutubeId = content['previewYoutubeId'] == "" ? null : content['previewYoutubeId'];
     privateOccupants = content['privateOccupants'];
     publicOccupants = content['publicOccupants'];
-    for (dynamic unitypackage in content['unityPackages']) {
-      unityPackages.add(UnityPackages.fromJson(unitypackage));
+    for (dynamic unityPackages in content['unityPackages']) {
+      unityPackages.add(UnityPackages.fromJson(unityPackages));
     }
     version = content['version'];
     visits = content['visits'];

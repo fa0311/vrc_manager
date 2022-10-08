@@ -16,6 +16,7 @@ class VRChatAPI {
   }
 
   Map<String, String> apiKey() {
+    // cspell:disable-next-line
     return <String, String>{"apiKey": "JlE5Jldo5Jibnk5O5hTx6XVqsJu4WJ26"};
   }
 
@@ -90,7 +91,7 @@ class VRChatAPI {
         {"targetUserId": uid, "note": note}).then((value) => VRChatUserNotes.fromJson(value));
   }
 
-  Future<VRChatfriendStatus> friendStatus(String uid) {
+  Future<VRChatFriendStatus> friendStatus(String uid) {
     return vrchatSession
         .get(
           endpoint(
@@ -98,7 +99,7 @@ class VRChatAPI {
             apiKey(),
           ),
         )
-        .then((value) => VRChatfriendStatus.fromJson(value));
+        .then((value) => VRChatFriendStatus.fromJson(value));
   }
 
   Future<VRChatNotifications> sendFriendRequest(String uid) {
