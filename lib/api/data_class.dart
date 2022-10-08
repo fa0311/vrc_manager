@@ -235,8 +235,8 @@ class VRChatWorld extends VRChatLimitedWorld {
     previewYoutubeId = content['previewYoutubeId'] == "" ? null : content['previewYoutubeId'];
     privateOccupants = content['privateOccupants'];
     publicOccupants = content['publicOccupants'];
-    for (dynamic unityPackages in content['unityPackages']) {
-      unityPackages.add(UnityPackages.fromJson(unityPackages));
+    for (dynamic package in content['unityPackages']) {
+      unityPackages.add(UnityPackages.fromJson(package));
     }
     version = content['version'];
     visits = content['visits'];
@@ -284,8 +284,8 @@ class VRChatLimitedWorld {
     releaseStatus = content['releaseStatus'];
     tags = content['tags'].cast<String>();
     thumbnailImageUrl = content['thumbnailImageUrl'];
-    for (dynamic unityPackage in content['unityPackages']) {
-      limitedUnityPackages.add(LimitedUnityPackages.fromJson(unityPackage));
+    for (dynamic package in content['unityPackages']) {
+      limitedUnityPackages.add(LimitedUnityPackages.fromJson(package));
     }
     updatedAt = DateTime.parse(content['updated_at']);
   }

@@ -23,6 +23,7 @@ void errorDialog(BuildContext context, AppConfig appConfig, String text, {String
   }
   if (kDebugMode) {
     print(errorLog(json.decode(log)));
+    return;
   }
   if (!appConfig.dontShowErrorDialog && log.isNotEmpty) {
     showDialog(
@@ -107,7 +108,6 @@ httpError(BuildContext context, AppConfig appConfig, HttpException error) {
     }
   } catch (e) {
     standardError(context, appConfig, e);
-    return;
   }
 }
 
