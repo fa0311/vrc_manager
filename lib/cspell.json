@@ -1,4 +1,5 @@
 {
+  "enabled": true,
   "version": "0.2",
   "language": "en",
   "words": [
@@ -19,25 +20,20 @@
     "vrchat",
     "vsco",
     "wechat",
-
     /* API */
     "standalonewindows",
     "totp",
     "twofactorauth",
-
     /* Flutter */
     "unfocus",
-
     /* Library */
     "cupertino",
     "fluttertoast",
     "agconnect",
-
     /* Name */
     "yuki",
-
     /* Other */
     "dont"
   ],
-  "ignorePaths": ["/lib/l10n/**", "/lib/assets/vrchat/lang.dart"]
+  "ignorePaths": ["l10n/**", "assets/vrchat/lang.dart"]
 }
