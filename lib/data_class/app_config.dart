@@ -1,6 +1,8 @@
 // Project imports:
 
 // Flutter imports:
+
+// Flutter imports:
 import 'package:flutter/cupertino.dart';
 
 // Project imports:
@@ -41,11 +43,15 @@ class AppConfig {
         _loggedAccount = accountConfig;
       }
     }
-    await Future.wait(futureList).then((value) {
-      futureList = [];
-      futureList.add(_loggedAccount!.getFavoriteWorldGroups(context, this));
-    });
-    return Future.wait(futureList);
+    if (_loggedAccount == null) return;
+    await Future.wait(futureList);
+    /*
+    * To be fixed in the next stable version.
+    * if(context.mounted)
+    */
+    // ignore: use_build_context_synchronously
+    await _loggedAccount!.getFavoriteWorldGroups(context, this);
+    return;
   }
 
   Future removeAccount(AccountConfig account) async {
