@@ -69,7 +69,7 @@ body:
       placeholder: |
         Example:
           1. Open "Online Friends"
-          2. Change the display setting from "normal" to "Simple"
+          2. Change the display setting from "Default" to "Simple"
           3. ...
           ...
     validations:
