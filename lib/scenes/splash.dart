@@ -12,6 +12,7 @@ import 'package:vrc_manager/assets/flutter/url_parser.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/home.dart';
 import 'package:vrc_manager/scenes/login.dart';
+import 'package:vrc_manager/scenes/web_view_policies.dart';
 
 class VRChatMobileSplash extends StatefulWidget {
   const VRChatMobileSplash({Key? key}) : super(key: key);
@@ -24,8 +25,10 @@ class _SplashState extends State<VRChatMobileSplash> {
   initState() {
     super.initState();
 
-    appConfig.get(context).then((value) async {
-      if (!appConfig.isLogout()) {
+    appConfig.get(context).then((_) async {
+      if (!appConfig.agreedUserPolicy) {
+        goWebViewUserPolicy();
+      } else if (!appConfig.isLogout()) {
         goLogin();
       } else if (Platform.isAndroid || Platform.isIOS) {
         ReceiveSharingIntent.getInitialText().then((String? initialText) {
@@ -45,9 +48,7 @@ class _SplashState extends State<VRChatMobileSplash> {
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(
-        builder: (BuildContext context) => VRChatMobileHome(
-          appConfig,
-        ),
+        builder: (BuildContext context) => VRChatMobileHome(appConfig),
       ),
       (_) => false,
     );
@@ -57,9 +58,17 @@ class _SplashState extends State<VRChatMobileSplash> {
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(
-        builder: (BuildContext context) => VRChatMobileLogin(
-          appConfig,
-        ),
+        builder: (BuildContext context) => VRChatMobileLogin(appConfig),
+      ),
+      (_) => false,
+    );
+  }
+
+  goWebViewUserPolicy() {
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(
+        builder: (BuildContext context) => VRChatMobileWebViewUserPolicy(appConfig),
       ),
       (_) => false,
     );
@@ -71,8 +80,14 @@ class _SplashState extends State<VRChatMobileSplash> {
       body: SafeArea(
         child: SizedBox(
           width: MediaQuery.of(context).size.width,
-          child: const SingleChildScrollView(
-            child: Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()),
+          child: const Center(
+            child: SizedBox(
+              width: 100,
+              height: 100,
+              child: CircularProgressIndicator(
+                strokeWidth: 8,
+              ),
+            ),
           ),
         ),
       ),

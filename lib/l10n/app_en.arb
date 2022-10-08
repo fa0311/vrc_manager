@@ -26,6 +26,7 @@
     "errorDialog": "Error",
     "parseError": "Parse error",
     "socketException": "No Internet connection",
+    "cantOpenBrowser": "The browser could not be opened",
     "unknownError": "Unknown error",
     "reportMessage1": "Please report this to the developer.",
     "reportMessage2": "Tapping Report will copy the log to the clipboard and access the report page.",
@@ -174,6 +175,10 @@
     "versionDetails": "Current Version: {version}",
     "license": "License",
     "licenseDetails": "Check License information",
+    "@____________________USER_POLICY____________________": {},
+    "userPolicy": "User Policy",
+    "agree": "Agree",
+    "disagree": "Disagree",
     "@____________________PLACEHOLDER____________________": {},
     "@__PLACEHOLDER_DATE__": {},
     "@dateFormat1": {
