@@ -21,11 +21,12 @@ void errorDialog(BuildContext context, AppConfig appConfig, String text, {String
   if (log.isNotEmpty) {
     text += "\n${AppLocalizations.of(context)!.reportMessage1}\n${AppLocalizations.of(context)!.reportMessage2}";
   }
-  if (kDebugMode) {
-    print(errorLog(json.decode(log)));
-    return;
+  if (log.isNotEmpty) {
+    if (kDebugMode) {
+      print(errorLog(json.decode(log)));
+    }
   }
-  if (!appConfig.dontShowErrorDialog && log.isNotEmpty) {
+  if (!appConfig.dontShowErrorDialog) {
     showDialog(
       context: context,
       builder: (_) {

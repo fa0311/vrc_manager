@@ -6,8 +6,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:vrc_manager/assets/error.dart';
 import 'package:vrc_manager/scenes/home.dart';
 import 'package:vrc_manager/widgets/share.dart';
 
@@ -27,30 +25,13 @@ class VRChatMobileWebViewUserPolicy extends StatefulWidget {
   State<VRChatMobileWebViewUserPolicy> createState() => _WebViewPageState();
 }
 
-enum LaunchUrl { webview, browser, error, wait }
-
 class _WebViewPageState extends State<VRChatMobileWebViewUserPolicy> {
   late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: widget.appConfig.loggedAccount?.cookie ?? "");
   static const String url = "https://github.com/fa0311/vrc_manager/blob/master/docs/user_policies/ja.md";
-  LaunchUrl launchData = LaunchUrl.wait;
-
-  Future get() async {
-    if (Platform.isAndroid || Platform.isIOS) {
-      launchData = LaunchUrl.webview;
-    } else {
-      if (await canLaunchUrl(Uri.parse(url))) {
-        launchData = LaunchUrl.browser;
-      } else {
-        launchData = LaunchUrl.error;
-        await launchUrl(Uri.parse(url));
-      }
-    }
-  }
 
   @override
   initState() {
     super.initState();
-    get().then((value) => setState(() {}));
   }
 
   @override
@@ -110,25 +91,38 @@ class _WebViewPageState extends State<VRChatMobileWebViewUserPolicy> {
         ),
       ),
       body: () {
-        if (launchData == LaunchUrl.webview) {
+        if (Platform.isAndroid || Platform.isIOS) {
           return const WebView(
             initialUrl: url,
             javascriptMode: JavascriptMode.unrestricted,
           );
-        }
-        if (launchData == LaunchUrl.error) {
-          errorDialog(context, widget.appConfig, AppLocalizations.of(context)!.cantOpenBrowser);
-        }
-
-        return const Center(
-          child: SizedBox(
-            width: 100,
-            height: 100,
-            child: CircularProgressIndicator(
-              strokeWidth: 8,
+        } else {
+          openInBrowser(context, widget.appConfig, url, forceExternal: true);
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  AppLocalizations.of(context)!.lookAtYourBrowser,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
+                ),
+                const Padding(
+                  padding: EdgeInsets.all(16.0),
+                  child: SizedBox(
+                    width: 50,
+                    height: 50,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 6,
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ),
-        );
+          );
+        }
       }(),
     );
   }

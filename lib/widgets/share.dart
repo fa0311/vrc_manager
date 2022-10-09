@@ -92,11 +92,7 @@ Widget openInBrowserExternalForceListTileWidget(BuildContext context, AppConfig 
     title: Text(AppLocalizations.of(context)!.openInExternalBrowser),
     onTap: () async {
       Navigator.pop(context);
-      if (await canLaunchUrl(
-        Uri.parse(url),
-      )) {
-        await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
-      }
+      openInBrowser(context, appConfig, url, forceExternal: true);
     },
   );
 }
@@ -149,8 +145,8 @@ Widget openInWindowsListTileWidget(BuildContext context, AppConfig appConfig, St
   );
 }
 
-Future openInBrowser(BuildContext context, AppConfig appConfig, String url) async {
-  if (Platform.isAndroid || Platform.isIOS) {
+Future openInBrowser(BuildContext context, AppConfig appConfig, String url, {bool forceExternal = false}) async {
+  if (!forceExternal && (Platform.isAndroid || Platform.isIOS)) {
     getStorage("force_external_browser").then(
       (response) async {
         if (response == "true" && Uri.parse(url).host != "vrchat.com") {
