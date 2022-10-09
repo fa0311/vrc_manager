@@ -54,8 +54,8 @@ sortByLocationMapFromUser(List<VRChatUser> userList) {
 
 sortByNameFromUser(List<VRChatUser> userList) {
   userList.sort((userA, userB) {
-    List<int> userBytesA = utf8.encode(userA.displayName);
-    List<int> userBytesB = utf8.encode(userB.displayName);
+    List<int> userBytesA = utf8.encode(userA.displayName.toLowerCase());
+    List<int> userBytesB = utf8.encode(userB.displayName.toLowerCase());
     for (int i = 0; i < userBytesA.length && i < userBytesB.length; i++) {
       if (userBytesA[i] < userBytesB[i]) return -1;
       if (userBytesA[i] > userBytesB[i]) return 1;

@@ -11,6 +11,7 @@ import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets/error.dart';
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
+import 'package:vrc_manager/assets/sort/users.dart';
 import 'package:vrc_manager/assets/sort/worlds_favorite.dart';
 import 'package:vrc_manager/assets/storage.dart';
 import 'package:vrc_manager/data_class/app_config.dart';
@@ -58,6 +59,8 @@ class _SearchState extends State<VRChatSearch> {
   }
 
   void init() {
+    sortedModeCache = "default";
+    sortedDescendCache = false;
     gridConfig = GridModalConfig();
     gridConfig.url = "https://vrchat.com/home/search/$text";
     if (searchingMode == SearchMode.worlds) {
@@ -351,17 +354,23 @@ class _SearchState extends State<VRChatSearch> {
   @override
   Widget build(BuildContext context) {
     textStream(context, widget.appConfig);
-    print("build");
-    if (config.sort != sortedModeCache) {
+    if (worldList.isNotEmpty && config.sort != sortedModeCache) {
       sortWorlds(config, worldList);
       sortedModeCache = config.sort;
     }
-    if (config.descending != sortedDescendCache) {
-      for (FavoriteWorldData favoriteWorld in widget.appConfig.loggedAccount?.favoriteWorld ?? []) {
-        favoriteWorld.list.reversed.toList();
-        sortedDescendCache = config.descending;
-      }
+    if (worldList.isNotEmpty && config.descending != sortedDescendCache) {
+      worldList.reversed.toList();
+      sortedDescendCache = config.descending;
     }
+    if (userList.isNotEmpty && config.sort != sortedModeCache) {
+      sortUsers(config, userList);
+      sortedModeCache = config.sort;
+    }
+    if (userList.isNotEmpty && config.descending != sortedDescendCache) {
+      userList.reversed.toList();
+      sortedDescendCache = config.descending;
+    }
+
     const selectedTextStyle = TextStyle(
       color: Colors.grey,
       fontSize: 16,
