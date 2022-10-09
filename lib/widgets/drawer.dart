@@ -15,6 +15,7 @@ import 'package:vrc_manager/scenes/main/search.dart';
 import 'package:vrc_manager/scenes/setting/other_account.dart';
 import 'package:vrc_manager/scenes/main/settings.dart';
 import 'package:vrc_manager/scenes/main/worlds_favorite.dart';
+import 'package:vrc_manager/scenes/sub/login.dart';
 
 Drawer drawer(BuildContext context, AppConfig appConfig) {
   List<Widget> getAccountList() {
@@ -25,16 +26,15 @@ Drawer drawer(BuildContext context, AppConfig appConfig) {
           title: Text(
             account.displayName ?? AppLocalizations.of(context)!.unknown,
           ),
-          onTap: () {
-            appConfig.login(context, account);
-            Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(
-                builder: (BuildContext context) => VRChatMobileHome(appConfig),
+          onTap: () => appConfig.login(context, account).then(
+                (bool logged) => Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => logged ? VRChatMobileHome(appConfig) : VRChatMobileLogin(appConfig),
+                  ),
+                  (_) => false,
+                ),
               ),
-              (_) => false,
-            );
-          },
         ),
       );
     }
@@ -216,16 +216,15 @@ Drawer simpleDrawer(BuildContext context, AppConfig appConfig) {
           title: Text(
             account.displayName ?? AppLocalizations.of(context)!.unknown,
           ),
-          onTap: () {
-            appConfig.login(context, account);
-            Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(
-                builder: (BuildContext context) => VRChatMobileHome(appConfig),
+          onTap: () => appConfig.login(context, account).then(
+                (bool logged) => Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => logged ? VRChatMobileHome(appConfig) : VRChatMobileLogin(appConfig),
+                  ),
+                  (_) => false,
+                ),
               ),
-              (_) => false,
-            );
-          },
         ),
       );
     }

@@ -20,7 +20,7 @@ class AppConfig {
 
   AccountConfig? get loggedAccount => _loggedAccount;
 
-  Future get(BuildContext context) async {
+  Future<bool> get(BuildContext context) async {
     List<Future> futureList = [];
     List uidList = [];
     String? accountUid;
@@ -45,15 +45,17 @@ class AppConfig {
         _loggedAccount = accountConfig;
       }
     }
-    if (_loggedAccount == null) return;
     await Future.wait(futureList);
+    if (_loggedAccount == null) return false;
+    if (!(await _loggedAccount!.tokenCheck())) return false;
+
     /*
     * To be fixed in the next stable version.
     * if(context.mounted)
     */
     // ignore: use_build_context_synchronously
     await _loggedAccount!.getFavoriteWorldGroups(context, this);
-    return;
+    return true;
   }
 
   Future removeAccount(AccountConfig account) async {
@@ -83,13 +85,15 @@ class AppConfig {
     return await removeStorage("account_index");
   }
 
-  Future login(BuildContext context, AccountConfig accountConfig) {
+  Future<bool> login(BuildContext context, AccountConfig accountConfig) async {
     List<Future> futureList = [];
     _loggedAccount = accountConfig;
     accountConfig.favoriteWorld = [];
+    if (!(await _loggedAccount!.tokenCheck())) return false;
     futureList.add(accountConfig.getFavoriteWorldGroups(context, this));
     futureList.add(setStorage("account_index", accountConfig.uid));
-    return Future.wait(futureList);
+    await Future.wait(futureList);
+    return true;
   }
 
   bool isLogout() {
@@ -175,6 +179,15 @@ class AccountConfig {
   Future removeDisplayName() async {
     displayName = null;
     return await removeLoginSession("display_name", uid);
+  }
+
+  Future<bool> tokenCheck() async {
+    late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: cookie);
+    return await vrchatLoginSession.user().then((VRChatUserSelfOverload response) {
+      return true;
+    }).catchError((status) {
+      return false;
+    });
   }
 
   Future getFavoriteWorldGroups(BuildContext context, AppConfig appConfig) async {

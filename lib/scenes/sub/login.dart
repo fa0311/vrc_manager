@@ -109,15 +109,16 @@ class _LoginPageState extends State<VRChatMobileLogin> {
     accountConfig.setCookie(cookie);
     accountConfig.setRememberLoginInfo(_rememberPassword);
     widget.appConfig.addAccount(accountConfig);
-    widget.appConfig.login(context, accountConfig);
 
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(
-        builder: (BuildContext context) => VRChatMobileHome(widget.appConfig),
-      ),
-      (_) => false,
-    );
+    widget.appConfig.login(context, accountConfig).then(
+          (bool logged) => Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+              builder: (BuildContext context) => logged ? VRChatMobileHome(widget.appConfig) : VRChatMobileLogin(widget.appConfig),
+            ),
+            (_) => false,
+          ),
+        );
   }
 
   String genUid([int length = 64]) {

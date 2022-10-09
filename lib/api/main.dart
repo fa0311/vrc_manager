@@ -71,7 +71,7 @@ class VRChatAPI {
 
   // User
 
-  Future<VRChatFriends> users(String uid) {
+  Future<VRChatUser> users(String uid) {
     return vrchatSession
         .get(
           endpoint(
@@ -79,7 +79,7 @@ class VRChatAPI {
             apiKey(),
           ),
         )
-        .then((value) => VRChatFriends.fromJson(value));
+        .then((value) => VRChatUser.fromJson(value));
   }
 
   Future<VRChatUserNotes> userNotes(String uid, String note) {

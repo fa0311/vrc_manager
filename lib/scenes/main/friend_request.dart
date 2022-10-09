@@ -27,7 +27,7 @@ class VRChatMobileFriendRequest extends StatefulWidget {
 class _FriendsPageState extends State<VRChatMobileFriendRequest> {
   late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: widget.appConfig.loggedAccount?.cookie ?? "");
   late GridConfig config = widget.appConfig.gridConfigList.friendsRequest;
-  List<VRChatFriends> userList = [];
+  List<VRChatUser> userList = [];
   Widget body = const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator());
 
   @override
@@ -44,7 +44,7 @@ class _FriendsPageState extends State<VRChatMobileFriendRequest> {
         apiError(context, widget.appConfig, status);
       });
       for (VRChatNotifications requestUser in response) {
-        futureList.add(vrchatLoginSession.users(requestUser.senderUserId).then((VRChatFriends user) {
+        futureList.add(vrchatLoginSession.users(requestUser.senderUserId).then((VRChatUser user) {
           userList.add(user);
         }).catchError((status) {
           apiError(context, widget.appConfig, status);

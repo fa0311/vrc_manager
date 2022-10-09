@@ -31,7 +31,7 @@ class VRChatMobileUser extends StatefulWidget {
 
 class _UserHomeState extends State<VRChatMobileUser> {
   late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: widget.appConfig.loggedAccount?.cookie ?? "");
-  VRChatFriends? user;
+  VRChatUser? user;
   VRChatFriendStatus? status;
   VRChatWorld? world;
   VRChatInstance? instance;
@@ -71,35 +71,6 @@ class _UserHomeState extends State<VRChatMobileUser> {
     }
   }
 
-  editNote() {
-    showDialog(
-      context: context,
-      builder: (_) {
-        return AlertDialog(
-          content: TextField(
-            controller: noteController,
-            decoration: InputDecoration(labelText: AppLocalizations.of(context)!.editNote),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: Text(AppLocalizations.of(context)!.close),
-              onPressed: () => Navigator.pop(context),
-            ),
-            TextButton(
-              child: Text(AppLocalizations.of(context)!.ok),
-              onPressed: () => vrchatLoginSession.userNotes(user!.id, user!.note = noteController.text).then((VRChatUserNotes response) {
-                Navigator.pop(context);
-                setState(() => user!.note = user!.note == "" ? null : user!.note);
-              }).catchError((status) {
-                apiError(context, widget.appConfig, status);
-              }),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     textStream(context, widget.appConfig);
@@ -137,7 +108,7 @@ class _UserHomeState extends State<VRChatMobileUser> {
                           minimumSize: Size.zero,
                           padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
                         ),
-                        onPressed: () => editNote(),
+                        onPressed: () => editNote(context, appConfig, setState, noteController, user!),
                         child: Text(AppLocalizations.of(context)!.editNote),
                       ),
                     ),
