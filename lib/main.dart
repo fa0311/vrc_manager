@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:vrc_manager/assets/storage.dart';
 import 'package:vrc_manager/data_class/app_config.dart';
 import 'package:vrc_manager/material.dart';
-import 'package:vrc_manager/scenes/splash.dart';
+import 'package:vrc_manager/scenes/sub/splash.dart';
 
 AppConfig appConfig = AppConfig();
 main() {

@@ -6,7 +6,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:vrc_manager/scenes/home.dart';
+import 'package:vrc_manager/scenes/main/home.dart';
 import 'package:vrc_manager/widgets/share.dart';
 
 // Package imports:

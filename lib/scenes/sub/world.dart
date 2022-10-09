@@ -21,7 +21,7 @@ import 'package:vrc_manager/assets/flutter/text_stream.dart';
 import 'package:vrc_manager/assets/vrchat/region.dart';
 import 'package:vrc_manager/data_class/app_config.dart';
 import 'package:vrc_manager/main.dart';
-import 'package:vrc_manager/scenes/json_viewer.dart';
+import 'package:vrc_manager/scenes/sub/json_viewer.dart';
 import 'package:vrc_manager/widgets/drawer.dart';
 import 'package:vrc_manager/widgets/region.dart';
 import 'package:vrc_manager/widgets/share.dart';

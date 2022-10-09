@@ -17,7 +17,7 @@ import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets/error.dart';
 import 'package:vrc_manager/assets/storage.dart';
 import 'package:vrc_manager/data_class/app_config.dart';
-import 'package:vrc_manager/scenes/web_view.dart';
+import 'package:vrc_manager/scenes/web/web_view.dart';
 
 Future modalBottom(BuildContext context, List<Widget> children) {
   return showModalBottomSheet(

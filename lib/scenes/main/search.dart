@@ -15,13 +15,10 @@ import 'package:vrc_manager/assets/sort/users.dart';
 import 'package:vrc_manager/assets/sort/worlds_favorite.dart';
 import 'package:vrc_manager/assets/storage.dart';
 import 'package:vrc_manager/data_class/app_config.dart';
-import 'package:vrc_manager/main.dart';
-import 'package:vrc_manager/scenes/user.dart';
-import 'package:vrc_manager/scenes/world.dart';
 import 'package:vrc_manager/widgets/drawer.dart';
+import 'package:vrc_manager/widgets/grid_view/extraction/user.dart';
+import 'package:vrc_manager/widgets/grid_view/extraction/world.dart';
 import 'package:vrc_manager/widgets/modal.dart';
-import 'package:vrc_manager/widgets/profile.dart';
-import 'package:vrc_manager/widgets/template.dart';
 
 class VRChatSearch extends StatefulWidget {
   final AppConfig appConfig;
@@ -72,213 +69,6 @@ class _SearchState extends State<VRChatSearch> {
     }
   }
 
-  GridView extractionUserDefault() {
-    return renderGrid(
-      context,
-      width: 600,
-      height: config.worldDetails ? 235 : 130,
-      children: [
-        for (VRChatUser user in userList)
-          () {
-            if (["private", "offline", "traveling"].contains(user.location) && config.joinable) return null;
-            String worldId = user.location.split(":")[0];
-            return genericTemplate(
-              context,
-              appConfig,
-              imageUrl: user.profilePicOverride ?? user.currentAvatarThumbnailImageUrl,
-              onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (BuildContext context) => VRChatMobileUser(appConfig, userId: user.id),
-                  )),
-              children: [
-                username(user),
-                for (String text in [
-                  if (user.statusDescription != null) user.statusDescription!,
-                  if (!["private", "offline", "traveling"].contains(user.location)) locationMap[worldId]!.name,
-                  if (user.location == "private") AppLocalizations.of(context)!.privateWorld,
-                  if (user.location == "traveling") AppLocalizations.of(context)!.traveling,
-                ].whereType<String>()) ...[
-                  Text(text, style: const TextStyle(fontSize: 15)),
-                ],
-              ],
-            );
-          }(),
-      ].whereType<Widget>().toList(),
-    );
-  }
-
-  GridView extractionUserSimple() {
-    return renderGrid(
-      context,
-      width: 320,
-      height: config.worldDetails ? 119 : 64,
-      children: [
-        for (VRChatUser user in userList)
-          () {
-            if (["private", "offline", "traveling"].contains(user.location) && config.joinable) return null;
-            return genericTemplate(
-              context,
-              appConfig,
-              imageUrl: user.profilePicOverride ?? user.currentAvatarThumbnailImageUrl,
-              half: true,
-              onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (BuildContext context) => VRChatMobileUser(appConfig, userId: user.id),
-                  )),
-              children: [
-                username(user, diameter: 12),
-                for (String text in [
-                  if (user.statusDescription != null) user.statusDescription!,
-                ].whereType<String>()) ...[
-                  Text(text, style: const TextStyle(fontSize: 10)),
-                ],
-              ],
-            );
-          }(),
-      ].whereType<Widget>().toList(),
-    );
-  }
-
-  GridView extractionUserText() {
-    return renderGrid(
-      context,
-      width: 400,
-      height: config.worldDetails ? 39 : 26,
-      children: [
-        for (VRChatUser user in userList)
-          () {
-            if (["private", "offline", "traveling"].contains(user.location) && config.joinable) return null;
-            return genericTemplateText(
-              context,
-              appConfig,
-              onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (BuildContext context) => VRChatMobileUser(appConfig, userId: user.id),
-                  )),
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    username(user, diameter: 15),
-                    if (user.statusDescription != null) Text(user.statusDescription!, style: const TextStyle(fontSize: 10)),
-                  ],
-                ),
-              ],
-            );
-          }(),
-      ].whereType<Widget>().toList(),
-    );
-  }
-
-  GridView extractionWorldDefault() {
-    return renderGrid(
-      context,
-      width: 600,
-      height: 130,
-      children: [
-        for (VRChatLimitedWorld world in worldList)
-          () {
-            return genericTemplate(
-              context,
-              widget.appConfig,
-              imageUrl: world.thumbnailImageUrl,
-              onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (BuildContext context) => VRChatMobileWorld(appConfig, worldId: world.id),
-                  )),
-              children: [
-                SizedBox(
-                  child: Text(
-                    world.name,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 2,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 15,
-                      height: 1,
-                    ),
-                  ),
-                ),
-              ],
-            );
-          }(),
-      ],
-    );
-  }
-
-  GridView extractionWorldSimple() {
-    return renderGrid(
-      context,
-      width: 320,
-      height: 64,
-      children: [
-        for (VRChatLimitedWorld world in worldList)
-          () {
-            return genericTemplate(
-              context,
-              widget.appConfig,
-              imageUrl: world.thumbnailImageUrl,
-              half: true,
-              onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (BuildContext context) => VRChatMobileWorld(appConfig, worldId: world.id),
-                  )),
-              children: [
-                SizedBox(
-                  width: double.infinity,
-                  child: Text(
-                    world.name,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 2,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 10,
-                      height: 1,
-                    ),
-                  ),
-                ),
-              ],
-            );
-          }(),
-      ],
-    );
-  }
-
-  GridView extractionWorldText() {
-    return renderGrid(
-      context,
-      width: 400,
-      height: config.worldDetails ? 39 : 26,
-      children: [
-        for (VRChatLimitedWorld world in worldList)
-          () {
-            return genericTemplateText(
-              context,
-              appConfig,
-              onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (BuildContext context) => VRChatMobileWorld(appConfig, worldId: world.id),
-                  )),
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(world.name, style: const TextStyle(fontSize: 10)),
-                  ],
-                ),
-              ],
-            );
-          }(),
-      ].whereType<Widget>().toList(),
-    );
-  }
-
   searchModeModal(Function setStateBuilderParent) {
     showModalBottomSheet(
       context: context,
@@ -315,8 +105,8 @@ class _SearchState extends State<VRChatSearch> {
   }
 
   void addWorldList(VRChatLimitedWorld world) {
-    for (VRChatLimitedWorld w in worldList) {
-      if (world.id == w.id) {
+    for (VRChatLimitedWorld worldValue in worldList) {
+      if (world.id == worldValue.id) {
         return;
       }
     }
@@ -431,14 +221,14 @@ class _SearchState extends State<VRChatSearch> {
                 ),
                 if (userList.isEmpty && worldList.isEmpty && text != null) const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()),
                 if (userList.isNotEmpty) ...[
-                  if (config.displayMode == "normal") extractionUserDefault(),
-                  if (config.displayMode == "simple") extractionUserSimple(),
-                  if (config.displayMode == "text_only") extractionUserText(),
+                  if (config.displayMode == "normal") extractionUserDefault(context, config, userList),
+                  if (config.displayMode == "simple") extractionUserSimple(context, config, userList),
+                  if (config.displayMode == "text_only") extractionUserText(context, config, userList),
                 ],
                 if (worldList.isNotEmpty) ...[
-                  if (config.displayMode == "normal") extractionWorldDefault(),
-                  if (config.displayMode == "simple") extractionWorldSimple(),
-                  if (config.displayMode == "text_only") extractionWorldText(),
+                  if (config.displayMode == "normal") extractionWorldDefault(context, config, worldList),
+                  if (config.displayMode == "simple") extractionWorldSimple(context, config, worldList),
+                  if (config.displayMode == "text_only") extractionWorldText(context, config, worldList),
                 ],
               ],
             ),

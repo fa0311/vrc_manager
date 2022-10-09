@@ -13,11 +13,11 @@ import 'package:vrc_manager/assets/error.dart';
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
 import 'package:vrc_manager/data_class/app_config.dart';
 import 'package:vrc_manager/main.dart';
-import 'package:vrc_manager/scenes/json_viewer.dart';
+import 'package:vrc_manager/scenes/sub/json_viewer.dart';
 import 'package:vrc_manager/widgets/drawer.dart';
+import 'package:vrc_manager/widgets/grid_view/widget/world.dart';
 import 'package:vrc_manager/widgets/profile.dart';
 import 'package:vrc_manager/widgets/share.dart';
-import 'package:vrc_manager/widgets/world.dart';
 
 class VRChatMobileUser extends StatefulWidget {
   final String userId;
@@ -86,13 +86,14 @@ class _UserHomeState extends State<VRChatMobileUser> {
               onPressed: () => Navigator.pop(context),
             ),
             TextButton(
-                child: Text(AppLocalizations.of(context)!.ok),
-                onPressed: () => vrchatLoginSession.userNotes(user!.id, user!.note = noteController.text).then((VRChatUserNotes response) {
-                      Navigator.pop(context);
-                      setState(() => user!.note = user!.note == "" ? null : user!.note);
-                    }).catchError((status) {
-                      apiError(context, widget.appConfig, status);
-                    })),
+              child: Text(AppLocalizations.of(context)!.ok),
+              onPressed: () => vrchatLoginSession.userNotes(user!.id, user!.note = noteController.text).then((VRChatUserNotes response) {
+                Navigator.pop(context);
+                setState(() => user!.note = user!.note == "" ? null : user!.note);
+              }).catchError((status) {
+                apiError(context, widget.appConfig, status);
+              }),
+            ),
           ],
         );
       },

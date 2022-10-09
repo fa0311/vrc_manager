@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 
 // Project imports:
 import 'package:vrc_manager/data_class/app_config.dart';
-import 'package:vrc_manager/scenes/user.dart';
-import 'package:vrc_manager/scenes/world.dart';
+import 'package:vrc_manager/scenes/sub/user.dart';
+import 'package:vrc_manager/scenes/sub/world.dart';
 import 'package:vrc_manager/widgets/share.dart';
 
 void urlParser(BuildContext context, AppConfig appConfig, String strUri) {

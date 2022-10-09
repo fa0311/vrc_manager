@@ -16,7 +16,7 @@ import 'package:vrc_manager/assets/date.dart';
 import 'package:vrc_manager/assets/error.dart';
 import 'package:vrc_manager/assets/vrchat/instance_type.dart';
 import 'package:vrc_manager/data_class/app_config.dart';
-import 'package:vrc_manager/scenes/world.dart';
+import 'package:vrc_manager/scenes/sub/world.dart';
 import 'package:vrc_manager/widgets/region.dart';
 
 Card simpleWorld(BuildContext context, AppConfig appConfig, VRChatLimitedWorld world) {

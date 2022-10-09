@@ -12,7 +12,7 @@ import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets/error.dart';
 import 'package:vrc_manager/data_class/app_config.dart';
-import 'package:vrc_manager/scenes/home.dart';
+import 'package:vrc_manager/scenes/main/home.dart';
 import 'package:vrc_manager/widgets/change_locale_dialog.dart';
 import 'package:vrc_manager/widgets/drawer.dart';
 import 'package:vrc_manager/widgets/share.dart';

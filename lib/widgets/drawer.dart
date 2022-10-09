@@ -8,13 +8,13 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 // Project imports:
 import 'package:vrc_manager/data_class/app_config.dart';
-import 'package:vrc_manager/scenes/friend_request.dart';
-import 'package:vrc_manager/scenes/friends.dart';
-import 'package:vrc_manager/scenes/home.dart';
-import 'package:vrc_manager/scenes/search.dart';
+import 'package:vrc_manager/scenes/main/friend_request.dart';
+import 'package:vrc_manager/scenes/main/friends.dart';
+import 'package:vrc_manager/scenes/main/home.dart';
+import 'package:vrc_manager/scenes/main/search.dart';
 import 'package:vrc_manager/scenes/setting/other_account.dart';
-import 'package:vrc_manager/scenes/settings.dart';
-import 'package:vrc_manager/scenes/worlds_favorite.dart';
+import 'package:vrc_manager/scenes/main/settings.dart';
+import 'package:vrc_manager/scenes/main/worlds_favorite.dart';
 
 Drawer drawer(BuildContext context, AppConfig appConfig) {
   List<Widget> getAccountList() {
