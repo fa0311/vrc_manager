@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 
 // Project imports:
-import 'package:vrc_manager/assets/storage.dart';
 import 'package:vrc_manager/data_class/app_config.dart';
 import 'package:vrc_manager/material.dart';
 import 'package:vrc_manager/scenes/sub/splash.dart';
@@ -20,20 +19,19 @@ class VRChatMobile extends StatefulWidget {
 }
 
 class _PageState extends State<VRChatMobile> {
-  String theme = "light";
-  String locale = "en";
+  @override
+  initState() {
+    super.initState();
+    appConfig.setState = setState;
+  }
 
-  _PageState() {
-    getStorage("theme_brightness").then((response) => setState(() => theme = response ?? "light"));
-    getStorage("language_code").then((response) => setState(() => locale = response ?? "en"));
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return getMaterialApp(
-      const VRChatMobileSplash(),
-      theme,
-      Locale(locale, ''),
-    );
+    return getMaterialApp(const VRChatMobileSplash());
   }
 }

@@ -1,15 +1,14 @@
-// Project imports:
-
 // Flutter imports:
 
 // Flutter imports:
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 // Project imports:
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets/error.dart';
 import 'package:vrc_manager/assets/storage.dart';
+import 'package:vrc_manager/data_class/enum.dart';
 
 class AppConfig {
   AccountConfig? _loggedAccount;
@@ -17,22 +16,32 @@ class AppConfig {
   GridConfigList gridConfigList = GridConfigList();
   bool dontShowErrorDialog = false;
   bool agreedUserPolicy = false;
+  ThemeBrightness themeBrightness = ThemeBrightness.light;
+  LanguageCode languageCode = LanguageCode.en;
+  bool forceExternalBrowser = false;
+  Function setState = () {};
 
   AccountConfig? get loggedAccount => _loggedAccount;
 
   Future<bool> get(BuildContext context) async {
-    List<Future> futureList = [];
     List uidList = [];
     String? accountUid;
 
-    futureList.add(getStorage("account_index").then((value) => accountUid = value));
-    futureList.add(getStorageList("account_index_list").then((List<String> value) => uidList = value));
-    futureList.add(getStorage("dont_show_error_dialog").then((value) => dontShowErrorDialog = (value == "true")));
-    futureList.add(getStorage("agreed_user_policy").then((value) => agreedUserPolicy = (value == "true")));
-    futureList.add(gridConfigList.setConfig());
+    await Future.wait([
+      getStorage("theme_brightness").then((value) => value == null ? themeBrightness : ThemeBrightness.values.byName(value)),
+      getStorage("language_code").then((value) => languageCode = value == null ? languageCode : LanguageCode.values.byName(value)),
+    ]);
+    setState(() {});
+    await Future.wait([
+      getStorage("account_index").then((value) => accountUid = value),
+      getStorageList("account_index_list").then((List<String> value) => uidList = value),
+      getStorage("dont_show_error_dialog").then((value) => dontShowErrorDialog = (value == "true")),
+      getStorage("agreed_user_policy").then((value) => agreedUserPolicy = (value == "true")),
+      getStorage("force_external_browser").then((value) => forceExternalBrowser = (value == "true")),
+      gridConfigList.setConfig(),
+    ]);
 
-    await Future.wait(futureList);
-    futureList = [];
+    List<Future> futureList = [];
     for (String uid in uidList) {
       AccountConfig accountConfig = AccountConfig(uid);
       futureList.add(getLoginSession("cookie", uid).then((value) => accountConfig.cookie = value ?? ""));
@@ -122,12 +131,24 @@ class AppConfig {
     return null;
   }
 
-  Future setCookie(bool value) async {
+  Future setThemeBrightness(ThemeBrightness value) async {
+    return await setStorage("theme_brightness", (themeBrightness = value).name);
+  }
+
+  Future setLanguageCode(LanguageCode value) async {
+    return await setStorage("language_code", (languageCode = value).name);
+  }
+
+  Future setDontShowErrorDialog(bool value) async {
     return await setStorage("dont_show_error_dialog", (dontShowErrorDialog = value).toString());
   }
 
   Future setAgreedUserPolicy(bool value) async {
     return await setStorage("agreed_user_policy", (agreedUserPolicy = value).toString());
+  }
+
+  Future setForceExternalBrowser(bool value) async {
+    return await setStorage("force_external_browser", (forceExternalBrowser = value).toString());
   }
 }
 

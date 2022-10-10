@@ -17,7 +17,7 @@ import 'package:vrc_manager/data_class/app_config.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/widgets/drawer.dart';
 import 'package:vrc_manager/widgets/grid_view/extraction/friends.dart';
-import 'package:vrc_manager/widgets/modal.dart';
+import 'package:vrc_manager/widgets/modal/modal.dart';
 
 class VRChatMobileFriends extends StatefulWidget {
   final bool offline;

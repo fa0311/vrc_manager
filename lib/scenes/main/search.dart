@@ -18,7 +18,7 @@ import 'package:vrc_manager/data_class/app_config.dart';
 import 'package:vrc_manager/widgets/drawer.dart';
 import 'package:vrc_manager/widgets/grid_view/extraction/user.dart';
 import 'package:vrc_manager/widgets/grid_view/extraction/world.dart';
-import 'package:vrc_manager/widgets/modal.dart';
+import 'package:vrc_manager/widgets/modal/modal.dart';
 
 class VRChatSearch extends StatefulWidget {
   final AppConfig appConfig;

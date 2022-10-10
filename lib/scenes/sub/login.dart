@@ -13,7 +13,7 @@ import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets/error.dart';
 import 'package:vrc_manager/data_class/app_config.dart';
 import 'package:vrc_manager/scenes/main/home.dart';
-import 'package:vrc_manager/widgets/change_locale_dialog.dart';
+import 'package:vrc_manager/widgets/modal/locale.dart';
 import 'package:vrc_manager/widgets/drawer.dart';
 import 'package:vrc_manager/widgets/share.dart';
 
@@ -138,7 +138,7 @@ class _LoginPageState extends State<VRChatMobileLogin> {
             icon: const Icon(
               Icons.translate,
             ),
-            onPressed: () => showLocaleModalBottomSheet(context),
+            onPressed: () => showLocaleModal(context),
           ),
         ],
       ),

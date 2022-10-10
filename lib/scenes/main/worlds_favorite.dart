@@ -13,7 +13,7 @@ import 'package:vrc_manager/assets/sort/worlds_favorite.dart';
 import 'package:vrc_manager/data_class/app_config.dart';
 import 'package:vrc_manager/widgets/drawer.dart';
 import 'package:vrc_manager/widgets/grid_view/extraction/favorite_world.dart';
-import 'package:vrc_manager/widgets/modal.dart';
+import 'package:vrc_manager/widgets/modal/modal.dart';
 
 class VRChatMobileWorldsFavorite extends StatefulWidget {
   final bool offline;

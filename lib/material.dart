@@ -4,25 +4,9 @@ import 'package:flutter/material.dart';
 // Package imports:
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:vrc_manager/main.dart';
 
-MaterialApp getMaterialApp(home, String theme, Locale locale) {
-  Map<String, ThemeData> themeMap = {
-    "dark": ThemeData(
-      brightness: Brightness.dark,
-      textTheme: const TextTheme(
-        bodyText2: TextStyle(fontSize: 16),
-      ),
-      primarySwatch: Colors.grey,
-    ),
-    "light": ThemeData(
-      brightness: Brightness.light,
-      textTheme: const TextTheme(
-        bodyText2: TextStyle(fontSize: 16),
-      ),
-      primarySwatch: Colors.blue,
-    ),
-  };
-
+MaterialApp getMaterialApp(Widget home) {
   return MaterialApp(
     title: 'VRChat Mobile Client',
     debugShowCheckedModeBanner: false,
@@ -41,9 +25,9 @@ MaterialApp getMaterialApp(home, String theme, Locale locale) {
       Locale('th', ''),
       Locale('zh', ''),
     ],
-    locale: locale,
-    theme: themeMap[theme],
-    darkTheme: themeMap["dark"],
+    locale: Locale(appConfig.languageCode.name, ''),
+    theme: appConfig.themeBrightness.toTheme(),
+    darkTheme: appConfig.themeBrightness.toDarkTheme(),
     home: home,
   );
 }

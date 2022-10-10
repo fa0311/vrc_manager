@@ -26,6 +26,7 @@
     "twofactorauth",
     /* Flutter */
     "unfocus",
+    "toggleable",
     /* Library */
     "cupertino",
     "fluttertoast",
