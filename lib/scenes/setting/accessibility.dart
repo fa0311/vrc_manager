@@ -26,10 +26,7 @@ class VRChatMobileSettingsAccessibility extends StatefulWidget {
 class _SettingAccessibilityPageState extends State<VRChatMobileSettingsAccessibility> {
   @override
   Widget build(BuildContext context) {
-    textStream(
-      context,
-      widget.appConfig,
-    );
+    textStream(context, widget.appConfig);
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.setting),
@@ -56,7 +53,7 @@ class _SettingAccessibilityPageState extends State<VRChatMobileSettingsAccessibi
                   value: appConfig.dontShowErrorDialog,
                   title: Text(AppLocalizations.of(context)!.dontShowErrorDialog),
                   subtitle: Text(AppLocalizations.of(context)!.dontShowErrorDialogDetails),
-                  onChanged: (bool e) => appConfig.setDontShowErrorDialog(e).then((value) => setState(() {})),
+                  onChanged: (bool e) => appConfig.setDontShowErrorDialog(e).then((value) => setState((() {}))),
                 ),
                 if (!Platform.isWindows) ...[
                   const Divider(),

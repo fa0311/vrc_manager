@@ -140,6 +140,7 @@
     "theme": "Theme",
     "lightTheme": "Light theme",
     "darkTheme": "Dark theme",
+    "blackTheme": "Black theme",
     "trueBlackTheme": "True black theme",
     "deviceTheme": "Device theme",
     "dontShowAgain": "Don't show again",
