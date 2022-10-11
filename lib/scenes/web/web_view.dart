@@ -1,8 +1,8 @@
 // Dart imports:
-import 'dart:io';
 
 // Flutter imports:
 import 'package:flutter/material.dart';
+import 'package:vrc_manager/main.dart';
 
 // Package imports:
 import 'package:webview_flutter/webview_flutter.dart';
@@ -11,7 +11,6 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
 import 'package:vrc_manager/assets/session.dart';
-import 'package:vrc_manager/assets/storage.dart';
 import 'package:vrc_manager/data_class/app_config.dart';
 import 'package:vrc_manager/widgets/share.dart';
 
@@ -27,35 +26,13 @@ class VRChatMobileWebView extends StatefulWidget {
 
 class _WebViewPageState extends State<VRChatMobileWebView> {
   late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: widget.appConfig.loggedAccount?.cookie ?? "");
-  late bool openInExternalBrowser = false;
   late WebViewController controllerGlobal;
   late int timeStamp = 0;
   late String url = widget.url;
-  late Widget body = WebView(
-    initialUrl: widget.url,
-    javascriptMode: JavascriptMode.unrestricted,
-    onWebViewCreated: (WebViewController webViewController) {
-      controllerGlobal = webViewController;
-    },
-    navigationDelegate: (NavigationRequest request) {
-      if (openInExternalBrowser && Uri.parse(url).host != "vrchat.com") {
-        openInBrowser(context, widget.appConfig, url);
-        return NavigationDecision.prevent;
-      } else {
-        setState(() => url = request.url);
-        return NavigationDecision.navigate;
-      }
-    },
-  );
 
   @override
   initState() {
     super.initState();
-    if (Platform.isAndroid || Platform.isIOS) {
-      getStorage("force_external_browser").then((response) async {
-        openInExternalBrowser = (response == "true");
-      });
-    }
   }
 
   @override
@@ -96,7 +73,22 @@ class _WebViewPageState extends State<VRChatMobileWebView> {
             )
           ],
         ),
-        body: body,
+        body: WebView(
+          initialUrl: widget.url,
+          javascriptMode: JavascriptMode.unrestricted,
+          onWebViewCreated: (WebViewController webViewController) {
+            controllerGlobal = webViewController;
+          },
+          navigationDelegate: (NavigationRequest request) {
+            if (appConfig.forceExternalBrowser && Uri.parse(url).host != "vrchat.com") {
+              openInBrowser(context, widget.appConfig, url);
+              return NavigationDecision.prevent;
+            } else {
+              setState(() => url = request.url);
+              return NavigationDecision.navigate;
+            }
+          },
+        ),
       ),
     );
   }

@@ -15,7 +15,6 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets/error.dart';
-import 'package:vrc_manager/assets/storage.dart';
 import 'package:vrc_manager/data_class/app_config.dart';
 import 'package:vrc_manager/scenes/web/web_view.dart';
 
@@ -147,22 +146,18 @@ Widget openInWindowsListTileWidget(BuildContext context, AppConfig appConfig, St
 
 Future openInBrowser(BuildContext context, AppConfig appConfig, String url, {bool forceExternal = false}) async {
   if (!forceExternal && (Platform.isAndroid || Platform.isIOS)) {
-    getStorage("force_external_browser").then(
-      (response) async {
-        if (response == "true" && Uri.parse(url).host != "vrchat.com") {
-          if (await canLaunchUrl(Uri.parse(url))) {
-            await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
-          }
-        } else {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (BuildContext context) => VRChatMobileWebView(appConfig, url: url),
-            ),
-          );
-        }
-      },
-    );
+    if (appConfig.forceExternalBrowser && Uri.parse(url).host != "vrchat.com") {
+      if (await canLaunchUrl(Uri.parse(url))) {
+        await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+      }
+    } else {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (BuildContext context) => VRChatMobileWebView(appConfig, url: url),
+        ),
+      );
+    }
   } else {
     if (await canLaunchUrl(Uri.parse(url))) {
       await launchUrl(Uri.parse(url));

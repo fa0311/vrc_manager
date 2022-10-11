@@ -13,7 +13,6 @@ import 'package:vrc_manager/assets/error.dart';
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
 import 'package:vrc_manager/assets/sort/users.dart';
 import 'package:vrc_manager/assets/sort/worlds_favorite.dart';
-import 'package:vrc_manager/assets/storage.dart';
 import 'package:vrc_manager/data_class/app_config.dart';
 import 'package:vrc_manager/widgets/drawer.dart';
 import 'package:vrc_manager/widgets/grid_view/extraction/user.dart';
@@ -85,7 +84,6 @@ class _SearchState extends State<VRChatSearch> {
                 onTap: () {
                   setStateBuilder(() => searchModeSelected = SearchMode.users);
                   setStateBuilderParent(() {});
-                  setStorage("search_mode", searchModeSelected.name);
                 },
               ),
               ListTile(
@@ -94,7 +92,6 @@ class _SearchState extends State<VRChatSearch> {
                 onTap: () {
                   setStateBuilder(() => searchModeSelected = SearchMode.worlds);
                   setStateBuilderParent(() {});
-                  setStorage("search_mode", searchModeSelected.name);
                 },
               ),
             ],
