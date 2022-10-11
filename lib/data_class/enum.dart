@@ -25,7 +25,7 @@ enum ThemeBrightness {
     }
   }
 
-  toTheme() {
+  toTheme({bool dark = false}) {
     switch (this) {
       case ThemeBrightness.light:
         return ThemeData(brightness: Brightness.light);
@@ -36,20 +36,7 @@ enum ThemeBrightness {
       case ThemeBrightness.trueBlack:
         return trueBlackTheme();
       case ThemeBrightness.auto:
-        return ThemeData(brightness: Brightness.light);
-    }
-  }
-
-  toDarkTheme() {
-    switch (this) {
-      case ThemeBrightness.light:
-        return ThemeData(brightness: Brightness.light);
-      case ThemeBrightness.dark:
-        return ThemeData(brightness: Brightness.dark);
-      case ThemeBrightness.trueBlack:
-        return blackTheme();
-      case ThemeBrightness.auto:
-        return ThemeData(brightness: Brightness.dark);
+        return ThemeData(brightness: dark ? Brightness.dark : Brightness.light);
     }
   }
 }

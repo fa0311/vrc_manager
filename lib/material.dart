@@ -27,7 +27,7 @@ MaterialApp getMaterialApp(Widget home) {
     ],
     locale: Locale(appConfig.languageCode.name, ''),
     theme: appConfig.themeBrightness.toTheme(),
-    darkTheme: appConfig.themeBrightness.toDarkTheme(),
+    darkTheme: appConfig.themeBrightness.toTheme(dark: true),
     home: home,
   );
 }
