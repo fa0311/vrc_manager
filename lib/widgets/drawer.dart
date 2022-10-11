@@ -19,39 +19,38 @@ import 'package:vrc_manager/scenes/sub/login.dart';
 
 Drawer drawer(BuildContext context, AppConfig appConfig) {
   List<Widget> getAccountList() {
-    List<Widget> list = [];
-    for (AccountConfig account in appConfig.accountList) {
-      list.add(
+    return [
+      for (AccountConfig account in appConfig.accountList)
         ListTile(
           title: Text(
             account.displayName ?? AppLocalizations.of(context)!.unknown,
           ),
-          onTap: () => appConfig.login(context, account).then(
-                (bool logged) => Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(
-                    builder: (BuildContext context) => logged ? VRChatMobileHome(appConfig) : VRChatMobileLogin(appConfig),
+          onTap: () {
+            Navigator.pop(context);
+            appConfig.login(context, account).then(
+                  (bool logged) => Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => logged ? VRChatMobileHome(appConfig) : VRChatMobileLogin(appConfig),
+                    ),
+                    (_) => false,
                   ),
-                  (_) => false,
-                ),
-              ),
+                );
+          },
         ),
-      );
-    }
-    list.add(const Divider());
-    list.add(ListTile(
-      leading: const Icon(Icons.settings),
-      title: Text(AppLocalizations.of(context)!.accountSwitchSetting),
-      onTap: () => Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(
-          builder: (BuildContext context) => VRChatMobileSettingsOtherAccount(appConfig),
+      const Divider(),
+      ListTile(
+        leading: const Icon(Icons.settings),
+        title: Text(AppLocalizations.of(context)!.accountSwitchSetting),
+        onTap: () => Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (BuildContext context) => VRChatMobileSettingsOtherAccount(appConfig),
+          ),
+          (_) => false,
         ),
-        (_) => false,
-      ),
-    ));
-
-    return list;
+      )
+    ];
   }
 
   return Drawer(
@@ -209,39 +208,38 @@ Drawer drawer(BuildContext context, AppConfig appConfig) {
 
 Drawer simpleDrawer(BuildContext context, AppConfig appConfig) {
   List<Widget> getAccountList() {
-    List<Widget> list = [];
-    for (AccountConfig account in appConfig.accountList) {
-      list.add(
+    return [
+      for (AccountConfig account in appConfig.accountList)
         ListTile(
           title: Text(
             account.displayName ?? AppLocalizations.of(context)!.unknown,
           ),
-          onTap: () => appConfig.login(context, account).then(
-                (bool logged) => Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(
-                    builder: (BuildContext context) => logged ? VRChatMobileHome(appConfig) : VRChatMobileLogin(appConfig),
+          onTap: () {
+            Navigator.pop(context);
+            appConfig.login(context, account).then(
+                  (bool logged) => Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => logged ? VRChatMobileHome(appConfig) : VRChatMobileLogin(appConfig),
+                    ),
+                    (_) => false,
                   ),
-                  (_) => false,
-                ),
-              ),
+                );
+          },
         ),
-      );
-    }
-    list.add(const Divider());
-    list.add(ListTile(
-      leading: const Icon(Icons.settings),
-      title: Text(AppLocalizations.of(context)!.accountSwitchSetting),
-      onTap: () => Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(
-          builder: (BuildContext context) => VRChatMobileSettingsOtherAccount(appConfig),
+      const Divider(),
+      ListTile(
+        leading: const Icon(Icons.settings),
+        title: Text(AppLocalizations.of(context)!.accountSwitchSetting),
+        onTap: () => Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (BuildContext context) => VRChatMobileSettingsOtherAccount(appConfig),
+          ),
+          (_) => false,
         ),
-        (_) => false,
       ),
-    ));
-
-    return list;
+    ];
   }
 
   return Drawer(
