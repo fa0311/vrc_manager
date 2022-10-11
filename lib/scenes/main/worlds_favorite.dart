@@ -14,6 +14,7 @@ import 'package:vrc_manager/data_class/app_config.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/widgets/drawer.dart';
 import 'package:vrc_manager/widgets/grid_view/extraction/favorite_world.dart';
+import 'package:vrc_manager/data_class/modal.dart';
 import 'package:vrc_manager/widgets/modal/modal.dart';
 
 class VRChatMobileWorldsFavorite extends StatefulWidget {
@@ -29,7 +30,7 @@ class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
   late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
   late GridConfig config = appConfig.gridConfigList.favoriteWorlds;
   GridModalConfig gridConfig = GridModalConfig();
-  String sortedModeCache = "default";
+  SortMode sortedModeCache = SortMode.normal;
   bool sortedDescendCache = false;
 
   @override
@@ -37,11 +38,16 @@ class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
     super.initState();
     gridConfig.url = "https://vrchat.com/home/worlds";
     gridConfig.removeButton = true;
-    gridConfig.sort?.updatedDate = true;
-    gridConfig.sort?.labsPublicationDate = true;
-    gridConfig.sort?.heat = true;
-    gridConfig.sort?.capacity = true;
-    gridConfig.sort?.occupants = true;
+
+    gridConfig.sortMode = [
+      SortMode.normal,
+      SortMode.name,
+      SortMode.updatedDate,
+      SortMode.labsPublicationDate,
+      SortMode.heat,
+      SortMode.capacity,
+      SortMode.occupants,
+    ];
   }
 
   @override
@@ -50,11 +56,11 @@ class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
       context,
     );
 
-    if (config.sort != sortedModeCache) {
+    if (config.sortMode != sortedModeCache) {
       for (FavoriteWorldData favoriteWorld in appConfig.loggedAccount?.favoriteWorld ?? []) {
         sortWorlds(config, favoriteWorld.list);
       }
-      sortedModeCache = config.sort;
+      sortedModeCache = config.sortMode;
     }
     if (config.descending != sortedDescendCache) {
       for (FavoriteWorldData favoriteWorld in appConfig.loggedAccount?.favoriteWorld ?? []) {
@@ -81,8 +87,8 @@ class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
             child: Column(children: [
               for (FavoriteWorldData favoriteWorld in appConfig.loggedAccount?.favoriteWorld ?? []) ...[
                 Text(favoriteWorld.group.displayName),
-                if (config.displayMode == "normal") extractionWorldDefault(context, config, setState, favoriteWorld.list),
-                if (config.displayMode == "simple") extractionWorldSimple(context, config, setState, favoriteWorld.list),
+                if (config.displayMode == DisplayMode.normal) extractionWorldDefault(context, config, setState, favoriteWorld.list),
+                if (config.displayMode == DisplayMode.simple) extractionWorldSimple(context, config, setState, favoriteWorld.list),
               ],
             ]),
           ),

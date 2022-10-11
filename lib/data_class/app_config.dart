@@ -9,6 +9,7 @@ import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets/error.dart';
 import 'package:vrc_manager/assets/storage.dart';
 import 'package:vrc_manager/data_class/enum.dart';
+import 'package:vrc_manager/data_class/modal.dart';
 
 class AppConfig {
   AccountConfig? _loggedAccount;
@@ -286,8 +287,8 @@ class GridConfigList {
 
 class GridConfig {
   late String id;
-  late String sort;
-  late String displayMode;
+  late SortMode sortMode;
+  late DisplayMode displayMode;
   late bool descending;
   late bool joinable;
   late bool worldDetails;
@@ -297,8 +298,8 @@ class GridConfig {
 
   Future setConfig() async {
     List<Future> futureList = [];
-    futureList.add(getStorage("sort", id: id).then((String? value) => sort = (value ?? "normal")));
-    futureList.add(getStorage("display_mode", id: id).then((String? value) => displayMode = (value ?? "normal")));
+    futureList.add(getStorage("sort", id: id).then((String? value) => sortMode = SortMode.normal.get(value)));
+    futureList.add(getStorage("display_mode", id: id).then((String? value) => displayMode = DisplayMode.normal.get(value)));
     futureList.add(getStorage("descending", id: id).then((String? value) => descending = (value == "true")));
     futureList.add(getStorage("joinable", id: id).then((String? value) => joinable = (value == "true")));
     futureList.add(getStorage("world_details", id: id).then((String? value) => worldDetails = (value == "true")));
@@ -307,12 +308,12 @@ class GridConfig {
     return Future.wait(futureList);
   }
 
-  Future setSort(String value) async {
-    return await setStorage("sort", sort = value, id: sort);
+  Future setSort(SortMode value) async {
+    return await setStorage("sort", value.name, id: id);
   }
 
-  Future setDisplayMode(String value) async {
-    return await setStorage("display_mode", displayMode = value, id: id);
+  Future setDisplayMode(DisplayMode value) async {
+    return await setStorage("display_mode", value.name, id: id);
   }
 
   Future setDescending(bool value) async {

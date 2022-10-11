@@ -14,6 +14,7 @@ import 'package:vrc_manager/assets/flutter/text_stream.dart';
 import 'package:vrc_manager/data_class/app_config.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/widgets/drawer.dart';
+import 'package:vrc_manager/data_class/modal.dart';
 import 'package:vrc_manager/widgets/modal/modal.dart';
 
 class VRChatMobileFriendRequest extends StatefulWidget {

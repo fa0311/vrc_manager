@@ -4,14 +4,21 @@ import 'dart:convert';
 // Project imports:
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/data_class/app_config.dart';
+import 'package:vrc_manager/data_class/modal.dart';
 
 sortUsers(GridConfig config, List<VRChatUser> userList) {
-  if (config.sort == "name") {
-    sortByNameFromUser(userList);
-  } else if (config.sort == "last_login") {
-    sortByLastLoginFromUser(userList);
-  } else if (config.sort == "friends_in_instance") {
-    sortByLocationMapFromUser(userList);
+  switch (config.sortMode) {
+    case SortMode.name:
+      sortByLastLoginFromUser(userList);
+      break;
+    case SortMode.lastLogin:
+      sortByLastLoginFromUser(userList);
+      break;
+    case SortMode.friendsInInstance:
+      sortByLocationMapFromUser(userList);
+      break;
+    default:
+      break;
   }
 }
 

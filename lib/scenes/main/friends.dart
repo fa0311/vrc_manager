@@ -17,6 +17,7 @@ import 'package:vrc_manager/data_class/app_config.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/widgets/drawer.dart';
 import 'package:vrc_manager/widgets/grid_view/extraction/friends.dart';
+import 'package:vrc_manager/data_class/modal.dart';
 import 'package:vrc_manager/widgets/modal/modal.dart';
 
 class VRChatMobileFriends extends StatefulWidget {
@@ -35,7 +36,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
   Map<String, VRChatInstance?> instanceMap = {};
   GridModalConfig gridConfig = GridModalConfig();
   List<VRChatFriends> userList = [];
-  String sortedModeCache = "default";
+  SortMode sortedModeCache = SortMode.normal;
   bool sortedDescendCache = false;
 
   @override
@@ -44,7 +45,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
     gridConfig.joinable = true;
     gridConfig.worldDetails = true;
     gridConfig.url = "https://vrchat.com/home/locations";
-    gridConfig.sort?.friendsInInstance = true;
+    gridConfig.sortMode = [SortMode.normal, SortMode.name, SortMode.friendsInInstance];
     get().then((value) => setState(() {}));
   }
 
@@ -71,9 +72,9 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
     textStream(
       context,
     );
-    if (config.sort != sortedModeCache) {
+    if (config.sortMode != sortedModeCache) {
       sortUsers(config, userList);
-      sortedModeCache = config.sort;
+      sortedModeCache = config.sortMode;
     }
     if (config.descending != sortedDescendCache) {
       userList = userList.reversed.toList();

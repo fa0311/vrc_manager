@@ -4,20 +4,30 @@ import 'dart:convert';
 // Project imports:
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/data_class/app_config.dart';
+import 'package:vrc_manager/data_class/modal.dart';
 
 sortWorlds(GridConfig config, List<VRChatLimitedWorld> worldList) {
-  if (config.sort == "name") {
-    sortByNameFromWorlds(worldList);
-  } else if (config.sort == "updated_date") {
-    sortByUpdatedDateFromWorlds(worldList);
-  } else if (config.sort == "labs_publication_date") {
-    sortByLabsPublicationDateFromWorlds(worldList);
-  } else if (config.sort == "heat") {
-    sortByHeatFavoriteFromWorlds(worldList);
-  } else if (config.sort == "capacity") {
-    sortByCapacityFromWorlds(worldList);
-  } else if (config.sort == "occupants") {
-    sortByOccupantsFromWorlds(worldList);
+  switch (config.sortMode) {
+    case SortMode.name:
+      sortByNameFromWorlds(worldList);
+      break;
+    case SortMode.updatedDate:
+      sortByUpdatedDateFromWorlds(worldList);
+      break;
+    case SortMode.labsPublicationDate:
+      sortByLabsPublicationDateFromWorlds(worldList);
+      break;
+    case SortMode.heat:
+      sortByHeatFavoriteFromWorlds(worldList);
+      break;
+    case SortMode.capacity:
+      sortByCapacityFromWorlds(worldList);
+      break;
+    case SortMode.occupants:
+      sortByOccupantsFromWorlds(worldList);
+      break;
+    default:
+      break;
   }
 }
 

@@ -18,6 +18,7 @@ import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/widgets/drawer.dart';
 import 'package:vrc_manager/widgets/grid_view/extraction/user.dart';
 import 'package:vrc_manager/widgets/grid_view/extraction/world.dart';
+import 'package:vrc_manager/data_class/modal.dart';
 import 'package:vrc_manager/widgets/modal/modal.dart';
 
 class VRChatSearch extends StatefulWidget {
@@ -44,7 +45,7 @@ class _SearchState extends State<VRChatSearch> {
   String? text;
   SearchMode searchingMode = SearchMode.users;
   SearchMode searchModeSelected = SearchMode.users;
-  String sortedModeCache = "default";
+  SortMode sortedModeCache = SortMode.normal;
   bool sortedDescendCache = false;
 
   @override
@@ -54,16 +55,20 @@ class _SearchState extends State<VRChatSearch> {
   }
 
   void init() {
-    sortedModeCache = "default";
+    sortedModeCache = SortMode.normal;
     sortedDescendCache = false;
     gridConfig = GridModalConfig();
     gridConfig.url = "https://vrchat.com/home/search/$text";
     if (searchingMode == SearchMode.worlds) {
-      gridConfig.sort?.updatedDate = true;
-      gridConfig.sort?.labsPublicationDate = true;
-      gridConfig.sort?.heat = true;
-      gridConfig.sort?.capacity = true;
-      gridConfig.sort?.occupants = true;
+      gridConfig.sortMode = [
+        SortMode.normal,
+        SortMode.name,
+        SortMode.updatedDate,
+        SortMode.labsPublicationDate,
+        SortMode.heat,
+        SortMode.capacity,
+        SortMode.occupants,
+      ];
     }
   }
 
@@ -142,17 +147,17 @@ class _SearchState extends State<VRChatSearch> {
     textStream(
       context,
     );
-    if (worldList.isNotEmpty && config.sort != sortedModeCache) {
+    if (worldList.isNotEmpty && config.sortMode != sortedModeCache) {
       sortWorlds(config, worldList);
-      sortedModeCache = config.sort;
+      sortedModeCache = config.sortMode;
     }
     if (worldList.isNotEmpty && config.descending != sortedDescendCache) {
       worldList.reversed.toList();
       sortedDescendCache = config.descending;
     }
-    if (userList.isNotEmpty && config.sort != sortedModeCache) {
+    if (userList.isNotEmpty && config.sortMode != sortedModeCache) {
       sortUsers(config, userList);
-      sortedModeCache = config.sort;
+      sortedModeCache = config.sortMode;
     }
     if (userList.isNotEmpty && config.descending != sortedDescendCache) {
       userList.reversed.toList();
