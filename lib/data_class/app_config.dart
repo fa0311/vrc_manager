@@ -205,6 +205,7 @@ class AccountConfig {
   Future<bool> tokenCheck() async {
     late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: cookie);
     return await vrchatLoginSession.user().then((VRChatUserSelfOverload response) {
+      setDisplayName(response.displayName);
       return true;
     }).catchError((status) {
       return false;
