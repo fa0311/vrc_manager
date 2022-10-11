@@ -12,15 +12,14 @@ import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets/error.dart';
 import 'package:vrc_manager/data_class/app_config.dart';
+import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/main/home.dart';
 import 'package:vrc_manager/widgets/modal/locale.dart';
 import 'package:vrc_manager/widgets/drawer.dart';
 import 'package:vrc_manager/widgets/share.dart';
 
 class VRChatMobileLogin extends StatefulWidget {
-  final AppConfig appConfig;
-
-  const VRChatMobileLogin(this.appConfig, {Key? key}) : super(key: key);
+  const VRChatMobileLogin({Key? key}) : super(key: key);
 
   @override
   State<VRChatMobileLogin> createState() => _LoginPageState();
@@ -38,8 +37,8 @@ class _LoginPageState extends State<VRChatMobileLogin> {
   @override
   initState() {
     super.initState();
-    if (widget.appConfig.isLogout()) {
-      accountConfig = widget.appConfig.loggedAccount!;
+    if (appConfig.isLogout()) {
+      accountConfig = appConfig.loggedAccount!;
       session = VRChatAPI(cookie: accountConfig.cookie);
       _userController.text = accountConfig.userId ?? "";
       _passwordController.text = accountConfig.password ?? "";
@@ -61,7 +60,7 @@ class _LoginPageState extends State<VRChatMobileLogin> {
         throw Exception(errorLog(login.content));
       }
     }).catchError((status) {
-      apiError(context, widget.appConfig, status);
+      apiError(context, status);
     });
   }
 
@@ -70,10 +69,10 @@ class _LoginPageState extends State<VRChatMobileLogin> {
       if (login.verified) {
         _save(session.getCookie());
       } else {
-        errorDialog(context, widget.appConfig, AppLocalizations.of(context)!.incorrectLogin);
+        errorDialog(context, AppLocalizations.of(context)!.incorrectLogin);
       }
     }).catchError((status) {
-      apiError(context, widget.appConfig, status);
+      apiError(context, status);
     });
   }
 
@@ -108,13 +107,13 @@ class _LoginPageState extends State<VRChatMobileLogin> {
     accountConfig.setPassword(_passwordController.text);
     accountConfig.setCookie(cookie);
     accountConfig.setRememberLoginInfo(_rememberPassword);
-    widget.appConfig.addAccount(accountConfig);
+    appConfig.addAccount(accountConfig);
 
-    widget.appConfig.login(context, accountConfig).then(
+    appConfig.login(context, accountConfig).then(
           (bool logged) => Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
-              builder: (BuildContext context) => logged ? VRChatMobileHome(widget.appConfig) : VRChatMobileLogin(widget.appConfig),
+              builder: (BuildContext context) => logged ? const VRChatMobileHome() : const VRChatMobileLogin(),
             ),
             (_) => false,
           ),
@@ -142,7 +141,7 @@ class _LoginPageState extends State<VRChatMobileLogin> {
           ),
         ],
       ),
-      drawer: simpleDrawer(context, widget.appConfig),
+      drawer: simpleDrawer(context),
       body: Padding(
           padding: const EdgeInsets.all(32.0),
           child: Column(
@@ -201,7 +200,7 @@ class _LoginPageState extends State<VRChatMobileLogin> {
                         TextButton(
                           onPressed: () {
                             Navigator.pop(context);
-                            openInBrowser(context, widget.appConfig, "https://vrchat.com/home/login");
+                            openInBrowser(context, "https://vrchat.com/home/login");
                           },
                           child: Text(AppLocalizations.of(context)!.openInBrowser),
                         ),

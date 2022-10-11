@@ -21,17 +21,16 @@ import 'package:vrc_manager/widgets/modal/modal.dart';
 
 class VRChatMobileFriends extends StatefulWidget {
   final bool offline;
-  final AppConfig appConfig;
 
-  const VRChatMobileFriends(this.appConfig, {Key? key, this.offline = true}) : super(key: key);
+  const VRChatMobileFriends({Key? key, this.offline = true}) : super(key: key);
 
   @override
   State<VRChatMobileFriends> createState() => _FriendsPageState();
 }
 
 class _FriendsPageState extends State<VRChatMobileFriends> {
-  late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: widget.appConfig.loggedAccount?.cookie ?? "");
-  late GridConfig config = widget.offline ? widget.appConfig.gridConfigList.offlineFriends : widget.appConfig.gridConfigList.onlineFriends;
+  late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
+  late GridConfig config = widget.offline ? appConfig.gridConfigList.offlineFriends : appConfig.gridConfigList.onlineFriends;
   Map<String, VRChatWorld?> locationMap = {};
   Map<String, VRChatInstance?> instanceMap = {};
   GridModalConfig gridConfig = GridModalConfig();
@@ -55,11 +54,11 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
     do {
       int offset = userList.length;
       List<VRChatFriends> users = await vrchatLoginSession.friends(offline: widget.offline, offset: offset).catchError((status) {
-        apiError(context, widget.appConfig, status);
+        apiError(context, status);
       });
       if (!mounted) return;
-      futureList.add(getWorld(context, appConfig, users, locationMap));
-      futureList.add(getInstance(context, appConfig, users, instanceMap));
+      futureList.add(getWorld(context, users, locationMap));
+      futureList.add(getInstance(context, users, instanceMap));
       userList.addAll(users);
       len = users.length;
     } while (len == 50);
@@ -69,7 +68,9 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
 
   @override
   Widget build(BuildContext context) {
-    textStream(context, widget.appConfig);
+    textStream(
+      context,
+    );
     if (config.sort != sortedModeCache) {
       sortUsers(config, userList);
       sortedModeCache = config.sort;
@@ -85,11 +86,11 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.more_vert),
-            onPressed: () => gridModal(context, widget.appConfig, setState, config, gridConfig),
+            onPressed: () => gridModal(context, setState, config, gridConfig),
           ),
         ],
       ),
-      drawer: drawer(context, widget.appConfig),
+      drawer: drawer(context),
       body: SafeArea(
         child: SizedBox(
           width: MediaQuery.of(context).size.width,

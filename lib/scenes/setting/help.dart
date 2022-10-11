@@ -8,13 +8,10 @@ import 'package:package_info_plus/package_info_plus.dart';
 // Project imports:
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
 import 'package:vrc_manager/assets/license.dart';
-import 'package:vrc_manager/data_class/app_config.dart';
 import 'package:vrc_manager/widgets/share.dart';
 
 class VRChatMobileHelp extends StatefulWidget {
-  final AppConfig appConfig;
-
-  const VRChatMobileHelp(this.appConfig, {Key? key}) : super(key: key);
+  const VRChatMobileHelp({Key? key}) : super(key: key);
 
   @override
   State<VRChatMobileHelp> createState() => _HelpPageState();
@@ -34,7 +31,6 @@ class _HelpPageState extends State<VRChatMobileHelp> {
   Widget build(BuildContext context) {
     textStream(
       context,
-      widget.appConfig,
     );
     return Scaffold(
       appBar: AppBar(
@@ -50,30 +46,30 @@ class _HelpPageState extends State<VRChatMobileHelp> {
                   ListTile(
                       title: Text(AppLocalizations.of(context)!.contribution),
                       subtitle: Text(AppLocalizations.of(context)!.contributionDetails),
-                      onTap: () => openInBrowser(context, widget.appConfig, "https://github.com/fa0311/vrc_manager")),
+                      onTap: () => openInBrowser(context, "https://github.com/fa0311/vrc_manager")),
                   const Divider(),
                   ListTile(
                       title: Text(AppLocalizations.of(context)!.report),
                       subtitle: Text(AppLocalizations.of(context)!.reportDetails),
-                      onTap: () => openInBrowser(context, widget.appConfig, "https://github.com/fa0311/vrc_manager/issues/new/choose")),
+                      onTap: () => openInBrowser(context, "https://github.com/fa0311/vrc_manager/issues/new/choose")),
                   const Divider(),
                   ListTile(
                     title: Text(AppLocalizations.of(context)!.developerInfo),
                     subtitle: Text(AppLocalizations.of(context)!.developerInfoDetails),
-                    onTap: () => openInBrowser(context, widget.appConfig, "https://twitter.com/faa0311"),
+                    onTap: () => openInBrowser(context, "https://twitter.com/faa0311"),
                   ),
                   const Divider(),
                   ListTile(
                     title: Text(AppLocalizations.of(context)!.rateTheApp),
                     subtitle: Text(AppLocalizations.of(context)!.rateTheAppDetails),
-                    onTap: () => openInBrowser(context, widget.appConfig, "https://play.google.com/store/apps/details?id=com.yuki0311.vrc_manager"),
+                    onTap: () => openInBrowser(context, "https://play.google.com/store/apps/details?id=com.yuki0311.vrc_manager"),
                   ),
                   const Divider(),
                   ListTile(
                     title: Text(AppLocalizations.of(context)!.version),
                     subtitle: Text(AppLocalizations.of(context)!.versionDetails(version)),
                     onTap: () => PackageInfo.fromPlatform().then((PackageInfo packageInfo) {
-                      openInBrowser(context, widget.appConfig, "https://github.com/fa0311/vrc_manager/releases");
+                      openInBrowser(context, "https://github.com/fa0311/vrc_manager/releases");
                     }),
                   ),
                   const Divider(),

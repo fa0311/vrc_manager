@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 // Project imports:
-import 'package:vrc_manager/data_class/app_config.dart';
 
 GridView renderGrid(
   BuildContext context, {
@@ -27,8 +26,7 @@ GridView renderGrid(
 }
 
 Widget genericTemplate(
-  BuildContext context,
-  AppConfig appConfig, {
+  BuildContext context, {
   required List<Widget> children,
   required String imageUrl,
   void Function()? onTap,
@@ -108,8 +106,7 @@ Widget genericTemplate(
 }
 
 Widget genericTemplateText(
-  BuildContext context,
-  AppConfig appConfig, {
+  BuildContext context, {
   required List<Widget> children,
   void Function()? onTap,
   void Function()? onLongPress,

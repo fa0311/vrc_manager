@@ -9,12 +9,11 @@ import 'package:vrc_manager/assets/flutter/url_parser.dart';
 
 textStream(
   context,
-  appConfig,
 ) {
   if (Platform.isAndroid || Platform.isIOS) {
     ReceiveSharingIntent.getTextStream().listen(
       (String value) {
-        urlParser(context, appConfig, value);
+        urlParser(context, value);
       },
     );
   }

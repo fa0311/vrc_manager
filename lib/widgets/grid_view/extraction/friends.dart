@@ -10,7 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/data_class/app_config.dart';
-import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/sub/user.dart';
 import 'package:vrc_manager/widgets/grid_view/template/template.dart';
 import 'package:vrc_manager/widgets/grid_view/widget/world.dart';
@@ -35,20 +34,19 @@ GridView extractionFriendDefault(
           String worldId = user.location.split(":")[0];
           return genericTemplate(
             context,
-            appConfig,
             imageUrl: user.profilePicOverride ?? user.currentAvatarThumbnailImageUrl,
             onTap: () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (BuildContext context) => VRChatMobileUser(appConfig, userId: user.id),
+                  builder: (BuildContext context) => VRChatMobileUser(userId: user.id),
                 )),
             bottom: () {
               if (!config.worldDetails) return null;
-              if (user.location == "private") return privateWorld(context, appConfig, card: false);
-              if (user.location == "traveling") return privateWorld(context, appConfig, card: false);
+              if (user.location == "private") return privateWorld(context, card: false);
+              if (user.location == "traveling") return privateWorld(context, card: false);
               if (user.location == "offline") return onTheWebsite(context);
               if (locationMap[worldId] == null) return null;
-              return instanceWidget(context, appConfig, locationMap[worldId]!, instanceMap[user.location]!, card: false);
+              return instanceWidget(context, locationMap[worldId]!, instanceMap[user.location]!, card: false);
             }(),
             children: [
               username(user),
@@ -85,21 +83,20 @@ GridView extractionFriendSimple(
           String worldId = user.location.split(":")[0];
           return genericTemplate(
             context,
-            appConfig,
             imageUrl: user.profilePicOverride ?? user.currentAvatarThumbnailImageUrl,
             half: true,
             onTap: () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (BuildContext context) => VRChatMobileUser(appConfig, userId: user.id),
+                  builder: (BuildContext context) => VRChatMobileUser(userId: user.id),
                 )),
             bottom: () {
               if (!config.worldDetails) return null;
-              if (user.location == "private") return privateWorld(context, appConfig, card: false, half: true);
-              if (user.location == "traveling") return privateWorld(context, appConfig, card: false, half: true);
+              if (user.location == "private") return privateWorld(context, card: false, half: true);
+              if (user.location == "traveling") return privateWorld(context, card: false, half: true);
               if (user.location == "offline") return onTheWebsite(context, half: true);
               if (locationMap[worldId] == null) return null;
-              return instanceWidget(context, appConfig, locationMap[worldId]!, instanceMap[user.location]!, card: false, half: true);
+              return instanceWidget(context, locationMap[worldId]!, instanceMap[user.location]!, card: false, half: true);
             }(),
             children: [
               username(user, diameter: 12),
@@ -133,11 +130,10 @@ GridView extractionFriendText(
           String worldId = user.location.split(":")[0];
           return genericTemplateText(
             context,
-            appConfig,
             onTap: () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (BuildContext context) => VRChatMobileUser(appConfig, userId: user.id),
+                  builder: (BuildContext context) => VRChatMobileUser(userId: user.id),
                 )),
             children: [
               Row(

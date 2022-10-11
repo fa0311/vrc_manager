@@ -11,23 +11,23 @@ import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
 import 'package:vrc_manager/assets/sort/worlds_favorite.dart';
 import 'package:vrc_manager/data_class/app_config.dart';
+import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/widgets/drawer.dart';
 import 'package:vrc_manager/widgets/grid_view/extraction/favorite_world.dart';
 import 'package:vrc_manager/widgets/modal/modal.dart';
 
 class VRChatMobileWorldsFavorite extends StatefulWidget {
   final bool offline;
-  final AppConfig appConfig;
 
-  const VRChatMobileWorldsFavorite(this.appConfig, {Key? key, this.offline = true}) : super(key: key);
+  const VRChatMobileWorldsFavorite({Key? key, this.offline = true}) : super(key: key);
 
   @override
   State<VRChatMobileWorldsFavorite> createState() => _WorldsFavoriteState();
 }
 
 class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
-  late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: widget.appConfig.loggedAccount?.cookie ?? "");
-  late GridConfig config = widget.appConfig.gridConfigList.favoriteWorlds;
+  late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
+  late GridConfig config = appConfig.gridConfigList.favoriteWorlds;
   GridModalConfig gridConfig = GridModalConfig();
   String sortedModeCache = "default";
   bool sortedDescendCache = false;
@@ -46,16 +46,18 @@ class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
 
   @override
   Widget build(BuildContext context) {
-    textStream(context, widget.appConfig);
+    textStream(
+      context,
+    );
 
     if (config.sort != sortedModeCache) {
-      for (FavoriteWorldData favoriteWorld in widget.appConfig.loggedAccount?.favoriteWorld ?? []) {
+      for (FavoriteWorldData favoriteWorld in appConfig.loggedAccount?.favoriteWorld ?? []) {
         sortWorlds(config, favoriteWorld.list);
       }
       sortedModeCache = config.sort;
     }
     if (config.descending != sortedDescendCache) {
-      for (FavoriteWorldData favoriteWorld in widget.appConfig.loggedAccount?.favoriteWorld ?? []) {
+      for (FavoriteWorldData favoriteWorld in appConfig.loggedAccount?.favoriteWorld ?? []) {
         favoriteWorld.list.reversed.toList();
         sortedDescendCache = config.descending;
       }
@@ -67,17 +69,17 @@ class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.more_vert),
-            onPressed: () => gridModal(context, widget.appConfig, setState, config, gridConfig),
+            onPressed: () => gridModal(context, setState, config, gridConfig),
           ),
         ],
       ),
-      drawer: drawer(context, widget.appConfig),
+      drawer: drawer(context),
       body: SafeArea(
         child: SizedBox(
           width: MediaQuery.of(context).size.width,
           child: SingleChildScrollView(
             child: Column(children: [
-              for (FavoriteWorldData favoriteWorld in widget.appConfig.loggedAccount?.favoriteWorld ?? []) ...[
+              for (FavoriteWorldData favoriteWorld in appConfig.loggedAccount?.favoriteWorld ?? []) ...[
                 Text(favoriteWorld.group.displayName),
                 if (config.displayMode == "normal") extractionWorldDefault(context, config, setState, favoriteWorld.list),
                 if (config.displayMode == "simple") extractionWorldSimple(context, config, setState, favoriteWorld.list),

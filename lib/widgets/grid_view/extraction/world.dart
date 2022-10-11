@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 // Project imports:
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/data_class/app_config.dart';
-import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/sub/world.dart';
 import 'package:vrc_manager/widgets/grid_view/template/template.dart';
 
@@ -26,12 +25,11 @@ GridView extractionWorldDefault(
         () {
           return genericTemplate(
             context,
-            appConfig,
             imageUrl: world.thumbnailImageUrl,
             onTap: () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (BuildContext context) => VRChatMobileWorld(appConfig, worldId: world.id),
+                  builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id),
                 )),
             children: [
               SizedBox(
@@ -67,13 +65,12 @@ GridView extractionWorldSimple(
         () {
           return genericTemplate(
             context,
-            appConfig,
             imageUrl: world.thumbnailImageUrl,
             half: true,
             onTap: () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (BuildContext context) => VRChatMobileWorld(appConfig, worldId: world.id),
+                  builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id),
                 )),
             children: [
               SizedBox(
@@ -110,11 +107,10 @@ GridView extractionWorldText(
         () {
           return genericTemplateText(
             context,
-            appConfig,
             onTap: () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (BuildContext context) => VRChatMobileWorld(appConfig, worldId: world.id),
+                  builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id),
                 )),
             children: [
               Row(

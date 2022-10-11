@@ -12,21 +12,20 @@ import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets/error.dart';
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
 import 'package:vrc_manager/data_class/app_config.dart';
+import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/widgets/drawer.dart';
 import 'package:vrc_manager/widgets/modal/modal.dart';
 
 class VRChatMobileFriendRequest extends StatefulWidget {
-  final AppConfig appConfig;
-
-  const VRChatMobileFriendRequest(this.appConfig, {Key? key}) : super(key: key);
+  const VRChatMobileFriendRequest({Key? key}) : super(key: key);
 
   @override
   State<VRChatMobileFriendRequest> createState() => _FriendsPageState();
 }
 
 class _FriendsPageState extends State<VRChatMobileFriendRequest> {
-  late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: widget.appConfig.loggedAccount?.cookie ?? "");
-  late GridConfig config = widget.appConfig.gridConfigList.friendsRequest;
+  late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
+  late GridConfig config = appConfig.gridConfigList.friendsRequest;
   List<VRChatUser> userList = [];
   Widget body = const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator());
 
@@ -41,13 +40,13 @@ class _FriendsPageState extends State<VRChatMobileFriendRequest> {
     List<Future> futureList = [];
     do {
       List<VRChatNotifications> response = await vrchatLoginSession.notifications(type: "friendRequest", offset: offset).catchError((status) {
-        apiError(context, widget.appConfig, status);
+        apiError(context, status);
       });
       for (VRChatNotifications requestUser in response) {
         futureList.add(vrchatLoginSession.users(requestUser.senderUserId).then((VRChatUser user) {
           userList.add(user);
         }).catchError((status) {
-          apiError(context, widget.appConfig, status);
+          apiError(context, status);
         }));
       }
       offset += 50;
@@ -57,7 +56,9 @@ class _FriendsPageState extends State<VRChatMobileFriendRequest> {
 
   @override
   Widget build(BuildContext context) {
-    textStream(context, widget.appConfig);
+    textStream(
+      context,
+    );
     GridModalConfig gridConfig = GridModalConfig();
 
     return Scaffold(
@@ -66,11 +67,11 @@ class _FriendsPageState extends State<VRChatMobileFriendRequest> {
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.more_vert),
-            onPressed: () => gridModal(context, widget.appConfig, setState, config, gridConfig),
+            onPressed: () => gridModal(context, setState, config, gridConfig),
           ),
         ],
       ),
-      drawer: drawer(context, widget.appConfig),
+      drawer: drawer(context),
       body: SafeArea(
         child: SizedBox(
           width: MediaQuery.of(context).size.width,

@@ -8,14 +8,13 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:vrc_manager/assets/dialog.dart';
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
 import 'package:vrc_manager/data_class/app_config.dart';
+import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/main/home.dart';
 import 'package:vrc_manager/scenes/sub/login.dart';
 import 'package:vrc_manager/widgets/drawer.dart';
 
 class VRChatMobileSettingsOtherAccount extends StatefulWidget {
-  final AppConfig appConfig;
-
-  const VRChatMobileSettingsOtherAccount(this.appConfig, {Key? key}) : super(key: key);
+  const VRChatMobileSettingsOtherAccount({Key? key}) : super(key: key);
 
   @override
   State<VRChatMobileSettingsOtherAccount> createState() => _SettingOtherAccountPageState();
@@ -26,7 +25,7 @@ class _SettingOtherAccountPageState extends State<VRChatMobileSettingsOtherAccou
 
   List<Widget> getAccountList() {
     List<Widget> list = [];
-    for (AccountConfig account in widget.appConfig.accountList) {
+    for (AccountConfig account in appConfig.accountList) {
       list.add(
         Card(
           elevation: 20.0,
@@ -34,11 +33,11 @@ class _SettingOtherAccountPageState extends State<VRChatMobileSettingsOtherAccou
             padding: const EdgeInsets.all(10.0),
             child: GestureDetector(
               onTap: () {
-                widget.appConfig.login(context, account).then(
+                appConfig.login(context, account).then(
                       (value) => Navigator.pushAndRemoveUntil(
                         context,
                         MaterialPageRoute(
-                          builder: (BuildContext context) => VRChatMobileHome(widget.appConfig),
+                          builder: (BuildContext context) => const VRChatMobileHome(),
                         ),
                         (_) => false,
                       ),
@@ -64,7 +63,7 @@ class _SettingOtherAccountPageState extends State<VRChatMobileSettingsOtherAccou
                         AppLocalizations.of(context)!.deleteLoginInfoConfirm,
                         AppLocalizations.of(context)!.delete,
                         () {
-                          widget.appConfig.removeAccount(account);
+                          appConfig.removeAccount(account);
                           setState(() {});
                           Navigator.pop(context);
                         },
@@ -84,12 +83,14 @@ class _SettingOtherAccountPageState extends State<VRChatMobileSettingsOtherAccou
 
   @override
   Widget build(BuildContext context) {
-    textStream(context, widget.appConfig);
+    textStream(
+      context,
+    );
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.accountSwitchSetting),
       ),
-      drawer: widget.appConfig.isLogout() ? drawer(context, widget.appConfig) : simpleDrawer(context, widget.appConfig),
+      drawer: appConfig.isLogout() ? drawer(context) : simpleDrawer(context),
       body: SafeArea(
         child: SizedBox(
           width: MediaQuery.of(context).size.width,
@@ -101,13 +102,11 @@ class _SettingOtherAccountPageState extends State<VRChatMobileSettingsOtherAccou
                 foregroundColor: Colors.grey,
               ),
               onPressed: () {
-                widget.appConfig.logout();
+                appConfig.logout();
                 Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(
-                    builder: (BuildContext context) => VRChatMobileLogin(
-                      widget.appConfig,
-                    ),
+                    builder: (BuildContext context) => const VRChatMobileLogin(),
                   ),
                   (_) => false,
                 );

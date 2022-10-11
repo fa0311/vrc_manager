@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/assets/vrchat/instance_type.dart';
-import 'package:vrc_manager/data_class/app_config.dart';
 import 'package:vrc_manager/scenes/sub/world.dart';
 import 'package:vrc_manager/widgets/grid_view/template/template.dart';
 import 'package:vrc_manager/widgets/region.dart';
@@ -11,7 +10,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 Widget instanceWidget(
   BuildContext context,
-  AppConfig appConfig,
   VRChatWorld world,
   VRChatInstance instance, {
   bool card = true,
@@ -19,16 +17,15 @@ Widget instanceWidget(
 }) {
   return genericTemplate(
     context,
-    appConfig,
     imageUrl: world.thumbnailImageUrl,
     card: card,
     half: half,
     onTap: () => Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (BuildContext context) => VRChatMobileWorld(appConfig, worldId: world.id),
+          builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id),
         )),
-    onLongPress: () => showWorldLongPressModal(context, appConfig, instance),
+    onLongPress: () => showWorldLongPressModal(context, instance),
     children: [
       Row(children: <Widget>[
         region(instance.region, size: half ? 12 : 15),
@@ -76,14 +73,12 @@ Widget instanceWidget(
 }
 
 Widget privateWorld(
-  BuildContext context,
-  AppConfig appConfig, {
+  BuildContext context, {
   bool card = true,
   bool half = false,
 }) {
   return genericTemplate(
     context,
-    appConfig,
     card: card,
     half: half,
     children: [
@@ -113,14 +108,12 @@ Widget privateWorld(
 }
 
 Widget travelingWorld(
-  BuildContext context,
-  AppConfig appConfig, {
+  BuildContext context, {
   bool card = true,
   bool half = false,
 }) {
   return genericTemplate(
     context,
-    appConfig,
     card: card,
     half: half,
     children: [

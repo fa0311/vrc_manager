@@ -10,14 +10,12 @@ import 'package:flutter_json_viewer/flutter_json_viewer.dart';
 
 // Project imports:
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
-import 'package:vrc_manager/data_class/app_config.dart';
 import 'package:vrc_manager/widgets/share.dart';
 
 class VRChatMobileJsonViewer extends StatefulWidget {
   final dynamic obj;
-  final AppConfig appConfig;
 
-  const VRChatMobileJsonViewer(this.appConfig, {Key? key, required this.obj}) : super(key: key);
+  const VRChatMobileJsonViewer({Key? key, required this.obj}) : super(key: key);
 
   @override
   State<VRChatMobileJsonViewer> createState() => _JsonViewerPageState();
@@ -26,7 +24,9 @@ class VRChatMobileJsonViewer extends StatefulWidget {
 class _JsonViewerPageState extends State<VRChatMobileJsonViewer> {
   @override
   Widget build(BuildContext context) {
-    textStream(context, widget.appConfig);
+    textStream(
+      context,
+    );
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.jsonViewer),

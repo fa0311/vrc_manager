@@ -11,6 +11,7 @@ import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets/error.dart';
 import 'package:vrc_manager/data_class/app_config.dart';
+import 'package:vrc_manager/main.dart';
 
 Widget onTheWebsite(
   BuildContext context, {
@@ -23,7 +24,7 @@ Widget onTheWebsite(
   );
 }
 
-showWorldLongPressModal(BuildContext context, AppConfig appConfig, VRChatInstance instance) {
+showWorldLongPressModal(BuildContext context, VRChatInstance instance) {
   return showModalBottomSheet(
     context: context,
     shape: const RoundedRectangleBorder(
@@ -37,7 +38,7 @@ showWorldLongPressModal(BuildContext context, AppConfig appConfig, VRChatInstanc
           ListTile(
             title: Text(AppLocalizations.of(context)!.joinInstance),
             onTap: () {
-              selfInvite(context, appConfig, instance);
+              selfInvite(context, instance);
             },
           ),
         ],
@@ -46,7 +47,7 @@ showWorldLongPressModal(BuildContext context, AppConfig appConfig, VRChatInstanc
   );
 }
 
-void selfInvite(BuildContext context, AppConfig appConfig, VRChatInstance instance) {
+void selfInvite(BuildContext context, VRChatInstance instance) {
   late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
   vrchatLoginSession.selfInvite(instance.location, instance.shortName ?? "").then((VRChatNotificationsInvite response) {
     showDialog(
@@ -65,11 +66,11 @@ void selfInvite(BuildContext context, AppConfig appConfig, VRChatInstance instan
       },
     );
   }).catchError((status) {
-    apiError(context, appConfig, status);
+    apiError(context, status);
   });
 }
 
-VRChatFavoriteWorld? getFavoriteWorld(AppConfig appConfig, VRChatWorld world) {
+VRChatFavoriteWorld? getFavoriteWorld(VRChatWorld world) {
   for (FavoriteWorldData favoriteWorld in appConfig.loggedAccount?.favoriteWorld ?? []) {
     for (VRChatFavoriteWorld favoriteWorld in favoriteWorld.list) {
       if (world.id == favoriteWorld.id) {
@@ -80,7 +81,7 @@ VRChatFavoriteWorld? getFavoriteWorld(AppConfig appConfig, VRChatWorld world) {
   return null;
 }
 
-FavoriteWorldData? getFavoriteData(AppConfig appConfig, VRChatWorld world) {
+FavoriteWorldData? getFavoriteData(VRChatWorld world) {
   for (FavoriteWorldData favoriteData in appConfig.loggedAccount?.favoriteWorld ?? []) {
     for (VRChatFavoriteWorld favoriteWorld in favoriteData.list) {
       if (world.id == favoriteWorld.id) {
@@ -91,10 +92,10 @@ FavoriteWorldData? getFavoriteData(AppConfig appConfig, VRChatWorld world) {
   return null;
 }
 
-Widget favoriteAction(BuildContext context, AppConfig appConfig, VRChatWorld world) {
+Widget favoriteAction(BuildContext context, VRChatWorld world) {
   late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
-  VRChatFavoriteWorld? favoriteWorld = getFavoriteWorld(appConfig, world);
-  FavoriteWorldData? favoriteWorldData = getFavoriteData(appConfig, world);
+  VRChatFavoriteWorld? favoriteWorld = getFavoriteWorld(world);
+  FavoriteWorldData? favoriteWorldData = getFavoriteData(world);
 
   return IconButton(
     icon: const Icon(Icons.favorite),
@@ -114,7 +115,7 @@ Widget favoriteAction(BuildContext context, AppConfig appConfig, VRChatWorld wor
                   onTap: () async {
                     if (favoriteWorldData == favoriteData || favoriteWorld != null) {
                       await vrchatLoginSession.deleteFavorites(favoriteWorld!.favoriteId).catchError((status) {
-                        apiError(context, appConfig, status);
+                        apiError(context, status);
                       });
                       favoriteWorldData!.list.remove(favoriteWorld);
                     }
@@ -122,7 +123,7 @@ Widget favoriteAction(BuildContext context, AppConfig appConfig, VRChatWorld wor
                       await vrchatLoginSession.addFavorites("world", world.id, favoriteData.group.name).then((VRChatFavorite favoriteWorld) {
                         favoriteData.list.add(VRChatFavoriteWorld.fromFavorite(world, favoriteWorld, favoriteData.group.name));
                       }).catchError((status) {
-                        apiError(context, appConfig, status);
+                        apiError(context, status);
                       });
                     }
                     /*

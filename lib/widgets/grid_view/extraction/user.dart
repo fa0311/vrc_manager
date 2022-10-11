@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 // Project imports:
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/data_class/app_config.dart';
-import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/sub/user.dart';
 import 'package:vrc_manager/widgets/profile.dart';
 import 'package:vrc_manager/widgets/grid_view/template/template.dart';
@@ -28,12 +27,11 @@ GridView extractionUserDefault(
           if (["private", "offline", "traveling"].contains(user.location) && config.joinable) return null;
           return genericTemplate(
             context,
-            appConfig,
             imageUrl: user.profilePicOverride ?? user.currentAvatarThumbnailImageUrl,
             onTap: () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (BuildContext context) => VRChatMobileUser(appConfig, userId: user.id),
+                  builder: (BuildContext context) => VRChatMobileUser(userId: user.id),
                 )),
             children: [
               username(user),
@@ -59,13 +57,12 @@ GridView extractionUserSimple(
           if (["private", "offline", "traveling"].contains(user.location) && config.joinable) return null;
           return genericTemplate(
             context,
-            appConfig,
             imageUrl: user.profilePicOverride ?? user.currentAvatarThumbnailImageUrl,
             half: true,
             onTap: () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (BuildContext context) => VRChatMobileUser(appConfig, userId: user.id),
+                  builder: (BuildContext context) => VRChatMobileUser(userId: user.id),
                 )),
             children: [
               username(user, diameter: 12),
@@ -96,11 +93,10 @@ GridView extractionUserText(
           if (["private", "offline", "traveling"].contains(user.location) && config.joinable) return null;
           return genericTemplateText(
             context,
-            appConfig,
             onTap: () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (BuildContext context) => VRChatMobileUser(appConfig, userId: user.id),
+                  builder: (BuildContext context) => VRChatMobileUser(userId: user.id),
                 )),
             children: [
               Row(

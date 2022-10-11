@@ -10,12 +10,9 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 // Project imports:
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
-import 'package:vrc_manager/data_class/app_config.dart';
 
 class VRChatMobileSettingsPermissions extends StatefulWidget {
-  final AppConfig appConfig;
-
-  const VRChatMobileSettingsPermissions(this.appConfig, {Key? key}) : super(key: key);
+  const VRChatMobileSettingsPermissions({Key? key}) : super(key: key);
 
   @override
   State<VRChatMobileSettingsPermissions> createState() => _SettingPermissionsPageState();
@@ -85,7 +82,6 @@ class _SettingPermissionsPageState extends State<VRChatMobileSettingsPermissions
   Widget build(BuildContext context) {
     textStream(
       context,
-      widget.appConfig,
     );
     return Scaffold(
       appBar: AppBar(

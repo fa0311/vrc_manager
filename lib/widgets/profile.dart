@@ -18,11 +18,11 @@ import 'package:vrc_manager/assets/date.dart';
 import 'package:vrc_manager/assets/dialog.dart';
 import 'package:vrc_manager/assets/error.dart';
 import 'package:vrc_manager/assets/vrchat/icon.dart';
-import 'package:vrc_manager/data_class/app_config.dart';
+import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/widgets/share.dart';
 import 'package:vrc_manager/widgets/status.dart';
 
-List<InlineSpan> textToAnchor(BuildContext context, AppConfig appConfig, String text) {
+List<InlineSpan> textToAnchor(BuildContext context, String text) {
   return [
     for (String line in text.split('\n')) ...[
       ...() {
@@ -50,14 +50,14 @@ List<InlineSpan> textToAnchor(BuildContext context, AppConfig appConfig, String 
                   ..onLongPressDown = ((details) => timeStamp = DateTime.now().millisecondsSinceEpoch)
                   ..onLongPress = () {
                     if (isUrl) {
-                      openInBrowser(context, appConfig, text!);
+                      openInBrowser(context, text!);
                     } else {
                       copyToClipboard(context, text!);
                     }
                   }
                   ..onLongPressCancel = () {
                     if (isUrl && DateTime.now().millisecondsSinceEpoch - timeStamp < 500) {
-                      modalBottom(context, shareUrlListTile(context, appConfig, text!));
+                      modalBottom(context, shareUrlListTile(context, text!));
                     }
                   })
           ];
@@ -87,7 +87,7 @@ Row username(VRChatUser user, {double diameter = 20}) {
   );
 }
 
-Column profile(BuildContext context, AppConfig appConfig, VRChatUser user) {
+Column profile(BuildContext context, VRChatUser user) {
   return Column(
     children: <Widget>[
       SizedBox(
@@ -136,7 +136,7 @@ Column profile(BuildContext context, AppConfig appConfig, VRChatUser user) {
         child: SingleChildScrollView(
           child: RichText(
             text: TextSpan(
-              children: textToAnchor(context, appConfig, user.bio ?? ""),
+              children: textToAnchor(context, user.bio ?? ""),
               style: TextStyle(color: Theme.of(context).textTheme.bodyText2?.color),
             ),
           ),
@@ -146,7 +146,6 @@ Column profile(BuildContext context, AppConfig appConfig, VRChatUser user) {
         mainAxisAlignment: MainAxisAlignment.center,
         children: _bioLink(
           context,
-          appConfig,
           user.bioLinks,
         ),
       ),
@@ -166,7 +165,7 @@ Column profile(BuildContext context, AppConfig appConfig, VRChatUser user) {
   );
 }
 
-editBio(BuildContext context, AppConfig appConfig, Function setState, TextEditingController controller, VRChatUserSelf user) {
+editBio(BuildContext context, Function setState, TextEditingController controller, VRChatUserSelf user) {
   late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
   showDialog(
     context: context,
@@ -188,7 +187,7 @@ editBio(BuildContext context, AppConfig appConfig, Function setState, TextEditin
               Navigator.pop(context);
               setState(() => user.bio = user.bio == "" ? null : user.bio);
             }).catchError((status) {
-              apiError(context, appConfig, status);
+              apiError(context, status);
             }),
           ),
         ],
@@ -197,7 +196,7 @@ editBio(BuildContext context, AppConfig appConfig, Function setState, TextEditin
   );
 }
 
-editNote(BuildContext context, AppConfig appConfig, Function setState, TextEditingController controller, VRChatUser user) {
+editNote(BuildContext context, Function setState, TextEditingController controller, VRChatUser user) {
   late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
   showDialog(
     context: context,
@@ -218,7 +217,7 @@ editNote(BuildContext context, AppConfig appConfig, Function setState, TextEditi
               Navigator.pop(context);
               setState(() => user.note = user.note == "" ? null : user.note);
             }).catchError((status) {
-              apiError(context, appConfig, status);
+              apiError(context, status);
             }),
           ),
         ],
@@ -227,7 +226,7 @@ editNote(BuildContext context, AppConfig appConfig, Function setState, TextEditi
   );
 }
 
-Widget profileAction(BuildContext context, AppConfig appConfig, VRChatFriendStatus status, String uid, Function reload) {
+Widget profileAction(BuildContext context, VRChatFriendStatus status, String uid, Function reload) {
   late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
 
   sendFriendRequest() {
@@ -235,7 +234,7 @@ Widget profileAction(BuildContext context, AppConfig appConfig, VRChatFriendStat
       Navigator.pop(context);
       reload();
     }).catchError((status) {
-      apiError(context, appConfig, status);
+      apiError(context, status);
     });
   }
 
@@ -244,7 +243,7 @@ Widget profileAction(BuildContext context, AppConfig appConfig, VRChatFriendStat
       Navigator.pop(context);
       reload();
     }).catchError((status) {
-      apiError(context, appConfig, status);
+      apiError(context, status);
     });
   }
 
@@ -253,7 +252,7 @@ Widget profileAction(BuildContext context, AppConfig appConfig, VRChatFriendStat
       Navigator.pop(context);
       reload();
     }).catchError((status) {
-      apiError(context, appConfig, status);
+      apiError(context, status);
     });
   }
 
@@ -267,7 +266,7 @@ Widget profileAction(BuildContext context, AppConfig appConfig, VRChatFriendStat
               Navigator.pop(context);
               reload();
             }).catchError((status) {
-              apiError(context, appConfig, status);
+              apiError(context, status);
             }));
   }
 
@@ -320,7 +319,7 @@ Widget profileAction(BuildContext context, AppConfig appConfig, VRChatFriendStat
   );
 }
 
-List<Widget> _bioLink(BuildContext context, AppConfig appConfig, List<dynamic> bioLinks) {
+List<Widget> _bioLink(BuildContext context, List<dynamic> bioLinks) {
   List<Widget> response = [];
   for (String link in bioLinks) {
     if (link == "") continue;
@@ -328,7 +327,7 @@ List<Widget> _bioLink(BuildContext context, AppConfig appConfig, List<dynamic> b
       CircleAvatar(
         backgroundColor: const Color(0x00000000),
         child: IconButton(
-          onPressed: () => openInBrowser(context, appConfig, link),
+          onPressed: () => openInBrowser(context, link),
           icon: SvgPicture.asset("assets/svg/${getVrchatIconContains(link)}.svg",
               width: 20, height: 20, color: Color(getVrchatIcon()[getVrchatIconContains(link)] ?? 0xFFFFFFFF), semanticsLabel: link),
         ),

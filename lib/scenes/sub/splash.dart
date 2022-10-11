@@ -33,7 +33,7 @@ class _SplashState extends State<VRChatMobileSplash> {
       } else if (Platform.isAndroid || Platform.isIOS) {
         ReceiveSharingIntent.getInitialText().then((String? initialText) {
           if (initialText != null) {
-            urlParser(context, appConfig, initialText);
+            urlParser(context, initialText);
           } else {
             goHome();
           }
@@ -48,7 +48,7 @@ class _SplashState extends State<VRChatMobileSplash> {
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(
-        builder: (BuildContext context) => VRChatMobileHome(appConfig),
+        builder: (BuildContext context) => const VRChatMobileHome(),
       ),
       (_) => false,
     );
@@ -58,7 +58,7 @@ class _SplashState extends State<VRChatMobileSplash> {
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(
-        builder: (BuildContext context) => VRChatMobileLogin(appConfig),
+        builder: (BuildContext context) => const VRChatMobileLogin(),
       ),
       (_) => false,
     );
@@ -68,7 +68,7 @@ class _SplashState extends State<VRChatMobileSplash> {
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(
-        builder: (BuildContext context) => VRChatMobileWebViewUserPolicy(appConfig),
+        builder: (BuildContext context) => const VRChatMobileWebViewUserPolicy(),
       ),
       (_) => false,
     );

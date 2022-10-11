@@ -8,6 +8,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 // Project imports:
 import 'package:vrc_manager/data_class/app_config.dart';
+import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/main/friend_request.dart';
 import 'package:vrc_manager/scenes/main/friends.dart';
 import 'package:vrc_manager/scenes/main/home.dart';
@@ -17,7 +18,7 @@ import 'package:vrc_manager/scenes/main/settings.dart';
 import 'package:vrc_manager/scenes/main/worlds_favorite.dart';
 import 'package:vrc_manager/scenes/sub/login.dart';
 
-Drawer drawer(BuildContext context, AppConfig appConfig) {
+Drawer drawer(BuildContext context) {
   List<Widget> getAccountList() {
     return [
       for (AccountConfig account in appConfig.accountList)
@@ -31,7 +32,7 @@ Drawer drawer(BuildContext context, AppConfig appConfig) {
                   (bool logged) => Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
-                      builder: (BuildContext context) => logged ? VRChatMobileHome(appConfig) : VRChatMobileLogin(appConfig),
+                      builder: (BuildContext context) => logged ? const VRChatMobileHome() : const VRChatMobileLogin(),
                     ),
                     (_) => false,
                   ),
@@ -45,7 +46,7 @@ Drawer drawer(BuildContext context, AppConfig appConfig) {
         onTap: () => Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
-            builder: (BuildContext context) => VRChatMobileSettingsOtherAccount(appConfig),
+            builder: (BuildContext context) => const VRChatMobileSettingsOtherAccount(),
           ),
           (_) => false,
         ),
@@ -65,7 +66,7 @@ Drawer drawer(BuildContext context, AppConfig appConfig) {
                     onTap: () => Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
-                        builder: (BuildContext context) => VRChatMobileHome(appConfig),
+                        builder: (BuildContext context) => const VRChatMobileHome(),
                       ),
                       (_) => false,
                     ),
@@ -76,7 +77,7 @@ Drawer drawer(BuildContext context, AppConfig appConfig) {
                     onTap: () => Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
-                        builder: (BuildContext context) => VRChatMobileFriends(appConfig, offline: false),
+                        builder: (BuildContext context) => const VRChatMobileFriends(offline: false),
                       ),
                       (_) => false,
                     ),
@@ -87,7 +88,7 @@ Drawer drawer(BuildContext context, AppConfig appConfig) {
                     onTap: () => Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
-                        builder: (BuildContext context) => VRChatMobileFriends(appConfig, offline: true),
+                        builder: (BuildContext context) => const VRChatMobileFriends(offline: true),
                       ),
                       (_) => false,
                     ),
@@ -98,9 +99,7 @@ Drawer drawer(BuildContext context, AppConfig appConfig) {
                     onTap: () => Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
-                        builder: (BuildContext context) => VRChatSearch(
-                          appConfig,
-                        ),
+                        builder: (BuildContext context) => const VRChatSearch(),
                       ),
                       (_) => false,
                     ),
@@ -111,9 +110,7 @@ Drawer drawer(BuildContext context, AppConfig appConfig) {
                     onTap: () => Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
-                        builder: (BuildContext context) => VRChatMobileFriendRequest(
-                          appConfig,
-                        ),
+                        builder: (BuildContext context) => const VRChatMobileFriendRequest(),
                       ),
                       (_) => false,
                     ),
@@ -124,9 +121,7 @@ Drawer drawer(BuildContext context, AppConfig appConfig) {
                     onTap: () => Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
-                        builder: (BuildContext context) => VRChatMobileWorldsFavorite(
-                          appConfig,
-                        ),
+                        builder: (BuildContext context) => const VRChatMobileWorldsFavorite(),
                       ),
                       (_) => false,
                     ),
@@ -148,7 +143,7 @@ Drawer drawer(BuildContext context, AppConfig appConfig) {
                 onTap: () => Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(
-                    builder: (BuildContext context) => VRChatMobileSettings(appConfig),
+                    builder: (BuildContext context) => const VRChatMobileSettings(),
                   ),
                   (_) => false,
                 ),
@@ -178,7 +173,7 @@ Drawer drawer(BuildContext context, AppConfig appConfig) {
                   onPressed: () => Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
-                      builder: (BuildContext context) => VRChatMobileSettings(appConfig),
+                      builder: (BuildContext context) => const VRChatMobileSettings(),
                     ),
                     (_) => false,
                   ),
@@ -206,7 +201,7 @@ Drawer drawer(BuildContext context, AppConfig appConfig) {
   );
 }
 
-Drawer simpleDrawer(BuildContext context, AppConfig appConfig) {
+Drawer simpleDrawer(BuildContext context) {
   List<Widget> getAccountList() {
     return [
       for (AccountConfig account in appConfig.accountList)
@@ -220,7 +215,7 @@ Drawer simpleDrawer(BuildContext context, AppConfig appConfig) {
                   (bool logged) => Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
-                      builder: (BuildContext context) => logged ? VRChatMobileHome(appConfig) : VRChatMobileLogin(appConfig),
+                      builder: (BuildContext context) => logged ? const VRChatMobileHome() : const VRChatMobileLogin(),
                     ),
                     (_) => false,
                   ),
@@ -234,7 +229,7 @@ Drawer simpleDrawer(BuildContext context, AppConfig appConfig) {
         onTap: () => Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
-            builder: (BuildContext context) => VRChatMobileSettingsOtherAccount(appConfig),
+            builder: (BuildContext context) => const VRChatMobileSettingsOtherAccount(),
           ),
           (_) => false,
         ),
@@ -252,9 +247,7 @@ Drawer simpleDrawer(BuildContext context, AppConfig appConfig) {
                 onTap: () => Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(
-                    builder: (BuildContext context) => VRChatMobileHome(
-                      appConfig,
-                    ),
+                    builder: (BuildContext context) => const VRChatMobileHome(),
                   ),
                   (_) => false,
                 ),
@@ -276,7 +269,7 @@ Drawer simpleDrawer(BuildContext context, AppConfig appConfig) {
                   onTap: () => Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
-                      builder: (BuildContext context) => VRChatMobileSettings(appConfig),
+                      builder: (BuildContext context) => const VRChatMobileSettings(),
                     ),
                     (_) => false,
                   ),

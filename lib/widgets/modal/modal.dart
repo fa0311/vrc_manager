@@ -36,7 +36,7 @@ class GridDisplayModeConfig {
   bool textOnly = true;
 }
 
-gridModal(BuildContext context, AppConfig appConfig, Function setState, GridConfig config, GridModalConfig gridModalConfig) {
+gridModal(BuildContext context, Function setState, GridConfig config, GridModalConfig gridModalConfig) {
   showModalBottomSheet(
     context: context,
     shape: const RoundedRectangleBorder(
@@ -110,7 +110,7 @@ gridModal(BuildContext context, AppConfig appConfig, Function setState, GridConf
                 title: Text(AppLocalizations.of(context)!.openInBrowser),
                 onTap: () {
                   Navigator.pop(context);
-                  openInBrowser(context, appConfig, gridModalConfig.url!);
+                  openInBrowser(context, gridModalConfig.url!);
                 },
               ),
           ],

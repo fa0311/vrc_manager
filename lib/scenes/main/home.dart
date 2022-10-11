@@ -9,7 +9,6 @@ import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets/error.dart';
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
-import 'package:vrc_manager/data_class/app_config.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/sub/json_viewer.dart';
 import 'package:vrc_manager/scenes/sub/login.dart';
@@ -19,14 +18,13 @@ import 'package:vrc_manager/widgets/profile.dart';
 import 'package:vrc_manager/widgets/share.dart';
 
 class VRChatMobileHome extends StatefulWidget {
-  final AppConfig appConfig;
-  const VRChatMobileHome(this.appConfig, {Key? key}) : super(key: key);
+  const VRChatMobileHome({Key? key}) : super(key: key);
   @override
   State<VRChatMobileHome> createState() => _LoginHomeState();
 }
 
 class _LoginHomeState extends State<VRChatMobileHome> {
-  late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: widget.appConfig.loggedAccount?.cookie ?? "");
+  late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
   VRChatUserSelfOverload? user;
   VRChatWorld? world;
   VRChatInstance? instance;
@@ -50,7 +48,7 @@ class _LoginHomeState extends State<VRChatMobileHome> {
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
-          builder: (BuildContext context) => VRChatMobileLogin(widget.appConfig),
+          builder: (BuildContext context) => const VRChatMobileLogin(),
         ),
         (_) => false,
       );
@@ -62,26 +60,28 @@ class _LoginHomeState extends State<VRChatMobileHome> {
   Future getWorld() async {
     if (!["private", "offline", "traveling"].contains(user!.location)) {
       world = await vrchatLoginSession.worlds(user!.location.split(":")[0]).catchError((status) {
-        apiError(context, widget.appConfig, status);
+        apiError(context, status);
       });
       instance = await vrchatLoginSession.instances(user!.location).catchError((status) {
-        apiError(context, widget.appConfig, status);
+        apiError(context, status);
       });
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    textStream(context, widget.appConfig);
+    textStream(
+      context,
+    );
     return Scaffold(
       appBar: AppBar(title: Text(AppLocalizations.of(context)!.home), actions: <Widget>[
         if (user != null)
           IconButton(
             icon: const Icon(Icons.share),
-            onPressed: () => modalBottom(context, shareUrlListTile(context, widget.appConfig, "https://vrchat.com/home/user/${user!.id}")),
+            onPressed: () => modalBottom(context, shareUrlListTile(context, "https://vrchat.com/home/user/${user!.id}")),
           )
       ]),
-      drawer: drawer(context, widget.appConfig),
+      drawer: drawer(context),
       body: SafeArea(
         child: SizedBox(
           width: MediaQuery.of(context).size.width,
@@ -98,7 +98,7 @@ class _LoginHomeState extends State<VRChatMobileHome> {
                   if (user == null)
                     const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator())
                   else ...[
-                    profile(context, widget.appConfig, user!),
+                    profile(context, user!),
                     SizedBox(
                       height: 30,
                       child: TextButton(
@@ -107,7 +107,7 @@ class _LoginHomeState extends State<VRChatMobileHome> {
                           minimumSize: Size.zero,
                           padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
                         ),
-                        onPressed: () => editBio(context, appConfig, setState, bioController, user!),
+                        onPressed: () => editBio(context, setState, bioController, user!),
                         child: Text(AppLocalizations.of(context)!.editBio),
                       ),
                     ),
@@ -119,7 +119,7 @@ class _LoginHomeState extends State<VRChatMobileHome> {
                           minimumSize: Size.zero,
                           padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
                         ),
-                        onPressed: () => editNote(context, appConfig, setState, noteController, user!),
+                        onPressed: () => editNote(context, setState, noteController, user!),
                         child: Text(AppLocalizations.of(context)!.editNote),
                       ),
                     ),
@@ -134,7 +134,7 @@ class _LoginHomeState extends State<VRChatMobileHome> {
                         onPressed: () => Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (BuildContext context) => VRChatMobileJsonViewer(widget.appConfig, obj: user!.content),
+                            builder: (BuildContext context) => VRChatMobileJsonViewer(obj: user!.content),
                           ),
                         ),
                         child: Text(AppLocalizations.of(context)!.viewInJsonViewer),
@@ -143,11 +143,11 @@ class _LoginHomeState extends State<VRChatMobileHome> {
                     Container(
                       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
                       child: () {
-                        if (user!.location == "private") return privateWorld(context, appConfig);
-                        if (user!.location == "traveling") return privateWorld(context, appConfig);
+                        if (user!.location == "private") return privateWorld(context);
+                        if (user!.location == "traveling") return privateWorld(context);
                         if (user!.location == "offline") return null;
                         if (world == null) return const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator());
-                        return instanceWidget(context, appConfig, world!, instance!);
+                        return instanceWidget(context, world!, instance!);
                       }(),
                     ),
                   ]

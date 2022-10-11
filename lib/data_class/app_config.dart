@@ -63,7 +63,7 @@ class AppConfig {
     * if(context.mounted)
     */
     // ignore: use_build_context_synchronously
-    await _loggedAccount!.getFavoriteWorldGroups(context, this);
+    await _loggedAccount!.getFavoriteWorldGroups(context);
     return true;
   }
 
@@ -99,7 +99,9 @@ class AppConfig {
     _loggedAccount = accountConfig;
     accountConfig.favoriteWorld = [];
     if (!(await _loggedAccount!.tokenCheck())) return false;
-    futureList.add(accountConfig.getFavoriteWorldGroups(context, this));
+    futureList.add(accountConfig.getFavoriteWorldGroups(
+      context,
+    ));
     futureList.add(setStorage("account_index", accountConfig.uid));
     await Future.wait(futureList);
     return true;
@@ -212,7 +214,7 @@ class AccountConfig {
     });
   }
 
-  Future getFavoriteWorldGroups(BuildContext context, AppConfig appConfig) async {
+  Future getFavoriteWorldGroups(BuildContext context) async {
     late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: cookie);
     List<Future> futureList = [];
     int len = 0;
@@ -226,23 +228,23 @@ class AccountConfig {
          * if(context.mounted)
          */
           // ignore: use_build_context_synchronously
-          futureList.add(getFavoriteWorld(context, appConfig, favorite));
+          futureList.add(getFavoriteWorld(context, favorite));
           favoriteWorld.add(favorite);
         }
         len = favoriteGroupList.length;
       }).catchError((status) {
-        apiError(context, appConfig, status);
+        apiError(context, status);
       });
     } while (len == 50);
   }
 
-  Future getFavoriteWorld(BuildContext context, AppConfig appConfig, FavoriteWorldData favoriteWorld) async {
+  Future getFavoriteWorld(BuildContext context, FavoriteWorldData favoriteWorld) async {
     late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: cookie);
     int len;
     do {
       int offset = favoriteWorld.list.length;
       List<VRChatFavoriteWorld> worlds = await vrchatLoginSession.favoritesWorlds(favoriteWorld.group.name, offset: offset).catchError((status) {
-        apiError(context, appConfig, status);
+        apiError(context, status);
       });
       for (VRChatFavoriteWorld world in worlds) {
         favoriteWorld.list.add(world);

@@ -9,15 +9,12 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 // Project imports:
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
-import 'package:vrc_manager/data_class/app_config.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/widgets/modal/locale.dart';
 import 'package:vrc_manager/widgets/modal/theme.dart';
 
 class VRChatMobileSettingsAccessibility extends StatefulWidget {
-  final AppConfig appConfig;
-
-  const VRChatMobileSettingsAccessibility(this.appConfig, {Key? key}) : super(key: key);
+  const VRChatMobileSettingsAccessibility({Key? key}) : super(key: key);
 
   @override
   State<VRChatMobileSettingsAccessibility> createState() => _SettingAccessibilityPageState();
@@ -26,7 +23,9 @@ class VRChatMobileSettingsAccessibility extends StatefulWidget {
 class _SettingAccessibilityPageState extends State<VRChatMobileSettingsAccessibility> {
   @override
   Widget build(BuildContext context) {
-    textStream(context, widget.appConfig);
+    textStream(
+      context,
+    );
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.setting),

@@ -19,7 +19,6 @@ import 'package:vrc_manager/assets/date.dart';
 import 'package:vrc_manager/assets/error.dart';
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
 import 'package:vrc_manager/assets/vrchat/region.dart';
-import 'package:vrc_manager/data_class/app_config.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/sub/json_viewer.dart';
 import 'package:vrc_manager/widgets/drawer.dart';
@@ -29,15 +28,15 @@ import 'package:vrc_manager/widgets/world.dart';
 
 class VRChatMobileWorld extends StatefulWidget {
   final String worldId;
-  final AppConfig appConfig;
-  const VRChatMobileWorld(this.appConfig, {Key? key, required this.worldId}) : super(key: key);
+
+  const VRChatMobileWorld({Key? key, required this.worldId}) : super(key: key);
 
   @override
   State<VRChatMobileWorld> createState() => _WorldState();
 }
 
 class _WorldState extends State<VRChatMobileWorld> {
-  late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: widget.appConfig.loggedAccount?.cookie ?? "");
+  late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
   VRChatWorld? world;
 
   String genRandHex([int length = 32]) {
@@ -56,7 +55,7 @@ class _WorldState extends State<VRChatMobileWorld> {
 
   genInstanceId(String region, String type, bool canRequestInvite) async {
     VRChatUserSelfOverload user = await vrchatLoginSession.user().catchError((status) {
-      apiError(context, widget.appConfig, status);
+      apiError(context, status);
     });
     String url = genRandNumber();
 
@@ -112,8 +111,7 @@ class _WorldState extends State<VRChatMobileWorld> {
               onTap: () {
                 Navigator.pop(context);
                 Navigator.pop(context);
-                genInstanceId(regionText, "public", false)
-                    .then((instanceId) => modalBottom(context, shareWorldListTile(context, appConfig, widget.worldId, instanceId)));
+                genInstanceId(regionText, "public", false).then((instanceId) => modalBottom(context, shareWorldListTile(context, widget.worldId, instanceId)));
               },
             ),
             ListTile(
@@ -123,7 +121,7 @@ class _WorldState extends State<VRChatMobileWorld> {
                   Navigator.pop(context);
 
                   genInstanceId(regionText, "hidden", false)
-                      .then((instanceId) => modalBottom(context, shareWorldListTile(context, appConfig, widget.worldId, instanceId)));
+                      .then((instanceId) => modalBottom(context, shareWorldListTile(context, widget.worldId, instanceId)));
                 }),
             ListTile(
                 title: Text(AppLocalizations.of(context)!.vrchatFriends),
@@ -132,7 +130,7 @@ class _WorldState extends State<VRChatMobileWorld> {
                   Navigator.pop(context);
 
                   genInstanceId(regionText, "friends", false)
-                      .then((instanceId) => modalBottom(context, shareWorldListTile(context, appConfig, widget.worldId, instanceId)));
+                      .then((instanceId) => modalBottom(context, shareWorldListTile(context, widget.worldId, instanceId)));
                 }),
             ListTile(
                 title: Text(AppLocalizations.of(context)!.vrchatInvitePlus),
@@ -140,7 +138,7 @@ class _WorldState extends State<VRChatMobileWorld> {
                   Navigator.pop(context);
                   Navigator.pop(context);
                   genInstanceId(regionText, "private", true)
-                      .then((instanceId) => modalBottom(context, shareWorldListTile(context, appConfig, widget.worldId, instanceId)));
+                      .then((instanceId) => modalBottom(context, shareWorldListTile(context, widget.worldId, instanceId)));
                 }),
             ListTile(
                 title: Text(AppLocalizations.of(context)!.vrchatInvite),
@@ -148,7 +146,7 @@ class _WorldState extends State<VRChatMobileWorld> {
                   Navigator.pop(context);
                   Navigator.pop(context);
                   genInstanceId(regionText, "private", false)
-                      .then((instanceId) => modalBottom(context, shareWorldListTile(context, appConfig, widget.worldId, instanceId)));
+                      .then((instanceId) => modalBottom(context, shareWorldListTile(context, widget.worldId, instanceId)));
                 })
           ],
         ),
@@ -164,7 +162,7 @@ class _WorldState extends State<VRChatMobileWorld> {
 
   Future get() async {
     world = await vrchatLoginSession.worlds(widget.worldId).catchError((status) {
-      apiError(context, widget.appConfig, status);
+      apiError(context, status);
     });
   }
 
@@ -172,22 +170,16 @@ class _WorldState extends State<VRChatMobileWorld> {
   Widget build(BuildContext context) {
     textStream(
       context,
-      widget.appConfig,
     );
     return Scaffold(
       appBar: AppBar(title: Text(AppLocalizations.of(context)!.world), actions: [
-        if (world != null) favoriteAction(context, appConfig, world!),
+        if (world != null) favoriteAction(context, world!),
         IconButton(
           icon: const Icon(Icons.share),
-          onPressed: () => modalBottom(context, shareUrlListTile(context, widget.appConfig, "https://vrchat.com/home/world/${widget.worldId}")),
+          onPressed: () => modalBottom(context, shareUrlListTile(context, "https://vrchat.com/home/world/${widget.worldId}")),
         )
       ]),
-      drawer: Navigator.of(context).canPop()
-          ? null
-          : drawer(
-              context,
-              widget.appConfig,
-            ),
+      drawer: Navigator.of(context).canPop() ? null : drawer(context),
       body: SafeArea(
         child: SizedBox(
           width: MediaQuery.of(context).size.width,
@@ -270,7 +262,7 @@ class _WorldState extends State<VRChatMobileWorld> {
                         onPressed: () => Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (BuildContext context) => VRChatMobileJsonViewer(widget.appConfig, obj: world!.content),
+                            builder: (BuildContext context) => VRChatMobileJsonViewer(obj: world!.content),
                           ),
                         ),
                         child: Text(AppLocalizations.of(context)!.viewInJsonViewer),

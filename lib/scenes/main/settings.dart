@@ -6,7 +6,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 // Project imports:
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
-import 'package:vrc_manager/data_class/app_config.dart';
+import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/setting/accessibility.dart';
 import 'package:vrc_manager/scenes/setting/account.dart';
 import 'package:vrc_manager/scenes/setting/help.dart';
@@ -14,9 +14,7 @@ import 'package:vrc_manager/scenes/setting/permissions.dart';
 import 'package:vrc_manager/widgets/drawer.dart';
 
 class VRChatMobileSettings extends StatefulWidget {
-  final AppConfig appConfig;
-
-  const VRChatMobileSettings(this.appConfig, {Key? key}) : super(key: key);
+  const VRChatMobileSettings({Key? key}) : super(key: key);
 
   @override
   State<VRChatMobileSettings> createState() => _SettingPageState();
@@ -25,12 +23,14 @@ class VRChatMobileSettings extends StatefulWidget {
 class _SettingPageState extends State<VRChatMobileSettings> {
   @override
   Widget build(BuildContext context) {
-    textStream(context, widget.appConfig);
+    textStream(
+      context,
+    );
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.setting),
       ),
-      drawer: widget.appConfig.isLogout() ? drawer(context, widget.appConfig) : simpleDrawer(context, widget.appConfig),
+      drawer: appConfig.isLogout() ? drawer(context) : simpleDrawer(context),
       body: SafeArea(
         child: SizedBox(
           child: SingleChildScrollView(
@@ -51,7 +51,7 @@ class _SettingPageState extends State<VRChatMobileSettings> {
                     onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (BuildContext context) => VRChatMobileSettingsAccessibility(widget.appConfig),
+                        builder: (BuildContext context) => const VRChatMobileSettingsAccessibility(),
                       ),
                     ),
                   ),
@@ -69,7 +69,7 @@ class _SettingPageState extends State<VRChatMobileSettings> {
                     onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (BuildContext context) => VRChatMobileSettingsAccount(widget.appConfig),
+                        builder: (BuildContext context) => const VRChatMobileSettingsAccount(),
                       ),
                     ),
                   ),
@@ -87,7 +87,7 @@ class _SettingPageState extends State<VRChatMobileSettings> {
                     onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (BuildContext context) => VRChatMobileSettingsPermissions(widget.appConfig),
+                        builder: (BuildContext context) => const VRChatMobileSettingsPermissions(),
                       ),
                     ),
                   ),
@@ -105,7 +105,7 @@ class _SettingPageState extends State<VRChatMobileSettings> {
                     onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (BuildContext context) => VRChatMobileHelp(widget.appConfig),
+                        builder: (BuildContext context) => const VRChatMobileHelp(),
                       ),
                     ),
                   )

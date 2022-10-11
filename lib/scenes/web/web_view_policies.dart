@@ -6,6 +6,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/main/home.dart';
 import 'package:vrc_manager/widgets/share.dart';
 
@@ -14,19 +15,16 @@ import 'package:webview_flutter/webview_flutter.dart';
 
 // Project imports:
 import 'package:vrc_manager/api/main.dart';
-import 'package:vrc_manager/data_class/app_config.dart';
 
 class VRChatMobileWebViewUserPolicy extends StatefulWidget {
-  final AppConfig appConfig;
-
-  const VRChatMobileWebViewUserPolicy(this.appConfig, {Key? key}) : super(key: key);
+  const VRChatMobileWebViewUserPolicy({Key? key}) : super(key: key);
 
   @override
   State<VRChatMobileWebViewUserPolicy> createState() => _WebViewPageState();
 }
 
 class _WebViewPageState extends State<VRChatMobileWebViewUserPolicy> {
-  late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: widget.appConfig.loggedAccount?.cookie ?? "");
+  late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
   static const String url = "https://github.com/fa0311/vrc_manager/blob/master/docs/user_policies/ja.md";
 
   @override
@@ -47,7 +45,7 @@ class _WebViewPageState extends State<VRChatMobileWebViewUserPolicy> {
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.more_vert),
-            onPressed: () => modalBottom(context, shareUrlListTile(context, widget.appConfig, url, browserExternalForce: true)),
+            onPressed: () => modalBottom(context, shareUrlListTile(context, url, browserExternalForce: true)),
           ),
         ],
       ),
@@ -71,12 +69,12 @@ class _WebViewPageState extends State<VRChatMobileWebViewUserPolicy> {
               flex: 2,
               child: TextButton(
                 onPressed: () async {
-                  await widget.appConfig.setAgreedUserPolicy(true);
+                  await appConfig.setAgreedUserPolicy(true);
                   if (!mounted) return;
                   Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
-                      builder: (BuildContext context) => VRChatMobileHome(widget.appConfig),
+                      builder: (BuildContext context) => const VRChatMobileHome(),
                     ),
                     (_) => false,
                   );
@@ -97,7 +95,7 @@ class _WebViewPageState extends State<VRChatMobileWebViewUserPolicy> {
             javascriptMode: JavascriptMode.unrestricted,
           );
         } else {
-          openInBrowser(context, widget.appConfig, url, forceExternal: true);
+          openInBrowser(context, url, forceExternal: true);
           return Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,

@@ -14,15 +14,14 @@ import 'package:vrc_manager/assets/flutter/text_stream.dart';
 import 'package:vrc_manager/assets/sort/users.dart';
 import 'package:vrc_manager/assets/sort/worlds_favorite.dart';
 import 'package:vrc_manager/data_class/app_config.dart';
+import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/widgets/drawer.dart';
 import 'package:vrc_manager/widgets/grid_view/extraction/user.dart';
 import 'package:vrc_manager/widgets/grid_view/extraction/world.dart';
 import 'package:vrc_manager/widgets/modal/modal.dart';
 
 class VRChatSearch extends StatefulWidget {
-  final AppConfig appConfig;
-
-  const VRChatSearch(this.appConfig, {Key? key}) : super(key: key);
+  const VRChatSearch({Key? key}) : super(key: key);
 
   @override
   State<VRChatSearch> createState() => _SearchState();
@@ -34,8 +33,8 @@ enum SearchMode {
 }
 
 class _SearchState extends State<VRChatSearch> {
-  late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: widget.appConfig.loggedAccount?.cookie ?? "");
-  late GridConfig config = widget.appConfig.gridConfigList.searchUsers;
+  late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
+  late GridConfig config = appConfig.gridConfigList.searchUsers;
   GridModalConfig gridConfig = GridModalConfig();
   List<VRChatLimitedWorld> worldList = [];
   Map<String, VRChatWorld?> locationMap = {};
@@ -117,7 +116,7 @@ class _SearchState extends State<VRChatSearch> {
       do {
         int offset = userList.length;
         List<VRChatUser> users = await vrchatLoginSession.searchUsers(text ?? "", offset: offset).catchError((status) {
-          apiError(context, widget.appConfig, status);
+          apiError(context, status);
         });
         for (VRChatUser user in users) {
           userList.add(user);
@@ -128,7 +127,7 @@ class _SearchState extends State<VRChatSearch> {
       do {
         int offset = worldList.length;
         List<VRChatLimitedWorld> worlds = await vrchatLoginSession.searchWorlds(text ?? "", offset: offset).catchError((status) {
-          apiError(context, widget.appConfig, status);
+          apiError(context, status);
         });
         for (VRChatLimitedWorld world in worlds) {
           addWorldList(world);
@@ -140,7 +139,9 @@ class _SearchState extends State<VRChatSearch> {
 
   @override
   Widget build(BuildContext context) {
-    textStream(context, widget.appConfig);
+    textStream(
+      context,
+    );
     if (worldList.isNotEmpty && config.sort != sortedModeCache) {
       sortWorlds(config, worldList);
       sortedModeCache = config.sort;
@@ -168,11 +169,11 @@ class _SearchState extends State<VRChatSearch> {
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.more_vert),
-            onPressed: () => gridModal(context, widget.appConfig, setState, config, gridConfig),
+            onPressed: () => gridModal(context, setState, config, gridConfig),
           ),
         ],
       ),
-      drawer: drawer(context, widget.appConfig),
+      drawer: drawer(context),
       body: SafeArea(
         child: SizedBox(
           child: SingleChildScrollView(

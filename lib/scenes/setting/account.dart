@@ -7,15 +7,13 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 // Project imports:
 import 'package:vrc_manager/assets/dialog.dart';
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
-import 'package:vrc_manager/data_class/app_config.dart';
+import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/sub/login.dart';
 import 'package:vrc_manager/scenes/setting/other_account.dart';
 import 'package:vrc_manager/scenes/setting/token.dart';
 
 class VRChatMobileSettingsAccount extends StatefulWidget {
-  final AppConfig appConfig;
-
-  const VRChatMobileSettingsAccount(this.appConfig, {Key? key}) : super(key: key);
+  const VRChatMobileSettingsAccount({Key? key}) : super(key: key);
 
   @override
   State<VRChatMobileSettingsAccount> createState() => _SettingAccountPageState();
@@ -24,7 +22,9 @@ class VRChatMobileSettingsAccount extends StatefulWidget {
 class _SettingAccountPageState extends State<VRChatMobileSettingsAccount> {
   @override
   Widget build(BuildContext context) {
-    textStream(context, widget.appConfig);
+    textStream(
+      context,
+    );
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.setting),
@@ -47,13 +47,11 @@ class _SettingAccountPageState extends State<VRChatMobileSettingsAccount> {
                               Navigator.pushAndRemoveUntil(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (BuildContext context) => VRChatMobileLogin(
-                                    widget.appConfig,
-                                  ),
+                                  builder: (BuildContext context) => const VRChatMobileLogin(),
                                 ),
                                 (_) => false,
                               );
-                              widget.appConfig.loggedAccount?.removeCookie();
+                              appConfig.loggedAccount?.removeCookie();
                             },
                           )),
                   const Divider(),
@@ -65,10 +63,10 @@ class _SettingAccountPageState extends State<VRChatMobileSettingsAccount> {
                       AppLocalizations.of(context)!.deleteLoginInfoConfirm,
                       AppLocalizations.of(context)!.delete,
                       () {
-                        widget.appConfig.loggedAccount?.removeUserId();
-                        widget.appConfig.loggedAccount?.removePassword();
-                        widget.appConfig.loggedAccount?.removeDisplayName();
-                        widget.appConfig.loggedAccount?.setRememberLoginInfo(false);
+                        appConfig.loggedAccount?.removeUserId();
+                        appConfig.loggedAccount?.removePassword();
+                        appConfig.loggedAccount?.removeDisplayName();
+                        appConfig.loggedAccount?.setRememberLoginInfo(false);
                         Navigator.pop(context);
                       },
                     ),
@@ -81,9 +79,7 @@ class _SettingAccountPageState extends State<VRChatMobileSettingsAccount> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (BuildContext context) => VRChatMobileTokenSetting(
-                            widget.appConfig,
-                          ),
+                          builder: (BuildContext context) => const VRChatMobileTokenSetting(),
                         ),
                       )
                     },
@@ -95,7 +91,7 @@ class _SettingAccountPageState extends State<VRChatMobileSettingsAccount> {
                     onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (BuildContext context) => VRChatMobileSettingsOtherAccount(widget.appConfig),
+                        builder: (BuildContext context) => const VRChatMobileSettingsOtherAccount(),
                       ),
                     ),
                   )

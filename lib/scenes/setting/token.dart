@@ -11,26 +11,24 @@ import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets/error.dart';
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
-import 'package:vrc_manager/data_class/app_config.dart';
+import 'package:vrc_manager/main.dart';
 
 class VRChatMobileTokenSetting extends StatefulWidget {
   final bool offline;
-  final AppConfig appConfig;
 
-  const VRChatMobileTokenSetting(this.appConfig, {Key? key, this.offline = true}) : super(key: key);
+  const VRChatMobileTokenSetting({Key? key, this.offline = true}) : super(key: key);
 
   @override
   State<VRChatMobileTokenSetting> createState() => _TokenSettingPageState();
 }
 
 class _TokenSettingPageState extends State<VRChatMobileTokenSetting> {
-  late final TextEditingController _tokenController = TextEditingController(text: widget.appConfig.loggedAccount?.cookie ?? "");
+  late final TextEditingController _tokenController = TextEditingController(text: appConfig.loggedAccount?.cookie ?? "");
 
   @override
   Widget build(BuildContext context) {
     textStream(
       context,
-      widget.appConfig,
     );
     return Scaffold(
       appBar: AppBar(
@@ -52,7 +50,7 @@ class _TokenSettingPageState extends State<VRChatMobileTokenSetting> {
                   ElevatedButton(
                     child: Text(AppLocalizations.of(context)!.save),
                     onPressed: () {
-                      widget.appConfig.loggedAccount?.setCookie(_tokenController.text);
+                      appConfig.loggedAccount?.setCookie(_tokenController.text);
                       showDialog(
                         context: context,
                         builder: (_) {
@@ -88,7 +86,7 @@ class _TokenSettingPageState extends State<VRChatMobileTokenSetting> {
                           },
                         );
                       }).catchError((status) {
-                        apiError(context, widget.appConfig, status);
+                        apiError(context, status);
                       });
                     },
                   ),

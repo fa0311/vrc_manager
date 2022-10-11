@@ -11,21 +11,19 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
 import 'package:vrc_manager/assets/session.dart';
-import 'package:vrc_manager/data_class/app_config.dart';
 import 'package:vrc_manager/widgets/share.dart';
 
 class VRChatMobileWebView extends StatefulWidget {
   final String url;
-  final AppConfig appConfig;
 
-  const VRChatMobileWebView(this.appConfig, {Key? key, required this.url}) : super(key: key);
+  const VRChatMobileWebView({Key? key, required this.url}) : super(key: key);
 
   @override
   State<VRChatMobileWebView> createState() => _WebViewPageState();
 }
 
 class _WebViewPageState extends State<VRChatMobileWebView> {
-  late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: widget.appConfig.loggedAccount?.cookie ?? "");
+  late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
   late WebViewController controllerGlobal;
   late int timeStamp = 0;
   late String url = widget.url;
@@ -37,7 +35,9 @@ class _WebViewPageState extends State<VRChatMobileWebView> {
 
   @override
   Widget build(BuildContext context) {
-    textStream(context, widget.appConfig);
+    textStream(
+      context,
+    );
     final cookieManager = CookieManager();
 
     final cookieMap = Session().decodeCookie(vrchatLoginSession.getCookie());
@@ -69,7 +69,7 @@ class _WebViewPageState extends State<VRChatMobileWebView> {
           actions: [
             IconButton(
               icon: const Icon(Icons.share),
-              onPressed: () => modalBottom(context, shareUrlListTile(context, widget.appConfig, url, browserExternalForce: true)),
+              onPressed: () => modalBottom(context, shareUrlListTile(context, url, browserExternalForce: true)),
             )
           ],
         ),
@@ -81,7 +81,7 @@ class _WebViewPageState extends State<VRChatMobileWebView> {
           },
           navigationDelegate: (NavigationRequest request) {
             if (appConfig.forceExternalBrowser && Uri.parse(url).host != "vrchat.com") {
-              openInBrowser(context, widget.appConfig, url);
+              openInBrowser(context, url);
               return NavigationDecision.prevent;
             } else {
               setState(() => url = request.url);

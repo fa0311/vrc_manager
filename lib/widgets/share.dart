@@ -15,7 +15,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets/error.dart';
-import 'package:vrc_manager/data_class/app_config.dart';
+import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/web/web_view.dart';
 
 Future modalBottom(BuildContext context, List<Widget> children) {
@@ -34,22 +34,22 @@ Future modalBottom(BuildContext context, List<Widget> children) {
   );
 }
 
-List<Widget> shareUrlListTile(BuildContext context, AppConfig appConfig, String url, {bool browserExternalForce = false}) {
+List<Widget> shareUrlListTile(BuildContext context, String url, {bool browserExternalForce = false}) {
   return [
     shareListTileWidget(context, url),
     copyListTileWidget(context, url),
-    if (!browserExternalForce) openInBrowserListTileWidget(context, appConfig, url),
-    if (Uri.parse(url).host != "vrchat.com" && browserExternalForce) openInBrowserExternalForceListTileWidget(context, appConfig, url),
+    if (!browserExternalForce) openInBrowserListTileWidget(context, url),
+    if (Uri.parse(url).host != "vrchat.com" && browserExternalForce) openInBrowserExternalForceListTileWidget(context, url),
   ];
 }
 
-List<Widget> shareWorldListTile(BuildContext context, AppConfig appConfig, String worldId, String instanceId) {
+List<Widget> shareWorldListTile(BuildContext context, String worldId, String instanceId) {
   String url = "https://vrchat.com/home/launch?worldId=$worldId&instanceId=$instanceId";
   return [
     shareListTileWidget(context, url),
     copyListTileWidget(context, url),
-    openInBrowserListTileWidget(context, appConfig, url),
-    if (Platform.isWindows) openInWindowsListTileWidget(context, appConfig, "vrchat://launch?ref=vrchat.com&id=$worldId:$instanceId"),
+    openInBrowserListTileWidget(context, url),
+    if (Platform.isWindows) openInWindowsListTileWidget(context, "vrchat://launch?ref=vrchat.com&id=$worldId:$instanceId"),
   ];
 }
 
@@ -74,29 +74,29 @@ Widget copyListTileWidget(BuildContext context, String text) {
       });
 }
 
-Widget openInBrowserListTileWidget(BuildContext context, AppConfig appConfig, String url) {
+Widget openInBrowserListTileWidget(BuildContext context, String url) {
   return ListTile(
     leading: const Icon(Icons.open_in_browser),
     title: Text(AppLocalizations.of(context)!.openInBrowser),
     onTap: () {
       Navigator.pop(context);
-      openInBrowser(context, appConfig, url);
+      openInBrowser(context, url);
     },
   );
 }
 
-Widget openInBrowserExternalForceListTileWidget(BuildContext context, AppConfig appConfig, String url) {
+Widget openInBrowserExternalForceListTileWidget(BuildContext context, String url) {
   return ListTile(
     leading: const Icon(Icons.open_in_browser),
     title: Text(AppLocalizations.of(context)!.openInExternalBrowser),
     onTap: () async {
       Navigator.pop(context);
-      openInBrowser(context, appConfig, url, forceExternal: true);
+      openInBrowser(context, url, forceExternal: true);
     },
   );
 }
 
-Widget inviteVrchatListTileWidget(BuildContext context, AppConfig appConfig, String location) {
+Widget inviteVrchatListTileWidget(BuildContext context, String location) {
   late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
   return ListTile(
     leading: const Icon(Icons.mail),
@@ -124,27 +124,27 @@ Widget inviteVrchatListTileWidget(BuildContext context, AppConfig appConfig, Str
                 ),
               )
               .catchError((status) {
-            apiError(context, appConfig, status);
+            apiError(context, status);
           }),
         )
         .catchError((status) {
-      apiError(context, appConfig, status);
+      apiError(context, status);
     }),
   );
 }
 
-Widget openInWindowsListTileWidget(BuildContext context, AppConfig appConfig, String url) {
+Widget openInWindowsListTileWidget(BuildContext context, String url) {
   return ListTile(
     leading: const Icon(Icons.laptop_windows),
     title: Text(AppLocalizations.of(context)!.openInVrchat),
     onTap: () {
       Navigator.pop(context);
-      openInBrowser(context, appConfig, url);
+      openInBrowser(context, url);
     },
   );
 }
 
-Future openInBrowser(BuildContext context, AppConfig appConfig, String url, {bool forceExternal = false}) async {
+Future openInBrowser(BuildContext context, String url, {bool forceExternal = false}) async {
   if (!forceExternal && (Platform.isAndroid || Platform.isIOS)) {
     if (appConfig.forceExternalBrowser && Uri.parse(url).host != "vrchat.com") {
       if (await canLaunchUrl(Uri.parse(url))) {
@@ -154,7 +154,7 @@ Future openInBrowser(BuildContext context, AppConfig appConfig, String url, {boo
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (BuildContext context) => VRChatMobileWebView(appConfig, url: url),
+          builder: (BuildContext context) => VRChatMobileWebView(url: url),
         ),
       );
     }
