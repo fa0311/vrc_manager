@@ -45,15 +45,15 @@ List<InlineSpan> textToAnchor(BuildContext context, String text) {
                 recognizer: LongPressGestureRecognizer()
                   ..onLongPressDown = ((details) => timeStamp = DateTime.now().millisecondsSinceEpoch)
                   ..onLongPress = () {
-                    if (isUrl) {
-                      openInBrowser(context, text!);
-                    } else {
-                      copyToClipboard(context, text!);
-                    }
+                    if (isUrl) modalBottom(context, shareUrlListTile(context, text!));
                   }
                   ..onLongPressCancel = () {
-                    if (isUrl && DateTime.now().millisecondsSinceEpoch - timeStamp < 500) {
-                      modalBottom(context, shareUrlListTile(context, text!));
+                    if (DateTime.now().millisecondsSinceEpoch - timeStamp < 500) {
+                      if (isUrl) {
+                        openInBrowser(context, text!);
+                      } else {
+                        copyToClipboard(context, text!);
+                      }
                     }
                   })
           ];

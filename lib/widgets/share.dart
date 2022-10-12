@@ -66,12 +66,13 @@ Widget shareListTileWidget(BuildContext context, String text) {
 
 Widget copyListTileWidget(BuildContext context, String text) {
   return ListTile(
-      leading: const Icon(Icons.copy),
-      title: Text(AppLocalizations.of(context)!.copy),
-      onTap: () {
-        Navigator.pop(context);
-        copyToClipboard(context, text);
-      });
+    leading: const Icon(Icons.copy),
+    title: Text(AppLocalizations.of(context)!.copy),
+    onTap: () {
+      Navigator.pop(context);
+      copyToClipboard(context, text);
+    },
+  );
 }
 
 Widget openInBrowserListTileWidget(BuildContext context, String url) {
