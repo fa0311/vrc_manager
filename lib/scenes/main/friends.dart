@@ -104,16 +104,17 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
           child: SingleChildScrollView(
             child: Column(children: <Widget>[
               if (!loadingComplete) const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()),
-              () {
-                switch (config.displayMode) {
-                  case DisplayMode.normal:
-                    return extractionFriendDefault(context, config, userList, locationMap, instanceMap);
-                  case DisplayMode.simple:
-                    return extractionFriendSimple(context, config, userList, locationMap, instanceMap);
-                  case DisplayMode.textOnly:
-                    return extractionFriendText(context, config, userList, locationMap, instanceMap);
-                }
-              }(),
+              if (userList.isNotEmpty)
+                () {
+                  switch (config.displayMode) {
+                    case DisplayMode.normal:
+                      return extractionFriendDefault(context, config, userList, locationMap, instanceMap);
+                    case DisplayMode.simple:
+                      return extractionFriendSimple(context, config, userList, locationMap, instanceMap);
+                    case DisplayMode.textOnly:
+                      return extractionFriendText(context, config, userList, locationMap, instanceMap);
+                  }
+                }(),
             ]),
           ),
         ),

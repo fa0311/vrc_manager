@@ -36,6 +36,7 @@ class _FriendsPageState extends State<VRChatMobileFriendRequest> {
   @override
   initState() {
     super.initState();
+    gridConfig.url = "https://vrchat.com/home/messages";
     gridConfig.sortMode = [
       SortMode.normal,
       SortMode.name,
@@ -82,7 +83,7 @@ class _FriendsPageState extends State<VRChatMobileFriendRequest> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.friends),
+        title: Text(AppLocalizations.of(context)!.friendRequest),
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.more_vert),
@@ -97,16 +98,17 @@ class _FriendsPageState extends State<VRChatMobileFriendRequest> {
           child: SingleChildScrollView(
             child: Column(children: [
               if (!loadingComplete) const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()),
-              () {
-                switch (config.displayMode) {
-                  case DisplayMode.normal:
-                    return extractionUserDefault(context, config, userList);
-                  case DisplayMode.simple:
-                    return extractionUserSimple(context, config, userList);
-                  case DisplayMode.textOnly:
-                    return extractionUserText(context, config, userList);
-                }
-              }(),
+              if (userList.isNotEmpty)
+                () {
+                  switch (config.displayMode) {
+                    case DisplayMode.normal:
+                      return extractionUserDefault(context, config, userList);
+                    case DisplayMode.simple:
+                      return extractionUserSimple(context, config, userList);
+                    case DisplayMode.textOnly:
+                      return extractionUserText(context, config, userList);
+                  }
+                }(),
             ]),
           ),
         ),

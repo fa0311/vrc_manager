@@ -65,6 +65,7 @@ class _SearchState extends State<VRChatSearch> {
           SortMode.normal,
           SortMode.name,
         ];
+        config = appConfig.gridConfigList.searchWorlds;
         break;
       case SearchMode.worlds:
         gridConfig.sortMode = [
@@ -76,11 +77,12 @@ class _SearchState extends State<VRChatSearch> {
           SortMode.capacity,
           SortMode.occupants,
         ];
+        config = appConfig.gridConfigList.searchUsers;
         break;
     }
   }
 
-  searchModeModal(Function setStateBuilderParent) {
+  searchModeModal() {
     showModalBottomSheet(
       context: context,
       shape: const RoundedRectangleBorder(
@@ -95,7 +97,7 @@ class _SearchState extends State<VRChatSearch> {
                 trailing: searchModeSelected == SearchMode.users ? const Icon(Icons.check) : null,
                 onTap: () {
                   setStateBuilder(() => searchModeSelected = SearchMode.users);
-                  setStateBuilderParent(() {});
+                  setState(() {});
                 },
               ),
               ListTile(
@@ -103,7 +105,7 @@ class _SearchState extends State<VRChatSearch> {
                 trailing: searchModeSelected == SearchMode.worlds ? const Icon(Icons.check) : null,
                 onTap: () {
                   setStateBuilder(() => searchModeSelected = SearchMode.worlds);
-                  setStateBuilderParent(() {});
+                  setState(() {});
                 },
               ),
             ],
@@ -113,7 +115,7 @@ class _SearchState extends State<VRChatSearch> {
     );
   }
 
-  void addWorldList(VRChatLimitedWorld world) {
+  addWorldList(VRChatLimitedWorld world) {
     for (VRChatLimitedWorld worldValue in worldList) {
       if (world.id == worldValue.id) {
         return;
@@ -202,12 +204,11 @@ class _SearchState extends State<VRChatSearch> {
                         onPressed: () {
                           searchingMode = searchModeSelected;
                           text = searchBoxController.text;
-                          loadingComplete = false;
                           worldList = [];
                           userList = [];
-                          setState(() {});
-                          get().then((value) => setState(() => loadingComplete = true));
                           init();
+                          setState(() => loadingComplete = false);
+                          get().then((value) => setState(() => loadingComplete = true));
                         },
                       ),
                     ),
@@ -219,33 +220,35 @@ class _SearchState extends State<VRChatSearch> {
                     children: <Widget>[
                       ListTile(
                         title: Text(AppLocalizations.of(context)!.type),
-                        trailing: Text(SearchMode.users.toLocalization(context), style: selectedTextStyle),
-                        onTap: () => setState(() => searchModeModal(setState)),
+                        trailing: Text(searchModeSelected.toLocalization(context), style: selectedTextStyle),
+                        onTap: () => searchModeModal(),
                       ),
                     ],
                   ),
                 ),
                 if (!loadingComplete) const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()),
-                () {
-                  switch (config.displayMode) {
-                    case DisplayMode.normal:
-                      return extractionUserDefault(context, config, userList);
-                    case DisplayMode.simple:
-                      return extractionUserSimple(context, config, userList);
-                    case DisplayMode.textOnly:
-                      return extractionUserText(context, config, userList);
-                  }
-                }(),
-                () {
-                  switch (config.displayMode) {
-                    case DisplayMode.normal:
-                      return extractionWorldDefault(context, config, worldList);
-                    case DisplayMode.simple:
-                      return extractionWorldSimple(context, config, worldList);
-                    case DisplayMode.textOnly:
-                      return extractionWorldText(context, config, worldList);
-                  }
-                }(),
+                if (userList.isNotEmpty)
+                  () {
+                    switch (config.displayMode) {
+                      case DisplayMode.normal:
+                        return extractionUserDefault(context, config, userList);
+                      case DisplayMode.simple:
+                        return extractionUserSimple(context, config, userList);
+                      case DisplayMode.textOnly:
+                        return extractionUserText(context, config, userList);
+                    }
+                  }(),
+                if (worldList.isNotEmpty)
+                  () {
+                    switch (config.displayMode) {
+                      case DisplayMode.normal:
+                        return extractionWorldDefault(context, config, worldList);
+                      case DisplayMode.simple:
+                        return extractionWorldSimple(context, config, worldList);
+                      case DisplayMode.textOnly:
+                        return extractionWorldText(context, config, worldList);
+                    }
+                  }(),
               ],
             ),
           ),
