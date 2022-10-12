@@ -7,7 +7,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 // Project imports:
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
-import 'package:vrc_manager/assets/error.dart';
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
 import 'package:vrc_manager/main.dart';
 
@@ -82,7 +81,20 @@ class _TokenSettingPageState extends State<VRChatMobileTokenSetting> {
                           },
                         );
                       }).catchError((status) {
-                        apiError(context, status);
+                        showDialog(
+                          context: context,
+                          builder: (_) {
+                            return AlertDialog(
+                              title: Text(AppLocalizations.of(context)!.failed),
+                              actions: <Widget>[
+                                TextButton(
+                                  child: Text(AppLocalizations.of(context)!.close),
+                                  onPressed: () => Navigator.pop(context),
+                                ),
+                              ],
+                            );
+                          },
+                        );
                       });
                     },
                   ),

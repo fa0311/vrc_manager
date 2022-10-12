@@ -150,6 +150,9 @@ standardError(BuildContext context, dynamic error) {
 }
 
 apiError(BuildContext context, dynamic error) {
+  if (kDebugMode) {
+    print(error);
+  }
   if (error is HttpException) {
     httpError(context, error);
   } else {
