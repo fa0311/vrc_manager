@@ -170,7 +170,7 @@ class VRChatUser {
     location = content['location'] == "" ? "offline" : content['location'] ?? "offline";
 
     allowAvatarCopying = content['allowAvatarCopying'] ?? false;
-    for (dynamic link in content['bioLinks']) {
+    for (dynamic link in content['bioLinks'] ?? []) {
       try {
         bioLinks.add(Uri.parse(link));
       } catch (e) {

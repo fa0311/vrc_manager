@@ -315,16 +315,20 @@ Widget profileAction(BuildContext context, VRChatFriendStatus status, String uid
 List<Widget> _bioLink(BuildContext context, List<Uri> bioLinks) {
   return [
     for (Uri link in bioLinks)
-      CircleAvatar(
-        backgroundColor: const Color(0x00000000),
-        child: IconButton(
-          onPressed: () => openInBrowser(context, link.toString()),
-          icon: SvgPicture.asset(
-            "assets/svg/${getVrchatIconContains(link)}.svg",
-            width: 20,
-            height: 20,
-            color: Color(getVrchatIcon()[getVrchatIconContains(link)] ?? 0xFFFFFFFF),
-            semanticsLabel: link.toString(),
+      InkWell(
+        borderRadius: BorderRadius.circular(20),
+        onTap: () => openInBrowser(context, link.toString()),
+        onLongPress: () => modalBottom(context, shareUrlListTile(context, link.toString())),
+        child: Padding(
+          padding: const EdgeInsets.all(5),
+          child: Ink(
+            child: SvgPicture.asset(
+              "assets/svg/${getVrchatIconContains(link)}.svg",
+              width: 20,
+              height: 20,
+              color: Color(getVrchatIcon()[getVrchatIconContains(link)] ?? 0xFFFFFFFF),
+              semanticsLabel: link.toString(),
+            ),
           ),
         ),
       ),
