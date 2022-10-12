@@ -71,9 +71,7 @@ class _UserHomeState extends State<VRChatMobileUser> {
 
   @override
   Widget build(BuildContext context) {
-    textStream(
-      context,
-    );
+    textStream(context);
     return Scaffold(
       appBar: AppBar(title: Text(AppLocalizations.of(context)!.user), actions: <Widget>[
         if (status != null) profileAction(context, status!, widget.userId, initState),

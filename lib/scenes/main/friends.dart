@@ -78,9 +78,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
 
   @override
   Widget build(BuildContext context) {
-    textStream(
-      context,
-    );
+    textStream(context);
     if (config.sortMode != sortedModeCache) {
       sortUsers(config, userList);
       sortedModeCache = config.sortMode;

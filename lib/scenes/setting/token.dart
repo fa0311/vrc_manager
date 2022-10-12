@@ -27,9 +27,7 @@ class _TokenSettingPageState extends State<VRChatMobileTokenSetting> {
 
   @override
   Widget build(BuildContext context) {
-    textStream(
-      context,
-    );
+    textStream(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.token),

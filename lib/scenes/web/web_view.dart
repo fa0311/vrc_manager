@@ -35,9 +35,7 @@ class _WebViewPageState extends State<VRChatMobileWebView> {
 
   @override
   Widget build(BuildContext context) {
-    textStream(
-      context,
-    );
+    textStream(context);
     final cookieManager = CookieManager();
 
     final cookieMap = Session().decodeCookie(vrchatLoginSession.getCookie());

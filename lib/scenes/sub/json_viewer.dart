@@ -24,9 +24,7 @@ class VRChatMobileJsonViewer extends StatefulWidget {
 class _JsonViewerPageState extends State<VRChatMobileJsonViewer> {
   @override
   Widget build(BuildContext context) {
-    textStream(
-      context,
-    );
+    textStream(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.jsonViewer),

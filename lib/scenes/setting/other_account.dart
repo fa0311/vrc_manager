@@ -83,9 +83,7 @@ class _SettingOtherAccountPageState extends State<VRChatMobileSettingsOtherAccou
 
   @override
   Widget build(BuildContext context) {
-    textStream(
-      context,
-    );
+    textStream(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.accountSwitchSetting),

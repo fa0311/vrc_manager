@@ -23,9 +23,7 @@ class VRChatMobileSettings extends StatefulWidget {
 class _SettingPageState extends State<VRChatMobileSettings> {
   @override
   Widget build(BuildContext context) {
-    textStream(
-      context,
-    );
+    textStream(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.setting),

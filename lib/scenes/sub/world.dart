@@ -168,9 +168,7 @@ class _WorldState extends State<VRChatMobileWorld> {
 
   @override
   Widget build(BuildContext context) {
-    textStream(
-      context,
-    );
+    textStream(context);
     return Scaffold(
       appBar: AppBar(title: Text(AppLocalizations.of(context)!.world), actions: [
         if (world != null) favoriteAction(context, world!),

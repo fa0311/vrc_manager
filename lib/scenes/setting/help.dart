@@ -29,9 +29,7 @@ class _HelpPageState extends State<VRChatMobileHelp> {
 
   @override
   Widget build(BuildContext context) {
-    textStream(
-      context,
-    );
+    textStream(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.help),

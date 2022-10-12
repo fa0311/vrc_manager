@@ -70,9 +70,7 @@ class _LoginHomeState extends State<VRChatMobileHome> {
 
   @override
   Widget build(BuildContext context) {
-    textStream(
-      context,
-    );
+    textStream(context);
     return Scaffold(
       appBar: AppBar(title: Text(AppLocalizations.of(context)!.home), actions: <Widget>[
         if (user != null)

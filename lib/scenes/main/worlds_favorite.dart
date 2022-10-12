@@ -56,9 +56,7 @@ class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
 
   @override
   Widget build(BuildContext context) {
-    textStream(
-      context,
-    );
+    textStream(context);
 
     if (config.sortMode != sortedModeCache) {
       for (FavoriteWorldData favoriteWorld in appConfig.loggedAccount?.favoriteWorld ?? []) {

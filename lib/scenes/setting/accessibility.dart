@@ -23,9 +23,7 @@ class VRChatMobileSettingsAccessibility extends StatefulWidget {
 class _SettingAccessibilityPageState extends State<VRChatMobileSettingsAccessibility> {
   @override
   Widget build(BuildContext context) {
-    textStream(
-      context,
-    );
+    textStream(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.setting),
