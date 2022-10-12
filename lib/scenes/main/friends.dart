@@ -97,10 +97,19 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
           width: MediaQuery.of(context).size.width,
           child: SingleChildScrollView(
             child: Column(children: <Widget>[
-              if (userList.isEmpty) const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()),
-              if (userList.isNotEmpty && config.displayMode == "normal") extractionFriendDefault(context, config, userList, locationMap, instanceMap),
-              if (userList.isNotEmpty && config.displayMode == "simple") extractionFriendSimple(context, config, userList, locationMap, instanceMap),
-              if (userList.isNotEmpty && config.displayMode == "text_only") extractionFriendText(context, config, userList, locationMap, instanceMap),
+              if (userList.isEmpty)
+                const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator())
+              else
+                () {
+                  switch (config.displayMode) {
+                    case DisplayMode.normal:
+                      return extractionFriendDefault(context, config, userList, locationMap, instanceMap);
+                    case DisplayMode.simple:
+                      return extractionFriendSimple(context, config, userList, locationMap, instanceMap);
+                    case DisplayMode.textOnly:
+                      return extractionFriendText(context, config, userList, locationMap, instanceMap);
+                  }
+                }(),
             ]),
           ),
         ),

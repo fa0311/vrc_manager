@@ -144,9 +144,7 @@ class _SearchState extends State<VRChatSearch> {
 
   @override
   Widget build(BuildContext context) {
-    textStream(
-      context,
-    );
+    textStream(context);
     if (worldList.isNotEmpty && config.sortMode != sortedModeCache) {
       sortWorlds(config, worldList);
       sortedModeCache = config.sortMode;
@@ -223,16 +221,28 @@ class _SearchState extends State<VRChatSearch> {
                   ),
                 ),
                 if (userList.isEmpty && worldList.isEmpty && text != null) const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()),
-                if (userList.isNotEmpty) ...[
-                  if (config.displayMode == "normal") extractionUserDefault(context, config, userList),
-                  if (config.displayMode == "simple") extractionUserSimple(context, config, userList),
-                  if (config.displayMode == "text_only") extractionUserText(context, config, userList),
-                ],
-                if (worldList.isNotEmpty) ...[
-                  if (config.displayMode == "normal") extractionWorldDefault(context, config, worldList),
-                  if (config.displayMode == "simple") extractionWorldSimple(context, config, worldList),
-                  if (config.displayMode == "text_only") extractionWorldText(context, config, worldList),
-                ],
+                if (userList.isNotEmpty)
+                  () {
+                    switch (config.displayMode) {
+                      case DisplayMode.normal:
+                        return extractionUserDefault(context, config, userList);
+                      case DisplayMode.simple:
+                        return extractionUserSimple(context, config, userList);
+                      case DisplayMode.textOnly:
+                        return extractionUserText(context, config, userList);
+                    }
+                  }(),
+                if (worldList.isNotEmpty)
+                  () {
+                    switch (config.displayMode) {
+                      case DisplayMode.normal:
+                        return extractionWorldDefault(context, config, worldList);
+                      case DisplayMode.simple:
+                        return extractionWorldSimple(context, config, worldList);
+                      case DisplayMode.textOnly:
+                        return extractionWorldText(context, config, worldList);
+                    }
+                  }(),
               ],
             ),
           ),
