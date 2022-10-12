@@ -31,6 +31,7 @@ class _FriendsPageState extends State<VRChatMobileFriendRequest> {
   List<VRChatUser> userList = [];
   SortMode sortedModeCache = SortMode.normal;
   bool sortedDescendCache = false;
+  bool loadingComplete = false;
 
   @override
   initState() {
@@ -44,7 +45,7 @@ class _FriendsPageState extends State<VRChatMobileFriendRequest> {
       DisplayMode.simple,
       DisplayMode.textOnly,
     ];
-    get().then((value) => setState(() {}));
+    get().then((value) => setState(() => loadingComplete = true));
   }
 
   Future get() async {
@@ -95,18 +96,17 @@ class _FriendsPageState extends State<VRChatMobileFriendRequest> {
           width: MediaQuery.of(context).size.width,
           child: SingleChildScrollView(
             child: Column(children: [
-              if (userList.isEmpty) const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()),
-              if (userList.isNotEmpty)
-                () {
-                  switch (config.displayMode) {
-                    case DisplayMode.normal:
-                      return extractionUserDefault(context, config, userList);
-                    case DisplayMode.simple:
-                      return extractionUserSimple(context, config, userList);
-                    case DisplayMode.textOnly:
-                      return extractionUserText(context, config, userList);
-                  }
-                }(),
+              if (!loadingComplete) const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()),
+              () {
+                switch (config.displayMode) {
+                  case DisplayMode.normal:
+                    return extractionUserDefault(context, config, userList);
+                  case DisplayMode.simple:
+                    return extractionUserSimple(context, config, userList);
+                  case DisplayMode.textOnly:
+                    return extractionUserText(context, config, userList);
+                }
+              }(),
             ]),
           ),
         ),

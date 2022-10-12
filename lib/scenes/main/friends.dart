@@ -36,6 +36,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
   List<VRChatFriends> userList = [];
   SortMode sortedModeCache = SortMode.normal;
   bool sortedDescendCache = false;
+  bool loadingComplete = false;
 
   @override
   initState() {
@@ -53,7 +54,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
       DisplayMode.simple,
       DisplayMode.textOnly,
     ];
-    get().then((value) => setState(() {}));
+    get().then((value) => setState(() => loadingComplete = true));
   }
 
   Future get() async {
@@ -102,19 +103,17 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
           width: MediaQuery.of(context).size.width,
           child: SingleChildScrollView(
             child: Column(children: <Widget>[
-              if (userList.isEmpty)
-                const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator())
-              else
-                () {
-                  switch (config.displayMode) {
-                    case DisplayMode.normal:
-                      return extractionFriendDefault(context, config, userList, locationMap, instanceMap);
-                    case DisplayMode.simple:
-                      return extractionFriendSimple(context, config, userList, locationMap, instanceMap);
-                    case DisplayMode.textOnly:
-                      return extractionFriendText(context, config, userList, locationMap, instanceMap);
-                  }
-                }(),
+              if (!loadingComplete) const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()),
+              () {
+                switch (config.displayMode) {
+                  case DisplayMode.normal:
+                    return extractionFriendDefault(context, config, userList, locationMap, instanceMap);
+                  case DisplayMode.simple:
+                    return extractionFriendSimple(context, config, userList, locationMap, instanceMap);
+                  case DisplayMode.textOnly:
+                    return extractionFriendText(context, config, userList, locationMap, instanceMap);
+                }
+              }(),
             ]),
           ),
         ),

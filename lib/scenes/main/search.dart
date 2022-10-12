@@ -41,6 +41,7 @@ class _SearchState extends State<VRChatSearch> {
   SearchMode searchModeSelected = SearchMode.users;
   SortMode sortedModeCache = SortMode.normal;
   bool sortedDescendCache = false;
+  bool loadingComplete = true;
 
   @override
   initState() {
@@ -201,10 +202,11 @@ class _SearchState extends State<VRChatSearch> {
                         onPressed: () {
                           searchingMode = searchModeSelected;
                           text = searchBoxController.text;
+                          loadingComplete = false;
                           worldList = [];
                           userList = [];
                           setState(() {});
-                          get().then((value) => setState(() {}));
+                          get().then((value) => setState(() => loadingComplete = true));
                           init();
                         },
                       ),
@@ -223,29 +225,27 @@ class _SearchState extends State<VRChatSearch> {
                     ],
                   ),
                 ),
-                if (userList.isEmpty && worldList.isEmpty && text != null) const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()),
-                if (userList.isNotEmpty)
-                  () {
-                    switch (config.displayMode) {
-                      case DisplayMode.normal:
-                        return extractionUserDefault(context, config, userList);
-                      case DisplayMode.simple:
-                        return extractionUserSimple(context, config, userList);
-                      case DisplayMode.textOnly:
-                        return extractionUserText(context, config, userList);
-                    }
-                  }(),
-                if (worldList.isNotEmpty)
-                  () {
-                    switch (config.displayMode) {
-                      case DisplayMode.normal:
-                        return extractionWorldDefault(context, config, worldList);
-                      case DisplayMode.simple:
-                        return extractionWorldSimple(context, config, worldList);
-                      case DisplayMode.textOnly:
-                        return extractionWorldText(context, config, worldList);
-                    }
-                  }(),
+                if (!loadingComplete) const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()),
+                () {
+                  switch (config.displayMode) {
+                    case DisplayMode.normal:
+                      return extractionUserDefault(context, config, userList);
+                    case DisplayMode.simple:
+                      return extractionUserSimple(context, config, userList);
+                    case DisplayMode.textOnly:
+                      return extractionUserText(context, config, userList);
+                  }
+                }(),
+                () {
+                  switch (config.displayMode) {
+                    case DisplayMode.normal:
+                      return extractionWorldDefault(context, config, worldList);
+                    case DisplayMode.simple:
+                      return extractionWorldSimple(context, config, worldList);
+                    case DisplayMode.textOnly:
+                      return extractionWorldText(context, config, worldList);
+                  }
+                }(),
               ],
             ),
           ),
