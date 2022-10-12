@@ -8,9 +8,9 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:vrc_manager/assets/dialog.dart';
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
 import 'package:vrc_manager/main.dart';
-import 'package:vrc_manager/scenes/sub/login.dart';
 import 'package:vrc_manager/scenes/setting/other_account.dart';
 import 'package:vrc_manager/scenes/setting/token.dart';
+import 'package:vrc_manager/scenes/sub/login.dart';
 
 class VRChatMobileSettingsAccount extends StatefulWidget {
   const VRChatMobileSettingsAccount({Key? key}) : super(key: key);

@@ -1,9 +1,5 @@
 // Flutter imports:
-
-// Flutter imports:
 import 'package:flutter/material.dart';
-
-// Package imports:
 
 // Project imports:
 import 'package:vrc_manager/api/data_class.dart';

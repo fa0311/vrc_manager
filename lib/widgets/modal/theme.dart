@@ -1,8 +1,6 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
 
-// Package imports:
-
 // Project imports:
 import 'package:vrc_manager/data_class/enum.dart';
 import 'package:vrc_manager/main.dart';

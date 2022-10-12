@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 // Package imports:
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+
+// Project imports:
 import 'package:vrc_manager/main.dart';
 
 MaterialApp getMaterialApp(Widget home) {

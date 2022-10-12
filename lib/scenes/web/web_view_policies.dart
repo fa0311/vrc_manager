@@ -1,20 +1,19 @@
 // Dart imports:
-
-// Flutter imports:
 import 'dart:io';
 
+// Flutter imports:
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:vrc_manager/main.dart';
-import 'package:vrc_manager/scenes/main/home.dart';
-import 'package:vrc_manager/widgets/share.dart';
 
 // Package imports:
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 // Project imports:
 import 'package:vrc_manager/api/main.dart';
+import 'package:vrc_manager/main.dart';
+import 'package:vrc_manager/scenes/main/home.dart';
+import 'package:vrc_manager/widgets/share.dart';
 
 class VRChatMobileWebViewUserPolicy extends StatefulWidget {
   const VRChatMobileWebViewUserPolicy({Key? key}) : super(key: key);

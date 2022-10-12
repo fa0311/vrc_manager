@@ -1,6 +1,4 @@
 // Flutter imports:
-
-// Flutter imports:
 import 'package:flutter/material.dart';
 
 // Package imports:
@@ -15,11 +13,11 @@ import 'package:vrc_manager/assets/sort/users.dart';
 import 'package:vrc_manager/assets/sort/worlds_favorite.dart';
 import 'package:vrc_manager/data_class/app_config.dart';
 import 'package:vrc_manager/data_class/enum.dart';
+import 'package:vrc_manager/data_class/modal.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/widgets/drawer.dart';
 import 'package:vrc_manager/widgets/grid_view/extraction/user.dart';
 import 'package:vrc_manager/widgets/grid_view/extraction/world.dart';
-import 'package:vrc_manager/data_class/modal.dart';
 import 'package:vrc_manager/widgets/modal/modal.dart';
 
 class VRChatSearch extends StatefulWidget {

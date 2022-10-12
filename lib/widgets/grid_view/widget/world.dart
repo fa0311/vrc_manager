@@ -1,12 +1,16 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+// Project imports:
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/assets/vrchat/instance_type.dart';
 import 'package:vrc_manager/scenes/sub/world.dart';
 import 'package:vrc_manager/widgets/grid_view/template/template.dart';
 import 'package:vrc_manager/widgets/region.dart';
 import 'package:vrc_manager/widgets/world.dart';
-
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 Widget instanceWidget(
   BuildContext context,

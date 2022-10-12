@@ -1,6 +1,4 @@
 // Flutter imports:
-
-// Flutter imports:
 import 'package:flutter/material.dart';
 
 // Package imports:
@@ -13,9 +11,9 @@ import 'package:vrc_manager/scenes/main/friend_request.dart';
 import 'package:vrc_manager/scenes/main/friends.dart';
 import 'package:vrc_manager/scenes/main/home.dart';
 import 'package:vrc_manager/scenes/main/search.dart';
-import 'package:vrc_manager/scenes/setting/other_account.dart';
 import 'package:vrc_manager/scenes/main/settings.dart';
 import 'package:vrc_manager/scenes/main/worlds_favorite.dart';
+import 'package:vrc_manager/scenes/setting/other_account.dart';
 import 'package:vrc_manager/scenes/sub/login.dart';
 
 Drawer drawer(BuildContext context) {
