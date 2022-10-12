@@ -142,7 +142,7 @@ class VRChatUser {
   late String location;
 
   late bool allowAvatarCopying;
-  late List<String> bioLinks;
+  late List<Uri> bioLinks = [];
   late DateTime? dateJoined;
   late String? friendRequestStatus;
   late String? instanceId;
@@ -170,7 +170,13 @@ class VRChatUser {
     location = content['location'] == "" ? "offline" : content['location'] ?? "offline";
 
     allowAvatarCopying = content['allowAvatarCopying'] ?? false;
-    bioLinks = (content['bioLinks'] ?? []).cast<String>();
+    for (dynamic link in content['bioLinks']) {
+      try {
+        bioLinks.add(Uri.parse(link));
+      } catch (e) {
+        //
+      }
+    }
     dateJoined = content['date_joined'] == null ? null : DateTime.parse(content['date_joined']);
     friendRequestStatus = content['friendRequestStatus'];
     instanceId = content['instanceId'];

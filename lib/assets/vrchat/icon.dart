@@ -44,9 +44,9 @@ Map<String, int> getVrchatIcon() {
   };
 }
 
-String getVrchatIconContains(String text) {
+String getVrchatIconContains(Uri text) {
   for (String key in getVrchatIcon().keys) {
-    if (text.contains(key)) return key;
+    if (text.host.contains(key)) return key;
   }
   return "sharethis";
 }

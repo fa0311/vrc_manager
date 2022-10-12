@@ -140,10 +140,7 @@ Column profile(BuildContext context, VRChatUser user) {
       ),
       Row(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: _bioLink(
-          context,
-          user.bioLinks,
-        ),
+        children: _bioLink(context, user.bioLinks),
       ),
       if (user.lastLogin != null)
         Text(
@@ -315,20 +312,21 @@ Widget profileAction(BuildContext context, VRChatFriendStatus status, String uid
   );
 }
 
-List<Widget> _bioLink(BuildContext context, List<dynamic> bioLinks) {
-  List<Widget> response = [];
-  for (String link in bioLinks) {
-    if (link == "") continue;
-    response.add(
+List<Widget> _bioLink(BuildContext context, List<Uri> bioLinks) {
+  return [
+    for (Uri link in bioLinks)
       CircleAvatar(
         backgroundColor: const Color(0x00000000),
         child: IconButton(
-          onPressed: () => openInBrowser(context, link),
-          icon: SvgPicture.asset("assets/svg/${getVrchatIconContains(link)}.svg",
-              width: 20, height: 20, color: Color(getVrchatIcon()[getVrchatIconContains(link)] ?? 0xFFFFFFFF), semanticsLabel: link),
+          onPressed: () => openInBrowser(context, link.toString()),
+          icon: SvgPicture.asset(
+            "assets/svg/${getVrchatIconContains(link)}.svg",
+            width: 20,
+            height: 20,
+            color: Color(getVrchatIcon()[getVrchatIconContains(link)] ?? 0xFFFFFFFF),
+            semanticsLabel: link.toString(),
+          ),
         ),
       ),
-    );
-  }
-  return response;
+  ];
 }
