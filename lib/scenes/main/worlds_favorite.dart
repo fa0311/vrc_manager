@@ -38,7 +38,11 @@ class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
     super.initState();
     gridConfig.url = "https://vrchat.com/home/worlds";
     gridConfig.removeButton = true;
-
+    gridConfig.displayMode = [
+      DisplayMode.normal,
+      DisplayMode.simple,
+      DisplayMode.textOnly,
+    ];
     gridConfig.sortMode = [
       SortMode.normal,
       SortMode.name,
@@ -87,8 +91,16 @@ class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
             child: Column(children: [
               for (FavoriteWorldData favoriteWorld in appConfig.loggedAccount?.favoriteWorld ?? []) ...[
                 Text(favoriteWorld.group.displayName),
-                if (config.displayMode == DisplayMode.normal) extractionWorldDefault(context, config, setState, favoriteWorld.list),
-                if (config.displayMode == DisplayMode.simple) extractionWorldSimple(context, config, setState, favoriteWorld.list),
+                () {
+                  switch (config.displayMode) {
+                    case DisplayMode.normal:
+                      return extractionWorldDefault(context, config, setState, favoriteWorld.list);
+                    case DisplayMode.simple:
+                      return extractionWorldSimple(context, config, setState, favoriteWorld.list);
+                    case DisplayMode.textOnly:
+                      return extractionWorldSimple(context, config, setState, favoriteWorld.list);
+                  }
+                }(),
               ],
             ]),
           ),

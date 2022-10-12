@@ -19,7 +19,7 @@ gridModal(BuildContext context, Function setState, GridConfig config, GridModalC
       builder: (BuildContext context, Function setStateBuilder) => SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            if (gridModalConfig.sortMode.isEmpty)
+            if (gridModalConfig.sortMode.isNotEmpty)
               ListTile(
                 title: Text(AppLocalizations.of(context)!.sort),
                 subtitle: Text(config.displayMode.toLocalization(context)),
@@ -30,15 +30,10 @@ gridModal(BuildContext context, Function setState, GridConfig config, GridModalC
                       gridModalConfig.sortMode,
                     )),
               ),
-            if (gridModalConfig.displayMode.isEmpty)
+            if (gridModalConfig.displayMode.isNotEmpty)
               ListTile(
                 title: Text(AppLocalizations.of(context)!.display),
-                subtitle: {
-                      "normal": Text(AppLocalizations.of(context)!.normal),
-                      "simple": Text(AppLocalizations.of(context)!.simple),
-                      "text_only": Text(AppLocalizations.of(context)!.textOnly),
-                    }[config.displayMode] ??
-                    Text(AppLocalizations.of(context)!.sortedByDefault),
+                subtitle: Text(config.displayMode.toLocalization(context)),
                 onTap: () => setStateBuilder(() => gridDisplayModeModal(
                       context,
                       (VoidCallback fn) => setStateBuilder(() => setState(fn)),
@@ -67,7 +62,7 @@ gridModal(BuildContext context, Function setState, GridConfig config, GridModalC
             if (gridModalConfig.removeButton)
               SwitchListTile(
                 value: config.removeButton,
-                title: Text(AppLocalizations.of(context)!.worldDetails),
+                title: Text(AppLocalizations.of(context)!.worldUnfavoriteButton),
                 onChanged: (bool e) => setStateBuilder(() {
                   config.setRemoveButton(e);
                   setState(() {});
@@ -134,7 +129,7 @@ gridDisplayModeModal(BuildContext context, Function setState, GridConfig config,
           for (DisplayMode display in gridDisplayMode)
             ListTile(
               title: Text(display.toLocalization(context)),
-              trailing: config.sortMode == display ? const Icon(Icons.check) : null,
+              trailing: config.displayMode == display ? const Icon(Icons.check) : null,
               onTap: () => setStateBuilder(() {
                 config.setDisplayMode(display);
                 setState(() {});

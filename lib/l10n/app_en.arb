@@ -74,6 +74,7 @@
     "autoReadMore": "Automatic continuation loading",
     "showOnlyAvailable": "Show only available participants",
     "worldDetails": "World details",
+    "worldUnfavoriteButton": "Unfavorite button",
     "sort": "Sort",
     "descending": "Descending order",
     "sortedByDefault": "Sort by Default",

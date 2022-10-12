@@ -309,11 +309,13 @@ class GridConfig {
   }
 
   Future setSort(SortMode value) async {
+    sortMode = value;
     return await setStorage("sort", value.name, id: id);
   }
 
   Future setDisplayMode(DisplayMode value) async {
-    return await setStorage("display_mode", value.name, id: id);
+    displayMode = value;
+    return await setStorage("display_mode", displayMode.name, id: id);
   }
 
   Future setDescending(bool value) async {

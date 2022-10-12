@@ -14,6 +14,7 @@ import 'package:vrc_manager/assets/flutter/text_stream.dart';
 import 'package:vrc_manager/assets/sort/users.dart';
 import 'package:vrc_manager/assets/sort/worlds_favorite.dart';
 import 'package:vrc_manager/data_class/app_config.dart';
+import 'package:vrc_manager/data_class/enum.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/widgets/drawer.dart';
 import 'package:vrc_manager/widgets/grid_view/extraction/user.dart';
@@ -26,11 +27,6 @@ class VRChatSearch extends StatefulWidget {
 
   @override
   State<VRChatSearch> createState() => _SearchState();
-}
-
-enum SearchMode {
-  users,
-  worlds,
 }
 
 class _SearchState extends State<VRChatSearch> {
@@ -59,16 +55,29 @@ class _SearchState extends State<VRChatSearch> {
     sortedDescendCache = false;
     gridConfig = GridModalConfig();
     gridConfig.url = "https://vrchat.com/home/search/$text";
-    if (searchingMode == SearchMode.worlds) {
-      gridConfig.sortMode = [
-        SortMode.normal,
-        SortMode.name,
-        SortMode.updatedDate,
-        SortMode.labsPublicationDate,
-        SortMode.heat,
-        SortMode.capacity,
-        SortMode.occupants,
-      ];
+    gridConfig.displayMode = [
+      DisplayMode.normal,
+      DisplayMode.simple,
+      DisplayMode.textOnly,
+    ];
+    switch (searchingMode) {
+      case SearchMode.users:
+        gridConfig.sortMode = [
+          SortMode.normal,
+          SortMode.name,
+        ];
+        break;
+      case SearchMode.worlds:
+        gridConfig.sortMode = [
+          SortMode.normal,
+          SortMode.name,
+          SortMode.updatedDate,
+          SortMode.labsPublicationDate,
+          SortMode.heat,
+          SortMode.capacity,
+          SortMode.occupants,
+        ];
+        break;
     }
   }
 
@@ -210,11 +219,7 @@ class _SearchState extends State<VRChatSearch> {
                     children: <Widget>[
                       ListTile(
                         title: Text(AppLocalizations.of(context)!.type),
-                        trailing: {
-                              SearchMode.users: Text(AppLocalizations.of(context)!.user, style: selectedTextStyle),
-                              SearchMode.worlds: Text(AppLocalizations.of(context)!.world, style: selectedTextStyle),
-                            }[searchModeSelected] ??
-                            Text(AppLocalizations.of(context)!.user, style: selectedTextStyle),
+                        trailing: Text(SearchMode.users.toLocalization(context), style: selectedTextStyle),
                         onTap: () => setState(() => searchModeModal(setState)),
                       ),
                     ],

@@ -52,7 +52,14 @@ enum DisplayMode {
   textOnly;
 
   String toLocalization(BuildContext context) {
-    return "a";
+    switch (this) {
+      case DisplayMode.normal:
+        return AppLocalizations.of(context)!.normal;
+      case DisplayMode.simple:
+        return AppLocalizations.of(context)!.simple;
+      case DisplayMode.textOnly:
+        return AppLocalizations.of(context)!.textOnly;
+    }
   }
 
   get(String? value) {
