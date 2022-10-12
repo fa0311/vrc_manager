@@ -22,7 +22,7 @@ gridModal(BuildContext context, Function setState, GridConfig config, GridModalC
             if (gridModalConfig.sortMode.isNotEmpty)
               ListTile(
                 title: Text(AppLocalizations.of(context)!.sort),
-                subtitle: Text(config.displayMode.toLocalization(context)),
+                subtitle: Text(config.sortMode.toLocalization(context)),
                 onTap: () => setStateBuilder(() => gridSortModal(
                       context,
                       (VoidCallback fn) => setStateBuilder(() => setState(fn)),

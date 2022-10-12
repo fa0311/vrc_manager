@@ -41,19 +41,33 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
   @override
   initState() {
     super.initState();
-    gridConfig.joinable = true;
-    gridConfig.worldDetails = true;
     gridConfig.url = "https://vrchat.com/home/locations";
-    gridConfig.sortMode = [
-      SortMode.normal,
-      SortMode.name,
-      SortMode.friendsInInstance,
-    ];
-    gridConfig.displayMode = [
-      DisplayMode.normal,
-      DisplayMode.simple,
-      DisplayMode.textOnly,
-    ];
+    if (widget.offline) {
+      gridConfig.sortMode = [
+        SortMode.normal,
+        SortMode.name,
+        SortMode.lastLogin,
+      ];
+      gridConfig.displayMode = [
+        DisplayMode.normal,
+        DisplayMode.simple,
+        DisplayMode.textOnly,
+      ];
+    } else {
+      gridConfig.joinable = true;
+      gridConfig.worldDetails = true;
+      gridConfig.sortMode = [
+        SortMode.normal,
+        SortMode.name,
+        SortMode.friendsInInstance,
+        SortMode.lastLogin,
+      ];
+      gridConfig.displayMode = [
+        DisplayMode.normal,
+        DisplayMode.simple,
+        DisplayMode.textOnly,
+      ];
+    }
     get().then((value) => setState(() => loadingComplete = true));
   }
 
@@ -89,7 +103,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.friends),
+        title: Text(widget.offline ? AppLocalizations.of(context)!.offlineFriends : AppLocalizations.of(context)!.onlineFriends),
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.more_vert),

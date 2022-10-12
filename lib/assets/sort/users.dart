@@ -9,7 +9,7 @@ import 'package:vrc_manager/data_class/modal.dart';
 sortUsers(GridConfig config, List<VRChatUser> userList) {
   switch (config.sortMode) {
     case SortMode.name:
-      sortByLastLoginFromUser(userList);
+      sortByNameFromUser(userList);
       break;
     case SortMode.lastLogin:
       sortByLastLoginFromUser(userList);
