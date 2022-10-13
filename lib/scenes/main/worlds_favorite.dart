@@ -7,9 +7,9 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 // Project imports:
 import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
-import 'package:vrc_manager/assets/sort/worlds_favorite.dart';
 import 'package:vrc_manager/data_class/app_config.dart';
 import 'package:vrc_manager/data_class/modal.dart';
+import 'package:vrc_manager/data_class/state.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/widgets/drawer.dart';
 import 'package:vrc_manager/widgets/grid_view/extraction/favorite_world.dart';
@@ -27,9 +27,8 @@ class VRChatMobileWorldsFavorite extends StatefulWidget {
 class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
   late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
   late GridConfig config = appConfig.gridConfigList.favoriteWorlds;
+  late SortData sortData = SortData(config);
   GridModalConfig gridConfig = GridModalConfig();
-  SortMode sortedModeCache = SortMode.normal;
-  bool sortedDescendCache = false;
 
   @override
   initState() {
@@ -55,18 +54,8 @@ class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
   @override
   Widget build(BuildContext context) {
     textStream(context);
-
-    if (config.sortMode != sortedModeCache) {
-      for (FavoriteWorldData favoriteWorld in appConfig.loggedAccount?.favoriteWorld ?? []) {
-        sortWorlds(config, favoriteWorld.list);
-      }
-      sortedModeCache = config.sortMode;
-    }
-    if (config.descending != sortedDescendCache) {
-      for (FavoriteWorldData favoriteWorld in appConfig.loggedAccount?.favoriteWorld ?? []) {
-        favoriteWorld.list.reversed.toList();
-        sortedDescendCache = config.descending;
-      }
+    for (FavoriteWorldData favoriteWorld in appConfig.loggedAccount?.favoriteWorld ?? []) {
+      sortData.worlds(favoriteWorld.list);
     }
 
     return Scaffold(

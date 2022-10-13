@@ -9,9 +9,9 @@ import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets/error.dart';
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
-import 'package:vrc_manager/assets/sort/users.dart';
 import 'package:vrc_manager/data_class/app_config.dart';
 import 'package:vrc_manager/data_class/modal.dart';
+import 'package:vrc_manager/data_class/state.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/widgets/drawer.dart';
 import 'package:vrc_manager/widgets/grid_view/extraction/user.dart';
@@ -27,10 +27,9 @@ class VRChatMobileFriendRequest extends StatefulWidget {
 class _FriendsPageState extends State<VRChatMobileFriendRequest> {
   late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
   late GridConfig config = appConfig.gridConfigList.friendsRequest;
+  late SortData sortData = SortData(config);
   GridModalConfig gridConfig = GridModalConfig();
   List<VRChatUser> userList = [];
-  SortMode sortedModeCache = SortMode.normal;
-  bool sortedDescendCache = false;
   bool loadingComplete = false;
 
   @override
@@ -72,13 +71,8 @@ class _FriendsPageState extends State<VRChatMobileFriendRequest> {
   @override
   Widget build(BuildContext context) {
     textStream(context);
-    if (config.sortMode != sortedModeCache) {
-      sortUsers(config, userList);
-      sortedModeCache = config.sortMode;
-    }
-    if (config.descending != sortedDescendCache) {
-      userList = userList.reversed.toList();
-      sortedDescendCache = config.descending;
+    if (loadingComplete) {
+      userList = sortData.users(userList);
     }
 
     return Scaffold(

@@ -9,11 +9,10 @@ import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets/error.dart';
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
-import 'package:vrc_manager/assets/sort/users.dart';
-import 'package:vrc_manager/assets/sort/worlds_favorite.dart';
 import 'package:vrc_manager/data_class/app_config.dart';
 import 'package:vrc_manager/data_class/enum.dart';
 import 'package:vrc_manager/data_class/modal.dart';
+import 'package:vrc_manager/data_class/state.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/widgets/drawer.dart';
 import 'package:vrc_manager/widgets/grid_view/extraction/user.dart';
@@ -30,17 +29,16 @@ class VRChatSearch extends StatefulWidget {
 class _SearchState extends State<VRChatSearch> {
   late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
   late GridConfig config = appConfig.gridConfigList.searchUsers;
+  late SortData sortData = SortData(config);
   GridModalConfig gridConfig = GridModalConfig();
   List<VRChatLimitedWorld> worldList = [];
   Map<String, VRChatWorld?> locationMap = {};
   List<VRChatUser> userList = [];
-  TextEditingController searchBoxController = TextEditingController();
   FocusNode searchBoxFocusNode = FocusNode();
   String? text;
   SearchMode searchingMode = SearchMode.users;
   SearchMode searchModeSelected = SearchMode.users;
-  SortMode sortedModeCache = SortMode.normal;
-  bool sortedDescendCache = false;
+  TextEditingController searchBoxController = TextEditingController();
   bool loadingComplete = true;
 
   @override
@@ -50,8 +48,6 @@ class _SearchState extends State<VRChatSearch> {
   }
 
   void init() {
-    sortedModeCache = SortMode.normal;
-    sortedDescendCache = false;
     gridConfig = GridModalConfig();
     gridConfig.url = "https://vrchat.com/home/search/$text";
     gridConfig.displayMode = [
@@ -66,6 +62,7 @@ class _SearchState extends State<VRChatSearch> {
           SortMode.name,
         ];
         config = appConfig.gridConfigList.searchWorlds;
+        sortData = SortData(config);
         break;
       case SearchMode.worlds:
         gridConfig.sortMode = [
@@ -78,6 +75,7 @@ class _SearchState extends State<VRChatSearch> {
           SortMode.occupants,
         ];
         config = appConfig.gridConfigList.searchUsers;
+        sortData = SortData(config);
         break;
     }
   }
@@ -155,21 +153,11 @@ class _SearchState extends State<VRChatSearch> {
   @override
   Widget build(BuildContext context) {
     textStream(context);
-    if (worldList.isNotEmpty && config.sortMode != sortedModeCache) {
-      sortWorlds(config, worldList);
-      sortedModeCache = config.sortMode;
+    if (userList.isNotEmpty && loadingComplete) {
+      userList = sortData.users(userList);
     }
-    if (worldList.isNotEmpty && config.descending != sortedDescendCache) {
-      worldList.reversed.toList();
-      sortedDescendCache = config.descending;
-    }
-    if (userList.isNotEmpty && config.sortMode != sortedModeCache) {
-      sortUsers(config, userList);
-      sortedModeCache = config.sortMode;
-    }
-    if (userList.isNotEmpty && config.descending != sortedDescendCache) {
-      userList.reversed.toList();
-      sortedDescendCache = config.descending;
+    if (worldList.isNotEmpty && loadingComplete) {
+      worldList = sortData.worlds(worldList);
     }
 
     const selectedTextStyle = TextStyle(

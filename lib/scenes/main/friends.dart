@@ -10,9 +10,9 @@ import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets/api/get.dart';
 import 'package:vrc_manager/assets/error.dart';
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
-import 'package:vrc_manager/assets/sort/users.dart';
 import 'package:vrc_manager/data_class/app_config.dart';
 import 'package:vrc_manager/data_class/modal.dart';
+import 'package:vrc_manager/data_class/state.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/widgets/drawer.dart';
 import 'package:vrc_manager/widgets/grid_view/extraction/friends.dart';
@@ -30,12 +30,11 @@ class VRChatMobileFriends extends StatefulWidget {
 class _FriendsPageState extends State<VRChatMobileFriends> {
   late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
   late GridConfig config = widget.offline ? appConfig.gridConfigList.offlineFriends : appConfig.gridConfigList.onlineFriends;
+  late SortData sortData = SortData(config);
+  GridModalConfig gridConfig = GridModalConfig();
   Map<String, VRChatWorld?> locationMap = {};
   Map<String, VRChatInstance?> instanceMap = {};
-  GridModalConfig gridConfig = GridModalConfig();
   List<VRChatFriends> userList = [];
-  SortMode sortedModeCache = SortMode.normal;
-  bool sortedDescendCache = false;
   bool loadingComplete = false;
 
   @override
@@ -92,15 +91,9 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
   @override
   Widget build(BuildContext context) {
     textStream(context);
-    if (config.sortMode != sortedModeCache) {
-      sortUsers(config, userList);
-      sortedModeCache = config.sortMode;
+    if (loadingComplete) {
+      userList = sortData.users(userList) as List<VRChatFriends>;
     }
-    if (config.descending != sortedDescendCache) {
-      userList = userList.reversed.toList();
-      sortedDescendCache = config.descending;
-    }
-
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.offline ? AppLocalizations.of(context)!.offlineFriends : AppLocalizations.of(context)!.onlineFriends),
