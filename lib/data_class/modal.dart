@@ -38,7 +38,7 @@ enum SortMode {
     }
   }
 
-  get(String? value) {
+  SortMode get(String? value) {
     if (value == null) return this;
     try {
       return SortMode.values.byName(value);
@@ -64,7 +64,7 @@ enum DisplayMode {
     }
   }
 
-  get(String? value) {
+  DisplayMode get(String? value) {
     if (value == null) return this;
     try {
       return DisplayMode.values.byName(value);
