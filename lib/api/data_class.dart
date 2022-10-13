@@ -383,7 +383,7 @@ class VRChatFavoriteWorld extends VRChatLimitedWorld {
     favoriteGroup = content['favoriteGroup'];
   }
 
-  VRChatFavoriteWorld.fromFavorite(VRChatWorld world, VRChatFavorite favorite, String favoriteGroup) : super.fromJson(world.content) {
+  VRChatFavoriteWorld.fromFavorite(VRChatLimitedWorld world, VRChatFavorite favorite, String favoriteGroup) : super.fromJson(world.content) {
     if (world.id != favorite.favoriteId) throw ArgumentError();
     favoriteId = favorite.id;
     favoriteGroup = favoriteGroup;

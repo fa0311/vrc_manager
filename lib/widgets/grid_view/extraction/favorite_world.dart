@@ -7,6 +7,8 @@ import 'package:vrc_manager/assets/api/post.dart';
 import 'package:vrc_manager/data_class/app_config.dart';
 import 'package:vrc_manager/scenes/sub/world.dart';
 import 'package:vrc_manager/widgets/grid_view/template/template.dart';
+import 'package:vrc_manager/widgets/share.dart';
+import 'package:vrc_manager/widgets/world.dart';
 
 GridView extractionWorldDefault(
   BuildContext context,
@@ -29,6 +31,9 @@ GridView extractionWorldDefault(
                 MaterialPageRoute(
                   builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id),
                 )),
+            onLongPress: () => modalBottom(context, [
+              favoriteListTileWidget(context, world),
+            ]),
             children: [
               SizedBox(
                 child: Text(
@@ -84,6 +89,9 @@ GridView extractionWorldSimple(
                 MaterialPageRoute(
                   builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id),
                 )),
+            onLongPress: () => modalBottom(context, [
+              favoriteListTileWidget(context, world),
+            ]),
             children: [
               SizedBox(
                 width: double.infinity,

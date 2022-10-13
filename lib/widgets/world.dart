@@ -31,7 +31,7 @@ Widget selfInviteListTileWidget(BuildContext context, VRChatInstance instance) {
   );
 }
 
-Widget favoriteListTileWidget(BuildContext context, VRChatWorld world) {
+Widget favoriteListTileWidget(BuildContext context, VRChatLimitedWorld world) {
   return ListTile(
     title: Text(AppLocalizations.of(context)!.favoriteWorld),
     onTap: () {
@@ -63,7 +63,7 @@ Future selfInvite(BuildContext context, VRChatInstance instance) async {
   });
 }
 
-VRChatFavoriteWorld? getFavoriteWorld(VRChatWorld world) {
+VRChatFavoriteWorld? getFavoriteWorld(VRChatLimitedWorld world) {
   for (FavoriteWorldData favoriteWorld in appConfig.loggedAccount?.favoriteWorld ?? []) {
     for (VRChatFavoriteWorld favoriteWorld in favoriteWorld.list) {
       if (world.id == favoriteWorld.id) {
@@ -74,7 +74,7 @@ VRChatFavoriteWorld? getFavoriteWorld(VRChatWorld world) {
   return null;
 }
 
-FavoriteWorldData? getFavoriteData(VRChatWorld world) {
+FavoriteWorldData? getFavoriteData(VRChatLimitedWorld world) {
   for (FavoriteWorldData favoriteData in appConfig.loggedAccount?.favoriteWorld ?? []) {
     for (VRChatFavoriteWorld favoriteWorld in favoriteData.list) {
       if (world.id == favoriteWorld.id) {
@@ -85,7 +85,7 @@ FavoriteWorldData? getFavoriteData(VRChatWorld world) {
   return null;
 }
 
-Future favoriteAction(BuildContext context, VRChatWorld world) {
+Future favoriteAction(BuildContext context, VRChatLimitedWorld world) {
   late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
   VRChatFavoriteWorld? favoriteWorld = getFavoriteWorld(world);
   FavoriteWorldData? favoriteWorldData = getFavoriteData(world);
