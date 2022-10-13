@@ -173,9 +173,7 @@ class VRChatUser {
     for (dynamic link in content['bioLinks'] ?? []) {
       try {
         bioLinks.add(Uri.parse(link));
-      } catch (e) {
-        //
-      }
+      } finally {}
     }
     dateJoined = content['date_joined'] == null ? null : DateTime.parse(content['date_joined']);
     friendRequestStatus = content['friendRequestStatus'];
