@@ -67,7 +67,7 @@ enum DisplayMode {
   get(String? value) {
     if (value == null) return this;
     try {
-      return SortMode.values.byName(value);
+      return DisplayMode.values.byName(value);
     } on ArgumentError {
       return this;
     }
