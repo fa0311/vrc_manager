@@ -10,6 +10,7 @@ import 'package:vrc_manager/assets/vrchat/instance_type.dart';
 import 'package:vrc_manager/scenes/sub/world.dart';
 import 'package:vrc_manager/widgets/grid_view/template/template.dart';
 import 'package:vrc_manager/widgets/region.dart';
+import 'package:vrc_manager/widgets/share.dart';
 import 'package:vrc_manager/widgets/world.dart';
 
 Widget instanceWidget(
@@ -29,7 +30,10 @@ Widget instanceWidget(
         MaterialPageRoute(
           builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id),
         )),
-    onLongPress: () => showWorldLongPressModal(context, instance),
+    onLongPress: () => modalBottom(context, [
+      selfInviteListTileWidget(context, instance),
+      favoriteListTileWidget(context, world),
+    ]),
     children: [
       Row(children: <Widget>[
         region(instance.region, size: half ? 12 : 15),

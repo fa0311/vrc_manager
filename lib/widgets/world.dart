@@ -22,32 +22,27 @@ Widget onTheWebsite(
   );
 }
 
-showWorldLongPressModal(BuildContext context, VRChatInstance instance) {
-  return showModalBottomSheet(
-    context: context,
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(
-        top: Radius.circular(15),
-      ),
-    ),
-    builder: (BuildContext context) => SingleChildScrollView(
-      child: Column(
-        children: <Widget>[
-          ListTile(
-            title: Text(AppLocalizations.of(context)!.joinInstance),
-            onTap: () {
-              selfInvite(context, instance);
-            },
-          ),
-        ],
-      ),
-    ),
+Widget selfInviteListTileWidget(BuildContext context, VRChatInstance instance) {
+  return ListTile(
+    title: Text(AppLocalizations.of(context)!.joinInstance),
+    onTap: () {
+      selfInvite(context, instance);
+    },
   );
 }
 
-void selfInvite(BuildContext context, VRChatInstance instance) {
+Widget favoriteListTileWidget(BuildContext context, VRChatWorld world) {
+  return ListTile(
+    title: Text(AppLocalizations.of(context)!.favoriteWorld),
+    onTap: () {
+      favoriteAction(context, world);
+    },
+  );
+}
+
+Future selfInvite(BuildContext context, VRChatInstance instance) async {
   late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
-  vrchatLoginSession.selfInvite(instance.location, instance.shortName ?? "").then((VRChatNotificationsInvite response) {
+  return await vrchatLoginSession.selfInvite(instance.location, instance.shortName ?? "").then((VRChatNotificationsInvite response) {
     showDialog(
       context: context,
       builder: (_) {
@@ -90,50 +85,55 @@ FavoriteWorldData? getFavoriteData(VRChatWorld world) {
   return null;
 }
 
-Widget favoriteAction(BuildContext context, VRChatWorld world) {
+Future favoriteAction(BuildContext context, VRChatWorld world) {
   late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
   VRChatFavoriteWorld? favoriteWorld = getFavoriteWorld(world);
   FavoriteWorldData? favoriteWorldData = getFavoriteData(world);
-
-  return IconButton(
-    icon: const Icon(Icons.favorite),
-    onPressed: () => showModalBottomSheet(
-      context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
-      ),
-      builder: (BuildContext context) => StatefulBuilder(
-        builder: (BuildContext context, Function setStateBuilder) => SingleChildScrollView(
-          child: Column(
-            children: [
-              for (FavoriteWorldData favoriteData in appConfig.loggedAccount?.favoriteWorld ?? [])
-                ListTile(
-                  title: Text(favoriteData.group.displayName),
-                  trailing: favoriteWorldData == favoriteData ? const Icon(Icons.check) : null,
-                  onTap: () async {
-                    if (favoriteWorldData == favoriteData || favoriteWorld != null) {
-                      await vrchatLoginSession.deleteFavorites(favoriteWorld!.favoriteId).catchError((status) {
-                        apiError(context, status);
-                      });
-                      favoriteWorldData!.list.remove(favoriteWorld);
-                    }
-                    if (favoriteWorldData != favoriteData) {
-                      await vrchatLoginSession.addFavorites("world", world.id, favoriteData.group.name).then((VRChatFavorite favoriteWorld) {
-                        favoriteData.list.add(VRChatFavoriteWorld.fromFavorite(world, favoriteWorld, favoriteData.group.name));
-                      }).catchError((status) {
-                        apiError(context, status);
-                      });
-                    }
-                    /*
-                    * To be fixed in the next stable version.
-                    * if(context.mounted)
-                    */
-                    // ignore: use_build_context_synchronously
-                    Navigator.pop(context);
-                  },
-                ),
-            ],
-          ),
+  FavoriteWorldData? loadingWorldData;
+  return showModalBottomSheet(
+    context: context,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
+    ),
+    builder: (BuildContext context) => SingleChildScrollView(
+      child: StatefulBuilder(
+        builder: (BuildContext context, setStateBuilder) => Column(
+          children: [
+            for (FavoriteWorldData favoriteData in appConfig.loggedAccount?.favoriteWorld ?? [])
+              ListTile(
+                title: Text(favoriteData.group.displayName),
+                trailing: favoriteWorldData == favoriteData
+                    ? const Icon(Icons.check)
+                    : loadingWorldData == favoriteData
+                        ? const Padding(
+                            padding: EdgeInsets.only(right: 2, top: 2),
+                            child: SizedBox(width: 20, height: 20, child: CircularProgressIndicator()),
+                          )
+                        : null,
+                onTap: () async {
+                  loadingWorldData = favoriteData;
+                  setStateBuilder(() {});
+                  if (favoriteWorldData == favoriteData || favoriteWorld != null) {
+                    await vrchatLoginSession.deleteFavorites(favoriteWorld!.favoriteId).catchError((status) {
+                      apiError(context, status);
+                    });
+                    favoriteWorldData!.list.remove(favoriteWorld);
+                    favoriteWorld = null;
+                    favoriteWorldData = null;
+                  }
+                  if (favoriteWorldData != favoriteData) {
+                    await vrchatLoginSession.addFavorites("world", world.id, favoriteData.group.name).then((VRChatFavorite favorite) {
+                      favoriteWorld = VRChatFavoriteWorld.fromFavorite(world, favorite, favoriteData.group.name);
+                      favoriteData.list.add(favoriteWorld!);
+                      favoriteWorldData = favoriteData;
+                    }).catchError((status) {
+                      apiError(context, status);
+                    });
+                  }
+                  setStateBuilder(() {});
+                },
+              ),
+          ],
         ),
       ),
     ),

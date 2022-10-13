@@ -167,7 +167,11 @@ class _WorldState extends State<VRChatMobileWorld> {
     textStream(context);
     return Scaffold(
       appBar: AppBar(title: Text(AppLocalizations.of(context)!.world), actions: [
-        if (world != null) favoriteAction(context, world!),
+        if (world != null)
+          IconButton(
+            icon: const Icon(Icons.favorite),
+            onPressed: () => favoriteAction(context, world!),
+          ),
         IconButton(
           icon: const Icon(Icons.share),
           onPressed: () => modalBottom(context, shareUrlListTile(context, "https://vrchat.com/home/world/${widget.worldId}")),
