@@ -18,6 +18,7 @@ class AppConfig {
   ThemeBrightness themeBrightness = ThemeBrightness.light;
   LanguageCode languageCode = LanguageCode.en;
   bool forceExternalBrowser = false;
+  bool debugMode = false;
   Function setState = () {};
 
   AccountConfig? get loggedAccount => _loggedAccount;
@@ -37,6 +38,7 @@ class AppConfig {
       getStorage("dont_show_error_dialog").then((value) => dontShowErrorDialog = (value == "true")),
       getStorage("agreed_user_policy").then((value) => agreedUserPolicy = (value == "true")),
       getStorage("force_external_browser").then((value) => forceExternalBrowser = (value == "true")),
+      getStorage("debug_mode").then((value) => debugMode = (value == "true")),
       gridConfigList.setConfig(),
     ]);
 
@@ -150,6 +152,10 @@ class AppConfig {
 
   Future setForceExternalBrowser(bool value) async {
     return await setStorage("force_external_browser", (forceExternalBrowser = value).toString());
+  }
+
+  Future setDebugMode(bool value) async {
+    return await setStorage("debug_mode", (debugMode = value).toString());
   }
 }
 
