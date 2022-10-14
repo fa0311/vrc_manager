@@ -90,7 +90,7 @@
     "user": "โลกที่ชื่นชอบ",
     "lastLogin": "เข้าสู่ระบบครั้งล่าสุด: {data}",
     "dateJoined": "วันที่ลงทะเบียน: {data}",
-    "viewInJsonViewer": "ดูในโปรแกรมดู JSON",
+    "openInJsonViewer": "ดูในโปรแกรมดู JSON",
     "joinInstance": "เชิญตัวเอง",
     "editBio": "แก้ไขประวัติ แก้ไข",
     "editNote": "บันทึก",

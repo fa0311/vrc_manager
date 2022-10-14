@@ -90,7 +90,7 @@
     "user": "Usuário",
     "lastLogin": "Último login: {data}",
     "dateJoined": "Registrado em: {data}",
-    "viewInJsonViewer": "Visualização em JSON viewer",
+    "openInJsonViewer": "Visualização em JSON viewer",
     "joinInstance": "Convide-se",
     "editBio": "Editar Bio",
     "editNote": "Nota de edição",

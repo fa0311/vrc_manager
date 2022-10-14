@@ -90,7 +90,7 @@
     "user": "Пользователь",
     "lastLogin": "Последний вход: {data}",
     "dateJoined": "Зарегистрирован на: {data}",
-    "viewInJsonViewer": "Отображение в программе просмотра JSON",
+    "openInJsonViewer": "Отображение в программе просмотра JSON",
     "joinInstance": "Пригласите себя",
     "editBio": "Редактировать биографию",
     "editNote": "Примечание редакции",

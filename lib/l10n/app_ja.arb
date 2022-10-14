@@ -93,7 +93,7 @@
     "user": "ユーザー",
     "lastLogin": "最終ログイン: {data}",
     "dateJoined": "登録日: {data}",
-    "viewInJsonViewer": "JSONビューワーで表示",
+    "openInJsonViewer": "JSONビューワーで表示",
     "joinInstance": "自分を招待",
     "editBio": "Bioを編集",
     "editNote": "ノートを編集",

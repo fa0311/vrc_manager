@@ -122,7 +122,7 @@ class _UserHomeState extends State<VRChatMobileUser> {
                             builder: (BuildContext context) => VRChatMobileJsonViewer(obj: user!.content),
                           ),
                         ),
-                        child: Text(AppLocalizations.of(context)!.viewInJsonViewer),
+                        child: Text(AppLocalizations.of(context)!.openInJsonViewer),
                       ),
                     ),
                     Container(

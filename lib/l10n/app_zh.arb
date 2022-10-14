@@ -90,7 +90,7 @@
     "user": "用户",
     "lastLogin": "最后一次登录: {data}",
     "dateJoined": "注册日期: {data}",
-    "viewInJsonViewer": "在JSON查看器中显示",
+    "openInJsonViewer": "在JSON查看器中显示",
     "joinInstance": "邀请自己",
     "editBio": "编辑生物",
     "editNote": "编辑注",

@@ -107,7 +107,8 @@ class _WorldState extends State<VRChatMobileWorld> {
               onTap: () {
                 Navigator.pop(context);
                 Navigator.pop(context);
-                genInstanceId(regionText, "public", false).then((instanceId) => modalBottom(context, shareWorldListTile(context, widget.worldId, instanceId)));
+                genInstanceId(regionText, "public", false)
+                    .then((instanceId) => modalBottom(context, shareInstanceListTile(context, widget.worldId, instanceId)));
               },
             ),
             ListTile(
@@ -117,7 +118,7 @@ class _WorldState extends State<VRChatMobileWorld> {
                   Navigator.pop(context);
 
                   genInstanceId(regionText, "hidden", false)
-                      .then((instanceId) => modalBottom(context, shareWorldListTile(context, widget.worldId, instanceId)));
+                      .then((instanceId) => modalBottom(context, shareInstanceListTile(context, widget.worldId, instanceId)));
                 }),
             ListTile(
                 title: Text(AppLocalizations.of(context)!.vrchatFriends),
@@ -126,7 +127,7 @@ class _WorldState extends State<VRChatMobileWorld> {
                   Navigator.pop(context);
 
                   genInstanceId(regionText, "friends", false)
-                      .then((instanceId) => modalBottom(context, shareWorldListTile(context, widget.worldId, instanceId)));
+                      .then((instanceId) => modalBottom(context, shareInstanceListTile(context, widget.worldId, instanceId)));
                 }),
             ListTile(
                 title: Text(AppLocalizations.of(context)!.vrchatInvitePlus),
@@ -134,7 +135,7 @@ class _WorldState extends State<VRChatMobileWorld> {
                   Navigator.pop(context);
                   Navigator.pop(context);
                   genInstanceId(regionText, "private", true)
-                      .then((instanceId) => modalBottom(context, shareWorldListTile(context, widget.worldId, instanceId)));
+                      .then((instanceId) => modalBottom(context, shareInstanceListTile(context, widget.worldId, instanceId)));
                 }),
             ListTile(
                 title: Text(AppLocalizations.of(context)!.vrchatInvite),
@@ -142,7 +143,7 @@ class _WorldState extends State<VRChatMobileWorld> {
                   Navigator.pop(context);
                   Navigator.pop(context);
                   genInstanceId(regionText, "private", false)
-                      .then((instanceId) => modalBottom(context, shareWorldListTile(context, widget.worldId, instanceId)));
+                      .then((instanceId) => modalBottom(context, shareInstanceListTile(context, widget.worldId, instanceId)));
                 })
           ],
         ),
@@ -263,7 +264,7 @@ class _WorldState extends State<VRChatMobileWorld> {
                             builder: (BuildContext context) => VRChatMobileJsonViewer(obj: world!.content),
                           ),
                         ),
-                        child: Text(AppLocalizations.of(context)!.viewInJsonViewer),
+                        child: Text(AppLocalizations.of(context)!.openInJsonViewer),
                       ),
                     ),
                     SizedBox(

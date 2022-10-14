@@ -16,6 +16,7 @@ import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets/error.dart';
 import 'package:vrc_manager/main.dart';
+import 'package:vrc_manager/scenes/sub/json_viewer.dart';
 import 'package:vrc_manager/scenes/web/web_view.dart';
 
 Future modalBottom(BuildContext context, List<Widget> children) {
@@ -43,7 +44,7 @@ List<Widget> shareUrlListTile(BuildContext context, String url, {bool browserExt
   ];
 }
 
-List<Widget> shareWorldListTile(BuildContext context, String worldId, String instanceId) {
+List<Widget> shareInstanceListTile(BuildContext context, String worldId, String instanceId) {
   String url = "https://vrchat.com/home/launch?worldId=$worldId&instanceId=$instanceId";
   return [
     shareListTileWidget(context, url),
@@ -90,9 +91,41 @@ Widget openInBrowserExternalForceListTileWidget(BuildContext context, String url
   return ListTile(
     leading: const Icon(Icons.open_in_browser),
     title: Text(AppLocalizations.of(context)!.openInExternalBrowser),
-    onTap: () async {
+    onTap: () {
       Navigator.pop(context);
       openInBrowser(context, url, forceExternal: true);
+    },
+  );
+}
+
+Widget openInJsonViewer(BuildContext context, dynamic content) {
+  return ListTile(
+    title: Text(AppLocalizations.of(context)!.openInJsonViewer),
+    onTap: () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (BuildContext context) => VRChatMobileJsonViewer(obj: content),
+        ),
+      );
+    },
+  );
+}
+
+Widget shareUrlTileWidget(BuildContext context, String url) {
+  return ListTile(
+    title: Text(AppLocalizations.of(context)!.share),
+    onTap: () {
+      modalBottom(context, shareUrlListTile(context, url));
+    },
+  );
+}
+
+Widget shareInstanceTileWidget(BuildContext context, String worldId, String instanceId) {
+  return ListTile(
+    title: Text(AppLocalizations.of(context)!.shareInstance),
+    onTap: () {
+      modalBottom(context, shareInstanceListTile(context, worldId, instanceId));
     },
   );
 }

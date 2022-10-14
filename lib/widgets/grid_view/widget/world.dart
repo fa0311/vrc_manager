@@ -31,8 +31,11 @@ Widget instanceWidget(
           builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id),
         )),
     onLongPress: () => modalBottom(context, [
-      selfInviteListTileWidget(context, instance),
+      shareUrlTileWidget(context, "https://vrchat.com/home/world/${world.id}"),
+      shareInstanceTileWidget(context, world.id, instance.location),
       favoriteListTileWidget(context, world),
+      selfInviteListTileWidget(context, instance),
+      openInJsonViewer(context, instance.content),
     ]),
     children: [
       Row(children: <Widget>[
