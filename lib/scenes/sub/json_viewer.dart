@@ -10,7 +10,7 @@ import 'package:flutter_json_viewer/flutter_json_viewer.dart';
 
 // Project imports:
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
-import 'package:vrc_manager/widgets/share.dart';
+import 'package:vrc_manager/widgets/modal/list_tile/share.dart';
 
 class VRChatMobileJsonViewer extends StatefulWidget {
   final dynamic obj;

@@ -8,8 +8,8 @@ import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets/dialog.dart';
 import 'package:vrc_manager/assets/error.dart';
 import 'package:vrc_manager/main.dart';
+import 'package:vrc_manager/widgets/modal/list_tile/share.dart';
 import 'package:vrc_manager/widgets/user.dart';
-import 'package:vrc_manager/widgets/share.dart';
 
 Widget editNoteTileWidget(BuildContext context, Function setState, VRChatUser user) {
   return ListTile(

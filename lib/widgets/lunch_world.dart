@@ -11,8 +11,8 @@ import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets/error.dart';
 import 'package:vrc_manager/assets/vrchat/region.dart';
 import 'package:vrc_manager/main.dart';
+import 'package:vrc_manager/widgets/modal/list_tile/share.dart';
 import 'package:vrc_manager/widgets/region.dart';
-import 'package:vrc_manager/widgets/share.dart';
 
 String genRandHex([int length = 32]) {
   const charset = '0123456789ABCDEF';

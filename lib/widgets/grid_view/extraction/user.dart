@@ -7,9 +7,9 @@ import 'package:vrc_manager/data_class/app_config.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/sub/user.dart';
 import 'package:vrc_manager/widgets/grid_view/template/template.dart';
+import 'package:vrc_manager/widgets/modal/list_tile/share.dart';
 import 'package:vrc_manager/widgets/modal/list_tile/user.dart';
 import 'package:vrc_manager/widgets/user.dart';
-import 'package:vrc_manager/widgets/share.dart';
 
 List<Widget> selfUserModalBottom(
   BuildContext context,

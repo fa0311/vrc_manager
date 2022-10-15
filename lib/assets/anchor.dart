@@ -1,6 +1,7 @@
 // Flutter imports:
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:vrc_manager/widgets/modal/list_tile/share.dart';
 
 // Project imports:
 import 'package:vrc_manager/widgets/share.dart';

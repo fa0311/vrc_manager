@@ -14,6 +14,7 @@ import 'package:vrc_manager/assets/date.dart';
 import 'package:vrc_manager/assets/error.dart';
 import 'package:vrc_manager/assets/vrchat/icon.dart';
 import 'package:vrc_manager/main.dart';
+import 'package:vrc_manager/widgets/modal/list_tile/share.dart';
 import 'package:vrc_manager/widgets/share.dart';
 import 'package:vrc_manager/widgets/status.dart';
 

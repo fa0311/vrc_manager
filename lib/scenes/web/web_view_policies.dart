@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 
 // Package imports:
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:vrc_manager/widgets/modal/list_tile/share.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 // Project imports:
