@@ -4,9 +4,28 @@ import 'package:flutter/material.dart';
 // Project imports:
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/data_class/app_config.dart';
+import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/sub/user.dart';
 import 'package:vrc_manager/widgets/grid_view/template/template.dart';
+import 'package:vrc_manager/widgets/modal/list_tile/user.dart';
 import 'package:vrc_manager/widgets/profile.dart';
+import 'package:vrc_manager/widgets/share.dart';
+
+Future userDetailsModalBottom(
+  BuildContext context,
+  Function setState,
+  VRChatUser user,
+  VRChatFriendStatus status,
+  TextEditingController noteController,
+) {
+  return modalBottom(context, [
+    editNoteTileWidget(context, setState, noteController, user),
+    shareUrlTileWidget(context, "https://vrchat.com/home/user/${user.id}"),
+    profileActionTileWidget(context, setState, status, user),
+    if (appConfig.debugMode) openInJsonViewer(context, user.content),
+    if (appConfig.debugMode) openInJsonViewer(context, status.content),
+  ]);
+}
 
 GridView extractionUserDefault(
   BuildContext context,

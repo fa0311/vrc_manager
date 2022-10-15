@@ -60,7 +60,13 @@ class _SettingAccessibilityPageState extends State<VRChatMobileSettingsAccessibi
                     subtitle: Text(AppLocalizations.of(context)!.forceExternalBrowserDetails),
                     onChanged: (bool e) => appConfig.setForceExternalBrowser(e).then((value) => setState(() {})),
                   )
-                ]
+                ],
+                const Divider(),
+                SwitchListTile(
+                  value: appConfig.debugMode,
+                  title: Text(AppLocalizations.of(context)!.debugMode),
+                  onChanged: (bool e) => appConfig.setDebugMode(e).then((value) => setState(() {})),
+                )
               ],
             ),
           ),

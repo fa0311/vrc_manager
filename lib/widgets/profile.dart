@@ -11,7 +11,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets/date.dart';
-import 'package:vrc_manager/assets/dialog.dart';
 import 'package:vrc_manager/assets/error.dart';
 import 'package:vrc_manager/assets/vrchat/icon.dart';
 import 'package:vrc_manager/main.dart';
@@ -158,9 +157,9 @@ Column profile(BuildContext context, VRChatUser user) {
   );
 }
 
-editBio(BuildContext context, Function setState, TextEditingController controller, VRChatUserSelf user) {
+Future editBio(BuildContext context, TextEditingController controller, VRChatUserSelf user) {
   late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
-  showDialog(
+  return showDialog(
     context: context,
     builder: (_) {
       return AlertDialog(
@@ -177,8 +176,8 @@ editBio(BuildContext context, Function setState, TextEditingController controlle
           TextButton(
             child: Text(AppLocalizations.of(context)!.ok),
             onPressed: () => vrchatLoginSession.changeBio(user.id, user.bio = controller.text).then((VRChatUserSelf response) {
+              user.bio = user.bio == "" ? null : user.bio;
               Navigator.pop(context);
-              setState(() => user.bio = user.bio == "" ? null : user.bio);
             }).catchError((status) {
               apiError(context, status);
             }),
@@ -189,9 +188,9 @@ editBio(BuildContext context, Function setState, TextEditingController controlle
   );
 }
 
-editNote(BuildContext context, Function setState, TextEditingController controller, VRChatUser user) {
+Future editNote(BuildContext context, TextEditingController controller, VRChatUser user) {
   late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
-  showDialog(
+  return showDialog(
     context: context,
     builder: (_) {
       return AlertDialog(
@@ -206,9 +205,9 @@ editNote(BuildContext context, Function setState, TextEditingController controll
           ),
           TextButton(
             child: Text(AppLocalizations.of(context)!.ok),
-            onPressed: () => vrchatLoginSession.userNotes(user.id, user.note = controller.text).then((VRChatUserNotes response) {
+            onPressed: () => vrchatLoginSession.userNotes(user.id, user.note = controller.text).then((VRChatUserNotes notes) {
+              user.note = user.note == "" ? null : user.note;
               Navigator.pop(context);
-              setState(() => user.note = user.note == "" ? null : user.note);
             }).catchError((status) {
               apiError(context, status);
             }),
@@ -216,99 +215,6 @@ editNote(BuildContext context, Function setState, TextEditingController controll
         ],
       );
     },
-  );
-}
-
-Widget profileAction(BuildContext context, VRChatFriendStatus status, String uid, Function reload) {
-  late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
-
-  sendFriendRequest() {
-    vrchatLoginSession.sendFriendRequest(uid).then((response) {
-      Navigator.pop(context);
-      reload();
-    }).catchError((status) {
-      apiError(context, status);
-    });
-  }
-
-  acceptFriendRequest() {
-    vrchatLoginSession.acceptFriendRequestByUid(uid).then((response) {
-      Navigator.pop(context);
-      reload();
-    }).catchError((status) {
-      apiError(context, status);
-    });
-  }
-
-  deleteFriendRequest() {
-    vrchatLoginSession.deleteFriendRequest(uid).then((response) {
-      Navigator.pop(context);
-      reload();
-    }).catchError((status) {
-      apiError(context, status);
-    });
-  }
-
-  deleteFriend() {
-    confirm(
-        context,
-        AppLocalizations.of(context)!.unfriendConfirm,
-        AppLocalizations.of(context)!.unfriend,
-        () => vrchatLoginSession.deleteFriend(uid).then((response) {
-              Navigator.pop(context);
-              Navigator.pop(context);
-              reload();
-            }).catchError((status) {
-              apiError(context, status);
-            }));
-  }
-
-  return IconButton(
-    icon: const Icon(Icons.add),
-    onPressed: () => showModalBottomSheet(
-      context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
-      ),
-      builder: (BuildContext context) => StatefulBuilder(
-        builder: (BuildContext context, setStateBuilder) => SingleChildScrollView(
-          child: Column(
-            children: [
-              if (!status.isFriend && !status.incomingRequest && !status.outgoingRequest)
-                ListTile(
-                  leading: const Icon(Icons.person_add),
-                  title: Text(AppLocalizations.of(context)!.friendRequest),
-                  onTap: sendFriendRequest,
-                ),
-              if (status.isFriend && !status.incomingRequest && !status.outgoingRequest)
-                ListTile(
-                  leading: const Icon(Icons.person_remove),
-                  title: Text(AppLocalizations.of(context)!.unfriend),
-                  onTap: deleteFriend,
-                ),
-              if (!status.isFriend && status.outgoingRequest)
-                ListTile(
-                  leading: const Icon(Icons.person_remove),
-                  title: Text(AppLocalizations.of(context)!.requestCancel),
-                  onTap: deleteFriendRequest,
-                ),
-              if (!status.isFriend && status.incomingRequest)
-                ListTile(
-                  leading: const Icon(Icons.person_add),
-                  title: Text(AppLocalizations.of(context)!.allowFriends),
-                  onTap: acceptFriendRequest,
-                ),
-              if (!status.isFriend && status.incomingRequest)
-                ListTile(
-                  leading: const Icon(Icons.person_remove),
-                  title: Text(AppLocalizations.of(context)!.denyFriends),
-                  onTap: deleteFriendRequest,
-                ),
-            ],
-          ),
-        ),
-      ),
-    ),
   );
 }
 

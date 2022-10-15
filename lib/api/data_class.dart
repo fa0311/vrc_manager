@@ -210,7 +210,6 @@ class VRChatFriendStatus {
   late bool incomingRequest;
   late bool isFriend;
   late bool outgoingRequest;
-
   VRChatFriendStatus.fromJson(this.content) {
     incomingRequest = content['incomingRequest'];
     isFriend = content['isFriend'];

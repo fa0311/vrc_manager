@@ -14,6 +14,20 @@ import 'package:vrc_manager/widgets/region.dart';
 import 'package:vrc_manager/widgets/share.dart';
 import 'package:vrc_manager/widgets/world.dart';
 
+Future worldDetailsModalBottom(
+  BuildContext context,
+  VRChatWorld world,
+  VRChatInstance instance,
+) {
+  return modalBottom(context, [
+    shareUrlTileWidget(context, "https://vrchat.com/home/world/${world.id}"),
+    shareInstanceTileWidget(context, world.id, instance.instanceId),
+    favoriteListTileWidget(context, world),
+    selfInviteListTileWidget(context, instance),
+    if (appConfig.debugMode) openInJsonViewer(context, instance.content),
+  ]);
+}
+
 Widget instanceWidget(
   BuildContext context,
   VRChatWorld world,
@@ -31,13 +45,7 @@ Widget instanceWidget(
         MaterialPageRoute(
           builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id),
         )),
-    onLongPress: () => modalBottom(context, [
-      shareUrlTileWidget(context, "https://vrchat.com/home/world/${world.id}"),
-      shareInstanceTileWidget(context, world.id, instance.location),
-      favoriteListTileWidget(context, world),
-      selfInviteListTileWidget(context, instance),
-      if (appConfig.debugMode) openInJsonViewer(context, instance.content),
-    ]),
+    onLongPress: () => worldDetailsModalBottom(context, world, instance),
     children: [
       Row(children: <Widget>[
         region(instance.region, size: half ? 12 : 15),

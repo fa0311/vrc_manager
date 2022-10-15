@@ -10,7 +10,6 @@ import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets/error.dart';
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
 import 'package:vrc_manager/main.dart';
-import 'package:vrc_manager/scenes/sub/json_viewer.dart';
 import 'package:vrc_manager/scenes/sub/login.dart';
 import 'package:vrc_manager/widgets/drawer.dart';
 import 'package:vrc_manager/widgets/grid_view/widget/world.dart';
@@ -97,47 +96,6 @@ class _LoginHomeState extends State<VRChatMobileHome> {
                     const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator())
                   else ...[
                     profile(context, user!),
-                    SizedBox(
-                      height: 30,
-                      child: TextButton(
-                        style: ElevatedButton.styleFrom(
-                          foregroundColor: Colors.grey,
-                          minimumSize: Size.zero,
-                          padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
-                        ),
-                        onPressed: () => editBio(context, setState, bioController, user!),
-                        child: Text(AppLocalizations.of(context)!.editBio),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 30,
-                      child: TextButton(
-                        style: ElevatedButton.styleFrom(
-                          foregroundColor: Colors.grey,
-                          minimumSize: Size.zero,
-                          padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
-                        ),
-                        onPressed: () => editNote(context, setState, noteController, user!),
-                        child: Text(AppLocalizations.of(context)!.editNote),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 30,
-                      child: TextButton(
-                        style: ElevatedButton.styleFrom(
-                          foregroundColor: Colors.grey,
-                          minimumSize: Size.zero,
-                          padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
-                        ),
-                        onPressed: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (BuildContext context) => VRChatMobileJsonViewer(obj: user!.content),
-                          ),
-                        ),
-                        child: Text(AppLocalizations.of(context)!.openInJsonViewer),
-                      ),
-                    ),
                     Container(
                       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
                       child: () {

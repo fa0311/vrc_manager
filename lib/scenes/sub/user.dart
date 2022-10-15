@@ -10,11 +10,10 @@ import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets/error.dart';
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
 import 'package:vrc_manager/main.dart';
-import 'package:vrc_manager/scenes/sub/json_viewer.dart';
 import 'package:vrc_manager/widgets/drawer.dart';
+import 'package:vrc_manager/widgets/grid_view/extraction/user.dart';
 import 'package:vrc_manager/widgets/grid_view/widget/world.dart';
 import 'package:vrc_manager/widgets/profile.dart';
-import 'package:vrc_manager/widgets/share.dart';
 
 class VRChatMobileUser extends StatefulWidget {
   final String userId;
@@ -71,13 +70,16 @@ class _UserHomeState extends State<VRChatMobileUser> {
   Widget build(BuildContext context) {
     textStream(context);
     return Scaffold(
-      appBar: AppBar(title: Text(AppLocalizations.of(context)!.user), actions: <Widget>[
-        if (status != null) profileAction(context, status!, widget.userId, initState),
-        IconButton(
-          icon: const Icon(Icons.share),
-          onPressed: () => modalBottom(context, shareUrlListTile(context, "https://vrchat.com/home/user/${widget.userId}")),
-        )
-      ]),
+      appBar: AppBar(
+        title: Text(AppLocalizations.of(context)!.user),
+        actions: <Widget>[
+          if (user != null && status != null)
+            IconButton(
+              icon: const Icon(Icons.more_vert),
+              onPressed: () => userDetailsModalBottom(context, setState, user!, status!, noteController),
+            ),
+        ],
+      ),
       drawer: Navigator.of(context).canPop() ? null : drawer(context),
       body: SafeArea(
         child: SizedBox(
@@ -96,35 +98,6 @@ class _UserHomeState extends State<VRChatMobileUser> {
                     const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator())
                   else ...[
                     profile(context, user!),
-                    SizedBox(
-                      height: 30,
-                      child: TextButton(
-                        style: ElevatedButton.styleFrom(
-                          foregroundColor: Colors.grey,
-                          minimumSize: Size.zero,
-                          padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
-                        ),
-                        onPressed: () => editNote(context, setState, noteController, user!),
-                        child: Text(AppLocalizations.of(context)!.editNote),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 30,
-                      child: TextButton(
-                        style: ElevatedButton.styleFrom(
-                          foregroundColor: Colors.grey,
-                          minimumSize: Size.zero,
-                          padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
-                        ),
-                        onPressed: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (BuildContext context) => VRChatMobileJsonViewer(obj: user!.content),
-                          ),
-                        ),
-                        child: Text(AppLocalizations.of(context)!.openInJsonViewer),
-                      ),
-                    ),
                     Container(
                       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
                       child: () {

@@ -152,6 +152,7 @@
     "dontShowErrorDialogDetails": "If enabled, the error dialog is no longer displayed.",
     "forceExternalBrowser": "Force external browsers",
     "forceExternalBrowserDetails": "Force opening of an external browser when opening a browser",
+    "debugMode": "debug mode",
     "@__ACCOUNT__": {},
     "account": "Account",
     "logout": "Logout",
