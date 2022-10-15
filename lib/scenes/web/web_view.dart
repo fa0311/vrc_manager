@@ -12,6 +12,8 @@ import 'package:vrc_manager/assets/session.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/widgets/share.dart';
 
+import 'package:vrc_manager/widgets/modal/list_tile/main.dart';
+
 class VRChatMobileWebView extends StatefulWidget {
   final String url;
 

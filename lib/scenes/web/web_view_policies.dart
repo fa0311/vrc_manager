@@ -14,6 +14,8 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/main/home.dart';
+
+import 'package:vrc_manager/widgets/modal/list_tile/main.dart';
 import 'package:vrc_manager/widgets/share.dart';
 
 class VRChatMobileWebViewUserPolicy extends StatefulWidget {

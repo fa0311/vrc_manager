@@ -13,23 +13,8 @@ import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets/error.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/sub/json_viewer.dart';
+import 'package:vrc_manager/widgets/modal/list_tile/main.dart';
 import 'package:vrc_manager/widgets/share.dart';
-
-Future modalBottom(BuildContext context, List<Widget> children) {
-  return showModalBottomSheet(
-    context: context,
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(
-        top: Radius.circular(15),
-      ),
-    ),
-    builder: (BuildContext context) => SingleChildScrollView(
-      child: Column(
-        children: children,
-      ),
-    ),
-  );
-}
 
 List<Widget> shareUrlListTile(BuildContext context, String url, {bool browserExternalForce = false}) {
   return [
