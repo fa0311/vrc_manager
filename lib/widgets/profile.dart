@@ -106,41 +106,30 @@ Column profile(BuildContext context, VRChatUser user) {
         ),
       ),
       Container(padding: const EdgeInsets.only(top: 10)),
-      Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          status(user.state == "offline" ? user.state! : user.status),
-          Container(
-            width: 5,
-          ),
-          Text(user.displayName,
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 20,
-              )),
-        ],
-      ),
-      Text(user.statusDescription ?? ""),
+      username(user),
+      if (user.statusDescription != null) Text(user.statusDescription ?? ""),
       if (user.note != null)
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 0),
           child: Text(user.note ?? ""),
         ),
-      ConstrainedBox(
-        constraints: const BoxConstraints(maxHeight: 200),
-        child: SingleChildScrollView(
-          child: RichText(
-            text: TextSpan(
-              children: textToAnchor(context, user.bio ?? ""),
-              style: TextStyle(color: Theme.of(context).textTheme.bodyText2?.color),
+      if (user.bio != null)
+        ConstrainedBox(
+          constraints: const BoxConstraints(maxHeight: 200),
+          child: SingleChildScrollView(
+            child: RichText(
+              text: TextSpan(
+                children: textToAnchor(context, user.bio ?? ""),
+                style: TextStyle(color: Theme.of(context).textTheme.bodyText2?.color),
+              ),
             ),
           ),
         ),
-      ),
-      Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: _bioLink(context, user.bioLinks),
-      ),
+      if (user.bioLinks.isNotEmpty)
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: bioLink(context, user.bioLinks),
+        ),
       if (user.lastLogin != null)
         Text(
           AppLocalizations.of(context)!.lastLogin(
@@ -174,7 +163,7 @@ Future editBio(BuildContext context, TextEditingController controller, VRChatUse
             onPressed: () => Navigator.pop(context),
           ),
           TextButton(
-            child: Text(AppLocalizations.of(context)!.ok),
+            child: Text(AppLocalizations.of(context)!.save),
             onPressed: () => vrchatLoginSession.changeBio(user.id, user.bio = controller.text).then((VRChatUserSelf response) {
               user.bio = user.bio == "" ? null : user.bio;
               Navigator.pop(context);
@@ -204,7 +193,7 @@ Future editNote(BuildContext context, TextEditingController controller, VRChatUs
             onPressed: () => Navigator.pop(context),
           ),
           TextButton(
-            child: Text(AppLocalizations.of(context)!.ok),
+            child: Text(AppLocalizations.of(context)!.save),
             onPressed: () => vrchatLoginSession.userNotes(user.id, user.note = controller.text).then((VRChatUserNotes notes) {
               user.note = user.note == "" ? null : user.note;
               Navigator.pop(context);
@@ -218,7 +207,7 @@ Future editNote(BuildContext context, TextEditingController controller, VRChatUs
   );
 }
 
-List<Widget> _bioLink(BuildContext context, List<Uri> bioLinks) {
+List<Widget> bioLink(BuildContext context, List<Uri> bioLinks) {
   return [
     for (Uri link in bioLinks)
       InkWell(

@@ -12,9 +12,9 @@ import 'package:vrc_manager/assets/flutter/text_stream.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/sub/login.dart';
 import 'package:vrc_manager/widgets/drawer.dart';
+import 'package:vrc_manager/widgets/grid_view/extraction/user.dart';
 import 'package:vrc_manager/widgets/grid_view/widget/world.dart';
 import 'package:vrc_manager/widgets/profile.dart';
-import 'package:vrc_manager/widgets/share.dart';
 
 class VRChatMobileHome extends StatefulWidget {
   const VRChatMobileHome({Key? key}) : super(key: key);
@@ -71,13 +71,16 @@ class _LoginHomeState extends State<VRChatMobileHome> {
   Widget build(BuildContext context) {
     textStream(context);
     return Scaffold(
-      appBar: AppBar(title: Text(AppLocalizations.of(context)!.home), actions: <Widget>[
-        if (user != null)
-          IconButton(
-            icon: const Icon(Icons.share),
-            onPressed: () => modalBottom(context, shareUrlListTile(context, "https://vrchat.com/home/user/${user!.id}")),
-          )
-      ]),
+      appBar: AppBar(
+        title: Text(AppLocalizations.of(context)!.home),
+        actions: <Widget>[
+          if (user != null)
+            IconButton(
+              icon: const Icon(Icons.more_vert),
+              onPressed: () => selfUserModalBottom(context, setState, user!, noteController, bioController),
+            ),
+        ],
+      ),
       drawer: drawer(context),
       body: SafeArea(
         child: SizedBox(

@@ -11,6 +11,21 @@ import 'package:vrc_manager/widgets/modal/list_tile/user.dart';
 import 'package:vrc_manager/widgets/profile.dart';
 import 'package:vrc_manager/widgets/share.dart';
 
+Future selfUserModalBottom(
+  BuildContext context,
+  Function setState,
+  VRChatUserSelfOverload user,
+  TextEditingController noteController,
+  TextEditingController bioController,
+) {
+  return modalBottom(context, [
+    editBioTileWidget(context, setState, bioController, user),
+    editNoteTileWidget(context, setState, noteController, user),
+    shareUrlTileWidget(context, "https://vrchat.com/home/user/${user.id}"),
+    if (appConfig.debugMode) openInJsonViewer(context, user.content),
+  ]);
+}
+
 Future userDetailsModalBottom(
   BuildContext context,
   Function setState,
