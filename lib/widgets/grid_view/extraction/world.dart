@@ -7,7 +7,7 @@ import 'package:vrc_manager/data_class/app_config.dart';
 import 'package:vrc_manager/scenes/sub/world.dart';
 import 'package:vrc_manager/widgets/grid_view/template/template.dart';
 import 'package:vrc_manager/widgets/modal/list_tile/main.dart';
-import 'package:vrc_manager/widgets/world.dart';
+import 'package:vrc_manager/widgets/modal/list_tile/world.dart';
 
 GridView extractionWorldDefault(
   BuildContext context,

@@ -49,7 +49,7 @@ genInstanceId(BuildContext context, String region, String type, bool canRequestI
   return url;
 }
 
-launchWorld(BuildContext context, VRChatWorld world) {
+launchWorld(BuildContext context, VRChatLimitedWorld world) {
   List<Widget> children = [];
   getVrchatRegion().forEach((String regionText, String image) => children.add(ListTile(
         leading: region(regionText),
@@ -72,7 +72,7 @@ launchWorld(BuildContext context, VRChatWorld world) {
   );
 }
 
-selectWordType(BuildContext context, VRChatWorld world, String regionText) {
+selectWordType(BuildContext context, VRChatLimitedWorld world, String regionText) {
   showModalBottomSheet(
     context: context,
     shape: const RoundedRectangleBorder(

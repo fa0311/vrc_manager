@@ -24,24 +24,6 @@ Widget onTheWebsite(
   );
 }
 
-Widget selfInviteListTileWidget(BuildContext context, VRChatInstance instance) {
-  return ListTile(
-    title: Text(AppLocalizations.of(context)!.joinInstance),
-    onTap: () {
-      selfInvite(context, instance);
-    },
-  );
-}
-
-Widget favoriteListTileWidget(BuildContext context, VRChatLimitedWorld world) {
-  return ListTile(
-    title: Text(AppLocalizations.of(context)!.favoriteWorld),
-    onTap: () {
-      favoriteAction(context, world);
-    },
-  );
-}
-
 Column worldProfile(BuildContext context, VRChatWorld world) {
   return Column(
     children: <Widget>[
