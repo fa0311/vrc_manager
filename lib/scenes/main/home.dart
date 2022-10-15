@@ -14,6 +14,7 @@ import 'package:vrc_manager/scenes/sub/login.dart';
 import 'package:vrc_manager/widgets/drawer.dart';
 import 'package:vrc_manager/widgets/grid_view/extraction/user.dart';
 import 'package:vrc_manager/widgets/grid_view/widget/world.dart';
+import 'package:vrc_manager/widgets/share.dart';
 import 'package:vrc_manager/widgets/user.dart';
 
 class VRChatMobileHome extends StatefulWidget {
@@ -72,7 +73,7 @@ class _LoginHomeState extends State<VRChatMobileHome> {
           if (user != null)
             IconButton(
               icon: const Icon(Icons.more_vert),
-              onPressed: () => selfUserModalBottom(context, setState, user!),
+              onPressed: () => modalBottom(context, selfUserModalBottom(context, setState, user!)),
             ),
         ],
       ),

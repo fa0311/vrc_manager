@@ -102,31 +102,39 @@ Column userProfile(BuildContext context, VRChatUser user) {
 
 Future editBio(BuildContext context, VRChatUserSelf user) {
   late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
-  late TextEditingController controller = TextEditingController()..text = user.note ?? "";
+  late TextEditingController controller = TextEditingController()..text = user.bio ?? "";
+  bool wait = false;
   return showDialog(
     context: context,
-    builder: (_) {
-      return AlertDialog(
-        content: TextField(
-          controller: controller,
-          maxLines: null,
-          decoration: InputDecoration(labelText: AppLocalizations.of(context)!.editBio),
-        ),
-        actions: <Widget>[
-          TextButton(
-            child: Text(AppLocalizations.of(context)!.close),
-            onPressed: () => Navigator.pop(context),
-          ),
-          TextButton(
-            child: Text(AppLocalizations.of(context)!.save),
-            onPressed: () => vrchatLoginSession.changeBio(user.id, user.bio = controller.text).then((VRChatUserSelf response) {
-              user.bio = user.bio == "" ? null : user.bio;
-              Navigator.pop(context);
-            }).catchError((status) {
-              apiError(context, status);
-            }),
-          ),
-        ],
+    builder: (context) {
+      return StatefulBuilder(
+        builder: (context, setState) {
+          return AlertDialog(
+            content: TextField(
+              controller: controller,
+              maxLines: null,
+              decoration: InputDecoration(labelText: AppLocalizations.of(context)!.editBio),
+            ),
+            actions: <Widget>[
+              TextButton(
+                child: Text(AppLocalizations.of(context)!.close),
+                onPressed: () => Navigator.pop(context),
+              ),
+              TextButton(
+                  child: wait ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator()) : Text(AppLocalizations.of(context)!.save),
+                  onPressed: () {
+                    wait = true;
+                    setState(() {});
+                    vrchatLoginSession.changeBio(user.id, user.bio = controller.text).then((VRChatUserSelf response) {
+                      user.bio = user.bio == "" ? null : user.bio;
+                      Navigator.pop(context);
+                    }).catchError((status) {
+                      apiError(context, status);
+                    });
+                  }),
+            ],
+          );
+        },
       );
     },
   );

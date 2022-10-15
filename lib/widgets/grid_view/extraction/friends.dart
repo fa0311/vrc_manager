@@ -142,7 +142,17 @@ GridView extractionFriendText(
                   builder: (BuildContext context) => VRChatMobileUser(userId: user.id),
                 )),
             onLongPress: () => modalBottom(
-                context, userDetailsModalBottom(context, setState, user, VRChatFriendStatus(isFriend: true, incomingRequest: false, outgoingRequest: false))),
+              context,
+              [
+                if (config.worldDetails &&
+                    !["private", "offline", "traveling"].contains(user.location) &&
+                    locationMap[worldId] != null &&
+                    instanceMap[user.location] != null)
+                  ...userInstanceDetailsModalBottom(context, setState, user, locationMap[worldId]!, instanceMap[user.location]!)
+                else
+                  ...userDetailsModalBottom(context, setState, user, VRChatFriendStatus(isFriend: true, incomingRequest: false, outgoingRequest: false))
+              ],
+            ),
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,

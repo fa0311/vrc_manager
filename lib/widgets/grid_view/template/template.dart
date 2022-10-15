@@ -108,18 +108,28 @@ Widget genericTemplateText(
   required List<Widget> children,
   void Function()? onTap,
   void Function()? onLongPress,
+  List<Widget>? stack,
+  bool card = true,
 }) {
-  return Card(
-    margin: const EdgeInsets.all(2),
-    elevation: 20.0,
-    child: GestureDetector(
+  Widget content = Column(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: children,
+  );
+  if (card && stack != null) {
+    content = Stack(
+      children: <Widget>[content],
+    );
+  }
+  if (onTap != null || onLongPress != null) {
+    content = InkWell(
+      borderRadius: BorderRadius.circular(5),
       onTap: onTap,
       onLongPress: onLongPress,
-      behavior: HitTestBehavior.opaque,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: children,
-      ),
-    ),
-  );
+      child: content,
+    );
+  }
+  if (card) {
+    content = Card(elevation: 20.0, margin: const EdgeInsets.all(2), child: content);
+  }
+  return content;
 }

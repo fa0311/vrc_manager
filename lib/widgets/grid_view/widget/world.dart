@@ -30,7 +30,22 @@ List<Widget> instanceDetailsModalBottom(
   VRChatInstance instance,
 ) {
   return [
-    shareUrlTileWidget(context, "https://vrchat.com/home/world/${world.id}"),
+    shareInstanceTileWidget(context, world.id, instance.instanceId),
+    favoriteListTileWidget(context, world),
+    selfInviteListTileWidget(context, instance),
+    if (appConfig.debugMode) openInJsonViewer(context, instance.content),
+  ];
+}
+
+List<Widget> userInstanceDetailsModalBottom(
+  BuildContext context,
+  Function setState,
+  VRChatUser user,
+  VRChatWorld world,
+  VRChatInstance instance,
+) {
+  return [
+    shareUrlTileWidget(context, "https://vrchat.com/home/user/${user.id}"),
     shareInstanceTileWidget(context, world.id, instance.instanceId),
     favoriteListTileWidget(context, world),
     selfInviteListTileWidget(context, instance),
