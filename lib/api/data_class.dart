@@ -211,7 +211,7 @@ class VRChatFriendStatus {
   late bool isFriend;
   late bool outgoingRequest;
 
-  VRChatFriendStatus({required isFriend, required incomingRequest, required outgoingRequest});
+  VRChatFriendStatus({required this.isFriend, required this.incomingRequest, required this.outgoingRequest});
 
   VRChatFriendStatus.fromJson(this.content) {
     incomingRequest = content['incomingRequest'];
