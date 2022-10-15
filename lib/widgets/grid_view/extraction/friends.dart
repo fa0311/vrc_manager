@@ -10,7 +10,7 @@ import 'package:vrc_manager/data_class/app_config.dart';
 import 'package:vrc_manager/scenes/sub/user.dart';
 import 'package:vrc_manager/widgets/grid_view/template/template.dart';
 import 'package:vrc_manager/widgets/grid_view/widget/world.dart';
-import 'package:vrc_manager/widgets/profile.dart';
+import 'package:vrc_manager/widgets/user.dart';
 import 'package:vrc_manager/widgets/world.dart';
 
 GridView extractionFriendDefault(

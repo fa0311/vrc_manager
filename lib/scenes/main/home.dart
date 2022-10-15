@@ -14,7 +14,7 @@ import 'package:vrc_manager/scenes/sub/login.dart';
 import 'package:vrc_manager/widgets/drawer.dart';
 import 'package:vrc_manager/widgets/grid_view/extraction/user.dart';
 import 'package:vrc_manager/widgets/grid_view/widget/world.dart';
-import 'package:vrc_manager/widgets/profile.dart';
+import 'package:vrc_manager/widgets/user.dart';
 
 class VRChatMobileHome extends StatefulWidget {
   const VRChatMobileHome({Key? key}) : super(key: key);
@@ -98,7 +98,7 @@ class _LoginHomeState extends State<VRChatMobileHome> {
                   if (user == null)
                     const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator())
                   else ...[
-                    profile(context, user!),
+                    userProfile(context, user!),
                     Container(
                       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
                       child: () {

@@ -1,4 +1,5 @@
 // Flutter imports:
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 // Package imports:
@@ -7,6 +8,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 // Project imports:
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
+import 'package:vrc_manager/assets/date.dart';
 import 'package:vrc_manager/assets/error.dart';
 import 'package:vrc_manager/data_class/app_config.dart';
 import 'package:vrc_manager/main.dart';
@@ -37,6 +39,69 @@ Widget favoriteListTileWidget(BuildContext context, VRChatLimitedWorld world) {
     onTap: () {
       favoriteAction(context, world);
     },
+  );
+}
+
+Column worldProfile(BuildContext context, VRChatWorld world) {
+  return Column(
+    children: <Widget>[
+      SizedBox(
+        height: 250,
+        child: CachedNetworkImage(
+          imageUrl: world.imageUrl,
+          fit: BoxFit.fitWidth,
+          progressIndicatorBuilder: (context, url, downloadProgress) => const SizedBox(
+            width: 250.0,
+            child: Padding(
+              padding: EdgeInsets.all(30),
+              child: CircularProgressIndicator(
+                strokeWidth: 10,
+              ),
+            ),
+          ),
+          errorWidget: (context, url, error) => const SizedBox(
+            width: 250.0,
+            child: Icon(Icons.error),
+          ),
+        ),
+      ),
+      Text(world.name,
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+          )),
+      ConstrainedBox(
+        constraints: const BoxConstraints(maxHeight: 200),
+        child: SingleChildScrollView(
+          child: Text(world.description ?? ""),
+        ),
+      ),
+      Text(
+        AppLocalizations.of(context)!.occupants(
+          world.occupants,
+        ),
+      ),
+      Text(
+        AppLocalizations.of(context)!.privateOccupants(
+          world.privateOccupants,
+        ),
+      ),
+      Text(
+        AppLocalizations.of(context)!.favorites(
+          world.favorites,
+        ),
+      ),
+      Text(
+        AppLocalizations.of(context)!.createdAt(
+          generalDateDifference(context, world.createdAt),
+        ),
+      ),
+      Text(
+        AppLocalizations.of(context)!.updatedAt(
+          generalDateDifference(context, world.updatedAt),
+        ),
+      ),
+    ],
   );
 }
 

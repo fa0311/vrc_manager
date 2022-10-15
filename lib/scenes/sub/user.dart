@@ -13,7 +13,7 @@ import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/widgets/drawer.dart';
 import 'package:vrc_manager/widgets/grid_view/extraction/user.dart';
 import 'package:vrc_manager/widgets/grid_view/widget/world.dart';
-import 'package:vrc_manager/widgets/profile.dart';
+import 'package:vrc_manager/widgets/user.dart';
 
 class VRChatMobileUser extends StatefulWidget {
   final String userId;
@@ -97,7 +97,7 @@ class _UserHomeState extends State<VRChatMobileUser> {
                   if (user == null)
                     const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator())
                   else ...[
-                    profile(context, user!),
+                    userProfile(context, user!),
                     Container(
                       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
                       child: () {
