@@ -29,9 +29,7 @@ GridView extractionWorldDefault(
                 MaterialPageRoute(
                   builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id),
                 )),
-            onLongPress: () => modalBottom(context, [
-              favoriteListTileWidget(context, world),
-            ]),
+            onLongPress: () => modalBottom(context, [favoriteListTileWidget(context, world)]),
             children: [
               SizedBox(
                 child: Text(
@@ -73,9 +71,7 @@ GridView extractionWorldSimple(
                 MaterialPageRoute(
                   builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id),
                 )),
-            onLongPress: () => modalBottom(context, [
-              favoriteListTileWidget(context, world),
-            ]),
+            onLongPress: () => modalBottom(context, [favoriteListTileWidget(context, world)]),
             children: [
               SizedBox(
                 width: double.infinity,
@@ -116,9 +112,7 @@ GridView extractionWorldText(
                 MaterialPageRoute(
                   builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id),
                 )),
-            onLongPress: () => modalBottom(context, [
-              favoriteListTileWidget(context, world),
-            ]),
+            onLongPress: () => modalBottom(context, [favoriteListTileWidget(context, world)]),
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,

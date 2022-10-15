@@ -100,8 +100,9 @@ Column userProfile(BuildContext context, VRChatUser user) {
   );
 }
 
-Future editBio(BuildContext context, TextEditingController controller, VRChatUserSelf user) {
+Future editBio(BuildContext context, VRChatUserSelf user) {
   late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
+  late TextEditingController controller = TextEditingController()..text = user.note ?? "";
   return showDialog(
     context: context,
     builder: (_) {
@@ -131,8 +132,9 @@ Future editBio(BuildContext context, TextEditingController controller, VRChatUse
   );
 }
 
-Future editNote(BuildContext context, TextEditingController controller, VRChatUser user) {
+Future editNote(BuildContext context, VRChatUser user) {
   late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
+  late TextEditingController controller = TextEditingController()..text = user.note ?? "";
   return showDialog(
     context: context,
     builder: (_) {

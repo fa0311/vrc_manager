@@ -28,9 +28,6 @@ class _LoginHomeState extends State<VRChatMobileHome> {
   VRChatWorld? world;
   VRChatInstance? instance;
 
-  TextEditingController bioController = TextEditingController();
-  TextEditingController noteController = TextEditingController();
-
   @override
   initState() {
     super.initState();
@@ -52,8 +49,6 @@ class _LoginHomeState extends State<VRChatMobileHome> {
         (_) => false,
       );
     });
-    bioController.text = user!.bio ?? "";
-    noteController.text = user!.note ?? "";
   }
 
   Future getWorld() async {
@@ -77,7 +72,7 @@ class _LoginHomeState extends State<VRChatMobileHome> {
           if (user != null)
             IconButton(
               icon: const Icon(Icons.more_vert),
-              onPressed: () => selfUserModalBottom(context, setState, user!, noteController, bioController),
+              onPressed: () => selfUserModalBottom(context, setState, user!),
             ),
         ],
       ),

@@ -31,9 +31,7 @@ GridView extractionWorldDefault(
                 MaterialPageRoute(
                   builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id),
                 )),
-            onLongPress: () => modalBottom(context, [
-              favoriteListTileWidget(context, world),
-            ]),
+            onLongPress: () => modalBottom(context, [favoriteListTileWidget(context, world)]),
             children: [
               SizedBox(
                 child: Text(

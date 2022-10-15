@@ -13,6 +13,7 @@ import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/widgets/drawer.dart';
 import 'package:vrc_manager/widgets/grid_view/extraction/user.dart';
 import 'package:vrc_manager/widgets/grid_view/widget/world.dart';
+import 'package:vrc_manager/widgets/share.dart';
 import 'package:vrc_manager/widgets/user.dart';
 
 class VRChatMobileUser extends StatefulWidget {
@@ -31,8 +32,6 @@ class _UserHomeState extends State<VRChatMobileUser> {
   VRChatWorld? world;
   VRChatInstance? instance;
 
-  TextEditingController noteController = TextEditingController();
-
   @override
   initState() {
     super.initState();
@@ -49,7 +48,6 @@ class _UserHomeState extends State<VRChatMobileUser> {
       apiError(context, status);
     });
     if (user == null) return;
-    noteController.text = user!.note ?? "";
     status = await vrchatLoginSession.friendStatus(widget.userId).catchError((status) {
       apiError(context, status);
     });
@@ -70,16 +68,16 @@ class _UserHomeState extends State<VRChatMobileUser> {
   Widget build(BuildContext context) {
     textStream(context);
     return Scaffold(
-      appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.user),
-        actions: <Widget>[
-          if (user != null && status != null)
-            IconButton(
-              icon: const Icon(Icons.more_vert),
-              onPressed: () => userDetailsModalBottom(context, setState, user!, status!, noteController),
+      appBar: AppBar(title: Text(AppLocalizations.of(context)!.user), actions: <Widget>[
+        if (user != null && status != null)
+          IconButton(
+            icon: const Icon(Icons.more_vert),
+            onPressed: () => modalBottom(
+              context,
+              userDetailsModalBottom(context, setState, user!, status!),
             ),
-        ],
-      ),
+          ),
+      ]),
       drawer: Navigator.of(context).canPop() ? null : drawer(context),
       body: SafeArea(
         child: SizedBox(

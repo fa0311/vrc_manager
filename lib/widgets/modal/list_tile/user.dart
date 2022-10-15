@@ -11,20 +11,20 @@ import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/widgets/user.dart';
 import 'package:vrc_manager/widgets/share.dart';
 
-Widget editNoteTileWidget(BuildContext context, Function setState, TextEditingController noteController, VRChatUser user) {
+Widget editNoteTileWidget(BuildContext context, Function setState, VRChatUser user) {
   return ListTile(
     title: Text(AppLocalizations.of(context)!.editNote),
     onTap: () {
-      editNote(context, noteController, user).then((value) => setState(() {}));
+      editNote(context, user).then((value) => setState(() {}));
     },
   );
 }
 
-Widget editBioTileWidget(BuildContext context, Function setState, TextEditingController bioController, VRChatUserSelf user) {
+Widget editBioTileWidget(BuildContext context, Function setState, VRChatUserSelf user) {
   return ListTile(
     title: Text(AppLocalizations.of(context)!.editBio),
     onTap: () {
-      editBio(context, bioController, user).then((value) => setState(() {}));
+      editBio(context, user).then((value) => setState(() {}));
     },
   );
 }

@@ -8,14 +8,17 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/data_class/app_config.dart';
 import 'package:vrc_manager/scenes/sub/user.dart';
+import 'package:vrc_manager/widgets/grid_view/extraction/user.dart';
 import 'package:vrc_manager/widgets/grid_view/template/template.dart';
 import 'package:vrc_manager/widgets/grid_view/widget/world.dart';
+import 'package:vrc_manager/widgets/share.dart';
 import 'package:vrc_manager/widgets/user.dart';
 import 'package:vrc_manager/widgets/world.dart';
 
 GridView extractionFriendDefault(
   BuildContext context,
   GridConfig config,
+  Function setState,
   List<VRChatFriends> userList,
   Map<String, VRChatWorld?> locationMap,
   Map<String, VRChatInstance?> instanceMap,
@@ -37,6 +40,8 @@ GridView extractionFriendDefault(
                 MaterialPageRoute(
                   builder: (BuildContext context) => VRChatMobileUser(userId: user.id),
                 )),
+            onLongPress: () => modalBottom(
+                context, userDetailsModalBottom(context, setState, user, VRChatFriendStatus(isFriend: true, incomingRequest: false, outgoingRequest: false))),
             bottom: () {
               if (!config.worldDetails) return null;
               if (user.location == "private") return privateWorld(context, card: false);
@@ -65,6 +70,7 @@ GridView extractionFriendDefault(
 GridView extractionFriendSimple(
   BuildContext context,
   GridConfig config,
+  Function setState,
   List<VRChatFriends> userList,
   Map<String, VRChatWorld?> locationMap,
   Map<String, VRChatInstance?> instanceMap,
@@ -87,6 +93,8 @@ GridView extractionFriendSimple(
                 MaterialPageRoute(
                   builder: (BuildContext context) => VRChatMobileUser(userId: user.id),
                 )),
+            onLongPress: () => modalBottom(
+                context, userDetailsModalBottom(context, setState, user, VRChatFriendStatus(isFriend: true, incomingRequest: false, outgoingRequest: false))),
             bottom: () {
               if (!config.worldDetails) return null;
               if (user.location == "private") return privateWorld(context, card: false, half: true);
@@ -112,6 +120,7 @@ GridView extractionFriendSimple(
 GridView extractionFriendText(
   BuildContext context,
   GridConfig config,
+  Function setState,
   List<VRChatFriends> userList,
   Map<String, VRChatWorld?> locationMap,
   Map<String, VRChatInstance?> instanceMap,
@@ -132,6 +141,8 @@ GridView extractionFriendText(
                 MaterialPageRoute(
                   builder: (BuildContext context) => VRChatMobileUser(userId: user.id),
                 )),
+            onLongPress: () => modalBottom(
+                context, userDetailsModalBottom(context, setState, user, VRChatFriendStatus(isFriend: true, incomingRequest: false, outgoingRequest: false))),
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,

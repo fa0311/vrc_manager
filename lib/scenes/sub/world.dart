@@ -11,6 +11,7 @@ import 'package:vrc_manager/assets/error.dart';
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/widgets/drawer.dart';
+import 'package:vrc_manager/widgets/grid_view/widget/world.dart';
 import 'package:vrc_manager/widgets/share.dart';
 import 'package:vrc_manager/widgets/world.dart';
 
@@ -46,13 +47,12 @@ class _WorldState extends State<VRChatMobileWorld> {
       appBar: AppBar(title: Text(AppLocalizations.of(context)!.world), actions: [
         if (world != null)
           IconButton(
-            icon: const Icon(Icons.favorite),
-            onPressed: () => favoriteAction(context, world!),
-          ),
-        IconButton(
-          icon: const Icon(Icons.share),
-          onPressed: () => modalBottom(context, shareUrlListTile(context, "https://vrchat.com/home/world/${widget.worldId}")),
-        )
+            icon: const Icon(Icons.share),
+            onPressed: () => modalBottom(
+              context,
+              worldDetailsModalBottom(context, world!),
+            ),
+          )
       ]),
       drawer: Navigator.of(context).canPop() ? null : drawer(context),
       body: SafeArea(
