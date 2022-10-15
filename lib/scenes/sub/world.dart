@@ -47,7 +47,7 @@ class _WorldState extends State<VRChatMobileWorld> {
       appBar: AppBar(title: Text(AppLocalizations.of(context)!.world), actions: [
         if (world != null)
           IconButton(
-            icon: const Icon(Icons.share),
+            icon: const Icon(Icons.more_vert),
             onPressed: () => modalBottom(
               context,
               worldDetailsModalBottom(context, world!),
@@ -60,12 +60,7 @@ class _WorldState extends State<VRChatMobileWorld> {
           width: MediaQuery.of(context).size.width,
           child: SingleChildScrollView(
             child: Container(
-              padding: const EdgeInsets.only(
-                top: 10,
-                bottom: 0,
-                right: 30,
-                left: 30,
-              ),
+              padding: const EdgeInsets.only(top: 10, bottom: 0, right: 30, left: 30),
               child: Column(
                 children: [
                   if (world == null) const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()),
