@@ -159,7 +159,6 @@ class _SearchState extends State<VRChatSearch> {
     if (worldList.isNotEmpty && loadingComplete) {
       worldList = sortData.worlds(worldList);
     }
-
     const selectedTextStyle = TextStyle(
       color: Colors.grey,
       fontSize: 16,

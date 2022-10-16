@@ -74,7 +74,7 @@ class _FriendsPageState extends State<VRChatMobileFriendRequest> {
     if (loadingComplete) {
       userList = sortData.users(userList);
     }
-
+    VRChatFriendStatus status = VRChatFriendStatus(isFriend: false, incomingRequest: true, outgoingRequest: false);
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.friendRequest),
@@ -96,11 +96,11 @@ class _FriendsPageState extends State<VRChatMobileFriendRequest> {
                 () {
                   switch (config.displayMode) {
                     case DisplayMode.normal:
-                      return extractionUserDefault(context, config, userList);
+                      return extractionUserDefault(context, config, userList, status: status);
                     case DisplayMode.simple:
-                      return extractionUserSimple(context, config, userList);
+                      return extractionUserSimple(context, config, userList, status: status);
                     case DisplayMode.textOnly:
-                      return extractionUserText(context, config, userList);
+                      return extractionUserText(context, config, userList, status: status);
                   }
                 }(),
             ]),

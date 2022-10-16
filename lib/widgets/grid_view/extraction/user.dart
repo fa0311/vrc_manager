@@ -7,6 +7,7 @@ import 'package:vrc_manager/data_class/app_config.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/sub/user.dart';
 import 'package:vrc_manager/widgets/grid_view/template/template.dart';
+import 'package:vrc_manager/widgets/modal/list_tile/main.dart';
 import 'package:vrc_manager/widgets/modal/list_tile/share.dart';
 import 'package:vrc_manager/widgets/modal/list_tile/user.dart';
 import 'package:vrc_manager/widgets/user.dart';
@@ -40,8 +41,10 @@ List<Widget> userDetailsModalBottom(
 GridView extractionUserDefault(
   BuildContext context,
   GridConfig config,
-  List<VRChatUser> userList,
-) {
+  List<VRChatUser> userList, {
+  VRChatFriendStatus? status,
+}) {
+  status ??= VRChatFriendStatus(isFriend: false, incomingRequest: false, outgoingRequest: false);
   return renderGrid(
     context,
     width: 600,
@@ -58,6 +61,7 @@ GridView extractionUserDefault(
                 MaterialPageRoute(
                   builder: (BuildContext context) => VRChatMobileUser(userId: user.id),
                 )),
+            onLongPress: () => modalBottom(context, userDetailsModalBottom(context, user, status!)),
             children: [
               username(user),
             ],
@@ -70,8 +74,10 @@ GridView extractionUserDefault(
 GridView extractionUserSimple(
   BuildContext context,
   GridConfig config,
-  List<VRChatUser> userList,
-) {
+  List<VRChatUser> userList, {
+  VRChatFriendStatus? status,
+}) {
+  status ??= VRChatFriendStatus(isFriend: false, incomingRequest: false, outgoingRequest: false);
   return renderGrid(
     context,
     width: 320,
@@ -89,6 +95,7 @@ GridView extractionUserSimple(
                 MaterialPageRoute(
                   builder: (BuildContext context) => VRChatMobileUser(userId: user.id),
                 )),
+            onLongPress: () => modalBottom(context, userDetailsModalBottom(context, user, status!)),
             children: [
               username(user, diameter: 12),
               for (String text in [
@@ -106,8 +113,10 @@ GridView extractionUserSimple(
 GridView extractionUserText(
   BuildContext context,
   GridConfig config,
-  List<VRChatUser> userList,
-) {
+  List<VRChatUser> userList, {
+  VRChatFriendStatus? status,
+}) {
+  status ??= VRChatFriendStatus(isFriend: false, incomingRequest: false, outgoingRequest: false);
   return renderGrid(
     context,
     width: 400,
@@ -123,6 +132,7 @@ GridView extractionUserText(
                 MaterialPageRoute(
                   builder: (BuildContext context) => VRChatMobileUser(userId: user.id),
                 )),
+            onLongPress: () => modalBottom(context, userDetailsModalBottom(context, user, status!)),
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
