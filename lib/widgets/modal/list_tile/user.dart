@@ -24,7 +24,7 @@ Widget editBioTileWidget(BuildContext context, Function setState, VRChatUserSelf
   return ListTile(
     title: Text(AppLocalizations.of(context)!.editBio),
     onTap: () {
-      editBio(context, user).then((value) => setState(() {}));
+      showDialog(context: context, builder: (context) => editBio(user));
     },
   );
 }
