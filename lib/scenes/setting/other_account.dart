@@ -39,23 +39,23 @@ class _SettingOtherAccountPageState extends State<VRChatMobileSettingsOtherAccou
             for (AccountConfig account in appConfig.accountList)
               Card(
                 elevation: 20.0,
-                child: Container(
-                  padding: const EdgeInsets.all(10.0),
-                  child: GestureDetector(
-                    onTap: () async {
-                      login = account;
-                      setState(() {});
-                      bool logged = await appConfig.login(context, account);
-                      if (!mounted) return;
-                      Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                          builder: (BuildContext context) => logged ? const VRChatMobileHome() : const VRChatMobileLogin(),
-                        ),
-                        (_) => false,
-                      );
-                    },
-                    behavior: HitTestBehavior.opaque,
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(5),
+                  onTap: () async {
+                    login = account;
+                    setState(() {});
+                    bool logged = await appConfig.login(context, account);
+                    if (!mounted) return;
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                        builder: (BuildContext context) => logged ? const VRChatMobileHome() : const VRChatMobileLogin(),
+                      ),
+                      (_) => false,
+                    );
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(10.0),
                     child: Row(
                       children: <Widget>[
                         Expanded(
