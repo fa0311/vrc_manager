@@ -115,11 +115,11 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
                 () {
                   switch (config.displayMode) {
                     case DisplayMode.normal:
-                      return extractionFriendDefault(context, config, setState, userList, locationMap, instanceMap);
+                      return extractionFriendDefault(context, config, userList, locationMap, instanceMap);
                     case DisplayMode.simple:
-                      return extractionFriendSimple(context, config, setState, userList, locationMap, instanceMap);
+                      return extractionFriendSimple(context, config, userList, locationMap, instanceMap);
                     case DisplayMode.textOnly:
-                      return extractionFriendText(context, config, setState, userList, locationMap, instanceMap);
+                      return extractionFriendText(context, config, userList, locationMap, instanceMap);
                   }
                 }(),
             ]),
