@@ -61,7 +61,7 @@ Widget selfInviteListTileWidget(BuildContext context, VRChatInstance instance) {
 
 Widget favoriteListTileWidget(BuildContext context, VRChatLimitedWorld world) {
   return ListTile(
-    title: Text(AppLocalizations.of(context)!.favoriteWorld),
+    title: Text(AppLocalizations.of(context)!.addFavoriteWorlds),
     onTap: () {
       favoriteAction(context, world);
     },
