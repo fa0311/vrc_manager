@@ -67,6 +67,7 @@ class _SettingOtherAccountPageState extends State<VRChatMobileSettingsOtherAccou
                             ),
                           ),
                         ),
+                        if (login == account) const SizedBox(width: 20, height: 20, child: CircularProgressIndicator()),
                         SizedBox(
                           width: 50,
                           child: IconButton(
