@@ -30,6 +30,8 @@ class _LoginPageState extends State<VRChatMobileLogin> {
   late AccountConfig accountConfig;
   bool _isPasswordObscure = true;
   bool _rememberPassword = false;
+  bool wait = false;
+  bool waitTotp = false;
   final TextEditingController _userController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _totpController = TextEditingController();
@@ -49,57 +51,66 @@ class _LoginPageState extends State<VRChatMobileLogin> {
     }
   }
 
-  _onPressed(context) {
-    session.login(_userController.text, _passwordController.text).then((VRChatLogin login) {
-      if (login.requiresTwoFactorAuth) {
-        _totp();
-      } else if (login.verified) {
-        _save(session.getCookie());
-      } else {
-        login.content.addAll({"lastEndpoint": "api/1/auth/user"});
-        throw Exception(errorLog(login.content));
-      }
-    }).catchError((status) {
+  _onPressed(context) async {
+    setState(() => wait = true);
+    VRChatLogin login = await session.login(_userController.text, _passwordController.text).catchError((status) {
+      setState(() => wait = false);
       apiError(context, status);
     });
+    setState(() => waitTotp = false);
+    if (login.requiresTwoFactorAuth) {
+      _totp();
+    } else if (login.verified) {
+      _save(session.getCookie());
+    } else {
+      login.content.addAll({"lastEndpoint": "api/1/auth/user"});
+      throw Exception(errorLog(login.content));
+    }
   }
 
-  _onPressedTotp(context) {
-    session.loginTotp(_totpController.text).then((VRChatLogin login) {
-      if (login.verified) {
-        _save(session.getCookie());
-      } else {
-        errorDialog(context, AppLocalizations.of(context)!.incorrectLogin);
-      }
-    }).catchError((status) {
+  _onPressedTotp(context, Function setState) async {
+    setState(() => waitTotp = true);
+    VRChatLogin login = await session.loginTotp(_totpController.text).catchError((status) {
+      setState(() => waitTotp = false);
       apiError(context, status);
     });
+    if (login.verified) {
+      await _save(session.getCookie());
+    } else {
+      errorDialog(context, AppLocalizations.of(context)!.incorrectLogin);
+      setState(() => waitTotp = false);
+    }
   }
 
   _totp() {
     showDialog(
       context: context,
       builder: (_) {
-        return AlertDialog(
-          title: Text(
-            AppLocalizations.of(context)!.twoFactorAuthentication,
+        return StatefulBuilder(
+          builder: (context, setState) => AlertDialog(
+            title: Text(
+              AppLocalizations.of(context)!.twoFactorAuthentication,
+            ),
+            content: TextFormField(
+              keyboardType: TextInputType.number,
+              controller: _totpController,
+              onFieldSubmitted: (String e) => _onPressedTotp(context, setState),
+              decoration: InputDecoration(labelText: AppLocalizations.of(context)!.authenticationCode),
+              maxLength: 6,
+            ),
+            actions: [
+              TextButton(
+                child: waitTotp ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator()) : Text(AppLocalizations.of(context)!.send),
+                onPressed: () => _onPressedTotp(context, setState),
+              ),
+            ],
           ),
-          content: TextFormField(
-            keyboardType: TextInputType.number,
-            controller: _totpController,
-            onFieldSubmitted: (String e) => _onPressedTotp(context),
-            decoration: InputDecoration(labelText: AppLocalizations.of(context)!.authenticationCode),
-            maxLength: 6,
-          ),
-          actions: [
-            TextButton(child: Text(AppLocalizations.of(context)!.send), onPressed: () => _onPressedTotp(context)),
-          ],
         );
       },
     );
   }
 
-  _save(String cookie) {
+  Future _save(String cookie) {
     if (!_rememberPassword) {
       _passwordController.text = "";
     }
@@ -109,7 +120,7 @@ class _LoginPageState extends State<VRChatMobileLogin> {
     accountConfig.setRememberLoginInfo(_rememberPassword);
     appConfig.addAccount(accountConfig);
 
-    appConfig.login(context, accountConfig).then(
+    return appConfig.login(context, accountConfig).then(
           (bool logged) => Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
@@ -174,9 +185,11 @@ class _LoginPageState extends State<VRChatMobileLogin> {
                 onChanged: (e) => setState(() => _rememberPassword = e),
               ),
               ElevatedButton(
-                child: Text(
-                  AppLocalizations.of(context)!.login,
-                ),
+                child: wait
+                    ? SizedBox(width: 20, height: 20, child: CircularProgressIndicator(color: Theme.of(context).colorScheme.onPrimary))
+                    : Text(
+                        AppLocalizations.of(context)!.login,
+                      ),
                 onPressed: () => _onPressed(context),
               ),
               TextButton(
