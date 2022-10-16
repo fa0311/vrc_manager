@@ -13,12 +13,11 @@ import 'package:vrc_manager/widgets/user.dart';
 
 List<Widget> selfUserModalBottom(
   BuildContext context,
-  Function setState,
   VRChatUserSelfOverload user,
 ) {
   return [
-    editBioTileWidget(context, setState, user),
-    editNoteTileWidget(context, setState, user),
+    editBioTileWidget(context, user),
+    editNoteTileWidget(context, user),
     shareUrlTileWidget(context, "https://vrchat.com/home/user/${user.id}"),
     if (appConfig.debugMode) openInJsonViewer(context, user.content),
   ];
@@ -26,12 +25,11 @@ List<Widget> selfUserModalBottom(
 
 List<Widget> userDetailsModalBottom(
   BuildContext context,
-  Function setState,
   VRChatUser user,
   VRChatFriendStatus status,
 ) {
   return [
-    editNoteTileWidget(context, setState, user),
+    editNoteTileWidget(context, user),
     shareUrlTileWidget(context, "https://vrchat.com/home/user/${user.id}"),
     profileActionTileWidget(context, status, user),
     if (appConfig.debugMode) openInJsonViewer(context, user.content),

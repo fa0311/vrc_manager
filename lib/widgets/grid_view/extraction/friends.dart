@@ -42,7 +42,7 @@ Widget extractionFriendDefault(
                     builder: (BuildContext context) => VRChatMobileUser(userId: user.id),
                   )),
               onLongPress: () => modalBottom(
-                  context, userDetailsModalBottom(context, setState, user, VRChatFriendStatus(isFriend: true, incomingRequest: false, outgoingRequest: false))),
+                  context, userDetailsModalBottom(context, user, VRChatFriendStatus(isFriend: true, incomingRequest: false, outgoingRequest: false))),
               bottom: () {
                 if (!config.worldDetails) return null;
                 if (user.location == "private") return privateWorld(context, card: false);
@@ -96,7 +96,7 @@ Widget extractionFriendSimple(
                     builder: (BuildContext context) => VRChatMobileUser(userId: user.id),
                   )),
               onLongPress: () => modalBottom(
-                  context, userDetailsModalBottom(context, setState, user, VRChatFriendStatus(isFriend: true, incomingRequest: false, outgoingRequest: false))),
+                  context, userDetailsModalBottom(context, user, VRChatFriendStatus(isFriend: true, incomingRequest: false, outgoingRequest: false))),
               bottom: () {
                 if (!config.worldDetails) return null;
                 if (user.location == "private") return privateWorld(context, card: false, half: true);
@@ -151,9 +151,9 @@ Widget extractionFriendText(
                       !["private", "offline", "traveling"].contains(user.location) &&
                       locationMap[worldId] != null &&
                       instanceMap[user.location] != null)
-                    ...userInstanceDetailsModalBottom(context, setState, user, locationMap[worldId]!, instanceMap[user.location]!)
+                    ...userInstanceDetailsModalBottom(context, user, locationMap[worldId]!, instanceMap[user.location]!)
                   else
-                    ...userDetailsModalBottom(context, setState, user, VRChatFriendStatus(isFriend: true, incomingRequest: false, outgoingRequest: false))
+                    ...userDetailsModalBottom(context, user, VRChatFriendStatus(isFriend: true, incomingRequest: false, outgoingRequest: false))
                 ],
               ),
               children: [

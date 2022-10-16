@@ -73,7 +73,7 @@ class _LoginHomeState extends State<VRChatMobileHome> {
           if (user != null)
             IconButton(
               icon: const Icon(Icons.more_vert),
-              onPressed: () => modalBottom(context, selfUserModalBottom(context, setState, user!)),
+              onPressed: () => modalBottom(context, selfUserModalBottom(context, user!)),
             ),
         ],
       ),

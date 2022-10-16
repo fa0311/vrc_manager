@@ -35,7 +35,6 @@ List<Widget> instanceDetailsModalBottom(
 
 List<Widget> userInstanceDetailsModalBottom(
   BuildContext context,
-  Function setState,
   VRChatUser user,
   VRChatWorld world,
   VRChatInstance instance,

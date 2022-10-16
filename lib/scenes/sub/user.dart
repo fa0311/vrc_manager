@@ -75,7 +75,7 @@ class _UserHomeState extends State<VRChatMobileUser> {
             icon: const Icon(Icons.more_vert),
             onPressed: () => modalBottom(
               context,
-              userDetailsModalBottom(context, setState, user!, status!),
+              userDetailsModalBottom(context, user!, status!),
             ),
           ),
       ]),

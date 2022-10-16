@@ -11,7 +11,7 @@ import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/widgets/modal/list_tile/main.dart';
 import 'package:vrc_manager/widgets/user.dart';
 
-Widget editNoteTileWidget(BuildContext context, Function setState, VRChatUser user) {
+Widget editNoteTileWidget(BuildContext context, VRChatUser user) {
   return ListTile(
     title: Text(AppLocalizations.of(context)!.editNote),
     onTap: () {
@@ -20,7 +20,7 @@ Widget editNoteTileWidget(BuildContext context, Function setState, VRChatUser us
   );
 }
 
-Widget editBioTileWidget(BuildContext context, Function setState, VRChatUserSelf user) {
+Widget editBioTileWidget(BuildContext context, VRChatUserSelf user) {
   return ListTile(
     title: Text(AppLocalizations.of(context)!.editBio),
     onTap: () {
