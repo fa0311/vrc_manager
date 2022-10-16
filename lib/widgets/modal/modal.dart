@@ -9,12 +9,16 @@ import 'package:vrc_manager/data_class/app_config.dart';
 import 'package:vrc_manager/data_class/modal.dart';
 import 'package:vrc_manager/widgets/share.dart';
 
+RoundedRectangleBorder getGridShape() {
+  return const RoundedRectangleBorder(
+    borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
+  );
+}
+
 gridModal(BuildContext context, Function setState, GridConfig config, GridModalConfig gridModalConfig) {
   showModalBottomSheet(
     context: context,
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
-    ),
+    shape: getGridShape(),
     builder: (BuildContext context) => StatefulBuilder(
       builder: (BuildContext context, Function setStateBuilder) => SingleChildScrollView(
         child: Column(
@@ -86,9 +90,7 @@ gridModal(BuildContext context, Function setState, GridConfig config, GridModalC
 gridSortModal(BuildContext context, Function setState, GridConfig config, List<SortMode> gridSortMode) {
   showModalBottomSheet(
     context: context,
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
-    ),
+    shape: getGridShape(),
     builder: (BuildContext context) => StatefulBuilder(
       builder: (BuildContext context, setStateBuilder) => SingleChildScrollView(
         child: Column(
@@ -120,9 +122,7 @@ gridSortModal(BuildContext context, Function setState, GridConfig config, List<S
 gridDisplayModeModal(BuildContext context, Function setState, GridConfig config, List<DisplayMode> gridDisplayMode) {
   showModalBottomSheet(
     context: context,
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
-    ),
+    shape: getGridShape(),
     builder: (BuildContext context) => StatefulBuilder(
       builder: (BuildContext context, setStateBuilder) => SingleChildScrollView(
         child: Column(children: <Widget>[
