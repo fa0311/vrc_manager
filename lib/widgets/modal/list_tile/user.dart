@@ -15,7 +15,7 @@ Widget editNoteTileWidget(BuildContext context, Function setState, VRChatUser us
   return ListTile(
     title: Text(AppLocalizations.of(context)!.editNote),
     onTap: () {
-      editNote(context, user).then((value) => setState(() {}));
+      showDialog(context: context, builder: (context) => editNote(user));
     },
   );
 }

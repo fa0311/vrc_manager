@@ -138,36 +138,33 @@ Future editBio(BuildContext context, VRChatUserSelf user) {
   );
 }
 
-Future editNote(BuildContext context, VRChatUser user) {
+StatefulBuilder editNote(VRChatUser user) {
   late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
   late TextEditingController controller = TextEditingController()..text = user.note ?? "";
   bool wait = false;
-  return showDialog(
-    context: context,
-    builder: (context) => StatefulBuilder(
-      builder: (context, setState) => AlertDialog(
-        content: TextField(
-          controller: controller,
-          decoration: InputDecoration(labelText: AppLocalizations.of(context)!.editNote),
-        ),
-        actions: <Widget>[
-          TextButton(
-            child: Text(AppLocalizations.of(context)!.close),
-            onPressed: () => Navigator.pop(context),
-          ),
-          TextButton(
-              child: wait ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator()) : Text(AppLocalizations.of(context)!.save),
-              onPressed: () {
-                setState(() => wait = true);
-                vrchatLoginSession.userNotes(user.id, user.note = controller.text).then((VRChatUserNotes response) {
-                  user.note = user.note == "" ? null : user.note;
-                  Navigator.pop(context);
-                }).catchError((status) {
-                  apiError(context, status);
-                });
-              }),
-        ],
+  return StatefulBuilder(
+    builder: (context, setState) => AlertDialog(
+      content: TextField(
+        controller: controller,
+        decoration: InputDecoration(labelText: AppLocalizations.of(context)!.editNote),
       ),
+      actions: <Widget>[
+        TextButton(
+          child: Text(AppLocalizations.of(context)!.close),
+          onPressed: () => Navigator.pop(context),
+        ),
+        TextButton(
+            child: wait ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator()) : Text(AppLocalizations.of(context)!.save),
+            onPressed: () {
+              setState(() => wait = true);
+              vrchatLoginSession.userNotes(user.id, user.note = controller.text).then((VRChatUserNotes response) {
+                user.note = user.note == "" ? null : user.note;
+                Navigator.pop(context);
+              }).catchError((status) {
+                apiError(context, status);
+              });
+            }),
+      ],
     ),
   );
 }
