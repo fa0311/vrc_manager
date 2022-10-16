@@ -17,39 +17,51 @@ import 'package:vrc_manager/scenes/setting/other_account.dart';
 import 'package:vrc_manager/scenes/sub/login.dart';
 
 Drawer drawer(BuildContext context) {
-  List<Widget> getAccountList() {
-    return [
-      for (AccountConfig account in appConfig.accountList)
-        ListTile(
-          title: Text(
-            account.displayName ?? AppLocalizations.of(context)!.unknown,
-          ),
-          onTap: () {
-            Navigator.pop(context);
-            appConfig.login(context, account).then(
-                  (bool logged) => Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                      builder: (BuildContext context) => logged ? const VRChatMobileHome() : const VRChatMobileLogin(),
-                    ),
-                    (_) => false,
+  Widget getAccountList() {
+    AccountConfig? login;
+    return StatefulBuilder(
+      builder: (BuildContext context, setState) => SingleChildScrollView(
+        child: Column(children: [
+          for (AccountConfig account in appConfig.accountList)
+            ListTile(
+              title: Text(
+                account.displayName ?? AppLocalizations.of(context)!.unknown,
+              ),
+              trailing: login == account
+                  ? const Padding(
+                      padding: EdgeInsets.only(right: 2, top: 2),
+                      child: SizedBox(width: 20, height: 20, child: CircularProgressIndicator()),
+                    )
+                  : null,
+              onTap: () async {
+                login = account;
+                setState(() {});
+                bool logged = await appConfig.login(context, account);
+                // ignore: use_build_context_synchronously
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => logged ? const VRChatMobileHome() : const VRChatMobileLogin(),
                   ),
+                  (_) => false,
                 );
-          },
-        ),
-      const Divider(),
-      ListTile(
-        leading: const Icon(Icons.settings),
-        title: Text(AppLocalizations.of(context)!.accountSwitchSetting),
-        onTap: () => Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-            builder: (BuildContext context) => const VRChatMobileSettingsOtherAccount(),
-          ),
-          (_) => false,
-        ),
-      )
-    ];
+              },
+            ),
+          const Divider(),
+          ListTile(
+            leading: const Icon(Icons.settings),
+            title: Text(AppLocalizations.of(context)!.accountSwitchSetting),
+            onTap: () => Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                builder: (BuildContext context) => const VRChatMobileSettingsOtherAccount(),
+              ),
+              (_) => false,
+            ),
+          )
+        ]),
+      ),
+    );
   }
 
   return Drawer(
@@ -156,9 +168,7 @@ Drawer drawer(BuildContext context) {
                       top: Radius.circular(15),
                     ),
                   ),
-                  builder: (BuildContext context) => SingleChildScrollView(
-                    child: Column(children: getAccountList()),
-                  ),
+                  builder: (BuildContext context) => getAccountList(),
                 ),
                 leading: const Icon(Icons.account_circle),
                 title: Text(AppLocalizations.of(context)!.accountSwitch),
@@ -185,9 +195,7 @@ Drawer drawer(BuildContext context) {
                         top: Radius.circular(15),
                       ),
                     ),
-                    builder: (BuildContext context) => SingleChildScrollView(
-                      child: Column(children: getAccountList()),
-                    ),
+                    builder: (BuildContext context) => getAccountList(),
                   ),
                   icon: const Icon(Icons.account_circle),
                 ),
