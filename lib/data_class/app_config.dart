@@ -19,7 +19,7 @@ class AppConfig {
   LanguageCode languageCode = LanguageCode.en;
   bool forceExternalBrowser = false;
   bool debugMode = false;
-  Function setState = () {};
+  Function setState = (Function fn) => fn();
 
   AccountConfig? get loggedAccount => _loggedAccount;
 
