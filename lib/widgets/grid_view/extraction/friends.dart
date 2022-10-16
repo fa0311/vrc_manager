@@ -120,7 +120,7 @@ Widget extractionFriendSimple(
   );
 }
 
-GridView extractionFriendText(
+Widget extractionFriendText(
   BuildContext context,
   GridConfig config,
   List<VRChatFriends> userList,
