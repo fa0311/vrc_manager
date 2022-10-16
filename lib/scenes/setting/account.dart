@@ -41,34 +41,32 @@ class _SettingAccountPageState extends State<VRChatMobileSettingsAccount> {
                             context,
                             AppLocalizations.of(context)!.logoutConfirm,
                             AppLocalizations.of(context)!.logout,
-                            () {
-                              Navigator.pushAndRemoveUntil(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (BuildContext context) => const VRChatMobileLogin(),
-                                ),
-                                (_) => false,
-                              );
-                              appConfig.loggedAccount?.removeCookie();
-                            },
-                          )),
+                          ).then((value) {
+                            if (!value) return;
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                builder: (BuildContext context) => const VRChatMobileLogin(),
+                              ),
+                              (_) => false,
+                            );
+                            appConfig.loggedAccount?.removeCookie();
+                          })),
                   const Divider(),
                   ListTile(
-                    title: Text(AppLocalizations.of(context)!.deleteLoginInfo),
-                    subtitle: Text(AppLocalizations.of(context)!.deleteLoginInfoDetails),
-                    onTap: () => confirm(
-                      context,
-                      AppLocalizations.of(context)!.deleteLoginInfoConfirm,
-                      AppLocalizations.of(context)!.delete,
-                      () {
-                        appConfig.loggedAccount?.removeUserId();
-                        appConfig.loggedAccount?.removePassword();
-                        appConfig.loggedAccount?.removeDisplayName();
-                        appConfig.loggedAccount?.setRememberLoginInfo(false);
-                        Navigator.pop(context);
-                      },
-                    ),
-                  ),
+                      title: Text(AppLocalizations.of(context)!.deleteLoginInfo),
+                      subtitle: Text(AppLocalizations.of(context)!.deleteLoginInfoDetails),
+                      onTap: () => confirm(
+                            context,
+                            AppLocalizations.of(context)!.deleteLoginInfoConfirm,
+                            AppLocalizations.of(context)!.delete,
+                          ).then((value) {
+                            if (!value) return;
+                            appConfig.loggedAccount?.removeUserId();
+                            appConfig.loggedAccount?.removePassword();
+                            appConfig.loggedAccount?.removeDisplayName();
+                            appConfig.loggedAccount?.setRememberLoginInfo(false);
+                          })),
                   const Divider(),
                   ListTile(
                     title: Text(AppLocalizations.of(context)!.token),

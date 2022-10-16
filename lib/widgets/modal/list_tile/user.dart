@@ -79,14 +79,15 @@ List<Widget> profileAction(
       context,
       AppLocalizations.of(context)!.unfriendConfirm,
       AppLocalizations.of(context)!.unfriend,
-      () => vrchatLoginSession.deleteFriend(user.id).then((response) {
+    ).then((value) {
+      if (!value) return;
+      vrchatLoginSession.deleteFriend(user.id).then((response) {
         status.isFriend = false;
-        Navigator.pop(context);
         Navigator.pop(context);
       }).catchError((status) {
         apiError(context, status);
-      }),
-    );
+      });
+    });
   }
 
   return [

@@ -21,65 +21,7 @@ class VRChatMobileSettingsOtherAccount extends StatefulWidget {
 }
 
 class _SettingOtherAccountPageState extends State<VRChatMobileSettingsOtherAccount> {
-  Column column = Column();
-
-  List<Widget> getAccountList() {
-    List<Widget> list = [];
-    for (AccountConfig account in appConfig.accountList) {
-      list.add(
-        Card(
-          elevation: 20.0,
-          child: Container(
-            padding: const EdgeInsets.all(10.0),
-            child: GestureDetector(
-              onTap: () {
-                appConfig.login(context, account).then(
-                      (value) => Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                          builder: (BuildContext context) => const VRChatMobileHome(),
-                        ),
-                        (_) => false,
-                      ),
-                    );
-              },
-              behavior: HitTestBehavior.opaque,
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                    child: SizedBox(
-                      width: double.infinity,
-                      child: Text(
-                        account.displayName ?? AppLocalizations.of(context)!.unknown,
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 50,
-                    child: IconButton(
-                      onPressed: () => confirm(
-                        context,
-                        AppLocalizations.of(context)!.deleteLoginInfoConfirm,
-                        AppLocalizations.of(context)!.delete,
-                        () {
-                          appConfig.removeAccount(account);
-                          setState(() {});
-                          Navigator.pop(context);
-                        },
-                      ),
-                      icon: const Icon(Icons.delete),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      );
-    }
-    return list;
-  }
+  AccountConfig? login;
 
   @override
   Widget build(BuildContext context) {
@@ -94,7 +36,57 @@ class _SettingOtherAccountPageState extends State<VRChatMobileSettingsOtherAccou
           width: MediaQuery.of(context).size.width,
           child: SingleChildScrollView(
               child: Column(children: [
-            ...getAccountList(),
+            for (AccountConfig account in appConfig.accountList)
+              Card(
+                elevation: 20.0,
+                child: Container(
+                  padding: const EdgeInsets.all(10.0),
+                  child: GestureDetector(
+                    onTap: () async {
+                      login = account;
+                      setState(() {});
+                      bool logged = await appConfig.login(context, account);
+                      if (!mounted) return;
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                          builder: (BuildContext context) => logged ? const VRChatMobileHome() : const VRChatMobileLogin(),
+                        ),
+                        (_) => false,
+                      );
+                    },
+                    behavior: HitTestBehavior.opaque,
+                    child: Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: SizedBox(
+                            width: double.infinity,
+                            child: Text(
+                              account.displayName ?? AppLocalizations.of(context)!.unknown,
+                              style: const TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 50,
+                          child: IconButton(
+                            onPressed: () => confirm(
+                              context,
+                              AppLocalizations.of(context)!.deleteLoginInfoConfirm,
+                              AppLocalizations.of(context)!.delete,
+                            ).then((value) {
+                              if (!value) return;
+                              appConfig.removeAccount(account);
+                              setState(() {});
+                            }),
+                            icon: const Icon(Icons.delete),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
             TextButton(
               style: ElevatedButton.styleFrom(
                 foregroundColor: Colors.grey,
