@@ -89,6 +89,7 @@
     "search": "Search",
     "@____________________FRIEND_REQUEST____________________": {},
     "friendRequest": "Friend request ",
+    "friendManagement": "Friend management",
     "@____________________FAVORITE_WORLD____________________": {},
     "favoriteWorlds": "Favorite Worlds",
     "@____________________USER____________________": {},

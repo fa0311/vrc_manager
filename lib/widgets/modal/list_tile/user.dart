@@ -59,7 +59,7 @@ Widget editBioTileWidget(BuildContext context, VRChatUserSelf user) {
 
 Widget profileActionTileWidget(BuildContext context, VRChatFriendStatus status, VRChatUser user) {
   return ListTile(
-    title: Text(AppLocalizations.of(context)!.friendRequest),
+    title: Text(AppLocalizations.of(context)!.friendManagement),
     onTap: () {
       modalBottom(context, profileAction(context, status, user));
     },
