@@ -29,11 +29,11 @@ Widget editBioTileWidget(BuildContext context, Function setState, VRChatUserSelf
   );
 }
 
-Widget profileActionTileWidget(BuildContext context, Function setState, VRChatFriendStatus status, VRChatUser user) {
+Widget profileActionTileWidget(BuildContext context, VRChatFriendStatus status, VRChatUser user) {
   return ListTile(
     title: Text(AppLocalizations.of(context)!.friendRequest),
     onTap: () {
-      modalBottom(context, profileAction(context, status, user)).then((value) => setState(() {}));
+      modalBottom(context, profileAction(context, status, user));
     },
   );
 }

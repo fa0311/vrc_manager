@@ -33,7 +33,7 @@ List<Widget> userDetailsModalBottom(
   return [
     editNoteTileWidget(context, setState, user),
     shareUrlTileWidget(context, "https://vrchat.com/home/user/${user.id}"),
-    profileActionTileWidget(context, setState, status, user),
+    profileActionTileWidget(context, status, user),
     if (appConfig.debugMode) openInJsonViewer(context, user.content),
     if (appConfig.debugMode) openInJsonViewer(context, status.content),
   ];
