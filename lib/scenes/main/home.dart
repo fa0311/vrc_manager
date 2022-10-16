@@ -12,9 +12,9 @@ import 'package:vrc_manager/assets/flutter/text_stream.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/sub/login.dart';
 import 'package:vrc_manager/widgets/drawer.dart';
-import 'package:vrc_manager/widgets/grid_view/extraction/user.dart';
 import 'package:vrc_manager/widgets/grid_view/widget/world.dart';
 import 'package:vrc_manager/widgets/modal/list_tile/main.dart';
+import 'package:vrc_manager/widgets/modal/list_tile/user.dart';
 import 'package:vrc_manager/widgets/user.dart';
 
 class VRChatMobileHome extends StatefulWidget {

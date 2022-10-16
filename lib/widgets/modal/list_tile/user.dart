@@ -11,7 +11,33 @@ import 'package:vrc_manager/assets/dialog.dart';
 import 'package:vrc_manager/assets/error.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/widgets/modal/list_tile/main.dart';
+import 'package:vrc_manager/widgets/modal/list_tile/share.dart';
 import 'package:vrc_manager/widgets/user.dart';
+
+List<Widget> selfUserModalBottom(
+  BuildContext context,
+  VRChatUserSelfOverload user,
+) {
+  return [
+    editBioTileWidget(context, user),
+    editNoteTileWidget(context, user),
+    shareUrlTileWidget(context, "https://vrchat.com/home/user/${user.id}"),
+    if (appConfig.debugMode) openInJsonViewer(context, user.content),
+  ];
+}
+
+List<Widget> userDetailsModalBottom(
+  BuildContext context,
+  VRChatUser user,
+  VRChatFriendStatus status,
+) {
+  return [
+    editNoteTileWidget(context, user),
+    shareUrlTileWidget(context, "https://vrchat.com/home/user/${user.id}"),
+    profileActionTileWidget(context, status, user),
+    if (appConfig.debugMode) openInJsonViewer(context, user.content),
+  ];
+}
 
 Widget editNoteTileWidget(BuildContext context, VRChatUser user) {
   return ListTile(
