@@ -108,47 +108,44 @@ Future editBio(BuildContext context, VRChatUserSelf user) {
   bool wait = false;
   return showDialog(
     context: context,
-    builder: (context) {
-      return StatefulBuilder(
-        builder: (context, setState) {
-          return AlertDialog(
-            content: TextField(
-              controller: controller,
-              maxLines: null,
-              decoration: InputDecoration(labelText: AppLocalizations.of(context)!.editBio),
-            ),
-            actions: <Widget>[
-              TextButton(
-                child: Text(AppLocalizations.of(context)!.close),
-                onPressed: () => Navigator.pop(context),
-              ),
-              TextButton(
-                  child: wait ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator()) : Text(AppLocalizations.of(context)!.save),
-                  onPressed: () {
-                    wait = true;
-                    setState(() {});
-                    vrchatLoginSession.changeBio(user.id, user.bio = controller.text).then((VRChatUserSelf response) {
-                      user.bio = user.bio == "" ? null : user.bio;
-                      Navigator.pop(context);
-                    }).catchError((status) {
-                      apiError(context, status);
-                    });
-                  }),
-            ],
-          );
-        },
-      );
-    },
+    builder: (context) => StatefulBuilder(
+      builder: (context, setState) => AlertDialog(
+        content: TextField(
+          controller: controller,
+          maxLines: null,
+          decoration: InputDecoration(labelText: AppLocalizations.of(context)!.editBio),
+        ),
+        actions: <Widget>[
+          TextButton(
+            child: Text(AppLocalizations.of(context)!.close),
+            onPressed: () => Navigator.pop(context),
+          ),
+          TextButton(
+            child: wait ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator()) : Text(AppLocalizations.of(context)!.save),
+            onPressed: () {
+              setState(() => wait = true);
+              vrchatLoginSession.changeBio(user.id, user.bio = controller.text).then((VRChatUserSelf response) {
+                user.bio = user.bio == "" ? null : user.bio;
+                Navigator.pop(context);
+              }).catchError((status) {
+                apiError(context, status);
+              });
+            },
+          ),
+        ],
+      ),
+    ),
   );
 }
 
 Future editNote(BuildContext context, VRChatUser user) {
   late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
   late TextEditingController controller = TextEditingController()..text = user.note ?? "";
+  bool wait = false;
   return showDialog(
     context: context,
-    builder: (_) {
-      return AlertDialog(
+    builder: (context) => StatefulBuilder(
+      builder: (context, setState) => AlertDialog(
         content: TextField(
           controller: controller,
           decoration: InputDecoration(labelText: AppLocalizations.of(context)!.editNote),
@@ -159,17 +156,19 @@ Future editNote(BuildContext context, VRChatUser user) {
             onPressed: () => Navigator.pop(context),
           ),
           TextButton(
-            child: Text(AppLocalizations.of(context)!.save),
-            onPressed: () => vrchatLoginSession.userNotes(user.id, user.note = controller.text).then((VRChatUserNotes notes) {
-              user.note = user.note == "" ? null : user.note;
-              Navigator.pop(context);
-            }).catchError((status) {
-              apiError(context, status);
-            }),
-          ),
+              child: wait ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator()) : Text(AppLocalizations.of(context)!.save),
+              onPressed: () {
+                setState(() => wait = true);
+                vrchatLoginSession.userNotes(user.id, user.note = controller.text).then((VRChatUserNotes response) {
+                  user.note = user.note == "" ? null : user.note;
+                  Navigator.pop(context);
+                }).catchError((status) {
+                  apiError(context, status);
+                });
+              }),
         ],
-      );
-    },
+      ),
+    ),
   );
 }
 
