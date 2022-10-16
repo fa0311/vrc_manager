@@ -19,6 +19,7 @@ List<Widget> worldDetailsModalBottom(
     shareUrlTileWidget(context, "https://vrchat.com/home/world/${world.id}"),
     favoriteListTileWidget(context, world),
     launchWorldListTileWidget(context, world),
+    if (appConfig.debugMode) openInJsonViewer(context, world.content),
   ];
 }
 
