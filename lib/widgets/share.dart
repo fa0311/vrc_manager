@@ -10,6 +10,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+// Project imports:
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/web/web_view.dart';
 

@@ -1,6 +1,5 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
-import 'package:vrc_manager/widgets/modal/list_tile/share.dart';
 
 // Package imports:
 import 'package:webview_flutter/webview_flutter.dart';
@@ -10,9 +9,9 @@ import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
 import 'package:vrc_manager/assets/session.dart';
 import 'package:vrc_manager/main.dart';
-import 'package:vrc_manager/widgets/share.dart';
-
 import 'package:vrc_manager/widgets/modal/list_tile/main.dart';
+import 'package:vrc_manager/widgets/modal/list_tile/share.dart';
+import 'package:vrc_manager/widgets/share.dart';
 
 class VRChatMobileWebView extends StatefulWidget {
   final String url;
