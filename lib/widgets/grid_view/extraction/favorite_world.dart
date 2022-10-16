@@ -13,8 +13,9 @@ import 'package:vrc_manager/widgets/modal/list_tile/world.dart';
 Widget extractionWorldDefault(
   BuildContext context,
   GridConfig config,
-  List<VRChatFavoriteWorld> favoriteWorld,
-) {
+  List<VRChatFavoriteWorld> favoriteWorld, {
+  Function? setState,
+}) {
   return StatefulBuilder(
     builder: (BuildContext context, setState) => renderGrid(
       context,
@@ -31,7 +32,7 @@ Widget extractionWorldDefault(
                   MaterialPageRoute(
                     builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id),
                   )),
-              onLongPress: () => modalBottom(context, [favoriteListTileWidget(context, world)]),
+              onLongPress: () => modalBottom(context, [favoriteListTileWidget(context, world, setState: setState)]),
               children: [
                 SizedBox(
                   child: Text(
@@ -69,10 +70,12 @@ Widget extractionWorldDefault(
 Widget extractionWorldSimple(
   BuildContext context,
   GridConfig config,
-  List<VRChatFavoriteWorld> favoriteWorld,
-) {
+  List<VRChatFavoriteWorld> favoriteWorld, {
+  Function? setState,
+}) {
+  setState ??= (fn) => fn();
   return StatefulBuilder(
-    builder: (BuildContext context, setState) => renderGrid(
+    builder: (BuildContext context, _) => renderGrid(
       context,
       width: 320,
       height: 64,
@@ -88,9 +91,7 @@ Widget extractionWorldSimple(
                   MaterialPageRoute(
                     builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id),
                   )),
-              onLongPress: () => modalBottom(context, [
-                favoriteListTileWidget(context, world),
-              ]),
+              onLongPress: () => modalBottom(context, [favoriteListTileWidget(context, world, setState: setState)]),
               children: [
                 SizedBox(
                   width: double.infinity,
@@ -125,7 +126,7 @@ Widget extractionWorldSimple(
                         color: Colors.white,
                         constraints: const BoxConstraints(),
                         padding: const EdgeInsets.all(0),
-                        onPressed: () => delete(context, world, favoriteWorld).then((value) => setState(() {})),
+                        onPressed: () => delete(context, world, favoriteWorld).then((value) => setState!(() {})),
                         icon: const Icon(Icons.delete),
                       ),
                     ]

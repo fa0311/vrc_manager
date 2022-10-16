@@ -80,11 +80,11 @@ class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
                   () {
                     switch (config.displayMode) {
                       case DisplayMode.normal:
-                        return extractionWorldDefault(context, config, favoriteWorld.list);
+                        return extractionWorldDefault(context, config, favoriteWorld.list, setState: setState);
                       case DisplayMode.simple:
-                        return extractionWorldSimple(context, config, favoriteWorld.list);
+                        return extractionWorldSimple(context, config, favoriteWorld.list, setState: setState);
                       case DisplayMode.textOnly:
-                        return extractionWorldSimple(context, config, favoriteWorld.list);
+                        return extractionWorldSimple(context, config, favoriteWorld.list, setState: setState);
                     }
                   }(),
                 ],

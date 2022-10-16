@@ -132,11 +132,12 @@ FavoriteWorldData? getFavoriteData(VRChatLimitedWorld world) {
   return null;
 }
 
-Future favoriteAction(BuildContext context, VRChatLimitedWorld world) {
+Future favoriteAction(BuildContext context, VRChatLimitedWorld world, {Function? setState}) {
   late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
   VRChatFavoriteWorld? favoriteWorld = getFavoriteWorld(world);
   FavoriteWorldData? favoriteWorldData = getFavoriteData(world);
   FavoriteWorldData? loadingWorldData;
+  setState ??= (fn) => fn();
   return showModalBottomSheet(
     context: context,
     shape: const RoundedRectangleBorder(
@@ -149,18 +150,19 @@ Future favoriteAction(BuildContext context, VRChatLimitedWorld world) {
             for (FavoriteWorldData favoriteData in appConfig.loggedAccount?.favoriteWorld ?? [])
               ListTile(
                 title: Text(favoriteData.group.displayName),
-                trailing: favoriteWorldData == favoriteData
-                    ? const Icon(Icons.check)
-                    : loadingWorldData == favoriteData
-                        ? const Padding(
-                            padding: EdgeInsets.only(right: 2, top: 2),
-                            child: SizedBox(width: 20, height: 20, child: CircularProgressIndicator()),
-                          )
+                trailing: loadingWorldData == favoriteData
+                    ? const Padding(
+                        padding: EdgeInsets.only(right: 2, top: 2),
+                        child: SizedBox(width: 20, height: 20, child: CircularProgressIndicator()),
+                      )
+                    : favoriteWorldData == favoriteData
+                        ? const Icon(Icons.check)
                         : null,
                 onTap: () async {
                   loadingWorldData = favoriteData;
                   setStateBuilder(() {});
-                  if (favoriteWorldData == favoriteData || favoriteWorld != null) {
+                  bool value = favoriteWorldData == favoriteData;
+                  if (value || favoriteWorld != null) {
                     await vrchatLoginSession.deleteFavorites(favoriteWorld!.favoriteId).catchError((status) {
                       apiError(context, status);
                     });
@@ -168,7 +170,7 @@ Future favoriteAction(BuildContext context, VRChatLimitedWorld world) {
                     favoriteWorld = null;
                     favoriteWorldData = null;
                   }
-                  if (favoriteWorldData != favoriteData) {
+                  if (!value && favoriteWorldData != favoriteData) {
                     await vrchatLoginSession.addFavorites("world", world.id, favoriteData.group.name).then((VRChatFavorite favorite) {
                       favoriteWorld = VRChatFavoriteWorld.fromFavorite(world, favorite, favoriteData.group.name);
                       favoriteData.list.add(favoriteWorld!);
@@ -177,7 +179,9 @@ Future favoriteAction(BuildContext context, VRChatLimitedWorld world) {
                       apiError(context, status);
                     });
                   }
+                  loadingWorldData = null;
                   setStateBuilder(() {});
+                  setState!(() {});
                 },
               ),
           ],
