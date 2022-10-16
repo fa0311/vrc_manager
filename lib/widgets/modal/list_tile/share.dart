@@ -105,7 +105,7 @@ Widget shareUrlTileWidget(BuildContext context, String url) {
 
 Widget shareInstanceTileWidget(BuildContext context, String worldId, String instanceId) {
   return ListTile(
-    title: Text(AppLocalizations.of(context)!.shareInstance),
+    title: Text(AppLocalizations.of(context)!.share),
     onTap: () {
       modalBottom(context, shareInstanceListTile(context, worldId, instanceId));
     },
