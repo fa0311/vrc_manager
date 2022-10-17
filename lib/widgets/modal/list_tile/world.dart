@@ -60,12 +60,11 @@ Widget selfInviteListTileWidget(BuildContext context, VRChatInstance instance) {
   );
 }
 
-Widget favoriteListTileWidget(BuildContext context, VRChatLimitedWorld world, {Function? setState}) {
-  setState ??= (fn) => fn();
+Widget favoriteListTileWidget(BuildContext context, VRChatLimitedWorld world) {
   return ListTile(
     title: Text(AppLocalizations.of(context)!.addFavoriteWorlds),
     onTap: () {
-      favoriteAction(context, world, setState: setState);
+      favoriteAction(context, world);
     },
   );
 }

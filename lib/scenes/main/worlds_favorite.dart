@@ -64,7 +64,7 @@ class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.more_vert),
-            onPressed: () => gridModal(context, setState, config, gridConfig),
+            onPressed: () => gridModal(context, config, gridConfig).then((value) => setState(() {})),
           ),
         ],
       ),

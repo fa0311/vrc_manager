@@ -87,14 +87,14 @@ class _SearchState extends State<VRChatSearch> {
         borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
       ),
       builder: (BuildContext context) => StatefulBuilder(
-        builder: (BuildContext context, setStateBuilder) => SingleChildScrollView(
+        builder: (BuildContext context, setState) => SingleChildScrollView(
           child: Column(
             children: <Widget>[
               ListTile(
                 title: Text(AppLocalizations.of(context)!.user),
                 trailing: searchModeSelected == SearchMode.users ? const Icon(Icons.check) : null,
                 onTap: () {
-                  setStateBuilder(() => searchModeSelected = SearchMode.users);
+                  setState(() => searchModeSelected = SearchMode.users);
                   setState(() {});
                 },
               ),
@@ -102,7 +102,7 @@ class _SearchState extends State<VRChatSearch> {
                 title: Text(AppLocalizations.of(context)!.world),
                 trailing: searchModeSelected == SearchMode.worlds ? const Icon(Icons.check) : null,
                 onTap: () {
-                  setStateBuilder(() => searchModeSelected = SearchMode.worlds);
+                  setState(() => searchModeSelected = SearchMode.worlds);
                   setState(() {});
                 },
               ),
@@ -169,7 +169,7 @@ class _SearchState extends State<VRChatSearch> {
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.more_vert),
-            onPressed: () => gridModal(context, setState, config, gridConfig),
+            onPressed: () => gridModal(context, config, gridConfig).then((value) => setState(() {})),
           ),
         ],
       ),

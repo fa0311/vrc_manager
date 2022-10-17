@@ -81,7 +81,7 @@ class _FriendsPageState extends State<VRChatMobileFriendRequest> {
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.more_vert),
-            onPressed: () => gridModal(context, setState, config, gridConfig),
+            onPressed: () => gridModal(context, config, gridConfig).then((value) => setState(() {})),
           ),
         ],
       ),

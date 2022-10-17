@@ -132,12 +132,11 @@ FavoriteWorldData? getFavoriteData(VRChatLimitedWorld world) {
   return null;
 }
 
-Future favoriteAction(BuildContext context, VRChatLimitedWorld world, {Function? setState}) {
+Future favoriteAction(BuildContext context, VRChatLimitedWorld world) {
   late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
   VRChatFavoriteWorld? favoriteWorld = getFavoriteWorld(world);
   FavoriteWorldData? favoriteWorldData = getFavoriteData(world);
   FavoriteWorldData? loadingWorldData;
-  setState ??= (fn) => fn();
   return showModalBottomSheet(
     context: context,
     shape: const RoundedRectangleBorder(
@@ -145,7 +144,7 @@ Future favoriteAction(BuildContext context, VRChatLimitedWorld world, {Function?
     ),
     builder: (BuildContext context) => SingleChildScrollView(
       child: StatefulBuilder(
-        builder: (BuildContext context, setStateBuilder) => Column(
+        builder: (BuildContext context, setState) => Column(
           children: [
             for (FavoriteWorldData favoriteData in appConfig.loggedAccount?.favoriteWorld ?? [])
               ListTile(
@@ -160,7 +159,7 @@ Future favoriteAction(BuildContext context, VRChatLimitedWorld world, {Function?
                         : null,
                 onTap: () async {
                   loadingWorldData = favoriteData;
-                  setStateBuilder(() {});
+                  setState(() {});
                   bool value = favoriteWorldData == favoriteData;
                   if (value || favoriteWorld != null) {
                     await vrchatLoginSession.deleteFavorites(favoriteWorld!.favoriteId).catchError((status) {
@@ -180,8 +179,7 @@ Future favoriteAction(BuildContext context, VRChatLimitedWorld world, {Function?
                     });
                   }
                   loadingWorldData = null;
-                  setStateBuilder(() {});
-                  setState!(() {});
+                  setState(() {});
                 },
               ),
           ],

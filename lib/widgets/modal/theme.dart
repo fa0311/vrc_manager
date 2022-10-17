@@ -15,7 +15,7 @@ Future showThemeBrightnessModal(BuildContext context) {
     ),
     builder: (BuildContext context) => SingleChildScrollView(
       child: StatefulBuilder(
-        builder: (BuildContext context, setStateBuilder) => Column(
+        builder: (BuildContext context, setState) => Column(
           children: <Widget>[
             for (ThemeBrightness e in ThemeBrightness.values)
               ListTile(

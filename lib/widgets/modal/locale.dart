@@ -18,7 +18,7 @@ Future showLocaleModal(BuildContext context) {
     ),
     builder: (BuildContext context) => SingleChildScrollView(
       child: StatefulBuilder(
-        builder: (BuildContext context, setStateBuilder) => Column(
+        builder: (BuildContext context, setState) => Column(
           children: <Widget>[
             for (LanguageCode value in LanguageCode.values)
               ListTile(

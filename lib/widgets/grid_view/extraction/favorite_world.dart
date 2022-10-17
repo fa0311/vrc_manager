@@ -32,7 +32,7 @@ Widget extractionWorldDefault(
                   MaterialPageRoute(
                     builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id),
                   )),
-              onLongPress: () => modalBottom(context, [favoriteListTileWidget(context, world, setState: setState)]),
+              onLongPress: () => modalBottom(context, [favoriteListTileWidget(context, world)]),
               children: [
                 SizedBox(
                   child: Text(
@@ -91,7 +91,7 @@ Widget extractionWorldSimple(
                   MaterialPageRoute(
                     builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id),
                   )),
-              onLongPress: () => modalBottom(context, [favoriteListTileWidget(context, world, setState: setState)]),
+              onLongPress: () => modalBottom(context, [favoriteListTileWidget(context, world)]),
               children: [
                 SizedBox(
                   width: double.infinity,

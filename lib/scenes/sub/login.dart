@@ -68,7 +68,7 @@ class _LoginPageState extends State<VRChatMobileLogin> {
     }
   }
 
-  _onPressedTotp(context, Function setState) async {
+  _onPressedTotp() async {
     setState(() => waitTotp = true);
     VRChatLogin login = await session.loginTotp(_totpController.text).catchError((status) {
       setState(() => waitTotp = false);
@@ -77,6 +77,7 @@ class _LoginPageState extends State<VRChatMobileLogin> {
     if (login.verified) {
       await _save(session.getCookie());
     } else {
+      // ignore: use_build_context_synchronously
       errorDialog(context, AppLocalizations.of(context)!.incorrectLogin);
       setState(() => waitTotp = false);
     }
@@ -94,14 +95,14 @@ class _LoginPageState extends State<VRChatMobileLogin> {
             content: TextFormField(
               keyboardType: TextInputType.number,
               controller: _totpController,
-              onFieldSubmitted: (String e) => _onPressedTotp(context, setState),
+              onFieldSubmitted: (String e) => _onPressedTotp(),
               decoration: InputDecoration(labelText: AppLocalizations.of(context)!.authenticationCode),
               maxLength: 6,
             ),
             actions: [
               TextButton(
                 child: waitTotp ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator()) : Text(AppLocalizations.of(context)!.send),
-                onPressed: () => _onPressedTotp(context, setState),
+                onPressed: () => _onPressedTotp(),
               ),
             ],
           ),
