@@ -23,8 +23,7 @@ Future showThemeBrightnessModal(BuildContext context) {
                 trailing: appConfig.themeBrightness == e ? const Icon(Icons.check) : null,
                 onTap: () {
                   appConfig.setThemeBrightness(e);
-                  setStateBuilder(() {});
-                  appConfig.setState(() {});
+                  appConfig.rootSetState(() {});
                 },
               ),
           ],

@@ -19,7 +19,7 @@ class AppConfig {
   LanguageCode languageCode = LanguageCode.en;
   bool forceExternalBrowser = false;
   bool debugMode = false;
-  Function setState = (Function fn) => fn();
+  Function rootSetState = (Function fn) => fn();
 
   AccountConfig? get loggedAccount => _loggedAccount;
 
@@ -31,7 +31,7 @@ class AppConfig {
       getStorage("theme_brightness").then((value) => value == null ? themeBrightness : ThemeBrightness.values.byName(value)),
       getStorage("language_code").then((value) => languageCode = value == null ? languageCode : LanguageCode.values.byName(value)),
     ]);
-    setState(() {});
+    rootSetState(() {});
     await Future.wait([
       getStorage("account_index").then((value) => accountUid = value),
       getStorageList("account_index_list").then((List<String> value) => uidList = value),

@@ -22,7 +22,7 @@ class _PageState extends State<VRChatMobile> {
   @override
   initState() {
     super.initState();
-    appConfig.setState = setState;
+    appConfig.rootSetState = setState;
   }
 
   @override
