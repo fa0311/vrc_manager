@@ -32,7 +32,7 @@ class VRChatMobileSettingsAccessibility extends ConsumerWidget {
               children: <Widget>[
                 ListTile(
                   title: Text(AppLocalizations.of(context)!.language),
-                  subtitle: Text(appConfig.languageCode.text),
+                  subtitle: Text(ref.read(appConfig.languageCode).text),
                   onTap: () => showLocaleModal(context),
                 ),
                 const Divider(),

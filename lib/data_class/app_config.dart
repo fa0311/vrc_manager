@@ -9,6 +9,7 @@ import 'package:vrc_manager/assets/error.dart';
 import 'package:vrc_manager/assets/storage.dart';
 import 'package:vrc_manager/data_class/enum.dart';
 import 'package:vrc_manager/data_class/modal.dart';
+import 'package:vrc_manager/data_class/notifier.dart';
 
 class AppConfig {
   AccountConfig? _loggedAccount;
@@ -16,9 +17,10 @@ class AppConfig {
   GridConfigList gridConfigList = GridConfigList();
   bool dontShowErrorDialog = false;
   bool agreedUserPolicy = false;
-  final themeBrightness = StateNotifierProvider<ThemeBrightnessNotifier, ThemeBrightness>((_) => ThemeBrightnessNotifier());
 
-  LanguageCode languageCode = LanguageCode.en;
+  final themeBrightness = StateNotifierProvider<ThemeBrightnessNotifier, ThemeBrightness>((_) => ThemeBrightnessNotifier());
+  final languageCode = StateNotifierProvider<LanguageCodeNotifier, LanguageCode>((_) => LanguageCodeNotifier());
+
   bool forceExternalBrowser = false;
   bool debugMode = false;
 
@@ -30,7 +32,7 @@ class AppConfig {
 
     await Future.wait([
       ref.read(themeBrightness.notifier).get(),
-      getStorage("language_code").then((value) => languageCode = value == null ? languageCode : LanguageCode.values.byName(value)),
+      ref.read(languageCode.notifier).get(),
     ]);
     await Future.wait([
       getStorage("account_index").then((value) => accountUid = value),
@@ -134,10 +136,6 @@ class AppConfig {
     return null;
   }
 
-  Future setLanguageCode(LanguageCode value) async {
-    return await setStorage("language_code", (languageCode = value).name);
-  }
-
   Future setDontShowErrorDialog(bool value) async {
     return await setStorage("dont_show_error_dialog", (dontShowErrorDialog = value).toString());
   }
@@ -153,19 +151,8 @@ class AppConfig {
   Future setDebugMode(bool value) async {
     return await setStorage("debug_mode", (debugMode = value).toString());
   }
-}
 
-class ThemeBrightnessNotifier extends StateNotifier<ThemeBrightness> {
-  ThemeBrightnessNotifier() : super(ThemeBrightness.light);
-  static const String key = "theme_brightness";
-
-  Future get() async {
-    state = ThemeBrightness.values.byName(await getStorage(key) ?? "");
-  }
-
-  Future set(ThemeBrightness set) async {
-    await setStorage(key, (state = set).name);
-  }
+  void setLanguageCode(LanguageCode value) {}
 }
 
 class AccountConfig {

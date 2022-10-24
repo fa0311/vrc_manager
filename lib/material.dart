@@ -11,6 +11,7 @@ import 'package:vrc_manager/main.dart';
 
 MaterialApp getMaterialApp(Widget home, WidgetRef ref) {
   final themeBrightness = ref.watch(appConfig.themeBrightness);
+  final languageCode = ref.watch(appConfig.languageCode);
 
   return MaterialApp(
     title: 'VRChat Mobile Client',
@@ -30,7 +31,7 @@ MaterialApp getMaterialApp(Widget home, WidgetRef ref) {
       Locale('th', ''),
       Locale('zh', ''),
     ],
-    locale: Locale(appConfig.languageCode.name, ''),
+    locale: Locale(languageCode.name, ''),
     theme: themeBrightness.toTheme(dark: true),
     darkTheme: themeBrightness.toTheme(dark: true),
     home: home,
