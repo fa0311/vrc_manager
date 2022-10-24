@@ -157,13 +157,14 @@ class AppConfig {
 
 class ThemeBrightnessNotifier extends StateNotifier<ThemeBrightness> {
   ThemeBrightnessNotifier() : super(ThemeBrightness.light);
+  static const String key = "theme_brightness";
 
   Future get() async {
-    state = ThemeBrightness.values.byName(await getStorage("theme_brightness") ?? "");
+    state = ThemeBrightness.values.byName(await getStorage(key) ?? "");
   }
 
-  Future set(ThemeBrightness element) async {
-    await setStorage("theme_brightness", (state = element).name);
+  Future set(ThemeBrightness set) async {
+    await setStorage(key, (state = set).name);
   }
 }
 
