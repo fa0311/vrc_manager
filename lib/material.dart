@@ -10,6 +10,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vrc_manager/main.dart';
 
 MaterialApp getMaterialApp(Widget home, WidgetRef ref) {
+  final themeBrightness = ref.watch(appConfig.themeBrightness);
+
   return MaterialApp(
     title: 'VRChat Mobile Client',
     debugShowCheckedModeBanner: false,
@@ -29,8 +31,8 @@ MaterialApp getMaterialApp(Widget home, WidgetRef ref) {
       Locale('zh', ''),
     ],
     locale: Locale(appConfig.languageCode.name, ''),
-    theme: ref.read(appConfig.themeBrightness).value.toTheme(),
-    darkTheme: ref.read(appConfig.themeBrightness).value.toTheme(dark: true),
+    theme: themeBrightness.toTheme(dark: true),
+    darkTheme: themeBrightness.toTheme(dark: true),
     home: home,
   );
 }

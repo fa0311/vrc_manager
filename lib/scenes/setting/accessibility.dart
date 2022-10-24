@@ -14,13 +14,11 @@ import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/widgets/modal/locale.dart';
 import 'package:vrc_manager/widgets/modal/theme.dart';
 
-
 class VRChatMobileSettingsAccessibility extends ConsumerWidget {
   const VRChatMobileSettingsAccessibility({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
     textStream(context);
     return Scaffold(
       appBar: AppBar(
@@ -40,16 +38,15 @@ class VRChatMobileSettingsAccessibility extends ConsumerWidget {
                 const Divider(),
                 ListTile(
                   title: Text(AppLocalizations.of(context)!.theme),
-                  subtitle: Text(ref.read(appConfig.themeBrightness).value.toLocalization(context)),
-                  onTap: () => showThemeBrightnessModal(context),
+                  subtitle: Text(ref.read(appConfig.themeBrightness).toLocalization(context)),
+                  onTap: () => showThemeBrightnessModal(context, ref),
                 ),
                 const Divider(),
                 SwitchListTile(
-                  value: appConfig.dontShowErrorDialog,
-                  title: Text(AppLocalizations.of(context)!.dontShowErrorDialog),
-                  subtitle: Text(AppLocalizations.of(context)!.dontShowErrorDialogDetails),
-                  onChanged: (bool e) => appConfig.setDontShowErrorDialog(e)),
-                ),
+                    value: appConfig.dontShowErrorDialog,
+                    title: Text(AppLocalizations.of(context)!.dontShowErrorDialog),
+                    subtitle: Text(AppLocalizations.of(context)!.dontShowErrorDialogDetails),
+                    onChanged: (bool e) => appConfig.setDontShowErrorDialog(e)),
                 if (!Platform.isWindows) ...[
                   const Divider(),
                   SwitchListTile(
@@ -63,7 +60,7 @@ class VRChatMobileSettingsAccessibility extends ConsumerWidget {
                 SwitchListTile(
                   value: appConfig.debugMode,
                   title: Text(AppLocalizations.of(context)!.debugMode),
-                  onChanged: (bool e) => appConfig.setDebugMode(e).then((value) => setState(() {})),
+                  onChanged: (bool e) => appConfig.setDebugMode(e),
                 )
               ],
             ),

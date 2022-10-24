@@ -3,6 +3,7 @@ import 'dart:io';
 
 // Flutter imports:
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Package imports:
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
@@ -14,37 +15,10 @@ import 'package:vrc_manager/scenes/main/home.dart';
 import 'package:vrc_manager/scenes/sub/login.dart';
 import 'package:vrc_manager/scenes/web/web_view_policies.dart';
 
-class VRChatMobileSplash extends StatefulWidget {
+class VRChatMobileSplash extends ConsumerWidget {
   const VRChatMobileSplash({Key? key}) : super(key: key);
-  @override
-  State<VRChatMobileSplash> createState() => _SplashState();
-}
 
-class _SplashState extends State<VRChatMobileSplash> {
-  @override
-  initState() {
-    super.initState();
-
-    appConfig.get(context).then((_) async {
-      if (!appConfig.agreedUserPolicy) {
-        goWebViewUserPolicy();
-      } else if (!appConfig.isLogout()) {
-        goLogin();
-      } else if (Platform.isAndroid || Platform.isIOS) {
-        ReceiveSharingIntent.getInitialText().then((String? initialText) {
-          if (initialText != null) {
-            urlParser(context, initialText);
-          } else {
-            goHome();
-          }
-        });
-      } else {
-        goHome();
-      }
-    });
-  }
-
-  goHome() {
+  goHome(BuildContext context) {
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(
@@ -54,7 +28,7 @@ class _SplashState extends State<VRChatMobileSplash> {
     );
   }
 
-  goLogin() {
+  goLogin(BuildContext context) {
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(
@@ -64,7 +38,7 @@ class _SplashState extends State<VRChatMobileSplash> {
     );
   }
 
-  goWebViewUserPolicy() {
+  goWebViewUserPolicy(BuildContext context) {
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(
@@ -75,7 +49,25 @@ class _SplashState extends State<VRChatMobileSplash> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    appConfig.get(context, ref).then((_) async {
+      if (!appConfig.agreedUserPolicy) {
+        goWebViewUserPolicy(context);
+      } else if (!appConfig.isLogout()) {
+        goLogin(context);
+      } else if (Platform.isAndroid || Platform.isIOS) {
+        ReceiveSharingIntent.getInitialText().then((String? initialText) {
+          if (initialText != null) {
+            urlParser(context, initialText);
+          } else {
+            goHome(context);
+          }
+        });
+      } else {
+        goHome(context);
+      }
+    });
+
     return Scaffold(
       body: SafeArea(
         child: SizedBox(

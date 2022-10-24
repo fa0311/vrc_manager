@@ -16,7 +16,7 @@ class AppConfig {
   GridConfigList gridConfigList = GridConfigList();
   bool dontShowErrorDialog = false;
   bool agreedUserPolicy = false;
-  final themeBrightness = Provider((_) => ThemeBrightnessProvider());
+  final themeBrightness = StateNotifierProvider<ThemeBrightnessNotifier, ThemeBrightness>((_) => ThemeBrightnessNotifier());
 
   LanguageCode languageCode = LanguageCode.en;
   bool forceExternalBrowser = false;
@@ -29,7 +29,7 @@ class AppConfig {
     String? accountUid;
 
     await Future.wait([
-      ref.read(themeBrightness).get(),
+      ref.read(themeBrightness.notifier).get(),
       getStorage("language_code").then((value) => languageCode = value == null ? languageCode : LanguageCode.values.byName(value)),
     ]);
     await Future.wait([
@@ -155,17 +155,15 @@ class AppConfig {
   }
 }
 
-class ThemeBrightnessProvider extends ChangeNotifier {
-  ThemeBrightness value = ThemeBrightness.light;
+class ThemeBrightnessNotifier extends StateNotifier<ThemeBrightness> {
+  ThemeBrightnessNotifier() : super(ThemeBrightness.light);
 
   Future get() async {
-    value = ThemeBrightness.values.byName(await getStorage("theme_brightness") ?? "");
-    notifyListeners();
+    state = ThemeBrightness.values.byName(await getStorage("theme_brightness") ?? "");
   }
 
   Future set(ThemeBrightness element) async {
-    await setStorage("theme_brightness", (value = element).name);
-    notifyListeners();
+    await setStorage("theme_brightness", (state = element).name);
   }
 }
 
