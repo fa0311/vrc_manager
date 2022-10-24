@@ -31,7 +31,6 @@ Future showLocaleModal(BuildContext context) {
                 ),
                 onTap: () {
                   appConfig.setLanguageCode(value);
-                  appConfig.rootSetState(() {});
                 },
               ),
           ],

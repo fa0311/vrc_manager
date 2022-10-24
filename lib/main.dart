@@ -1,5 +1,6 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
 import 'package:vrc_manager/data_class/app_config.dart';
@@ -8,30 +9,14 @@ import 'package:vrc_manager/scenes/sub/splash.dart';
 
 AppConfig appConfig = AppConfig();
 main() {
-  runApp(const VRChatMobile());
+  runApp(const ProviderScope(child: VRChatMobile()));
 }
 
-class VRChatMobile extends StatefulWidget {
+class VRChatMobile extends ConsumerWidget {
   const VRChatMobile({Key? key}) : super(key: key);
 
   @override
-  State<VRChatMobile> createState() => _PageState();
-}
-
-class _PageState extends State<VRChatMobile> {
-  @override
-  initState() {
-    super.initState();
-    appConfig.rootSetState = setState;
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return getMaterialApp(const VRChatMobileSplash());
+  Widget build(BuildContext context, WidgetRef ref) {
+    return getMaterialApp(const VRChatMobileSplash(), ref);
   }
 }

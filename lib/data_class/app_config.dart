@@ -1,5 +1,6 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
 import 'package:vrc_manager/api/data_class.dart';
@@ -15,23 +16,22 @@ class AppConfig {
   GridConfigList gridConfigList = GridConfigList();
   bool dontShowErrorDialog = false;
   bool agreedUserPolicy = false;
-  ThemeBrightness themeBrightness = ThemeBrightness.light;
+  final themeBrightness = Provider((_) => ThemeBrightnessProvider());
+
   LanguageCode languageCode = LanguageCode.en;
   bool forceExternalBrowser = false;
   bool debugMode = false;
-  Function rootSetState = (Function fn) => fn();
 
   AccountConfig? get loggedAccount => _loggedAccount;
 
-  Future<bool> get(BuildContext context) async {
+  Future<bool> get(BuildContext context, WidgetRef ref) async {
     List uidList = [];
     String? accountUid;
 
     await Future.wait([
-      getStorage("theme_brightness").then((value) => value == null ? themeBrightness : ThemeBrightness.values.byName(value)),
+      ref.read(themeBrightness).get(),
       getStorage("language_code").then((value) => languageCode = value == null ? languageCode : LanguageCode.values.byName(value)),
     ]);
-    rootSetState(() {});
     await Future.wait([
       getStorage("account_index").then((value) => accountUid = value),
       getStorageList("account_index_list").then((List<String> value) => uidList = value),
@@ -134,10 +134,6 @@ class AppConfig {
     return null;
   }
 
-  Future setThemeBrightness(ThemeBrightness value) async {
-    return await setStorage("theme_brightness", (themeBrightness = value).name);
-  }
-
   Future setLanguageCode(LanguageCode value) async {
     return await setStorage("language_code", (languageCode = value).name);
   }
@@ -156,6 +152,20 @@ class AppConfig {
 
   Future setDebugMode(bool value) async {
     return await setStorage("debug_mode", (debugMode = value).toString());
+  }
+}
+
+class ThemeBrightnessProvider extends ChangeNotifier {
+  ThemeBrightness value = ThemeBrightness.light;
+
+  Future get() async {
+    value = ThemeBrightness.values.byName(await getStorage("theme_brightness") ?? "");
+    notifyListeners();
+  }
+
+  Future set(ThemeBrightness element) async {
+    await setStorage("theme_brightness", (value = element).name);
+    notifyListeners();
   }
 }
 

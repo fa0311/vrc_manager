@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
@@ -13,16 +14,13 @@ import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/widgets/modal/locale.dart';
 import 'package:vrc_manager/widgets/modal/theme.dart';
 
-class VRChatMobileSettingsAccessibility extends StatefulWidget {
+
+class VRChatMobileSettingsAccessibility extends ConsumerWidget {
   const VRChatMobileSettingsAccessibility({Key? key}) : super(key: key);
 
   @override
-  State<VRChatMobileSettingsAccessibility> createState() => _SettingAccessibilityPageState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
 
-class _SettingAccessibilityPageState extends State<VRChatMobileSettingsAccessibility> {
-  @override
-  Widget build(BuildContext context) {
     textStream(context);
     return Scaffold(
       appBar: AppBar(
@@ -42,7 +40,7 @@ class _SettingAccessibilityPageState extends State<VRChatMobileSettingsAccessibi
                 const Divider(),
                 ListTile(
                   title: Text(AppLocalizations.of(context)!.theme),
-                  subtitle: Text(appConfig.themeBrightness.toLocalization(context)),
+                  subtitle: Text(ref.read(appConfig.themeBrightness).value.toLocalization(context)),
                   onTap: () => showThemeBrightnessModal(context),
                 ),
                 const Divider(),
@@ -50,7 +48,7 @@ class _SettingAccessibilityPageState extends State<VRChatMobileSettingsAccessibi
                   value: appConfig.dontShowErrorDialog,
                   title: Text(AppLocalizations.of(context)!.dontShowErrorDialog),
                   subtitle: Text(AppLocalizations.of(context)!.dontShowErrorDialogDetails),
-                  onChanged: (bool e) => appConfig.setDontShowErrorDialog(e).then((value) => setState((() {}))),
+                  onChanged: (bool e) => appConfig.setDontShowErrorDialog(e)),
                 ),
                 if (!Platform.isWindows) ...[
                   const Divider(),
@@ -58,7 +56,7 @@ class _SettingAccessibilityPageState extends State<VRChatMobileSettingsAccessibi
                     value: appConfig.forceExternalBrowser,
                     title: Text(AppLocalizations.of(context)!.forceExternalBrowser),
                     subtitle: Text(AppLocalizations.of(context)!.forceExternalBrowserDetails),
-                    onChanged: (bool e) => appConfig.setForceExternalBrowser(e).then((value) => setState(() {})),
+                    onChanged: (bool e) => appConfig.setForceExternalBrowser(e),
                   )
                 ],
                 const Divider(),
