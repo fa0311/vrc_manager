@@ -7,7 +7,7 @@ import 'package:vrc_manager/data_class/enum.dart';
 
 class ThemeBrightnessNotifier extends StateNotifier<ThemeBrightness> {
   late String key;
-  ThemeBrightnessNotifier(key) : super(ThemeBrightness.light);
+  ThemeBrightnessNotifier(this.key) : super(ThemeBrightness.light);
 
   Future get() async {
     state = ThemeBrightness.values.byName(await getStorage(key) ?? "");
@@ -20,7 +20,7 @@ class ThemeBrightnessNotifier extends StateNotifier<ThemeBrightness> {
 
 class LanguageCodeNotifier extends StateNotifier<LanguageCode> {
   late String key;
-  LanguageCodeNotifier(key) : super(LanguageCode.en);
+  LanguageCodeNotifier(this.key) : super(LanguageCode.en);
 
   Future get() async {
     state = LanguageCode.values.byName(await getStorage(key) ?? "");
@@ -33,7 +33,7 @@ class LanguageCodeNotifier extends StateNotifier<LanguageCode> {
 
 class BooleanNotifier extends StateNotifier<bool> {
   late String key;
-  BooleanNotifier(key) : super(false);
+  BooleanNotifier(this.key) : super(false);
 
   Future get() async {
     state = await getStorage(key) == "true";

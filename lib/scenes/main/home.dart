@@ -23,7 +23,7 @@ class VRChatMobileHome extends ConsumerWidget {
   VRChatMobileHome({Key? key}) : super(key: key);
 
   late final VRChatAPI vrchatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
-  late final VRChatUserSelfOverload? user;
+  VRChatUserSelfOverload? user;
   late final VRChatWorld? world;
   late final VRChatInstance? instance;
 
