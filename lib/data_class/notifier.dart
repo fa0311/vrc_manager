@@ -6,8 +6,8 @@ import 'package:vrc_manager/assets/storage.dart';
 import 'package:vrc_manager/data_class/enum.dart';
 
 class ThemeBrightnessNotifier extends StateNotifier<ThemeBrightness> {
-  ThemeBrightnessNotifier() : super(ThemeBrightness.light);
-  static const String key = "theme_brightness";
+  late String key;
+  ThemeBrightnessNotifier(key) : super(ThemeBrightness.light);
 
   Future get() async {
     state = ThemeBrightness.values.byName(await getStorage(key) ?? "");
@@ -19,8 +19,8 @@ class ThemeBrightnessNotifier extends StateNotifier<ThemeBrightness> {
 }
 
 class LanguageCodeNotifier extends StateNotifier<LanguageCode> {
-  LanguageCodeNotifier() : super(LanguageCode.en);
-  static const String key = "language_code";
+  late String key;
+  LanguageCodeNotifier(key) : super(LanguageCode.en);
 
   Future get() async {
     state = LanguageCode.values.byName(await getStorage(key) ?? "");
@@ -28,5 +28,18 @@ class LanguageCodeNotifier extends StateNotifier<LanguageCode> {
 
   Future set(LanguageCode set) async {
     await setStorage(key, (state = set).name);
+  }
+}
+
+class BooleanNotifier extends StateNotifier<bool> {
+  late String key;
+  BooleanNotifier(key) : super(false);
+
+  Future get() async {
+    state = await getStorage(key) == "true";
+  }
+
+  Future set(bool set) async {
+    await setStorage(key, (state = set).toString());
   }
 }

@@ -15,14 +15,13 @@ class AppConfig {
   AccountConfig? _loggedAccount;
   List<AccountConfig> accountList = [];
   GridConfigList gridConfigList = GridConfigList();
-  bool dontShowErrorDialog = false;
-  bool agreedUserPolicy = false;
+  final dontShowErrorDialog = StateNotifierProvider<BooleanNotifier, bool>((_) => BooleanNotifier("dont_show_error_dialog"));
+  final agreedUserPolicy = StateNotifierProvider<BooleanNotifier, bool>((_) => BooleanNotifier("agreed_user_policy"));
+  final forceExternalBrowser = StateNotifierProvider<BooleanNotifier, bool>((_) => BooleanNotifier("force_external_browser"));
+  final debugMode = StateNotifierProvider<BooleanNotifier, bool>((_) => BooleanNotifier("debug_mode"));
 
-  final themeBrightness = StateNotifierProvider<ThemeBrightnessNotifier, ThemeBrightness>((_) => ThemeBrightnessNotifier());
-  final languageCode = StateNotifierProvider<LanguageCodeNotifier, LanguageCode>((_) => LanguageCodeNotifier());
-
-  bool forceExternalBrowser = false;
-  bool debugMode = false;
+  final themeBrightness = StateNotifierProvider<ThemeBrightnessNotifier, ThemeBrightness>((_) => ThemeBrightnessNotifier("theme_brightness"));
+  final languageCode = StateNotifierProvider<LanguageCodeNotifier, LanguageCode>((_) => LanguageCodeNotifier("language_code"));
 
   AccountConfig? get loggedAccount => _loggedAccount;
 
@@ -37,10 +36,10 @@ class AppConfig {
     await Future.wait([
       getStorage("account_index").then((value) => accountUid = value),
       getStorageList("account_index_list").then((List<String> value) => uidList = value),
-      getStorage("dont_show_error_dialog").then((value) => dontShowErrorDialog = (value == "true")),
-      getStorage("agreed_user_policy").then((value) => agreedUserPolicy = (value == "true")),
-      getStorage("force_external_browser").then((value) => forceExternalBrowser = (value == "true")),
-      getStorage("debug_mode").then((value) => debugMode = (value == "true")),
+      ref.read(dontShowErrorDialog.notifier).get(),
+      ref.read(agreedUserPolicy.notifier).get(),
+      ref.read(forceExternalBrowser.notifier).get(),
+      ref.read(debugMode.notifier).get(),
       gridConfigList.setConfig(),
     ]);
 
@@ -66,7 +65,7 @@ class AppConfig {
     * if(context.mounted)
     */
     // ignore: use_build_context_synchronously
-    await _loggedAccount!.getFavoriteWorldGroups(context);
+    await _loggedAccount!.getFavoriteWorldGroups(context, ref);
     return true;
   }
 
@@ -97,14 +96,12 @@ class AppConfig {
     return await removeStorage("account_index");
   }
 
-  Future<bool> login(BuildContext context, AccountConfig accountConfig) async {
+  Future<bool> login(BuildContext context, WidgetRef ref, AccountConfig accountConfig) async {
     List<Future> futureList = [];
     _loggedAccount = accountConfig;
     accountConfig.favoriteWorld = [];
     if (!(await _loggedAccount!.tokenCheck())) return false;
-    futureList.add(accountConfig.getFavoriteWorldGroups(
-      context,
-    ));
+    futureList.add(accountConfig.getFavoriteWorldGroups(context, ref));
     futureList.add(setStorage("account_index", accountConfig.uid));
     await Future.wait(futureList);
     return true;
@@ -135,24 +132,6 @@ class AppConfig {
     }
     return null;
   }
-
-  Future setDontShowErrorDialog(bool value) async {
-    return await setStorage("dont_show_error_dialog", (dontShowErrorDialog = value).toString());
-  }
-
-  Future setAgreedUserPolicy(bool value) async {
-    return await setStorage("agreed_user_policy", (agreedUserPolicy = value).toString());
-  }
-
-  Future setForceExternalBrowser(bool value) async {
-    return await setStorage("force_external_browser", (forceExternalBrowser = value).toString());
-  }
-
-  Future setDebugMode(bool value) async {
-    return await setStorage("debug_mode", (debugMode = value).toString());
-  }
-
-  void setLanguageCode(LanguageCode value) {}
 }
 
 class AccountConfig {
@@ -215,7 +194,7 @@ class AccountConfig {
     });
   }
 
-  Future getFavoriteWorldGroups(BuildContext context) async {
+  Future getFavoriteWorldGroups(BuildContext context, WidgetRef ref) async {
     late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: cookie);
     List<Future> futureList = [];
     int len = 0;
@@ -229,23 +208,23 @@ class AccountConfig {
          * if(context.mounted)
          */
           // ignore: use_build_context_synchronously
-          futureList.add(getFavoriteWorld(context, favorite));
+          futureList.add(getFavoriteWorld(context, ref, favorite));
           favoriteWorld.add(favorite);
         }
         len = favoriteGroupList.length;
       }).catchError((status) {
-        apiError(context, status);
+        apiError(context, ref, status);
       });
     } while (len == 50);
   }
 
-  Future getFavoriteWorld(BuildContext context, FavoriteWorldData favoriteWorld) async {
+  Future getFavoriteWorld(BuildContext context, WidgetRef ref, FavoriteWorldData favoriteWorld) async {
     late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: cookie);
     int len;
     do {
       int offset = favoriteWorld.list.length;
       List<VRChatFavoriteWorld> worlds = await vrchatLoginSession.favoritesWorlds(favoriteWorld.group.name, offset: offset).catchError((status) {
-        apiError(context, status);
+        apiError(context, ref, status);
       });
       for (VRChatFavoriteWorld world in worlds) {
         favoriteWorld.list.add(world);
