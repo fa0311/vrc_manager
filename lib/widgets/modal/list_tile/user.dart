@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
 import 'package:vrc_manager/api/data_class.dart';
@@ -16,18 +17,20 @@ import 'package:vrc_manager/widgets/user.dart';
 
 List<Widget> selfUserModalBottom(
   BuildContext context,
+  WidgetRef ref,
   VRChatUserSelfOverload user,
 ) {
   return [
     editBioTileWidget(context, user),
     editNoteTileWidget(context, user),
     shareUrlTileWidget(context, "https://vrchat.com/home/user/${user.id}"),
-    if (appConfig.debugMode) openInJsonViewer(context, user.content),
+    if (ref.read(appConfig.debugMode)) openInJsonViewer(context, user.content),
   ];
 }
 
 List<Widget> userDetailsModalBottom(
   BuildContext context,
+  WidgetRef ref,
   VRChatUser user,
   VRChatFriendStatus status,
 ) {
@@ -35,7 +38,7 @@ List<Widget> userDetailsModalBottom(
     editNoteTileWidget(context, user),
     shareUrlTileWidget(context, "https://vrchat.com/home/user/${user.id}"),
     profileActionTileWidget(context, status, user),
-    if (appConfig.debugMode) openInJsonViewer(context, user.content),
+    if (ref.read(appConfig.debugMode)) openInJsonViewer(context, user.content),
   ];
 }
 

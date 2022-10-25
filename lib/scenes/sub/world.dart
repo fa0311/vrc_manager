@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
 import 'package:vrc_manager/api/data_class.dart';
@@ -15,33 +16,20 @@ import 'package:vrc_manager/widgets/modal/list_tile/main.dart';
 import 'package:vrc_manager/widgets/modal/list_tile/world.dart';
 import 'package:vrc_manager/widgets/world.dart';
 
-class VRChatMobileWorld extends StatefulWidget {
-  final String worldId;
+class VRChatMobileWorld extends ConsumerWidget {
+  VRChatMobileWorld({Key? key, required this.worldId}) : super(key: key);
+  late final String worldId;
+  late final VRChatAPI vrchatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
+  late final VRChatWorld? world;
 
-  const VRChatMobileWorld({Key? key, required this.worldId}) : super(key: key);
-
-  @override
-  State<VRChatMobileWorld> createState() => _WorldState();
-}
-
-class _WorldState extends State<VRChatMobileWorld> {
-  late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
-  VRChatWorld? world;
-
-  @override
-  initState() {
-    super.initState();
-    get().then((value) => setState(() {}));
-  }
-
-  Future get() async {
-    world = await vrchatLoginSession.worlds(widget.worldId).catchError((status) {
+  Future get(BuildContext context) async {
+    world = await vrchatLoginSession.worlds(worldId).catchError((status) {
       apiError(context, status);
     });
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     textStream(context);
     return Scaffold(
       appBar: AppBar(title: Text(AppLocalizations.of(context)!.world), actions: [
@@ -50,7 +38,7 @@ class _WorldState extends State<VRChatMobileWorld> {
             icon: const Icon(Icons.more_vert),
             onPressed: () => modalBottom(
               context,
-              worldDetailsModalBottom(context, world!),
+              worldDetailsModalBottom(context, ref, world!),
             ),
           )
       ]),

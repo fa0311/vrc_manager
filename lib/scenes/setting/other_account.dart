@@ -49,7 +49,7 @@ class _SettingOtherAccountPageState extends State<VRChatMobileSettingsOtherAccou
                     Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
-                        builder: (BuildContext context) => logged ? const VRChatMobileHome() : const VRChatMobileLogin(),
+                        builder: (BuildContext context) => logged ? VRChatMobileHome() : const VRChatMobileLogin(),
                       ),
                       (_) => false,
                     );

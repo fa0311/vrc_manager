@@ -125,7 +125,7 @@ class _LoginPageState extends State<VRChatMobileLogin> {
           (bool logged) => Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
-              builder: (BuildContext context) => logged ? const VRChatMobileHome() : const VRChatMobileLogin(),
+              builder: (BuildContext context) => logged ? VRChatMobileHome() : const VRChatMobileLogin(),
             ),
             (_) => false,
           ),

@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 // Package imports:
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 // Project imports:
@@ -26,36 +27,38 @@ void errorDialog(BuildContext context, String text, {String log = ""}) {
       print(errorLog(json.decode(log)));
     }
   }
-  if (!appConfig.dontShowErrorDialog) {
-    showDialog(
-      context: context,
-      builder: (_) {
-        return AlertDialog(
-          title: Text(AppLocalizations.of(context)!.errorDialog),
-          content: Text(text),
-          actions: [
-            if (log.isNotEmpty)
-              TextButton(
-                child: Text(AppLocalizations.of(context)!.report),
-                onPressed: () async {
-                  await copyToClipboard(context, log);
-                  /*
+  FutureProvider.autoDispose((ref) {
+    if (!ref.read(appConfig.dontShowErrorDialog)) {
+      showDialog(
+        context: context,
+        builder: (_) {
+          return AlertDialog(
+            title: Text(AppLocalizations.of(context)!.errorDialog),
+            content: Text(text),
+            actions: [
+              if (log.isNotEmpty)
+                TextButton(
+                  child: Text(AppLocalizations.of(context)!.report),
+                  onPressed: () async {
+                    await copyToClipboard(context, log);
+                    /*
                     * To be fixed in the next stable version.
                     * if(context.mounted)
                     */
-                  // ignore: use_build_context_synchronously
-                  openInBrowser(context, "https://github.com/fa0311/vrc_manager/issues/new/choose");
-                },
+                    // ignore: use_build_context_synchronously
+                    openInBrowser(context, "https://github.com/fa0311/vrc_manager/issues/new/choose");
+                  },
+                ),
+              TextButton(
+                child: Text(AppLocalizations.of(context)!.ok),
+                onPressed: () => Navigator.pop(context),
               ),
-            TextButton(
-              child: Text(AppLocalizations.of(context)!.ok),
-              onPressed: () => Navigator.pop(context),
-            ),
-          ],
-        );
-      },
-    );
-  }
+            ],
+          );
+        },
+      );
+    }
+  });
 }
 
 String errorLog(Map log) {

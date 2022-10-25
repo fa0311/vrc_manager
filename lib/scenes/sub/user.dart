@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
 import 'package:vrc_manager/api/data_class.dart';
@@ -16,44 +17,32 @@ import 'package:vrc_manager/widgets/modal/list_tile/main.dart';
 import 'package:vrc_manager/widgets/modal/list_tile/user.dart';
 import 'package:vrc_manager/widgets/user.dart';
 
-class VRChatMobileUser extends StatefulWidget {
+class VRChatMobileUser extends ConsumerWidget {
+  VRChatMobileUser({Key? key, required this.userId}) : super(key: key);
   final String userId;
+  late final VRChatAPI vrchatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
+  late final VRChatUser? user;
+  late final VRChatFriendStatus? status;
+  late final VRChatWorld? world;
+  late final VRChatInstance? instance;
 
-  const VRChatMobileUser({Key? key, required this.userId}) : super(key: key);
-
-  @override
-  State<VRChatMobileUser> createState() => _UserHomeState();
-}
-
-class _UserHomeState extends State<VRChatMobileUser> {
-  late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
-  VRChatUser? user;
-  VRChatFriendStatus? status;
-  VRChatWorld? world;
-  VRChatInstance? instance;
-
-  @override
-  initState() {
-    super.initState();
-    get();
+  Future get(BuildContext context) async {
+    await getUser(context);
+    // ignore: use_build_context_synchronously
+    await getWorld(context);
   }
 
-  Future get() async {
-    await getUser().then((value) => setState(() {}));
-    await getWorld().then((value) => setState(() {}));
-  }
-
-  Future getUser() async {
-    user = await vrchatLoginSession.users(widget.userId).catchError((status) {
+  Future getUser(BuildContext context) async {
+    user = await vrchatLoginSession.users(userId).catchError((status) {
       apiError(context, status);
     });
     if (user == null) return;
-    status = await vrchatLoginSession.friendStatus(widget.userId).catchError((status) {
+    status = await vrchatLoginSession.friendStatus(userId).catchError((status) {
       apiError(context, status);
     });
   }
 
-  Future getWorld() async {
+  Future getWorld(BuildContext context) async {
     if (!["private", "offline", "traveling"].contains(user!.location)) {
       world = await vrchatLoginSession.worlds(user!.location.split(":")[0]).catchError((status) {
         apiError(context, status);
@@ -65,7 +54,7 @@ class _UserHomeState extends State<VRChatMobileUser> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     textStream(context);
     return Scaffold(
       appBar: AppBar(title: Text(AppLocalizations.of(context)!.user), actions: <Widget>[
@@ -74,7 +63,7 @@ class _UserHomeState extends State<VRChatMobileUser> {
             icon: const Icon(Icons.more_vert),
             onPressed: () => modalBottom(
               context,
-              userDetailsModalBottom(context, user!, status!),
+              userDetailsModalBottom(context, ref, user!, status!),
             ),
           ),
       ]),

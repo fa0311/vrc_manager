@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
 import 'package:vrc_manager/api/data_class.dart';
@@ -20,60 +21,64 @@ Widget instanceWidget(
   bool card = true,
   bool half = false,
 }) {
-  return genericTemplate(
-    context,
-    imageUrl: world.thumbnailImageUrl,
-    card: card,
-    half: half,
-    onTap: () => Navigator.push(
+  return Consumer(
+    builder: (context, ref, _) {
+      return genericTemplate(
         context,
-        MaterialPageRoute(
-          builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id),
-        )),
-    onLongPress: () => modalBottom(context, instanceDetailsModalBottom(context, world, instance)),
-    children: [
-      Row(children: <Widget>[
-        region(instance.region, size: half ? 12 : 15),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 5),
-          child: Row(
-            children: [
-              Icon(Icons.groups, size: half ? 17 : 25),
-              Text("${instance.nUsers}/${instance.capacity}",
-                  style: TextStyle(
-                    fontSize: half ? 10 : 15,
-                  )),
-            ],
-          ),
-        ),
-        Expanded(
-          child: SizedBox(
-            width: double.infinity,
-            child: Text(getVrchatInstanceType(context)[instance.type] ?? "Error",
+        imageUrl: world.thumbnailImageUrl,
+        card: card,
+        half: half,
+        onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id),
+            )),
+        onLongPress: () => modalBottom(context, instanceDetailsModalBottom(context, ref, world, instance)),
+        children: [
+          Row(children: <Widget>[
+            region(instance.region, size: half ? 12 : 15),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 5),
+              child: Row(
+                children: [
+                  Icon(Icons.groups, size: half ? 17 : 25),
+                  Text("${instance.nUsers}/${instance.capacity}",
+                      style: TextStyle(
+                        fontSize: half ? 10 : 15,
+                      )),
+                ],
+              ),
+            ),
+            Expanded(
+              child: SizedBox(
+                width: double.infinity,
+                child: Text(getVrchatInstanceType(context)[instance.type] ?? "Error",
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: half ? 10 : 15,
+                    )),
+              ),
+            )
+          ]),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 2),
+            child: SizedBox(
+              width: double.infinity,
+              child: Text(
+                world.name,
                 overflow: TextOverflow.ellipsis,
+                maxLines: 2,
                 style: TextStyle(
+                  fontWeight: FontWeight.bold,
                   fontSize: half ? 10 : 15,
-                )),
-          ),
-        )
-      ]),
-      Padding(
-        padding: const EdgeInsets.symmetric(vertical: 2),
-        child: SizedBox(
-          width: double.infinity,
-          child: Text(
-            world.name,
-            overflow: TextOverflow.ellipsis,
-            maxLines: 2,
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: half ? 10 : 15,
-              height: 1,
+                  height: 1,
+                ),
+              ),
             ),
           ),
-        ),
-      ),
-    ],
+        ],
+      );
+    },
   );
 }
 

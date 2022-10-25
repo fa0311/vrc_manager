@@ -65,7 +65,7 @@ class AppConfig {
     * if(context.mounted)
     */
     // ignore: use_build_context_synchronously
-    await _loggedAccount!.getFavoriteWorldGroups(context, ref);
+    await _loggedAccount!.getFavoriteWorldGroups(context);
     return true;
   }
 
@@ -96,12 +96,12 @@ class AppConfig {
     return await removeStorage("account_index");
   }
 
-  Future<bool> login(BuildContext context, WidgetRef ref, AccountConfig accountConfig) async {
+  Future<bool> login(BuildContext context, AccountConfig accountConfig) async {
     List<Future> futureList = [];
     _loggedAccount = accountConfig;
     accountConfig.favoriteWorld = [];
     if (!(await _loggedAccount!.tokenCheck())) return false;
-    futureList.add(accountConfig.getFavoriteWorldGroups(context, ref));
+    futureList.add(accountConfig.getFavoriteWorldGroups(context));
     futureList.add(setStorage("account_index", accountConfig.uid));
     await Future.wait(futureList);
     return true;
@@ -194,7 +194,7 @@ class AccountConfig {
     });
   }
 
-  Future getFavoriteWorldGroups(BuildContext context, WidgetRef ref) async {
+  Future getFavoriteWorldGroups(BuildContext context) async {
     late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: cookie);
     List<Future> futureList = [];
     int len = 0;
@@ -208,23 +208,23 @@ class AccountConfig {
          * if(context.mounted)
          */
           // ignore: use_build_context_synchronously
-          futureList.add(getFavoriteWorld(context, ref, favorite));
+          futureList.add(getFavoriteWorld(context, favorite));
           favoriteWorld.add(favorite);
         }
         len = favoriteGroupList.length;
       }).catchError((status) {
-        apiError(context, ref, status);
+        apiError(context, status);
       });
     } while (len == 50);
   }
 
-  Future getFavoriteWorld(BuildContext context, WidgetRef ref, FavoriteWorldData favoriteWorld) async {
+  Future getFavoriteWorld(BuildContext context, FavoriteWorldData favoriteWorld) async {
     late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: cookie);
     int len;
     do {
       int offset = favoriteWorld.list.length;
       List<VRChatFavoriteWorld> worlds = await vrchatLoginSession.favoritesWorlds(favoriteWorld.group.name, offset: offset).catchError((status) {
-        apiError(context, ref, status);
+        apiError(context, status);
       });
       for (VRChatFavoriteWorld world in worlds) {
         favoriteWorld.list.add(world);

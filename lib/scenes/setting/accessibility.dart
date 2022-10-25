@@ -43,24 +43,24 @@ class VRChatMobileSettingsAccessibility extends ConsumerWidget {
                 ),
                 const Divider(),
                 SwitchListTile(
-                    value: appConfig.dontShowErrorDialog,
+                    value: ref.read(appConfig.dontShowErrorDialog),
                     title: Text(AppLocalizations.of(context)!.dontShowErrorDialog),
                     subtitle: Text(AppLocalizations.of(context)!.dontShowErrorDialogDetails),
-                    onChanged: (bool e) => appConfig.setDontShowErrorDialog(e)),
+                    onChanged: (bool e) => ref.read(appConfig.dontShowErrorDialog.notifier).set(e)),
                 if (!Platform.isWindows) ...[
                   const Divider(),
                   SwitchListTile(
-                    value: appConfig.forceExternalBrowser,
+                    value: ref.read(appConfig.forceExternalBrowser),
                     title: Text(AppLocalizations.of(context)!.forceExternalBrowser),
                     subtitle: Text(AppLocalizations.of(context)!.forceExternalBrowserDetails),
-                    onChanged: (bool e) => appConfig.setForceExternalBrowser(e),
+                    onChanged: (bool e) => ref.read(appConfig.forceExternalBrowser.notifier).set(e),
                   )
                 ],
                 const Divider(),
                 SwitchListTile(
-                  value: appConfig.debugMode,
+                  value: ref.read(appConfig.debugMode),
                   title: Text(AppLocalizations.of(context)!.debugMode),
-                  onChanged: (bool e) => appConfig.setDebugMode(e),
+                  onChanged: (bool e) => ref.read(appConfig.debugMode.notifier).set(e),
                 )
               ],
             ),

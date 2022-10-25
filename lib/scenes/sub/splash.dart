@@ -22,7 +22,7 @@ class VRChatMobileSplash extends ConsumerWidget {
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(
-        builder: (BuildContext context) => const VRChatMobileHome(),
+        builder: (BuildContext context) => VRChatMobileHome(),
       ),
       (_) => false,
     );
@@ -42,7 +42,7 @@ class VRChatMobileSplash extends ConsumerWidget {
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(
-        builder: (BuildContext context) => const VRChatMobileWebViewUserPolicy(),
+        builder: (BuildContext context) => VRChatMobileWebViewUserPolicy(),
       ),
       (_) => false,
     );
@@ -51,7 +51,7 @@ class VRChatMobileSplash extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     appConfig.get(context, ref).then((_) async {
-      if (!appConfig.agreedUserPolicy) {
+      if (!ref.read(appConfig.agreedUserPolicy)) {
         goWebViewUserPolicy(context);
       } else if (!appConfig.isLogout()) {
         goLogin(context);

@@ -1,5 +1,6 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Package imports:
 import 'package:webview_flutter/webview_flutter.dart';
@@ -13,30 +14,22 @@ import 'package:vrc_manager/widgets/modal/list_tile/main.dart';
 import 'package:vrc_manager/widgets/modal/list_tile/share.dart';
 import 'package:vrc_manager/widgets/share.dart';
 
-class VRChatMobileWebView extends StatefulWidget {
-  final String url;
+final timeStampProvider = StateProvider<int>((ref) => 0);
+final urlProvider = StateProvider<String?>((ref) => null);
 
-  const VRChatMobileWebView({Key? key, required this.url}) : super(key: key);
+class VRChatMobileWebView extends ConsumerWidget {
+  VRChatMobileWebView({Key? key, required this.initUrl}) : super(key: key);
 
-  @override
-  State<VRChatMobileWebView> createState() => _WebViewPageState();
-}
-
-class _WebViewPageState extends State<VRChatMobileWebView> {
-  late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
-  late WebViewController controllerGlobal;
-  late int timeStamp = 0;
-  late String url = widget.url;
+  late final VRChatAPI vrchatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
+  late final WebViewController controllerGlobal;
+  final String initUrl;
 
   @override
-  initState() {
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     textStream(context);
     final cookieManager = CookieManager();
+    int timeStamp = ref.read(timeStampProvider);
+    String url = ref.watch(urlProvider) ?? initUrl;
 
     final cookieMap = Session().decodeCookie(vrchatLoginSession.getCookie());
     for (String key in cookieMap.keys) {
@@ -72,17 +65,17 @@ class _WebViewPageState extends State<VRChatMobileWebView> {
           ],
         ),
         body: WebView(
-          initialUrl: widget.url,
+          initialUrl: url,
           javascriptMode: JavascriptMode.unrestricted,
           onWebViewCreated: (WebViewController webViewController) {
             controllerGlobal = webViewController;
           },
           navigationDelegate: (NavigationRequest request) {
-            if (appConfig.forceExternalBrowser && Uri.parse(url).host != "vrchat.com") {
+            if (ref.read(appConfig.forceExternalBrowser) && Uri.parse(url).host != "vrchat.com") {
               openInBrowser(context, url);
               return NavigationDecision.prevent;
             } else {
-              setState(() => url = request.url);
+              url = request.url;
               return NavigationDecision.navigate;
             }
           },

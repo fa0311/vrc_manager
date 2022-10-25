@@ -11,12 +11,11 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 // Project imports:
-import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/web/web_view.dart';
 
 Future openInBrowser(BuildContext context, String url, {bool forceExternal = false}) async {
   if (!forceExternal && (Platform.isAndroid || Platform.isIOS)) {
-    if (appConfig.forceExternalBrowser && Uri.parse(url).host != "vrchat.com") {
+    if (/* ref.read(appConfig.forceExternalBrowser) && */ Uri.parse(url).host != "vrchat.com") {
       if (await canLaunchUrl(Uri.parse(url))) {
         await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
       }
@@ -24,7 +23,7 @@ Future openInBrowser(BuildContext context, String url, {bool forceExternal = fal
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (BuildContext context) => VRChatMobileWebView(url: url),
+          builder: (BuildContext context) => VRChatMobileWebView(initUrl: url),
         ),
       );
     }

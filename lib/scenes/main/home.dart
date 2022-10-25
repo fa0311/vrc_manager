@@ -1,8 +1,10 @@
 // Flutter imports:
+
 import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
 import 'package:vrc_manager/api/data_class.dart';
@@ -17,30 +19,21 @@ import 'package:vrc_manager/widgets/modal/list_tile/main.dart';
 import 'package:vrc_manager/widgets/modal/list_tile/user.dart';
 import 'package:vrc_manager/widgets/user.dart';
 
-class VRChatMobileHome extends StatefulWidget {
-  const VRChatMobileHome({Key? key}) : super(key: key);
-  @override
-  State<VRChatMobileHome> createState() => _LoginHomeState();
-}
+class VRChatMobileHome extends ConsumerWidget {
+  VRChatMobileHome({Key? key}) : super(key: key);
 
-class _LoginHomeState extends State<VRChatMobileHome> {
-  late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
-  VRChatUserSelfOverload? user;
-  VRChatWorld? world;
-  VRChatInstance? instance;
+  late final VRChatAPI vrchatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
+  late final VRChatUserSelfOverload? user;
+  late final VRChatWorld? world;
+  late final VRChatInstance? instance;
 
-  @override
-  initState() {
-    super.initState();
-    get();
+  Future get(BuildContext context) async {
+    await getUser(context);
+    // ignore: use_build_context_synchronously
+    await getWorld(context);
   }
 
-  Future get() async {
-    await getUser().then((value) => setState(() {}));
-    await getWorld().then((value) => setState(() {}));
-  }
-
-  Future getUser() async {
+  Future getUser(BuildContext context) async {
     user = await vrchatLoginSession.user().catchError((status) {
       Navigator.pushAndRemoveUntil(
         context,
@@ -52,7 +45,7 @@ class _LoginHomeState extends State<VRChatMobileHome> {
     });
   }
 
-  Future getWorld() async {
+  Future getWorld(BuildContext context) async {
     if (!["private", "offline", "traveling"].contains(user!.location)) {
       world = await vrchatLoginSession.worlds(user!.location.split(":")[0]).catchError((status) {
         apiError(context, status);
@@ -64,7 +57,7 @@ class _LoginHomeState extends State<VRChatMobileHome> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     textStream(context);
     return Scaffold(
       appBar: AppBar(
@@ -73,7 +66,7 @@ class _LoginHomeState extends State<VRChatMobileHome> {
           if (user != null)
             IconButton(
               icon: const Icon(Icons.more_vert),
-              onPressed: () => modalBottom(context, selfUserModalBottom(context, user!)),
+              onPressed: () => modalBottom(context, selfUserModalBottom(context, ref, user!)),
             ),
         ],
       ),

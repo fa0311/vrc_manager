@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 
 // Package imports:
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 // Project imports:
@@ -17,29 +18,14 @@ import 'package:vrc_manager/widgets/modal/list_tile/main.dart';
 import 'package:vrc_manager/widgets/modal/list_tile/share.dart';
 import 'package:vrc_manager/widgets/share.dart';
 
-class VRChatMobileWebViewUserPolicy extends StatefulWidget {
-  const VRChatMobileWebViewUserPolicy({Key? key}) : super(key: key);
+class VRChatMobileWebViewUserPolicy extends ConsumerWidget {
+  VRChatMobileWebViewUserPolicy({Key? key}) : super(key: key);
 
-  @override
-  State<VRChatMobileWebViewUserPolicy> createState() => _WebViewPageState();
-}
-
-class _WebViewPageState extends State<VRChatMobileWebViewUserPolicy> {
-  late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
+  final VRChatAPI vrchatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
   static const String url = "https://github.com/fa0311/vrc_manager/blob/master/docs/user_policies/ja.md";
 
   @override
-  initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.userPolicy),
@@ -70,12 +56,12 @@ class _WebViewPageState extends State<VRChatMobileWebViewUserPolicy> {
               flex: 2,
               child: TextButton(
                 onPressed: () async {
-                  await appConfig.setAgreedUserPolicy(true);
-                  if (!mounted) return;
+                  await ref.read(appConfig.agreedUserPolicy.notifier).set(true);
+                  // ignore: use_build_context_synchronously
                   Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
-                      builder: (BuildContext context) => const VRChatMobileHome(),
+                      builder: (BuildContext context) => VRChatMobileHome(),
                     ),
                     (_) => false,
                   );

@@ -41,7 +41,7 @@ Drawer drawer(BuildContext context) {
                 Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(
-                    builder: (BuildContext context) => logged ? const VRChatMobileHome() : const VRChatMobileLogin(),
+                    builder: (BuildContext context) => logged ? VRChatMobileHome() : const VRChatMobileLogin(),
                   ),
                   (_) => false,
                 );
@@ -76,7 +76,7 @@ Drawer drawer(BuildContext context) {
                     onTap: () => Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
-                        builder: (BuildContext context) => const VRChatMobileHome(),
+                        builder: (BuildContext context) => VRChatMobileHome(),
                       ),
                       (_) => false,
                     ),
@@ -221,7 +221,7 @@ Drawer simpleDrawer(BuildContext context) {
                   (bool logged) => Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
-                      builder: (BuildContext context) => logged ? const VRChatMobileHome() : const VRChatMobileLogin(),
+                      builder: (BuildContext context) => logged ? VRChatMobileHome() : const VRChatMobileLogin(),
                     ),
                     (_) => false,
                   ),
@@ -253,7 +253,7 @@ Drawer simpleDrawer(BuildContext context) {
                 onTap: () => Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(
-                    builder: (BuildContext context) => const VRChatMobileHome(),
+                    builder: (BuildContext context) => VRChatMobileHome(),
                   ),
                   (_) => false,
                 ),
