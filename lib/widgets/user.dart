@@ -105,12 +105,14 @@ Column userProfile(BuildContext context, VRChatUser user) {
   );
 }
 
-StatefulBuilder editBio(VRChatUserSelf user) {
-  late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
-  late TextEditingController controller = TextEditingController()..text = user.bio ?? "";
-  bool wait = false;
-  return StatefulBuilder(
-    builder: (context, setState) => AlertDialog(
+final editBioProvider = StateProvider<bool>((ref) => false);
+
+Widget editBio(VRChatUser user) {
+  VRChatAPI vrchatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
+  TextEditingController controller = TextEditingController()..text = user.bio ?? "";
+  return Consumer(builder: (BuildContext context, WidgetRef ref, _) {
+    bool wait = ref.watch(editBioProvider);
+    return AlertDialog(
       content: TextField(
         controller: controller,
         maxLines: null,
@@ -122,20 +124,21 @@ StatefulBuilder editBio(VRChatUserSelf user) {
           onPressed: () => Navigator.pop(context),
         ),
         TextButton(
-          child: wait ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator()) : Text(AppLocalizations.of(context)!.save),
-          onPressed: () {
-            setState(() => wait = true);
-            vrchatLoginSession.changeBio(user.id, user.bio = controller.text).then((VRChatUserSelf response) {
-              user.bio = user.bio == "" ? null : user.bio;
-              Navigator.pop(context);
-            }).catchError((status) {
-              apiError(context, status);
-            });
-          },
-        ),
+            child: wait ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator()) : Text(AppLocalizations.of(context)!.save),
+            onPressed: () {
+              ref.read(editBioProvider.notifier).state = true;
+              vrchatLoginSession.changeBio(user.id, user.bio = controller.text).then((VRChatUserSelf response) {
+                user.bio = user.bio == "" ? null : user.bio;
+                ref.read(vrchatUserNotifier.notifier).set(user);
+                ref.read(editBioProvider.notifier).state = false;
+                Navigator.pop(context);
+              }).catchError((status) {
+                apiError(context, status);
+              });
+            }),
       ],
-    ),
-  );
+    );
+  });
 }
 
 final editNoteProvider = StateProvider<bool>((ref) => false);

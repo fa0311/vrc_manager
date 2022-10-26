@@ -60,7 +60,6 @@ class VRChatMobileUser extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     textStream(context);
     AsyncValue<VRChatMobileUserData> data = ref.watch(vrchatMobileUserProvider(userId));
-    ref.watch(vrchatUserNotifier);
 
     return Scaffold(
       appBar: AppBar(
@@ -89,23 +88,28 @@ class VRChatMobileUser extends ConsumerWidget {
               right: 30,
               left: 30,
             ),
-            child: data.when(
-              loading: () => const Center(child: CircularProgressIndicator()),
-              error: (err, stack) => Text('Error: $err'),
-              data: (data) => Column(
-                children: [
-                  userProfile(context, data.user),
-                  Container(
-                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
-                    child: () {
-                      if (data.user.location == "private") return privateWorld(context);
-                      if (data.user.location == "traveling") return privateWorld(context);
-                      if (data.user.location == "offline") return null;
-                      return data.world == null ? null : instanceWidget(context, data.world!, data.instance!);
-                    }(),
+            child: Consumer(
+              builder: (context, ref, child) {
+                ref.watch(vrchatUserNotifier);
+                return data.when(
+                  loading: () => const Center(child: CircularProgressIndicator()),
+                  error: (err, stack) => Text('Error: $err'),
+                  data: (data) => Column(
+                    children: [
+                      userProfile(context, ref.read(vrchatUserNotifier).user ?? data.user),
+                      Container(
+                        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
+                        child: () {
+                          if (data.user.location == "private") return privateWorld(context);
+                          if (data.user.location == "traveling") return privateWorld(context);
+                          if (data.user.location == "offline") return null;
+                          return data.world == null ? null : instanceWidget(context, data.world!, data.instance!);
+                        }(),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                );
+              },
             ),
           ),
         ),

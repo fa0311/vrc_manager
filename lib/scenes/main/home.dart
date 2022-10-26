@@ -42,7 +42,6 @@ final vrchatMobileHomeProvider = FutureProvider<VRChatMobileHomeData>((ref) asyn
   await Future.wait([
     vrchatLoginSession.users(user.id).then((value) => user.note = value.note),
   ]);
-  print(user.note);
   if (["private", "offline", "traveling"].contains(user.location)) return VRChatMobileHomeData(user: user);
 
   await Future.wait([
@@ -95,7 +94,7 @@ class VRChatMobileHome extends ConsumerWidget {
                   error: (err, stack) => Text('Error: $err'),
                   data: (data) => Column(
                     children: [
-                      userProfile(context, ref.read(vrchatUserNotifier) ?? data.user),
+                      userProfile(context, ref.read(vrchatUserNotifier).user ?? data.user),
                       Container(
                         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
                         child: () {
