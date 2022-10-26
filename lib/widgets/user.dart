@@ -1,14 +1,17 @@
 // Flutter imports:
+
 import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 // Project imports:
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
+import 'package:vrc_manager/api/notifier.dart';
 import 'package:vrc_manager/assets/anchor.dart';
 import 'package:vrc_manager/assets/date.dart';
 import 'package:vrc_manager/assets/error.dart';
@@ -135,12 +138,14 @@ StatefulBuilder editBio(VRChatUserSelf user) {
   );
 }
 
-StatefulBuilder editNote(VRChatUser user) {
-  late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
-  late TextEditingController controller = TextEditingController()..text = user.note ?? "";
-  bool wait = false;
-  return StatefulBuilder(
-    builder: (context, setState) => AlertDialog(
+final editNoteProvider = StateProvider<bool>((ref) => false);
+
+Widget editNote(VRChatUser user) {
+  VRChatAPI vrchatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
+  TextEditingController controller = TextEditingController()..text = user.note ?? "";
+  return Consumer(builder: (BuildContext context, WidgetRef ref, _) {
+    bool wait = ref.watch(editNoteProvider);
+    return AlertDialog(
       content: TextField(
         controller: controller,
         decoration: InputDecoration(labelText: AppLocalizations.of(context)!.editNote),
@@ -153,17 +158,19 @@ StatefulBuilder editNote(VRChatUser user) {
         TextButton(
             child: wait ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator()) : Text(AppLocalizations.of(context)!.save),
             onPressed: () {
-              setState(() => wait = true);
+              ref.read(editNoteProvider.notifier).state = true;
               vrchatLoginSession.userNotes(user.id, user.note = controller.text).then((VRChatUserNotes response) {
                 user.note = user.note == "" ? null : user.note;
+                ref.read(vrchatUserNotifier.notifier).set(user);
+                ref.read(editNoteProvider.notifier).state = false;
                 Navigator.pop(context);
               }).catchError((status) {
                 apiError(context, status);
               });
             }),
       ],
-    ),
-  );
+    );
+  });
 }
 
 List<Widget> bioLink(BuildContext context, List<Uri> bioLinks) {

@@ -22,7 +22,7 @@ class VRChatMobileSplash extends ConsumerWidget {
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(
-        builder: (BuildContext context) => VRChatMobileHome(),
+        builder: (BuildContext context) => const VRChatMobileHome(),
       ),
       (_) => false,
     );

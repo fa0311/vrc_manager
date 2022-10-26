@@ -9,6 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 // Project imports:
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
+import 'package:vrc_manager/api/notifier.dart';
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/widgets/drawer.dart';
@@ -18,7 +19,7 @@ import 'package:vrc_manager/widgets/modal/list_tile/user.dart';
 import 'package:vrc_manager/widgets/user.dart';
 
 class VRChatMobileHomeData {
-  VRChatUserSelfOverload user;
+  VRChatUserSelf user;
   VRChatWorld? world;
   VRChatInstance? instance;
 
@@ -38,6 +39,9 @@ final vrchatMobileHomeProvider = FutureProvider<VRChatMobileHomeData>((ref) asyn
   await Future.wait([
     vrchatLoginSession.user().then((value) => user = value),
   ]);
+  await Future.wait([
+    vrchatLoginSession.users(user.id).then((value) => user.note = value.note),
+  ]);
   if (["private", "offline", "traveling"].contains(user.location)) return VRChatMobileHomeData(user: user);
 
   await Future.wait([
@@ -47,14 +51,44 @@ final vrchatMobileHomeProvider = FutureProvider<VRChatMobileHomeData>((ref) asyn
   return VRChatMobileHomeData(user: user, world: world, instance: instance);
 });
 
-class VRChatMobileHome extends ConsumerWidget {
-  VRChatMobileHome({Key? key}) : super(key: key);
+class VRChatMobileUserData {
+  VRChatUserSelfOverload user;
+  VRChatWorld? world;
+  VRChatInstance? instance;
+
+  VRChatMobileUserData({
+    required this.user,
+    this.world,
+    this.instance,
+  });
+}
+
+final vrchatMobileUserProvider = FutureProvider<VRChatMobileUserData>((ref) async {
   final VRChatAPI vrchatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
+  late VRChatUserSelfOverload user;
+  VRChatWorld? world;
+  VRChatInstance? instance;
+
+  await Future.wait([
+    vrchatLoginSession.user().then((value) => user = value),
+  ]);
+  if (["private", "offline", "traveling"].contains(user.location)) return VRChatMobileUserData(user: user);
+
+  await Future.wait([
+    vrchatLoginSession.worlds(user.location.split(":")[0]).then((value) => world = value),
+    vrchatLoginSession.instances(user.location).then((value) => instance = value),
+  ]);
+  return VRChatMobileUserData(user: user, world: world, instance: instance);
+});
+
+class VRChatMobileHome extends ConsumerWidget {
+  const VRChatMobileHome({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     textStream(context);
-    AsyncValue<VRChatMobileHomeData> data = ref.watch(vrchatMobileHomeProvider);
+    AsyncValue<VRChatMobileUserData> data = ref.watch(vrchatMobileUserProvider);
+    ref.watch(vrchatUserNotifier);
 
     return Scaffold(
       appBar: AppBar(
@@ -65,7 +99,10 @@ class VRChatMobileHome extends ConsumerWidget {
           data: (data) => [
             IconButton(
               icon: const Icon(Icons.more_vert),
-              onPressed: () => modalBottom(context, selfUserModalBottom(context, ref, data.user)),
+              onPressed: () => modalBottom(
+                context,
+                selfUserModalBottom(context, ref, data.user),
+              ),
             ),
           ],
         ),

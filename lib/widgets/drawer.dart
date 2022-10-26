@@ -41,7 +41,7 @@ Drawer drawer(BuildContext context) {
                 Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(
-                    builder: (BuildContext context) => logged ? VRChatMobileHome() : const VRChatMobileLogin(),
+                    builder: (BuildContext context) => logged ? const VRChatMobileHome() : const VRChatMobileLogin(),
                   ),
                   (_) => false,
                 );
@@ -73,10 +73,30 @@ Drawer drawer(BuildContext context) {
               child: Column(
                 children: <Widget>[
                   ListTile(
+                    title: Text(AppLocalizations.of(context)!.home),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+
+  return Drawer(
+    child: SafeArea(
+      child: Column(
+        children: <Widget>[
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  ListTile(
                     onTap: () => Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
-                        builder: (BuildContext context) => VRChatMobileHome(),
+                        builder: (BuildContext context) => const VRChatMobileHome(),
                       ),
                       (_) => false,
                     ),
@@ -221,7 +241,7 @@ Drawer simpleDrawer(BuildContext context) {
                   (bool logged) => Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
-                      builder: (BuildContext context) => logged ? VRChatMobileHome() : const VRChatMobileLogin(),
+                      builder: (BuildContext context) => logged ? const VRChatMobileHome() : const VRChatMobileLogin(),
                     ),
                     (_) => false,
                   ),
@@ -253,7 +273,7 @@ Drawer simpleDrawer(BuildContext context) {
                 onTap: () => Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(
-                    builder: (BuildContext context) => VRChatMobileHome(),
+                    builder: (BuildContext context) => const VRChatMobileHome(),
                   ),
                   (_) => false,
                 ),

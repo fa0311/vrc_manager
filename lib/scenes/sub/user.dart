@@ -9,6 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 // Project imports:
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
+import 'package:vrc_manager/api/notifier.dart';
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/widgets/drawer.dart';
@@ -59,6 +60,7 @@ class VRChatMobileUser extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     textStream(context);
     AsyncValue<VRChatMobileUserData> data = ref.watch(vrchatMobileUserProvider(userId));
+    ref.watch(vrchatUserNotifier);
 
     return Scaffold(
       appBar: AppBar(

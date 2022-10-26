@@ -18,7 +18,7 @@ import 'package:vrc_manager/widgets/user.dart';
 List<Widget> selfUserModalBottom(
   BuildContext context,
   WidgetRef ref,
-  VRChatUserSelfOverload user,
+  VRChatUserSelf user,
 ) {
   return [
     editBioTileWidget(context, user),
