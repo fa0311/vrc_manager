@@ -82,6 +82,7 @@ class VRChatMobileUser extends ConsumerWidget {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Container(
+            alignment: Alignment.center,
             padding: const EdgeInsets.only(
               top: 10,
               bottom: 0,
