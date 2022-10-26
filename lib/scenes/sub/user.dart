@@ -1,5 +1,4 @@
 // Flutter imports:
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 
@@ -17,117 +16,22 @@ import 'package:vrc_manager/widgets/grid_view/widget/world.dart';
 import 'package:vrc_manager/widgets/modal/list_tile/main.dart';
 import 'package:vrc_manager/widgets/modal/list_tile/user.dart';
 import 'package:vrc_manager/widgets/user.dart';
-/*
-class VRChatMobileUser extends ConsumerWidget {
-  VRChatMobileUser({Key? key, required this.userId}) : super(key: key);
-  final String userId;
-  late final VRChatAPI vrchatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
-  late final VRChatUser? user;
-  late final VRChatFriendStatus? status;
-  late final VRChatWorld? world;
-  late final VRChatInstance? instance;
 
-  Future get(BuildContext context) async {
-    await getUser(context);
-    // ignore: use_build_context_synchronously
-    await getWorld(context);
-  }
-
-  Future getUser(BuildContext context) async {
-    user = await vrchatLoginSession.users(userId).catchError((status) {
-      apiError(context, status);
-    });
-    if (user == null) return;
-    status = await vrchatLoginSession.friendStatus(userId).catchError((status) {
-      apiError(context, status);
-    });
-  }
-
-  Future getWorld(BuildContext context) async {
-    if (!["private", "offline", "traveling"].contains(user!.location)) {
-      world = await vrchatLoginSession.worlds(user!.location.split(":")[0]).catchError((status) {
-        apiError(context, status);
-      });
-      instance = await vrchatLoginSession.instances(user!.location).catchError((status) {
-        apiError(context, status);
-      });
-    }
-  }
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    textStream(context);
-    return Scaffold(
-      appBar: AppBar(title: Text(AppLocalizations.of(context)!.user), actions: <Widget>[
-        if (user != null && status != null)
-          IconButton(
-            icon: const Icon(Icons.more_vert),
-            onPressed: () => modalBottom(
-              context,
-              userDetailsModalBottom(context, ref, user!, status!),
-            ),
-          ),
-      ]),
-      drawer: Navigator.of(context).canPop() ? null : drawer(context),
-      body: SafeArea(
-        child: SizedBox(
-          width: MediaQuery.of(context).size.width,
-          child: SingleChildScrollView(
-            child: Container(
-              padding: const EdgeInsets.only(
-                top: 10,
-                bottom: 0,
-                right: 30,
-                left: 30,
-              ),
-              child: Column(
-                children: <Widget>[
-                  if (user == null)
-                    const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator())
-                  else ...[
-                    userProfile(context, user!),
-                    Container(
-                      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
-                      child: () {
-                        if (user!.location == "private") return privateWorld(context);
-                        if (user!.location == "traveling") return privateWorld(context);
-                        if (user!.location == "offline") return null;
-                        if (world == null) return const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator());
-                        return instanceWidget(context, VRChatWorldInstance(world!, instance!));
-                      }(),
-                    ),
-                  ]
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-
-
-
-
-*/
-
-class VRChatMobileUserProvider {
+class VRChatMobileUserData {
   VRChatUser user;
   VRChatFriendStatus status;
   VRChatWorld? world;
   VRChatInstance? instance;
 
-  VRChatMobileUserProvider({
+  VRChatMobileUserData({
     required this.user,
     required this.status,
-    world,
-    instance,
+    this.world,
+    this.instance,
   });
 }
 
-final worldInstanceProvider = FutureProvider.family<VRChatMobileUserProvider, String>((ref, userId) async {
+final vrchatMobileUserProvider = FutureProvider.family<VRChatMobileUserData, String>((ref, userId) async {
   final VRChatAPI vrchatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
   late VRChatUser user;
   late VRChatFriendStatus status;
@@ -138,36 +42,30 @@ final worldInstanceProvider = FutureProvider.family<VRChatMobileUserProvider, St
     vrchatLoginSession.users(userId).then((value) => user = value),
     vrchatLoginSession.friendStatus(userId).then((value) => status = value),
   ]);
-  if (user == null) throw const HttpException("user error");
-  if (["private", "offline", "traveling"].contains(user.location)) return VRChatMobileUserProvider(user: user, status: status);
+  if (["private", "offline", "traveling"].contains(user.location)) return VRChatMobileUserData(user: user, status: status);
 
   await Future.wait([
     vrchatLoginSession.worlds(user.location.split(":")[0]).then((value) => world = value),
     vrchatLoginSession.instances(user.location).then((value) => instance = value),
   ]);
-  return VRChatMobileUserProvider(user: user, status: status, world: world, instance: instance);
+  return VRChatMobileUserData(user: user, status: status, world: world, instance: instance);
 });
 
 class VRChatMobileUser extends ConsumerWidget {
-  VRChatMobileUser({Key? key, required this.userId}) : super(key: key);
+  const VRChatMobileUser({Key? key, required this.userId}) : super(key: key);
   final String userId;
-  late final VRChatAPI vrchatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
-  late final VRChatUser? user;
-  late final VRChatFriendStatus? status;
-  late final VRChatWorld? world;
-  late final VRChatInstance? instance;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     textStream(context);
-    AsyncValue<VRChatMobileUserProvider> data = ref.watch(worldInstanceProvider(userId));
+    AsyncValue<VRChatMobileUserData> data = ref.watch(vrchatMobileUserProvider(userId));
 
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.home),
         actions: data.when(
           loading: () => null,
-          error: (err, stack) => [Text('Error: $err')],
+          error: (err, stack) => null,
           data: (data) => [
             IconButton(
               icon: const Icon(Icons.more_vert),
@@ -181,32 +79,30 @@ class VRChatMobileUser extends ConsumerWidget {
       ),
       drawer: Navigator.of(context).canPop() ? null : drawer(context),
       body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
-            child: Container(
-              padding: const EdgeInsets.only(
-                top: 10,
-                bottom: 0,
-                right: 30,
-                left: 30,
-              ),
-              child: data.when(
-                loading: () => const CircularProgressIndicator(),
-                error: (err, stack) => Text('Error: $err'),
-                data: (data) => Column(
-                  children: [
-                    userProfile(context, data.user),
-                    Container(
-                      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
-                      child: () {
-                        if (data.user.location == "private") return privateWorld(context);
-                        if (data.user.location == "traveling") return privateWorld(context);
-                        if (data.user.location == "offline") return null;
-                        data.world == null ? null : instanceWidget(context, data.world!, data.instance!);
-                      }(),
-                    ),
-                  ],
-                ),
+        child: SingleChildScrollView(
+          child: Container(
+            padding: const EdgeInsets.only(
+              top: 10,
+              bottom: 0,
+              right: 30,
+              left: 30,
+            ),
+            child: data.when(
+              loading: () => const Center(child: CircularProgressIndicator()),
+              error: (err, stack) => Text('Error: $err'),
+              data: (data) => Column(
+                children: [
+                  userProfile(context, data.user),
+                  Container(
+                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
+                    child: () {
+                      if (data.user.location == "private") return privateWorld(context);
+                      if (data.user.location == "traveling") return privateWorld(context);
+                      if (data.user.location == "offline") return null;
+                      return data.world == null ? null : instanceWidget(context, data.world!, data.instance!);
+                    }(),
+                  ),
+                ],
               ),
             ),
           ),
