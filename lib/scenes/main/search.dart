@@ -173,7 +173,7 @@ class _SearchState extends State<VRChatSearch> {
           ),
         ],
       ),
-      drawer: drawer(context),
+      drawer: drawer(),
       body: SafeArea(
         child: SizedBox(
           child: SingleChildScrollView(

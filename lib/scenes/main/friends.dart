@@ -104,7 +104,7 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
           ),
         ],
       ),
-      drawer: drawer(context),
+      drawer: drawer(),
       body: SafeArea(
         child: SizedBox(
           width: MediaQuery.of(context).size.width,

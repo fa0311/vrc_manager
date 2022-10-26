@@ -79,7 +79,7 @@ class VRChatMobileUser extends ConsumerWidget {
           ],
         ),
       ),
-      drawer: Navigator.of(context).canPop() ? null : drawer(context),
+      drawer: Navigator.of(context).canPop() ? null : drawer(),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Container(

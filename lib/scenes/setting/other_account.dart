@@ -30,7 +30,7 @@ class _SettingOtherAccountPageState extends State<VRChatMobileSettingsOtherAccou
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.accountSwitchSetting),
       ),
-      drawer: appConfig.isLogout() ? drawer(context) : simpleDrawer(context),
+      drawer: appConfig.isLogout() ? drawer() : simpleDrawer(),
       body: SafeArea(
         child: SizedBox(
           width: MediaQuery.of(context).size.width,

@@ -68,7 +68,7 @@ class _WorldsFavoriteState extends State<VRChatMobileWorldsFavorite> {
           ),
         ],
       ),
-      drawer: drawer(context),
+      drawer: drawer(),
       body: SafeArea(
         child: SizedBox(
           width: MediaQuery.of(context).size.width,

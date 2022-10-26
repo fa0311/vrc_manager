@@ -19,7 +19,7 @@ import 'package:vrc_manager/widgets/modal/list_tile/user.dart';
 import 'package:vrc_manager/widgets/user.dart';
 
 class VRChatMobileHomeData {
-  VRChatUserSelf user;
+  VRChatUserSelfOverload user;
   VRChatWorld? world;
   VRChatInstance? instance;
 
@@ -42,6 +42,7 @@ final vrchatMobileHomeProvider = FutureProvider<VRChatMobileHomeData>((ref) asyn
   await Future.wait([
     vrchatLoginSession.users(user.id).then((value) => user.note = value.note),
   ]);
+  print(user.note);
   if (["private", "offline", "traveling"].contains(user.location)) return VRChatMobileHomeData(user: user);
 
   await Future.wait([
@@ -51,44 +52,13 @@ final vrchatMobileHomeProvider = FutureProvider<VRChatMobileHomeData>((ref) asyn
   return VRChatMobileHomeData(user: user, world: world, instance: instance);
 });
 
-class VRChatMobileUserData {
-  VRChatUserSelfOverload user;
-  VRChatWorld? world;
-  VRChatInstance? instance;
-
-  VRChatMobileUserData({
-    required this.user,
-    this.world,
-    this.instance,
-  });
-}
-
-final vrchatMobileUserProvider = FutureProvider<VRChatMobileUserData>((ref) async {
-  final VRChatAPI vrchatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
-  late VRChatUserSelfOverload user;
-  VRChatWorld? world;
-  VRChatInstance? instance;
-
-  await Future.wait([
-    vrchatLoginSession.user().then((value) => user = value),
-  ]);
-  if (["private", "offline", "traveling"].contains(user.location)) return VRChatMobileUserData(user: user);
-
-  await Future.wait([
-    vrchatLoginSession.worlds(user.location.split(":")[0]).then((value) => world = value),
-    vrchatLoginSession.instances(user.location).then((value) => instance = value),
-  ]);
-  return VRChatMobileUserData(user: user, world: world, instance: instance);
-});
-
 class VRChatMobileHome extends ConsumerWidget {
   const VRChatMobileHome({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     textStream(context);
-    AsyncValue<VRChatMobileUserData> data = ref.watch(vrchatMobileUserProvider);
-    ref.watch(vrchatUserNotifier);
+    AsyncValue<VRChatMobileHomeData> data = ref.watch(vrchatMobileHomeProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -107,7 +77,7 @@ class VRChatMobileHome extends ConsumerWidget {
           ],
         ),
       ),
-      drawer: Navigator.of(context).canPop() ? null : drawer(context),
+      drawer: Navigator.of(context).canPop() ? null : drawer(),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Container(
@@ -117,23 +87,28 @@ class VRChatMobileHome extends ConsumerWidget {
               right: 30,
               left: 30,
             ),
-            child: data.when(
-              loading: () => const Center(child: CircularProgressIndicator()),
-              error: (err, stack) => Text('Error: $err'),
-              data: (data) => Column(
-                children: [
-                  userProfile(context, data.user),
-                  Container(
-                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
-                    child: () {
-                      if (data.user.location == "private") return privateWorld(context);
-                      if (data.user.location == "traveling") return privateWorld(context);
-                      if (data.user.location == "offline") return null;
-                      return data.world == null ? null : instanceWidget(context, data.world!, data.instance!);
-                    }(),
+            child: Consumer(
+              builder: (context, ref, child) {
+                ref.watch(vrchatUserNotifier);
+                return data.when(
+                  loading: () => const Center(child: CircularProgressIndicator()),
+                  error: (err, stack) => Text('Error: $err'),
+                  data: (data) => Column(
+                    children: [
+                      userProfile(context, ref.read(vrchatUserNotifier) ?? data.user),
+                      Container(
+                        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
+                        child: () {
+                          if (data.user.location == "private") return privateWorld(context);
+                          if (data.user.location == "traveling") return privateWorld(context);
+                          if (data.user.location == "offline") return null;
+                          return data.world == null ? null : instanceWidget(context, data.world!, data.instance!);
+                        }(),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                );
+              },
             ),
           ),
         ),

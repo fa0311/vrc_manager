@@ -153,7 +153,7 @@ class _LoginPageState extends State<VRChatMobileLogin> {
           ),
         ],
       ),
-      drawer: simpleDrawer(context),
+      drawer: simpleDrawer(),
       body: Padding(
           padding: const EdgeInsets.all(32.0),
           child: Column(
