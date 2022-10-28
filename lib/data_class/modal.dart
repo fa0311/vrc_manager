@@ -81,5 +81,4 @@ class GridModalConfig {
   bool joinable = false;
   bool removeButton = false;
   String? url;
-  GridModalConfig();
 }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
 import 'package:vrc_manager/api/data_class.dart';
@@ -18,24 +19,28 @@ import 'package:vrc_manager/widgets/drawer.dart';
 import 'package:vrc_manager/widgets/grid_view/extraction/friends.dart';
 import 'package:vrc_manager/widgets/modal/modal.dart';
 
-class VRChatMobileFriends extends StatefulWidget {
-  final bool offline;
-
-  const VRChatMobileFriends({Key? key, this.offline = true}) : super(key: key);
-
-  @override
-  State<VRChatMobileFriends> createState() => _FriendsPageState();
-}
-
-class _FriendsPageState extends State<VRChatMobileFriends> {
+final vrchatMobileFriendsProvider = FutureProvider.family<VRChatMobileFriends, bool>((ref, offline) async {
   late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
-  late GridConfig config = widget.offline ? appConfig.gridConfigList.offlineFriends : appConfig.gridConfigList.onlineFriends;
-  late SortData sortData = SortData(config);
-  GridModalConfig gridConfig = GridModalConfig();
+  List<Future> futureList = [];
   Map<String, VRChatWorld?> locationMap = {};
   Map<String, VRChatInstance?> instanceMap = {};
   List<VRChatFriends> userList = [];
-  bool loadingComplete = false;
+  int len;
+  do {
+    int offset = userList.length;
+    List<VRChatFriends> users = await vrchatLoginSession.friends(offline: offline, offset: offset);
+    futureList.add(getWorld(users, locationMap));
+    futureList.add(getInstance(users, instanceMap));
+    userList.addAll(users);
+    len = users.length;
+  } while (len == 50);
+  Future.wait(futureList);
+  return;
+});
+
+class VRChatMobileFriends extends ConsumerWidget {
+  bool offline;
+  VRChatMobileFriends({Key? key, this.offline = true}) : super(key: key);
 
   @override
   initState() {
@@ -70,30 +75,18 @@ class _FriendsPageState extends State<VRChatMobileFriends> {
     get().then((value) => setState(() => loadingComplete = true));
   }
 
-  Future get() async {
-    List<Future> futureList = [];
-    int len;
-    do {
-      int offset = userList.length;
-      List<VRChatFriends> users = await vrchatLoginSession.friends(offline: widget.offline, offset: offset).catchError((status) {
-        apiError(context, status);
-      });
-      if (!mounted) return;
-      futureList.add(getWorld(context, users, locationMap));
-      futureList.add(getInstance(context, users, instanceMap));
-      userList.addAll(users);
-      len = users.length;
-    } while (len == 50);
-
-    return Future.wait(futureList);
-  }
-
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     textStream(context);
     if (loadingComplete) {
       userList = sortData.users(userList) as List<VRChatFriends>;
     }
+
+    late GridConfig config = widget.offline ? appConfig.gridConfigList.offlineFriends : appConfig.gridConfigList.onlineFriends;
+    late SortData sortData = SortData(config);
+    GridModalConfig gridConfig = GridModalConfig();
+    bool loadingComplete = false;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.offline ? AppLocalizations.of(context)!.offlineFriends : AppLocalizations.of(context)!.onlineFriends),
