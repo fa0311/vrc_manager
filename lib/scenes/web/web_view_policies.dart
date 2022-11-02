@@ -13,7 +13,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 // Project imports:
 import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/main.dart';
-import 'package:vrc_manager/scenes/main/home.dart';
+import 'package:vrc_manager/scenes/sub/self.dart';
 import 'package:vrc_manager/widgets/modal/list_tile/main.dart';
 import 'package:vrc_manager/widgets/modal/list_tile/share.dart';
 import 'package:vrc_manager/widgets/share.dart';

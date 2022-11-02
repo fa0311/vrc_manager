@@ -10,7 +10,7 @@ import 'package:vrc_manager/data_class/app_config.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/main/friend_request.dart';
 import 'package:vrc_manager/scenes/main/friends.dart';
-import 'package:vrc_manager/scenes/main/home.dart';
+import 'package:vrc_manager/scenes/sub/self.dart';
 import 'package:vrc_manager/scenes/main/search.dart';
 import 'package:vrc_manager/scenes/main/settings.dart';
 import 'package:vrc_manager/scenes/main/worlds_favorite.dart';
