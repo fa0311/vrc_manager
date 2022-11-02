@@ -9,7 +9,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets/api/get.dart';
-import 'package:vrc_manager/assets/error.dart';
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
 import 'package:vrc_manager/data_class/app_config.dart';
 import 'package:vrc_manager/data_class/modal.dart';
@@ -19,7 +18,19 @@ import 'package:vrc_manager/widgets/drawer.dart';
 import 'package:vrc_manager/widgets/grid_view/extraction/friends.dart';
 import 'package:vrc_manager/widgets/modal/modal.dart';
 
-final vrchatMobileFriendsProvider = FutureProvider.family<VRChatMobileFriends, bool>((ref, offline) async {
+class VRChatMobileFriendsData {
+  Map<String, VRChatWorld?> locationMap;
+  Map<String, VRChatInstance?> instanceMap;
+  List<VRChatFriends> userList;
+
+  VRChatMobileFriendsData({
+    required this.locationMap,
+    required this.instanceMap,
+    required this.userList,
+  });
+}
+
+final vrchatMobileFriendsProvider = FutureProvider.family<VRChatMobileFriendsData, bool>((ref, offline) async {
   late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
   List<Future> futureList = [];
   Map<String, VRChatWorld?> locationMap = {};
@@ -35,18 +46,24 @@ final vrchatMobileFriendsProvider = FutureProvider.family<VRChatMobileFriends, b
     len = users.length;
   } while (len == 50);
   Future.wait(futureList);
-  return;
+  return VRChatMobileFriendsData(locationMap: locationMap, instanceMap: instanceMap, userList: userList);
 });
 
 class VRChatMobileFriends extends ConsumerWidget {
-  bool offline;
-  VRChatMobileFriends({Key? key, this.offline = true}) : super(key: key);
+  const VRChatMobileFriends({Key? key, this.offline = true}) : super(key: key);
+  final bool offline;
 
   @override
-  initState() {
-    super.initState();
+  Widget build(BuildContext context, WidgetRef ref) {
+    textStream(context);
+    AsyncValue<VRChatMobileFriendsData> data = ref.watch(vrchatMobileFriendsProvider(offline));
+
+    GridConfig config = offline ? appConfig.gridConfigList.offlineFriends : appConfig.gridConfigList.onlineFriends;
+    SortData sortData = SortData(config);
+    GridModalConfig gridConfig = GridModalConfig();
+
     gridConfig.url = "https://vrchat.com/home/locations";
-    if (widget.offline) {
+    if (offline) {
       gridConfig.sortMode = [
         SortMode.normal,
         SortMode.name,
@@ -72,50 +89,45 @@ class VRChatMobileFriends extends ConsumerWidget {
         DisplayMode.textOnly,
       ];
     }
-    get().then((value) => setState(() => loadingComplete = true));
-  }
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    textStream(context);
-    if (loadingComplete) {
-      userList = sortData.users(userList) as List<VRChatFriends>;
-    }
-
-    late GridConfig config = widget.offline ? appConfig.gridConfigList.offlineFriends : appConfig.gridConfigList.onlineFriends;
-    late SortData sortData = SortData(config);
-    GridModalConfig gridConfig = GridModalConfig();
-    bool loadingComplete = false;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.offline ? AppLocalizations.of(context)!.offlineFriends : AppLocalizations.of(context)!.onlineFriends),
+        title: Text(offline ? AppLocalizations.of(context)!.offlineFriends : AppLocalizations.of(context)!.onlineFriends),
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.more_vert),
-            onPressed: () => gridModal(context, config, gridConfig).then((value) => setState(() {})),
+            onPressed: () => gridModal(context, config, gridConfig),
           ),
         ],
       ),
       drawer: drawer(),
       body: SafeArea(
-        child: SizedBox(
-          width: MediaQuery.of(context).size.width,
-          child: SingleChildScrollView(
-            child: Column(children: <Widget>[
-              if (!loadingComplete) const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()),
-              if (userList.isNotEmpty)
-                () {
-                  switch (config.displayMode) {
-                    case DisplayMode.normal:
-                      return extractionFriendDefault(context, config, userList, locationMap, instanceMap);
-                    case DisplayMode.simple:
-                      return extractionFriendSimple(context, config, userList, locationMap, instanceMap);
-                    case DisplayMode.textOnly:
-                      return extractionFriendText(context, config, userList, locationMap, instanceMap);
-                  }
-                }(),
-            ]),
+        child: SingleChildScrollView(
+          child: Container(
+            alignment: Alignment.center,
+            child: Consumer(
+              builder: (context, ref, child) {
+                return data.when(
+                  loading: () => const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()),
+                  error: (err, stack) => Text('Error: $err'),
+                  data: (data) => Column(
+                    children: [
+                      () {
+                        data.userList = sortData.users(data.userList) as List<VRChatFriends>;
+                        switch (config.displayMode) {
+                          case DisplayMode.normal:
+                            return extractionFriendDefault(context, config, data.userList, data.locationMap, data.instanceMap);
+                          case DisplayMode.simple:
+                            return extractionFriendSimple(context, config, data.userList, data.locationMap, data.instanceMap);
+                          case DisplayMode.textOnly:
+                            return extractionFriendText(context, config, data.userList, data.locationMap, data.instanceMap);
+                        }
+                      }(),
+                    ],
+                  ),
+                );
+              },
+            ),
           ),
         ),
       ),

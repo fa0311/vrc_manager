@@ -1,10 +1,8 @@
 // Flutter imports:
-import 'package:flutter/material.dart';
 
 // Project imports:
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
-import 'package:vrc_manager/assets/error.dart';
 import 'package:vrc_manager/main.dart';
 
 Future getWorld(List<VRChatFriends> users, Map<String, VRChatWorld?> locationMap) {
