@@ -82,28 +82,6 @@ Drawer drawer() {
                       leading: const Icon(Icons.home),
                       title: Text(AppLocalizations.of(context)!.home),
                     ),
-                    ListTile(
-                      onTap: () => Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => const VRChatMobileFriendRequest(),
-                        ),
-                        (_) => false,
-                      ),
-                      leading: const Icon(Icons.notifications),
-                      title: Text(AppLocalizations.of(context)!.friendRequest),
-                    ),
-                    ListTile(
-                      onTap: () => Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => const VRChatMobileWorldsFavorite(),
-                        ),
-                        (_) => false,
-                      ),
-                      leading: const Icon(Icons.favorite),
-                      title: Text(AppLocalizations.of(context)!.favoriteWorlds),
-                    ),
                     TextButton(
                       onPressed: () => Navigator.pop(context),
                       child: Text(AppLocalizations.of(context)!.close),
