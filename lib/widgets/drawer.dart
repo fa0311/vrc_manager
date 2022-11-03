@@ -9,9 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vrc_manager/data_class/app_config.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/main/friend_request.dart';
-import 'package:vrc_manager/scenes/main/friends.dart';
-import 'package:vrc_manager/scenes/sub/self.dart';
-import 'package:vrc_manager/scenes/main/search.dart';
+import 'package:vrc_manager/scenes/main/main.dart';
 import 'package:vrc_manager/scenes/main/settings.dart';
 import 'package:vrc_manager/scenes/main/worlds_favorite.dart';
 import 'package:vrc_manager/scenes/setting/other_account.dart';
@@ -83,39 +81,6 @@ Drawer drawer() {
                       ),
                       leading: const Icon(Icons.home),
                       title: Text(AppLocalizations.of(context)!.home),
-                    ),
-                    ListTile(
-                      onTap: () => Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => const VRChatMobileFriends(offline: false),
-                        ),
-                        (_) => false,
-                      ),
-                      leading: const Icon(Icons.wb_sunny),
-                      title: Text(AppLocalizations.of(context)!.onlineFriends),
-                    ),
-                    ListTile(
-                      onTap: () => Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => const VRChatMobileFriends(offline: true),
-                        ),
-                        (_) => false,
-                      ),
-                      leading: const Icon(Icons.bedtime),
-                      title: Text(AppLocalizations.of(context)!.offlineFriends),
-                    ),
-                    ListTile(
-                      onTap: () => Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => const VRChatSearch(),
-                        ),
-                        (_) => false,
-                      ),
-                      leading: const Icon(Icons.search),
-                      title: Text(AppLocalizations.of(context)!.search),
                     ),
                     ListTile(
                       onTap: () => Navigator.pushAndRemoveUntil(

@@ -11,7 +11,7 @@ import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 // Project imports:
 import 'package:vrc_manager/assets/flutter/url_parser.dart';
 import 'package:vrc_manager/main.dart';
-import 'package:vrc_manager/scenes/sub/self.dart';
+import 'package:vrc_manager/scenes/main/main.dart';
 import 'package:vrc_manager/scenes/sub/login.dart';
 import 'package:vrc_manager/scenes/web/web_view_policies.dart';
 

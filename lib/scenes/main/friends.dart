@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 
 // Package imports:
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
@@ -14,9 +13,7 @@ import 'package:vrc_manager/data_class/app_config.dart';
 import 'package:vrc_manager/data_class/modal.dart';
 import 'package:vrc_manager/data_class/state.dart';
 import 'package:vrc_manager/main.dart';
-import 'package:vrc_manager/widgets/drawer.dart';
 import 'package:vrc_manager/widgets/grid_view/extraction/friends.dart';
-import 'package:vrc_manager/widgets/modal/modal.dart';
 
 class VRChatMobileFriendsData {
   Map<String, VRChatWorld?> locationMap;
@@ -40,12 +37,14 @@ final vrchatMobileFriendsProvider = FutureProvider.family<VRChatMobileFriendsDat
   do {
     int offset = userList.length;
     List<VRChatFriends> users = await vrchatLoginSession.friends(offline: offline, offset: offset);
-    futureList.add(getWorld(users, locationMap));
-    futureList.add(getInstance(users, instanceMap));
+    if (!offline) {
+      futureList.add(getWorld(users, locationMap));
+      futureList.add(getInstance(users, instanceMap));
+    }
     userList.addAll(users);
     len = users.length;
   } while (len == 50);
-  Future.wait(futureList);
+  await Future.wait(futureList);
   return VRChatMobileFriendsData(locationMap: locationMap, instanceMap: instanceMap, userList: userList);
 });
 
@@ -90,45 +89,31 @@ class VRChatMobileFriends extends ConsumerWidget {
       ];
     }
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(offline ? AppLocalizations.of(context)!.offlineFriends : AppLocalizations.of(context)!.onlineFriends),
-        actions: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.more_vert),
-            onPressed: () => gridModal(context, config, gridConfig),
-          ),
-        ],
-      ),
-      drawer: drawer(),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Container(
-            alignment: Alignment.center,
-            child: Consumer(
-              builder: (context, ref, child) {
-                return data.when(
-                  loading: () => const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()),
-                  error: (err, stack) => Text('Error: $err'),
-                  data: (data) => Column(
-                    children: [
-                      () {
-                        data.userList = sortData.users(data.userList) as List<VRChatFriends>;
-                        switch (config.displayMode) {
-                          case DisplayMode.normal:
-                            return extractionFriendDefault(context, config, data.userList, data.locationMap, data.instanceMap);
-                          case DisplayMode.simple:
-                            return extractionFriendSimple(context, config, data.userList, data.locationMap, data.instanceMap);
-                          case DisplayMode.textOnly:
-                            return extractionFriendText(context, config, data.userList, data.locationMap, data.instanceMap);
-                        }
-                      }(),
-                    ],
-                  ),
-                );
-              },
-            ),
-          ),
+    return SingleChildScrollView(
+      child: Container(
+        alignment: Alignment.center,
+        child: Consumer(
+          builder: (context, ref, child) {
+            return data.when(
+              loading: () => const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()),
+              error: (err, stack) => Text('Error: $err'),
+              data: (data) => Column(
+                children: [
+                  () {
+                    data.userList = sortData.users(data.userList) as List<VRChatFriends>;
+                    switch (config.displayMode) {
+                      case DisplayMode.normal:
+                        return extractionFriendDefault(context, config, data.userList, data.locationMap, data.instanceMap);
+                      case DisplayMode.simple:
+                        return extractionFriendSimple(context, config, data.userList, data.locationMap, data.instanceMap);
+                      case DisplayMode.textOnly:
+                        return extractionFriendText(context, config, data.userList, data.locationMap, data.instanceMap);
+                    }
+                  }(),
+                ],
+              ),
+            );
+          },
         ),
       ),
     );

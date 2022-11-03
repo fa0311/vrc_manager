@@ -18,19 +18,19 @@ import 'package:vrc_manager/widgets/modal/list_tile/main.dart';
 import 'package:vrc_manager/widgets/modal/list_tile/user.dart';
 import 'package:vrc_manager/widgets/user.dart';
 
-class VRChatMobileHomeData {
+class VRChatMobileSelfData {
   VRChatUserSelfOverload user;
   VRChatWorld? world;
   VRChatInstance? instance;
 
-  VRChatMobileHomeData({
+  VRChatMobileSelfData({
     required this.user,
     this.world,
     this.instance,
   });
 }
 
-final vrchatMobileHomeProvider = FutureProvider<VRChatMobileHomeData>((ref) async {
+final VRChatMobileSelfProvider = FutureProvider<VRChatMobileSelfData>((ref) async {
   final VRChatAPI vrchatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
   late VRChatUserSelfOverload user;
   VRChatWorld? world;
@@ -42,22 +42,22 @@ final vrchatMobileHomeProvider = FutureProvider<VRChatMobileHomeData>((ref) asyn
   await Future.wait([
     vrchatLoginSession.users(user.id).then((value) => user.note = value.note),
   ]);
-  if (["private", "offline", "traveling"].contains(user.location)) return VRChatMobileHomeData(user: user);
+  if (["private", "offline", "traveling"].contains(user.location)) return VRChatMobileSelfData(user: user);
 
   await Future.wait([
     vrchatLoginSession.worlds(user.location.split(":")[0]).then((value) => world = value),
     vrchatLoginSession.instances(user.location).then((value) => instance = value),
   ]);
-  return VRChatMobileHomeData(user: user, world: world, instance: instance);
+  return VRChatMobileSelfData(user: user, world: world, instance: instance);
 });
 
-class VRChatMobileHome extends ConsumerWidget {
-  const VRChatMobileHome({Key? key}) : super(key: key);
+class VRChatMobileSelf extends ConsumerWidget {
+  const VRChatMobileSelf({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     textStream(context);
-    AsyncValue<VRChatMobileHomeData> data = ref.watch(vrchatMobileHomeProvider);
+    AsyncValue<VRChatMobileSelfData> data = ref.watch(VRChatMobileSelfProvider);
 
     return Scaffold(
       appBar: AppBar(

@@ -163,83 +163,67 @@ class _SearchState extends State<VRChatSearch> {
       color: Colors.grey,
       fontSize: 16,
     );
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.search),
-        actions: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.more_vert),
-            onPressed: () => gridModal(context, config, gridConfig).then((value) => setState(() {})),
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          Container(
+            padding: const EdgeInsets.only(top: 10, right: 20, left: 20, bottom: 0),
+            child: TextField(
+              controller: searchBoxController,
+              focusNode: searchBoxFocusNode,
+              decoration: InputDecoration(
+                labelText: AppLocalizations.of(context)!.search,
+                suffixIcon: IconButton(
+                  icon: const Icon(Icons.search),
+                  onPressed: () {
+                    searchingMode = searchModeSelected;
+                    text = searchBoxController.text;
+                    worldList = [];
+                    userList = [];
+                    init();
+                    setState(() => loadingComplete = false);
+                    get().then((value) => setState(() => loadingComplete = true));
+                  },
+                ),
+              ),
+            ),
           ),
-        ],
-      ),
-      drawer: drawer(),
-      body: SafeArea(
-        child: SizedBox(
-          child: SingleChildScrollView(
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Column(
-              children: [
-                Container(
-                  padding: const EdgeInsets.only(top: 10, right: 20, left: 20, bottom: 0),
-                  child: TextField(
-                    controller: searchBoxController,
-                    focusNode: searchBoxFocusNode,
-                    decoration: InputDecoration(
-                      labelText: AppLocalizations.of(context)!.search,
-                      suffixIcon: IconButton(
-                        icon: const Icon(Icons.search),
-                        onPressed: () {
-                          searchingMode = searchModeSelected;
-                          text = searchBoxController.text;
-                          worldList = [];
-                          userList = [];
-                          init();
-                          setState(() => loadingComplete = false);
-                          get().then((value) => setState(() => loadingComplete = true));
-                        },
-                      ),
-                    ),
-                  ),
+              children: <Widget>[
+                ListTile(
+                  title: Text(AppLocalizations.of(context)!.type),
+                  trailing: Text(searchModeSelected.toLocalization(context), style: selectedTextStyle),
+                  onTap: () => searchModeModal(),
                 ),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: Column(
-                    children: <Widget>[
-                      ListTile(
-                        title: Text(AppLocalizations.of(context)!.type),
-                        trailing: Text(searchModeSelected.toLocalization(context), style: selectedTextStyle),
-                        onTap: () => searchModeModal(),
-                      ),
-                    ],
-                  ),
-                ),
-                if (!loadingComplete) const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()),
-                if (userList.isNotEmpty)
-                  () {
-                    switch (config.displayMode) {
-                      case DisplayMode.normal:
-                        return extractionUserDefault(context, config, userList);
-                      case DisplayMode.simple:
-                        return extractionUserSimple(context, config, userList);
-                      case DisplayMode.textOnly:
-                        return extractionUserText(context, config, userList);
-                    }
-                  }(),
-                if (worldList.isNotEmpty)
-                  () {
-                    switch (config.displayMode) {
-                      case DisplayMode.normal:
-                        return extractionWorldDefault(context, config, worldList);
-                      case DisplayMode.simple:
-                        return extractionWorldSimple(context, config, worldList);
-                      case DisplayMode.textOnly:
-                        return extractionWorldText(context, config, worldList);
-                    }
-                  }(),
               ],
             ),
           ),
-        ),
+          if (!loadingComplete) const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()),
+          if (userList.isNotEmpty)
+            () {
+              switch (config.displayMode) {
+                case DisplayMode.normal:
+                  return extractionUserDefault(context, config, userList);
+                case DisplayMode.simple:
+                  return extractionUserSimple(context, config, userList);
+                case DisplayMode.textOnly:
+                  return extractionUserText(context, config, userList);
+              }
+            }(),
+          if (worldList.isNotEmpty)
+            () {
+              switch (config.displayMode) {
+                case DisplayMode.normal:
+                  return extractionWorldDefault(context, config, worldList);
+                case DisplayMode.simple:
+                  return extractionWorldSimple(context, config, worldList);
+                case DisplayMode.textOnly:
+                  return extractionWorldText(context, config, worldList);
+              }
+            }(),
+        ],
       ),
     );
   }
