@@ -30,7 +30,7 @@ class VRChatMobileSelfData {
   });
 }
 
-final VRChatMobileSelfProvider = FutureProvider<VRChatMobileSelfData>((ref) async {
+final vrchatMobileSelfProvider = FutureProvider<VRChatMobileSelfData>((ref) async {
   final VRChatAPI vrchatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
   late VRChatUserSelfOverload user;
   VRChatWorld? world;
@@ -57,7 +57,7 @@ class VRChatMobileSelf extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     textStream(context);
-    AsyncValue<VRChatMobileSelfData> data = ref.watch(VRChatMobileSelfProvider);
+    AsyncValue<VRChatMobileSelfData> data = ref.watch(vrchatMobileSelfProvider);
 
     return Scaffold(
       appBar: AppBar(

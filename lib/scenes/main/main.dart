@@ -28,7 +28,7 @@ class VRChatMobileHome extends ConsumerWidget {
           children: const [
             VRChatMobileFriends(offline: false),
             VRChatMobileFriends(offline: true),
-            VRChatSearch(),
+            VRChatMobileSearch(),
           ],
           onPageChanged: (int index) => ref.read(currentIndexProvider.notifier).state = index,
         ),
