@@ -13,9 +13,8 @@ import 'package:vrc_manager/widgets/modal/list_tile/world.dart';
 Widget extractionWorldDefault(
   BuildContext context,
   GridConfig config,
-  List<VRChatFavoriteWorld> favoriteWorld, {
-  Function? setState,
-}) {
+  List<VRChatFavoriteWorld> favoriteWorld,
+) {
   return StatefulBuilder(
     builder: (BuildContext context, setState) => renderGrid(
       context,
@@ -70,10 +69,8 @@ Widget extractionWorldDefault(
 Widget extractionWorldSimple(
   BuildContext context,
   GridConfig config,
-  List<VRChatFavoriteWorld> favoriteWorld, {
-  Function? setState,
-}) {
-  setState ??= (fn) => fn();
+  List<VRChatFavoriteWorld> favoriteWorld,
+) {
   return StatefulBuilder(
     builder: (BuildContext context, _) => renderGrid(
       context,
@@ -126,7 +123,7 @@ Widget extractionWorldSimple(
                         color: Colors.white,
                         constraints: const BoxConstraints(),
                         padding: const EdgeInsets.all(0),
-                        onPressed: () => delete(context, world, favoriteWorld).then((value) => setState!(() {})),
+                        onPressed: () => delete(context, world, favoriteWorld),
                         icon: const Icon(Icons.delete),
                       ),
                     ]
