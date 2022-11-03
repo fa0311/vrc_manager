@@ -35,15 +35,17 @@ class VRChatMobileHome extends ConsumerWidget {
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.access_alarm_outlined), label: 'Clock'),
-          BottomNavigationBarItem(icon: Icon(Icons.vpn_key), label: 'Secret'),
+          BottomNavigationBarItem(icon: Icon(Icons.wb_sunny), label: 'online'),
+          BottomNavigationBarItem(icon: Icon(Icons.bedtime), label: 'offline'),
+          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'search'),
         ],
         currentIndex: currentIndex,
         onTap: (int index) {
           ref.read(currentIndexProvider.notifier).state = index;
           controller.jumpToPage(index);
         },
+        showSelectedLabels: false,
+        showUnselectedLabels: false,
       ),
     );
   }
