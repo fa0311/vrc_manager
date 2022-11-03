@@ -11,7 +11,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 // Project imports:
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
-import 'package:vrc_manager/api/notifier.dart';
+import 'package:vrc_manager/assets/api/notifier.dart';
 import 'package:vrc_manager/assets/anchor.dart';
 import 'package:vrc_manager/assets/date.dart';
 import 'package:vrc_manager/assets/error.dart';

@@ -9,7 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 // Project imports:
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
-import 'package:vrc_manager/api/notifier.dart';
+import 'package:vrc_manager/assets/api/notifier.dart';
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/widgets/drawer.dart';
