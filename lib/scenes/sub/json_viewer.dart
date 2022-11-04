@@ -7,24 +7,19 @@ import 'package:flutter/material.dart';
 // Package imports:
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_json_viewer/flutter_json_viewer.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
 import 'package:vrc_manager/widgets/modal/list_tile/main.dart';
 import 'package:vrc_manager/widgets/modal/list_tile/share.dart';
 
-class VRChatMobileJsonViewer extends StatefulWidget {
+class VRChatMobileJsonViewer extends ConsumerWidget {
   final dynamic obj;
-
   const VRChatMobileJsonViewer({Key? key, required this.obj}) : super(key: key);
 
   @override
-  State<VRChatMobileJsonViewer> createState() => _JsonViewerPageState();
-}
-
-class _JsonViewerPageState extends State<VRChatMobileJsonViewer> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     textStream(context);
     return Scaffold(
       appBar: AppBar(
@@ -32,7 +27,7 @@ class _JsonViewerPageState extends State<VRChatMobileJsonViewer> {
         actions: [
           IconButton(
             icon: const Icon(Icons.share),
-            onPressed: () => modalBottom(context, [copyListTileWidget(context, jsonEncode(widget.obj))]),
+            onPressed: () => modalBottom(context, [copyListTileWidget(context, jsonEncode(obj))]),
           )
         ],
       ),
@@ -41,7 +36,7 @@ class _JsonViewerPageState extends State<VRChatMobileJsonViewer> {
         child: SafeArea(
           child: ListView(
             children: [
-              JsonViewer(widget.obj),
+              JsonViewer(obj),
             ],
           ),
         ),
