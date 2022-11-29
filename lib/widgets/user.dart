@@ -187,10 +187,10 @@ List<Widget> bioLink(BuildContext context, List<Uri> bioLinks) {
           padding: const EdgeInsets.all(5),
           child: Ink(
             child: SvgPicture.asset(
-              "assets/svg/${getVrchatIconContains(link)}.svg",
+              "assets/svg/${getVrchatExternalServices(link)}.svg",
               width: 20,
               height: 20,
-              color: Color(getVrchatIcon()[getVrchatIconContains(link)] ?? 0xFFFFFFFF),
+              color: Color(getVrchatExternalServices(link).color),
               semanticsLabel: link.toString(),
             ),
           ),
