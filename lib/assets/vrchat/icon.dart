@@ -42,6 +42,10 @@ enum VRChatExternalServices {
   yelp(color: 0xFFB90C04),
   youtube(color: 0xFFff3333);
 
+  String getName() {
+    return text ?? name;
+  }
+
   final int color;
   final String? text;
   const VRChatExternalServices({required this.color, this.text});
@@ -49,7 +53,7 @@ enum VRChatExternalServices {
 
 VRChatExternalServices getVrchatExternalServices(Uri uri) {
   for (VRChatExternalServices key in VRChatExternalServices.values) {
-    if (uri.host.contains(key.name)) return key;
+    if (uri.host.contains(key.getName())) return key;
   }
   return VRChatExternalServices.none;
 }
