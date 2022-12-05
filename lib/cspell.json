@@ -37,5 +37,5 @@
     /* Other */
     "dont"
   ],
-  "ignorePaths": ["l10n/**", "assets/vrchat/lang.dart"]
+  "ignorePaths": ["l10n/**", "lang.dart"]
 }
