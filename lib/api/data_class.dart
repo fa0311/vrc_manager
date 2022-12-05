@@ -167,7 +167,7 @@ class VRChatUser {
     isFriend = content['isFriend'];
     lastPlatform = content['last_platform'];
     profilePicOverride = content['profilePicOverride'] == "" ? null : content['profilePicOverride'];
-    status = byVrchatStatusData(Uri.parse(content['status']));
+    status = byVrchatStatusData(content['status']);
     statusDescription = content['statusDescription'] == "" ? null : content['statusDescription'];
     tags = content['tags'].cast<String>();
     userIcon = content['userIcon'];

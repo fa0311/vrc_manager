@@ -16,9 +16,9 @@ enum VRChatStatusData {
   const VRChatStatusData({required this.text, required this.color});
 }
 
-VRChatStatusData byVrchatStatusData(Uri uri) {
-  for (VRChatStatusData key in VRChatStatusData.values) {
-    if (uri.host.contains(key.text)) return key;
+VRChatStatusData byVrchatStatusData(String text) {
+  for (VRChatStatusData status in VRChatStatusData.values) {
+    if (text == status.text) return status;
   }
   return VRChatStatusData.offline;
 }
