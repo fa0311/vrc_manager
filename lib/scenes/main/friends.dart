@@ -89,31 +89,35 @@ class VRChatMobileFriends extends ConsumerWidget {
       ];
     }
 
-    return SingleChildScrollView(
-      child: Container(
-        alignment: Alignment.center,
-        child: Consumer(
-          builder: (context, ref, child) {
-            return data.when(
-              loading: () => const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()),
-              error: (err, stack) => Text('Error: $err\n$stack'),
-              data: (data) => Column(
-                children: [
-                  () {
-                    data.userList = sortData.users(data.userList) as List<VRChatFriends>;
-                    switch (config.displayMode) {
-                      case DisplayMode.normal:
-                        return extractionFriendDefault(context, config, data.userList, data.locationMap, data.instanceMap);
-                      case DisplayMode.simple:
-                        return extractionFriendSimple(context, config, data.userList, data.locationMap, data.instanceMap);
-                      case DisplayMode.textOnly:
-                        return extractionFriendText(context, config, data.userList, data.locationMap, data.instanceMap);
-                    }
-                  }(),
-                ],
-              ),
-            );
-          },
+    return RefreshIndicator(
+      onRefresh: () => ref.refresh(vrchatMobileFriendsProvider(offline).future),
+      child: SingleChildScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        child: Container(
+          alignment: Alignment.center,
+          child: Consumer(
+            builder: (context, ref, child) {
+              return data.when(
+                loading: () => const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()),
+                error: (err, stack) => Text('Error: $err\n$stack'),
+                data: (data) => Column(
+                  children: [
+                    () {
+                      data.userList = sortData.users(data.userList) as List<VRChatFriends>;
+                      switch (config.displayMode) {
+                        case DisplayMode.normal:
+                          return extractionFriendDefault(context, config, data.userList, data.locationMap, data.instanceMap);
+                        case DisplayMode.simple:
+                          return extractionFriendSimple(context, config, data.userList, data.locationMap, data.instanceMap);
+                        case DisplayMode.textOnly:
+                          return extractionFriendText(context, config, data.userList, data.locationMap, data.instanceMap);
+                      }
+                    }(),
+                  ],
+                ),
+              );
+            },
+          ),
         ),
       ),
     );
