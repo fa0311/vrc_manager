@@ -59,17 +59,3 @@ enum ThemeBrightness {
     }
   }
 }
-
-enum SearchMode {
-  users,
-  worlds;
-
-  String toLocalization(BuildContext context) {
-    switch (this) {
-      case SearchMode.users:
-        return AppLocalizations.of(context)!.user;
-      case SearchMode.worlds:
-        return AppLocalizations.of(context)!.world;
-    }
-  }
-}
