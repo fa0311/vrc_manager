@@ -15,21 +15,21 @@ import 'package:vrc_manager/widgets/modal/list_tile/share.dart';
 import 'package:vrc_manager/widgets/share.dart';
 
 final timeStampProvider = StateProvider<int>((ref) => 0);
-final urlProvider = StateProvider<String?>((ref) => null);
+final urlProvider = StateProvider<Uri?>((ref) => null);
 
 class VRChatMobileWebView extends ConsumerWidget {
   VRChatMobileWebView({Key? key, required this.initUrl}) : super(key: key);
 
   late final VRChatAPI vrchatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
   late final WebViewController controllerGlobal;
-  final String initUrl;
+  final Uri initUrl;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     textStream(context);
     final cookieManager = CookieManager();
     int timeStamp = ref.read(timeStampProvider);
-    String url = ref.watch(urlProvider) ?? initUrl;
+    Uri url = ref.watch(urlProvider) ?? initUrl;
 
     final cookieMap = Session().decodeCookie(vrchatLoginSession.getCookie());
     for (String key in cookieMap.keys) {
@@ -65,17 +65,17 @@ class VRChatMobileWebView extends ConsumerWidget {
           ],
         ),
         body: WebView(
-          initialUrl: url,
+          initialUrl: url.toString(),
           javascriptMode: JavascriptMode.unrestricted,
           onWebViewCreated: (WebViewController webViewController) {
             controllerGlobal = webViewController;
           },
           navigationDelegate: (NavigationRequest request) {
-            if (ref.read(appConfig.forceExternalBrowser) && Uri.parse(url).host != "vrchat.com") {
+            if (ref.read(appConfig.forceExternalBrowser) && url.host != "vrchat.com") {
               openInBrowser(context, url);
               return NavigationDecision.prevent;
             } else {
-              url = request.url;
+              ref.watch(urlProvider.notifier).state = Uri.parse(request.url);
               return NavigationDecision.navigate;
             }
           },

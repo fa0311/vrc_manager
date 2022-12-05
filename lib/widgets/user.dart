@@ -178,20 +178,20 @@ Widget editNote(VRChatUser user) {
 
 List<Widget> bioLink(BuildContext context, List<Uri> bioLinks) {
   return [
-    for (Uri link in bioLinks)
+    for (Uri url in bioLinks)
       InkWell(
         borderRadius: BorderRadius.circular(20),
-        onTap: () => openInBrowser(context, link.toString()),
-        onLongPress: () => modalBottom(context, shareUrlListTile(context, link.toString())),
+        onTap: () => openInBrowser(context, url),
+        onLongPress: () => modalBottom(context, shareUrlListTile(context, url)),
         child: Padding(
           padding: const EdgeInsets.all(5),
           child: Ink(
             child: SvgPicture.asset(
-              "assets/svg/${byVrchatExternalServices(link)}.svg",
+              "assets/svg/${byVrchatExternalServices(url)}.svg",
               width: 20,
               height: 20,
-              color: Color(byVrchatExternalServices(link).color),
-              semanticsLabel: link.toString(),
+              color: Color(byVrchatExternalServices(url).color),
+              semanticsLabel: url.toString(),
             ),
           ),
         ),

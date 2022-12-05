@@ -22,7 +22,7 @@ class VRChatMobileWebViewUserPolicy extends ConsumerWidget {
   VRChatMobileWebViewUserPolicy({Key? key}) : super(key: key);
 
   final VRChatAPI vrchatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
-  static const String url = "https://github.com/fa0311/vrc_manager/blob/master/docs/user_policies/ja.md";
+  static Uri url = Uri.https("github.com", "/fa0311/vrc_manager/blob/master/docs/user_policies/ja.md");
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -77,8 +77,8 @@ class VRChatMobileWebViewUserPolicy extends ConsumerWidget {
       ),
       body: () {
         if (Platform.isAndroid || Platform.isIOS) {
-          return const WebView(
-            initialUrl: url,
+          return WebView(
+            initialUrl: url.toString(),
             javascriptMode: JavascriptMode.unrestricted,
           );
         } else {

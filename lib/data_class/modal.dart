@@ -80,5 +80,5 @@ class GridModalConfig {
   bool worldDetails = false;
   bool joinable = false;
   bool removeButton = false;
-  String? url;
+  Uri? url;
 }

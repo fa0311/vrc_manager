@@ -46,7 +46,7 @@ void errorDialog(BuildContext context, String text, {String log = ""}) {
                     * if(context.mounted)
                     */
                     // ignore: use_build_context_synchronously
-                    openInBrowser(context, "https://github.com/fa0311/vrc_manager/issues/new/choose");
+                    openInBrowser(context, Uri.https("github.com", "/vrc_manager/issues/new/choose"));
                   },
                 ),
               TextButton(

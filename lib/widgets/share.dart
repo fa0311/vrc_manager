@@ -13,11 +13,11 @@ import 'package:url_launcher/url_launcher.dart';
 // Project imports:
 import 'package:vrc_manager/scenes/web/web_view.dart';
 
-Future openInBrowser(BuildContext context, String url, {bool forceExternal = false}) async {
+Future openInBrowser(BuildContext context, Uri url, {bool forceExternal = false}) async {
   if (!forceExternal && (Platform.isAndroid || Platform.isIOS)) {
-    if (/* ref.read(appConfig.forceExternalBrowser) && */ Uri.parse(url).host != "vrchat.com") {
-      if (await canLaunchUrl(Uri.parse(url))) {
-        await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+    if (/* ref.read(appConfig.forceExternalBrowser) && */ url.host != "vrchat.com") {
+      if (await canLaunchUrl(url)) {
+        await launchUrl(url, mode: LaunchMode.externalApplication);
       }
     } else {
       Navigator.push(
@@ -28,8 +28,8 @@ Future openInBrowser(BuildContext context, String url, {bool forceExternal = fal
       );
     }
   } else {
-    if (await canLaunchUrl(Uri.parse(url))) {
-      await launchUrl(Uri.parse(url));
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url);
     }
   }
 }

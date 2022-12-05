@@ -50,7 +50,7 @@ class VRChatMobileFriendRequest extends ConsumerWidget {
     textStream(context);
     AsyncValue<VRChatMobileFriendRequestData> data = ref.watch(vrchatMobileFriendsProvider);
 
-    gridConfig.url = "https://vrchat.com/home/messages";
+    gridConfig.url = Uri.https("vrchat.com", "/home/messages");
     gridConfig.sortMode = [
       SortMode.normal,
       SortMode.name,

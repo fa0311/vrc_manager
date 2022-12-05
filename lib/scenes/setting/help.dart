@@ -44,30 +44,30 @@ class _HelpPageState extends State<VRChatMobileHelp> {
                   ListTile(
                       title: Text(AppLocalizations.of(context)!.contribution),
                       subtitle: Text(AppLocalizations.of(context)!.contributionDetails),
-                      onTap: () => openInBrowser(context, "https://github.com/fa0311/vrc_manager")),
+                      onTap: () => openInBrowser(context, Uri.https("github.com", "/fa0311/vrc_manager"))),
                   const Divider(),
                   ListTile(
                       title: Text(AppLocalizations.of(context)!.report),
                       subtitle: Text(AppLocalizations.of(context)!.reportDetails),
-                      onTap: () => openInBrowser(context, "https://github.com/fa0311/vrc_manager/issues/new/choose")),
+                      onTap: () => openInBrowser(context, Uri.https("github.com", "/fa0311/vrc_manager/issues/new/choose"))),
                   const Divider(),
                   ListTile(
                     title: Text(AppLocalizations.of(context)!.developerInfo),
                     subtitle: Text(AppLocalizations.of(context)!.developerInfoDetails),
-                    onTap: () => openInBrowser(context, "https://twitter.com/faa0311"),
+                    onTap: () => openInBrowser(context, Uri.https("twitter.com", "/faa0311")),
                   ),
                   const Divider(),
                   ListTile(
                     title: Text(AppLocalizations.of(context)!.rateTheApp),
                     subtitle: Text(AppLocalizations.of(context)!.rateTheAppDetails),
-                    onTap: () => openInBrowser(context, "https://play.google.com/store/apps/details?id=com.yuki0311.vrc_manager"),
+                    onTap: () => openInBrowser(context, Uri.https("play.google.com", "/store/apps/details?id=com.yuki0311.vrc_manager")),
                   ),
                   const Divider(),
                   ListTile(
                     title: Text(AppLocalizations.of(context)!.version),
                     subtitle: Text(AppLocalizations.of(context)!.versionDetails(version)),
                     onTap: () => PackageInfo.fromPlatform().then((PackageInfo packageInfo) {
-                      openInBrowser(context, "https://github.com/fa0311/vrc_manager/releases");
+                      openInBrowser(context, Uri.https("github.com", "/fa0311/vrc_manager/releases"));
                     }),
                   ),
                   const Divider(),

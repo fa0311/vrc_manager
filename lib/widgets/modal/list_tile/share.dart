@@ -17,22 +17,23 @@ import 'package:vrc_manager/scenes/sub/json_viewer.dart';
 import 'package:vrc_manager/widgets/modal/list_tile/main.dart';
 import 'package:vrc_manager/widgets/share.dart';
 
-List<Widget> shareUrlListTile(BuildContext context, String url, {bool browserExternalForce = false}) {
+List<Widget> shareUrlListTile(BuildContext context, Uri url, {bool browserExternalForce = false}) {
   return [
-    shareListTileWidget(context, url),
-    copyListTileWidget(context, url),
+    shareListTileWidget(context, url.toString()),
+    copyListTileWidget(context, url.toString()),
     if (!browserExternalForce) openInBrowserListTileWidget(context, url),
-    if (Uri.parse(url).host != "vrchat.com" && browserExternalForce) openInBrowserExternalForceListTileWidget(context, url),
+    if (url.host != "vrchat.com" && browserExternalForce) openInBrowserExternalForceListTileWidget(context, url),
   ];
 }
 
 List<Widget> shareInstanceListTile(BuildContext context, String worldId, String instanceId) {
-  String url = "https://vrchat.com/home/launch?worldId=$worldId&instanceId=$instanceId";
+  Uri url = Uri.https("vrchat.com/", "/home/launch?worldId=$worldId&instanceId=$instanceId");
   return [
-    shareListTileWidget(context, url),
-    copyListTileWidget(context, url),
+    shareListTileWidget(context, url.toString()),
+    copyListTileWidget(context, url.toString()),
     openInBrowserListTileWidget(context, url),
-    if (Platform.isWindows) openInWindowsListTileWidget(context, "vrchat://launch?ref=vrchat.com&id=$worldId:$instanceId"),
+    if (Platform.isWindows)
+      openInWindowsListTileWidget(context, Uri(scheme: "vrchat", path: "launch", queryParameters: {"ref": "vrchat.com", "id": "$worldId:$instanceId"})),
   ];
 }
 
@@ -58,7 +59,7 @@ Widget copyListTileWidget(BuildContext context, String text) {
   );
 }
 
-Widget openInBrowserListTileWidget(BuildContext context, String url) {
+Widget openInBrowserListTileWidget(BuildContext context, Uri url) {
   return ListTile(
     leading: const Icon(Icons.open_in_browser),
     title: Text(AppLocalizations.of(context)!.openInBrowser),
@@ -69,7 +70,7 @@ Widget openInBrowserListTileWidget(BuildContext context, String url) {
   );
 }
 
-Widget openInBrowserExternalForceListTileWidget(BuildContext context, String url) {
+Widget openInBrowserExternalForceListTileWidget(BuildContext context, Uri url) {
   return ListTile(
     leading: const Icon(Icons.open_in_browser),
     title: Text(AppLocalizations.of(context)!.openInExternalBrowser),
@@ -94,7 +95,7 @@ Widget openInJsonViewer(BuildContext context, dynamic content) {
   );
 }
 
-Widget shareUrlTileWidget(BuildContext context, String url) {
+Widget shareUrlTileWidget(BuildContext context, Uri url) {
   return ListTile(
     title: Text(AppLocalizations.of(context)!.share),
     onTap: () {
@@ -149,7 +150,7 @@ Widget inviteVrchatListTileWidget(BuildContext context, String location) {
   );
 }
 
-Widget openInWindowsListTileWidget(BuildContext context, String url) {
+Widget openInWindowsListTileWidget(BuildContext context, Uri url) {
   return ListTile(
     leading: const Icon(Icons.laptop_windows),
     title: Text(AppLocalizations.of(context)!.openInVrchat),

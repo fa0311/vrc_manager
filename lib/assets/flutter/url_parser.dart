@@ -6,9 +6,9 @@ import 'package:vrc_manager/scenes/sub/user.dart';
 import 'package:vrc_manager/scenes/sub/world.dart';
 import 'package:vrc_manager/widgets/share.dart';
 
-void urlParser(BuildContext context, String strUri) {
-  final List<String> path = Uri.parse(strUri).path.split("/");
-  final Map<String, String> queryParameters = Uri.parse(strUri).queryParameters;
+void urlParser(BuildContext context, Uri url) {
+  final List<String> path = url.path.split("/");
+  final Map<String, String> queryParameters = url.queryParameters;
   if (path.length < 2) {
     return;
   } else if (path[2] == "launch") {
@@ -36,6 +36,6 @@ void urlParser(BuildContext context, String strUri) {
       (_) => false,
     );
   } else {
-    openInBrowser(context, strUri);
+    openInBrowser(context, url);
   }
 }

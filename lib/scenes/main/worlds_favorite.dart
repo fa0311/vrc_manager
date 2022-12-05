@@ -23,7 +23,7 @@ class VRChatMobileWorldsFavorite extends ConsumerWidget {
     late SortData sortData = SortData(config);
     GridModalConfig gridConfig = GridModalConfig();
 
-    gridConfig.url = "https://vrchat.com/home/worlds";
+    gridConfig.url = Uri.https("vrchat.com", "/home/worlds");
     gridConfig.removeButton = true;
     gridConfig.displayMode = [
       DisplayMode.normal,

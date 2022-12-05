@@ -61,7 +61,7 @@ class VRChatMobileFriends extends ConsumerWidget {
     SortData sortData = SortData(config);
     GridModalConfig gridConfig = GridModalConfig();
 
-    gridConfig.url = "https://vrchat.com/home/locations";
+    gridConfig.url = Uri.https("vrchat.com", "/home/locations");
     if (offline) {
       gridConfig.sortMode = [
         SortMode.normal,

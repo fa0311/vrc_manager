@@ -231,7 +231,7 @@ class VRChatMobileLogin extends ConsumerWidget {
                       TextButton(
                         onPressed: () {
                           Navigator.pop(context);
-                          openInBrowser(context, "https://vrchat.com/home/login");
+                          openInBrowser(context, Uri.https("vrchat.com", "/home/login"));
                         },
                         child: Text(AppLocalizations.of(context)!.openInBrowser),
                       ),

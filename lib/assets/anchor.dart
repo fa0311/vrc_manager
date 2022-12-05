@@ -11,7 +11,6 @@ List<InlineSpan> textToAnchor(BuildContext context, String text) {
   return [
     for (String line in text.split('\n')) ...[
       ...() {
-        bool isUrl = true;
         Match? match;
         String? text = () {
           match = RegExp(r'^(Twitter|twitter|TWITTER)([:˸：\s]{0,3})([@＠\s]{0,3})([0-9０-９a-zA-Z_]{1,15})$').firstMatch(line);
@@ -20,7 +19,6 @@ List<InlineSpan> textToAnchor(BuildContext context, String text) {
           if (match != null) return "https://github.com/${match!.group(match!.groupCount)}";
           match = RegExp(r'^(https?[:˸][/⁄]{2}.+)$').firstMatch(line);
           if (match != null) return "${match!.group(match!.groupCount)}".replaceAll("⁄", "/").replaceAll("˸", ":").replaceAll("․", ".");
-          isUrl = false;
           match = RegExp(r'^(Discord|discord|DISCORD)([:˸：\s]{1,3})(.{1,16}[#＃][0-9０-９]{4})$').firstMatch(line);
           if (match != null) return "${match!.group(match!.groupCount)}".replaceAll("＃", "#");
         }();
@@ -34,14 +32,14 @@ List<InlineSpan> textToAnchor(BuildContext context, String text) {
                   recognizer: LongPressGestureRecognizer()
                     ..onLongPressDown = ((details) => timeStamp = DateTime.now().millisecondsSinceEpoch)
                     ..onLongPress = () {
-                      if (isUrl) modalBottom(context, shareUrlListTile(context, text!));
+                      if (Uri.tryParse(text!) != null) modalBottom(context, shareUrlListTile(context, Uri.parse(text)));
                     }
                     ..onLongPressCancel = () {
                       if (DateTime.now().millisecondsSinceEpoch - timeStamp < 500) {
-                        if (isUrl) {
-                          openInBrowser(context, text!);
+                        if (Uri.tryParse(text!) == null) {
+                          copyToClipboard(context, text);
                         } else {
-                          copyToClipboard(context, text!);
+                          openInBrowser(context, Uri.parse(text));
                         }
                       }
                     })
@@ -55,14 +53,14 @@ List<InlineSpan> textToAnchor(BuildContext context, String text) {
                   recognizer: LongPressGestureRecognizer()
                     ..onLongPressDown = ((details) => timeStamp = DateTime.now().millisecondsSinceEpoch)
                     ..onLongPress = () {
-                      if (isUrl) modalBottom(context, shareUrlListTile(context, text!));
+                      if (Uri.tryParse(text!) != null) modalBottom(context, shareUrlListTile(context, Uri.parse(text)));
                     }
                     ..onLongPressCancel = () {
                       if (DateTime.now().millisecondsSinceEpoch - timeStamp < 500) {
-                        if (isUrl) {
-                          openInBrowser(context, text!);
+                        if (Uri.tryParse(text!) == null) {
+                          copyToClipboard(context, text);
                         } else {
-                          copyToClipboard(context, text!);
+                          openInBrowser(context, Uri.parse(text));
                         }
                       }
                     })

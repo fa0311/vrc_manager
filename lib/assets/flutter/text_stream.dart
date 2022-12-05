@@ -11,7 +11,7 @@ textStream(context) {
   if (Platform.isAndroid || Platform.isIOS) {
     ReceiveSharingIntent.getTextStream().listen(
       (String value) {
-        urlParser(context, value);
+        urlParser(context, Uri.parse(value));
       },
     );
   }

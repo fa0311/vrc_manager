@@ -58,7 +58,7 @@ class VRChatMobileSplash extends ConsumerWidget {
       } else if (Platform.isAndroid || Platform.isIOS) {
         ReceiveSharingIntent.getInitialText().then((String? initialText) {
           if (initialText != null) {
-            urlParser(context, initialText);
+            urlParser(context, Uri.parse(initialText));
           } else {
             goHome(context);
           }

@@ -23,7 +23,7 @@ List<Widget> selfUserModalBottom(
   return [
     editBioTileWidget(context, user),
     editNoteTileWidget(context, user),
-    shareUrlTileWidget(context, "https://vrchat.com/home/user/${user.id}"),
+    shareUrlTileWidget(context, Uri.https("vrchat.com", "/home/user/${user.id}")),
     if (ref.read(appConfig.debugMode)) openInJsonViewer(context, user.content),
   ];
 }
@@ -36,7 +36,7 @@ List<Widget> userDetailsModalBottom(
 ) {
   return [
     editNoteTileWidget(context, user),
-    shareUrlTileWidget(context, "https://vrchat.com/home/user/${user.id}"),
+    shareUrlTileWidget(context, Uri.https("vrchat.com", "/home/user/${user.id}")),
     profileActionTileWidget(context, status, user),
     if (ref.read(appConfig.debugMode)) openInJsonViewer(context, user.content),
   ];
