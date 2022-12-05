@@ -96,7 +96,7 @@ class VRChatMobileFriends extends ConsumerWidget {
           builder: (context, ref, child) {
             return data.when(
               loading: () => const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()),
-              error: (err, stack) => Text('Error: $err'),
+              error: (err, stack) => Text('Error: $err\n$stack'),
               data: (data) => Column(
                 children: [
                   () {

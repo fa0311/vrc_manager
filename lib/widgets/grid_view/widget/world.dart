@@ -7,7 +7,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
 import 'package:vrc_manager/api/data_class.dart';
-import 'package:vrc_manager/assets/vrchat/instance_type.dart';
 import 'package:vrc_manager/scenes/sub/world.dart';
 import 'package:vrc_manager/widgets/grid_view/template/template.dart';
 import 'package:vrc_manager/widgets/modal/list_tile/main.dart';
@@ -36,7 +35,7 @@ Widget instanceWidget(
         onLongPress: () => modalBottom(context, instanceDetailsModalBottom(context, ref, world, instance)),
         children: [
           Row(children: <Widget>[
-            region(instance.region, size: half ? 12 : 15),
+            RegionWidget(region: instance.region, size: half ? 12 : 15),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 5),
               child: Row(
@@ -52,11 +51,13 @@ Widget instanceWidget(
             Expanded(
               child: SizedBox(
                 width: double.infinity,
-                child: Text(getVrchatInstanceType(context)[instance.type] ?? "Error",
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: half ? 10 : 15,
-                    )),
+                child: Text(
+                  instance.type.name,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: half ? 10 : 15,
+                  ),
+                ),
               ),
             )
           ]),

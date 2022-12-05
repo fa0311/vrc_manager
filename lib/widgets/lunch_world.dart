@@ -11,7 +11,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets/error.dart';
-import 'package:vrc_manager/assets/vrchat/region.dart';
+import 'package:vrc_manager/api/enum/region.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/widgets/modal/list_tile/main.dart';
 import 'package:vrc_manager/widgets/modal/list_tile/share.dart';
@@ -53,11 +53,15 @@ genInstanceId(BuildContext context, String region, String type, bool canRequestI
 
 launchWorld(BuildContext context, VRChatLimitedWorld world) {
   List<Widget> children = [];
-  getVrchatRegion().forEach((String regionText, String image) => children.add(ListTile(
-        leading: region(regionText),
-        title: Text(regionText),
-        onTap: () => selectWordType(context, world, regionText),
-      )));
+  for (VRChatRegion region in VRChatRegion.values) {
+    children.add(
+      ListTile(
+        leading: RegionWidget(region: region),
+        title: Text(region.name),
+        onTap: () => selectWordType(context, world, region.name),
+      ),
+    );
+  }
 
   showModalBottomSheet(
     context: context,

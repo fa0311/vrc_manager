@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 enum VRChatExternalServices {
   none(color: 0xFF000000),
   fivehundredpix(color: 0xFF222222),
@@ -42,8 +44,12 @@ enum VRChatExternalServices {
   yelp(color: 0xFFB90C04),
   youtube(color: 0xFFff3333);
 
-  String getName() {
+  String toText() {
     return text ?? name;
+  }
+
+  Color toColor() {
+    return Color(color);
   }
 
   final int color;
@@ -51,9 +57,9 @@ enum VRChatExternalServices {
   const VRChatExternalServices({required this.color, this.text});
 }
 
-VRChatExternalServices getVrchatExternalServices(Uri uri) {
+VRChatExternalServices byVrchatExternalServices(Uri uri) {
   for (VRChatExternalServices key in VRChatExternalServices.values) {
-    if (uri.host.contains(key.getName())) return key;
+    if (uri.host.contains(key.toText())) return key;
   }
   return VRChatExternalServices.none;
 }

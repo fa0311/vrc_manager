@@ -15,7 +15,7 @@ import 'package:vrc_manager/assets/api/notifier.dart';
 import 'package:vrc_manager/assets/anchor.dart';
 import 'package:vrc_manager/assets/date.dart';
 import 'package:vrc_manager/assets/error.dart';
-import 'package:vrc_manager/assets/vrchat/icon.dart';
+import 'package:vrc_manager/api/enum/icon.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/widgets/modal/list_tile/main.dart';
 import 'package:vrc_manager/widgets/modal/list_tile/share.dart';
@@ -26,7 +26,7 @@ Row username(VRChatUser user, {double diameter = 20}) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.center,
     children: <Widget>[
-      status(user.state == "offline" ? user.state! : user.status, diameter: diameter - 2),
+      StatusWidget(status: user.status, diameter: diameter - 2),
       Padding(
         padding: const EdgeInsets.only(left: 2, right: 5),
         child: Text(
@@ -187,10 +187,10 @@ List<Widget> bioLink(BuildContext context, List<Uri> bioLinks) {
           padding: const EdgeInsets.all(5),
           child: Ink(
             child: SvgPicture.asset(
-              "assets/svg/${getVrchatExternalServices(link)}.svg",
+              "assets/svg/${byVrchatExternalServices(link)}.svg",
               width: 20,
               height: 20,
-              color: Color(getVrchatExternalServices(link).color),
+              color: Color(byVrchatExternalServices(link).color),
               semanticsLabel: link.toString(),
             ),
           ),

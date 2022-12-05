@@ -1,3 +1,8 @@
+import 'package:vrc_manager/api/enum/instance_type.dart';
+import 'package:vrc_manager/api/enum/region.dart';
+
+import 'enum/status.dart';
+
 class VRChatStatus {
   dynamic content;
   late int statusCode;
@@ -134,7 +139,7 @@ class VRChatUser {
   late bool isFriend;
   late String lastPlatform;
   late String? profilePicOverride;
-  late String status;
+  late VRChatStatusData status;
   late String? statusDescription;
   late List<String> tags;
   late String userIcon;
@@ -162,7 +167,7 @@ class VRChatUser {
     isFriend = content['isFriend'];
     lastPlatform = content['last_platform'];
     profilePicOverride = content['profilePicOverride'] == "" ? null : content['profilePicOverride'];
-    status = content['status'];
+    status = byVrchatStatusData(Uri.parse(content['status']));
     statusDescription = content['statusDescription'] == "" ? null : content['statusDescription'];
     tags = content['tags'].cast<String>();
     userIcon = content['userIcon'];
@@ -312,14 +317,14 @@ class VRChatInstance {
   late String name;
   late String? ownerId;
   late bool permanent;
-  late String photonRegion;
+  late VRChatRegion photonRegion;
   late VRChatPlatforms platforms;
-  late String region;
+  late VRChatRegion region;
   late String? secureName;
   late String? shortName;
   late bool strict;
   late List<String> tags;
-  late String type;
+  late VRChatInstanceType type;
   late String worldId;
   late String? hidden;
   late String? friends;
@@ -338,14 +343,14 @@ class VRChatInstance {
     name = content['name'];
     ownerId = content['ownerId'];
     permanent = content['permanent'];
-    photonRegion = content['photonRegion'];
+    photonRegion = VRChatRegion.values.byName(content['photonRegion']);
     platforms = VRChatPlatforms.fromJson(content['platforms']);
-    region = content['region'];
+    region = VRChatRegion.values.byName(content['region']);
     secureName = content['secureName'];
     shortName = content['shortName'];
     strict = content['strict'] ?? false;
     tags = content['tags'].cast<String>();
-    type = content['type'];
+    type = VRChatInstanceType.values.byName(content['type']);
     worldId = content['worldId'];
     hidden = content['hidden'];
     friends = content['friends'];
