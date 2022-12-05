@@ -8,7 +8,18 @@ import 'package:vrc_manager/scenes/main/search.dart';
 import 'package:vrc_manager/scenes/main/worlds_favorite.dart';
 import 'package:vrc_manager/widgets/drawer.dart';
 
-final currentIndexProvider = StateProvider<int>((ref) => 0);
+final currentIndexProvider = StateProvider<CurrentIndex>((ref) => CurrentIndex.online);
+
+enum CurrentIndex {
+  online(icon: Icons.wb_sunny),
+  offline(icon: Icons.bedtime),
+  search(icon: Icons.search),
+  notify(icon: Icons.notifications),
+  favorite(icon: Icons.favorite);
+
+  final IconData icon;
+  const CurrentIndex({required this.icon});
+}
 
 class VRChatMobileHome extends ConsumerWidget {
   const VRChatMobileHome({Key? key}) : super(key: key);
@@ -16,8 +27,8 @@ class VRChatMobileHome extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     textStream(context);
-    final int currentIndex = ref.watch(currentIndexProvider);
-    final PageController controller = PageController(initialPage: currentIndex);
+    final CurrentIndex currentIndex = ref.watch(currentIndexProvider);
+    final PageController controller = PageController(initialPage: currentIndex.index);
 
     return Scaffold(
       appBar: AppBar(
@@ -34,7 +45,7 @@ class VRChatMobileHome extends ConsumerWidget {
             VRChatMobileFriendRequest(),
             VRChatMobileWorldsFavorite(),
           ],
-          onPageChanged: (int index) => ref.read(currentIndexProvider.notifier).state = index,
+          onPageChanged: (int index) => ref.read(currentIndexProvider.notifier).state = CurrentIndex.values[index],
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -45,9 +56,9 @@ class VRChatMobileHome extends ConsumerWidget {
           BottomNavigationBarItem(icon: Icon(Icons.notifications), label: 'notify'),
           BottomNavigationBarItem(icon: Icon(Icons.favorite), label: 'favorite'),
         ],
-        currentIndex: currentIndex,
+        currentIndex: currentIndex.index,
         onTap: (int index) {
-          ref.read(currentIndexProvider.notifier).state = index;
+          ref.read(currentIndexProvider.notifier).state = CurrentIndex.values[index];
           controller.jumpToPage(index);
         },
         showSelectedLabels: false,
