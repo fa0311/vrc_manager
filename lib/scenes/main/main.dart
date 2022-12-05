@@ -17,6 +17,25 @@ enum CurrentIndex {
   notify(icon: Icons.notifications),
   favorite(icon: Icons.favorite);
 
+  toWidget() {
+    switch (this) {
+      case CurrentIndex.online:
+        return const VRChatMobileFriends(offline: false);
+      case CurrentIndex.offline:
+        return const VRChatMobileFriends(offline: true);
+      case CurrentIndex.search:
+        return const VRChatMobileSearch();
+      case CurrentIndex.notify:
+        return const VRChatMobileFriendRequest();
+      case CurrentIndex.favorite:
+        return const VRChatMobileWorldsFavorite();
+    }
+  }
+
+  String toLocalization(BuildContext context) {
+    return name;
+  }
+
   final IconData icon;
   const CurrentIndex({required this.icon});
 }
@@ -38,23 +57,13 @@ class VRChatMobileHome extends ConsumerWidget {
       body: SafeArea(
         child: PageView(
           controller: controller,
-          children: const [
-            VRChatMobileFriends(offline: false),
-            VRChatMobileFriends(offline: true),
-            VRChatMobileSearch(),
-            VRChatMobileFriendRequest(),
-            VRChatMobileWorldsFavorite(),
-          ],
+          children: [for (CurrentIndex scene in CurrentIndex.values) scene.toWidget()],
           onPageChanged: (int index) => ref.read(currentIndexProvider.notifier).state = CurrentIndex.values[index],
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.wb_sunny), label: 'online'),
-          BottomNavigationBarItem(icon: Icon(Icons.bedtime), label: 'offline'),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'search'),
-          BottomNavigationBarItem(icon: Icon(Icons.notifications), label: 'notify'),
-          BottomNavigationBarItem(icon: Icon(Icons.favorite), label: 'favorite'),
+        items: [
+          for (CurrentIndex scene in CurrentIndex.values) BottomNavigationBarItem(icon: Icon(scene.icon), label: scene.toLocalization(context)),
         ],
         currentIndex: currentIndex.index,
         onTap: (int index) {
