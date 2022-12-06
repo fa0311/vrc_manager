@@ -262,7 +262,6 @@ class VRChatUser {
   late String? statusDescription;
   late List<String> tags;
   late String userIcon;
-  late String username;
   late String location;
   late String friendKey;
 
@@ -295,7 +294,6 @@ class VRChatUser {
     statusDescription = content['statusDescription'] == "" ? null : content['statusDescription'];
     tags = content['tags'].cast<String>();
     userIcon = content['userIcon'];
-    username = content['username'];
     location = content['location'] == "" ? "offline" : content['location'] ?? "offline";
     friendKey = content['friendKey'];
 
