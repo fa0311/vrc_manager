@@ -10,7 +10,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
-import 'package:vrc_manager/main.dart';
+import 'package:vrc_manager/data_class/app_config.dart';
 import 'package:vrc_manager/widgets/modal/locale.dart';
 import 'package:vrc_manager/widgets/modal/theme.dart';
 
@@ -32,35 +32,35 @@ class VRChatMobileSettingsAccessibility extends ConsumerWidget {
               children: <Widget>[
                 ListTile(
                   title: Text(AppLocalizations.of(context)!.language),
-                  subtitle: Text(ref.read(appConfig.languageCode).text),
+                  subtitle: Text(ref.read(languageCodeProvider).text),
                   onTap: () => showLocaleModal(context),
                 ),
                 const Divider(),
                 ListTile(
                   title: Text(AppLocalizations.of(context)!.theme),
-                  subtitle: Text(ref.read(appConfig.themeBrightness).toLocalization(context)),
+                  subtitle: Text(ref.read(themeBrightnessProvider).toLocalization(context)),
                   onTap: () => showThemeBrightnessModal(context, ref),
                 ),
                 const Divider(),
                 SwitchListTile(
-                    value: ref.read(appConfig.dontShowErrorDialog),
+                    value: ref.read(dontShowErrorDialogProvider),
                     title: Text(AppLocalizations.of(context)!.dontShowErrorDialog),
                     subtitle: Text(AppLocalizations.of(context)!.dontShowErrorDialogDetails),
-                    onChanged: (bool e) => ref.read(appConfig.dontShowErrorDialog.notifier).set(e)),
+                    onChanged: (bool e) => ref.read(dontShowErrorDialogProvider.notifier).set(e)),
                 if (!Platform.isWindows) ...[
                   const Divider(),
                   SwitchListTile(
-                    value: ref.read(appConfig.forceExternalBrowser),
+                    value: ref.read(forceExternalBrowserProvider),
                     title: Text(AppLocalizations.of(context)!.forceExternalBrowser),
                     subtitle: Text(AppLocalizations.of(context)!.forceExternalBrowserDetails),
-                    onChanged: (bool e) => ref.read(appConfig.forceExternalBrowser.notifier).set(e),
+                    onChanged: (bool e) => ref.read(forceExternalBrowserProvider.notifier).set(e),
                   )
                 ],
                 const Divider(),
                 SwitchListTile(
-                  value: ref.read(appConfig.debugMode),
+                  value: ref.read(debugModeProvider),
                   title: Text(AppLocalizations.of(context)!.debugMode),
-                  onChanged: (bool e) => ref.read(appConfig.debugMode.notifier).set(e),
+                  onChanged: (bool e) => ref.read(debugModeProvider.notifier).set(e),
                 )
               ],
             ),

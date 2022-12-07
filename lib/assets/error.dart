@@ -14,7 +14,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 
 // Project imports:
 import 'package:vrc_manager/api/data_class.dart';
-import 'package:vrc_manager/main.dart';
+import 'package:vrc_manager/data_class/app_config.dart';
 import 'package:vrc_manager/scenes/sub/login.dart';
 import 'package:vrc_manager/widgets/share.dart';
 
@@ -28,7 +28,7 @@ void errorDialog(BuildContext context, String text, {String log = ""}) {
     }
   }
   FutureProvider.autoDispose((ref) {
-    if (!ref.read(appConfig.dontShowErrorDialog)) {
+    if (!ref.read(dontShowErrorDialogProvider)) {
       showDialog(
         context: context,
         builder: (_) {

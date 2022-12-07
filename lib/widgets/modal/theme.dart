@@ -1,10 +1,10 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:vrc_manager/data_class/app_config.dart';
 
 // Project imports:
 import 'package:vrc_manager/data_class/enum.dart';
-import 'package:vrc_manager/main.dart';
 
 Future showThemeBrightnessModal(BuildContext context, WidgetRef ref) {
   return showModalBottomSheet(
@@ -17,7 +17,7 @@ Future showThemeBrightnessModal(BuildContext context, WidgetRef ref) {
     builder: (BuildContext context) => SingleChildScrollView(
       child: Consumer(
         builder: (context, ref, _) {
-          final themeBrightness = ref.watch(appConfig.themeBrightness);
+          final themeBrightness = ref.watch(themeBrightnessProvider);
 
           return Column(
             children: <Widget>[
@@ -26,7 +26,7 @@ Future showThemeBrightnessModal(BuildContext context, WidgetRef ref) {
                   title: Text(value.toLocalization(context)),
                   trailing: themeBrightness == value ? const Icon(Icons.check) : null,
                   onTap: () {
-                    ref.read(appConfig.themeBrightness.notifier).set(value);
+                    ref.read(themeBrightnessProvider.notifier).set(value);
                   },
                 ),
             ],

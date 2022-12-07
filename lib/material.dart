@@ -7,11 +7,11 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
-import 'package:vrc_manager/main.dart';
+import 'package:vrc_manager/data_class/app_config.dart';
 
 MaterialApp getMaterialApp(Widget home, WidgetRef ref) {
-  final themeBrightness = ref.watch(appConfig.themeBrightness);
-  final languageCode = ref.watch(appConfig.languageCode);
+  final themeBrightness = ref.watch(themeBrightnessProvider);
+  final languageCode = ref.watch(languageCodeProvider);
 
   return MaterialApp(
     title: 'VRChat Mobile Client',

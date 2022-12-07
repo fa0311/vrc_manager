@@ -10,6 +10,7 @@ import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets/dialog.dart';
 import 'package:vrc_manager/assets/error.dart';
+import 'package:vrc_manager/data_class/app_config.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/widgets/modal/list_tile/main.dart';
 import 'package:vrc_manager/widgets/modal/list_tile/share.dart';
@@ -24,7 +25,7 @@ List<Widget> selfUserModalBottom(
     editBioTileWidget(context, user),
     editNoteTileWidget(context, user),
     shareUrlTileWidget(context, Uri.https("vrchat.com", "/home/user/${user.id}")),
-    if (ref.read(appConfig.debugMode)) openInJsonViewer(context, user.content),
+    if (ref.read(debugModeProvider)) openInJsonViewer(context, user.content),
   ];
 }
 
@@ -38,7 +39,7 @@ List<Widget> userDetailsModalBottom(
     editNoteTileWidget(context, user),
     shareUrlTileWidget(context, Uri.https("vrchat.com", "/home/user/${user.id}")),
     profileActionTileWidget(context, status, user),
-    if (ref.read(appConfig.debugMode)) openInJsonViewer(context, user.content),
+    if (ref.read(debugModeProvider)) openInJsonViewer(context, user.content),
   ];
 }
 

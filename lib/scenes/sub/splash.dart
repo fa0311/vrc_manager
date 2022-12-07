@@ -10,6 +10,7 @@ import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 
 // Project imports:
 import 'package:vrc_manager/assets/flutter/url_parser.dart';
+import 'package:vrc_manager/data_class/app_config.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/main/main.dart';
 import 'package:vrc_manager/scenes/sub/login.dart';
@@ -51,7 +52,7 @@ class VRChatMobileSplash extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     appConfig.get(context, ref).then((_) async {
-      if (!ref.read(appConfig.agreedUserPolicy)) {
+      if (!ref.read(agreedUserPolicyProvider)) {
         goWebViewUserPolicy(context);
       } else if (!appConfig.isLogout()) {
         goLogin(context);

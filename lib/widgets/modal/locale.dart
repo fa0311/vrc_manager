@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 // Package imports:
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:vrc_manager/data_class/app_config.dart';
 
 // Project imports:
 import 'package:vrc_manager/data_class/enum.dart';
-import 'package:vrc_manager/main.dart';
 
 Future showLocaleModal(BuildContext context) {
   return showModalBottomSheet(
@@ -20,7 +20,7 @@ Future showLocaleModal(BuildContext context) {
     builder: (BuildContext context) => SingleChildScrollView(
       child: Consumer(
         builder: (context, ref, _) {
-          final languageCode = ref.watch(appConfig.languageCode);
+          final languageCode = ref.watch(languageCodeProvider);
 
           return Column(
             children: <Widget>[
@@ -34,7 +34,7 @@ Future showLocaleModal(BuildContext context) {
                     ).contributor),
                   ),
                   onTap: () {
-                    ref.read(appConfig.languageCode.notifier).set(value);
+                    ref.read(languageCodeProvider.notifier).set(value);
                   },
                 ),
             ],

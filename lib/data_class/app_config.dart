@@ -11,17 +11,17 @@ import 'package:vrc_manager/data_class/enum.dart';
 import 'package:vrc_manager/data_class/modal.dart';
 import 'package:vrc_manager/data_class/notifier.dart';
 
+final dontShowErrorDialogProvider = StateNotifierProvider<BooleanNotifier, bool>((_) => BooleanNotifier("dont_show_error_dialog"));
+final agreedUserPolicyProvider = StateNotifierProvider<BooleanNotifier, bool>((_) => BooleanNotifier("agreed_user_policy"));
+final forceExternalBrowserProvider = StateNotifierProvider<BooleanNotifier, bool>((_) => BooleanNotifier("force_external_browser"));
+final debugModeProvider = StateNotifierProvider<BooleanNotifier, bool>((_) => BooleanNotifier("debug_mode"));
+final themeBrightnessProvider = StateNotifierProvider<ThemeBrightnessNotifier, ThemeBrightness>((_) => ThemeBrightnessNotifier("theme_brightness"));
+final languageCodeProvider = StateNotifierProvider<LanguageCodeNotifier, LanguageCode>((_) => LanguageCodeNotifier("language_code"));
+
 class AppConfig {
   AccountConfig? _loggedAccount;
   List<AccountConfig> accountList = [];
   GridConfigList gridConfigList = GridConfigList();
-  final dontShowErrorDialog = StateNotifierProvider<BooleanNotifier, bool>((_) => BooleanNotifier("dont_show_error_dialog"));
-  final agreedUserPolicy = StateNotifierProvider<BooleanNotifier, bool>((_) => BooleanNotifier("agreed_user_policy"));
-  final forceExternalBrowser = StateNotifierProvider<BooleanNotifier, bool>((_) => BooleanNotifier("force_external_browser"));
-  final debugMode = StateNotifierProvider<BooleanNotifier, bool>((_) => BooleanNotifier("debug_mode"));
-
-  final themeBrightness = StateNotifierProvider<ThemeBrightnessNotifier, ThemeBrightness>((_) => ThemeBrightnessNotifier("theme_brightness"));
-  final languageCode = StateNotifierProvider<LanguageCodeNotifier, LanguageCode>((_) => LanguageCodeNotifier("language_code"));
 
   AccountConfig? get loggedAccount => _loggedAccount;
 
@@ -30,16 +30,16 @@ class AppConfig {
     String? accountUid;
 
     await Future.wait([
-      ref.read(themeBrightness.notifier).get(),
-      ref.read(languageCode.notifier).get(),
+      ref.read(themeBrightnessProvider.notifier).get(),
+      ref.read(languageCodeProvider.notifier).get(),
     ]);
     await Future.wait([
       getStorage("account_index").then((value) => accountUid = value),
       getStorageList("account_index_list").then((List<String> value) => uidList = value),
-      ref.read(dontShowErrorDialog.notifier).get(),
-      ref.read(agreedUserPolicy.notifier).get(),
-      ref.read(forceExternalBrowser.notifier).get(),
-      ref.read(debugMode.notifier).get(),
+      ref.read(dontShowErrorDialogProvider.notifier).get(),
+      ref.read(agreedUserPolicyProvider.notifier).get(),
+      ref.read(forceExternalBrowserProvider.notifier).get(),
+      ref.read(debugModeProvider.notifier).get(),
       gridConfigList.setConfig(),
     ]);
 

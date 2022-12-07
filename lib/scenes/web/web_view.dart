@@ -1,6 +1,7 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:vrc_manager/data_class/app_config.dart';
 
 // Package imports:
 import 'package:webview_flutter/webview_flutter.dart';
@@ -71,7 +72,7 @@ class VRChatMobileWebView extends ConsumerWidget {
             controllerGlobal = webViewController;
           },
           navigationDelegate: (NavigationRequest request) {
-            if (ref.read(appConfig.forceExternalBrowser) && url.host != "vrchat.com") {
+            if (ref.read(forceExternalBrowserProvider) && url.host != "vrchat.com") {
               openInBrowser(context, url);
               return NavigationDecision.prevent;
             } else {
