@@ -102,7 +102,7 @@ httpError(BuildContext context, HttpException error) {
               : {
                   "exceptionType": error.toString(),
                   "version": packageInfo.version,
-                  "deviceInfo": deviceInfo.toMap(),
+                  "deviceInfo": deviceInfo.data,
                   "error": error.toString(),
                   "message": message,
                 };
@@ -127,7 +127,7 @@ standardError(BuildContext context, dynamic error) {
           : {
               "exceptionType": error.toString(),
               "version": packageInfo.version,
-              "deviceInfo": deviceInfo.toMap(),
+              "deviceInfo": deviceInfo.data,
               "error": error.toString(),
             };
       if (error is TypeError) {
