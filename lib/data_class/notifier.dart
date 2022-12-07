@@ -10,7 +10,10 @@ class ThemeBrightnessNotifier extends StateNotifier<ThemeBrightness> {
   ThemeBrightnessNotifier(this.key) : super(ThemeBrightness.light);
 
   Future get() async {
-    state = ThemeBrightness.values.byName(await getStorage(key) ?? "");
+    String? storage = await getStorage(key);
+    if (storage != null) {
+      state = ThemeBrightness.values.byName(storage);
+    }
   }
 
   Future set(ThemeBrightness set) async {
@@ -23,7 +26,10 @@ class LanguageCodeNotifier extends StateNotifier<LanguageCode> {
   LanguageCodeNotifier(this.key) : super(LanguageCode.en);
 
   Future get() async {
-    state = LanguageCode.values.byName(await getStorage(key) ?? "");
+    String? storage = await getStorage(key);
+    if (storage != null) {
+      state = LanguageCode.values.byName(storage);
+    }
   }
 
   Future set(LanguageCode set) async {
