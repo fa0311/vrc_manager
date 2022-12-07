@@ -37,43 +37,56 @@ class VRChatMobileWebViewUserPolicy extends ConsumerWidget {
           ),
         ],
       ),
-      bottomNavigationBar: SizedBox(
-        height: 50,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Spacer(),
-            Expanded(
-              flex: 2,
-              child: TextButton(
-                onPressed: () => SystemNavigator.pop(),
-                child: Text(
-                  AppLocalizations.of(context)!.disagree,
-                ),
-              ),
+      bottomNavigationBar: Container(
+        decoration: const BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: Color.fromARGB(30, 0, 0, 0),
+              spreadRadius: 5,
+              blurRadius: 5,
             ),
-            const Spacer(),
-            Expanded(
-              flex: 2,
-              child: TextButton(
-                onPressed: () async {
-                  await ref.read(agreedUserPolicyProvider.notifier).set(true);
-                  // ignore: use_build_context_synchronously
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                      builder: (BuildContext context) => const VRChatMobileHome(),
-                    ),
-                    (_) => false,
-                  );
-                },
-                child: Text(
-                  AppLocalizations.of(context)!.agree,
-                ),
-              ),
-            ),
-            const Spacer(),
           ],
+          color: Colors.white,
+        ),
+        child: SizedBox(
+          height: 50,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Spacer(),
+              Expanded(
+                flex: 2,
+                child: ElevatedButton(
+                  onPressed: () => SystemNavigator.pop(),
+                  style: ElevatedButton.styleFrom(backgroundColor: Colors.grey),
+                  child: Text(
+                    AppLocalizations.of(context)!.disagree,
+                  ),
+                ),
+              ),
+              const Spacer(),
+              Expanded(
+                flex: 2,
+                child: ElevatedButton(
+                  onPressed: () async {
+                    await ref.read(agreedUserPolicyProvider.notifier).set(true);
+                    // ignore: use_build_context_synchronously
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                        builder: (BuildContext context) => const VRChatMobileHome(),
+                      ),
+                      (_) => false,
+                    );
+                  },
+                  child: Text(
+                    AppLocalizations.of(context)!.agree,
+                  ),
+                ),
+              ),
+              const Spacer(),
+            ],
+          ),
         ),
       ),
       body: () {
