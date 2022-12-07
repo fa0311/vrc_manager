@@ -93,81 +93,78 @@ class VRChatMobileSearch extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     textStream(context);
     ref.watch(vrchatMobileSearchCounterProvider);
-    print("00");
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          Container(
-            padding: const EdgeInsets.only(top: 10, right: 20, left: 20, bottom: 0),
-            child: TextField(
-              controller: ref.read(searchBoxControllerProvider),
-              decoration: InputDecoration(
-                labelText: AppLocalizations.of(context)!.search,
-                suffixIcon: IconButton(
-                  icon: const Icon(Icons.search),
-                  onPressed: () {
-                    FocusScopeNode currentScope = FocusScope.of(context);
-                    if (!currentScope.hasPrimaryFocus && currentScope.hasFocus) {
-                      FocusManager.instance.primaryFocus!.unfocus();
-                    }
-                    ref.read(vrchatMobileSearchCounterProvider.notifier).state++;
-                  },
-                ),
-              ),
-            ),
-          ),
-          Consumer(
-            builder: (context, ref, child) {
-              SearchMode searchMode = ref.watch(vrchatMobileSearchModeProvider);
-              return Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: ListTile(
-                  title: Text(AppLocalizations.of(context)!.type),
-                  trailing: Text(
-                    searchMode.toLocalization(context),
-                    style: const TextStyle(
-                      color: Colors.grey,
-                      fontSize: 16,
-                    ),
-                  ),
-                  onTap: () => showModalBottomSheetConsumer(
-                    context: context,
-                    builder: (context, ref, child) {
-                      SearchMode searchMode = ref.watch(vrchatMobileSearchModeProvider);
-                      return SingleChildScrollView(
-                        child: Column(
-                          children: <Widget>[
-                            ListTile(
-                              title: Text(AppLocalizations.of(context)!.user),
-                              trailing: searchMode == SearchMode.users ? const Icon(Icons.check) : null,
-                              onTap: () {
-                                ref.read(vrchatMobileSearchModeProvider.notifier).state = SearchMode.users;
-                              },
-                            ),
-                            ListTile(
-                              title: Text(AppLocalizations.of(context)!.world),
-                              trailing: searchMode == SearchMode.worlds ? const Icon(Icons.check) : null,
-                              onTap: () {
-                                ref.read(vrchatMobileSearchModeProvider.notifier).state = SearchMode.worlds;
-                              },
-                            ),
-                          ],
-                        ),
-                      );
+    return RefreshIndicator(
+      onRefresh: () => ref.refresh(vrchatMobileSearchProvider.future),
+      child: SingleChildScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        child: Column(
+          children: [
+            Container(
+              padding: const EdgeInsets.only(top: 10, right: 20, left: 20, bottom: 0),
+              child: TextField(
+                controller: ref.read(searchBoxControllerProvider),
+                decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context)!.search,
+                  suffixIcon: IconButton(
+                    icon: const Icon(Icons.search),
+                    onPressed: () {
+                      FocusScopeNode currentScope = FocusScope.of(context);
+                      if (!currentScope.hasPrimaryFocus && currentScope.hasFocus) {
+                        FocusManager.instance.primaryFocus!.unfocus();
+                      }
+                      ref.read(vrchatMobileSearchCounterProvider.notifier).state++;
                     },
                   ),
                 ),
-              );
-            },
-          ),
-          if (ref.read(vrchatMobileSearchCounterProvider) > 0)
+              ),
+            ),
             Consumer(
               builder: (context, ref, child) {
-                print("wwww");
-                return const VRChatMobileSearchResult();
+                SearchMode searchMode = ref.watch(vrchatMobileSearchModeProvider);
+                return Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: ListTile(
+                    title: Text(AppLocalizations.of(context)!.type),
+                    trailing: Text(
+                      searchMode.toLocalization(context),
+                      style: const TextStyle(
+                        color: Colors.grey,
+                        fontSize: 16,
+                      ),
+                    ),
+                    onTap: () => showModalBottomSheetConsumer(
+                      context: context,
+                      builder: (context, ref, child) {
+                        SearchMode searchMode = ref.watch(vrchatMobileSearchModeProvider);
+                        return SingleChildScrollView(
+                          child: Column(
+                            children: <Widget>[
+                              ListTile(
+                                title: Text(AppLocalizations.of(context)!.user),
+                                trailing: searchMode == SearchMode.users ? const Icon(Icons.check) : null,
+                                onTap: () {
+                                  ref.read(vrchatMobileSearchModeProvider.notifier).state = SearchMode.users;
+                                },
+                              ),
+                              ListTile(
+                                title: Text(AppLocalizations.of(context)!.world),
+                                trailing: searchMode == SearchMode.worlds ? const Icon(Icons.check) : null,
+                                onTap: () {
+                                  ref.read(vrchatMobileSearchModeProvider.notifier).state = SearchMode.worlds;
+                                },
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                );
               },
             ),
-        ],
+            if (ref.read(vrchatMobileSearchCounterProvider) > 0) const VRChatMobileSearchResult(),
+          ],
+        ),
       ),
     );
   }
