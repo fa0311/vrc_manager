@@ -84,6 +84,7 @@ class VRChatUserSelf extends VRChatUser {
   late List<Map<String, String>> pastDisplayNames = [];
   late bool statusFirstTime;
   late Map steamDetails; //default {}
+  late String username;
   late bool unsubscribe;
 
   VRChatUserSelf.fromJson(content) : super.fromJson(content) {
@@ -106,6 +107,7 @@ class VRChatUserSelf extends VRChatUser {
     pastDisplayNames = content['pastDisplayNames'].cast<Map<String, String>>();
     statusFirstTime = content['statusFirstTime'];
     steamDetails = content['steamDetails'];
+    username = content['username'];
     unsubscribe = content['unsubscribe'];
   }
 }
@@ -143,7 +145,6 @@ class VRChatUser {
   late String? statusDescription;
   late List<String> tags;
   late String userIcon;
-  late String username;
   late String location;
 
   late bool allowAvatarCopying;
@@ -171,7 +172,6 @@ class VRChatUser {
     statusDescription = content['statusDescription'] == "" ? null : content['statusDescription'];
     tags = content['tags'].cast<String>();
     userIcon = content['userIcon'];
-    username = content['username'];
     location = content['location'] == "" ? "offline" : content['location'] ?? "offline";
 
     allowAvatarCopying = content['allowAvatarCopying'] ?? false;
