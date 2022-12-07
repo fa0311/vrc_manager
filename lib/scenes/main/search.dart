@@ -18,8 +18,8 @@ import 'package:vrc_manager/widgets/grid_view/extraction/user.dart';
 import 'package:vrc_manager/widgets/grid_view/extraction/world.dart';
 
 final vrchatMobileSearchModeProvider = StateProvider<SearchMode>((ref) => SearchMode.users);
-final vrchatMobileSearchTextProvider = StateProvider<String>((ref) => "");
-final vrchatMobileSearchResultProvider = StateProvider<bool>((ref) => false);
+final vrchatMobileSearchCounterProvider = StateProvider<int>((ref) => 0);
+final searchBoxControllerProvider = StateProvider<TextEditingController>((ref) => TextEditingController(text: ''));
 
 enum SearchMode {
   users,
@@ -35,24 +35,21 @@ enum SearchMode {
   }
 }
 
-class VRChatMobileSearchArgs {
-  String text;
-  SearchMode searchingMode;
-  VRChatMobileSearchArgs({required this.text, required this.searchingMode});
-}
-
 class VRChatMobileSearchData {
   List<VRChatUser> userList;
   List<VRChatLimitedWorld> worldList;
   VRChatMobileSearchData({required this.userList, required this.worldList});
 }
 
-final vrchatMobileSearchProvider = FutureProvider.family<VRChatMobileSearchData, VRChatMobileSearchArgs>((ref, args) async {
+final vrchatMobileSearchProvider = FutureProvider<VRChatMobileSearchData>((ref) async {
   late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
   List<VRChatUser> userList = [];
   List<VRChatLimitedWorld> worldList = [];
   int len;
-  print("aaa");
+
+  ref.watch(vrchatMobileSearchCounterProvider);
+  SearchMode searchingMode = ref.watch(vrchatMobileSearchModeProvider);
+  String searchingText = ref.read(searchBoxControllerProvider).text;
 
   addWorldList(VRChatLimitedWorld world) {
     for (VRChatLimitedWorld worldValue in worldList) {
@@ -63,11 +60,11 @@ final vrchatMobileSearchProvider = FutureProvider.family<VRChatMobileSearchData,
     worldList.add(world);
   }
 
-  switch (args.searchingMode) {
+  switch (searchingMode) {
     case SearchMode.users:
       do {
         int offset = userList.length;
-        List<VRChatUser> users = await vrchatLoginSession.searchUsers(args.text, offset: offset);
+        List<VRChatUser> users = await vrchatLoginSession.searchUsers(searchingText, offset: offset);
         for (VRChatUser user in users) {
           userList.add(user);
         }
@@ -77,7 +74,7 @@ final vrchatMobileSearchProvider = FutureProvider.family<VRChatMobileSearchData,
     case SearchMode.worlds:
       do {
         int offset = worldList.length;
-        List<VRChatLimitedWorld> worlds = await vrchatLoginSession.searchWorlds(args.text, offset: offset);
+        List<VRChatLimitedWorld> worlds = await vrchatLoginSession.searchWorlds(searchingText, offset: offset);
         for (VRChatLimitedWorld world in worlds) {
           addWorldList(world);
         }
@@ -95,15 +92,15 @@ class VRChatMobileSearch extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     textStream(context);
-    TextEditingController searchBoxController = TextEditingController()..text = ref.watch(vrchatMobileSearchTextProvider);
-
+    ref.watch(vrchatMobileSearchCounterProvider);
+    print("00");
     return SingleChildScrollView(
       child: Column(
         children: [
           Container(
             padding: const EdgeInsets.only(top: 10, right: 20, left: 20, bottom: 0),
             child: TextField(
-              controller: searchBoxController,
+              controller: ref.read(searchBoxControllerProvider),
               decoration: InputDecoration(
                 labelText: AppLocalizations.of(context)!.search,
                 suffixIcon: IconButton(
@@ -113,8 +110,7 @@ class VRChatMobileSearch extends ConsumerWidget {
                     if (!currentScope.hasPrimaryFocus && currentScope.hasFocus) {
                       FocusManager.instance.primaryFocus!.unfocus();
                     }
-                    ref.read(vrchatMobileSearchTextProvider.notifier).state = searchBoxController.text;
-                    ref.read(vrchatMobileSearchResultProvider.notifier).state = true;
+                    ref.read(vrchatMobileSearchCounterProvider.notifier).state++;
                   },
                 ),
               ),
@@ -164,15 +160,13 @@ class VRChatMobileSearch extends ConsumerWidget {
               );
             },
           ),
-          Consumer(
-            builder: (context, ref, child) {
-              VRChatMobileSearchArgs args = VRChatMobileSearchArgs(
-                searchingMode: ref.read(vrchatMobileSearchModeProvider),
-                text: ref.read(vrchatMobileSearchTextProvider),
-              );
-              return ref.read(vrchatMobileSearchResultProvider) ? VRChatMobileSearchResult(args: args) : Column(children: const []);
-            },
-          ),
+          if (ref.read(vrchatMobileSearchCounterProvider) > 0)
+            Consumer(
+              builder: (context, ref, child) {
+                print("wwww");
+                return const VRChatMobileSearchResult();
+              },
+            ),
         ],
       ),
     );
@@ -180,14 +174,13 @@ class VRChatMobileSearch extends ConsumerWidget {
 }
 
 class VRChatMobileSearchResult extends ConsumerWidget {
-  final VRChatMobileSearchArgs args;
-  const VRChatMobileSearchResult({Key? key, required this.args}) : super(key: key);
+  const VRChatMobileSearchResult({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     GridConfig config = appConfig.gridConfigList.searchUsers;
     SortData sortData = SortData(config);
-    AsyncValue<VRChatMobileSearchData> data = ref.watch(vrchatMobileSearchProvider(args));
+    AsyncValue<VRChatMobileSearchData> data = ref.watch(vrchatMobileSearchProvider);
     textStream(context);
     return data.when(
       loading: () => const Center(child: CircularProgressIndicator()),
