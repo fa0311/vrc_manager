@@ -6,11 +6,27 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
+import 'package:vrc_manager/assets/sort/worlds_favorite.dart';
 import 'package:vrc_manager/data_class/app_config.dart';
 import 'package:vrc_manager/data_class/modal.dart';
-import 'package:vrc_manager/data_class/state.dart';
+
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/widgets/grid_view/extraction/favorite_world.dart';
+
+class VRChatMobileWorldFavoriteData {
+  List<FavoriteWorldData> worldList;
+  late GridConfigNotifier config;
+  VRChatMobileWorldFavoriteData({required this.worldList});
+}
+
+final vrchatMobileWorldFavoriteSortProvider = FutureProvider<VRChatMobileWorldFavoriteData>((ref) async {
+  VRChatMobileWorldFavoriteData data = VRChatMobileWorldFavoriteData(worldList: appConfig.loggedAccount?.favoriteWorld ?? []);
+  data.config = await ref.watch(gridConfigProvider.future);
+  for (FavoriteWorldData favoriteWorld in data.worldList) {
+    sortWorlds(data.config, favoriteWorld.list);
+  }
+  return data;
+});
 
 class VRChatMobileWorldsFavorite extends ConsumerWidget {
   const VRChatMobileWorldsFavorite({Key? key}) : super(key: key);
@@ -18,9 +34,7 @@ class VRChatMobileWorldsFavorite extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     textStream(context);
-
-    late GridConfigNotifier config = appConfig.gridConfigList.favoriteWorlds;
-    late SortData sortData = SortData(config);
+    AsyncValue<VRChatMobileWorldFavoriteData> data = ref.watch(vrchatMobileWorldFavoriteSortProvider);
     GridModalConfig gridConfig = GridModalConfig();
 
     gridConfig.url = Uri.https("vrchat.com", "/home/worlds");
@@ -40,27 +54,33 @@ class VRChatMobileWorldsFavorite extends ConsumerWidget {
       SortMode.occupants,
     ];
 
-    for (FavoriteWorldData favoriteWorld in appConfig.loggedAccount?.favoriteWorld ?? []) {
-      sortData.worlds(favoriteWorld.list);
-    }
-
     return SingleChildScrollView(
-      child: Column(children: [
-        for (FavoriteWorldData favoriteWorld in appConfig.loggedAccount?.favoriteWorld ?? [])
-          if (favoriteWorld.list.isNotEmpty) ...[
-            Text(favoriteWorld.group.displayName),
-            () {
-              switch (config.displayMode) {
-                case DisplayMode.normal:
-                  return extractionWorldDefault(context, config, favoriteWorld.list);
-                case DisplayMode.simple:
-                  return extractionWorldSimple(context, config, favoriteWorld.list);
-                case DisplayMode.textOnly:
-                  return extractionWorldSimple(context, config, favoriteWorld.list);
-              }
-            }(),
-          ],
-      ]),
+      child: Consumer(
+        builder: (context, ref, child) {
+          return data.when(
+            loading: () => const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()),
+            error: (err, stack) => Text('Error: $err'),
+            data: (data) {
+              return Column(children: [
+                for (FavoriteWorldData favoriteWorld in appConfig.loggedAccount?.favoriteWorld ?? [])
+                  if (favoriteWorld.list.isNotEmpty) ...[
+                    Text(favoriteWorld.group.displayName),
+                    () {
+                      switch (data.config.displayMode) {
+                        case DisplayMode.normal:
+                          return extractionWorldDefault(context, data.config, favoriteWorld.list);
+                        case DisplayMode.simple:
+                          return extractionWorldSimple(context, data.config, favoriteWorld.list);
+                        case DisplayMode.textOnly:
+                          return extractionWorldSimple(context, data.config, favoriteWorld.list);
+                      }
+                    }(),
+                  ],
+              ]);
+            },
+          );
+        },
+      ),
     );
   }
 }

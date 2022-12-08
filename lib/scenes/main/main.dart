@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
+import 'package:vrc_manager/data_class/app_config.dart';
 import 'package:vrc_manager/scenes/main/friend_request.dart';
 import 'package:vrc_manager/scenes/main/friends.dart';
 import 'package:vrc_manager/scenes/main/search.dart';
@@ -69,7 +70,28 @@ class VRChatMobileHome extends ConsumerWidget {
         child: PageView(
           controller: controller,
           children: [for (CurrentIndex scene in CurrentIndex.values) scene.toWidget()],
-          onPageChanged: (int index) => ref.read(currentIndexProvider.notifier).state = CurrentIndex.values[index],
+          onPageChanged: (int index) {
+            ref.read(currentIndexProvider.notifier).state = CurrentIndex.values[index];
+            ref.read(gridConfigIdProvider.notifier).state = () {
+              switch (ref.read(currentIndexProvider)) {
+                case CurrentIndex.online:
+                  return GridConfigId.onlineFriends;
+                case CurrentIndex.offline:
+                  return GridConfigId.offlineFriends;
+                case CurrentIndex.search:
+                  switch (ref.read(vrchatMobileSearchModeProvider)) {
+                    case SearchMode.users:
+                      return GridConfigId.searchUsers;
+                    case SearchMode.worlds:
+                      return GridConfigId.searchWorlds;
+                  }
+                case CurrentIndex.notify:
+                  return GridConfigId.friendsRequest;
+                case CurrentIndex.favorite:
+                  return GridConfigId.favoriteWorlds;
+              }
+            }();
+          },
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(

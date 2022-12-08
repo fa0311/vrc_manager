@@ -12,14 +12,17 @@ import 'package:vrc_manager/assets/api/get.dart';
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
 import 'package:vrc_manager/data_class/app_config.dart';
 import 'package:vrc_manager/data_class/modal.dart';
-import 'package:vrc_manager/data_class/state.dart';
+
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/widgets/grid_view/extraction/friends.dart';
+
+import 'package:vrc_manager/assets/sort/users.dart';
 
 class VRChatMobileFriendsData {
   Map<String, VRChatWorld?> locationMap;
   Map<String, VRChatInstance?> instanceMap;
   List<VRChatFriends> userList;
+  late GridConfigNotifier config;
 
   VRChatMobileFriendsData({
     required this.locationMap,
@@ -55,6 +58,13 @@ final vrchatMobileFriendsProvider = FutureProvider.family<VRChatMobileFriendsDat
   return VRChatMobileFriendsData(locationMap: locationMap, instanceMap: instanceMap, userList: userList);
 });
 
+final vrchatMobileFriendsSortProvider = FutureProvider.family<VRChatMobileFriendsData, bool>((ref, offline) async {
+  VRChatMobileFriendsData data = await ref.watch(vrchatMobileFriendsProvider(offline).future);
+  data.config = await ref.watch(gridConfigProvider.future);
+  data.userList = sortUsers(data.config, data.userList);
+  return data;
+});
+
 class VRChatMobileFriends extends ConsumerWidget {
   const VRChatMobileFriends({Key? key, this.offline = true}) : super(key: key);
   final bool offline;
@@ -62,10 +72,7 @@ class VRChatMobileFriends extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     textStream(context);
-    AsyncValue<VRChatMobileFriendsData> data = ref.watch(vrchatMobileFriendsProvider(offline));
-
-    GridConfigNotifier config = offline ? appConfig.gridConfigList.offlineFriends : appConfig.gridConfigList.onlineFriends;
-    SortData sortData = SortData(config);
+    AsyncValue<VRChatMobileFriendsData> data = ref.watch(vrchatMobileFriendsSortProvider(offline));
     GridModalConfig gridConfig = GridModalConfig();
 
     gridConfig.url = Uri.https("vrchat.com", "/home/locations");
@@ -110,14 +117,13 @@ class VRChatMobileFriends extends ConsumerWidget {
                 data: (data) => Column(
                   children: [
                     () {
-                      data.userList = sortData.users(data.userList) as List<VRChatFriends>;
-                      switch (config.displayMode) {
+                      switch (data.config.displayMode) {
                         case DisplayMode.normal:
-                          return extractionFriendDefault(context, config, data.userList, data.locationMap, data.instanceMap);
+                          return extractionFriendDefault(context, data.config, data.userList, data.locationMap, data.instanceMap);
                         case DisplayMode.simple:
-                          return extractionFriendSimple(context, config, data.userList, data.locationMap, data.instanceMap);
+                          return extractionFriendSimple(context, data.config, data.userList, data.locationMap, data.instanceMap);
                         case DisplayMode.textOnly:
-                          return extractionFriendText(context, config, data.userList, data.locationMap, data.instanceMap);
+                          return extractionFriendText(context, data.config, data.userList, data.locationMap, data.instanceMap);
                       }
                     }(),
                   ],

@@ -20,6 +20,7 @@ sortUsers(GridConfigNotifier config, List<VRChatUser> userList) {
     default:
       break;
   }
+  return userList.reversed.toList();
 }
 
 class LocationDataClass {

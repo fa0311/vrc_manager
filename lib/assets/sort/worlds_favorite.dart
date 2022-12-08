@@ -29,6 +29,7 @@ sortWorlds(GridConfigNotifier config, List<VRChatLimitedWorld> worldList) {
     default:
       break;
   }
+  return worldList.reversed.toList();
 }
 
 sortByNameFromWorlds(List<VRChatLimitedWorld> worldList) {

@@ -11,11 +11,12 @@ import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
 import 'package:vrc_manager/data_class/app_config.dart';
 import 'package:vrc_manager/data_class/modal.dart';
-import 'package:vrc_manager/data_class/state.dart';
+
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/widgets/modal.dart';
 import 'package:vrc_manager/widgets/grid_view/extraction/user.dart';
 import 'package:vrc_manager/widgets/grid_view/extraction/world.dart';
+import 'package:vrc_manager/assets/sort/users.dart';
 
 final vrchatMobileSearchModeProvider = StateProvider<SearchMode>((ref) => SearchMode.users);
 final vrchatMobileSearchCounterProvider = StateProvider<int>((ref) => 0);
@@ -38,6 +39,7 @@ enum SearchMode {
 class VRChatMobileSearchData {
   List<VRChatUser> userList;
   List<VRChatLimitedWorld> worldList;
+  late GridConfigNotifier config;
   VRChatMobileSearchData({required this.userList, required this.worldList});
 }
 
@@ -84,6 +86,13 @@ final vrchatMobileSearchProvider = FutureProvider<VRChatMobileSearchData>((ref) 
   }
 
   return VRChatMobileSearchData(userList: userList, worldList: worldList);
+});
+
+final vrchatMobileSearchSortProvider = FutureProvider<VRChatMobileSearchData>((ref) async {
+  VRChatMobileSearchData data = await ref.watch(vrchatMobileSearchProvider.future);
+  data.config = await ref.watch(gridConfigProvider.future);
+  data.userList = sortUsers(data.config, data.userList);
+  return data;
 });
 
 class VRChatMobileSearch extends ConsumerWidget {
@@ -175,9 +184,7 @@ class VRChatMobileSearchResult extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    GridConfigNotifier config = appConfig.gridConfigList.searchUsers;
-    SortData sortData = SortData(config);
-    AsyncValue<VRChatMobileSearchData> data = ref.watch(vrchatMobileSearchProvider);
+    AsyncValue<VRChatMobileSearchData> data = ref.watch(vrchatMobileSearchSortProvider);
     textStream(context);
     return data.when(
       loading: () => const Center(child: CircularProgressIndicator()),
@@ -186,25 +193,23 @@ class VRChatMobileSearchResult extends ConsumerWidget {
         List<VRChatUser> userList = data.userList;
         List<VRChatLimitedWorld> worldList = data.worldList;
         if (userList.isNotEmpty) {
-          userList = sortData.users(userList);
-          switch (config.displayMode) {
+          switch (data.config.displayMode) {
             case DisplayMode.normal:
-              return extractionUserDefault(context, config, userList);
+              return extractionUserDefault(context, data.config, userList);
             case DisplayMode.simple:
-              return extractionUserSimple(context, config, userList);
+              return extractionUserSimple(context, data.config, userList);
             case DisplayMode.textOnly:
-              return extractionUserText(context, config, userList);
+              return extractionUserText(context, data.config, userList);
           }
         }
         if (worldList.isNotEmpty) {
-          worldList = sortData.worlds(worldList);
-          switch (config.displayMode) {
+          switch (data.config.displayMode) {
             case DisplayMode.normal:
-              return extractionWorldDefault(context, config, worldList);
+              return extractionWorldDefault(context, data.config, worldList);
             case DisplayMode.simple:
-              return extractionWorldSimple(context, config, worldList);
+              return extractionWorldSimple(context, data.config, worldList);
             case DisplayMode.textOnly:
-              return extractionWorldText(context, config, worldList);
+              return extractionWorldText(context, data.config, worldList);
           }
         }
         return Column(children: const []);

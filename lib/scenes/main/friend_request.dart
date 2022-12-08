@@ -11,12 +11,14 @@ import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
 import 'package:vrc_manager/data_class/app_config.dart';
 import 'package:vrc_manager/data_class/modal.dart';
-import 'package:vrc_manager/data_class/state.dart';
+
+import 'package:vrc_manager/assets/sort/users.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/widgets/grid_view/extraction/user.dart';
 
 class VRChatMobileFriendRequestData {
   List<VRChatUser> userList;
+  late GridConfigNotifier config;
   VRChatMobileFriendRequestData({required this.userList});
 }
 
@@ -41,17 +43,22 @@ final vrchatMobileFriendsProvider = FutureProvider<VRChatMobileFriendRequestData
   return VRChatMobileFriendRequestData(userList: userList);
 });
 
+final vrchatMobileFriendsSortProvider = FutureProvider<VRChatMobileFriendRequestData>((ref) async {
+  VRChatMobileFriendRequestData data = await ref.watch(vrchatMobileFriendsProvider.future);
+  data.config = await ref.watch(gridConfigProvider.future);
+  data.userList = sortUsers(data.config, data.userList);
+  return data;
+});
+
 class VRChatMobileFriendRequest extends ConsumerWidget {
   const VRChatMobileFriendRequest({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    late GridConfigNotifier config = appConfig.gridConfigList.friendsRequest;
     GridModalConfig gridConfig = GridModalConfig();
-    SortData sortData = SortData(config);
 
     textStream(context);
-    AsyncValue<VRChatMobileFriendRequestData> data = ref.watch(vrchatMobileFriendsProvider);
+    AsyncValue<VRChatMobileFriendRequestData> data = ref.watch(vrchatMobileFriendsSortProvider);
 
     gridConfig.url = Uri.https("vrchat.com", "/home/messages");
     gridConfig.sortMode = [
@@ -77,14 +84,13 @@ class VRChatMobileFriendRequest extends ConsumerWidget {
               data: (data) => Column(
                 children: [
                   () {
-                    data.userList = sortData.users(data.userList);
-                    switch (config.displayMode) {
+                    switch (data.config.displayMode) {
                       case DisplayMode.normal:
-                        return extractionUserDefault(context, config, data.userList, status: status);
+                        return extractionUserDefault(context, data.config, data.userList, status: status);
                       case DisplayMode.simple:
-                        return extractionUserSimple(context, config, data.userList, status: status);
+                        return extractionUserSimple(context, data.config, data.userList, status: status);
                       case DisplayMode.textOnly:
-                        return extractionUserText(context, config, data.userList, status: status);
+                        return extractionUserText(context, data.config, data.userList, status: status);
                     }
                   }(),
                 ],
