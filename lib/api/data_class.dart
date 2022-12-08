@@ -1,6 +1,6 @@
+// Project imports:
 import 'package:vrc_manager/api/enum/instance_type.dart';
 import 'package:vrc_manager/api/enum/region.dart';
-
 import 'enum/status.dart';
 
 class VRChatStatus {

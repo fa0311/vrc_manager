@@ -1,6 +1,10 @@
-// Package imports:
+// Flutter imports:
 import 'package:flutter/cupertino.dart';
+
+// Package imports:
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+// Project imports:
 import 'package:vrc_manager/api/enum/instance_type.dart';
 
 String vrchatInstanceTypeToLocalization(VRChatInstanceType type, BuildContext context) {

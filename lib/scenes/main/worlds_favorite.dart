@@ -9,7 +9,6 @@ import 'package:vrc_manager/assets/flutter/text_stream.dart';
 import 'package:vrc_manager/assets/sort/worlds_favorite.dart';
 import 'package:vrc_manager/data_class/app_config.dart';
 import 'package:vrc_manager/data_class/modal.dart';
-
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/widgets/grid_view/extraction/favorite_world.dart';
 

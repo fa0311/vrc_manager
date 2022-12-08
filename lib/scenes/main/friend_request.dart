@@ -9,10 +9,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
+import 'package:vrc_manager/assets/sort/users.dart';
 import 'package:vrc_manager/data_class/app_config.dart';
 import 'package:vrc_manager/data_class/modal.dart';
-
-import 'package:vrc_manager/assets/sort/users.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/widgets/grid_view/extraction/user.dart';
 

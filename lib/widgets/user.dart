@@ -1,5 +1,6 @@
 // Flutter imports:
 
+// Flutter imports:
 import 'package:flutter/material.dart';
 
 // Package imports:
@@ -10,12 +11,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 // Project imports:
 import 'package:vrc_manager/api/data_class.dart';
+import 'package:vrc_manager/api/enum/icon.dart';
 import 'package:vrc_manager/api/main.dart';
-import 'package:vrc_manager/assets/api/notifier.dart';
 import 'package:vrc_manager/assets/anchor.dart';
+import 'package:vrc_manager/assets/api/notifier.dart';
 import 'package:vrc_manager/assets/date.dart';
 import 'package:vrc_manager/assets/error.dart';
-import 'package:vrc_manager/api/enum/icon.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/widgets/modal/list_tile/main.dart';
 import 'package:vrc_manager/widgets/modal/list_tile/share.dart';
