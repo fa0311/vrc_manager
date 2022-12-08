@@ -19,7 +19,7 @@ import 'package:vrc_manager/widgets/world.dart';
 
 Widget extractionFriendDefault(
   BuildContext context,
-  GridConfig config,
+  GridConfigNotifier config,
   List<VRChatFriends> userList,
   Map<String, VRChatWorld?> locationMap,
   Map<String, VRChatInstance?> instanceMap,
@@ -74,7 +74,7 @@ Widget extractionFriendDefault(
 
 Widget extractionFriendSimple(
   BuildContext context,
-  GridConfig config,
+  GridConfigNotifier config,
   List<VRChatFriends> userList,
   Map<String, VRChatWorld?> locationMap,
   Map<String, VRChatInstance?> instanceMap,
@@ -127,7 +127,7 @@ Widget extractionFriendSimple(
 
 Widget extractionFriendText(
   BuildContext context,
-  GridConfig config,
+  GridConfigNotifier config,
   List<VRChatFriends> userList,
   Map<String, VRChatWorld?> locationMap,
   Map<String, VRChatInstance?> instanceMap,

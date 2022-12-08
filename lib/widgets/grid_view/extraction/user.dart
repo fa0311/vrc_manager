@@ -13,7 +13,7 @@ import 'package:vrc_manager/widgets/user.dart';
 
 Widget extractionUserDefault(
   BuildContext context,
-  GridConfig config,
+  GridConfigNotifier config,
   List<VRChatUser> userList, {
   VRChatFriendStatus? status,
 }) {
@@ -50,7 +50,7 @@ Widget extractionUserDefault(
 
 Widget extractionUserSimple(
   BuildContext context,
-  GridConfig config,
+  GridConfigNotifier config,
   List<VRChatUser> userList, {
   VRChatFriendStatus? status,
 }) {
@@ -93,7 +93,7 @@ Widget extractionUserSimple(
 
 Widget extractionUserText(
   BuildContext context,
-  GridConfig config,
+  GridConfigNotifier config,
   List<VRChatUser> userList, {
   VRChatFriendStatus? status,
 }) {

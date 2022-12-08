@@ -245,12 +245,12 @@ class FavoriteWorldData {
 }
 
 class GridConfigList {
-  GridConfig onlineFriends = GridConfig("online_friends_config");
-  GridConfig offlineFriends = GridConfig("offline_friends_config");
-  GridConfig friendsRequest = GridConfig("friends_request_config");
-  GridConfig searchUsers = GridConfig("search_users_config");
-  GridConfig searchWorlds = GridConfig("search_worlds_config");
-  GridConfig favoriteWorlds = GridConfig("favorite_worlds_config");
+  GridConfigNotifier onlineFriends = GridConfigNotifier("online_friends_config");
+  GridConfigNotifier offlineFriends = GridConfigNotifier("offline_friends_config");
+  GridConfigNotifier friendsRequest = GridConfigNotifier("friends_request_config");
+  GridConfigNotifier searchUsers = GridConfigNotifier("search_users_config");
+  GridConfigNotifier searchWorlds = GridConfigNotifier("search_worlds_config");
+  GridConfigNotifier favoriteWorlds = GridConfigNotifier("favorite_worlds_config");
 
   Future setConfig() async {
     List<Future> futureList = [];
@@ -264,7 +264,7 @@ class GridConfigList {
   }
 }
 
-class GridConfig {
+class GridConfigNotifier extends ChangeNotifier {
   late String id;
   late SortMode sortMode;
   late DisplayMode displayMode;
@@ -273,7 +273,7 @@ class GridConfig {
   late bool worldDetails;
   late bool removeButton;
 
-  GridConfig(this.id);
+  GridConfigNotifier(this.id);
 
   Future setConfig() async {
     List<Future> futureList = [];
@@ -283,33 +283,48 @@ class GridConfig {
     futureList.add(getStorage("joinable", id: id).then((String? value) => joinable = (value == "true")));
     futureList.add(getStorage("world_details", id: id).then((String? value) => worldDetails = (value == "true")));
     futureList.add(getStorage("remove_button", id: id).then((String? value) => removeButton = (value == "true")));
-
+    notifyListeners();
     return Future.wait(futureList);
   }
 
   Future setSort(SortMode value) async {
     sortMode = value;
+    notifyListeners();
     return await setStorage("sort", value.name, id: id);
   }
 
   Future setDisplayMode(DisplayMode value) async {
     displayMode = value;
+    notifyListeners();
     return await setStorage("display_mode", displayMode.name, id: id);
   }
 
   Future setDescending(bool value) async {
-    return await setStorage("descending", (descending = value) ? "true" : "false", id: id);
+    descending = value;
+    notifyListeners();
+    return await setStorage("descending", descending ? "true" : "false", id: id);
   }
 
   Future setJoinable(bool value) async {
-    return await setStorage("joinable", (joinable = value) ? "true" : "false", id: id);
+    joinable = value;
+    notifyListeners();
+    return await setStorage("joinable", joinable ? "true" : "false", id: id);
   }
 
   Future setWorldDetails(bool value) async {
-    return await setStorage("world_details", (worldDetails = value) ? "true" : "false", id: id);
+    worldDetails = value;
+    notifyListeners();
+    return await setStorage("world_details", worldDetails ? "true" : "false", id: id);
   }
 
   Future setRemoveButton(bool value) async {
-    return await setStorage("remove_button", (removeButton = value) ? "true" : "false", id: id);
+    removeButton = value;
+    notifyListeners();
+    return await setStorage("remove_button", removeButton ? "true" : "false", id: id);
   }
 }
+
+final gridConfigProvider = ChangeNotifierProvider<GridConfigNotifier>((ref) {
+  // ref.watch();
+  return GridConfigNotifier("a");
+});

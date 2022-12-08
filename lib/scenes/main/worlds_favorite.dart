@@ -19,7 +19,7 @@ class VRChatMobileWorldsFavorite extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     textStream(context);
 
-    late GridConfig config = appConfig.gridConfigList.favoriteWorlds;
+    late GridConfigNotifier config = appConfig.gridConfigList.favoriteWorlds;
     late SortData sortData = SortData(config);
     GridModalConfig gridConfig = GridModalConfig();
 

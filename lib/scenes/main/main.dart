@@ -52,6 +52,17 @@ class VRChatMobileHome extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Bottom Menu"),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.more_vert),
+            onPressed: () => showModalBottomSheet(
+              context: context,
+              builder: (BuildContext context) {
+                return Column();
+              },
+            ),
+          ),
+        ],
       ),
       drawer: drawer(),
       body: SafeArea(

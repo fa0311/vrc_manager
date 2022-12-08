@@ -12,7 +12,7 @@ import 'package:vrc_manager/widgets/modal/list_tile/world.dart';
 
 Widget extractionWorldDefault(
   BuildContext context,
-  GridConfig config,
+  GridConfigNotifier config,
   List<VRChatFavoriteWorld> favoriteWorld,
 ) {
   return StatefulBuilder(
@@ -68,7 +68,7 @@ Widget extractionWorldDefault(
 
 Widget extractionWorldSimple(
   BuildContext context,
-  GridConfig config,
+  GridConfigNotifier config,
   List<VRChatFavoriteWorld> favoriteWorld,
 ) {
   return StatefulBuilder(

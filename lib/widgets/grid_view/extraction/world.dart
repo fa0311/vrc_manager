@@ -11,7 +11,7 @@ import 'package:vrc_manager/widgets/modal/list_tile/world.dart';
 
 GridView extractionWorldDefault(
   BuildContext context,
-  GridConfig config,
+  GridConfigNotifier config,
   List<VRChatLimitedWorld> worldList,
 ) {
   return renderGrid(
@@ -52,7 +52,7 @@ GridView extractionWorldDefault(
 
 GridView extractionWorldSimple(
   BuildContext context,
-  GridConfig config,
+  GridConfigNotifier config,
   List<VRChatLimitedWorld> worldList,
 ) {
   return renderGrid(
@@ -95,7 +95,7 @@ GridView extractionWorldSimple(
 
 GridView extractionWorldText(
   BuildContext context,
-  GridConfig config,
+  GridConfigNotifier config,
   List<VRChatLimitedWorld> worldList,
 ) {
   return renderGrid(

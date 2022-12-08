@@ -46,7 +46,7 @@ class VRChatMobileFriendRequest extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    late GridConfig config = appConfig.gridConfigList.friendsRequest;
+    late GridConfigNotifier config = appConfig.gridConfigList.friendsRequest;
     GridModalConfig gridConfig = GridModalConfig();
     SortData sortData = SortData(config);
 

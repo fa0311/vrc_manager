@@ -8,7 +8,7 @@ import 'package:vrc_manager/data_class/modal.dart';
 class SortData {
   SortMode sortedModeCache = SortMode.normal;
   bool sortedDescendCache = false;
-  GridConfig config;
+  GridConfigNotifier config;
   SortData(this.config);
 
   List<VRChatUser> users(List<VRChatUser> userList) {

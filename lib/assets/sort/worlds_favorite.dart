@@ -6,7 +6,7 @@ import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/data_class/app_config.dart';
 import 'package:vrc_manager/data_class/modal.dart';
 
-sortWorlds(GridConfig config, List<VRChatLimitedWorld> worldList) {
+sortWorlds(GridConfigNotifier config, List<VRChatLimitedWorld> worldList) {
   switch (config.sortMode) {
     case SortMode.name:
       sortByNameFromWorlds(worldList);

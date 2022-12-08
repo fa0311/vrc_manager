@@ -6,7 +6,7 @@ import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/data_class/app_config.dart';
 import 'package:vrc_manager/data_class/modal.dart';
 
-sortUsers(GridConfig config, List<VRChatUser> userList) {
+sortUsers(GridConfigNotifier config, List<VRChatUser> userList) {
   switch (config.sortMode) {
     case SortMode.name:
       sortByNameFromUser(userList);

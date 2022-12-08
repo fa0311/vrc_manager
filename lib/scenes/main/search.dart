@@ -175,7 +175,7 @@ class VRChatMobileSearchResult extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    GridConfig config = appConfig.gridConfigList.searchUsers;
+    GridConfigNotifier config = appConfig.gridConfigList.searchUsers;
     SortData sortData = SortData(config);
     AsyncValue<VRChatMobileSearchData> data = ref.watch(vrchatMobileSearchProvider);
     textStream(context);

@@ -64,7 +64,7 @@ class VRChatMobileFriends extends ConsumerWidget {
     textStream(context);
     AsyncValue<VRChatMobileFriendsData> data = ref.watch(vrchatMobileFriendsProvider(offline));
 
-    GridConfig config = offline ? appConfig.gridConfigList.offlineFriends : appConfig.gridConfigList.onlineFriends;
+    GridConfigNotifier config = offline ? appConfig.gridConfigList.offlineFriends : appConfig.gridConfigList.onlineFriends;
     SortData sortData = SortData(config);
     GridModalConfig gridConfig = GridModalConfig();
 
