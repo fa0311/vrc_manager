@@ -13,7 +13,7 @@ import 'package:vrc_manager/data_class/app_config.dart';
 import 'package:vrc_manager/data_class/modal.dart';
 import 'package:vrc_manager/data_class/state.dart';
 import 'package:vrc_manager/main.dart';
-import 'package:vrc_manager/scenes/main/modal.dart';
+import 'package:vrc_manager/widgets/modal.dart';
 import 'package:vrc_manager/widgets/grid_view/extraction/user.dart';
 import 'package:vrc_manager/widgets/grid_view/extraction/world.dart';
 
