@@ -5,43 +5,25 @@ import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/main.dart';
 
-Future getWorld(List<VRChatFriends> users, Map<String, VRChatWorld?> locationMap) {
+Future getWorld(VRChatFriends user, Map<String, VRChatWorld?> locationMap) async {
   late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
-  List<Future> futureList = [];
-  for (VRChatFriends user in users) {
-    String wid = user.location.split(":")[0];
-    if (["private", "offline", "traveling"].contains(user.location) || locationMap.containsKey(wid)) continue;
-    locationMap[wid] = null;
-    futureList.add(vrchatLoginSession.worlds(wid).then((VRChatWorld world) {
-      locationMap[wid] = world;
-    }));
-  }
-  return Future.wait(futureList);
+  String wid = user.location.split(":")[0];
+  if (["private", "offline", "traveling"].contains(user.location) || locationMap.containsKey(wid)) return;
+  locationMap[wid] = null;
+  locationMap[wid] = await vrchatLoginSession.worlds(wid);
 }
 
-Future getWorldFromFavorite(List<VRChatFavoriteGroup> favoriteGroups, Map<String, VRChatWorld?> locationMap) {
+Future getWorldFromFavorite(VRChatFavoriteGroup favoriteGroup, Map<String, VRChatWorld?> locationMap) async {
   late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
-  List<Future> futureList = [];
-  for (VRChatFavoriteGroup favoriteGroup in favoriteGroups) {
-    String wid = favoriteGroup.id;
-    if (["private", "offline", "traveling"].contains(wid) || locationMap.containsKey(wid)) continue;
-    locationMap[wid] = null;
-    futureList.add(vrchatLoginSession.worlds(wid).then((VRChatWorld world) {
-      locationMap[wid] = world;
-    }));
-  }
-  return Future.wait(futureList);
+  String wid = favoriteGroup.id;
+  if (["private", "offline", "traveling"].contains(wid) || locationMap.containsKey(wid)) return;
+  locationMap[wid] = null;
+  locationMap[wid] = await vrchatLoginSession.worlds(wid);
 }
 
-Future getInstance(List<VRChatFriends> users, Map<String, VRChatInstance?> instanceMap) {
+Future getInstance(VRChatFriends user, Map<String, VRChatInstance?> instanceMap) async {
   late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
-  List<Future> futureList = [];
-  for (VRChatFriends user in users) {
-    if (["private", "offline", "traveling"].contains(user.location) || instanceMap.containsKey(user.location)) continue;
-    instanceMap[user.location] = null;
-    futureList.add(vrchatLoginSession.instances(user.location).then((VRChatInstance instance) {
-      instanceMap[user.location] = instance;
-    }));
-  }
-  return Future.wait(futureList);
+  if (["private", "offline", "traveling"].contains(user.location) || instanceMap.containsKey(user.location)) return;
+  instanceMap[user.location] = null;
+  instanceMap[user.location] = await vrchatLoginSession.instances(user.location);
 }

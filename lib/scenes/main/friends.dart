@@ -1,4 +1,5 @@
 // Flutter imports:
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 // Package imports:
@@ -37,11 +38,17 @@ final vrchatMobileFriendsProvider = FutureProvider.family<VRChatMobileFriendsDat
   do {
     int offset = userList.length;
     List<VRChatFriends> users = await vrchatLoginSession.friends(offline: offline, offset: offset);
-    if (!offline) {
-      futureList.add(getWorld(users, locationMap));
-      futureList.add(getInstance(users, instanceMap));
-    }
     userList.addAll(users);
+    if (!offline) {
+      for (VRChatFriends user in users) {
+        futureList.add(getWorld(user, locationMap).catchError((status) {
+          if (kDebugMode) print(status);
+        }));
+        futureList.add(getInstance(user, instanceMap).catchError((status) {
+          if (kDebugMode) print(status);
+        }));
+      }
+    }
     len = users.length;
   } while (len == 50);
   await Future.wait(futureList);

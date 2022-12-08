@@ -57,7 +57,7 @@ Widget extractionFriendDefault(
                   username(user),
                   for (String text in [
                     if (user.statusDescription != null) user.statusDescription!,
-                    if (!["private", "offline", "traveling"].contains(user.location)) locationMap[worldId]!.name,
+                    if (!["private", "offline", "traveling"].contains(user.location)) locationMap[worldId]?.name,
                     if (user.location == "private") AppLocalizations.of(context)!.privateWorld,
                     if (user.location == "traveling") AppLocalizations.of(context)!.traveling,
                   ].whereType<String>()) ...[
