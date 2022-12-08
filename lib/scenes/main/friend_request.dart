@@ -1,4 +1,5 @@
 // Flutter imports:
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 // Package imports:
@@ -30,6 +31,8 @@ final vrchatMobileFriendsProvider = FutureProvider<VRChatMobileFriendRequestData
     for (VRChatNotifications requestUser in notify) {
       futureList.add(vrchatLoginSession.users(requestUser.senderUserId).then((VRChatUser user) {
         userList.add(user);
+      }).catchError((status) {
+        if (kDebugMode) print(status);
       }));
     }
     len = notify.length;
