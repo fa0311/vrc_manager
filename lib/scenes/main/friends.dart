@@ -11,9 +11,10 @@ import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets/api/get.dart';
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
 import 'package:vrc_manager/assets/sort/users.dart';
-import 'package:vrc_manager/data_class/app_config.dart';
 import 'package:vrc_manager/data_class/modal.dart';
 import 'package:vrc_manager/main.dart';
+import 'package:vrc_manager/scenes/main/main.dart';
+import 'package:vrc_manager/storage/grid_config.dart';
 import 'package:vrc_manager/widgets/grid_view/extraction/friends.dart';
 
 class VRChatMobileFriendsData {
@@ -58,7 +59,7 @@ final vrchatMobileFriendsProvider = FutureProvider.family<VRChatMobileFriendsDat
 
 final vrchatMobileFriendsSortProvider = FutureProvider.family<VRChatMobileFriendsData, bool>((ref, offline) async {
   VRChatMobileFriendsData data = await ref.watch(vrchatMobileFriendsProvider(offline).future);
-  data.config = await ref.watch(gridConfigProvider.future);
+  data.config = await ref.watch(gridConfigProvider(ref.read(gridConfigIdProvider)).future);
   data.userList = sortUsers(data.config, data.userList);
   return data;
 });

@@ -10,9 +10,10 @@ import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
 import 'package:vrc_manager/assets/sort/users.dart';
-import 'package:vrc_manager/data_class/app_config.dart';
 import 'package:vrc_manager/data_class/modal.dart';
 import 'package:vrc_manager/main.dart';
+import 'package:vrc_manager/scenes/main/main.dart';
+import 'package:vrc_manager/storage/grid_config.dart';
 import 'package:vrc_manager/widgets/grid_view/extraction/user.dart';
 import 'package:vrc_manager/widgets/grid_view/extraction/world.dart';
 import 'package:vrc_manager/widgets/modal.dart';
@@ -89,7 +90,7 @@ final vrchatMobileSearchProvider = FutureProvider<VRChatMobileSearchData>((ref) 
 
 final vrchatMobileSearchSortProvider = FutureProvider<VRChatMobileSearchData>((ref) async {
   VRChatMobileSearchData data = await ref.watch(vrchatMobileSearchProvider.future);
-  data.config = await ref.watch(gridConfigProvider.future);
+  data.config = await ref.watch(gridConfigProvider(ref.read(gridConfigIdProvider)).future);
   data.userList = sortUsers(data.config, data.userList);
   return data;
 });

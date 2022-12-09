@@ -6,8 +6,9 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
-import 'package:vrc_manager/data_class/app_config.dart';
 import 'package:vrc_manager/data_class/modal.dart';
+import 'package:vrc_manager/scenes/main/main.dart';
+import 'package:vrc_manager/storage/grid_config.dart';
 import 'package:vrc_manager/widgets/grid_modal/config.dart';
 import 'package:vrc_manager/widgets/modal.dart';
 import 'package:vrc_manager/widgets/share.dart';
@@ -23,7 +24,7 @@ class GridModal extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    AsyncValue<GridConfigNotifier> config = ref.watch(gridConfigProvider);
+    AsyncValue<GridConfigNotifier> config = ref.watch(gridConfigProvider(ref.read(gridConfigIdProvider)));
     GridModalConfig gridModalConfig = ref.watch(gridModalProvider);
     return config.when(
       loading: () => const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()),
@@ -86,7 +87,7 @@ class GridSortModal extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    AsyncValue<GridConfigNotifier> config = ref.watch(gridConfigProvider);
+    AsyncValue<GridConfigNotifier> config = ref.watch(gridConfigProvider(ref.read(gridConfigIdProvider)));
     GridModalConfig gridModalConfig = ref.watch(gridModalProvider);
     return SingleChildScrollView(
       child: config.when(
@@ -118,7 +119,7 @@ class GridDisplayModeModal extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    AsyncValue<GridConfigNotifier> config = ref.watch(gridConfigProvider);
+    AsyncValue<GridConfigNotifier> config = ref.watch(gridConfigProvider(ref.read(gridConfigIdProvider)));
     GridModalConfig gridModalConfig = ref.watch(gridModalProvider);
     return SingleChildScrollView(
       child: config.when(

@@ -10,6 +10,8 @@ import 'package:vrc_manager/assets/sort/worlds_favorite.dart';
 import 'package:vrc_manager/data_class/app_config.dart';
 import 'package:vrc_manager/data_class/modal.dart';
 import 'package:vrc_manager/main.dart';
+import 'package:vrc_manager/scenes/main/main.dart';
+import 'package:vrc_manager/storage/grid_config.dart';
 import 'package:vrc_manager/widgets/grid_view/extraction/favorite_world.dart';
 
 class VRChatMobileWorldFavoriteData {
@@ -20,7 +22,7 @@ class VRChatMobileWorldFavoriteData {
 
 final vrchatMobileWorldFavoriteSortProvider = FutureProvider<VRChatMobileWorldFavoriteData>((ref) async {
   VRChatMobileWorldFavoriteData data = VRChatMobileWorldFavoriteData(worldList: appConfig.loggedAccount?.favoriteWorld ?? []);
-  data.config = await ref.watch(gridConfigProvider.future);
+  data.config = await ref.watch(gridConfigProvider(ref.read(gridConfigIdProvider)).future);
   for (FavoriteWorldData favoriteWorld in data.worldList) {
     sortWorlds(data.config, favoriteWorld.list);
   }

@@ -3,8 +3,8 @@ import 'dart:convert';
 
 // Project imports:
 import 'package:vrc_manager/api/data_class.dart';
-import 'package:vrc_manager/data_class/app_config.dart';
 import 'package:vrc_manager/data_class/modal.dart';
+import 'package:vrc_manager/storage/grid_config.dart';
 
 sortWorlds(GridConfigNotifier config, List<VRChatLimitedWorld> worldList) {
   switch (config.sortMode) {
