@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
+import 'package:vrc_manager/data_class/app_config.dart';
 import 'package:vrc_manager/scenes/main/friend_request.dart';
 import 'package:vrc_manager/scenes/main/friends.dart';
 import 'package:vrc_manager/scenes/main/search.dart';
@@ -55,6 +56,26 @@ class VRChatMobileHome extends ConsumerWidget {
     final CurrentIndex currentIndex = ref.watch(currentIndexProvider);
     final PageController controller = PageController(initialPage: currentIndex.index);
 
+    getGridConfig(CurrentIndex currentIndex) {
+      switch (currentIndex) {
+        case CurrentIndex.online:
+          return GridConfigId.onlineFriends;
+        case CurrentIndex.offline:
+          return GridConfigId.offlineFriends;
+        case CurrentIndex.notify:
+          return GridConfigId.friendsRequest;
+        case CurrentIndex.search:
+          switch (ref.read(vrchatMobileSearchModeProvider)) {
+            case SearchMode.users:
+              return GridConfigId.searchUsers;
+            case SearchMode.worlds:
+              return GridConfigId.searchWorlds;
+          }
+        case CurrentIndex.favorite:
+          return GridConfigId.favoriteWorlds;
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Bottom Menu"),
@@ -75,6 +96,7 @@ class VRChatMobileHome extends ConsumerWidget {
           children: [for (CurrentIndex scene in CurrentIndex.values) scene.toWidget()],
           onPageChanged: (int index) {
             ref.read(currentIndexProvider.notifier).state = CurrentIndex.values[index];
+            ref.read(gridConfigIdProvider.notifier).state = getGridConfig(CurrentIndex.values[index]);
           },
         ),
       ),
@@ -83,10 +105,7 @@ class VRChatMobileHome extends ConsumerWidget {
           for (CurrentIndex scene in CurrentIndex.values) BottomNavigationBarItem(icon: Icon(scene.icon), label: scene.toLocalization(context)),
         ],
         currentIndex: currentIndex.index,
-        onTap: (int index) {
-          ref.read(currentIndexProvider.notifier).state = CurrentIndex.values[index];
-          controller.jumpToPage(index);
-        },
+        onTap: (int index) => controller.jumpToPage(index),
         showSelectedLabels: false,
         showUnselectedLabels: false,
         type: BottomNavigationBarType.fixed,
