@@ -6,12 +6,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
-import 'package:vrc_manager/data_class/app_config.dart';
 import 'package:vrc_manager/scenes/main/friend_request.dart';
 import 'package:vrc_manager/scenes/main/friends.dart';
 import 'package:vrc_manager/scenes/main/search.dart';
 import 'package:vrc_manager/scenes/main/worlds_favorite.dart';
 import 'package:vrc_manager/widgets/drawer.dart';
+import 'package:vrc_manager/widgets/modal.dart';
+import 'package:vrc_manager/widgets/modal/modal.dart';
 
 final currentIndexProvider = StateProvider<CurrentIndex>((ref) => CurrentIndex.online);
 
@@ -22,7 +23,7 @@ enum CurrentIndex {
   notify(icon: Icons.notifications),
   favorite(icon: Icons.favorite);
 
-  toWidget() {
+  Widget toWidget() {
     switch (this) {
       case CurrentIndex.online:
         return const VRChatMobileFriends(offline: false);
@@ -60,11 +61,9 @@ class VRChatMobileHome extends ConsumerWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.more_vert),
-            onPressed: () => showModalBottomSheet(
+            onPressed: () => showModalBottomSheetConsumerWidget(
               context: context,
-              builder: (BuildContext context) {
-                return Column();
-              },
+              builder: () => const GridModal(),
             ),
           ),
         ],
@@ -76,25 +75,6 @@ class VRChatMobileHome extends ConsumerWidget {
           children: [for (CurrentIndex scene in CurrentIndex.values) scene.toWidget()],
           onPageChanged: (int index) {
             ref.read(currentIndexProvider.notifier).state = CurrentIndex.values[index];
-            ref.read(gridConfigIdProvider.notifier).state = () {
-              switch (ref.read(currentIndexProvider)) {
-                case CurrentIndex.online:
-                  return GridConfigId.onlineFriends;
-                case CurrentIndex.offline:
-                  return GridConfigId.offlineFriends;
-                case CurrentIndex.search:
-                  switch (ref.read(vrchatMobileSearchModeProvider)) {
-                    case SearchMode.users:
-                      return GridConfigId.searchUsers;
-                    case SearchMode.worlds:
-                      return GridConfigId.searchWorlds;
-                  }
-                case CurrentIndex.notify:
-                  return GridConfigId.friendsRequest;
-                case CurrentIndex.favorite:
-                  return GridConfigId.favoriteWorlds;
-              }
-            }();
           },
         ),
       ),

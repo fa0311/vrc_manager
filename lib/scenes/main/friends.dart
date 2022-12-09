@@ -71,35 +71,6 @@ class VRChatMobileFriends extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     textStream(context);
     AsyncValue<VRChatMobileFriendsData> data = ref.watch(vrchatMobileFriendsSortProvider(offline));
-    GridModalConfig gridConfig = GridModalConfig();
-
-    gridConfig.url = Uri.https("vrchat.com", "/home/locations");
-    if (offline) {
-      gridConfig.sortMode = [
-        SortMode.normal,
-        SortMode.name,
-        SortMode.lastLogin,
-      ];
-      gridConfig.displayMode = [
-        DisplayMode.normal,
-        DisplayMode.simple,
-        DisplayMode.textOnly,
-      ];
-    } else {
-      gridConfig.joinable = true;
-      gridConfig.worldDetails = true;
-      gridConfig.sortMode = [
-        SortMode.normal,
-        SortMode.name,
-        SortMode.friendsInInstance,
-        SortMode.lastLogin,
-      ];
-      gridConfig.displayMode = [
-        DisplayMode.normal,
-        DisplayMode.simple,
-        DisplayMode.textOnly,
-      ];
-    }
 
     return RefreshIndicator(
       onRefresh: () => ref.refresh(vrchatMobileFriendsProvider(offline).future),

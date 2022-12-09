@@ -34,24 +34,6 @@ class VRChatMobileWorldsFavorite extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     textStream(context);
     AsyncValue<VRChatMobileWorldFavoriteData> data = ref.watch(vrchatMobileWorldFavoriteSortProvider);
-    GridModalConfig gridConfig = GridModalConfig();
-
-    gridConfig.url = Uri.https("vrchat.com", "/home/worlds");
-    gridConfig.removeButton = true;
-    gridConfig.displayMode = [
-      DisplayMode.normal,
-      DisplayMode.simple,
-      DisplayMode.textOnly,
-    ];
-    gridConfig.sortMode = [
-      SortMode.normal,
-      SortMode.name,
-      SortMode.updatedDate,
-      SortMode.labsPublicationDate,
-      SortMode.heat,
-      SortMode.capacity,
-      SortMode.occupants,
-    ];
 
     return SingleChildScrollView(
       child: Consumer(

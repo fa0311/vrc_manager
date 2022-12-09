@@ -8,6 +8,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 // Project imports:
 import 'package:vrc_manager/data_class/app_config.dart';
 import 'package:vrc_manager/data_class/modal.dart';
+import 'package:vrc_manager/scenes/main/main.dart';
+import 'package:vrc_manager/scenes/main/search.dart';
 import 'package:vrc_manager/widgets/modal.dart';
 import 'package:vrc_manager/widgets/share.dart';
 
@@ -17,13 +19,120 @@ RoundedRectangleBorder getGridShape() {
   );
 }
 
+final gridModalProvider = StateProvider<GridModalConfig>((ref) {
+  CurrentIndex currentIndex = ref.watch(currentIndexProvider);
+  ref.watch(vrchatMobileSearchCounterProvider);
+  SearchMode searchingMode = ref.watch(vrchatMobileSearchModeProvider);
+  String searchingText = ref.read(searchBoxControllerProvider).text;
+
+  switch (currentIndex) {
+    case CurrentIndex.online:
+      ref.read(gridConfigIdProvider.notifier).state = GridConfigId.onlineFriends;
+      return GridModalConfig()
+        ..url = Uri.https("vrchat.com", "/home/locations")
+        ..joinable = true
+        ..worldDetails = true
+        ..sortMode = [
+          SortMode.normal,
+          SortMode.name,
+          SortMode.friendsInInstance,
+          SortMode.lastLogin,
+        ]
+        ..displayMode = [
+          DisplayMode.normal,
+          DisplayMode.simple,
+          DisplayMode.textOnly,
+        ];
+    case CurrentIndex.offline:
+      ref.read(gridConfigIdProvider.notifier).state = GridConfigId.offlineFriends;
+      return GridModalConfig()
+        ..url = Uri.https("vrchat.com", "/home/locations")
+        ..sortMode = [
+          SortMode.normal,
+          SortMode.name,
+          SortMode.lastLogin,
+        ]
+        ..displayMode = [
+          DisplayMode.normal,
+          DisplayMode.simple,
+          DisplayMode.textOnly,
+        ];
+    case CurrentIndex.notify:
+      ref.read(gridConfigIdProvider.notifier).state = GridConfigId.friendsRequest;
+      return GridModalConfig()
+        ..url = Uri.https("vrchat.com", "/home/messages")
+        ..sortMode = [
+          SortMode.normal,
+          SortMode.name,
+        ]
+        ..displayMode = [
+          DisplayMode.normal,
+          DisplayMode.simple,
+          DisplayMode.textOnly,
+        ];
+    case CurrentIndex.search:
+      switch (searchingMode) {
+        case SearchMode.users:
+          ref.read(gridConfigIdProvider.notifier).state = GridConfigId.searchUsers;
+          return GridModalConfig()
+            ..url = Uri.https("vrchat.com", "/home/search/$searchingText")
+            ..displayMode = [
+              DisplayMode.normal,
+              DisplayMode.simple,
+              DisplayMode.textOnly,
+            ]
+            ..sortMode = [
+              SortMode.normal,
+              SortMode.name,
+            ];
+        case SearchMode.worlds:
+          ref.read(gridConfigIdProvider.notifier).state = GridConfigId.searchWorlds;
+          return GridModalConfig()
+            ..url = Uri.https("vrchat.com", "/home/search/$searchingText")
+            ..displayMode = [
+              DisplayMode.normal,
+              DisplayMode.simple,
+              DisplayMode.textOnly,
+            ]
+            ..sortMode = [
+              SortMode.normal,
+              SortMode.name,
+              SortMode.updatedDate,
+              SortMode.labsPublicationDate,
+              SortMode.heat,
+              SortMode.capacity,
+              SortMode.occupants,
+            ];
+      }
+    case CurrentIndex.favorite:
+      ref.read(gridConfigIdProvider.notifier).state = GridConfigId.favoriteWorlds;
+      return GridModalConfig()
+        ..url = Uri.https("vrchat.com", "/home/worlds")
+        ..removeButton = true
+        ..displayMode = [
+          DisplayMode.normal,
+          DisplayMode.simple,
+          DisplayMode.textOnly,
+        ]
+        ..sortMode = [
+          SortMode.normal,
+          SortMode.name,
+          SortMode.updatedDate,
+          SortMode.labsPublicationDate,
+          SortMode.heat,
+          SortMode.capacity,
+          SortMode.occupants,
+        ];
+  }
+});
+
 class GridModal extends ConsumerWidget {
-  final GridModalConfig gridModalConfig;
-  const GridModal({Key? key, required this.gridModalConfig}) : super(key: key);
+  const GridModal({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     AsyncValue<GridConfigNotifier> config = ref.watch(gridConfigProvider);
+    GridModalConfig gridModalConfig = ref.watch(gridModalProvider);
     return config.when(
       loading: () => const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()),
       error: (err, stack) => Text('Error: $err'),
@@ -36,7 +145,7 @@ class GridModal extends ConsumerWidget {
                 subtitle: Text(config.sortMode.toLocalization(context)),
                 onTap: () => showModalBottomSheetConsumerWidget(
                   context: context,
-                  builder: () => GridSortModal(gridSortMode: gridModalConfig.sortMode),
+                  builder: () => const GridSortModal(),
                 ),
               ),
             if (gridModalConfig.displayMode.isNotEmpty)
@@ -45,15 +154,21 @@ class GridModal extends ConsumerWidget {
                 subtitle: Text(config.displayMode.toLocalization(context)),
                 onTap: () => showModalBottomSheetConsumerWidget(
                   context: context,
-                  builder: () => GridDisplayModeModal(gridDisplayMode: gridModalConfig.displayMode),
+                  builder: () => const GridDisplayModeModal(),
                 ),
               ),
             if (gridModalConfig.joinable)
               SwitchListTile(
-                  value: config.joinable, title: Text(AppLocalizations.of(context)!.showOnlyAvailable), onChanged: (bool e) => config.setJoinable(e)),
+                value: config.joinable,
+                title: Text(AppLocalizations.of(context)!.showOnlyAvailable),
+                onChanged: (bool e) => config.setJoinable(e),
+              ),
             if (gridModalConfig.worldDetails)
               SwitchListTile(
-                  value: config.worldDetails, title: Text(AppLocalizations.of(context)!.worldDetails), onChanged: (bool e) => config.setWorldDetails(e)),
+                value: config.worldDetails,
+                title: Text(AppLocalizations.of(context)!.worldDetails),
+                onChanged: (bool e) => config.setWorldDetails(e),
+              ),
             if (gridModalConfig.removeButton)
               SwitchListTile(
                   value: config.removeButton,
@@ -75,12 +190,12 @@ class GridModal extends ConsumerWidget {
 }
 
 class GridSortModal extends ConsumerWidget {
-  final List<SortMode> gridSortMode;
-  const GridSortModal({Key? key, required this.gridSortMode}) : super(key: key);
+  const GridSortModal({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     AsyncValue<GridConfigNotifier> config = ref.watch(gridConfigProvider);
+    GridModalConfig gridModalConfig = ref.watch(gridModalProvider);
     return SingleChildScrollView(
       child: config.when(
         loading: () => const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()),
@@ -88,12 +203,16 @@ class GridSortModal extends ConsumerWidget {
         data: (config) {
           return Column(
             children: <Widget>[
-              for (SortMode sort in gridSortMode)
+              for (SortMode sort in gridModalConfig.sortMode)
                 ListTile(
                     title: Text(sort.toLocalization(context)),
                     trailing: config.sortMode == sort ? const Icon(Icons.check) : null,
                     onTap: () => config.setSort(sort)),
-              SwitchListTile(value: config.descending, title: Text(AppLocalizations.of(context)!.descending), onChanged: (bool e) => config.setDescending(e)),
+              SwitchListTile(
+                value: config.descending,
+                title: Text(AppLocalizations.of(context)!.descending),
+                onChanged: (bool e) => config.setDescending(e),
+              ),
             ],
           );
         },
@@ -103,12 +222,12 @@ class GridSortModal extends ConsumerWidget {
 }
 
 class GridDisplayModeModal extends ConsumerWidget {
-  final List<DisplayMode> gridDisplayMode;
-  const GridDisplayModeModal({Key? key, required this.gridDisplayMode}) : super(key: key);
+  const GridDisplayModeModal({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     AsyncValue<GridConfigNotifier> config = ref.watch(gridConfigProvider);
+    GridModalConfig gridModalConfig = ref.watch(gridModalProvider);
     return SingleChildScrollView(
       child: config.when(
         loading: () => const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()),
@@ -116,7 +235,7 @@ class GridDisplayModeModal extends ConsumerWidget {
         data: (config) {
           return Column(
             children: <Widget>[
-              for (DisplayMode display in gridDisplayMode)
+              for (DisplayMode display in gridModalConfig.displayMode)
                 ListTile(
                   title: Text(display.toLocalization(context)),
                   trailing: config.displayMode == display ? const Icon(Icons.check) : null,

@@ -54,21 +54,8 @@ class VRChatMobileFriendRequest extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    GridModalConfig gridConfig = GridModalConfig();
-
     textStream(context);
     AsyncValue<VRChatMobileFriendRequestData> data = ref.watch(vrchatMobileFriendsSortProvider);
-
-    gridConfig.url = Uri.https("vrchat.com", "/home/messages");
-    gridConfig.sortMode = [
-      SortMode.normal,
-      SortMode.name,
-    ];
-    gridConfig.displayMode = [
-      DisplayMode.normal,
-      DisplayMode.simple,
-      DisplayMode.textOnly,
-    ];
 
     VRChatFriendStatus status = VRChatFriendStatus(isFriend: false, incomingRequest: true, outgoingRequest: false);
 
