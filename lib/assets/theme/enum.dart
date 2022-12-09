@@ -7,21 +7,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 // Project imports:
 import 'package:vrc_manager/assets/theme/true_black.dart';
 
-enum LanguageCode {
-// cSpell:disable
-  en("English"),
-  ja("日本語"),
-  es("español"),
-  pt("Português"),
-  ru("русский"),
-  th("ไทย"),
-  zh("简体中文");
-// cSpell:enable
-
-  final String text;
-  const LanguageCode(this.text);
-}
-
 enum ThemeBrightness {
   light,
   dark,

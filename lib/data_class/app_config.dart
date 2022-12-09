@@ -9,9 +9,11 @@ import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets/error.dart';
 import 'package:vrc_manager/assets/storage.dart';
-import 'package:vrc_manager/data_class/enum.dart';
+import 'package:vrc_manager/assets/theme/enum.dart';
 import 'package:vrc_manager/data_class/modal.dart';
 import 'package:vrc_manager/data_class/notifier.dart';
+import 'package:vrc_manager/l10n/code.dart';
+import 'package:vrc_manager/scenes/main/main.dart';
 
 final dontShowErrorDialogProvider = StateNotifierProvider<BooleanNotifier, bool>((_) => BooleanNotifier("dont_show_error_dialog"));
 final agreedUserPolicyProvider = StateNotifierProvider<BooleanNotifier, bool>((_) => BooleanNotifier("agreed_user_policy"));
@@ -304,19 +306,8 @@ class GridConfigNotifier extends ChangeNotifier {
   }
 }
 
-enum GridConfigId {
-  onlineFriends,
-  offlineFriends,
-  friendsRequest,
-  searchUsers,
-  searchWorlds,
-  favoriteWorlds;
-}
-
 final gridConfigProvider = FutureProvider<GridConfigNotifier>((ref) async {
   GridConfigNotifier config = GridConfigNotifier(ref.watch(gridConfigIdProvider));
   await config.setConfig();
   return config;
 });
-
-final gridConfigIdProvider = StateProvider<GridConfigId>((ref) => GridConfigId.onlineFriends);

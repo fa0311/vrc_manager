@@ -3,7 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
 import 'package:vrc_manager/assets/storage.dart';
-import 'package:vrc_manager/data_class/enum.dart';
+import 'package:vrc_manager/assets/theme/enum.dart';
+import 'package:vrc_manager/l10n/code.dart';
 
 class ThemeBrightnessNotifier extends StateNotifier<ThemeBrightness> {
   late String key;

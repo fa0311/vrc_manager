@@ -7,7 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
 import 'package:vrc_manager/data_class/app_config.dart';
-import 'package:vrc_manager/data_class/enum.dart';
+import 'package:vrc_manager/l10n/code.dart';
 
 Future showLocaleModal(BuildContext context) {
   return showModalBottomSheet(

@@ -37,5 +37,5 @@
     /* Other */
     "dont"
   ],
-  "ignorePaths": ["l10n/**", "lang.dart"]
+  "ignorePaths": ["l10n/**", "api/enum/lang.dart"]
 }
