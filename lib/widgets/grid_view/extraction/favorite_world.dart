@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 // Project imports:
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/assets/api/post.dart';
-import 'package:vrc_manager/assets/sort/worlds_favorite.dart';
+import 'package:vrc_manager/assets/sort/worlds.dart';
 import 'package:vrc_manager/scenes/sub/world.dart';
 import 'package:vrc_manager/storage/grid_config.dart';
 import 'package:vrc_manager/widgets/grid_view/extraction/consumer.dart';
