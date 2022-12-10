@@ -64,7 +64,7 @@ launchWorld(BuildContext context, VRChatLimitedWorld world) {
     );
   }
 
-  showModalBottomSheetConsumerWidget(
+  showModalBottomSheetStatelessWidget(
     context: context,
     builder: () => SingleChildScrollView(
       child: Column(
@@ -75,7 +75,7 @@ launchWorld(BuildContext context, VRChatLimitedWorld world) {
 }
 
 selectWordType(BuildContext context, VRChatLimitedWorld world, String regionText) {
-  showModalBottomSheetConsumerWidget(
+  showModalBottomSheetStatelessWidget(
     context: context,
     builder: () => SingleChildScrollView(
       child: Column(

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 // Package imports:
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-Future<T?> showModalBottomSheetConsumer<T>({
+Future<T?> showModalBottomSheetStateless<T>({
   required BuildContext context,
   required ConsumerBuilder builder,
 }) {
@@ -24,7 +24,7 @@ Future<T?> showModalBottomSheetConsumer<T>({
   );
 }
 
-Future<T?> showModalBottomSheetConsumerWidget<T>({
+Future<T?> showModalBottomSheetStatelessWidget<T>({
   required BuildContext context,
   required Widget Function() builder,
 }) {

@@ -10,7 +10,7 @@ import 'package:vrc_manager/l10n/code.dart';
 import 'package:vrc_manager/widgets/modal.dart';
 
 Future showLocaleModal(BuildContext context) {
-  return showModalBottomSheetConsumer(
+  return showModalBottomSheetStateless(
     context: context,
     builder: (context, ref, _) {
       final languageCode = ref.watch(languageCodeProvider);

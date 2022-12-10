@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:vrc_manager/widgets/modal.dart';
 
 Future modalBottom(BuildContext context, List<Widget> children) {
-  return showModalBottomSheetConsumerWidget(
+  return showModalBottomSheetStatelessWidget(
     context: context,
     builder: () => SingleChildScrollView(
       child: Column(

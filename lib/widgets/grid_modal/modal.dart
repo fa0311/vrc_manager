@@ -43,7 +43,7 @@ class GridModal extends ConsumerWidget {
           ListTile(
             title: Text(AppLocalizations.of(context)!.sort),
             subtitle: Text(config.sortMode.toLocalization(context)),
-            onTap: () => showModalBottomSheetConsumerWidget(
+            onTap: () => showModalBottomSheetStatelessWidget(
               context: context,
               builder: () => GridSortModal(gridConfigId: gridConfigId),
             ),
@@ -52,7 +52,7 @@ class GridModal extends ConsumerWidget {
           ListTile(
             title: Text(AppLocalizations.of(context)!.display),
             subtitle: Text(config.displayMode.toLocalization(context)),
-            onTap: () => showModalBottomSheetConsumerWidget(
+            onTap: () => showModalBottomSheetStatelessWidget(
               context: context,
               builder: () => GridDisplayModeModal(gridConfigId: gridConfigId),
             ),

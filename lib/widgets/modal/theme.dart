@@ -10,7 +10,7 @@ import 'package:vrc_manager/assets/theme/enum.dart';
 import 'package:vrc_manager/widgets/modal.dart';
 
 Future showThemeBrightnessModal(BuildContext context, WidgetRef ref) {
-  return showModalBottomSheetConsumer(
+  return showModalBottomSheetStateless(
     context: context,
     builder: (context, ref, _) {
       final themeBrightness = ref.watch(themeBrightnessProvider);

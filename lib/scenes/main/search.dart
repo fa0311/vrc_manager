@@ -130,7 +130,7 @@ class VRChatMobileSearch extends ConsumerWidget {
                         fontSize: 16,
                       ),
                     ),
-                    onTap: () => showModalBottomSheetConsumer(
+                    onTap: () => showModalBottomSheetStateless(
                       context: context,
                       builder: (context, ref, child) {
                         SearchMode searchMode = ref.watch(vrchatMobileSearchModeProvider);

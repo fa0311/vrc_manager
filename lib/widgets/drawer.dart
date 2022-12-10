@@ -104,7 +104,7 @@ Drawer drawer() {
                   title: Text(AppLocalizations.of(context)!.setting),
                 ),
                 ListTile(
-                  onTap: () => showModalBottomSheetConsumerWidget(
+                  onTap: () => showModalBottomSheetStatelessWidget(
                     context: context,
                     builder: () => getAccountList(),
                   ),
@@ -126,7 +126,7 @@ Drawer drawer() {
                     icon: const Icon(Icons.settings),
                   ),
                   IconButton(
-                    onPressed: () => showModalBottomSheetConsumerWidget(
+                    onPressed: () => showModalBottomSheetStatelessWidget(
                       context: context,
                       builder: () => getAccountList(),
                     ),
@@ -183,7 +183,7 @@ Drawer simpleDrawer() {
                     title: Text(AppLocalizations.of(context)!.setting),
                   ),
                   ListTile(
-                    onTap: () => showModalBottomSheetConsumerWidget(
+                    onTap: () => showModalBottomSheetStatelessWidget(
                       context: context,
                       builder: () => getAccountList(),
                     ),
