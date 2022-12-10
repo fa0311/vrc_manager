@@ -26,7 +26,7 @@ enum ThemeBrightness {
     }
   }
 
-  toTheme() {
+  ThemeData toTheme() {
     switch (this) {
       case ThemeBrightness.light:
         return ThemeData(brightness: Brightness.light);

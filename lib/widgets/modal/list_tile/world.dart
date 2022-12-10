@@ -7,7 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
 import 'package:vrc_manager/api/data_class.dart';
-import 'package:vrc_manager/data_class/app_config.dart';
+import 'package:vrc_manager/storage/accessibility.dart';
 import 'package:vrc_manager/widgets/lunch_world.dart';
 import 'package:vrc_manager/widgets/modal/list_tile/share.dart';
 import 'package:vrc_manager/widgets/world.dart';
@@ -21,7 +21,7 @@ List<Widget> worldDetailsModalBottom(
     shareUrlTileWidget(context, Uri.https("vrchat.com", "/home/world/${world.id}")),
     favoriteListTileWidget(context, world),
     launchWorldListTileWidget(context, world),
-    if (ref.read(debugModeProvider)) openInJsonViewer(context, world.content),
+    if (ref.read(accessibilityConfigProvider).debugMode) openInJsonViewer(context, world.content),
   ];
 }
 
@@ -35,7 +35,7 @@ List<Widget> instanceDetailsModalBottom(
     shareInstanceTileWidget(context, world.id, instance.instanceId),
     favoriteListTileWidget(context, world),
     selfInviteListTileWidget(context, instance),
-    if (ref.read(debugModeProvider)) openInJsonViewer(context, instance.content),
+    if (ref.read(accessibilityConfigProvider).debugMode) openInJsonViewer(context, instance.content),
   ];
 }
 
@@ -51,7 +51,7 @@ List<Widget> userInstanceDetailsModalBottom(
     shareInstanceTileWidget(context, world.id, instance.instanceId),
     favoriteListTileWidget(context, world),
     selfInviteListTileWidget(context, instance),
-    if (ref.read(debugModeProvider)) openInJsonViewer(context, instance.content),
+    if (ref.read(accessibilityConfigProvider).debugMode) openInJsonViewer(context, instance.content),
   ];
 }
 

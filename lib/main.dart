@@ -4,15 +4,14 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 
 // Package imports:
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:vrc_manager/assets/theme/enum.dart';
 
 // Project imports:
 import 'package:vrc_manager/data_class/app_config.dart';
-import 'package:vrc_manager/l10n/code.dart';
 
 // Package imports:
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:vrc_manager/scenes/sub/splash.dart';
+import 'package:vrc_manager/storage/accessibility.dart';
 
 AppConfig appConfig = AppConfig();
 main() {
@@ -24,9 +23,7 @@ class VRChatMobile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ThemeBrightness themeBrightness = ref.watch(themeBrightnessProvider);
-    ThemeBrightness darkThemeBrightness = ref.watch(darkThemeBrightnessProvider);
-    LanguageCode languageCode = ref.watch(languageCodeProvider);
+    AccessibilityConfigNotifier accessibilityConfig = ref.watch(accessibilityConfigProvider);
 
     return MaterialApp(
       title: 'VRChat Mobile Client',
@@ -46,9 +43,9 @@ class VRChatMobile extends ConsumerWidget {
         Locale('th', ''),
         Locale('zh', ''),
       ],
-      locale: Locale(languageCode.name, ''),
-      theme: themeBrightness.toTheme(),
-      darkTheme: darkThemeBrightness.toTheme(),
+      locale: Locale(accessibilityConfig.languageCode.name, ''),
+      theme: accessibilityConfig.themeBrightness.toTheme(),
+      darkTheme: accessibilityConfig.darkThemeBrightness.toTheme(),
       home: const VRChatMobileSplash(),
     );
   }

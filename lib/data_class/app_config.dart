@@ -9,17 +9,6 @@ import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets/error.dart';
 import 'package:vrc_manager/assets/storage.dart';
-import 'package:vrc_manager/assets/theme/enum.dart';
-import 'package:vrc_manager/data_class/notifier.dart';
-import 'package:vrc_manager/l10n/code.dart';
-
-final dontShowErrorDialogProvider = StateNotifierProvider<BooleanNotifier, bool>((_) => BooleanNotifier("dont_show_error_dialog"));
-final agreedUserPolicyProvider = StateNotifierProvider<BooleanNotifier, bool>((_) => BooleanNotifier("agreed_user_policy"));
-final forceExternalBrowserProvider = StateNotifierProvider<BooleanNotifier, bool>((_) => BooleanNotifier("force_external_browser"));
-final debugModeProvider = StateNotifierProvider<BooleanNotifier, bool>((_) => BooleanNotifier("debug_mode"));
-final themeBrightnessProvider = StateNotifierProvider<ThemeBrightnessNotifier, ThemeBrightness>((_) => ThemeBrightnessNotifier("theme_brightness"));
-final darkThemeBrightnessProvider = StateNotifierProvider<ThemeBrightnessNotifier, ThemeBrightness>((_) => ThemeBrightnessNotifier("dark_theme_brightness"));
-final languageCodeProvider = StateNotifierProvider<LanguageCodeNotifier, LanguageCode>((_) => LanguageCodeNotifier("language_code"));
 
 class AppConfig {
   AccountConfig? _loggedAccount;

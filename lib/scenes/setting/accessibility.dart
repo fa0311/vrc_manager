@@ -10,7 +10,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
-import 'package:vrc_manager/data_class/app_config.dart';
+import 'package:vrc_manager/storage/accessibility.dart';
 import 'package:vrc_manager/widgets/modal.dart';
 import 'package:vrc_manager/widgets/modal/locale.dart';
 import 'package:vrc_manager/widgets/modal/theme.dart';
@@ -21,6 +21,7 @@ class VRChatMobileSettingsAccessibility extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     textStream(context);
+    AccessibilityConfigNotifier accessibilityConfig = ref.watch(accessibilityConfigProvider);
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.setting),
@@ -33,7 +34,7 @@ class VRChatMobileSettingsAccessibility extends ConsumerWidget {
               children: <Widget>[
                 ListTile(
                   title: Text(AppLocalizations.of(context)!.language),
-                  subtitle: Text(ref.read(languageCodeProvider).text),
+                  subtitle: Text(accessibilityConfig.languageCode.text),
                   onTap: () => showModalBottomSheetStatelessWidget(
                     context: context,
                     builder: () => const LocaleModal(),
@@ -41,38 +42,38 @@ class VRChatMobileSettingsAccessibility extends ConsumerWidget {
                 ),
                 ListTile(
                   title: Text(AppLocalizations.of(context)!.theme),
-                  subtitle: Text(ref.read(themeBrightnessProvider).toLocalization(context)),
+                  subtitle: Text(accessibilityConfig.themeBrightness.toLocalization(context)),
                   onTap: () => showModalBottomSheetStatelessWidget(
                     context: context,
-                    builder: () => ThemeBrightnessModal(themeBrightnessProvider),
+                    builder: () => const ThemeBrightnessModal(
+                      dark: false,
+                    ),
                   ),
                 ),
                 ListTile(
                   title: Text(AppLocalizations.of(context)!.theme),
-                  subtitle: Text(ref.read(darkThemeBrightnessProvider).toLocalization(context)),
+                  subtitle: Text(accessibilityConfig.darkThemeBrightness.toLocalization(context)),
                   onTap: () => showModalBottomSheetStatelessWidget(
                     context: context,
-                    builder: () => ThemeBrightnessModal(darkThemeBrightnessProvider),
+                    builder: () => const ThemeBrightnessModal(dark: true),
                   ),
                 ),
                 SwitchListTile(
-                  value: ref.read(dontShowErrorDialogProvider),
-                  title: Text(AppLocalizations.of(context)!.dontShowErrorDialog),
-                  subtitle: Text(AppLocalizations.of(context)!.dontShowErrorDialogDetails),
-                  onChanged: (bool e) => ref.read(dontShowErrorDialogProvider.notifier).set(e),
-                ),
-                if (!Platform.isWindows) ...[
+                    value: accessibilityConfig.dontShowErrorDialog,
+                    title: Text(AppLocalizations.of(context)!.dontShowErrorDialog),
+                    subtitle: Text(AppLocalizations.of(context)!.dontShowErrorDialogDetails),
+                    onChanged: (bool e) => accessibilityConfig.setDontShowErrorDialog(e)),
+                if (!Platform.isWindows)
                   SwitchListTile(
-                    value: ref.read(forceExternalBrowserProvider),
+                    value: accessibilityConfig.forceExternalBrowser,
                     title: Text(AppLocalizations.of(context)!.forceExternalBrowser),
                     subtitle: Text(AppLocalizations.of(context)!.forceExternalBrowserDetails),
-                    onChanged: (bool e) => ref.read(forceExternalBrowserProvider.notifier).set(e),
-                  )
-                ],
+                    onChanged: (bool e) => accessibilityConfig.setForceExternalBrowser(e),
+                  ),
                 SwitchListTile(
-                  value: ref.read(debugModeProvider),
+                  value: accessibilityConfig.debugMode,
                   title: Text(AppLocalizations.of(context)!.debugMode),
-                  onChanged: (bool e) => ref.read(debugModeProvider.notifier).set(e),
+                  onChanged: (bool e) => accessibilityConfig.setDebugMode(e),
                 )
               ],
             ),

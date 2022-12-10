@@ -8,11 +8,11 @@ import 'package:flutter/services.dart';
 // Package imports:
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:vrc_manager/storage/user_policy.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 // Project imports:
 import 'package:vrc_manager/api/main.dart';
-import 'package:vrc_manager/data_class/app_config.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/main/main.dart';
 import 'package:vrc_manager/widgets/modal/list_tile/main.dart';
@@ -69,7 +69,7 @@ class VRChatMobileWebViewUserPolicy extends ConsumerWidget {
                 flex: 2,
                 child: ElevatedButton(
                   onPressed: () async {
-                    await ref.read(agreedUserPolicyProvider.notifier).set(true);
+                    ref.read(userPolicyConfigProvider).setAgree(true);
                     // ignore: use_build_context_synchronously
                     Navigator.pushAndRemoveUntil(
                       context,

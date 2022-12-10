@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:vrc_manager/storage/accessibility.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 // Project imports:
 import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
 import 'package:vrc_manager/assets/session.dart';
-import 'package:vrc_manager/data_class/app_config.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/widgets/modal/list_tile/main.dart';
 import 'package:vrc_manager/widgets/modal/list_tile/share.dart';
@@ -72,7 +72,7 @@ class VRChatMobileWebView extends ConsumerWidget {
             controllerGlobal = webViewController;
           },
           navigationDelegate: (NavigationRequest request) {
-            if (ref.read(forceExternalBrowserProvider) && url.host != "vrchat.com") {
+            if (ref.read(accessibilityConfigProvider).forceExternalBrowser && url.host != "vrchat.com") {
               openInBrowser(context, url);
               return NavigationDecision.prevent;
             } else {

@@ -6,25 +6,24 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
 import 'package:vrc_manager/assets/theme/enum.dart';
-import 'package:vrc_manager/data_class/notifier.dart';
+import 'package:vrc_manager/storage/accessibility.dart';
 
 class ThemeBrightnessModal extends ConsumerWidget {
-  final StateNotifierProvider<ThemeBrightnessNotifier, ThemeBrightness> provider;
+  final bool dark;
 
-  const ThemeBrightnessModal(this.provider, {super.key});
+  const ThemeBrightnessModal({super.key, required this.dark});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final themeBrightness = ref.watch(provider);
+    AccessibilityConfigNotifier accessibilityConfig = ref.watch(accessibilityConfigProvider);
+
     return Column(
       children: <Widget>[
         for (ThemeBrightness value in ThemeBrightness.values)
           ListTile(
             title: Text(value.toLocalization(context)),
-            trailing: themeBrightness == value ? const Icon(Icons.check) : null,
-            onTap: () {
-              ref.read(provider.notifier).set(value);
-            },
+            trailing: (dark ? accessibilityConfig.darkThemeBrightness : accessibilityConfig.themeBrightness) == value ? const Icon(Icons.check) : null,
+            onTap: () => dark ? accessibilityConfig.setDarkThemeBrightness(value) : accessibilityConfig.setThemeBrightness(value),
           ),
       ],
     );

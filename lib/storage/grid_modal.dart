@@ -9,6 +9,8 @@ import 'package:vrc_manager/assets/storage.dart';
 import 'package:vrc_manager/data_class/modal.dart';
 import 'package:vrc_manager/scenes/main/main.dart';
 
+final gridConfigProvider = ChangeNotifierProvider.family<GridConfigNotifier, GridConfigId>((ref, id) => GridConfigNotifier(id: id));
+
 class GridConfigNotifier extends ChangeNotifier {
   GridConfigId id;
   SortMode sortMode = SortMode.normal;
@@ -20,8 +22,8 @@ class GridConfigNotifier extends ChangeNotifier {
 
   GridConfigNotifier({required this.id}) {
     List<Future> futureList = [];
-    futureList.add(getStorage("sort", id: id.name).then((String? value) => sortMode = SortMode.normal.get(value)));
-    futureList.add(getStorage("display_mode", id: id.name).then((String? value) => displayMode = DisplayMode.normal.get(value)));
+    futureList.add(getStorage("sort", id: id.name).then((String? value) => sortMode = SortMode.values.byName(value!)).catchError((onError) {}));
+    futureList.add(getStorage("display_mode", id: id.name).then((String? value) => displayMode = DisplayMode.values.byName(value!)).catchError((onError) {}));
     futureList.add(getStorage("descending", id: id.name).then((String? value) => descending = (value == "true")));
     futureList.add(getStorage("joinable", id: id.name).then((String? value) => joinable = (value == "true")));
     futureList.add(getStorage("world_details", id: id.name).then((String? value) => worldDetails = (value == "true")));
@@ -65,5 +67,3 @@ class GridConfigNotifier extends ChangeNotifier {
     return await setStorage("remove_button", removeButton ? "true" : "false", id: id.name);
   }
 }
-
-final gridConfigProvider = ChangeNotifierProvider.family<GridConfigNotifier, GridConfigId>((ref, id) => GridConfigNotifier(id: id));

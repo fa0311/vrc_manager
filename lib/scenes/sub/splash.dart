@@ -10,12 +10,12 @@ import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 
 // Project imports:
 import 'package:vrc_manager/assets/flutter/url_parser.dart';
-import 'package:vrc_manager/data_class/app_config.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/main/main.dart';
 import 'package:vrc_manager/scenes/sub/login.dart';
 import 'package:vrc_manager/scenes/web/web_view_policies.dart';
-import 'package:vrc_manager/storage/grid_config.dart';
+import 'package:vrc_manager/storage/grid_modal.dart';
+import 'package:vrc_manager/storage/user_policy.dart';
 
 class VRChatMobileSplash extends ConsumerWidget {
   const VRChatMobileSplash({Key? key}) : super(key: key);
@@ -56,16 +56,12 @@ class VRChatMobileSplash extends ConsumerWidget {
       ref.read(gridConfigProvider(id));
     }
 
-    ref.read(themeBrightnessProvider.notifier);
-    ref.read(darkThemeBrightnessProvider.notifier);
-    ref.read(languageCodeProvider.notifier);
-    ref.read(dontShowErrorDialogProvider.notifier);
-    ref.read(agreedUserPolicyProvider.notifier);
-    ref.read(forceExternalBrowserProvider.notifier);
-    ref.read(debugModeProvider.notifier);
+    UserPolicyConfigNotifier userPolicyConfig = ref.watch(userPolicyConfigProvider);
+
+    userPolicyConfig.setAgree(false);
 
     appConfig.get(context, ref).then((_) async {
-      if (!ref.read(agreedUserPolicyProvider)) {
+      if (!userPolicyConfig.agree) {
         goWebViewUserPolicy(context);
       } else if (!appConfig.isLogout()) {
         goLogin(context);

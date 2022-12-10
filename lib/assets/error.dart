@@ -14,7 +14,6 @@ import 'package:package_info_plus/package_info_plus.dart';
 
 // Project imports:
 import 'package:vrc_manager/api/data_class.dart';
-import 'package:vrc_manager/data_class/app_config.dart';
 import 'package:vrc_manager/scenes/sub/login.dart';
 import 'package:vrc_manager/widgets/share.dart';
 
@@ -28,36 +27,34 @@ void errorDialog(BuildContext context, String text, {String log = ""}) {
     }
   }
   FutureProvider.autoDispose((ref) {
-    if (!ref.read(dontShowErrorDialogProvider)) {
-      showDialog(
-        context: context,
-        builder: (_) {
-          return AlertDialog(
-            title: Text(AppLocalizations.of(context)!.errorDialog),
-            content: Text(text),
-            actions: [
-              if (log.isNotEmpty)
-                TextButton(
-                  child: Text(AppLocalizations.of(context)!.report),
-                  onPressed: () async {
-                    await copyToClipboard(context, log);
-                    /*
+    showDialog(
+      context: context,
+      builder: (_) {
+        return AlertDialog(
+          title: Text(AppLocalizations.of(context)!.errorDialog),
+          content: Text(text),
+          actions: [
+            if (log.isNotEmpty)
+              TextButton(
+                child: Text(AppLocalizations.of(context)!.report),
+                onPressed: () async {
+                  await copyToClipboard(context, log);
+                  /*
                     * To be fixed in the next stable version.
                     * if(context.mounted)
                     */
-                    // ignore: use_build_context_synchronously
-                    openInBrowser(context, Uri.https("github.com", "/vrc_manager/issues/new/choose"));
-                  },
-                ),
-              TextButton(
-                child: Text(AppLocalizations.of(context)!.ok),
-                onPressed: () => Navigator.pop(context),
+                  // ignore: use_build_context_synchronously
+                  openInBrowser(context, Uri.https("github.com", "/vrc_manager/issues/new/choose"));
+                },
               ),
-            ],
-          );
-        },
-      );
-    }
+            TextButton(
+              child: Text(AppLocalizations.of(context)!.ok),
+              onPressed: () => Navigator.pop(context),
+            ),
+          ],
+        );
+      },
+    );
   });
 }
 

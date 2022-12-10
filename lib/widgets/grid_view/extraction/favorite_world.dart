@@ -9,7 +9,7 @@ import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/assets/api/post.dart';
 import 'package:vrc_manager/assets/sort/worlds.dart';
 import 'package:vrc_manager/scenes/sub/world.dart';
-import 'package:vrc_manager/storage/grid_config.dart';
+import 'package:vrc_manager/storage/grid_modal.dart';
 import 'package:vrc_manager/widgets/grid_view/extraction/consumer.dart';
 import 'package:vrc_manager/widgets/grid_view/template/template.dart';
 import 'package:vrc_manager/widgets/modal/list_tile/main.dart';

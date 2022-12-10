@@ -7,7 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 // Project imports:
 import 'package:vrc_manager/data_class/modal.dart';
 import 'package:vrc_manager/scenes/main/main.dart';
-import 'package:vrc_manager/storage/grid_config.dart';
+import 'package:vrc_manager/storage/grid_modal.dart';
 
 abstract class ConsumerGridWidget extends ConsumerWidget {
   final GridConfigId id;
