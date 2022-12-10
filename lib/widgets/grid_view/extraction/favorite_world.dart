@@ -16,15 +16,13 @@ Widget extractionWorldDefault(
   List<VRChatFavoriteWorld> favoriteWorld,
 ) {
   return StatefulBuilder(
-    builder: (BuildContext context, setState) => renderGrid(
-      context,
+    builder: (BuildContext context, setState) => RenderGrid(
       width: 600,
       height: 130,
       children: [
         for (VRChatFavoriteWorld world in favoriteWorld)
           () {
-            return genericTemplate(
-              context,
+            return GenericTemplate(
               imageUrl: world.thumbnailImageUrl,
               onTap: () => Navigator.push(
                   context,
@@ -32,6 +30,19 @@ Widget extractionWorldDefault(
                     builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id),
                   )),
               onLongPress: () => modalBottom(context, [favoriteListTileWidget(context, world)]),
+              right: config.removeButton
+                  ? [
+                      SizedBox(
+                        width: 50,
+                        child: IconButton(
+                          constraints: const BoxConstraints(),
+                          padding: const EdgeInsets.all(0),
+                          onPressed: () => delete(context, world, favoriteWorld).then((value) => setState(() {})),
+                          icon: const Icon(Icons.delete),
+                        ),
+                      ),
+                    ]
+                  : null,
               children: [
                 SizedBox(
                   child: Text(
@@ -46,19 +57,6 @@ Widget extractionWorldDefault(
                   ),
                 ),
               ],
-              right: config.removeButton
-                  ? [
-                      SizedBox(
-                        width: 50,
-                        child: IconButton(
-                          constraints: const BoxConstraints(),
-                          padding: const EdgeInsets.all(0),
-                          onPressed: () => delete(context, world, favoriteWorld).then((value) => setState(() {})),
-                          icon: const Icon(Icons.delete),
-                        ),
-                      ),
-                    ]
-                  : null,
             );
           }(),
       ],
@@ -72,15 +70,13 @@ Widget extractionWorldSimple(
   List<VRChatFavoriteWorld> favoriteWorld,
 ) {
   return StatefulBuilder(
-    builder: (BuildContext context, _) => renderGrid(
-      context,
+    builder: (BuildContext context, _) => RenderGrid(
       width: 320,
       height: 64,
       children: [
         for (VRChatFavoriteWorld world in favoriteWorld)
           () {
-            return genericTemplate(
-              context,
+            return GenericTemplate(
               imageUrl: world.thumbnailImageUrl,
               half: true,
               onTap: () => Navigator.push(
@@ -89,21 +85,6 @@ Widget extractionWorldSimple(
                     builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id),
                   )),
               onLongPress: () => modalBottom(context, [favoriteListTileWidget(context, world)]),
-              children: [
-                SizedBox(
-                  width: double.infinity,
-                  child: Text(
-                    world.name,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 2,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 10,
-                      height: 1,
-                    ),
-                  ),
-                ),
-              ],
               stack: config.removeButton
                   ? [
                       SizedBox(
@@ -128,6 +109,21 @@ Widget extractionWorldSimple(
                       ),
                     ]
                   : null,
+              children: [
+                SizedBox(
+                  width: double.infinity,
+                  child: Text(
+                    world.name,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 2,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 10,
+                      height: 1,
+                    ),
+                  ),
+                ),
+              ],
             );
           }(),
       ],

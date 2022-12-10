@@ -22,16 +22,14 @@ Widget extractionUserDefault(
   return Consumer(
     builder: (context, ref, _) {
       status ??= VRChatFriendStatus(isFriend: false, incomingRequest: false, outgoingRequest: false);
-      return renderGrid(
-        context,
+      return RenderGrid(
         width: 600,
         height: config.worldDetails ? 235 : 130,
         children: [
           for (VRChatUser user in userList)
             () {
               if (["private", "offline", "traveling"].contains(user.location) && config.joinable) return null;
-              return genericTemplate(
-                context,
+              return GenericTemplate(
                 imageUrl: user.profilePicOverride ?? user.currentAvatarThumbnailImageUrl,
                 onTap: () => Navigator.push(
                     context,
@@ -59,16 +57,14 @@ Widget extractionUserSimple(
   return Consumer(
     builder: (context, ref, _) {
       status ??= VRChatFriendStatus(isFriend: false, incomingRequest: false, outgoingRequest: false);
-      return renderGrid(
-        context,
+      return RenderGrid(
         width: 320,
         height: config.worldDetails ? 119 : 64,
         children: [
           for (VRChatUser user in userList)
             () {
               if (["private", "offline", "traveling"].contains(user.location) && config.joinable) return null;
-              return genericTemplate(
-                context,
+              return GenericTemplate(
                 imageUrl: user.profilePicOverride ?? user.currentAvatarThumbnailImageUrl,
                 half: true,
                 onTap: () => Navigator.push(
@@ -102,16 +98,14 @@ Widget extractionUserText(
   return Consumer(
     builder: (context, ref, _) {
       status ??= VRChatFriendStatus(isFriend: false, incomingRequest: false, outgoingRequest: false);
-      return renderGrid(
-        context,
+      return RenderGrid(
         width: 400,
         height: config.worldDetails ? 39 : 26,
         children: [
           for (VRChatUser user in userList)
             () {
               if (["private", "offline", "traveling"].contains(user.location) && config.joinable) return null;
-              return genericTemplateText(
-                context,
+              return GenericTemplateText(
                 onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(

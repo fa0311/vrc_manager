@@ -10,8 +10,6 @@ import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets/api/get.dart';
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
-import 'package:vrc_manager/assets/sort/users.dart';
-import 'package:vrc_manager/data_class/modal.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/main/main.dart';
 import 'package:vrc_manager/storage/grid_config.dart';
@@ -21,7 +19,6 @@ class VRChatMobileFriendsData {
   Map<String, VRChatWorld?> locationMap;
   Map<String, VRChatInstance?> instanceMap;
   List<VRChatFriends> userList;
-  late GridConfigNotifier config;
 
   VRChatMobileFriendsData({
     required this.locationMap,
@@ -59,8 +56,7 @@ final vrchatMobileFriendsProvider = FutureProvider.family<VRChatMobileFriendsDat
 
 final vrchatMobileFriendsSortProvider = FutureProvider.family<VRChatMobileFriendsData, bool>((ref, offline) async {
   VRChatMobileFriendsData data = await ref.watch(vrchatMobileFriendsProvider(offline).future);
-  data.config = await ref.watch(gridConfigProvider(ref.read(gridConfigIdProvider)).future);
-  data.userList = sortUsers(data.config, data.userList);
+  await ref.watch(gridConfigProvider(offline ? GridConfigId.offlineFriends : GridConfigId.onlineFriends).future);
   return data;
 });
 
@@ -79,27 +75,14 @@ class VRChatMobileFriends extends ConsumerWidget {
         physics: const AlwaysScrollableScrollPhysics(),
         child: Container(
           alignment: Alignment.center,
-          child: Consumer(
-            builder: (context, ref, child) {
-              return data.when(
-                loading: () => const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()),
-                error: (err, stack) => Text('Error: $err\n$stack'),
-                data: (data) => Column(
-                  children: [
-                    () {
-                      switch (data.config.displayMode) {
-                        case DisplayMode.normal:
-                          return extractionFriendDefault(context, data.config, data.userList, data.locationMap, data.instanceMap);
-                        case DisplayMode.simple:
-                          return extractionFriendSimple(context, data.config, data.userList, data.locationMap, data.instanceMap);
-                        case DisplayMode.textOnly:
-                          return extractionFriendText(context, data.config, data.userList, data.locationMap, data.instanceMap);
-                      }
-                    }(),
-                  ],
-                ),
-              );
-            },
+          child: data.when(
+            loading: () => const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()),
+            error: (err, stack) => Text('Error: $err\n$stack'),
+            data: (data) => ExtractionFriend(
+                gridConfigId: offline ? GridConfigId.offlineFriends : GridConfigId.onlineFriends,
+                userList: data.userList,
+                locationMap: data.locationMap,
+                instanceMap: data.instanceMap),
           ),
         ),
       ),

@@ -22,8 +22,7 @@ Widget instanceWidget(
 }) {
   return Consumer(
     builder: (context, ref, _) {
-      return genericTemplate(
-        context,
+      return GenericTemplate(
         imageUrl: world.thumbnailImageUrl,
         card: card,
         half: half,
@@ -88,10 +87,10 @@ Widget privateWorld(
   bool card = true,
   bool half = false,
 }) {
-  return genericTemplate(
-    context,
+  return GenericTemplate(
     card: card,
     half: half,
+    imageUrl: "https://assets.vrchat.com/www/images/default_private_image.png",
     children: [
       SizedBox(
         width: double.infinity,
@@ -114,7 +113,6 @@ Widget privateWorld(
         ),
       ),
     ],
-    imageUrl: "https://assets.vrchat.com/www/images/default_private_image.png",
   );
 }
 
@@ -123,10 +121,10 @@ Widget travelingWorld(
   bool card = true,
   bool half = false,
 }) {
-  return genericTemplate(
-    context,
+  return GenericTemplate(
     card: card,
     half: half,
+    imageUrl: "https://assets.vrchat.com/www/images/normalbetween_image.png",
     children: [
       SizedBox(
         width: double.infinity,
@@ -149,6 +147,5 @@ Widget travelingWorld(
         ),
       ),
     ],
-    imageUrl: "https://assets.vrchat.com/www/images/normalbetween_image.png",
   );
 }

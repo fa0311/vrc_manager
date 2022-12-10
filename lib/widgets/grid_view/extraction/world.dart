@@ -9,20 +9,18 @@ import 'package:vrc_manager/widgets/grid_view/template/template.dart';
 import 'package:vrc_manager/widgets/modal/list_tile/main.dart';
 import 'package:vrc_manager/widgets/modal/list_tile/world.dart';
 
-GridView extractionWorldDefault(
+Widget extractionWorldDefault(
   BuildContext context,
   GridConfigNotifier config,
   List<VRChatLimitedWorld> worldList,
 ) {
-  return renderGrid(
-    context,
+  return RenderGrid(
     width: 600,
     height: 130,
     children: [
       for (VRChatLimitedWorld world in worldList)
         () {
-          return genericTemplate(
-            context,
+          return GenericTemplate(
             imageUrl: world.thumbnailImageUrl,
             onTap: () => Navigator.push(
                 context,
@@ -50,20 +48,18 @@ GridView extractionWorldDefault(
   );
 }
 
-GridView extractionWorldSimple(
+Widget extractionWorldSimple(
   BuildContext context,
   GridConfigNotifier config,
   List<VRChatLimitedWorld> worldList,
 ) {
-  return renderGrid(
-    context,
+  return RenderGrid(
     width: 320,
     height: 64,
     children: [
       for (VRChatLimitedWorld world in worldList)
         () {
-          return genericTemplate(
-            context,
+          return GenericTemplate(
             imageUrl: world.thumbnailImageUrl,
             half: true,
             onTap: () => Navigator.push(
@@ -93,20 +89,18 @@ GridView extractionWorldSimple(
   );
 }
 
-GridView extractionWorldText(
+Widget extractionWorldText(
   BuildContext context,
   GridConfigNotifier config,
   List<VRChatLimitedWorld> worldList,
 ) {
-  return renderGrid(
-    context,
+  return RenderGrid(
     width: 400,
     height: config.worldDetails ? 39 : 26,
     children: [
       for (VRChatLimitedWorld world in worldList)
         () {
-          return genericTemplateText(
-            context,
+          return GenericTemplateText(
             onTap: () => Navigator.push(
                 context,
                 MaterialPageRoute(

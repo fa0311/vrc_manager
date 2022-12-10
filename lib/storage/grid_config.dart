@@ -65,4 +65,4 @@ class GridConfigNotifier extends ChangeNotifier {
   }
 }
 
-final gridConfigProvider = FutureProvider.family<GridConfigNotifier, GridConfigId>((ref, id) async => GridConfigNotifier(id)..setConfig());
+final gridConfigProvider = FutureProvider.family<GridConfigNotifier, GridConfigId>((ref, id) => GridConfigNotifier(id)..setConfig());
