@@ -22,7 +22,7 @@ class VRChatMobileWorldFavoriteData {
 
 final vrchatMobileWorldFavoriteSortProvider = FutureProvider<VRChatMobileWorldFavoriteData>((ref) async {
   VRChatMobileWorldFavoriteData data = VRChatMobileWorldFavoriteData(worldList: appConfig.loggedAccount?.favoriteWorld ?? []);
-  data.config = await ref.watch(gridConfigProvider(ref.read(gridConfigIdProvider)).future);
+  data.config = ref.watch(gridConfigProvider(ref.read(gridConfigIdProvider)));
   for (FavoriteWorldData favoriteWorld in data.worldList) {
     sortWorlds(data.config, favoriteWorld.list);
   }

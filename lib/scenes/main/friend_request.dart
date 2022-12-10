@@ -45,7 +45,7 @@ final vrchatMobileFriendsProvider = FutureProvider<VRChatMobileFriendRequestData
 
 final vrchatMobileFriendsSortProvider = FutureProvider<VRChatMobileFriendRequestData>((ref) async {
   VRChatMobileFriendRequestData data = await ref.watch(vrchatMobileFriendsProvider.future);
-  data.config = await ref.watch(gridConfigProvider(ref.read(gridConfigIdProvider)).future);
+  data.config = await ref.watch(gridConfigProvider(ref.read(gridConfigIdProvider)));
   data.userList = sortUsers(data.config, data.userList);
   return data;
 });

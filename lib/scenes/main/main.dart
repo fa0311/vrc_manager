@@ -93,7 +93,7 @@ class VRChatMobileHome extends ConsumerWidget {
             icon: const Icon(Icons.more_vert),
             onPressed: () => showModalBottomSheetConsumerWidget(
               context: context,
-              builder: () => const GridModal(),
+              builder: () => GridModal(gridConfigId: ref.read(gridConfigIdProvider)),
             ),
           ),
         ],

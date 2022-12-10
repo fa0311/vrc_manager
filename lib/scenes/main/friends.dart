@@ -12,7 +12,6 @@ import 'package:vrc_manager/assets/api/get.dart';
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/main/main.dart';
-import 'package:vrc_manager/storage/grid_config.dart';
 import 'package:vrc_manager/widgets/grid_view/extraction/friends.dart';
 
 class VRChatMobileFriendsData {
@@ -54,12 +53,6 @@ final vrchatMobileFriendsProvider = FutureProvider.family<VRChatMobileFriendsDat
   return VRChatMobileFriendsData(locationMap: locationMap, instanceMap: instanceMap, userList: userList);
 });
 
-final vrchatMobileFriendsSortProvider = FutureProvider.family<VRChatMobileFriendsData, bool>((ref, offline) async {
-  VRChatMobileFriendsData data = await ref.watch(vrchatMobileFriendsProvider(offline).future);
-  await ref.watch(gridConfigProvider(offline ? GridConfigId.offlineFriends : GridConfigId.onlineFriends).future);
-  return data;
-});
-
 class VRChatMobileFriends extends ConsumerWidget {
   const VRChatMobileFriends({Key? key, this.offline = true}) : super(key: key);
   final bool offline;
@@ -67,7 +60,7 @@ class VRChatMobileFriends extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     textStream(context);
-    AsyncValue<VRChatMobileFriendsData> data = ref.watch(vrchatMobileFriendsSortProvider(offline));
+    AsyncValue<VRChatMobileFriendsData> data = ref.watch(vrchatMobileFriendsProvider(offline));
 
     return RefreshIndicator(
       onRefresh: () => ref.refresh(vrchatMobileFriendsProvider(offline).future),
@@ -79,10 +72,11 @@ class VRChatMobileFriends extends ConsumerWidget {
             loading: () => const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()),
             error: (err, stack) => Text('Error: $err\n$stack'),
             data: (data) => ExtractionFriend(
-                gridConfigId: offline ? GridConfigId.offlineFriends : GridConfigId.onlineFriends,
-                userList: data.userList,
-                locationMap: data.locationMap,
-                instanceMap: data.instanceMap),
+              gridConfigId: offline ? GridConfigId.offlineFriends : GridConfigId.onlineFriends,
+              userList: data.userList,
+              locationMap: data.locationMap,
+              instanceMap: data.instanceMap,
+            ),
           ),
         ),
       ),

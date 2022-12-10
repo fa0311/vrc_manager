@@ -90,7 +90,7 @@ final vrchatMobileSearchProvider = FutureProvider<VRChatMobileSearchData>((ref) 
 
 final vrchatMobileSearchSortProvider = FutureProvider<VRChatMobileSearchData>((ref) async {
   VRChatMobileSearchData data = await ref.watch(vrchatMobileSearchProvider.future);
-  data.config = await ref.watch(gridConfigProvider(ref.read(gridConfigIdProvider)).future);
+  data.config = ref.watch(gridConfigProvider(ref.read(gridConfigIdProvider)));
   data.userList = sortUsers(data.config, data.userList);
   return data;
 });

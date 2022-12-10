@@ -1,18 +1,10 @@
-// Flutter imports:
-
-// Package imports:
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-// Project imports:
 import 'package:vrc_manager/data_class/modal.dart';
 import 'package:vrc_manager/scenes/main/main.dart';
-import 'package:vrc_manager/scenes/main/search.dart';
 
-final gridModalProvider = StateProvider<GridModalConfig>((ref) {
-  GridConfigId gridConfigId = ref.watch(gridConfigIdProvider);
-  ref.watch(vrchatMobileSearchCounterProvider);
-  String searchingText = ref.read(searchBoxControllerProvider).text;
-
+GridModalConfig getGridModalConfig({
+  required GridConfigId gridConfigId,
+  required String searchingText,
+}) {
   switch (gridConfigId) {
     case GridConfigId.onlineFriends:
       return GridModalConfig()
@@ -103,4 +95,4 @@ final gridModalProvider = StateProvider<GridModalConfig>((ref) {
           SortMode.occupants,
         ];
   }
-});
+}

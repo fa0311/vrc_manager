@@ -13,9 +13,7 @@ class GridConfigNotifier extends ChangeNotifier {
   late bool worldDetails;
   late bool removeButton;
 
-  GridConfigNotifier(this.id);
-
-  Future setConfig() async {
+  GridConfigNotifier({required this.id}) {
     List<Future> futureList = [];
     futureList.add(getStorage("sort", id: id.name).then((String? value) => sortMode = SortMode.normal.get(value)));
     futureList.add(getStorage("display_mode", id: id.name).then((String? value) => displayMode = DisplayMode.normal.get(value)));
@@ -23,8 +21,7 @@ class GridConfigNotifier extends ChangeNotifier {
     futureList.add(getStorage("joinable", id: id.name).then((String? value) => joinable = (value == "true")));
     futureList.add(getStorage("world_details", id: id.name).then((String? value) => worldDetails = (value == "true")));
     futureList.add(getStorage("remove_button", id: id.name).then((String? value) => removeButton = (value == "true")));
-    notifyListeners();
-    return Future.wait(futureList);
+    Future.wait(futureList).then((_) => notifyListeners());
   }
 
   Future setSort(SortMode value) async {
@@ -36,7 +33,6 @@ class GridConfigNotifier extends ChangeNotifier {
   Future setDisplayMode(DisplayMode value) async {
     displayMode = value;
     notifyListeners();
-    print("aaaa");
     return await setStorage("display_mode", displayMode.name, id: id.name);
   }
 
@@ -65,4 +61,4 @@ class GridConfigNotifier extends ChangeNotifier {
   }
 }
 
-final gridConfigProvider = FutureProvider.family<GridConfigNotifier, GridConfigId>((ref, id) => GridConfigNotifier(id)..setConfig());
+final gridConfigProvider = ChangeNotifierProvider.family<GridConfigNotifier, GridConfigId>((ref, id) => GridConfigNotifier(id: id));
