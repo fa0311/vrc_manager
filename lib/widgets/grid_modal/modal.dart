@@ -8,6 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 // Project imports:
 import 'package:vrc_manager/data_class/modal.dart';
 import 'package:vrc_manager/scenes/main/main.dart';
+import 'package:vrc_manager/scenes/main/search.dart';
 import 'package:vrc_manager/storage/grid_config.dart';
 import 'package:vrc_manager/widgets/grid_modal/config.dart';
 import 'package:vrc_manager/widgets/modal.dart';
@@ -15,8 +16,6 @@ import 'package:vrc_manager/widgets/share.dart';
 
 // Package imports:
 
-// Project imports:
-import 'package:vrc_manager/scenes/main/search.dart';
 
 RoundedRectangleBorder getGridShape() {
   return const RoundedRectangleBorder(

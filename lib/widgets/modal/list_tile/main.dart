@@ -1,5 +1,7 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
+
+// Project imports:
 import 'package:vrc_manager/widgets/modal.dart';
 
 Future modalBottom(BuildContext context, List<Widget> children) {
