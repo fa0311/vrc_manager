@@ -1,15 +1,11 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
+import 'package:vrc_manager/widgets/modal.dart';
 
 Future modalBottom(BuildContext context, List<Widget> children) {
-  return showModalBottomSheet(
+  return showModalBottomSheetConsumerWidget(
     context: context,
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(
-        top: Radius.circular(15),
-      ),
-    ),
-    builder: (BuildContext context) => SingleChildScrollView(
+    builder: () => SingleChildScrollView(
       child: Column(
         children: children,
       ),

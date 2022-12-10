@@ -13,6 +13,7 @@ import 'package:vrc_manager/api/enum/region.dart';
 import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets/error.dart';
 import 'package:vrc_manager/main.dart';
+import 'package:vrc_manager/widgets/modal.dart';
 import 'package:vrc_manager/widgets/modal/list_tile/main.dart';
 import 'package:vrc_manager/widgets/modal/list_tile/share.dart';
 import 'package:vrc_manager/widgets/region.dart';
@@ -63,14 +64,9 @@ launchWorld(BuildContext context, VRChatLimitedWorld world) {
     );
   }
 
-  showModalBottomSheet(
+  showModalBottomSheetConsumerWidget(
     context: context,
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(
-        top: Radius.circular(15),
-      ),
-    ),
-    builder: (BuildContext context) => SingleChildScrollView(
+    builder: () => SingleChildScrollView(
       child: Column(
         children: children,
       ),
@@ -79,14 +75,9 @@ launchWorld(BuildContext context, VRChatLimitedWorld world) {
 }
 
 selectWordType(BuildContext context, VRChatLimitedWorld world, String regionText) {
-  showModalBottomSheet(
+  showModalBottomSheetConsumerWidget(
     context: context,
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(
-        top: Radius.circular(15),
-      ),
-    ),
-    builder: (BuildContext _) => SingleChildScrollView(
+    builder: () => SingleChildScrollView(
       child: Column(
         children: [
           ListTile(

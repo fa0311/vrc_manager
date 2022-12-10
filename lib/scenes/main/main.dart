@@ -11,8 +11,8 @@ import 'package:vrc_manager/scenes/main/friends.dart';
 import 'package:vrc_manager/scenes/main/search.dart';
 import 'package:vrc_manager/scenes/main/worlds_favorite.dart';
 import 'package:vrc_manager/widgets/drawer.dart';
-import 'package:vrc_manager/widgets/modal.dart';
 import 'package:vrc_manager/widgets/grid_modal/modal.dart';
+import 'package:vrc_manager/widgets/modal.dart';
 
 final currentIndexProvider = StateProvider<CurrentIndex>((ref) => CurrentIndex.online);
 final gridConfigIdProvider = StateProvider<GridConfigId>((ref) => GridConfigId.onlineFriends);

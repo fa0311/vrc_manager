@@ -12,6 +12,7 @@ import 'package:vrc_manager/scenes/main/main.dart';
 import 'package:vrc_manager/scenes/main/settings.dart';
 import 'package:vrc_manager/scenes/setting/other_account.dart';
 import 'package:vrc_manager/scenes/sub/login.dart';
+import 'package:vrc_manager/widgets/modal.dart';
 
 Widget getAccountList() {
   AccountConfig? login;
@@ -103,14 +104,9 @@ Drawer drawer() {
                   title: Text(AppLocalizations.of(context)!.setting),
                 ),
                 ListTile(
-                  onTap: () => showModalBottomSheet(
+                  onTap: () => showModalBottomSheetConsumerWidget(
                     context: context,
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.vertical(
-                        top: Radius.circular(15),
-                      ),
-                    ),
-                    builder: (_) => getAccountList(),
+                    builder: () => getAccountList(),
                   ),
                   leading: const Icon(Icons.account_circle),
                   title: Text(AppLocalizations.of(context)!.accountSwitch),
@@ -130,14 +126,9 @@ Drawer drawer() {
                     icon: const Icon(Icons.settings),
                   ),
                   IconButton(
-                    onPressed: () => showModalBottomSheet(
+                    onPressed: () => showModalBottomSheetConsumerWidget(
                       context: context,
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.vertical(
-                          top: Radius.circular(15),
-                        ),
-                      ),
-                      builder: (_) => getAccountList(),
+                      builder: () => getAccountList(),
                     ),
                     icon: const Icon(Icons.account_circle),
                   ),
@@ -192,14 +183,9 @@ Drawer simpleDrawer() {
                     title: Text(AppLocalizations.of(context)!.setting),
                   ),
                   ListTile(
-                    onTap: () => showModalBottomSheet(
+                    onTap: () => showModalBottomSheetConsumerWidget(
                       context: context,
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.vertical(
-                          top: Radius.circular(15),
-                        ),
-                      ),
-                      builder: (_) => getAccountList(),
+                      builder: () => getAccountList(),
                     ),
                     leading: const Icon(Icons.account_circle),
                     title: Text(AppLocalizations.of(context)!.accountSwitch),
