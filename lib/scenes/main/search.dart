@@ -8,11 +8,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 // Project imports:
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
-import 'package:vrc_manager/assets/flutter/text_stream.dart';
-import 'package:vrc_manager/assets/sort/users.dart';
 import 'package:vrc_manager/data_class/modal.dart';
 import 'package:vrc_manager/main.dart';
-import 'package:vrc_manager/scenes/main/main.dart';
 import 'package:vrc_manager/storage/grid_config.dart';
 import 'package:vrc_manager/widgets/grid_view/extraction/user.dart';
 import 'package:vrc_manager/widgets/grid_view/extraction/world.dart';
@@ -88,19 +85,11 @@ final vrchatMobileSearchProvider = FutureProvider<VRChatMobileSearchData>((ref) 
   return VRChatMobileSearchData(userList: userList, worldList: worldList);
 });
 
-final vrchatMobileSearchSortProvider = FutureProvider<VRChatMobileSearchData>((ref) async {
-  VRChatMobileSearchData data = await ref.watch(vrchatMobileSearchProvider.future);
-  data.config = ref.watch(gridConfigProvider(ref.read(gridConfigIdProvider)));
-  data.userList = sortUsers(data.config, data.userList);
-  return data;
-});
-
 class VRChatMobileSearch extends ConsumerWidget {
   const VRChatMobileSearch({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    textStream(context);
     ref.watch(vrchatMobileSearchCounterProvider);
     return RefreshIndicator(
       onRefresh: () => ref.refresh(vrchatMobileSearchProvider.future),
@@ -184,8 +173,7 @@ class VRChatMobileSearchResult extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    AsyncValue<VRChatMobileSearchData> data = ref.watch(vrchatMobileSearchSortProvider);
-    textStream(context);
+    AsyncValue<VRChatMobileSearchData> data = ref.watch(vrchatMobileSearchProvider);
     return data.when(
       loading: () => const Center(child: CircularProgressIndicator()),
       error: (err, stack) => Text('Error: $err'),

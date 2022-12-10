@@ -9,7 +9,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets/api/get.dart';
-import 'package:vrc_manager/assets/flutter/text_stream.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/main/main.dart';
 import 'package:vrc_manager/widgets/grid_view/extraction/friends.dart';
@@ -59,7 +58,6 @@ class VRChatMobileFriends extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    textStream(context);
     AsyncValue<VRChatMobileFriendsData> data = ref.watch(vrchatMobileFriendsProvider(offline));
 
     return RefreshIndicator(

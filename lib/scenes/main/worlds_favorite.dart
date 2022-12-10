@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
-import 'package:vrc_manager/assets/flutter/text_stream.dart';
 import 'package:vrc_manager/assets/sort/worlds_favorite.dart';
 import 'package:vrc_manager/data_class/app_config.dart';
 import 'package:vrc_manager/data_class/modal.dart';
@@ -34,7 +33,6 @@ class VRChatMobileWorldsFavorite extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    textStream(context);
     AsyncValue<VRChatMobileWorldFavoriteData> data = ref.watch(vrchatMobileWorldFavoriteSortProvider);
 
     return SingleChildScrollView(

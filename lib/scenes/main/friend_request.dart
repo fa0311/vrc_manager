@@ -8,11 +8,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 // Project imports:
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
-import 'package:vrc_manager/assets/flutter/text_stream.dart';
-import 'package:vrc_manager/assets/sort/users.dart';
 import 'package:vrc_manager/data_class/modal.dart';
 import 'package:vrc_manager/main.dart';
-import 'package:vrc_manager/scenes/main/main.dart';
 import 'package:vrc_manager/storage/grid_config.dart';
 import 'package:vrc_manager/widgets/grid_view/extraction/user.dart';
 
@@ -43,21 +40,12 @@ final vrchatMobileFriendsProvider = FutureProvider<VRChatMobileFriendRequestData
   return VRChatMobileFriendRequestData(userList: userList);
 });
 
-final vrchatMobileFriendsSortProvider = FutureProvider<VRChatMobileFriendRequestData>((ref) async {
-  VRChatMobileFriendRequestData data = await ref.watch(vrchatMobileFriendsProvider.future);
-  data.config = await ref.watch(gridConfigProvider(ref.read(gridConfigIdProvider)));
-  data.userList = sortUsers(data.config, data.userList);
-  return data;
-});
-
 class VRChatMobileFriendRequest extends ConsumerWidget {
   const VRChatMobileFriendRequest({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    textStream(context);
-    AsyncValue<VRChatMobileFriendRequestData> data = ref.watch(vrchatMobileFriendsSortProvider);
-
+    AsyncValue<VRChatMobileFriendRequestData> data = ref.watch(vrchatMobileFriendsProvider);
     VRChatFriendStatus status = VRChatFriendStatus(isFriend: false, incomingRequest: true, outgoingRequest: false);
 
     return SingleChildScrollView(
