@@ -9,8 +9,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/main.dart';
-import 'package:vrc_manager/scenes/main/main.dart';
 import 'package:vrc_manager/storage/grid_modal.dart';
+import 'package:vrc_manager/widgets/grid_modal/config.dart';
 import 'package:vrc_manager/widgets/grid_view/extraction/user.dart';
 import 'package:vrc_manager/widgets/grid_view/extraction/world.dart';
 import 'package:vrc_manager/widgets/modal.dart';
@@ -185,10 +185,10 @@ class VRChatMobileSearchResult extends ConsumerWidget {
         List<VRChatUser> userList = data.userList;
         List<VRChatLimitedWorld> worldList = data.worldList;
         if (userList.isNotEmpty) {
-          return ExtractionUser(id: GridConfigId.searchUsers, userList: data.userList, status: null);
+          return ExtractionUser(id: GridModalConfigType.searchUsers, userList: data.userList, status: null);
         }
         if (worldList.isNotEmpty) {
-          return ExtractionWorld(id: GridConfigId.searchWorlds, worldList: worldList);
+          return ExtractionWorld(id: GridModalConfigType.searchWorlds, worldList: worldList);
         }
         return Container();
       },

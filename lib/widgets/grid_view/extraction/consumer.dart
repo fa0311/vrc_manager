@@ -6,11 +6,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
 import 'package:vrc_manager/data_class/modal.dart';
-import 'package:vrc_manager/scenes/main/main.dart';
 import 'package:vrc_manager/storage/grid_modal.dart';
+import 'package:vrc_manager/widgets/grid_modal/config.dart';
 
 abstract class ConsumerGridWidget extends ConsumerWidget {
-  final GridConfigId id;
+  final GridModalConfigType id;
   const ConsumerGridWidget({super.key, required this.id});
 
   Widget normal(BuildContext context, WidgetRef ref, GridConfigNotifier config) {

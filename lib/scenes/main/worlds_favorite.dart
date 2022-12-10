@@ -8,7 +8,7 @@ import 'package:vrc_manager/api/main.dart';
 
 // Project imports:
 import 'package:vrc_manager/main.dart';
-import 'package:vrc_manager/scenes/main/main.dart';
+import 'package:vrc_manager/widgets/grid_modal/config.dart';
 import 'package:vrc_manager/widgets/grid_view/extraction/favorite_world.dart';
 
 class VRChatMobileWorldFavoriteData {
@@ -78,7 +78,7 @@ class VRChatMobileWorldsFavorite extends ConsumerWidget {
                 for (FavoriteWorldData favoriteWorld in data.favoriteWorld)
                   if (favoriteWorld.list.isNotEmpty) ...[
                     Text(favoriteWorld.group.displayName),
-                    ExtractionFavoriteWorld(id: GridConfigId.favoriteWorlds, favoriteWorld: favoriteWorld.list),
+                    ExtractionFavoriteWorld(id: GridModalConfigType.favoriteWorlds, favoriteWorld: favoriteWorld.list),
                   ],
               ]);
             },

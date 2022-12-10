@@ -11,11 +11,12 @@ import 'package:vrc_manager/scenes/main/friends.dart';
 import 'package:vrc_manager/scenes/main/search.dart';
 import 'package:vrc_manager/scenes/main/worlds_favorite.dart';
 import 'package:vrc_manager/widgets/drawer.dart';
+import 'package:vrc_manager/widgets/grid_modal/config.dart';
 import 'package:vrc_manager/widgets/grid_modal/modal.dart';
 import 'package:vrc_manager/widgets/modal.dart';
 
 final currentIndexProvider = StateProvider<CurrentIndex>((ref) => CurrentIndex.online);
-final gridConfigIdProvider = StateProvider<GridConfigId>((ref) => GridConfigId.onlineFriends);
+final gridModalConfigIdProvider = StateProvider<GridModalConfigType>((ref) => GridModalConfigType.onlineFriends);
 
 enum CurrentIndex {
   online(icon: Icons.wb_sunny),
@@ -47,15 +48,6 @@ enum CurrentIndex {
   const CurrentIndex({required this.icon});
 }
 
-enum GridConfigId {
-  onlineFriends,
-  offlineFriends,
-  friendsRequest,
-  searchUsers,
-  searchWorlds,
-  favoriteWorlds;
-}
-
 class VRChatMobileHome extends ConsumerWidget {
   const VRChatMobileHome({Key? key}) : super(key: key);
 
@@ -68,20 +60,20 @@ class VRChatMobileHome extends ConsumerWidget {
     getGridConfig(CurrentIndex currentIndex) {
       switch (currentIndex) {
         case CurrentIndex.online:
-          return GridConfigId.onlineFriends;
+          return GridModalConfigType.onlineFriends;
         case CurrentIndex.offline:
-          return GridConfigId.offlineFriends;
+          return GridModalConfigType.offlineFriends;
         case CurrentIndex.notify:
-          return GridConfigId.friendsRequest;
+          return GridModalConfigType.friendsRequest;
         case CurrentIndex.search:
           switch (ref.read(vrchatMobileSearchModeProvider)) {
             case SearchMode.users:
-              return GridConfigId.searchUsers;
+              return GridModalConfigType.searchUsers;
             case SearchMode.worlds:
-              return GridConfigId.searchWorlds;
+              return GridModalConfigType.searchWorlds;
           }
         case CurrentIndex.favorite:
-          return GridConfigId.favoriteWorlds;
+          return GridModalConfigType.favoriteWorlds;
       }
     }
 
@@ -93,7 +85,7 @@ class VRChatMobileHome extends ConsumerWidget {
             icon: const Icon(Icons.more_vert),
             onPressed: () => showModalBottomSheetStatelessWidget(
               context: context,
-              builder: () => GridModal(gridConfigId: ref.read(gridConfigIdProvider)),
+              builder: () => GridModal(type: ref.read(gridModalConfigIdProvider)),
             ),
           ),
         ],
@@ -105,7 +97,7 @@ class VRChatMobileHome extends ConsumerWidget {
           children: [for (CurrentIndex scene in CurrentIndex.values) scene.toWidget()],
           onPageChanged: (int index) {
             ref.read(currentIndexProvider.notifier).state = CurrentIndex.values[index];
-            ref.read(gridConfigIdProvider.notifier).state = getGridConfig(CurrentIndex.values[index]);
+            ref.read(gridModalConfigIdProvider.notifier).state = getGridConfig(CurrentIndex.values[index]);
           },
         ),
       ),

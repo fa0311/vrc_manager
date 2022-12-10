@@ -55,12 +55,3 @@ enum DisplayMode {
     }
   }
 }
-
-class GridModalConfig {
-  List<SortMode> sortMode = [];
-  List<DisplayMode> displayMode = [];
-  bool worldDetails = false;
-  bool joinable = false;
-  bool removeButton = false;
-  Uri? url;
-}

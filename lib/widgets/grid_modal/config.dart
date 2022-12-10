@@ -1,14 +1,31 @@
 // Project imports:
 import 'package:vrc_manager/data_class/modal.dart';
-import 'package:vrc_manager/scenes/main/main.dart';
 
-GridModalConfig getGridModalConfig({
-  required GridConfigId gridConfigId,
-  required String searchingText,
+enum GridModalConfigType {
+  onlineFriends,
+  offlineFriends,
+  friendsRequest,
+  searchUsers,
+  searchWorlds,
+  favoriteWorlds;
+}
+
+class GridModalConfigData {
+  List<SortMode> sortMode = [];
+  List<DisplayMode> displayMode = [];
+  bool worldDetails = false;
+  bool joinable = false;
+  bool removeButton = false;
+  Uri? url;
+}
+
+GridModalConfigData getGridModalConfig({
+  required GridModalConfigType type,
+  required String text,
 }) {
-  switch (gridConfigId) {
-    case GridConfigId.onlineFriends:
-      return GridModalConfig()
+  switch (type) {
+    case GridModalConfigType.onlineFriends:
+      return GridModalConfigData()
         ..url = Uri.https("vrchat.com", "/home/locations")
         ..joinable = true
         ..worldDetails = true
@@ -23,8 +40,8 @@ GridModalConfig getGridModalConfig({
           DisplayMode.simple,
           DisplayMode.textOnly,
         ];
-    case GridConfigId.offlineFriends:
-      return GridModalConfig()
+    case GridModalConfigType.offlineFriends:
+      return GridModalConfigData()
         ..url = Uri.https("vrchat.com", "/home/locations")
         ..sortMode = [
           SortMode.normal,
@@ -36,8 +53,8 @@ GridModalConfig getGridModalConfig({
           DisplayMode.simple,
           DisplayMode.textOnly,
         ];
-    case GridConfigId.friendsRequest:
-      return GridModalConfig()
+    case GridModalConfigType.friendsRequest:
+      return GridModalConfigData()
         ..url = Uri.https("vrchat.com", "/home/messages")
         ..sortMode = [
           SortMode.normal,
@@ -48,9 +65,9 @@ GridModalConfig getGridModalConfig({
           DisplayMode.simple,
           DisplayMode.textOnly,
         ];
-    case GridConfigId.searchUsers:
-      return GridModalConfig()
-        ..url = Uri.https("vrchat.com", "/home/search/$searchingText")
+    case GridModalConfigType.searchUsers:
+      return GridModalConfigData()
+        ..url = Uri.https("vrchat.com", "/home/search/$text")
         ..displayMode = [
           DisplayMode.normal,
           DisplayMode.simple,
@@ -60,9 +77,9 @@ GridModalConfig getGridModalConfig({
           SortMode.normal,
           SortMode.name,
         ];
-    case GridConfigId.searchWorlds:
-      return GridModalConfig()
-        ..url = Uri.https("vrchat.com", "/home/search/$searchingText")
+    case GridModalConfigType.searchWorlds:
+      return GridModalConfigData()
+        ..url = Uri.https("vrchat.com", "/home/search/$text")
         ..displayMode = [
           DisplayMode.normal,
           DisplayMode.simple,
@@ -77,8 +94,8 @@ GridModalConfig getGridModalConfig({
           SortMode.capacity,
           SortMode.occupants,
         ];
-    case GridConfigId.favoriteWorlds:
-      return GridModalConfig()
+    case GridModalConfigType.favoriteWorlds:
+      return GridModalConfigData()
         ..url = Uri.https("vrchat.com", "/home/worlds")
         ..removeButton = true
         ..displayMode = [

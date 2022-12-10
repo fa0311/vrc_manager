@@ -10,7 +10,7 @@ import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets/api/get.dart';
 import 'package:vrc_manager/main.dart';
-import 'package:vrc_manager/scenes/main/main.dart';
+import 'package:vrc_manager/widgets/grid_modal/config.dart';
 import 'package:vrc_manager/widgets/grid_view/extraction/friends.dart';
 
 class VRChatMobileFriendsData {
@@ -70,7 +70,7 @@ class VRChatMobileFriends extends ConsumerWidget {
             loading: () => const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()),
             error: (err, stack) => Text('Error: $err\n$stack'),
             data: (data) => ExtractionFriend(
-              id: offline ? GridConfigId.offlineFriends : GridConfigId.onlineFriends,
+              id: offline ? GridModalConfigType.offlineFriends : GridModalConfigType.onlineFriends,
               userList: data.userList,
               locationMap: data.locationMap,
               instanceMap: data.instanceMap,

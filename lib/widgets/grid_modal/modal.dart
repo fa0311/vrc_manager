@@ -7,7 +7,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
 import 'package:vrc_manager/data_class/modal.dart';
-import 'package:vrc_manager/scenes/main/main.dart';
 import 'package:vrc_manager/scenes/main/search.dart';
 import 'package:vrc_manager/storage/grid_modal.dart';
 import 'package:vrc_manager/widgets/grid_modal/config.dart';
@@ -15,18 +14,18 @@ import 'package:vrc_manager/widgets/modal.dart';
 import 'package:vrc_manager/widgets/share.dart';
 
 class GridModal extends ConsumerWidget {
-  final GridConfigId gridConfigId;
+  final GridModalConfigType type;
 
   const GridModal({
     super.key,
-    required this.gridConfigId,
+    required this.type,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     String searchingText = ref.read(searchBoxControllerProvider).text;
-    GridConfigNotifier config = ref.watch(gridConfigProvider(gridConfigId));
-    GridModalConfig gridModalConfig = getGridModalConfig(gridConfigId: gridConfigId, searchingText: searchingText);
+    GridConfigNotifier config = ref.watch(gridConfigProvider(type));
+    GridModalConfigData gridModalConfig = getGridModalConfig(type: type, text: searchingText);
     return Column(
       children: <Widget>[
         if (gridModalConfig.sortMode.isNotEmpty)
@@ -35,7 +34,7 @@ class GridModal extends ConsumerWidget {
             subtitle: Text(config.sortMode.toLocalization(context)),
             onTap: () => showModalBottomSheetStatelessWidget(
               context: context,
-              builder: () => GridSortModal(gridConfigId: gridConfigId),
+              builder: () => GridSortModal(type: type),
             ),
           ),
         if (gridModalConfig.displayMode.isNotEmpty)
@@ -44,7 +43,7 @@ class GridModal extends ConsumerWidget {
             subtitle: Text(config.displayMode.toLocalization(context)),
             onTap: () => showModalBottomSheetStatelessWidget(
               context: context,
-              builder: () => GridDisplayModeModal(gridConfigId: gridConfigId),
+              builder: () => GridDisplayModeModal(type: type),
             ),
           ),
         if (gridModalConfig.joinable)
@@ -79,19 +78,19 @@ class GridModal extends ConsumerWidget {
 }
 
 class GridSortModal extends ConsumerWidget {
-  final GridConfigId gridConfigId;
+  final GridModalConfigType type;
 
   const GridSortModal({
     super.key,
-    required this.gridConfigId,
+    required this.type,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     ref.watch(vrchatMobileSearchCounterProvider);
     String searchingText = ref.read(searchBoxControllerProvider).text;
-    GridConfigNotifier config = ref.watch(gridConfigProvider(gridConfigId));
-    GridModalConfig gridModalConfig = getGridModalConfig(gridConfigId: gridConfigId, searchingText: searchingText);
+    GridConfigNotifier config = ref.watch(gridConfigProvider(type));
+    GridModalConfigData gridModalConfig = getGridModalConfig(type: type, text: searchingText);
 
     return SingleChildScrollView(
       child: Column(
@@ -113,16 +112,16 @@ class GridSortModal extends ConsumerWidget {
 }
 
 class GridDisplayModeModal extends ConsumerWidget {
-  final GridConfigId gridConfigId;
+  final GridModalConfigType type;
 
-  const GridDisplayModeModal({Key? key, required this.gridConfigId}) : super(key: key);
+  const GridDisplayModeModal({Key? key, required this.type}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     ref.watch(vrchatMobileSearchCounterProvider);
-    String searchingText = ref.read(searchBoxControllerProvider).text;
-    GridConfigNotifier config = ref.watch(gridConfigProvider(gridConfigId));
-    GridModalConfig gridModalConfig = getGridModalConfig(gridConfigId: gridConfigId, searchingText: searchingText);
+    String text = ref.read(searchBoxControllerProvider).text;
+    GridConfigNotifier config = ref.watch(gridConfigProvider(type));
+    GridModalConfigData gridModalConfig = getGridModalConfig(type: type, text: text);
 
     return SingleChildScrollView(
         child: Column(

@@ -9,7 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/main.dart';
-import 'package:vrc_manager/scenes/main/main.dart';
+import 'package:vrc_manager/widgets/grid_modal/config.dart';
 import 'package:vrc_manager/widgets/grid_view/extraction/user.dart';
 
 class VRChatMobileFriendRequestData {
@@ -55,7 +55,7 @@ class VRChatMobileFriendRequest extends ConsumerWidget {
           child: data.when(
             loading: () => const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()),
             error: (err, stack) => Text('Error: $err'),
-            data: (data) => ExtractionUser(id: GridConfigId.favoriteWorlds, userList: data.userList, status: status),
+            data: (data) => ExtractionUser(id: GridModalConfigType.favoriteWorlds, userList: data.userList, status: status),
           ),
         ),
       ),
