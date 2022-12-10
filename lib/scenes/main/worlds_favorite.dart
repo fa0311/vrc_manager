@@ -27,10 +27,13 @@ class VRChatMobileWorldsFavorite extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     AsyncValue<VRChatMobileWorldFavoriteData> data = ref.watch(vrchatMobileWorldFavoriteSortProvider);
 
-    return SingleChildScrollView(
-      child: Consumer(
-        builder: (context, ref, child) {
-          return data.when(
+    return RefreshIndicator(
+      onRefresh: () => ref.refresh(vrchatMobileWorldFavoriteSortProvider.future),
+      child: SingleChildScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        child: Container(
+          alignment: Alignment.center,
+          child: data.when(
             loading: () => const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()),
             error: (err, stack) => Text('Error: $err'),
             data: (data) {
@@ -42,8 +45,8 @@ class VRChatMobileWorldsFavorite extends ConsumerWidget {
                   ],
               ]);
             },
-          );
-        },
+          ),
+        ),
       ),
     );
   }

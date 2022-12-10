@@ -46,17 +46,17 @@ class VRChatMobileFriendRequest extends ConsumerWidget {
     AsyncValue<VRChatMobileFriendRequestData> data = ref.watch(vrchatMobileFriendsProvider);
     VRChatFriendStatus status = VRChatFriendStatus(isFriend: false, incomingRequest: true, outgoingRequest: false);
 
-    return SingleChildScrollView(
-      child: Container(
-        alignment: Alignment.center,
-        child: Consumer(
-          builder: (context, ref, child) {
-            return data.when(
-              loading: () => const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()),
-              error: (err, stack) => Text('Error: $err'),
-              data: (data) => ExtractionUser(id: GridConfigId.favoriteWorlds, userList: data.userList, status: status),
-            );
-          },
+    return RefreshIndicator(
+      onRefresh: () => ref.refresh(vrchatMobileFriendsProvider.future),
+      child: SingleChildScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        child: Container(
+          alignment: Alignment.center,
+          child: data.when(
+            loading: () => const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()),
+            error: (err, stack) => Text('Error: $err'),
+            data: (data) => ExtractionUser(id: GridConfigId.favoriteWorlds, userList: data.userList, status: status),
+          ),
         ),
       ),
     );
