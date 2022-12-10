@@ -58,8 +58,6 @@ class VRChatMobileSplash extends ConsumerWidget {
 
     UserPolicyConfigNotifier userPolicyConfig = ref.watch(userPolicyConfigProvider);
 
-    userPolicyConfig.setAgree(false);
-
     appConfig.get(context, ref).then((_) async {
       if (!userPolicyConfig.agree) {
         goWebViewUserPolicy(context);
