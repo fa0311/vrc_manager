@@ -52,7 +52,6 @@ class _SettingAccountPageState extends State<VRChatMobileSettingsAccount> {
                             );
                             appConfig.loggedAccount?.removeCookie();
                           })),
-                  const Divider(),
                   ListTile(
                       title: Text(AppLocalizations.of(context)!.deleteLoginInfo),
                       subtitle: Text(AppLocalizations.of(context)!.deleteLoginInfoDetails),
@@ -67,7 +66,6 @@ class _SettingAccountPageState extends State<VRChatMobileSettingsAccount> {
                             appConfig.loggedAccount?.removeDisplayName();
                             appConfig.loggedAccount?.setRememberLoginInfo(false);
                           })),
-                  const Divider(),
                   ListTile(
                     title: Text(AppLocalizations.of(context)!.token),
                     subtitle: Text(AppLocalizations.of(context)!.tokenDetails),
@@ -80,7 +78,6 @@ class _SettingAccountPageState extends State<VRChatMobileSettingsAccount> {
                       )
                     },
                   ),
-                  const Divider(),
                   ListTile(
                     title: Text(AppLocalizations.of(context)!.accountSwitchSetting),
                     subtitle: Text(AppLocalizations.of(context)!.accountSwitchSettingDetails),

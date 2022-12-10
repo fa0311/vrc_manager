@@ -39,7 +39,6 @@ class VRChatMobileSettingsAccessibility extends ConsumerWidget {
                     builder: () => const LocaleModal(),
                   ),
                 ),
-                const Divider(),
                 ListTile(
                   title: Text(AppLocalizations.of(context)!.theme),
                   subtitle: Text(ref.read(themeBrightnessProvider).toLocalization(context)),
@@ -48,7 +47,6 @@ class VRChatMobileSettingsAccessibility extends ConsumerWidget {
                     builder: () => ThemeBrightnessModal(themeBrightnessProvider),
                   ),
                 ),
-                const Divider(),
                 ListTile(
                   title: Text(AppLocalizations.of(context)!.theme),
                   subtitle: Text(ref.read(darkThemeBrightnessProvider).toLocalization(context)),
@@ -57,7 +55,6 @@ class VRChatMobileSettingsAccessibility extends ConsumerWidget {
                     builder: () => ThemeBrightnessModal(darkThemeBrightnessProvider),
                   ),
                 ),
-                const Divider(),
                 SwitchListTile(
                   value: ref.read(dontShowErrorDialogProvider),
                   title: Text(AppLocalizations.of(context)!.dontShowErrorDialog),
@@ -65,7 +62,6 @@ class VRChatMobileSettingsAccessibility extends ConsumerWidget {
                   onChanged: (bool e) => ref.read(dontShowErrorDialogProvider.notifier).set(e),
                 ),
                 if (!Platform.isWindows) ...[
-                  const Divider(),
                   SwitchListTile(
                     value: ref.read(forceExternalBrowserProvider),
                     title: Text(AppLocalizations.of(context)!.forceExternalBrowser),
@@ -73,7 +69,6 @@ class VRChatMobileSettingsAccessibility extends ConsumerWidget {
                     onChanged: (bool e) => ref.read(forceExternalBrowserProvider.notifier).set(e),
                   )
                 ],
-                const Divider(),
                 SwitchListTile(
                   value: ref.read(debugModeProvider),
                   title: Text(AppLocalizations.of(context)!.debugMode),

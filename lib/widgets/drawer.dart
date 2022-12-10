@@ -170,7 +170,6 @@ Drawer simpleDrawer() {
               alignment: FractionalOffset.bottomCenter,
               child: Column(
                 children: <Widget>[
-                  const Divider(),
                   ListTile(
                     onTap: () => Navigator.pushAndRemoveUntil(
                       context,
