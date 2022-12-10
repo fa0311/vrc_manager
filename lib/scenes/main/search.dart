@@ -190,7 +190,7 @@ class VRChatMobileSearchResult extends ConsumerWidget {
         if (worldList.isNotEmpty) {
           return ExtractionWorld(id: GridConfigId.searchWorlds, worldList: worldList);
         }
-        return Column(children: const []);
+        return Container();
       },
     );
   }

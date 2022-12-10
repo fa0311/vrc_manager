@@ -14,15 +14,15 @@ abstract class ConsumerGridWidget extends ConsumerWidget {
   const ConsumerGridWidget({super.key, required this.id});
 
   Widget normal(BuildContext context, WidgetRef ref, GridConfigNotifier config) {
-    return Column();
+    return Container();
   }
 
   Widget simple(BuildContext context, WidgetRef ref, GridConfigNotifier config) {
-    return Column();
+    return Container();
   }
 
   Widget textOnly(BuildContext context, WidgetRef ref, GridConfigNotifier config) {
-    return Column();
+    return Container();
   }
 
   @override
