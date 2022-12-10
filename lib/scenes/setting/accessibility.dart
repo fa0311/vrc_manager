@@ -11,6 +11,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 // Project imports:
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
 import 'package:vrc_manager/data_class/app_config.dart';
+import 'package:vrc_manager/widgets/modal.dart';
 import 'package:vrc_manager/widgets/modal/locale.dart';
 import 'package:vrc_manager/widgets/modal/theme.dart';
 
@@ -33,20 +34,36 @@ class VRChatMobileSettingsAccessibility extends ConsumerWidget {
                 ListTile(
                   title: Text(AppLocalizations.of(context)!.language),
                   subtitle: Text(ref.read(languageCodeProvider).text),
-                  onTap: () => showLocaleModal(context),
+                  onTap: () => showModalBottomSheetStatelessWidget(
+                    context: context,
+                    builder: () => const LocaleModal(),
+                  ),
                 ),
                 const Divider(),
                 ListTile(
                   title: Text(AppLocalizations.of(context)!.theme),
                   subtitle: Text(ref.read(themeBrightnessProvider).toLocalization(context)),
-                  onTap: () => showThemeBrightnessModal(context, ref),
+                  onTap: () => showModalBottomSheetStatelessWidget(
+                    context: context,
+                    builder: () => ThemeBrightnessModal(themeBrightnessProvider),
+                  ),
+                ),
+                const Divider(),
+                ListTile(
+                  title: Text(AppLocalizations.of(context)!.theme),
+                  subtitle: Text(ref.read(darkThemeBrightnessProvider).toLocalization(context)),
+                  onTap: () => showModalBottomSheetStatelessWidget(
+                    context: context,
+                    builder: () => ThemeBrightnessModal(darkThemeBrightnessProvider),
+                  ),
                 ),
                 const Divider(),
                 SwitchListTile(
-                    value: ref.read(dontShowErrorDialogProvider),
-                    title: Text(AppLocalizations.of(context)!.dontShowErrorDialog),
-                    subtitle: Text(AppLocalizations.of(context)!.dontShowErrorDialogDetails),
-                    onChanged: (bool e) => ref.read(dontShowErrorDialogProvider.notifier).set(e)),
+                  value: ref.read(dontShowErrorDialogProvider),
+                  title: Text(AppLocalizations.of(context)!.dontShowErrorDialog),
+                  subtitle: Text(AppLocalizations.of(context)!.dontShowErrorDialogDetails),
+                  onChanged: (bool e) => ref.read(dontShowErrorDialogProvider.notifier).set(e),
+                ),
                 if (!Platform.isWindows) ...[
                   const Divider(),
                   SwitchListTile(

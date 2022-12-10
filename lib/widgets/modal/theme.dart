@@ -6,26 +6,27 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
 import 'package:vrc_manager/assets/theme/enum.dart';
-import 'package:vrc_manager/data_class/app_config.dart';
-import 'package:vrc_manager/widgets/modal.dart';
+import 'package:vrc_manager/data_class/notifier.dart';
 
-Future showThemeBrightnessModal(BuildContext context, WidgetRef ref) {
-  return showModalBottomSheetStateless(
-    context: context,
-    builder: (context, ref, _) {
-      final themeBrightness = ref.watch(themeBrightnessProvider);
-      return Column(
-        children: <Widget>[
-          for (ThemeBrightness value in ThemeBrightness.values)
-            ListTile(
-              title: Text(value.toLocalization(context)),
-              trailing: themeBrightness == value ? const Icon(Icons.check) : null,
-              onTap: () {
-                ref.read(themeBrightnessProvider.notifier).set(value);
-              },
-            ),
-        ],
-      );
-    },
-  );
+class ThemeBrightnessModal extends ConsumerWidget {
+  final StateNotifierProvider<ThemeBrightnessNotifier, ThemeBrightness> provider;
+
+  const ThemeBrightnessModal(this.provider, {super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final themeBrightness = ref.watch(provider);
+    return Column(
+      children: <Widget>[
+        for (ThemeBrightness value in ThemeBrightness.values)
+          ListTile(
+            title: Text(value.toLocalization(context)),
+            trailing: themeBrightness == value ? const Icon(Icons.check) : null,
+            onTap: () {
+              ref.read(provider.notifier).set(value);
+            },
+          ),
+      ],
+    );
+  }
 }

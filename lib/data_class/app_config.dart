@@ -18,6 +18,7 @@ final agreedUserPolicyProvider = StateNotifierProvider<BooleanNotifier, bool>((_
 final forceExternalBrowserProvider = StateNotifierProvider<BooleanNotifier, bool>((_) => BooleanNotifier("force_external_browser"));
 final debugModeProvider = StateNotifierProvider<BooleanNotifier, bool>((_) => BooleanNotifier("debug_mode"));
 final themeBrightnessProvider = StateNotifierProvider<ThemeBrightnessNotifier, ThemeBrightness>((_) => ThemeBrightnessNotifier("theme_brightness"));
+final darkThemeBrightnessProvider = StateNotifierProvider<ThemeBrightnessNotifier, ThemeBrightness>((_) => ThemeBrightnessNotifier("dark_theme_brightness"));
 final languageCodeProvider = StateNotifierProvider<LanguageCodeNotifier, LanguageCode>((_) => LanguageCodeNotifier("language_code"));
 
 class AppConfig {
@@ -31,16 +32,8 @@ class AppConfig {
     String? accountUid;
 
     await Future.wait([
-      ref.read(themeBrightnessProvider.notifier).get(),
-      ref.read(languageCodeProvider.notifier).get(),
-    ]);
-    await Future.wait([
       getStorage("account_index").then((value) => accountUid = value),
       getStorageList("account_index_list").then((List<String> value) => uidList = value),
-      ref.read(dontShowErrorDialogProvider.notifier).get(),
-      ref.read(agreedUserPolicyProvider.notifier).get(),
-      ref.read(forceExternalBrowserProvider.notifier).get(),
-      ref.read(debugModeProvider.notifier).get(),
     ]);
 
     List<Future> futureList = [];

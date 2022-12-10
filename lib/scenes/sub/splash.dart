@@ -56,6 +56,14 @@ class VRChatMobileSplash extends ConsumerWidget {
       ref.read(gridConfigProvider(id));
     }
 
+    ref.read(themeBrightnessProvider.notifier);
+    ref.read(darkThemeBrightnessProvider.notifier);
+    ref.read(languageCodeProvider.notifier);
+    ref.read(dontShowErrorDialogProvider.notifier);
+    ref.read(agreedUserPolicyProvider.notifier);
+    ref.read(forceExternalBrowserProvider.notifier);
+    ref.read(debugModeProvider.notifier);
+
     appConfig.get(context, ref).then((_) async {
       if (!ref.read(agreedUserPolicyProvider)) {
         goWebViewUserPolicy(context);

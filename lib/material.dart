@@ -11,6 +11,7 @@ import 'package:vrc_manager/data_class/app_config.dart';
 
 MaterialApp getMaterialApp(Widget home, WidgetRef ref) {
   final themeBrightness = ref.watch(themeBrightnessProvider);
+  final darkThemeBrightness = ref.watch(darkThemeBrightnessProvider);
   final languageCode = ref.watch(languageCodeProvider);
 
   return MaterialApp(
@@ -32,8 +33,8 @@ MaterialApp getMaterialApp(Widget home, WidgetRef ref) {
       Locale('zh', ''),
     ],
     locale: Locale(languageCode.name, ''),
-    theme: themeBrightness.toTheme(dark: true),
-    darkTheme: themeBrightness.toTheme(dark: true),
+    theme: themeBrightness.toTheme(),
+    darkTheme: darkThemeBrightness.toTheme(),
     home: home,
   );
 }
