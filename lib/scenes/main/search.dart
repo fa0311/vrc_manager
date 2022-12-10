@@ -8,8 +8,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 // Project imports:
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
-import 'package:vrc_manager/data_class/modal.dart';
 import 'package:vrc_manager/main.dart';
+import 'package:vrc_manager/scenes/main/main.dart';
 import 'package:vrc_manager/storage/grid_config.dart';
 import 'package:vrc_manager/widgets/grid_view/extraction/user.dart';
 import 'package:vrc_manager/widgets/grid_view/extraction/world.dart';
@@ -181,24 +181,10 @@ class VRChatMobileSearchResult extends ConsumerWidget {
         List<VRChatUser> userList = data.userList;
         List<VRChatLimitedWorld> worldList = data.worldList;
         if (userList.isNotEmpty) {
-          switch (data.config.displayMode) {
-            case DisplayMode.normal:
-              return extractionUserDefault(context, data.config, userList);
-            case DisplayMode.simple:
-              return extractionUserSimple(context, data.config, userList);
-            case DisplayMode.textOnly:
-              return extractionUserText(context, data.config, userList);
-          }
+          return ExtractionUser(id: GridConfigId.searchUsers, userList: data.userList, status: null);
         }
         if (worldList.isNotEmpty) {
-          switch (data.config.displayMode) {
-            case DisplayMode.normal:
-              return extractionWorldDefault(context, data.config, worldList);
-            case DisplayMode.simple:
-              return extractionWorldSimple(context, data.config, worldList);
-            case DisplayMode.textOnly:
-              return extractionWorldText(context, data.config, worldList);
-          }
+          return ExtractionWorld(id: GridConfigId.searchWorlds, worldList: worldList);
         }
         return Column(children: const []);
       },

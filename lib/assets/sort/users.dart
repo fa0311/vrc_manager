@@ -6,7 +6,7 @@ import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/data_class/modal.dart';
 import 'package:vrc_manager/storage/grid_config.dart';
 
-sortUsers(GridConfigNotifier config, List<VRChatUser> userList) {
+List<VRChatUser> sortUsers(GridConfigNotifier config, List<VRChatUser> userList) {
   switch (config.sortMode) {
     case SortMode.name:
       sortByNameFromUser(userList);
@@ -20,7 +20,11 @@ sortUsers(GridConfigNotifier config, List<VRChatUser> userList) {
     default:
       break;
   }
-  return userList.reversed.toList();
+  if (config.descending) {
+    return userList.reversed.toList();
+  } else {
+    return userList;
+  }
 }
 
 class LocationDataClass {

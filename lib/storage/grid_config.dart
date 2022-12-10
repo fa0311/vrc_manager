@@ -5,13 +5,13 @@ import 'package:vrc_manager/data_class/modal.dart';
 import 'package:vrc_manager/scenes/main/main.dart';
 
 class GridConfigNotifier extends ChangeNotifier {
-  late GridConfigId id;
-  late SortMode sortMode;
-  late DisplayMode displayMode;
-  late bool descending;
-  late bool joinable;
-  late bool worldDetails;
-  late bool removeButton;
+  GridConfigId id;
+  SortMode sortMode = SortMode.normal;
+  DisplayMode displayMode = DisplayMode.normal;
+  bool descending = false;
+  bool joinable = false;
+  bool worldDetails = false;
+  bool removeButton = false;
 
   GridConfigNotifier({required this.id}) {
     List<Future> futureList = [];

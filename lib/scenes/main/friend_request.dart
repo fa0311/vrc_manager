@@ -8,14 +8,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 // Project imports:
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
-import 'package:vrc_manager/data_class/modal.dart';
 import 'package:vrc_manager/main.dart';
-import 'package:vrc_manager/storage/grid_config.dart';
+import 'package:vrc_manager/scenes/main/main.dart';
 import 'package:vrc_manager/widgets/grid_view/extraction/user.dart';
 
 class VRChatMobileFriendRequestData {
   List<VRChatUser> userList;
-  late GridConfigNotifier config;
   VRChatMobileFriendRequestData({required this.userList});
 }
 
@@ -56,20 +54,7 @@ class VRChatMobileFriendRequest extends ConsumerWidget {
             return data.when(
               loading: () => const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()),
               error: (err, stack) => Text('Error: $err'),
-              data: (data) => Column(
-                children: [
-                  () {
-                    switch (data.config.displayMode) {
-                      case DisplayMode.normal:
-                        return extractionUserDefault(context, data.config, data.userList, status: status);
-                      case DisplayMode.simple:
-                        return extractionUserSimple(context, data.config, data.userList, status: status);
-                      case DisplayMode.textOnly:
-                        return extractionUserText(context, data.config, data.userList, status: status);
-                    }
-                  }(),
-                ],
-              ),
+              data: (data) => ExtractionUser(id: GridConfigId.favoriteWorlds, userList: data.userList, status: status),
             );
           },
         ),

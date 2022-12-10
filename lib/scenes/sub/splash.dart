@@ -15,6 +15,7 @@ import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/main/main.dart';
 import 'package:vrc_manager/scenes/sub/login.dart';
 import 'package:vrc_manager/scenes/web/web_view_policies.dart';
+import 'package:vrc_manager/storage/grid_config.dart';
 
 class VRChatMobileSplash extends ConsumerWidget {
   const VRChatMobileSplash({Key? key}) : super(key: key);
@@ -51,6 +52,10 @@ class VRChatMobileSplash extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    for (GridConfigId id in GridConfigId.values) {
+      ref.read(gridConfigProvider(id));
+    }
+
     appConfig.get(context, ref).then((_) async {
       if (!ref.read(agreedUserPolicyProvider)) {
         goWebViewUserPolicy(context);

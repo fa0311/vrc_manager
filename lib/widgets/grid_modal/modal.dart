@@ -58,7 +58,11 @@ class GridModal extends ConsumerWidget {
             ),
           ),
         if (gridModalConfig.joinable)
-          SwitchListTile(value: config.joinable, title: Text(AppLocalizations.of(context)!.showOnlyAvailable), onChanged: (bool e) => config.setJoinable(e)),
+          SwitchListTile(
+            value: config.joinable,
+            title: Text(AppLocalizations.of(context)!.showOnlyAvailable),
+            onChanged: (bool e) => config.setJoinable(e),
+          ),
         if (gridModalConfig.worldDetails)
           SwitchListTile(
             value: config.worldDetails,
@@ -67,7 +71,10 @@ class GridModal extends ConsumerWidget {
           ),
         if (gridModalConfig.removeButton)
           SwitchListTile(
-              value: config.removeButton, title: Text(AppLocalizations.of(context)!.worldUnfavoriteButton), onChanged: (bool e) => config.setRemoveButton(e)),
+            value: config.removeButton,
+            title: Text(AppLocalizations.of(context)!.worldUnfavoriteButton),
+            onChanged: (bool e) => config.setRemoveButton(e),
+          ),
         if (gridModalConfig.url != null)
           ListTile(
             title: Text(AppLocalizations.of(context)!.openInBrowser),
@@ -136,11 +143,6 @@ class GridDisplayModeModal extends ConsumerWidget {
             trailing: config.displayMode == display ? const Icon(Icons.check) : null,
             onTap: () => config.setDisplayMode(display),
           ),
-        SwitchListTile(
-          value: config.descending,
-          title: Text(AppLocalizations.of(context)!.descending),
-          onChanged: (bool e) => config.setDescending(e),
-        ),
       ],
     ));
   }

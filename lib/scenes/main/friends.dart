@@ -70,7 +70,7 @@ class VRChatMobileFriends extends ConsumerWidget {
             loading: () => const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()),
             error: (err, stack) => Text('Error: $err\n$stack'),
             data: (data) => ExtractionFriend(
-              gridConfigId: offline ? GridConfigId.offlineFriends : GridConfigId.onlineFriends,
+              id: offline ? GridConfigId.offlineFriends : GridConfigId.onlineFriends,
               userList: data.userList,
               locationMap: data.locationMap,
               instanceMap: data.instanceMap,
