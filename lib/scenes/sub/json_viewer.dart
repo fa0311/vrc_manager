@@ -11,8 +11,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
-import 'package:vrc_manager/widgets/modal/list_tile/main.dart';
-import 'package:vrc_manager/widgets/modal/list_tile/share.dart';
+import 'package:vrc_manager/widgets/modal/main.dart';
+import 'package:vrc_manager/widgets/modal/share.dart';
 
 class VRChatMobileJsonViewer extends ConsumerWidget {
   final dynamic obj;

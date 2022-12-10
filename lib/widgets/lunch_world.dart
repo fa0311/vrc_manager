@@ -14,8 +14,8 @@ import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets/error.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/widgets/modal.dart';
-import 'package:vrc_manager/widgets/modal/list_tile/main.dart';
-import 'package:vrc_manager/widgets/modal/list_tile/share.dart';
+import 'package:vrc_manager/widgets/modal/main.dart';
+import 'package:vrc_manager/widgets/modal/share.dart';
 import 'package:vrc_manager/widgets/region.dart';
 
 String genRandHex([int length = 32]) {

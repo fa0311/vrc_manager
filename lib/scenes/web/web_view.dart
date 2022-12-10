@@ -11,8 +11,8 @@ import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
 import 'package:vrc_manager/assets/session.dart';
 import 'package:vrc_manager/main.dart';
-import 'package:vrc_manager/widgets/modal/list_tile/main.dart';
-import 'package:vrc_manager/widgets/modal/list_tile/share.dart';
+import 'package:vrc_manager/widgets/modal/main.dart';
+import 'package:vrc_manager/widgets/modal/share.dart';
 import 'package:vrc_manager/widgets/share.dart';
 
 final timeStampProvider = StateProvider<int>((ref) => 0);

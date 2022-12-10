@@ -14,7 +14,7 @@ import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets/error.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/sub/json_viewer.dart';
-import 'package:vrc_manager/widgets/modal/list_tile/main.dart';
+import 'package:vrc_manager/widgets/modal/main.dart';
 import 'package:vrc_manager/widgets/share.dart';
 
 List<Widget> shareUrlListTile(BuildContext context, Uri url, {bool browserExternalForce = false}) {

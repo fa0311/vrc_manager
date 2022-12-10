@@ -12,8 +12,8 @@ import 'package:vrc_manager/assets/dialog.dart';
 import 'package:vrc_manager/assets/error.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/storage/accessibility.dart';
-import 'package:vrc_manager/widgets/modal/list_tile/main.dart';
-import 'package:vrc_manager/widgets/modal/list_tile/share.dart';
+import 'package:vrc_manager/widgets/modal/main.dart';
+import 'package:vrc_manager/widgets/modal/share.dart';
 import 'package:vrc_manager/widgets/user.dart';
 
 List<Widget> selfUserModalBottom(

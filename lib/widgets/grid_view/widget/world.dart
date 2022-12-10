@@ -9,8 +9,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/scenes/sub/world.dart';
 import 'package:vrc_manager/widgets/grid_view/template/template.dart';
-import 'package:vrc_manager/widgets/modal/list_tile/main.dart';
-import 'package:vrc_manager/widgets/modal/list_tile/world.dart';
+import 'package:vrc_manager/widgets/modal/main.dart';
+import 'package:vrc_manager/widgets/modal/world.dart';
 import 'package:vrc_manager/widgets/region.dart';
 
 Widget instanceWidget(

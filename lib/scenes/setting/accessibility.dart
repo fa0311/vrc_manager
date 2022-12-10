@@ -12,8 +12,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
 import 'package:vrc_manager/storage/accessibility.dart';
 import 'package:vrc_manager/widgets/modal.dart';
-import 'package:vrc_manager/widgets/modal/locale.dart';
-import 'package:vrc_manager/widgets/modal/theme.dart';
+import 'package:vrc_manager/widgets/config_modal/locale.dart';
+import 'package:vrc_manager/widgets/config_modal/theme.dart';
 
 class VRChatMobileSettingsAccessibility extends ConsumerWidget {
   const VRChatMobileSettingsAccessibility({Key? key}) : super(key: key);

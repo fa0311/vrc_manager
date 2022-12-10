@@ -15,8 +15,8 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/main/main.dart';
-import 'package:vrc_manager/widgets/modal/list_tile/main.dart';
-import 'package:vrc_manager/widgets/modal/list_tile/share.dart';
+import 'package:vrc_manager/widgets/modal/main.dart';
+import 'package:vrc_manager/widgets/modal/share.dart';
 import 'package:vrc_manager/widgets/share.dart';
 
 class VRChatMobileWebViewUserPolicy extends ConsumerWidget {

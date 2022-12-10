@@ -11,8 +11,8 @@ import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/widgets/drawer.dart';
-import 'package:vrc_manager/widgets/modal/list_tile/main.dart';
-import 'package:vrc_manager/widgets/modal/list_tile/world.dart';
+import 'package:vrc_manager/widgets/modal/main.dart';
+import 'package:vrc_manager/widgets/modal/world.dart';
 import 'package:vrc_manager/widgets/world.dart';
 
 class VRChatMobileWorldData {

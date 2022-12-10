@@ -11,8 +11,8 @@ import 'package:vrc_manager/scenes/sub/world.dart';
 import 'package:vrc_manager/storage/grid_modal.dart';
 import 'package:vrc_manager/widgets/grid_view/extraction/consumer.dart';
 import 'package:vrc_manager/widgets/grid_view/template/template.dart';
-import 'package:vrc_manager/widgets/modal/list_tile/main.dart';
-import 'package:vrc_manager/widgets/modal/list_tile/world.dart';
+import 'package:vrc_manager/widgets/modal/main.dart';
+import 'package:vrc_manager/widgets/modal/world.dart';
 
 class ExtractionWorld extends ConsumerGridWidget {
   final List<VRChatLimitedWorld> worldList;

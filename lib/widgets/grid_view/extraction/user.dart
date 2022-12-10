@@ -11,8 +11,8 @@ import 'package:vrc_manager/scenes/sub/user.dart';
 import 'package:vrc_manager/storage/grid_modal.dart';
 import 'package:vrc_manager/widgets/grid_view/extraction/consumer.dart';
 import 'package:vrc_manager/widgets/grid_view/template/template.dart';
-import 'package:vrc_manager/widgets/modal/list_tile/main.dart';
-import 'package:vrc_manager/widgets/modal/list_tile/user.dart';
+import 'package:vrc_manager/widgets/modal/main.dart';
+import 'package:vrc_manager/widgets/modal/user.dart';
 import 'package:vrc_manager/widgets/user.dart';
 
 class ExtractionUser extends ConsumerGridWidget {
