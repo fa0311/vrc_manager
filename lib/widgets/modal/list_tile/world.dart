@@ -9,6 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/storage/accessibility.dart';
 import 'package:vrc_manager/widgets/lunch_world.dart';
+import 'package:vrc_manager/widgets/modal.dart';
 import 'package:vrc_manager/widgets/modal/list_tile/share.dart';
 import 'package:vrc_manager/widgets/world.dart';
 
@@ -67,9 +68,7 @@ Widget selfInviteListTileWidget(BuildContext context, VRChatInstance instance) {
 Widget favoriteListTileWidget(BuildContext context, VRChatLimitedWorld world) {
   return ListTile(
     title: Text(AppLocalizations.of(context)!.addFavoriteWorlds),
-    onTap: () {
-      favoriteAction(context, world);
-    },
+    onTap: () => showModalBottomSheetStatelessWidget(context: context, builder: () => FavoriteAction(world: world)),
   );
 }
 
