@@ -9,6 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/main.dart';
+import 'package:vrc_manager/scenes/main/main.dart';
 import 'package:vrc_manager/storage/grid_modal.dart';
 import 'package:vrc_manager/widgets/grid_modal/config.dart';
 import 'package:vrc_manager/widgets/grid_view/extraction/user.dart';
@@ -90,10 +91,11 @@ class VRChatMobileSearch extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.watch(vrchatMobileSearchCounterProvider);
+    int count = ref.watch(vrchatMobileSearchCounterProvider);
 
     return RefreshIndicator(
       onRefresh: () => ref.refresh(vrchatMobileSearchProvider.future),
+      notificationPredicate: (notification) => count > 0,
       child: SingleChildScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
         child: Container(
@@ -145,6 +147,7 @@ class VRChatMobileSearch extends ConsumerWidget {
                                   trailing: searchMode == SearchMode.users ? const Icon(Icons.check) : null,
                                   onTap: () {
                                     ref.read(vrchatMobileSearchModeProvider.notifier).state = SearchMode.users;
+                                    ref.read(gridModalConfigIdProvider.notifier).state = GridModalConfigType.searchUsers;
                                   },
                                 ),
                                 ListTile(
@@ -152,6 +155,7 @@ class VRChatMobileSearch extends ConsumerWidget {
                                   trailing: searchMode == SearchMode.worlds ? const Icon(Icons.check) : null,
                                   onTap: () {
                                     ref.read(vrchatMobileSearchModeProvider.notifier).state = SearchMode.worlds;
+                                    ref.read(gridModalConfigIdProvider.notifier).state = GridModalConfigType.searchWorlds;
                                   },
                                 ),
                               ],
@@ -163,7 +167,7 @@ class VRChatMobileSearch extends ConsumerWidget {
                   );
                 },
               ),
-              if (ref.read(vrchatMobileSearchCounterProvider) > 0) const VRChatMobileSearchResult(),
+              if (count > 0) const VRChatMobileSearchResult(),
             ],
           ),
         ),

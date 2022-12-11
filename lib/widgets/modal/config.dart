@@ -1,3 +1,7 @@
+// Dart imports:
+
+import 'dart:io';
+
 import 'package:vrc_manager/api/data_class.dart';
 
 enum UserModalType {
@@ -56,7 +60,7 @@ class WorldModalData {
 
 WorldModalData getWorldModalConfig({
   required WorldModalType type,
-  required VRChatUser world,
+  required VRChatWorld world,
 }) {
   switch (type) {
     case WorldModalType.instance:
@@ -68,5 +72,38 @@ WorldModalData getWorldModalConfig({
       return WorldModalData()
         ..favorite = true
         ..shareUrl = Uri.https("vrchat.com", "/home/world/${world.id}");
+  }
+}
+
+enum ShareModalType {
+  url,
+  world;
+}
+
+class ShareModalData {
+  bool share = false;
+  bool copy = false;
+  bool open = false;
+  Uri? shareUrl;
+  Uri? openInWindows;
+}
+
+ShareModalData getShareInstanceModalData({
+  required VRChatWorld world,
+  required String instanceId,
+}) {
+  if (Platform.isWindows) {
+    return ShareModalData()
+      ..share = true
+      ..copy = true
+      ..open = true
+      ..shareUrl = Uri.https("vrchat.com/", "/home/launch?worldId=${world.id}&instanceId=$instanceId");
+  } else {
+    return ShareModalData()
+      ..share = true
+      ..copy = true
+      ..open = true
+      ..shareUrl = Uri.https("vrchat.com/", "/home/launch?worldId=${world.id}&instanceId=$instanceId")
+      ..openInWindows = Uri(scheme: "vrchat", path: "launch", queryParameters: {"ref": "vrchat.com", "id": "${world.id}:$instanceId"});
   }
 }
