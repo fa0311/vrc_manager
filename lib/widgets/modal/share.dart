@@ -15,10 +15,10 @@ import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/sub/json_viewer.dart';
 import 'package:vrc_manager/storage/accessibility.dart';
-import 'package:vrc_manager/widgets/modal/main.dart';
+import 'package:vrc_manager/widgets/modal.dart';
 import 'package:vrc_manager/widgets/share.dart';
 
-List<Widget> shareUrlListTile(BuildContext context, Uri url, {bool browserExternalForce = false}) {
+List<Widget> shareUrlListTile(Uri url, {bool browserExternalForce = false}) {
   return [
     ShareListTileWidget(text: url.toString()),
     CopyListTileWidget(text: url.toString()),
@@ -27,7 +27,7 @@ List<Widget> shareUrlListTile(BuildContext context, Uri url, {bool browserExtern
   ];
 }
 
-List<Widget> shareInstanceListTile(BuildContext context, String worldId, String instanceId) {
+List<Widget> shareInstanceListTile(String worldId, String instanceId) {
   Uri url = Uri.https("vrchat.com", "/home/launch", {"worldId": worldId, "instanceId": instanceId});
   return [
     ShareListTileWidget(text: url.toString()),
@@ -138,7 +138,12 @@ class ShareUrlTileWidget extends ConsumerWidget {
     return ListTile(
       title: Text(AppLocalizations.of(context)!.share),
       onTap: () {
-        modalBottom(context, shareUrlListTile(context, url));
+        showModalBottomSheetStatelessWidget(
+          context: context,
+          builder: () {
+            return Column(children: shareUrlListTile(url));
+          },
+        );
       },
     );
   }
@@ -154,7 +159,12 @@ class ShareInstanceTileWidget extends ConsumerWidget {
     return ListTile(
       title: Text(AppLocalizations.of(context)!.share),
       onTap: () {
-        modalBottom(context, shareInstanceListTile(context, worldId, instanceId));
+        showModalBottomSheetStatelessWidget(
+          context: context,
+          builder: () {
+            return Column(children: shareInstanceListTile(worldId, instanceId));
+          },
+        );
       },
     );
   }

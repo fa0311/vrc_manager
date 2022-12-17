@@ -12,7 +12,7 @@ import 'package:vrc_manager/scenes/sub/world.dart';
 import 'package:vrc_manager/storage/grid_modal.dart';
 import 'package:vrc_manager/widgets/grid_view/extraction/consumer.dart';
 import 'package:vrc_manager/widgets/grid_view/template/template.dart';
-import 'package:vrc_manager/widgets/modal/main.dart';
+import 'package:vrc_manager/widgets/modal.dart';
 import 'package:vrc_manager/widgets/modal/world.dart';
 
 class ExtractionFavoriteWorld extends ConsumerGridWidget {
@@ -40,7 +40,14 @@ class ExtractionFavoriteWorld extends ConsumerGridWidget {
                     MaterialPageRoute(
                       builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id),
                     )),
-                onLongPress: () => modalBottom(context, [FavoriteListTileWidget(world: world)]),
+                onLongPress: () {
+                  showModalBottomSheetStatelessWidget(
+                    context: context,
+                    builder: () {
+                      return Column(children: [FavoriteListTileWidget(world: world)]);
+                    },
+                  );
+                },
                 right: config.removeButton
                     ? [
                         SizedBox(
@@ -91,7 +98,14 @@ class ExtractionFavoriteWorld extends ConsumerGridWidget {
                   MaterialPageRoute(
                     builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id),
                   )),
-              onLongPress: () => modalBottom(context, [FavoriteListTileWidget(world: world)]),
+              onLongPress: () {
+                showModalBottomSheetStatelessWidget(
+                  context: context,
+                  builder: () {
+                    return Column(children: [FavoriteListTileWidget(world: world)]);
+                  },
+                );
+              },
               stack: config.removeButton
                   ? [
                       SizedBox(

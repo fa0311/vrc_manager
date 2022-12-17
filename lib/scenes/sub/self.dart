@@ -14,7 +14,7 @@ import 'package:vrc_manager/assets/flutter/text_stream.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/widgets/drawer.dart';
 import 'package:vrc_manager/widgets/grid_view/widget/world.dart';
-import 'package:vrc_manager/widgets/modal/main.dart';
+import 'package:vrc_manager/widgets/modal.dart';
 import 'package:vrc_manager/widgets/modal/user.dart';
 import 'package:vrc_manager/widgets/user.dart';
 
@@ -70,10 +70,14 @@ class VRChatMobileSelf extends ConsumerWidget {
           data: (data) => [
             IconButton(
               icon: const Icon(Icons.more_vert),
-              onPressed: () => modalBottom(
-                context,
-                selfUserModalBottom(data.user),
-              ),
+              onPressed: () {
+                showModalBottomSheetStatelessWidget(
+                  context: context,
+                  builder: () {
+                    return Column(children: selfUserModalBottom(data.user));
+                  },
+                );
+              },
             ),
           ],
         ),

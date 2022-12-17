@@ -15,7 +15,7 @@ import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/sub/self.dart';
 import 'package:vrc_manager/widgets/drawer.dart';
 import 'package:vrc_manager/widgets/grid_view/widget/world.dart';
-import 'package:vrc_manager/widgets/modal/main.dart';
+import 'package:vrc_manager/widgets/modal.dart';
 import 'package:vrc_manager/widgets/modal/user.dart';
 import 'package:vrc_manager/widgets/user.dart';
 
@@ -71,10 +71,14 @@ class VRChatMobileUser extends ConsumerWidget {
           data: (data) => [
             IconButton(
               icon: const Icon(Icons.more_vert),
-              onPressed: () => modalBottom(
-                context,
-                userDetailsModalBottom(data.user, data.status),
-              ),
+              onPressed: () {
+                showModalBottomSheetStatelessWidget(
+                  context: context,
+                  builder: () {
+                    return Column(children: userDetailsModalBottom(data.user, data.status));
+                  },
+                );
+              },
             ),
           ],
         ),

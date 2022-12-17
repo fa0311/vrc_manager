@@ -9,7 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/scenes/sub/world.dart';
 import 'package:vrc_manager/widgets/grid_view/template/template.dart';
-import 'package:vrc_manager/widgets/modal/main.dart';
+import 'package:vrc_manager/widgets/modal.dart';
 import 'package:vrc_manager/widgets/modal/world.dart';
 import 'package:vrc_manager/widgets/region.dart';
 
@@ -31,7 +31,14 @@ Widget instanceWidget(
             MaterialPageRoute(
               builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id),
             )),
-        onLongPress: () => modalBottom(context, instanceDetailsModalBottom(world, instance)),
+        onLongPress: () {
+          showModalBottomSheetStatelessWidget(
+            context: context,
+            builder: () {
+              return Column(children: instanceDetailsModalBottom(world, instance));
+            },
+          );
+        },
         children: [
           Row(children: <Widget>[
             RegionWidget(region: instance.region, size: half ? 12 : 15),

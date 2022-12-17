@@ -11,7 +11,7 @@ import 'package:vrc_manager/scenes/sub/user.dart';
 import 'package:vrc_manager/storage/grid_modal.dart';
 import 'package:vrc_manager/widgets/grid_view/extraction/consumer.dart';
 import 'package:vrc_manager/widgets/grid_view/template/template.dart';
-import 'package:vrc_manager/widgets/modal/main.dart';
+import 'package:vrc_manager/widgets/modal.dart';
 import 'package:vrc_manager/widgets/modal/user.dart';
 import 'package:vrc_manager/widgets/user.dart';
 
@@ -43,7 +43,14 @@ class ExtractionUser extends ConsumerGridWidget {
                   MaterialPageRoute(
                     builder: (BuildContext context) => VRChatMobileUser(userId: user.id),
                   )),
-              onLongPress: () => modalBottom(context, userDetailsModalBottom(user, userStatus)),
+              onLongPress: () {
+                showModalBottomSheetStatelessWidget(
+                  context: context,
+                  builder: () {
+                    return Column(children: userDetailsModalBottom(user, userStatus));
+                  },
+                );
+              },
               children: [
                 username(user),
               ],
@@ -71,7 +78,14 @@ class ExtractionUser extends ConsumerGridWidget {
                   MaterialPageRoute(
                     builder: (BuildContext context) => VRChatMobileUser(userId: user.id),
                   )),
-              onLongPress: () => modalBottom(context, userDetailsModalBottom(user, userStatus)),
+              onLongPress: () {
+                showModalBottomSheetStatelessWidget(
+                  context: context,
+                  builder: () {
+                    return Column(children: userDetailsModalBottom(user, userStatus));
+                  },
+                );
+              },
               children: [
                 username(user, diameter: 12),
                 for (String text in [
@@ -101,7 +115,14 @@ class ExtractionUser extends ConsumerGridWidget {
                   MaterialPageRoute(
                     builder: (BuildContext context) => VRChatMobileUser(userId: user.id),
                   )),
-              onLongPress: () => modalBottom(context, userDetailsModalBottom(user, status!)),
+              onLongPress: () {
+                showModalBottomSheetStatelessWidget(
+                  context: context,
+                  builder: () {
+                    return Column(children: userDetailsModalBottom(user, status!));
+                  },
+                );
+              },
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 // Package imports:
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vrc_manager/storage/accessibility.dart';
+import 'package:vrc_manager/widgets/modal.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 // Project imports:
@@ -11,7 +12,6 @@ import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
 import 'package:vrc_manager/assets/session.dart';
 import 'package:vrc_manager/main.dart';
-import 'package:vrc_manager/widgets/modal/main.dart';
 import 'package:vrc_manager/widgets/modal/share.dart';
 import 'package:vrc_manager/widgets/share.dart';
 
@@ -61,8 +61,15 @@ class VRChatMobileWebView extends ConsumerWidget {
           actions: [
             IconButton(
               icon: const Icon(Icons.share),
-              onPressed: () => modalBottom(context, shareUrlListTile(context, url, browserExternalForce: true)),
-            )
+              onPressed: () {
+                showModalBottomSheetStatelessWidget(
+                  context: context,
+                  builder: () {
+                    return Column(children: shareUrlListTile(url, browserExternalForce: true));
+                  },
+                );
+              },
+            ),
           ],
         ),
         body: WebView(

@@ -11,7 +11,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
-import 'package:vrc_manager/widgets/modal/main.dart';
+import 'package:vrc_manager/widgets/modal.dart';
 import 'package:vrc_manager/widgets/modal/share.dart';
 
 class VRChatMobileJsonViewer extends ConsumerWidget {
@@ -27,7 +27,14 @@ class VRChatMobileJsonViewer extends ConsumerWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.share),
-            onPressed: () => modalBottom(context, [CopyListTileWidget(text: jsonEncode(content))]),
+            onPressed: () {
+              showModalBottomSheetStatelessWidget(
+                context: context,
+                builder: () {
+                  return Column(children: [CopyListTileWidget(text: jsonEncode(content))]);
+                },
+              );
+            },
           )
         ],
       ),

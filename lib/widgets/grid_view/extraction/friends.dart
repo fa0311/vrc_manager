@@ -13,7 +13,7 @@ import 'package:vrc_manager/storage/grid_modal.dart';
 import 'package:vrc_manager/widgets/grid_view/extraction/consumer.dart';
 import 'package:vrc_manager/widgets/grid_view/template/template.dart';
 import 'package:vrc_manager/widgets/grid_view/widget/world.dart';
-import 'package:vrc_manager/widgets/modal/main.dart';
+import 'package:vrc_manager/widgets/modal.dart';
 import 'package:vrc_manager/widgets/modal/user.dart';
 import 'package:vrc_manager/widgets/modal/world.dart';
 import 'package:vrc_manager/widgets/user.dart';
@@ -49,8 +49,14 @@ class ExtractionFriend extends ConsumerGridWidget {
                   MaterialPageRoute(
                     builder: (BuildContext context) => VRChatMobileUser(userId: user.id),
                   )),
-              onLongPress: () =>
-                  modalBottom(context, userDetailsModalBottom(user, VRChatFriendStatus(isFriend: true, incomingRequest: false, outgoingRequest: false))),
+              onLongPress: () {
+                showModalBottomSheetStatelessWidget(
+                  context: context,
+                  builder: () {
+                    return Column(children: userDetailsModalBottom(user, VRChatFriendStatus(isFriend: true, incomingRequest: false, outgoingRequest: false)));
+                  },
+                );
+              },
               bottom: () {
                 if (!config.worldDetails) return null;
                 if (user.location == "private") return privateWorld(context, card: false);
@@ -94,8 +100,14 @@ class ExtractionFriend extends ConsumerGridWidget {
                   MaterialPageRoute(
                     builder: (BuildContext context) => VRChatMobileUser(userId: user.id),
                   )),
-              onLongPress: () =>
-                  modalBottom(context, userDetailsModalBottom(user, VRChatFriendStatus(isFriend: true, incomingRequest: false, outgoingRequest: false))),
+              onLongPress: () {
+                showModalBottomSheetStatelessWidget(
+                  context: context,
+                  builder: () {
+                    return Column(children: userDetailsModalBottom(user, VRChatFriendStatus(isFriend: true, incomingRequest: false, outgoingRequest: false)));
+                  },
+                );
+              },
               bottom: () {
                 if (!config.worldDetails) return null;
                 if (user.location == "private") return privateWorld(context, card: false, half: true);
@@ -134,18 +146,22 @@ class ExtractionFriend extends ConsumerGridWidget {
                   MaterialPageRoute(
                     builder: (BuildContext context) => VRChatMobileUser(userId: user.id),
                   )),
-              onLongPress: () => modalBottom(
-                context,
-                [
-                  if (config.worldDetails &&
-                      !["private", "offline", "traveling"].contains(user.location) &&
-                      locationMap[worldId] != null &&
-                      instanceMap[user.location] != null)
-                    ...userInstanceDetailsModalBottom(user, locationMap[worldId]!, instanceMap[user.location]!)
-                  else
-                    ...userDetailsModalBottom(user, VRChatFriendStatus(isFriend: true, incomingRequest: false, outgoingRequest: false))
-                ],
-              ),
+              onLongPress: () {
+                showModalBottomSheetStatelessWidget(
+                  context: context,
+                  builder: () {
+                    return Column(children: [
+                      if (config.worldDetails &&
+                          !["private", "offline", "traveling"].contains(user.location) &&
+                          locationMap[worldId] != null &&
+                          instanceMap[user.location] != null)
+                        ...userInstanceDetailsModalBottom(user, locationMap[worldId]!, instanceMap[user.location]!)
+                      else
+                        ...userDetailsModalBottom(user, VRChatFriendStatus(isFriend: true, incomingRequest: false, outgoingRequest: false))
+                    ]);
+                  },
+                );
+              },
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,

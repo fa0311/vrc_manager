@@ -1,9 +1,9 @@
 // Flutter imports:
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:vrc_manager/widgets/modal.dart';
 
 // Project imports:
-import 'package:vrc_manager/widgets/modal/main.dart';
 import 'package:vrc_manager/widgets/modal/share.dart';
 import 'package:vrc_manager/widgets/share.dart';
 
@@ -27,43 +27,59 @@ List<InlineSpan> textToAnchor(BuildContext context, String text) {
           if (match!.groupCount == 1) {
             return [
               TextSpan(
-                  text: "${match!.group(1)}\n",
-                  style: const TextStyle(color: Colors.blue),
-                  recognizer: LongPressGestureRecognizer()
-                    ..onLongPressDown = ((details) => timeStamp = DateTime.now().millisecondsSinceEpoch)
-                    ..onLongPress = () {
-                      if (Uri.tryParse(text!) != null) modalBottom(context, shareUrlListTile(context, Uri.parse(text)));
+                text: "${match!.group(1)}\n",
+                style: const TextStyle(color: Colors.blue),
+                recognizer: LongPressGestureRecognizer()
+                  ..onLongPressDown = ((details) => timeStamp = DateTime.now().millisecondsSinceEpoch)
+                  ..onLongPress = () {
+                    if (Uri.tryParse(text!) != null) {
+                      showModalBottomSheetStatelessWidget(
+                        context: context,
+                        builder: () {
+                          return Column(children: shareUrlListTile(Uri.parse(text)));
+                        },
+                      );
                     }
-                    ..onLongPressCancel = () {
-                      if (DateTime.now().millisecondsSinceEpoch - timeStamp < 500) {
-                        if (Uri.tryParse(text!) == null) {
-                          copyToClipboard(context, text);
-                        } else {
-                          openInBrowser(context, Uri.parse(text));
-                        }
+                  }
+                  ..onLongPressCancel = () {
+                    if (DateTime.now().millisecondsSinceEpoch - timeStamp < 500) {
+                      if (Uri.tryParse(text!) == null) {
+                        copyToClipboard(context, text);
+                      } else {
+                        openInBrowser(context, Uri.parse(text));
                       }
-                    })
+                    }
+                  },
+              )
             ];
           } else {
             return [
               TextSpan(text: "${match!.group(1)}${match!.group(2)}"),
               TextSpan(
-                  text: "${[for (int i = 3; i <= match!.groupCount; i++) match!.group(i)!].join()}\n",
-                  style: const TextStyle(color: Colors.blue),
-                  recognizer: LongPressGestureRecognizer()
-                    ..onLongPressDown = ((details) => timeStamp = DateTime.now().millisecondsSinceEpoch)
-                    ..onLongPress = () {
-                      if (Uri.tryParse(text!) != null) modalBottom(context, shareUrlListTile(context, Uri.parse(text)));
+                text: "${[for (int i = 3; i <= match!.groupCount; i++) match!.group(i)!].join()}\n",
+                style: const TextStyle(color: Colors.blue),
+                recognizer: LongPressGestureRecognizer()
+                  ..onLongPressDown = ((details) => timeStamp = DateTime.now().millisecondsSinceEpoch)
+                  ..onLongPress = () {
+                    if (Uri.tryParse(text!) != null) {
+                      showModalBottomSheetStatelessWidget(
+                        context: context,
+                        builder: () {
+                          return Column(children: shareUrlListTile(Uri.parse(text)));
+                        },
+                      );
                     }
-                    ..onLongPressCancel = () {
-                      if (DateTime.now().millisecondsSinceEpoch - timeStamp < 500) {
-                        if (Uri.tryParse(text!) == null) {
-                          copyToClipboard(context, text);
-                        } else {
-                          openInBrowser(context, Uri.parse(text));
-                        }
+                  }
+                  ..onLongPressCancel = () {
+                    if (DateTime.now().millisecondsSinceEpoch - timeStamp < 500) {
+                      if (Uri.tryParse(text!) == null) {
+                        copyToClipboard(context, text);
+                      } else {
+                        openInBrowser(context, Uri.parse(text));
                       }
-                    })
+                    }
+                  },
+              )
             ];
           }
         }

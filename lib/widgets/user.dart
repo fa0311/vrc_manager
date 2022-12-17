@@ -18,7 +18,7 @@ import 'package:vrc_manager/assets/date.dart';
 import 'package:vrc_manager/assets/error.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/sub/self.dart';
-import 'package:vrc_manager/widgets/modal/main.dart';
+import 'package:vrc_manager/widgets/modal.dart';
 import 'package:vrc_manager/widgets/modal/share.dart';
 import 'package:vrc_manager/widgets/share.dart';
 import 'package:vrc_manager/widgets/status.dart';
@@ -183,7 +183,14 @@ List<Widget> bioLink(BuildContext context, List<Uri> bioLinks) {
       InkWell(
         borderRadius: BorderRadius.circular(20),
         onTap: () => openInBrowser(context, url),
-        onLongPress: () => modalBottom(context, shareUrlListTile(context, url)),
+        onLongPress: () {
+          showModalBottomSheetStatelessWidget(
+            context: context,
+            builder: () {
+              return Column(children: shareUrlListTile(url));
+            },
+          );
+        },
         child: Padding(
           padding: const EdgeInsets.all(5),
           child: Ink(
