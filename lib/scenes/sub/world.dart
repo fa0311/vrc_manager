@@ -72,7 +72,7 @@ class VRChatMobileWorld extends ConsumerWidget {
                 return data.when(
                   loading: () => const Center(child: CircularProgressIndicator()),
                   error: (err, stack) => Text('Error: $err'),
-                  data: (data) => worldProfile(context, data.world),
+                  data: (data) => WorldProfile(world: data.world),
                 );
               },
             ),

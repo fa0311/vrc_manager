@@ -55,7 +55,7 @@ class ExtractionFriend extends ConsumerGridWidget {
                 if (!config.worldDetails) return null;
                 if (user.location == "private") return privateWorld(context, card: false);
                 if (user.location == "traveling") return privateWorld(context, card: false);
-                if (user.location == "offline") return onTheWebsite(context);
+                if (user.location == "offline") return const OnTheWebsite();
                 if (locationMap[worldId] == null) return null;
                 return instanceWidget(context, locationMap[worldId]!, instanceMap[user.location]!, card: false);
               }(),
@@ -100,7 +100,7 @@ class ExtractionFriend extends ConsumerGridWidget {
                 if (!config.worldDetails) return null;
                 if (user.location == "private") return privateWorld(context, card: false, half: true);
                 if (user.location == "traveling") return privateWorld(context, card: false, half: true);
-                if (user.location == "offline") return onTheWebsite(context, half: true);
+                if (user.location == "offline") return const OnTheWebsite(half: true);
                 if (locationMap[worldId] == null) return null;
                 return instanceWidget(context, locationMap[worldId]!, instanceMap[user.location]!, card: false, half: true);
               }(),
