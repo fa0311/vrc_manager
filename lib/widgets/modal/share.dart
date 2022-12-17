@@ -12,7 +12,6 @@ import 'package:share_plus/share_plus.dart';
 // Project imports:
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
-import 'package:vrc_manager/assets/error.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/sub/json_viewer.dart';
 import 'package:vrc_manager/widgets/modal/main.dart';
@@ -156,41 +155,38 @@ class ShareInstanceTileWidget extends ConsumerWidget {
   }
 }
 
-Widget inviteVrchatListTileWidget(BuildContext context, String location) {
-  late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
-  return ListTile(
-    leading: const Icon(Icons.mail),
-    title: Text(AppLocalizations.of(context)!.joinInstance),
-    onTap: () => vrchatLoginSession
-        .shortName(location)
-        .then(
-          (VRChatSecureName secureId) => vrchatLoginSession
-              .selfInvite(location, secureId.shortName ?? secureId.secureName ?? "")
-              .then(
-                (VRChatNotificationsInvite response) => showDialog(
-                  context: context,
-                  builder: (_) {
-                    return AlertDialog(
-                      title: Text(AppLocalizations.of(context)!.sendInvite),
-                      content: Text(AppLocalizations.of(context)!.selfInviteDetails),
-                      actions: <Widget>[
-                        TextButton(
-                          child: Text(AppLocalizations.of(context)!.close),
-                          onPressed: () => Navigator.pop(context),
-                        ),
-                      ],
-                    );
-                  },
+class InviteVrchatListTileWidget extends ConsumerWidget {
+  final String location;
+  const InviteVrchatListTileWidget({super.key, required this.location});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
+    return ListTile(
+      leading: const Icon(Icons.mail),
+      title: Text(AppLocalizations.of(context)!.joinInstance),
+      onTap: () async {
+        VRChatSecureName secureId = await vrchatLoginSession.shortName(location);
+        await vrchatLoginSession.selfInvite(location, secureId.shortName ?? secureId.secureName ?? "");
+
+        showDialog(
+          context: context,
+          builder: (_) {
+            return AlertDialog(
+              title: Text(AppLocalizations.of(context)!.sendInvite),
+              content: Text(AppLocalizations.of(context)!.selfInviteDetails),
+              actions: <Widget>[
+                TextButton(
+                  child: Text(AppLocalizations.of(context)!.close),
+                  onPressed: () => Navigator.pop(context),
                 ),
-              )
-              .catchError((status) {
-            apiError(context, status);
-          }),
-        )
-        .catchError((status) {
-      apiError(context, status);
-    }),
-  );
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
 }
 
 class OpenInWindowsListTileWidget extends ConsumerWidget {
