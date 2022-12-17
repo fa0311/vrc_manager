@@ -14,10 +14,10 @@ import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/enum/icon.dart';
 import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets/anchor.dart';
-import 'package:vrc_manager/assets/api/notifier.dart';
 import 'package:vrc_manager/assets/date.dart';
 import 'package:vrc_manager/assets/error.dart';
 import 'package:vrc_manager/main.dart';
+import 'package:vrc_manager/scenes/sub/self.dart';
 import 'package:vrc_manager/widgets/modal/main.dart';
 import 'package:vrc_manager/widgets/modal/share.dart';
 import 'package:vrc_manager/widgets/share.dart';
@@ -130,7 +130,7 @@ Widget editBio(VRChatUser user) {
               ref.read(editBioProvider.notifier).state = true;
               vrchatLoginSession.changeBio(user.id, user.bio = controller.text).then((VRChatUserSelf response) {
                 user.bio = user.bio == "" ? null : user.bio;
-                ref.read(vrchatUserNotifier.notifier).set(user);
+                ref.read(vrchatUserCountProvider.notifier).state++;
                 ref.read(editBioProvider.notifier).state = false;
                 Navigator.pop(context);
               }).catchError((status) {
@@ -165,7 +165,7 @@ Widget editNote(VRChatUser user) {
               ref.read(editNoteProvider.notifier).state = true;
               vrchatLoginSession.userNotes(user.id, user.note = controller.text).then((VRChatUserNotes response) {
                 user.note = user.note == "" ? null : user.note;
-                ref.read(vrchatUserNotifier.notifier).set(user);
+                ref.read(vrchatUserCountProvider.notifier).state++;
                 ref.read(editNoteProvider.notifier).state = false;
                 Navigator.pop(context);
               }).catchError((status) {

@@ -10,7 +10,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 // Project imports:
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
-import 'package:vrc_manager/assets/api/notifier.dart';
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/widgets/drawer.dart';
@@ -30,6 +29,8 @@ class VRChatMobileSelfData {
     this.instance,
   });
 }
+
+final vrchatUserCountProvider = StateProvider<int>((ref) => 0);
 
 final vrchatMobileSelfProvider = FutureProvider<VRChatMobileSelfData>((ref) async {
   final VRChatAPI vrchatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
@@ -90,13 +91,13 @@ class VRChatMobileSelf extends ConsumerWidget {
             ),
             child: Consumer(
               builder: (context, ref, child) {
-                ref.watch(vrchatUserNotifier);
+                ref.watch(vrchatUserCountProvider);
                 return data.when(
                   loading: () => const Center(child: CircularProgressIndicator()),
                   error: (err, stack) => Text('Error: $err'),
                   data: (data) => Column(
                     children: [
-                      userProfile(context, ref.read(vrchatUserNotifier).user ?? data.user),
+                      userProfile(context, data.user),
                       Container(
                         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
                         child: () {

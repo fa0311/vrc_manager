@@ -10,9 +10,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 // Project imports:
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
-import 'package:vrc_manager/assets/api/notifier.dart';
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
 import 'package:vrc_manager/main.dart';
+import 'package:vrc_manager/scenes/sub/self.dart';
 import 'package:vrc_manager/widgets/drawer.dart';
 import 'package:vrc_manager/widgets/grid_view/widget/world.dart';
 import 'package:vrc_manager/widgets/modal/main.dart';
@@ -92,13 +92,13 @@ class VRChatMobileUser extends ConsumerWidget {
             ),
             child: Consumer(
               builder: (context, ref, child) {
-                ref.watch(vrchatUserNotifier);
+                ref.watch(vrchatUserCountProvider);
                 return data.when(
                   loading: () => const Center(child: CircularProgressIndicator()),
                   error: (err, stack) => Text('Error: $err'),
                   data: (data) => Column(
                     children: [
-                      userProfile(context, ref.read(vrchatUserNotifier).user ?? data.user),
+                      userProfile(context, data.user),
                       Container(
                         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
                         child: () {
