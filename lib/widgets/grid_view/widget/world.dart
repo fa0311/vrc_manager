@@ -31,7 +31,7 @@ Widget instanceWidget(
             MaterialPageRoute(
               builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id),
             )),
-        onLongPress: () => modalBottom(context, instanceDetailsModalBottom(context, ref, world, instance)),
+        onLongPress: () => modalBottom(context, instanceDetailsModalBottom(world, instance)),
         children: [
           Row(children: <Widget>[
             RegionWidget(region: instance.region, size: half ? 12 : 15),

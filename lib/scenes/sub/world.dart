@@ -50,7 +50,7 @@ class VRChatMobileWorld extends ConsumerWidget {
               icon: const Icon(Icons.more_vert),
               onPressed: () => modalBottom(
                 context,
-                worldDetailsModalBottom(context, ref, data.world),
+                worldDetailsModalBottom(data.world),
               ),
             )
           ],

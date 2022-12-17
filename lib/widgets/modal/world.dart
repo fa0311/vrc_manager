@@ -7,42 +7,35 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
 import 'package:vrc_manager/api/data_class.dart';
-import 'package:vrc_manager/storage/accessibility.dart';
 import 'package:vrc_manager/widgets/lunch_world.dart';
 import 'package:vrc_manager/widgets/modal.dart';
 import 'package:vrc_manager/widgets/modal/share.dart';
 import 'package:vrc_manager/widgets/world.dart';
 
 List<Widget> worldDetailsModalBottom(
-  BuildContext context,
-  WidgetRef ref,
   VRChatWorld world,
 ) {
   return [
     ShareUrlTileWidget(url: Uri.https("vrchat.com", "/home/world/${world.id}")),
-    favoriteListTileWidget(context, world),
-    launchWorldListTileWidget(context, world),
-    if (ref.read(accessibilityConfigProvider).debugMode) OpenInJsonViewer(content: world.content),
+    FavoriteListTileWidget(world: world),
+    LaunchWorldListTileWidget(world: world),
+    OpenInJsonViewer(content: world.content),
   ];
 }
 
 List<Widget> instanceDetailsModalBottom(
-  BuildContext context,
-  WidgetRef ref,
   VRChatWorld world,
   VRChatInstance instance,
 ) {
   return [
     ShareInstanceTileWidget(worldId: world.id, instanceId: instance.instanceId),
-    favoriteListTileWidget(context, world),
-    selfInviteListTileWidget(context, instance),
-    if (ref.read(accessibilityConfigProvider).debugMode) OpenInJsonViewer(content: instance.content),
+    FavoriteListTileWidget(world: world),
+    SelfInviteListTileWidget(instance: instance),
+    OpenInJsonViewer(content: instance.content),
   ];
 }
 
 List<Widget> userInstanceDetailsModalBottom(
-  BuildContext context,
-  WidgetRef ref,
   VRChatUser user,
   VRChatWorld world,
   VRChatInstance instance,
@@ -50,33 +43,58 @@ List<Widget> userInstanceDetailsModalBottom(
   return [
     ShareUrlTileWidget(url: Uri.https("vrchat.com", "/home/user/${user.id}")),
     ShareInstanceTileWidget(worldId: world.id, instanceId: instance.instanceId),
-    favoriteListTileWidget(context, world),
-    selfInviteListTileWidget(context, instance),
-    if (ref.read(accessibilityConfigProvider).debugMode) OpenInJsonViewer(content: instance.content),
+    FavoriteListTileWidget(world: world),
+    SelfInviteListTileWidget(instance: instance),
+    OpenInJsonViewer(content: instance.content),
   ];
 }
 
-Widget selfInviteListTileWidget(BuildContext context, VRChatInstance instance) {
-  return ListTile(
-    title: Text(AppLocalizations.of(context)!.joinInstance),
-    onTap: () {
-      selfInvite(context, instance);
-    },
-  );
+class SelfInviteListTileWidget extends ConsumerWidget {
+  final VRChatInstance instance;
+  const SelfInviteListTileWidget({super.key, required this.instance});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ListTile(
+      title: Text(AppLocalizations.of(context)!.joinInstance),
+      onTap: () {
+        selfInvite(context, instance);
+      },
+    );
+  }
 }
 
-Widget favoriteListTileWidget(BuildContext context, VRChatLimitedWorld world) {
-  return ListTile(
-    title: Text(AppLocalizations.of(context)!.addFavoriteWorlds),
-    onTap: () => showModalBottomSheetStatelessWidget(context: context, builder: () => FavoriteAction(world: world)),
-  );
+class FavoriteListTileWidget extends ConsumerWidget {
+  final VRChatLimitedWorld world;
+  const FavoriteListTileWidget({super.key, required this.world});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ListTile(
+      title: Text(AppLocalizations.of(context)!.addFavoriteWorlds),
+      onTap: () {
+        showModalBottomSheetStatelessWidget(
+          context: context,
+          builder: () {
+            return FavoriteAction(world: world);
+          },
+        );
+      },
+    );
+  }
 }
 
-Widget launchWorldListTileWidget(BuildContext context, VRChatLimitedWorld world) {
-  return ListTile(
-    title: Text(AppLocalizations.of(context)!.launchWorld),
-    onTap: () {
-      launchWorld(context, world);
-    },
-  );
+class LaunchWorldListTileWidget extends ConsumerWidget {
+  final VRChatLimitedWorld world;
+  const LaunchWorldListTileWidget({super.key, required this.world});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ListTile(
+      title: Text(AppLocalizations.of(context)!.launchWorld),
+      onTap: () {
+        launchWorld(context, world);
+      },
+    );
+  }
 }

@@ -43,7 +43,7 @@ class ExtractionUser extends ConsumerGridWidget {
                   MaterialPageRoute(
                     builder: (BuildContext context) => VRChatMobileUser(userId: user.id),
                   )),
-              onLongPress: () => modalBottom(context, userDetailsModalBottom(context, ref, user, userStatus)),
+              onLongPress: () => modalBottom(context, userDetailsModalBottom(user, userStatus)),
               children: [
                 username(user),
               ],
@@ -71,7 +71,7 @@ class ExtractionUser extends ConsumerGridWidget {
                   MaterialPageRoute(
                     builder: (BuildContext context) => VRChatMobileUser(userId: user.id),
                   )),
-              onLongPress: () => modalBottom(context, userDetailsModalBottom(context, ref, user, userStatus)),
+              onLongPress: () => modalBottom(context, userDetailsModalBottom(user, userStatus)),
               children: [
                 username(user, diameter: 12),
                 for (String text in [
@@ -101,7 +101,7 @@ class ExtractionUser extends ConsumerGridWidget {
                   MaterialPageRoute(
                     builder: (BuildContext context) => VRChatMobileUser(userId: user.id),
                   )),
-              onLongPress: () => modalBottom(context, userDetailsModalBottom(context, ref, user, status!)),
+              onLongPress: () => modalBottom(context, userDetailsModalBottom(user, status!)),
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,

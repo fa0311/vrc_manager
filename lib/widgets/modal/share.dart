@@ -14,6 +14,7 @@ import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/sub/json_viewer.dart';
+import 'package:vrc_manager/storage/accessibility.dart';
 import 'package:vrc_manager/widgets/modal/main.dart';
 import 'package:vrc_manager/widgets/share.dart';
 
@@ -110,17 +111,21 @@ class OpenInJsonViewer extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return ListTile(
-      title: Text(AppLocalizations.of(context)!.openInJsonViewer),
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (BuildContext context) => VRChatMobileJsonViewer(content: content),
-          ),
-        );
-      },
-    );
+    if (ref.watch(accessibilityConfigProvider).debugMode) {
+      return ListTile(
+        title: Text(AppLocalizations.of(context)!.openInJsonViewer),
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (BuildContext context) => VRChatMobileJsonViewer(content: content),
+            ),
+          );
+        },
+      );
+    } else {
+      return Container();
+    }
   }
 }
 

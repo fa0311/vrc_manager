@@ -49,8 +49,8 @@ class ExtractionFriend extends ConsumerGridWidget {
                   MaterialPageRoute(
                     builder: (BuildContext context) => VRChatMobileUser(userId: user.id),
                   )),
-              onLongPress: () => modalBottom(
-                  context, userDetailsModalBottom(context, ref, user, VRChatFriendStatus(isFriend: true, incomingRequest: false, outgoingRequest: false))),
+              onLongPress: () =>
+                  modalBottom(context, userDetailsModalBottom(user, VRChatFriendStatus(isFriend: true, incomingRequest: false, outgoingRequest: false))),
               bottom: () {
                 if (!config.worldDetails) return null;
                 if (user.location == "private") return privateWorld(context, card: false);
@@ -94,8 +94,8 @@ class ExtractionFriend extends ConsumerGridWidget {
                   MaterialPageRoute(
                     builder: (BuildContext context) => VRChatMobileUser(userId: user.id),
                   )),
-              onLongPress: () => modalBottom(
-                  context, userDetailsModalBottom(context, ref, user, VRChatFriendStatus(isFriend: true, incomingRequest: false, outgoingRequest: false))),
+              onLongPress: () =>
+                  modalBottom(context, userDetailsModalBottom(user, VRChatFriendStatus(isFriend: true, incomingRequest: false, outgoingRequest: false))),
               bottom: () {
                 if (!config.worldDetails) return null;
                 if (user.location == "private") return privateWorld(context, card: false, half: true);
@@ -141,9 +141,9 @@ class ExtractionFriend extends ConsumerGridWidget {
                       !["private", "offline", "traveling"].contains(user.location) &&
                       locationMap[worldId] != null &&
                       instanceMap[user.location] != null)
-                    ...userInstanceDetailsModalBottom(context, ref, user, locationMap[worldId]!, instanceMap[user.location]!)
+                    ...userInstanceDetailsModalBottom(user, locationMap[worldId]!, instanceMap[user.location]!)
                   else
-                    ...userDetailsModalBottom(context, ref, user, VRChatFriendStatus(isFriend: true, incomingRequest: false, outgoingRequest: false))
+                    ...userDetailsModalBottom(user, VRChatFriendStatus(isFriend: true, incomingRequest: false, outgoingRequest: false))
                 ],
               ),
               children: [

@@ -34,7 +34,7 @@ class ExtractionWorld extends ConsumerGridWidget {
                   MaterialPageRoute(
                     builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id),
                   )),
-              onLongPress: () => modalBottom(context, [favoriteListTileWidget(context, world)]),
+              onLongPress: () => modalBottom(context, [FavoriteListTileWidget(world: world)]),
               children: [
                 SizedBox(
                   child: Text(
@@ -71,7 +71,7 @@ class ExtractionWorld extends ConsumerGridWidget {
                   MaterialPageRoute(
                     builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id),
                   )),
-              onLongPress: () => modalBottom(context, [favoriteListTileWidget(context, world)]),
+              onLongPress: () => modalBottom(context, [FavoriteListTileWidget(world: world)]),
               children: [
                 SizedBox(
                   width: double.infinity,
@@ -107,7 +107,7 @@ class ExtractionWorld extends ConsumerGridWidget {
                   MaterialPageRoute(
                     builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id),
                   )),
-              onLongPress: () => modalBottom(context, [favoriteListTileWidget(context, world)]),
+              onLongPress: () => modalBottom(context, [FavoriteListTileWidget(world: world)]),
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,

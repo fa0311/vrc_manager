@@ -40,7 +40,7 @@ class ExtractionFavoriteWorld extends ConsumerGridWidget {
                     MaterialPageRoute(
                       builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id),
                     )),
-                onLongPress: () => modalBottom(context, [favoriteListTileWidget(context, world)]),
+                onLongPress: () => modalBottom(context, [FavoriteListTileWidget(world: world)]),
                 right: config.removeButton
                     ? [
                         SizedBox(
@@ -91,7 +91,7 @@ class ExtractionFavoriteWorld extends ConsumerGridWidget {
                   MaterialPageRoute(
                     builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id),
                   )),
-              onLongPress: () => modalBottom(context, [favoriteListTileWidget(context, world)]),
+              onLongPress: () => modalBottom(context, [FavoriteListTileWidget(world: world)]),
               stack: config.removeButton
                   ? [
                       SizedBox(
