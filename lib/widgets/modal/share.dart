@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:share_plus/share_plus.dart';
 
 // Project imports:
@@ -19,98 +20,140 @@ import 'package:vrc_manager/widgets/share.dart';
 
 List<Widget> shareUrlListTile(BuildContext context, Uri url, {bool browserExternalForce = false}) {
   return [
-    shareListTileWidget(context, url.toString()),
-    copyListTileWidget(context, url.toString()),
-    if (!browserExternalForce) openInBrowserListTileWidget(context, url),
-    if (url.host != "vrchat.com" && browserExternalForce) openInBrowserExternalForceListTileWidget(context, url),
+    ShareListTileWidget(text: url.toString()),
+    CopyListTileWidget(text: url.toString()),
+    if (!browserExternalForce) OpenInBrowserListTileWidget(url: url),
+    if (url.host != "vrchat.com" && browserExternalForce) OpenInBrowserExternalForceListTileWidget(url: url),
   ];
 }
 
 List<Widget> shareInstanceListTile(BuildContext context, String worldId, String instanceId) {
-  Uri url = Uri.https("vrchat.com/", "/home/launch?worldId=$worldId&instanceId=$instanceId");
+  Uri url = Uri.https("vrchat.com", "/home/launch", {"worldId": worldId, "instanceId": instanceId});
   return [
-    shareListTileWidget(context, url.toString()),
-    copyListTileWidget(context, url.toString()),
-    openInBrowserListTileWidget(context, url),
+    ShareListTileWidget(text: url.toString()),
+    CopyListTileWidget(text: url.toString()),
+    OpenInBrowserListTileWidget(url: url),
     if (Platform.isWindows)
-      openInWindowsListTileWidget(context, Uri(scheme: "vrchat", path: "launch", queryParameters: {"ref": "vrchat.com", "id": "$worldId:$instanceId"})),
+      OpenInWindowsListTileWidget(url: Uri(scheme: "vrchat", path: "launch", queryParameters: {"ref": "vrchat.com", "id": "$worldId:$instanceId"})),
   ];
 }
 
-Widget shareListTileWidget(BuildContext context, String text) {
-  return ListTile(
-    leading: const Icon(Icons.share),
-    title: Text(AppLocalizations.of(context)!.share),
-    onTap: () {
-      Navigator.pop(context);
-      Share.share(text);
-    },
-  );
+class ShareListTileWidget extends ConsumerWidget {
+  final String text;
+  const ShareListTileWidget({super.key, required this.text});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ListTile(
+      leading: const Icon(Icons.share),
+      title: Text(AppLocalizations.of(context)!.share),
+      onTap: () {
+        Share.share(text);
+      },
+    );
+  }
 }
 
-Widget copyListTileWidget(BuildContext context, String text) {
-  return ListTile(
-    leading: const Icon(Icons.copy),
-    title: Text(AppLocalizations.of(context)!.copy),
-    onTap: () {
-      Navigator.pop(context);
-      copyToClipboard(context, text);
-    },
-  );
+class CopyListTileWidget extends ConsumerWidget {
+  final String text;
+  const CopyListTileWidget({super.key, required this.text});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ListTile(
+      leading: const Icon(Icons.copy),
+      title: Text(AppLocalizations.of(context)!.copy),
+      onTap: () {
+        Navigator.pop(context);
+        copyToClipboard(context, text);
+      },
+    );
+  }
 }
 
-Widget openInBrowserListTileWidget(BuildContext context, Uri url) {
-  return ListTile(
-    leading: const Icon(Icons.open_in_browser),
-    title: Text(AppLocalizations.of(context)!.openInBrowser),
-    onTap: () {
-      Navigator.pop(context);
-      openInBrowser(context, url);
-    },
-  );
+class OpenInBrowserListTileWidget extends ConsumerWidget {
+  final Uri url;
+  const OpenInBrowserListTileWidget({super.key, required this.url});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ListTile(
+      leading: const Icon(Icons.open_in_browser),
+      title: Text(AppLocalizations.of(context)!.openInBrowser),
+      onTap: () {
+        Navigator.pop(context);
+        openInBrowser(context, url);
+      },
+    );
+  }
 }
 
-Widget openInBrowserExternalForceListTileWidget(BuildContext context, Uri url) {
-  return ListTile(
-    leading: const Icon(Icons.open_in_browser),
-    title: Text(AppLocalizations.of(context)!.openInExternalBrowser),
-    onTap: () {
-      Navigator.pop(context);
-      openInBrowser(context, url, forceExternal: true);
-    },
-  );
+class OpenInBrowserExternalForceListTileWidget extends ConsumerWidget {
+  final Uri url;
+  const OpenInBrowserExternalForceListTileWidget({super.key, required this.url});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ListTile(
+      leading: const Icon(Icons.open_in_browser),
+      title: Text(AppLocalizations.of(context)!.openInExternalBrowser),
+      onTap: () {
+        Navigator.pop(context);
+        openInBrowser(context, url, forceExternal: true);
+      },
+    );
+  }
 }
 
-Widget openInJsonViewer(BuildContext context, dynamic content) {
-  return ListTile(
-    title: Text(AppLocalizations.of(context)!.openInJsonViewer),
-    onTap: () {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (BuildContext context) => VRChatMobileJsonViewer(obj: content),
-        ),
-      );
-    },
-  );
+class OpenInJsonViewer extends ConsumerWidget {
+  final dynamic content;
+  const OpenInJsonViewer({super.key, this.content});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ListTile(
+      title: Text(AppLocalizations.of(context)!.openInJsonViewer),
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (BuildContext context) => VRChatMobileJsonViewer(content: content),
+          ),
+        );
+      },
+    );
+  }
 }
 
-Widget shareUrlTileWidget(BuildContext context, Uri url) {
-  return ListTile(
-    title: Text(AppLocalizations.of(context)!.share),
-    onTap: () {
-      modalBottom(context, shareUrlListTile(context, url));
-    },
-  );
+class ShareUrlTileWidget extends ConsumerWidget {
+  final Uri url;
+  const ShareUrlTileWidget({super.key, required this.url});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ListTile(
+      title: Text(AppLocalizations.of(context)!.share),
+      onTap: () {
+        modalBottom(context, shareUrlListTile(context, url));
+      },
+    );
+  }
 }
 
-Widget shareInstanceTileWidget(BuildContext context, String worldId, String instanceId) {
-  return ListTile(
-    title: Text(AppLocalizations.of(context)!.share),
-    onTap: () {
-      modalBottom(context, shareInstanceListTile(context, worldId, instanceId));
-    },
-  );
+class ShareInstanceTileWidget extends ConsumerWidget {
+  final String worldId;
+  final String instanceId;
+  const ShareInstanceTileWidget({super.key, required this.worldId, required this.instanceId});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ListTile(
+      title: Text(AppLocalizations.of(context)!.share),
+      onTap: () {
+        modalBottom(context, shareInstanceListTile(context, worldId, instanceId));
+      },
+    );
+  }
 }
 
 Widget inviteVrchatListTileWidget(BuildContext context, String location) {
@@ -150,13 +193,19 @@ Widget inviteVrchatListTileWidget(BuildContext context, String location) {
   );
 }
 
-Widget openInWindowsListTileWidget(BuildContext context, Uri url) {
-  return ListTile(
-    leading: const Icon(Icons.laptop_windows),
-    title: Text(AppLocalizations.of(context)!.openInVrchat),
-    onTap: () {
-      Navigator.pop(context);
-      openInBrowser(context, url);
-    },
-  );
+class OpenInWindowsListTileWidget extends ConsumerWidget {
+  final Uri url;
+  const OpenInWindowsListTileWidget({super.key, required this.url});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ListTile(
+      leading: const Icon(Icons.laptop_windows),
+      title: Text(AppLocalizations.of(context)!.openInVrchat),
+      onTap: () {
+        Navigator.pop(context);
+        openInBrowser(context, url);
+      },
+    );
+  }
 }

@@ -15,8 +15,8 @@ import 'package:vrc_manager/widgets/modal/main.dart';
 import 'package:vrc_manager/widgets/modal/share.dart';
 
 class VRChatMobileJsonViewer extends ConsumerWidget {
-  final dynamic obj;
-  const VRChatMobileJsonViewer({Key? key, required this.obj}) : super(key: key);
+  final dynamic content;
+  const VRChatMobileJsonViewer({Key? key, required this.content}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -27,7 +27,7 @@ class VRChatMobileJsonViewer extends ConsumerWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.share),
-            onPressed: () => modalBottom(context, [copyListTileWidget(context, jsonEncode(obj))]),
+            onPressed: () => modalBottom(context, [CopyListTileWidget(text: jsonEncode(content))]),
           )
         ],
       ),
@@ -36,7 +36,7 @@ class VRChatMobileJsonViewer extends ConsumerWidget {
         child: SafeArea(
           child: ListView(
             children: [
-              JsonViewer(obj),
+              JsonViewer(content),
             ],
           ),
         ),

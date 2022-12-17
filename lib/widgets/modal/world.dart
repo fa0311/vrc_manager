@@ -19,10 +19,10 @@ List<Widget> worldDetailsModalBottom(
   VRChatWorld world,
 ) {
   return [
-    shareUrlTileWidget(context, Uri.https("vrchat.com", "/home/world/${world.id}")),
+    ShareUrlTileWidget(url: Uri.https("vrchat.com", "/home/world/${world.id}")),
     favoriteListTileWidget(context, world),
     launchWorldListTileWidget(context, world),
-    if (ref.read(accessibilityConfigProvider).debugMode) openInJsonViewer(context, world.content),
+    if (ref.read(accessibilityConfigProvider).debugMode) OpenInJsonViewer(content: world.content),
   ];
 }
 
@@ -33,10 +33,10 @@ List<Widget> instanceDetailsModalBottom(
   VRChatInstance instance,
 ) {
   return [
-    shareInstanceTileWidget(context, world.id, instance.instanceId),
+    ShareInstanceTileWidget(worldId: world.id, instanceId: instance.instanceId),
     favoriteListTileWidget(context, world),
     selfInviteListTileWidget(context, instance),
-    if (ref.read(accessibilityConfigProvider).debugMode) openInJsonViewer(context, instance.content),
+    if (ref.read(accessibilityConfigProvider).debugMode) OpenInJsonViewer(content: instance.content),
   ];
 }
 
@@ -48,11 +48,11 @@ List<Widget> userInstanceDetailsModalBottom(
   VRChatInstance instance,
 ) {
   return [
-    shareUrlTileWidget(context, Uri.https("vrchat.com", "/home/user/${user.id}")),
-    shareInstanceTileWidget(context, world.id, instance.instanceId),
+    ShareUrlTileWidget(url: Uri.https("vrchat.com", "/home/user/${user.id}")),
+    ShareInstanceTileWidget(worldId: world.id, instanceId: instance.instanceId),
     favoriteListTileWidget(context, world),
     selfInviteListTileWidget(context, instance),
-    if (ref.read(accessibilityConfigProvider).debugMode) openInJsonViewer(context, instance.content),
+    if (ref.read(accessibilityConfigProvider).debugMode) OpenInJsonViewer(content: instance.content),
   ];
 }
 
