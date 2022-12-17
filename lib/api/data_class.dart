@@ -176,9 +176,9 @@ class VRChatUser {
 
     allowAvatarCopying = content['allowAvatarCopying'] ?? false;
     for (dynamic link in content['bioLinks'] ?? []) {
-      try {
+      if (Uri.tryParse(link) != null) {
         bioLinks.add(Uri.parse(link));
-      } finally {}
+      }
     }
     dateJoined = content['date_joined'] == null ? null : DateTime.parse(content['date_joined']);
     friendRequestStatus = content['friendRequestStatus'];
