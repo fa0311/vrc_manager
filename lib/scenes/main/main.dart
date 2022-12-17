@@ -90,7 +90,7 @@ class VRChatMobileHome extends ConsumerWidget {
           ),
         ],
       ),
-      drawer: drawer(),
+      drawer: const NormalDrawer(),
       body: SafeArea(
         child: PageView(
           controller: controller,

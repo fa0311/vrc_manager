@@ -60,12 +60,30 @@ Widget getAccountList() {
   });
 }
 
-Drawer drawer() {
-  return Drawer(
-    child: SafeArea(
-      child: Consumer(
-        builder: (BuildContext context, WidgetRef ref, _) => Column(
+class NormalDrawer extends ConsumerWidget {
+  const NormalDrawer({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Drawer(
+      child: SafeArea(
+        child: Column(
           children: <Widget>[
+            UserAccountsDrawerHeader(
+              accountName: const Text("User Name"),
+              accountEmail: const Text("User Email"),
+              currentAccountPicture: const CircleAvatar(
+                backgroundColor: Colors.white,
+              ),
+              otherAccountsPictures: [
+                InkWell(
+                  onTap: () => print("image clicked"),
+                  child: const CircleAvatar(
+                    backgroundColor: Colors.white,
+                  ),
+                ),
+              ],
+            ),
             Expanded(
               child: SingleChildScrollView(
                 child: Column(
@@ -137,15 +155,18 @@ Drawer drawer() {
           ],
         ),
       ),
-    ),
-  );
+    );
+  }
 }
 
-Drawer simpleDrawer() {
-  return Drawer(
-    child: SafeArea(
-      child: Consumer(
-        builder: (BuildContext context, WidgetRef ref, _) => Column(
+class SimpleDrawer extends ConsumerWidget {
+  const SimpleDrawer({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Drawer(
+      child: SafeArea(
+        child: Column(
           children: <Widget>[
             Expanded(
               child: Column(children: <Widget>[
@@ -195,6 +216,6 @@ Drawer simpleDrawer() {
           ],
         ),
       ),
-    ),
-  );
+    );
+  }
 }

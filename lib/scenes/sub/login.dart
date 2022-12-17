@@ -161,7 +161,7 @@ class VRChatMobileLogin extends ConsumerWidget {
           ),
         ],
       ),
-      drawer: simpleDrawer(),
+      drawer: const SimpleDrawer(),
       body: Padding(
         padding: const EdgeInsets.all(32.0),
         child: Column(

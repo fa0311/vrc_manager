@@ -56,7 +56,7 @@ class VRChatMobileWorld extends ConsumerWidget {
           ],
         ),
       ),
-      drawer: Navigator.of(context).canPop() ? null : drawer(),
+      drawer: Navigator.of(context).canPop() ? null : const NormalDrawer(),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Container(
@@ -81,4 +81,6 @@ class VRChatMobileWorld extends ConsumerWidget {
       ),
     );
   }
+
+  normalDrawer() {}
 }
