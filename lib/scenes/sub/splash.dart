@@ -14,9 +14,12 @@ import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/main/main.dart';
 import 'package:vrc_manager/scenes/sub/login.dart';
 import 'package:vrc_manager/scenes/web/web_view_policies.dart';
+import 'package:vrc_manager/storage/account.dart';
 import 'package:vrc_manager/storage/grid_modal.dart';
 import 'package:vrc_manager/storage/user_policy.dart';
 import 'package:vrc_manager/widgets/grid_modal/config.dart';
+
+final accountConfigProvider = ChangeNotifierProvider<AccountConfigNotifier>((ref) => AccountConfigNotifier());
 
 class VRChatMobileSplash extends ConsumerWidget {
   const VRChatMobileSplash({Key? key}) : super(key: key);
@@ -56,6 +59,8 @@ class VRChatMobileSplash extends ConsumerWidget {
     for (GridModalConfigType id in GridModalConfigType.values) {
       ref.read(gridConfigProvider(id));
     }
+
+    // AccountConfigNotifier accountConfig = ref.watch(accountConfigProvider);
 
     UserPolicyConfigNotifier userPolicyConfig = ref.watch(userPolicyConfigProvider);
 
