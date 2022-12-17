@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 // Project imports:
-import 'package:vrc_manager/assets/dialog.dart';
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/setting/other_account.dart';
@@ -35,37 +34,67 @@ class _SettingAccountPageState extends State<VRChatMobileSettingsAccount> {
               child: Column(
                 children: <Widget>[
                   ListTile(
-                      title: Text(AppLocalizations.of(context)!.logout),
-                      subtitle: Text(AppLocalizations.of(context)!.logoutDetails),
-                      onTap: () => confirm(
-                            context,
-                            AppLocalizations.of(context)!.logoutConfirm,
-                            AppLocalizations.of(context)!.logout,
-                          ).then((value) {
-                            if (!value) return;
-                            Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(
-                                builder: (BuildContext context) => const VRChatMobileLogin(),
+                    title: Text(AppLocalizations.of(context)!.logout),
+                    subtitle: Text(AppLocalizations.of(context)!.logoutDetails),
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (_) {
+                          return AlertDialog(
+                            title: Text(AppLocalizations.of(context)!.logoutConfirm),
+                            actions: <Widget>[
+                              TextButton(
+                                child: Text(AppLocalizations.of(context)!.cancel),
+                                onPressed: () => Navigator.pop(context),
                               ),
-                              (_) => false,
-                            );
-                            appConfig.loggedAccount?.removeCookie();
-                          })),
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pushAndRemoveUntil(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (BuildContext context) => const VRChatMobileLogin(),
+                                    ),
+                                    (_) => false,
+                                  );
+                                  appConfig.loggedAccount?.removeCookie();
+                                },
+                                child: Text(AppLocalizations.of(context)!.logout),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
+                  ),
                   ListTile(
-                      title: Text(AppLocalizations.of(context)!.deleteLoginInfo),
-                      subtitle: Text(AppLocalizations.of(context)!.deleteLoginInfoDetails),
-                      onTap: () => confirm(
-                            context,
-                            AppLocalizations.of(context)!.deleteLoginInfoConfirm,
-                            AppLocalizations.of(context)!.delete,
-                          ).then((value) {
-                            if (!value) return;
-                            appConfig.loggedAccount?.removeUserId();
-                            appConfig.loggedAccount?.removePassword();
-                            appConfig.loggedAccount?.removeDisplayName();
-                            appConfig.loggedAccount?.setRememberLoginInfo(false);
-                          })),
+                    title: Text(AppLocalizations.of(context)!.deleteLoginInfo),
+                    subtitle: Text(AppLocalizations.of(context)!.deleteLoginInfoDetails),
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (_) {
+                          return AlertDialog(
+                            title: Text(AppLocalizations.of(context)!.deleteLoginInfoConfirm),
+                            actions: <Widget>[
+                              TextButton(
+                                child: Text(AppLocalizations.of(context)!.cancel),
+                                onPressed: () => Navigator.pop(context),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  appConfig.loggedAccount?.removeUserId();
+                                  appConfig.loggedAccount?.removePassword();
+                                  appConfig.loggedAccount?.removeDisplayName();
+                                  appConfig.loggedAccount?.setRememberLoginInfo(false);
+                                },
+                                child: Text(AppLocalizations.of(context)!.delete),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
+                  ),
                   ListTile(
                     title: Text(AppLocalizations.of(context)!.token),
                     subtitle: Text(AppLocalizations.of(context)!.tokenDetails),

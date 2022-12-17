@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 // Project imports:
-import 'package:vrc_manager/assets/dialog.dart';
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
 import 'package:vrc_manager/data_class/app_config.dart';
 import 'package:vrc_manager/main.dart';
@@ -71,15 +70,28 @@ class _SettingOtherAccountPageState extends State<VRChatMobileSettingsOtherAccou
                         SizedBox(
                           width: 50,
                           child: IconButton(
-                            onPressed: () => confirm(
-                              context,
-                              AppLocalizations.of(context)!.deleteLoginInfoConfirm,
-                              AppLocalizations.of(context)!.delete,
-                            ).then((value) {
-                              if (!value) return;
-                              appConfig.removeAccount(account);
-                              setState(() {});
-                            }),
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (_) {
+                                  return AlertDialog(
+                                    title: Text(AppLocalizations.of(context)!.deleteLoginInfoConfirm),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        child: Text(AppLocalizations.of(context)!.cancel),
+                                        onPressed: () => Navigator.pop(context),
+                                      ),
+                                      TextButton(
+                                        onPressed: () {
+                                          appConfig.removeAccount(account);
+                                        },
+                                        child: Text(AppLocalizations.of(context)!.delete),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            },
                             icon: const Icon(Icons.delete),
                           ),
                         ),
