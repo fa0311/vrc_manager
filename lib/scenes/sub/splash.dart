@@ -11,7 +11,6 @@ import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:vrc_manager/assets/flutter/url_parser.dart';
 
 // Project imports:
-import 'package:vrc_manager/scenes/main/main.dart';
 import 'package:vrc_manager/scenes/sub/login.dart';
 import 'package:vrc_manager/scenes/web/web_view_policies.dart';
 import 'package:vrc_manager/storage/account.dart';
@@ -52,45 +51,53 @@ final splashProvider = FutureProvider<SplashData>((ref) async {
     return SplashData.login;
   }
 
+  if (!await accountConfig.loggedAccount!.tokenCheck()) {
+    return SplashData.login;
+  }
+
   return SplashData.home;
 });
 
 class VRChatMobileSplash extends ConsumerWidget {
-  const VRChatMobileSplash({Key? key}) : super(key: key);
+  final Widget child;
+  final bool login;
+  const VRChatMobileSplash({Key? key, required this.child, this.login = true}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     AsyncValue<SplashData> data = ref.watch(splashProvider);
 
-    return data.when(
-      loading: () => SizedBox(
-        width: MediaQuery.of(context).size.width,
-        child: const Center(
-          child: SizedBox(
-            width: 100,
-            height: 100,
-            child: CircularProgressIndicator(strokeWidth: 8),
+    return Scaffold(
+      body: data.when(
+        loading: () => SizedBox(
+          width: MediaQuery.of(context).size.width,
+          child: const Center(
+            child: SizedBox(
+              width: 100,
+              height: 100,
+              child: CircularProgressIndicator(strokeWidth: 8),
+            ),
           ),
         ),
+        error: (err, stack) => Text('Error: $err'),
+        data: (SplashData data) {
+          switch (data) {
+            case SplashData.home:
+              if (Platform.isAndroid || Platform.isIOS) {
+                ReceiveSharingIntent.getInitialText().then((String? initialText) {
+                  if (initialText != null) {
+                    urlParser(context, Uri.parse(initialText));
+                  }
+                });
+              }
+              return child;
+            case SplashData.login:
+              return login ? const VRChatMobileLogin() : child;
+            case SplashData.userPolicy:
+              return const VRChatMobileWebViewUserPolicy();
+          }
+        },
       ),
-      error: (err, stack) => Text('Error: $err'),
-      data: (SplashData data) {
-        switch (data) {
-          case SplashData.home:
-            if (Platform.isAndroid || Platform.isIOS) {
-              ReceiveSharingIntent.getInitialText().then((String? initialText) {
-                if (initialText != null) {
-                  urlParser(context, Uri.parse(initialText));
-                }
-              });
-            }
-            return const VRChatMobileHome();
-          case SplashData.login:
-            return const VRChatMobileLogin();
-          case SplashData.userPolicy:
-            return const VRChatMobileWebViewUserPolicy();
-        }
-      },
     );
   }
 }

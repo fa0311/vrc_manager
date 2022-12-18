@@ -9,6 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Package imports:
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:vrc_manager/scenes/main/main.dart';
 import 'package:vrc_manager/scenes/sub/splash.dart';
 import 'package:vrc_manager/storage/accessibility.dart';
 
@@ -44,7 +45,9 @@ class VRChatMobile extends ConsumerWidget {
       locale: Locale(accessibilityConfig.languageCode.name, ''),
       theme: accessibilityConfig.themeBrightness.toTheme(),
       darkTheme: accessibilityConfig.darkThemeBrightness.toTheme(),
-      home: const VRChatMobileSplash(),
+      home: const VRChatMobileSplash(
+        child: VRChatMobileHome(),
+      ),
     );
   }
 }

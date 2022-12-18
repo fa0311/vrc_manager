@@ -36,7 +36,10 @@ class AccountList extends ConsumerWidget {
           onTap: () => Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
-              builder: (_) => const VRChatMobileSettingsOtherAccount(),
+              builder: (_) => const VRChatMobileSplash(
+                login: false,
+                child: VRChatMobileSettingsOtherAccount(),
+              ),
             ),
             (_) => false,
           ),

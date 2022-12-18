@@ -21,13 +21,16 @@ class AccountConfigNotifier extends ChangeNotifier {
       getStorage("account_index").then((value) => accountUid = value),
       getStorageList("account_index_list").then((List<String> value) => uidList = value),
     ]);
+    List<Future> futureList = [];
     for (String uid in uidList) {
       AccountConfig accountConfig = AccountConfig(uid);
       accountList.add(accountConfig);
+      futureList.add(accountConfig.init());
       if (uid == accountUid) {
         loggedAccount = accountConfig;
       }
     }
+    await Future.wait(futureList);
   }
 
   Future removeAccount(AccountConfig account) async {
@@ -59,12 +62,10 @@ class AccountConfigNotifier extends ChangeNotifier {
     return await removeStorage("account_index");
   }
 
-  Future<bool> login(AccountConfig value) async {
+  Future login(AccountConfig value) async {
     loggedAccount = value;
     notifyListeners();
-    if (!(await loggedAccount!.tokenCheck())) return false;
     await setStorage("account_index", value.uid);
-    return true;
   }
 
   bool isLogout() {
@@ -154,7 +155,7 @@ class AccountConfig extends ChangeNotifier {
   }
 
   Future<bool> tokenCheck() async {
-    late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: cookie);
+    VRChatAPI vrchatLoginSession = VRChatAPI(cookie: cookie);
     return await vrchatLoginSession.user().then((VRChatUserSelfOverload response) {
       setDisplayName(response.displayName);
       return true;

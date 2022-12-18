@@ -14,7 +14,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets/error.dart';
-import 'package:vrc_manager/scenes/main/main.dart';
 import 'package:vrc_manager/scenes/sub/splash.dart';
 import 'package:vrc_manager/storage/account.dart';
 import 'package:vrc_manager/widgets/drawer.dart';
@@ -80,15 +79,7 @@ class VRChatMobileLogin extends ConsumerWidget {
       config.setRememberLoginInfo(ref.read(rememberPasswordProvider));
       ref.read(accountConfigProvider.notifier).addAccount(config);
 
-      bool logged = await ref.read(accountConfigProvider.notifier).login(config);
-      // ignore: use_build_context_synchronously
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(
-          builder: (BuildContext context) => logged ? const VRChatMobileHome() : const VRChatMobileLogin(),
-        ),
-        (_) => false,
-      );
+      await ref.read(accountConfigProvider.notifier).login(config);
     }
 
     onPressedTotp() async {
