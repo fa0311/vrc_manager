@@ -34,7 +34,7 @@ class VRChatMobileUserData {
 }
 
 final vrchatMobileUserProvider = FutureProvider.family<VRChatMobileUserData, String>((ref, userId) async {
-  VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider)!.cookie);
+  VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount!.cookie);
   late VRChatUser user;
   late VRChatFriendStatus status;
   VRChatWorld? world;

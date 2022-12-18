@@ -42,7 +42,7 @@ class VRChatMobileSearchData {
 }
 
 final vrchatMobileSearchProvider = FutureProvider<VRChatMobileSearchData>((ref) async {
-  VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider)!.cookie);
+  VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount!.cookie);
   List<VRChatUser> userList = [];
   List<VRChatLimitedWorld> worldList = [];
   int len;

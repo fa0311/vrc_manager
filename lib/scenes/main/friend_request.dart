@@ -18,7 +18,7 @@ class VRChatMobileFriendRequestData {
 }
 
 final vrchatMobileFriendsProvider = FutureProvider<VRChatMobileFriendRequestData>((ref) async {
-  VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider)!.cookie);
+  VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount!.cookie);
   List<Future> futureList = [];
   List<VRChatUser> userList = [];
   int len;

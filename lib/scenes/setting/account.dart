@@ -52,7 +52,7 @@ class VRChatMobileSettingsAccount extends ConsumerWidget {
                                     ),
                                     (_) => false,
                                   );
-                                  ref.watch(accountConfigProvider)!.removeCookie();
+                                  ref.watch(accountConfigProvider).loggedAccount!.removeCookie();
                                 },
                                 child: Text(AppLocalizations.of(context)!.logout),
                               ),
@@ -78,7 +78,7 @@ class VRChatMobileSettingsAccount extends ConsumerWidget {
                               ),
                               TextButton(
                                 onPressed: () {
-                                  ref.read(accountConfigProvider)!
+                                  ref.read(accountConfigProvider).loggedAccount!
                                     ..removeUserId()
                                     ..removePassword()
                                     ..removeDisplayName()

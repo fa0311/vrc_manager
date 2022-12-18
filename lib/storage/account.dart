@@ -1,20 +1,21 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
 
 // Project imports:
 import 'package:vrc_manager/assets/storage.dart';
 
-class AccountConfigNotifier extends StateNotifier<AccountConfig?> {
+class AccountConfigNotifier extends ChangeNotifier {
   List<AccountConfig> accountList = [];
-
-  AccountConfigNotifier(super.state);
+  AccountConfig? loggedAccount;
+  bool isFirst = true;
 
   init() async {
     List uidList = [];
     String? accountUid;
+
+    isFirst = false;
 
     await Future.wait([
       getStorage("account_index").then((value) => accountUid = value),
@@ -24,7 +25,7 @@ class AccountConfigNotifier extends StateNotifier<AccountConfig?> {
       AccountConfig accountConfig = AccountConfig(uid);
       accountList.add(accountConfig);
       if (uid == accountUid) {
-        state = accountConfig;
+        loggedAccount = accountConfig;
       }
     }
   }
@@ -41,32 +42,33 @@ class AccountConfigNotifier extends StateNotifier<AccountConfig?> {
 
     futureList.add(setStorageList("account_index_list", getAccountList()));
 
-    if (state == account) {
+    if (loggedAccount == account) {
       if (accountList.isEmpty) {
         futureList.add(logout());
       } else {
-        state = accountList.first;
+        loggedAccount = accountList.first;
+        notifyListeners();
       }
     }
     return Future.wait(futureList);
   }
 
   Future<bool> logout() async {
-    state = null;
+    loggedAccount = null;
+    notifyListeners();
     return await removeStorage("account_index");
   }
 
-  Future<bool> login(AccountConfig accountConfig) async {
-    List<Future> futureList = [];
-    state = accountConfig;
-    if (!(await state!.tokenCheck())) return false;
-    futureList.add(setStorage("account_index", accountConfig.uid));
-    await Future.wait(futureList);
+  Future<bool> login(AccountConfig value) async {
+    loggedAccount = value;
+    notifyListeners();
+    if (!(await loggedAccount!.tokenCheck())) return false;
+    await setStorage("account_index", value.uid);
     return true;
   }
 
   bool isLogout() {
-    return state != null;
+    return loggedAccount != null;
   }
 
   List<String> getAccountList() {
@@ -109,7 +111,6 @@ class AccountConfig extends ChangeNotifier {
       getLoginSession("display_name", uid).then((value) => displayName = value ?? ""),
       getLoginSession("remember_login_info", uid).then((value) => rememberLoginInfo = (value == "true"))
     ]);
-    notifyListeners();
   }
 
   Future setCookie(String value) async {
@@ -152,9 +153,13 @@ class AccountConfig extends ChangeNotifier {
     return await removeLoginSession("display_name", uid);
   }
 
-  Future tokenCheck() async {
-    VRChatAPI vrchatLoginSession = VRChatAPI(cookie: cookie);
-    VRChatUserSelfOverload response = await vrchatLoginSession.user();
-    setDisplayName(response.displayName);
+  Future<bool> tokenCheck() async {
+    late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: cookie);
+    return await vrchatLoginSession.user().then((VRChatUserSelfOverload response) {
+      setDisplayName(response.displayName);
+      return true;
+    }).catchError((status) {
+      return false;
+    });
   }
 }

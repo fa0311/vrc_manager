@@ -54,7 +54,7 @@ final rememberPasswordProvider = StateProvider.autoDispose<bool>((ref) {
 final loginDataProvider = StateProvider.autoDispose<VRChatMobileLoginData>((ref) {
   AccountConfig accountConfig;
   if (ref.read(accountConfigProvider.notifier).isLogout()) {
-    accountConfig = ref.read(accountConfigProvider)!;
+    accountConfig = ref.read(accountConfigProvider).loggedAccount!;
   } else {
     accountConfig = AccountConfig(genUid());
   }

@@ -33,7 +33,7 @@ class VRChatMobileSelfData {
 final vrchatUserCountProvider = StateProvider<int>((ref) => 0);
 
 final vrchatMobileSelfProvider = FutureProvider<VRChatMobileSelfData>((ref) async {
-  final VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.read(accountConfigProvider)!.cookie);
+  final VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.read(accountConfigProvider).loggedAccount!.cookie);
   late VRChatUserSelfOverload user;
   VRChatWorld? world;
   VRChatInstance? instance;

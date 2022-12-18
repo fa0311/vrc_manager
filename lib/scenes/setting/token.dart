@@ -11,7 +11,8 @@ import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
 import 'package:vrc_manager/scenes/sub/splash.dart';
 
-final tokenControllerProvider = StateProvider<TextEditingController>((ref) => TextEditingController(text: ref.read(accountConfigProvider)!.cookie));
+final tokenControllerProvider =
+    StateProvider<TextEditingController>((ref) => TextEditingController(text: ref.read(accountConfigProvider).loggedAccount!.cookie));
 
 class VRChatMobileTokenSetting extends ConsumerWidget {
   final bool offline;
@@ -42,7 +43,7 @@ class VRChatMobileTokenSetting extends ConsumerWidget {
                   ElevatedButton(
                     child: Text(AppLocalizations.of(context)!.save),
                     onPressed: () {
-                      ref.read(accountConfigProvider)!.setCookie(tokenController.text);
+                      ref.read(accountConfigProvider).loggedAccount!.setCookie(tokenController.text);
                       showDialog(
                         context: context,
                         builder: (_) {

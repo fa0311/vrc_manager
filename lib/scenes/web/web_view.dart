@@ -27,7 +27,7 @@ class VRChatMobileWebView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     textStream(context);
-    VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider)!.cookie);
+    VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount!.cookie);
 
     WebViewController? webViewController = ref.read(webViewControllerProvider);
 

@@ -112,7 +112,7 @@ Widget editBio(VRChatUser user) {
   TextEditingController controller = TextEditingController()..text = user.bio ?? "";
   return Consumer(builder: (BuildContext context, WidgetRef ref, _) {
     bool wait = ref.watch(editBioProvider);
-    VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider)!.cookie);
+    VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount!.cookie);
     return AlertDialog(
       content: TextField(
         controller: controller,
@@ -148,7 +148,7 @@ Widget editNote(VRChatUser user) {
   TextEditingController controller = TextEditingController()..text = user.note ?? "";
   return Consumer(builder: (BuildContext context, WidgetRef ref, _) {
     bool wait = ref.watch(editNoteProvider);
-    VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider)!.cookie);
+    VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount!.cookie);
     return AlertDialog(
       content: TextField(
         controller: controller,

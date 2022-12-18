@@ -9,38 +9,24 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vrc_manager/scenes/main/main.dart';
 import 'package:vrc_manager/scenes/main/settings.dart';
 import 'package:vrc_manager/scenes/setting/other_account.dart';
-import 'package:vrc_manager/scenes/sub/login.dart';
 import 'package:vrc_manager/scenes/sub/splash.dart';
 import 'package:vrc_manager/storage/account.dart';
 import 'package:vrc_manager/widgets/modal.dart';
 
-Widget getAccountList() {
-  AccountConfig? login;
-  return Consumer(builder: (BuildContext context, WidgetRef ref, _) {
-    return SingleChildScrollView(
-      child: Column(children: [
+class AccountList extends ConsumerWidget {
+  const AccountList({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Column(
+      children: [
         for (AccountConfig account in ref.read(accountConfigProvider.notifier).accountList)
           ListTile(
             title: Text(
               account.displayName ?? AppLocalizations.of(context)!.unknown,
             ),
-            trailing: login == account
-                ? const Padding(
-                    padding: EdgeInsets.only(right: 2, top: 2),
-                    child: SizedBox(width: 20, height: 20, child: CircularProgressIndicator()),
-                  )
-                : null,
             onTap: () async {
-              login = account;
-              bool logged = await ref.read(accountConfigProvider.notifier).login(account);
-              // ignore: use_build_context_synchronously
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => logged ? const VRChatMobileHome() : const VRChatMobileLogin(),
-                ),
-                (_) => false,
-              );
+              ref.read(accountConfigProvider.notifier).login(account);
             },
           ),
         const Divider(),
@@ -54,10 +40,10 @@ Widget getAccountList() {
             ),
             (_) => false,
           ),
-        )
-      ]),
+        ),
+      ],
     );
-  });
+  }
 }
 
 class NormalDrawer extends ConsumerWidget {
@@ -124,7 +110,7 @@ class NormalDrawer extends ConsumerWidget {
                 ListTile(
                   onTap: () => showModalBottomSheetStatelessWidget(
                     context: context,
-                    builder: () => getAccountList(),
+                    builder: () => const AccountList(),
                   ),
                   leading: const Icon(Icons.account_circle),
                   title: Text(AppLocalizations.of(context)!.accountSwitch),
@@ -146,7 +132,7 @@ class NormalDrawer extends ConsumerWidget {
                   IconButton(
                     onPressed: () => showModalBottomSheetStatelessWidget(
                       context: context,
-                      builder: () => getAccountList(),
+                      builder: () => const AccountList(),
                     ),
                     icon: const Icon(Icons.account_circle),
                   ),
@@ -205,7 +191,7 @@ class SimpleDrawer extends ConsumerWidget {
                   ListTile(
                     onTap: () => showModalBottomSheetStatelessWidget(
                       context: context,
-                      builder: () => getAccountList(),
+                      builder: () => const AccountList(),
                     ),
                     leading: const Icon(Icons.account_circle),
                     title: Text(AppLocalizations.of(context)!.accountSwitch),
