@@ -8,8 +8,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 // Project imports:
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
-import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/main/main.dart';
+import 'package:vrc_manager/scenes/sub/splash.dart';
 import 'package:vrc_manager/storage/grid_modal.dart';
 import 'package:vrc_manager/widgets/grid_modal/config.dart';
 import 'package:vrc_manager/widgets/grid_view/extraction/user.dart';
@@ -42,7 +42,7 @@ class VRChatMobileSearchData {
 }
 
 final vrchatMobileSearchProvider = FutureProvider<VRChatMobileSearchData>((ref) async {
-  late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
+  VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider)!.cookie);
   List<VRChatUser> userList = [];
   List<VRChatLimitedWorld> worldList = [];
   int len;

@@ -7,10 +7,9 @@ final userPolicyConfigProvider = ChangeNotifierProvider<UserPolicyConfigNotifier
 class UserPolicyConfigNotifier extends ChangeNotifier {
   bool agree = true;
 
-  UserPolicyConfigNotifier() {
-    Future.wait([
-      getStorage("agreed_user_policy").then((String? value) => agree = (value == "true")),
-    ]).then((_) => notifyListeners());
+  Future init() async {
+    await getStorage("agreed_user_policy").then((String? value) => agree = (value == "true"));
+    notifyListeners();
   }
 
   Future setAgree(bool value) async {

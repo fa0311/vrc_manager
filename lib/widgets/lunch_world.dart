@@ -6,36 +6,33 @@ import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/enum/region.dart';
 import 'package:vrc_manager/api/main.dart';
-import 'package:vrc_manager/assets/error.dart';
-import 'package:vrc_manager/main.dart';
+import 'package:vrc_manager/scenes/sub/splash.dart';
 import 'package:vrc_manager/widgets/modal.dart';
 import 'package:vrc_manager/widgets/modal/share.dart';
 import 'package:vrc_manager/widgets/region.dart';
 
 String genRandHex([int length = 32]) {
-  const charset = '0123456789ABCDEF';
-  final random = Random.secure();
-  final randomStr = List.generate(length, (_) => charset[random.nextInt(charset.length)]).join();
+  const String charset = '0123456789ABCDEF';
+  Random random = Random.secure();
+  String randomStr = List.generate(length, (_) => charset[random.nextInt(charset.length)]).join();
   return randomStr;
 }
 
 String genRandNumber([int length = 5]) {
-  const charset = '0123456789';
-  final random = Random.secure();
-  final randomStr = List.generate(length, (_) => charset[random.nextInt(charset.length)]).join();
+  const String charset = '0123456789';
+  Random random = Random.secure();
+  String randomStr = List.generate(length, (_) => charset[random.nextInt(charset.length)]).join();
   return randomStr;
 }
 
-Future<String> genInstanceId(BuildContext context, String region, String type, bool canRequestInvite) async {
-  late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
-  VRChatUserSelfOverload user = await vrchatLoginSession.user().catchError((status) {
-    apiError(context, status);
-  });
+Future<String> genInstanceId({required VRChatAPI vrchatLoginSession, required String region, required String type, required bool canRequestInvite}) async {
+  VRChatUserSelfOverload user = await vrchatLoginSession.user();
   String url = genRandNumber();
 
   if (["hidden", "friends", "private"].contains(type)) {
@@ -51,111 +48,108 @@ Future<String> genInstanceId(BuildContext context, String region, String type, b
   return url;
 }
 
-launchWorld(BuildContext context, VRChatLimitedWorld world) {
-  List<Widget> children = [];
-  for (VRChatRegion region in VRChatRegion.values) {
-    children.add(
-      ListTile(
-        leading: RegionWidget(region: region),
-        title: Text(region.name),
-        onTap: () => selectWordType(context, world, region.name),
-      ),
+class LaunchWorld extends ConsumerWidget {
+  final VRChatLimitedWorld world;
+  const LaunchWorld({super.key, required this.world});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Column(
+      children: [
+        for (VRChatRegion region in VRChatRegion.values)
+          ListTile(
+            leading: RegionWidget(region: region),
+            title: Text(region.name),
+            onTap: () => SelectWordType(world: world, regionText: region.name),
+          ),
+      ],
     );
   }
-
-  showModalBottomSheetStatelessWidget(
-    context: context,
-    builder: () => SingleChildScrollView(
-      child: Column(
-        children: children,
-      ),
-    ),
-  );
 }
 
-selectWordType(BuildContext context, VRChatLimitedWorld world, String regionText) {
-  showModalBottomSheetStatelessWidget(
-    context: context,
-    builder: () => SingleChildScrollView(
-      child: Column(
-        children: [
-          ListTile(
-            title: Text(AppLocalizations.of(context)!.vrchatPublic),
-            onTap: () async {
-              Navigator.pop(context);
-              Navigator.pop(context);
-              String instanceId = await genInstanceId(context, regionText, "public", false);
-              showModalBottomSheetStatelessWidget(
-                context: context,
-                builder: () {
-                  return Column(children: shareInstanceListTile(world.id, instanceId));
-                },
-              );
-            },
-          ),
-          ListTile(
-            title: Text(AppLocalizations.of(context)!.vrchatFriendsPlus),
-            onTap: () async {
-              Navigator.pop(context);
-              Navigator.pop(context);
+class SelectWordType extends ConsumerWidget {
+  final VRChatLimitedWorld world;
+  final String regionText;
 
-              String instanceId = await genInstanceId(context, regionText, "hidden", false);
+  const SelectWordType({super.key, required this.world, required this.regionText});
 
-              showModalBottomSheetStatelessWidget(
-                context: context,
-                builder: () {
-                  return Column(children: shareInstanceListTile(world.id, instanceId));
-                },
-              );
-            },
-          ),
-          ListTile(
-            title: Text(AppLocalizations.of(context)!.vrchatFriends),
-            onTap: () async {
-              Navigator.pop(context);
-              Navigator.pop(context);
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider)!.cookie);
 
-              String instanceId = await genInstanceId(context, regionText, "friends", false);
-
-              showModalBottomSheetStatelessWidget(
-                context: context,
-                builder: () {
-                  return Column(children: shareInstanceListTile(world.id, instanceId));
-                },
-              );
-            },
-          ),
-          ListTile(
-            title: Text(AppLocalizations.of(context)!.vrchatInvitePlus),
-            onTap: () async {
-              Navigator.pop(context);
-              Navigator.pop(context);
-              String instanceId = await genInstanceId(context, regionText, "private", true);
-
-              showModalBottomSheetStatelessWidget(
-                context: context,
-                builder: () {
-                  return Column(children: shareInstanceListTile(world.id, instanceId));
-                },
-              );
-            },
-          ),
-          ListTile(
-            title: Text(AppLocalizations.of(context)!.vrchatInvite),
-            onTap: () async {
-              Navigator.pop(context);
-              Navigator.pop(context);
-              String instanceId = await genInstanceId(context, regionText, "private", false);
-              showModalBottomSheetStatelessWidget(
-                context: context,
-                builder: () {
-                  return Column(children: shareInstanceListTile(world.id, instanceId));
-                },
-              );
-            },
-          )
-        ],
-      ),
-    ),
-  );
+    return Column(
+      children: [
+        ListTile(
+          title: Text(AppLocalizations.of(context)!.vrchatPublic),
+          onTap: () async {
+            Navigator.pop(context);
+            Navigator.pop(context);
+            String instanceId = await genInstanceId(vrchatLoginSession: vrchatLoginSession, region: regionText, type: "public", canRequestInvite: false);
+            showModalBottomSheetStatelessWidget(
+              context: context,
+              builder: () {
+                return Column(children: shareInstanceListTile(world.id, instanceId));
+              },
+            );
+          },
+        ),
+        ListTile(
+          title: Text(AppLocalizations.of(context)!.vrchatFriendsPlus),
+          onTap: () async {
+            Navigator.pop(context);
+            Navigator.pop(context);
+            String instanceId = await genInstanceId(vrchatLoginSession: vrchatLoginSession, region: regionText, type: "hidden", canRequestInvite: false);
+            showModalBottomSheetStatelessWidget(
+              context: context,
+              builder: () {
+                return Column(children: shareInstanceListTile(world.id, instanceId));
+              },
+            );
+          },
+        ),
+        ListTile(
+          title: Text(AppLocalizations.of(context)!.vrchatFriends),
+          onTap: () async {
+            Navigator.pop(context);
+            Navigator.pop(context);
+            String instanceId = await genInstanceId(vrchatLoginSession: vrchatLoginSession, region: regionText, type: "friends", canRequestInvite: false);
+            showModalBottomSheetStatelessWidget(
+              context: context,
+              builder: () {
+                return Column(children: shareInstanceListTile(world.id, instanceId));
+              },
+            );
+          },
+        ),
+        ListTile(
+          title: Text(AppLocalizations.of(context)!.vrchatInvitePlus),
+          onTap: () async {
+            Navigator.pop(context);
+            Navigator.pop(context);
+            String instanceId = await genInstanceId(vrchatLoginSession: vrchatLoginSession, region: regionText, type: "private", canRequestInvite: true);
+            showModalBottomSheetStatelessWidget(
+              context: context,
+              builder: () {
+                return Column(children: shareInstanceListTile(world.id, instanceId));
+              },
+            );
+          },
+        ),
+        ListTile(
+          title: Text(AppLocalizations.of(context)!.vrchatInvite),
+          onTap: () async {
+            Navigator.pop(context);
+            Navigator.pop(context);
+            String instanceId = await genInstanceId(vrchatLoginSession: vrchatLoginSession, region: regionText, type: "private", canRequestInvite: false);
+            showModalBottomSheetStatelessWidget(
+              context: context,
+              builder: () {
+                return Column(children: shareInstanceListTile(world.id, instanceId));
+              },
+            );
+          },
+        )
+      ],
+    );
+  }
 }

@@ -7,11 +7,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
-import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/setting/accessibility.dart';
 import 'package:vrc_manager/scenes/setting/account.dart';
 import 'package:vrc_manager/scenes/setting/help.dart';
 import 'package:vrc_manager/scenes/setting/permissions.dart';
+import 'package:vrc_manager/scenes/sub/splash.dart';
 import 'package:vrc_manager/widgets/drawer.dart';
 
 class VRChatMobileSettings extends ConsumerWidget {
@@ -24,7 +24,7 @@ class VRChatMobileSettings extends ConsumerWidget {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.setting),
       ),
-      drawer: appConfig.isLogout() ? const NormalDrawer() : const SimpleDrawer(),
+      drawer: ref.read(accountConfigProvider.notifier).isLogout() ? const NormalDrawer() : const SimpleDrawer(),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Container(

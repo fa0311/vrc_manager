@@ -6,8 +6,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
 import 'package:vrc_manager/api/data_class.dart';
+import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets/api/post.dart';
 import 'package:vrc_manager/assets/sort/worlds.dart';
+import 'package:vrc_manager/scenes/sub/splash.dart';
 import 'package:vrc_manager/scenes/sub/world.dart';
 import 'package:vrc_manager/storage/grid_modal.dart';
 import 'package:vrc_manager/widgets/grid_view/extraction/consumer.dart';
@@ -26,6 +28,7 @@ class ExtractionFavoriteWorld extends ConsumerGridWidget {
 
   @override
   Widget normal(BuildContext context, WidgetRef ref, GridConfigNotifier config) {
+    VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider)!.cookie);
     return StatefulBuilder(
       builder: (BuildContext context, setState) => RenderGrid(
         width: 600,
@@ -55,7 +58,7 @@ class ExtractionFavoriteWorld extends ConsumerGridWidget {
                           child: IconButton(
                             constraints: const BoxConstraints(),
                             padding: const EdgeInsets.all(0),
-                            onPressed: () => delete(context, world, favoriteWorld).then((value) => setState(() {})),
+                            onPressed: () => delete(vrchatLoginSession: vrchatLoginSession, world: world, favoriteWorld: favoriteWorld),
                             icon: const Icon(Icons.delete),
                           ),
                         ),
@@ -84,6 +87,7 @@ class ExtractionFavoriteWorld extends ConsumerGridWidget {
 
   @override
   Widget simple(BuildContext context, WidgetRef ref, GridConfigNotifier config) {
+    VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider)!.cookie);
     return RenderGrid(
       width: 320,
       height: 64,
@@ -125,7 +129,7 @@ class ExtractionFavoriteWorld extends ConsumerGridWidget {
                         color: Colors.white,
                         constraints: const BoxConstraints(),
                         padding: const EdgeInsets.all(0),
-                        onPressed: () => delete(context, world, favoriteWorld),
+                        onPressed: () => delete(vrchatLoginSession: vrchatLoginSession, world: world, favoriteWorld: favoriteWorld),
                         icon: const Icon(Icons.delete),
                       ),
                     ]

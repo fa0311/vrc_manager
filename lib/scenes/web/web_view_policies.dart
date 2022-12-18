@@ -13,16 +13,13 @@ import 'package:vrc_manager/widgets/modal.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 // Project imports:
-import 'package:vrc_manager/api/main.dart';
-import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/main/main.dart';
 import 'package:vrc_manager/widgets/modal/share.dart';
 import 'package:vrc_manager/widgets/share.dart';
 
 class VRChatMobileWebViewUserPolicy extends ConsumerWidget {
-  VRChatMobileWebViewUserPolicy({Key? key}) : super(key: key);
+  const VRChatMobileWebViewUserPolicy({Key? key}) : super(key: key);
 
-  final VRChatAPI vrchatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
   static Uri url = Uri.https("github.com", "/fa0311/vrc_manager/blob/master/docs/user_policies/ja.md");
 
   @override

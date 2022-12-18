@@ -6,12 +6,12 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
-import 'package:vrc_manager/data_class/app_config.dart';
-import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/main/main.dart';
 import 'package:vrc_manager/scenes/main/settings.dart';
 import 'package:vrc_manager/scenes/setting/other_account.dart';
 import 'package:vrc_manager/scenes/sub/login.dart';
+import 'package:vrc_manager/scenes/sub/splash.dart';
+import 'package:vrc_manager/storage/account.dart';
 import 'package:vrc_manager/widgets/modal.dart';
 
 Widget getAccountList() {
@@ -19,7 +19,7 @@ Widget getAccountList() {
   return Consumer(builder: (BuildContext context, WidgetRef ref, _) {
     return SingleChildScrollView(
       child: Column(children: [
-        for (AccountConfig account in appConfig.accountList)
+        for (AccountConfig account in ref.read(accountConfigProvider.notifier).accountList)
           ListTile(
             title: Text(
               account.displayName ?? AppLocalizations.of(context)!.unknown,
@@ -32,7 +32,7 @@ Widget getAccountList() {
                 : null,
             onTap: () async {
               login = account;
-              bool logged = await appConfig.login(context, account);
+              bool logged = await ref.read(accountConfigProvider.notifier).login(account);
               // ignore: use_build_context_synchronously
               Navigator.pushAndRemoveUntil(
                 context,

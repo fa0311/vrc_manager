@@ -14,9 +14,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets/error.dart';
-import 'package:vrc_manager/data_class/app_config.dart';
-import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/main/main.dart';
+import 'package:vrc_manager/scenes/sub/splash.dart';
+import 'package:vrc_manager/storage/account.dart';
 import 'package:vrc_manager/widgets/drawer.dart';
 import 'package:vrc_manager/widgets/modal.dart';
 import 'package:vrc_manager/widgets/config_modal/locale.dart';
@@ -53,8 +53,8 @@ final rememberPasswordProvider = StateProvider.autoDispose<bool>((ref) {
 
 final loginDataProvider = StateProvider.autoDispose<VRChatMobileLoginData>((ref) {
   AccountConfig accountConfig;
-  if (appConfig.isLogout()) {
-    accountConfig = appConfig.loggedAccount!;
+  if (ref.read(accountConfigProvider.notifier).isLogout()) {
+    accountConfig = ref.read(accountConfigProvider)!;
   } else {
     accountConfig = AccountConfig(genUid());
   }
@@ -78,9 +78,9 @@ class VRChatMobileLogin extends ConsumerWidget {
 
       config.setCookie(ref.read(loginDataProvider).session.getCookie());
       config.setRememberLoginInfo(ref.read(rememberPasswordProvider));
-      appConfig.addAccount(config);
+      ref.read(accountConfigProvider.notifier).addAccount(config);
 
-      bool logged = await appConfig.login(context, config);
+      bool logged = await ref.read(accountConfigProvider.notifier).login(config);
       // ignore: use_build_context_synchronously
       Navigator.pushAndRemoveUntil(
         context,

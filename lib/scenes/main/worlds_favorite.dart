@@ -7,7 +7,7 @@ import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
 
 // Project imports:
-import 'package:vrc_manager/main.dart';
+import 'package:vrc_manager/scenes/sub/splash.dart';
 import 'package:vrc_manager/widgets/grid_modal/config.dart';
 import 'package:vrc_manager/widgets/grid_view/extraction/favorite_world.dart';
 
@@ -25,7 +25,20 @@ class FavoriteWorldData {
 }
 
 final vrchatMobileWorldFavoriteSortProvider = FutureProvider<VRChatMobileWorldFavoriteData>((ref) async {
-  late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
+  Future getFavoriteWorld(FavoriteWorldData favoriteWorld) async {
+    VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider)!.cookie);
+    int len;
+    do {
+      int offset = favoriteWorld.list.length;
+      List<VRChatFavoriteWorld> worlds = await vrchatLoginSession.favoritesWorlds(favoriteWorld.group.name, offset: offset);
+      for (VRChatFavoriteWorld world in worlds) {
+        favoriteWorld.list.add(world);
+      }
+      len = worlds.length;
+    } while (len == 50);
+  }
+
+  VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider)!.cookie);
   List<Future> futureList = [];
   List<FavoriteWorldData> favoriteWorld = [];
   int len = 0;
@@ -43,19 +56,6 @@ final vrchatMobileWorldFavoriteSortProvider = FutureProvider<VRChatMobileWorldFa
   await Future.wait(futureList);
   return VRChatMobileWorldFavoriteData(favoriteWorld: favoriteWorld);
 });
-
-Future getFavoriteWorld(FavoriteWorldData favoriteWorld) async {
-  late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
-  int len;
-  do {
-    int offset = favoriteWorld.list.length;
-    List<VRChatFavoriteWorld> worlds = await vrchatLoginSession.favoritesWorlds(favoriteWorld.group.name, offset: offset);
-    for (VRChatFavoriteWorld world in worlds) {
-      favoriteWorld.list.add(world);
-    }
-    len = worlds.length;
-  } while (len == 50);
-}
 
 class VRChatMobileWorldsFavorite extends ConsumerWidget {
   const VRChatMobileWorldsFavorite({Key? key}) : super(key: key);

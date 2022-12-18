@@ -11,8 +11,8 @@ import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets/date.dart';
 import 'package:vrc_manager/assets/error.dart';
-import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/main/worlds_favorite.dart';
+import 'package:vrc_manager/scenes/sub/splash.dart';
 
 class OnTheWebsite extends ConsumerWidget {
   final bool half;
@@ -97,8 +97,7 @@ class WorldProfile extends ConsumerWidget {
   }
 }
 
-Future selfInvite(BuildContext context, VRChatInstance instance) async {
-  late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
+Future selfInvite({required VRChatAPI vrchatLoginSession, required VRChatInstance instance}) async {
   await vrchatLoginSession.selfInvite(instance.location, instance.shortName ?? "");
 }
 
@@ -130,7 +129,7 @@ class FavoriteAction extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
+    VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider)!.cookie);
     AsyncValue<VRChatMobileWorldFavoriteData> data = ref.watch(vrchatMobileWorldFavoriteSortProvider);
 
     FavoriteWorldData? loadingWorldData;

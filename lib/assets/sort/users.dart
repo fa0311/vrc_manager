@@ -3,8 +3,8 @@ import 'dart:convert';
 
 // Project imports:
 import 'package:vrc_manager/api/data_class.dart';
-import 'package:vrc_manager/data_class/modal.dart';
 import 'package:vrc_manager/storage/grid_modal.dart';
+import 'package:vrc_manager/widgets/grid_modal/config.dart';
 
 List<VRChatUser> sortUsers(GridConfigNotifier config, List<VRChatUser> userList) {
   switch (config.sortMode) {

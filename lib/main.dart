@@ -6,14 +6,12 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
-import 'package:vrc_manager/data_class/app_config.dart';
 
 // Package imports:
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:vrc_manager/scenes/sub/splash.dart';
 import 'package:vrc_manager/storage/accessibility.dart';
 
-AppConfig appConfig = AppConfig();
 main() {
   runApp(const ProviderScope(child: VRChatMobile()));
 }

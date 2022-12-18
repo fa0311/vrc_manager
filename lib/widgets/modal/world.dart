@@ -7,6 +7,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
 import 'package:vrc_manager/api/data_class.dart';
+import 'package:vrc_manager/api/main.dart';
+import 'package:vrc_manager/scenes/sub/splash.dart';
 import 'package:vrc_manager/widgets/lunch_world.dart';
 import 'package:vrc_manager/widgets/modal.dart';
 import 'package:vrc_manager/widgets/modal/share.dart';
@@ -55,10 +57,12 @@ class SelfInviteListTileWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider)!.cookie);
+
     return ListTile(
       title: Text(AppLocalizations.of(context)!.joinInstance),
       onTap: () {
-        selfInvite(context, instance);
+        selfInvite(vrchatLoginSession: vrchatLoginSession, instance: instance);
       },
     );
   }
@@ -93,7 +97,12 @@ class LaunchWorldListTileWidget extends ConsumerWidget {
     return ListTile(
       title: Text(AppLocalizations.of(context)!.launchWorld),
       onTap: () {
-        launchWorld(context, world);
+        showModalBottomSheetStatelessWidget(
+          context: context,
+          builder: () {
+            return LaunchWorld(world: world);
+          },
+        );
       },
     );
   }

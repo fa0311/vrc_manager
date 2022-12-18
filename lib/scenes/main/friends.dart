@@ -9,7 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets/api/get.dart';
-import 'package:vrc_manager/main.dart';
+import 'package:vrc_manager/scenes/sub/splash.dart';
 import 'package:vrc_manager/widgets/grid_modal/config.dart';
 import 'package:vrc_manager/widgets/grid_view/extraction/friends.dart';
 
@@ -26,7 +26,7 @@ class VRChatMobileFriendsData {
 }
 
 final vrchatMobileFriendsProvider = FutureProvider.family<VRChatMobileFriendsData, bool>((ref, offline) async {
-  late VRChatAPI vrchatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
+  VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider)!.cookie);
   List<Future> futureList = [];
   Map<String, VRChatWorld?> locationMap = {};
   Map<String, VRChatInstance?> instanceMap = {};
@@ -38,10 +38,10 @@ final vrchatMobileFriendsProvider = FutureProvider.family<VRChatMobileFriendsDat
     userList.addAll(users);
     if (!offline) {
       for (VRChatFriends user in users) {
-        futureList.add(getWorld(user, locationMap).catchError((status) {
+        futureList.add(getWorld(vrchatLoginSession: vrchatLoginSession, user: user, locationMap: locationMap).catchError((status) {
           if (kDebugMode) print(status);
         }));
-        futureList.add(getInstance(user, instanceMap).catchError((status) {
+        futureList.add(getInstance(vrchatLoginSession: vrchatLoginSession, user: user, instanceMap: instanceMap).catchError((status) {
           if (kDebugMode) print(status);
         }));
       }

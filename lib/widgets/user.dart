@@ -16,8 +16,8 @@ import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets/anchor.dart';
 import 'package:vrc_manager/assets/date.dart';
 import 'package:vrc_manager/assets/error.dart';
-import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/sub/self.dart';
+import 'package:vrc_manager/scenes/sub/splash.dart';
 import 'package:vrc_manager/widgets/modal.dart';
 import 'package:vrc_manager/widgets/modal/share.dart';
 import 'package:vrc_manager/widgets/share.dart';
@@ -109,10 +109,10 @@ Column userProfile(BuildContext context, VRChatUser user) {
 final editBioProvider = StateProvider<bool>((ref) => false);
 
 Widget editBio(VRChatUser user) {
-  VRChatAPI vrchatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
   TextEditingController controller = TextEditingController()..text = user.bio ?? "";
   return Consumer(builder: (BuildContext context, WidgetRef ref, _) {
     bool wait = ref.watch(editBioProvider);
+    VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider)!.cookie);
     return AlertDialog(
       content: TextField(
         controller: controller,
@@ -145,10 +145,10 @@ Widget editBio(VRChatUser user) {
 final editNoteProvider = StateProvider<bool>((ref) => false);
 
 Widget editNote(VRChatUser user) {
-  VRChatAPI vrchatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
   TextEditingController controller = TextEditingController()..text = user.note ?? "";
   return Consumer(builder: (BuildContext context, WidgetRef ref, _) {
     bool wait = ref.watch(editNoteProvider);
+    VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider)!.cookie);
     return AlertDialog(
       content: TextField(
         controller: controller,

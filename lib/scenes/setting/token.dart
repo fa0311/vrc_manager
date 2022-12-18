@@ -3,27 +3,24 @@ import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
-import 'package:vrc_manager/main.dart';
+import 'package:vrc_manager/scenes/sub/splash.dart';
 
-class VRChatMobileTokenSetting extends StatefulWidget {
+final tokenControllerProvider = StateProvider<TextEditingController>((ref) => TextEditingController(text: ref.read(accountConfigProvider)!.cookie));
+
+class VRChatMobileTokenSetting extends ConsumerWidget {
   final bool offline;
-
-  const VRChatMobileTokenSetting({Key? key, this.offline = true}) : super(key: key);
-
-  @override
-  State<VRChatMobileTokenSetting> createState() => _TokenSettingPageState();
-}
-
-class _TokenSettingPageState extends State<VRChatMobileTokenSetting> {
-  late final TextEditingController _tokenController = TextEditingController(text: appConfig.loggedAccount?.cookie ?? "");
+  const VRChatMobileTokenSetting({super.key, this.offline = true});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    TextEditingController tokenController = ref.watch(tokenControllerProvider);
+
     textStream(context);
     return Scaffold(
       appBar: AppBar(
@@ -38,14 +35,14 @@ class _TokenSettingPageState extends State<VRChatMobileTokenSetting> {
               child: Column(
                 children: <Widget>[
                   TextField(
-                    controller: _tokenController,
+                    controller: tokenController,
                     maxLines: null,
                     decoration: InputDecoration(labelText: AppLocalizations.of(context)!.cookie),
                   ),
                   ElevatedButton(
                     child: Text(AppLocalizations.of(context)!.save),
                     onPressed: () {
-                      appConfig.loggedAccount?.setCookie(_tokenController.text);
+                      ref.read(accountConfigProvider)!.setCookie(tokenController.text);
                       showDialog(
                         context: context,
                         builder: (_) {
@@ -65,7 +62,7 @@ class _TokenSettingPageState extends State<VRChatMobileTokenSetting> {
                   ElevatedButton(
                     child: Text(AppLocalizations.of(context)!.login),
                     onPressed: () {
-                      VRChatAPI(cookie: _tokenController.text).user().then((VRChatUserSelfOverload response) {
+                      VRChatAPI(cookie: tokenController.text).user().then((VRChatUserSelfOverload response) {
                         showDialog(
                           context: context,
                           builder: (_) {

@@ -3,24 +3,20 @@ import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
-import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/setting/other_account.dart';
 import 'package:vrc_manager/scenes/setting/token.dart';
 import 'package:vrc_manager/scenes/sub/login.dart';
+import 'package:vrc_manager/scenes/sub/splash.dart';
 
-class VRChatMobileSettingsAccount extends StatefulWidget {
-  const VRChatMobileSettingsAccount({Key? key}) : super(key: key);
+class VRChatMobileSettingsAccount extends ConsumerWidget {
+  const VRChatMobileSettingsAccount({super.key});
 
   @override
-  State<VRChatMobileSettingsAccount> createState() => _SettingAccountPageState();
-}
-
-class _SettingAccountPageState extends State<VRChatMobileSettingsAccount> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     textStream(context);
     return Scaffold(
       appBar: AppBar(
@@ -56,7 +52,7 @@ class _SettingAccountPageState extends State<VRChatMobileSettingsAccount> {
                                     ),
                                     (_) => false,
                                   );
-                                  appConfig.loggedAccount?.removeCookie();
+                                  ref.watch(accountConfigProvider)!.removeCookie();
                                 },
                                 child: Text(AppLocalizations.of(context)!.logout),
                               ),
@@ -82,10 +78,11 @@ class _SettingAccountPageState extends State<VRChatMobileSettingsAccount> {
                               ),
                               TextButton(
                                 onPressed: () {
-                                  appConfig.loggedAccount?.removeUserId();
-                                  appConfig.loggedAccount?.removePassword();
-                                  appConfig.loggedAccount?.removeDisplayName();
-                                  appConfig.loggedAccount?.setRememberLoginInfo(false);
+                                  ref.read(accountConfigProvider)!
+                                    ..removeUserId()
+                                    ..removePassword()
+                                    ..removeDisplayName()
+                                    ..setRememberLoginInfo(false);
                                 },
                                 child: Text(AppLocalizations.of(context)!.delete),
                               ),

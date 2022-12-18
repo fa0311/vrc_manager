@@ -1,16 +1,12 @@
 // Dart imports:
-import 'dart:io';
 
 // Flutter imports:
 import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 
 // Project imports:
-import 'package:vrc_manager/assets/flutter/url_parser.dart';
-import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/main/main.dart';
 import 'package:vrc_manager/scenes/sub/login.dart';
 import 'package:vrc_manager/scenes/web/web_view_policies.dart';
@@ -19,52 +15,69 @@ import 'package:vrc_manager/storage/grid_modal.dart';
 import 'package:vrc_manager/storage/user_policy.dart';
 import 'package:vrc_manager/widgets/grid_modal/config.dart';
 
-final accountConfigProvider = ChangeNotifierProvider<AccountConfigNotifier>((ref) => AccountConfigNotifier());
+final accountConfigProvider = StateNotifierProvider<AccountConfigNotifier, AccountConfig?>((ref) => AccountConfigNotifier(null));
+
+enum SplashData {
+  home,
+  login,
+  userPolicy;
+}
+
+final splashProvider = FutureProvider<SplashData>((ref) async {
+  for (GridModalConfigType id in GridModalConfigType.values) {
+    ref.read(gridConfigProvider(id));
+  }
+
+  AccountConfigNotifier accountConfig = ref.read(accountConfigProvider.notifier);
+  UserPolicyConfigNotifier userPolicyConfig = ref.read(userPolicyConfigProvider);
+
+  await accountConfig.init();
+  await userPolicyConfig.init();
+
+  if (!userPolicyConfig.agree) {
+    return SplashData.userPolicy;
+  }
+  return SplashData.home;
+});
 
 class VRChatMobileSplash extends ConsumerWidget {
   const VRChatMobileSplash({Key? key}) : super(key: key);
 
-  goHome(BuildContext context) {
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(
-        builder: (BuildContext context) => const VRChatMobileHome(),
-      ),
-      (_) => false,
-    );
-  }
-
-  goLogin(BuildContext context) {
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(
-        builder: (BuildContext context) => const VRChatMobileLogin(),
-      ),
-      (_) => false,
-    );
-  }
-
-  goWebViewUserPolicy(BuildContext context) {
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(
-        builder: (BuildContext context) => VRChatMobileWebViewUserPolicy(),
-      ),
-      (_) => false,
-    );
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    for (GridModalConfigType id in GridModalConfigType.values) {
-      ref.read(gridConfigProvider(id));
+    AsyncValue<SplashData> data = ref.watch(splashProvider);
+
+    goHome() {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (BuildContext context) => const VRChatMobileHome(),
+        ),
+        (_) => false,
+      );
     }
 
-    // AccountConfigNotifier accountConfig = ref.watch(accountConfigProvider);
+    goLogin() {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (BuildContext context) => const VRChatMobileLogin(),
+        ),
+        (_) => false,
+      );
+    }
 
-    UserPolicyConfigNotifier userPolicyConfig = ref.watch(userPolicyConfigProvider);
+    goWebViewUserPolicy() {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (BuildContext context) => const VRChatMobileWebViewUserPolicy(),
+        ),
+        (_) => false,
+      );
+    }
 
-    appConfig.get(context, ref).then((_) async {
+/*
       if (!userPolicyConfig.agree) {
         goWebViewUserPolicy(context);
       } else if (!appConfig.isLogout()) {
@@ -80,19 +93,29 @@ class VRChatMobileSplash extends ConsumerWidget {
       } else {
         goHome(context);
       }
-    });
+      */
 
     return Scaffold(
       body: SafeArea(
         child: SizedBox(
           width: MediaQuery.of(context).size.width,
-          child: const Center(
-            child: SizedBox(
-              width: 100,
-              height: 100,
-              child: CircularProgressIndicator(
-                strokeWidth: 8,
-              ),
+          child: Center(
+            child: data.when(
+              loading: () => const SizedBox(width: 100, height: 100, child: CircularProgressIndicator(strokeWidth: 8)),
+              error: (err, stack) => Text('Error: $err'),
+              data: (SplashData data) {
+                switch (data) {
+                  case SplashData.home:
+                    goHome();
+                    return Container();
+                  case SplashData.login:
+                    goLogin();
+                    return Container();
+                  case SplashData.userPolicy:
+                    goWebViewUserPolicy();
+                    return Container();
+                }
+              },
             ),
           ),
         ),

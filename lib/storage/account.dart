@@ -1,14 +1,16 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
 
 // Project imports:
 import 'package:vrc_manager/assets/storage.dart';
 
-class AccountConfigNotifier extends ChangeNotifier {
-  AccountConfig? loggedAccount;
+class AccountConfigNotifier extends StateNotifier<AccountConfig?> {
   List<AccountConfig> accountList = [];
+
+  AccountConfigNotifier(super.state);
 
   init() async {
     List uidList = [];
@@ -22,7 +24,7 @@ class AccountConfigNotifier extends ChangeNotifier {
       AccountConfig accountConfig = AccountConfig(uid);
       accountList.add(accountConfig);
       if (uid == accountUid) {
-        loggedAccount = accountConfig;
+        state = accountConfig;
       }
     }
   }
@@ -39,32 +41,32 @@ class AccountConfigNotifier extends ChangeNotifier {
 
     futureList.add(setStorageList("account_index_list", getAccountList()));
 
-    if (loggedAccount == account) {
+    if (state == account) {
       if (accountList.isEmpty) {
         futureList.add(logout());
       } else {
-        loggedAccount = accountList.first;
+        state = accountList.first;
       }
     }
     return Future.wait(futureList);
   }
 
   Future<bool> logout() async {
-    loggedAccount = null;
+    state = null;
     return await removeStorage("account_index");
   }
 
-  Future<bool> login(BuildContext context, AccountConfig accountConfig) async {
+  Future<bool> login(AccountConfig accountConfig) async {
     List<Future> futureList = [];
-    loggedAccount = accountConfig;
-    if (!(await loggedAccount!.tokenCheck())) return false;
+    state = accountConfig;
+    if (!(await state!.tokenCheck())) return false;
     futureList.add(setStorage("account_index", accountConfig.uid));
     await Future.wait(futureList);
     return true;
   }
 
   bool isLogout() {
-    return loggedAccount != null;
+    return state != null;
   }
 
   List<String> getAccountList() {

@@ -3,48 +3,40 @@ import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
-import 'package:vrc_manager/data_class/app_config.dart';
-import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/main/main.dart';
 import 'package:vrc_manager/scenes/sub/login.dart';
+import 'package:vrc_manager/scenes/sub/splash.dart';
+import 'package:vrc_manager/storage/account.dart';
 import 'package:vrc_manager/widgets/drawer.dart';
 
-class VRChatMobileSettingsOtherAccount extends StatefulWidget {
-  const VRChatMobileSettingsOtherAccount({Key? key}) : super(key: key);
+class VRChatMobileSettingsOtherAccount extends ConsumerWidget {
+  const VRChatMobileSettingsOtherAccount({super.key});
 
   @override
-  State<VRChatMobileSettingsOtherAccount> createState() => _SettingOtherAccountPageState();
-}
-
-class _SettingOtherAccountPageState extends State<VRChatMobileSettingsOtherAccount> {
-  AccountConfig? login;
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     textStream(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.accountSwitchSetting),
       ),
-      drawer: appConfig.isLogout() ? const NormalDrawer() : const SimpleDrawer(),
+      drawer: ref.read(accountConfigProvider.notifier).isLogout() ? const NormalDrawer() : const SimpleDrawer(),
       body: SafeArea(
         child: SizedBox(
           width: MediaQuery.of(context).size.width,
           child: SingleChildScrollView(
               child: Column(children: [
-            for (AccountConfig account in appConfig.accountList)
+            for (AccountConfig account in ref.read(accountConfigProvider.notifier).accountList)
               Card(
                 elevation: 20.0,
                 child: InkWell(
                   borderRadius: BorderRadius.circular(5),
                   onTap: () async {
-                    login = account;
-                    setState(() {});
-                    bool logged = await appConfig.login(context, account);
-                    if (!mounted) return;
+                    bool logged = await ref.read(accountConfigProvider.notifier).login(account);
+                    // ignore: use_build_context_synchronously
                     Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
@@ -66,7 +58,7 @@ class _SettingOtherAccountPageState extends State<VRChatMobileSettingsOtherAccou
                             ),
                           ),
                         ),
-                        if (login == account) const SizedBox(width: 20, height: 20, child: CircularProgressIndicator()),
+                        if (ref.read(accountConfigProvider) == account) const SizedBox(width: 20, height: 20, child: CircularProgressIndicator()),
                         SizedBox(
                           width: 50,
                           child: IconButton(
@@ -83,7 +75,7 @@ class _SettingOtherAccountPageState extends State<VRChatMobileSettingsOtherAccou
                                       ),
                                       TextButton(
                                         onPressed: () {
-                                          appConfig.removeAccount(account);
+                                          ref.read(accountConfigProvider.notifier).removeAccount(account);
                                         },
                                         child: Text(AppLocalizations.of(context)!.delete),
                                       ),
@@ -105,7 +97,7 @@ class _SettingOtherAccountPageState extends State<VRChatMobileSettingsOtherAccou
                 foregroundColor: Colors.grey,
               ),
               onPressed: () {
-                appConfig.logout();
+                ref.read(accountConfigProvider.notifier).logout();
                 Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:vrc_manager/scenes/sub/splash.dart';
 import 'package:vrc_manager/storage/accessibility.dart';
 import 'package:vrc_manager/widgets/modal.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -11,23 +12,25 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
 import 'package:vrc_manager/assets/session.dart';
-import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/widgets/modal/share.dart';
 import 'package:vrc_manager/widgets/share.dart';
 
 final timeStampProvider = StateProvider<int>((ref) => 0);
 final urlProvider = StateProvider<Uri?>((ref) => null);
+final webViewControllerProvider = StateProvider<WebViewController?>((ref) => null);
 
 class VRChatMobileWebView extends ConsumerWidget {
-  VRChatMobileWebView({Key? key, required this.initUrl}) : super(key: key);
+  const VRChatMobileWebView({Key? key, required this.initUrl}) : super(key: key);
 
-  late final VRChatAPI vrchatLoginSession = VRChatAPI(cookie: appConfig.loggedAccount?.cookie ?? "");
-  late final WebViewController controllerGlobal;
   final Uri initUrl;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     textStream(context);
+    VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider)!.cookie);
+
+    WebViewController? webViewController = ref.read(webViewControllerProvider);
+
     final cookieManager = CookieManager();
     int timeStamp = ref.read(timeStampProvider);
     Uri url = ref.watch(urlProvider) ?? initUrl;
@@ -46,8 +49,8 @@ class VRChatMobileWebView extends ConsumerWidget {
     Future<bool> exitApp(BuildContext context) async {
       if (DateTime.now().millisecondsSinceEpoch - timeStamp < 200) {
         return true;
-      } else if (await controllerGlobal.canGoBack()) {
-        controllerGlobal.goBack();
+      } else if (await webViewController!.canGoBack()) {
+        webViewController!.goBack();
         timeStamp = DateTime.now().millisecondsSinceEpoch;
         return false;
       }
@@ -75,8 +78,8 @@ class VRChatMobileWebView extends ConsumerWidget {
         body: WebView(
           initialUrl: url.toString(),
           javascriptMode: JavascriptMode.unrestricted,
-          onWebViewCreated: (WebViewController webViewController) {
-            controllerGlobal = webViewController;
+          onWebViewCreated: (WebViewController value) {
+            webViewController = value;
           },
           navigationDelegate: (NavigationRequest request) {
             if (ref.read(accessibilityConfigProvider).forceExternalBrowser && url.host != "vrchat.com") {
