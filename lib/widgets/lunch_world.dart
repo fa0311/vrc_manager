@@ -60,7 +60,10 @@ class LaunchWorld extends ConsumerWidget {
           ListTile(
             leading: RegionWidget(region: region),
             title: Text(region.name),
-            onTap: () => SelectWordType(world: world, regionText: region.name),
+            onTap: () => showModalBottomSheetStatelessWidget(
+              context: context,
+              builder: () => SelectWordType(world: world, regionText: region.name),
+            ),
           ),
       ],
     );
@@ -82,9 +85,9 @@ class SelectWordType extends ConsumerWidget {
         ListTile(
           title: Text(AppLocalizations.of(context)!.vrchatPublic),
           onTap: () async {
-            Navigator.pop(context);
-            Navigator.pop(context);
             String instanceId = await genInstanceId(vrchatLoginSession: vrchatLoginSession, region: regionText, type: "public", canRequestInvite: false);
+            // ignore: use_build_context_synchronously
+            Navigator.of(context).popUntil((route) => route.isFirst);
             showModalBottomSheetStatelessWidget(
               context: context,
               builder: () => ShareInstanceListTile(worldId: world.id, instanceId: instanceId),
@@ -94,9 +97,9 @@ class SelectWordType extends ConsumerWidget {
         ListTile(
           title: Text(AppLocalizations.of(context)!.vrchatFriendsPlus),
           onTap: () async {
-            Navigator.pop(context);
-            Navigator.pop(context);
             String instanceId = await genInstanceId(vrchatLoginSession: vrchatLoginSession, region: regionText, type: "hidden", canRequestInvite: false);
+            // ignore: use_build_context_synchronously
+            Navigator.of(context).popUntil((route) => route.isFirst);
             showModalBottomSheetStatelessWidget(
               context: context,
               builder: () => ShareInstanceListTile(worldId: world.id, instanceId: instanceId),
@@ -106,9 +109,9 @@ class SelectWordType extends ConsumerWidget {
         ListTile(
           title: Text(AppLocalizations.of(context)!.vrchatFriends),
           onTap: () async {
-            Navigator.pop(context);
-            Navigator.pop(context);
             String instanceId = await genInstanceId(vrchatLoginSession: vrchatLoginSession, region: regionText, type: "friends", canRequestInvite: false);
+            // ignore: use_build_context_synchronously
+            Navigator.of(context).popUntil((route) => route.isFirst);
             showModalBottomSheetStatelessWidget(
               context: context,
               builder: () => ShareInstanceListTile(worldId: world.id, instanceId: instanceId),
@@ -118,9 +121,9 @@ class SelectWordType extends ConsumerWidget {
         ListTile(
           title: Text(AppLocalizations.of(context)!.vrchatInvitePlus),
           onTap: () async {
-            Navigator.pop(context);
-            Navigator.pop(context);
             String instanceId = await genInstanceId(vrchatLoginSession: vrchatLoginSession, region: regionText, type: "private", canRequestInvite: true);
+            // ignore: use_build_context_synchronously
+            Navigator.of(context).popUntil((route) => route.isFirst);
             showModalBottomSheetStatelessWidget(
               context: context,
               builder: () => ShareInstanceListTile(worldId: world.id, instanceId: instanceId),
@@ -130,9 +133,9 @@ class SelectWordType extends ConsumerWidget {
         ListTile(
           title: Text(AppLocalizations.of(context)!.vrchatInvite),
           onTap: () async {
-            Navigator.pop(context);
-            Navigator.pop(context);
             String instanceId = await genInstanceId(vrchatLoginSession: vrchatLoginSession, region: regionText, type: "private", canRequestInvite: false);
+            // ignore: use_build_context_synchronously
+            Navigator.of(context).popUntil((route) => route.isFirst);
             showModalBottomSheetStatelessWidget(
               context: context,
               builder: () => ShareInstanceListTile(worldId: world.id, instanceId: instanceId),

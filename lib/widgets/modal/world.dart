@@ -15,7 +15,7 @@ import 'package:vrc_manager/widgets/modal/share.dart';
 import 'package:vrc_manager/widgets/world.dart';
 
 class WorldDetailsModalBottom extends ConsumerWidget {
-  final VRChatWorld world;
+  final VRChatLimitedWorld world;
   const WorldDetailsModalBottom({super.key, required this.world});
 
   @override
@@ -34,7 +34,7 @@ class WorldDetailsModalBottom extends ConsumerWidget {
 }
 
 class InstanceDetailsModalBottom extends ConsumerWidget {
-  final VRChatWorld world;
+  final VRChatLimitedWorld world;
   final VRChatInstance instance;
 
   const InstanceDetailsModalBottom({super.key, required this.world, required this.instance});
@@ -56,7 +56,7 @@ class InstanceDetailsModalBottom extends ConsumerWidget {
 
 class UserInstanceDetailsModalBottom extends ConsumerWidget {
   final VRChatUser user;
-  final VRChatWorld world;
+  final VRChatLimitedWorld world;
   final VRChatInstance instance;
 
   const UserInstanceDetailsModalBottom({super.key, required this.user, required this.world, required this.instance});

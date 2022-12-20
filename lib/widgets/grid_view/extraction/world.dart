@@ -37,7 +37,7 @@ class ExtractionWorld extends ConsumerGridWidget {
               onLongPress: () {
                 showModalBottomSheetStatelessWidget(
                   context: context,
-                  builder: () => Column(children: [FavoriteListTileWidget(world: world)]),
+                  builder: () => WorldDetailsModalBottom(world: world),
                 );
               },
               children: [
@@ -79,7 +79,7 @@ class ExtractionWorld extends ConsumerGridWidget {
               onLongPress: () {
                 showModalBottomSheetStatelessWidget(
                   context: context,
-                  builder: () => Column(children: [FavoriteListTileWidget(world: world)]),
+                  builder: () => WorldDetailsModalBottom(world: world),
                 );
               },
               children: [
@@ -120,7 +120,7 @@ class ExtractionWorld extends ConsumerGridWidget {
               onLongPress: () {
                 showModalBottomSheetStatelessWidget(
                   context: context,
-                  builder: () => Column(children: [FavoriteListTileWidget(world: world)]),
+                  builder: () => WorldDetailsModalBottom(world: world),
                 );
               },
               children: [
