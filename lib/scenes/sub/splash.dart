@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:vrc_manager/assets/flutter/url_parser.dart';
+import 'package:vrc_manager/scenes/main/main.dart';
 import 'package:vrc_manager/scenes/sub/login.dart';
 
 // Project imports:
@@ -19,6 +20,7 @@ import 'package:vrc_manager/storage/user_policy.dart';
 import 'package:vrc_manager/widgets/grid_modal/config.dart';
 
 final accountConfigProvider = ChangeNotifierProvider<AccountConfigNotifier>((ref) => AccountConfigNotifier());
+final accountListConfigProvider = ChangeNotifierProvider<AccountListConfigNotifier>((ref) => AccountListConfigNotifier());
 
 final isFirstProvider = StateProvider<bool>((ref) => true);
 
@@ -34,11 +36,14 @@ final splashProvider = FutureProvider<SplashData>((ref) async {
   }
 
   AccountConfigNotifier accountConfig = ref.watch(accountConfigProvider);
+  AccountListConfigNotifier accountListConfig = ref.read(accountListConfigProvider);
   UserPolicyConfigNotifier userPolicyConfig = ref.watch(userPolicyConfigProvider);
 
-  if (accountConfig.isFirst) {
-    await accountConfig.init();
+  if (accountListConfig.isFirst) {
+    await accountListConfig.init();
+    accountConfig.init(await accountListConfig.getLoggedAccount());
   }
+
   if (userPolicyConfig.isFirst) {
     await userPolicyConfig.init();
   }
@@ -48,22 +53,24 @@ final splashProvider = FutureProvider<SplashData>((ref) async {
   }
 
   if (!accountConfig.isLogout()) {
-    print("isLogout");
     return SplashData.login;
   }
 
   if (!await accountConfig.loggedAccount!.tokenCheck()) {
-    print("tokenCheck");
     return SplashData.login;
   }
 
-  print("home");
   return SplashData.home;
 });
 
 class VRChatMobileSplash extends ConsumerWidget {
   final Widget child;
-  const VRChatMobileSplash({Key? key, required this.child}) : super(key: key);
+  final Widget login;
+  const VRChatMobileSplash({
+    Key? key,
+    this.child = const VRChatMobileHome(),
+    this.login = const VRChatMobileLogin(),
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -94,7 +101,7 @@ class VRChatMobileSplash extends ConsumerWidget {
               }
               return child;
             case SplashData.login:
-              return const VRChatMobileLogin();
+              return login;
             case SplashData.userPolicy:
               return const VRChatMobileWebViewUserPolicy();
           }

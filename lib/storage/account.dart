@@ -6,54 +6,66 @@ import 'package:vrc_manager/api/main.dart';
 // Project imports:
 import 'package:vrc_manager/assets/storage.dart';
 
-class AccountConfigNotifier extends ChangeNotifier {
+class AccountListConfigNotifier extends ChangeNotifier {
   List<AccountConfig> accountList = [];
-  AccountConfig? loggedAccount;
   bool isFirst = true;
 
   init() async {
-    List uidList = [];
-    String? accountUid;
-
     isFirst = false;
 
-    await Future.wait([
-      getStorage("account_index").then((value) => accountUid = value),
-      getStorageList("account_index_list").then((List<String> value) => uidList = value),
-    ]);
+    List<String> uidList = await getStorageList("account_index_list");
     List<Future> futureList = [];
     for (String uid in uidList) {
       AccountConfig accountConfig = AccountConfig(uid);
       accountList.add(accountConfig);
       futureList.add(accountConfig.init());
-      if (uid == accountUid) {
-        loggedAccount = accountConfig;
-      }
     }
     await Future.wait(futureList);
   }
 
+  Future addAccount(AccountConfig accountConfig) async {
+    accountList.add(accountConfig);
+    notifyListeners();
+    await setStorageList("account_index_list", getAccountList());
+  }
+
   Future removeAccount(AccountConfig account) async {
-    List<Future> futureList = [];
-
-    futureList.add(removeLoginSession("user_id", account.uid));
-    futureList.add(removeLoginSession("remember_login_info", account.uid));
-    futureList.add(account.removeCookie());
-    futureList.add(account.removePassword());
-    futureList.add(account.removeDisplayName());
     accountList.remove(account);
+    notifyListeners();
 
-    futureList.add(setStorageList("account_index_list", getAccountList()));
+    return Future.wait([
+      account.removeUserId(),
+      account.removeRememberLoginInfo(),
+      account.removeCookie(),
+      account.removePassword(),
+      account.removeDisplayName(),
+      setStorageList("account_index_list", getAccountList()),
+    ]);
+  }
 
-    if (loggedAccount == account) {
-      if (accountList.isEmpty) {
-        futureList.add(logout());
-      } else {
-        loggedAccount = accountList.first;
-        notifyListeners();
+  Future<AccountConfig?> getLoggedAccount() async {
+    return getAccount(await getStorage("account_index") ?? "");
+  }
+
+  List<String> getAccountList() {
+    return [for (AccountConfig account in accountList) account.uid];
+  }
+
+  AccountConfig? getAccount(String uid) {
+    for (AccountConfig account in accountList) {
+      if (uid == account.uid) {
+        return account;
       }
     }
-    return Future.wait(futureList);
+    return null;
+  }
+}
+
+class AccountConfigNotifier extends ChangeNotifier {
+  AccountConfig? loggedAccount;
+
+  init(AccountConfig? account) async {
+    loggedAccount = account;
   }
 
   Future<bool> logout() async {
@@ -70,24 +82,6 @@ class AccountConfigNotifier extends ChangeNotifier {
 
   bool isLogout() {
     return loggedAccount != null;
-  }
-
-  List<String> getAccountList() {
-    return [for (AccountConfig account in accountList) account.uid];
-  }
-
-  Future addAccount(AccountConfig accountConfig) async {
-    accountList.add(accountConfig);
-    await setStorageList("account_index_list", getAccountList());
-  }
-
-  AccountConfig? getAccount(String uid) {
-    for (AccountConfig account in accountList) {
-      if (uid == account.uid) {
-        return account;
-      }
-    }
-    return null;
   }
 }
 
@@ -148,6 +142,11 @@ class AccountConfig extends ChangeNotifier {
   Future removeDisplayName() async {
     displayName = null;
     return await removeLoginSession("display_name", uid);
+  }
+
+  Future removeRememberLoginInfo() async {
+    rememberLoginInfo = false;
+    return await removeLoginSession("remember_login_info", uid);
   }
 
   Future<bool> tokenCheck() async {

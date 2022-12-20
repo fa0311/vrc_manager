@@ -20,27 +20,27 @@ class AccountList extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Column(
       children: [
-        for (AccountConfig account in ref.read(accountConfigProvider.notifier).accountList)
+        for (AccountConfig account in ref.watch(accountListConfigProvider).accountList)
           ListTile(
             title: Text(
               account.displayName ?? AppLocalizations.of(context)!.unknown,
             ),
             onTap: () async {
-              ref.read(accountConfigProvider.notifier).login(account);
+              ref.read(accountConfigProvider).login(account);
             },
           ),
         const Divider(),
         ListTile(
           leading: const Icon(Icons.settings),
           title: Text(AppLocalizations.of(context)!.accountSwitchSetting),
-          onTap: () => Navigator.pushAndRemoveUntil(
+          onTap: () => Navigator.push(
             context,
             MaterialPageRoute(
               builder: (_) => const VRChatMobileSplash(
+                login: VRChatMobileSettingsOtherAccount(),
                 child: VRChatMobileSettingsOtherAccount(),
               ),
             ),
-            (_) => false,
           ),
         ),
       ],

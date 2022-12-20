@@ -52,7 +52,7 @@ final rememberPasswordProvider = StateProvider.autoDispose<bool>((ref) {
 
 final loginDataProvider = StateProvider.autoDispose<VRChatMobileLoginData>((ref) {
   AccountConfig accountConfig;
-  if (ref.read(accountConfigProvider.notifier).isLogout()) {
+  if (ref.read(accountConfigProvider).isLogout()) {
     accountConfig = ref.read(accountConfigProvider).loggedAccount!;
   } else {
     accountConfig = AccountConfig(genUid());
@@ -77,9 +77,9 @@ class VRChatMobileLogin extends ConsumerWidget {
 
       config.setCookie(ref.read(loginDataProvider).session.getCookie());
       config.setRememberLoginInfo(ref.read(rememberPasswordProvider));
-      ref.read(accountConfigProvider.notifier).addAccount(config);
+      ref.read(accountListConfigProvider).addAccount(config);
 
-      await ref.read(accountConfigProvider.notifier).login(config);
+      await ref.read(accountConfigProvider).login(config);
     }
 
     onPressedTotp() async {
