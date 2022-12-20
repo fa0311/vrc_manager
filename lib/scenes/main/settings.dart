@@ -23,7 +23,6 @@ class VRChatMobileSettings extends ConsumerWidget {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.setting),
       ),
-      drawer: const NormalDrawer(),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Container(

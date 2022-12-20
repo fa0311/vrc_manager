@@ -19,13 +19,15 @@ class SelfUserModalBottom extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Column(
-      children: [
-        EditBioTileWidget(user: user),
-        EditNoteTileWidget(user: user),
-        ShareUrlTileWidget(url: Uri.https("vrchat.com", "/home/user/${user.id}")),
-        OpenInJsonViewer(content: user.content),
-      ],
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          EditBioTileWidget(user: user),
+          EditNoteTileWidget(user: user),
+          ShareUrlTileWidget(url: Uri.https("vrchat.com", "/home/user/${user.id}")),
+          OpenInJsonViewer(content: user.content),
+        ],
+      ),
     );
   }
 }
@@ -37,13 +39,15 @@ class UserDetailsModalBottom extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Column(
-      children: [
-        EditNoteTileWidget(user: user),
-        ShareUrlTileWidget(url: Uri.https("vrchat.com", "/home/user/${user.id}")),
-        ProfileActionTileWidget(status: status, user: user),
-        OpenInJsonViewer(content: user.content),
-      ],
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          EditNoteTileWidget(user: user),
+          ShareUrlTileWidget(url: Uri.https("vrchat.com", "/home/user/${user.id}")),
+          ProfileActionTileWidget(status: status, user: user),
+          OpenInJsonViewer(content: user.content),
+        ],
+      ),
     );
   }
 }
@@ -146,39 +150,41 @@ class ProfileAction extends ConsumerWidget {
       );
     }
 
-    return Column(
-      children: [
-        if (!status.isFriend && !status.incomingRequest && !status.outgoingRequest)
-          ListTile(
-            leading: const Icon(Icons.person_add),
-            title: Text(AppLocalizations.of(context)!.friendRequest),
-            onTap: sendFriendRequest,
-          ),
-        if (status.isFriend && !status.incomingRequest && !status.outgoingRequest)
-          ListTile(
-            leading: const Icon(Icons.person_remove),
-            title: Text(AppLocalizations.of(context)!.unfriend),
-            onTap: deleteFriend,
-          ),
-        if (!status.isFriend && status.outgoingRequest)
-          ListTile(
-            leading: const Icon(Icons.person_remove),
-            title: Text(AppLocalizations.of(context)!.requestCancel),
-            onTap: deleteFriendRequest,
-          ),
-        if (!status.isFriend && status.incomingRequest)
-          ListTile(
-            leading: const Icon(Icons.person_add),
-            title: Text(AppLocalizations.of(context)!.allowFriends),
-            onTap: acceptFriendRequest,
-          ),
-        if (!status.isFriend && status.incomingRequest)
-          ListTile(
-            leading: const Icon(Icons.person_remove),
-            title: Text(AppLocalizations.of(context)!.denyFriends),
-            onTap: deleteFriendRequest,
-          ),
-      ],
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          if (!status.isFriend && !status.incomingRequest && !status.outgoingRequest)
+            ListTile(
+              leading: const Icon(Icons.person_add),
+              title: Text(AppLocalizations.of(context)!.friendRequest),
+              onTap: sendFriendRequest,
+            ),
+          if (status.isFriend && !status.incomingRequest && !status.outgoingRequest)
+            ListTile(
+              leading: const Icon(Icons.person_remove),
+              title: Text(AppLocalizations.of(context)!.unfriend),
+              onTap: deleteFriend,
+            ),
+          if (!status.isFriend && status.outgoingRequest)
+            ListTile(
+              leading: const Icon(Icons.person_remove),
+              title: Text(AppLocalizations.of(context)!.requestCancel),
+              onTap: deleteFriendRequest,
+            ),
+          if (!status.isFriend && status.incomingRequest)
+            ListTile(
+              leading: const Icon(Icons.person_add),
+              title: Text(AppLocalizations.of(context)!.allowFriends),
+              onTap: acceptFriendRequest,
+            ),
+          if (!status.isFriend && status.incomingRequest)
+            ListTile(
+              leading: const Icon(Icons.person_remove),
+              title: Text(AppLocalizations.of(context)!.denyFriends),
+              onTap: deleteFriendRequest,
+            ),
+        ],
+      ),
     );
   }
 }

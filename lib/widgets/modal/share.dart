@@ -30,13 +30,15 @@ class ShareUrlListTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Column(
-      children: [
-        ShareListTileWidget(text: url.toString()),
-        CopyListTileWidget(text: url.toString()),
-        if (!browserExternalForce) OpenInBrowserListTileWidget(url: url),
-        if (url.host != "vrchat.com" && browserExternalForce) OpenInBrowserExternalForceListTileWidget(url: url),
-      ],
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          ShareListTileWidget(text: url.toString()),
+          CopyListTileWidget(text: url.toString()),
+          if (!browserExternalForce) OpenInBrowserListTileWidget(url: url),
+          if (url.host != "vrchat.com" && browserExternalForce) OpenInBrowserExternalForceListTileWidget(url: url),
+        ],
+      ),
     );
   }
 }
@@ -51,14 +53,16 @@ class ShareInstanceListTile extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     Uri url = Uri.https("vrchat.com", "/home/launch", {"worldId": worldId, "instanceId": instanceId});
 
-    return Column(
-      children: [
-        ShareListTileWidget(text: url.toString()),
-        CopyListTileWidget(text: url.toString()),
-        OpenInBrowserListTileWidget(url: url),
-        if (Platform.isWindows)
-          OpenInWindowsListTileWidget(url: Uri(scheme: "vrchat", path: "launch", queryParameters: {"ref": "vrchat.com", "id": "$worldId:$instanceId"})),
-      ],
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          ShareListTileWidget(text: url.toString()),
+          CopyListTileWidget(text: url.toString()),
+          OpenInBrowserListTileWidget(url: url),
+          if (Platform.isWindows)
+            OpenInWindowsListTileWidget(url: Uri(scheme: "vrchat", path: "launch", queryParameters: {"ref": "vrchat.com", "id": "$worldId:$instanceId"})),
+        ],
+      ),
     );
   }
 }

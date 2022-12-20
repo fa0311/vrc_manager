@@ -16,24 +16,26 @@ class LocaleModal extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final accessibilityConfig = ref.watch(accessibilityConfigProvider);
 
-    return Column(
-      children: <Widget>[
-        for (LanguageCode value in LanguageCode.values)
-          ListTile(
-            title: Text(value.text),
-            trailing: accessibilityConfig.languageCode == value ? const Icon(Icons.check) : null,
-            subtitle: Text(
-              AppLocalizations.of(context)!.translatorDetails(
-                lookupAppLocalizations(
-                  Locale(value.name, ""),
-                ).contributor,
+    return SingleChildScrollView(
+      child: Column(
+        children: <Widget>[
+          for (LanguageCode value in LanguageCode.values)
+            ListTile(
+              title: Text(value.text),
+              trailing: accessibilityConfig.languageCode == value ? const Icon(Icons.check) : null,
+              subtitle: Text(
+                AppLocalizations.of(context)!.translatorDetails(
+                  lookupAppLocalizations(
+                    Locale(value.name, ""),
+                  ).contributor,
+                ),
               ),
+              onTap: () {
+                accessibilityConfig.setLanguageCode(value);
+              },
             ),
-            onTap: () {
-              accessibilityConfig.setLanguageCode(value);
-            },
-          ),
-      ],
+        ],
+      ),
     );
   }
 }

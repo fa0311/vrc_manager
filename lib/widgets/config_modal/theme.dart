@@ -17,15 +17,17 @@ class ThemeBrightnessModal extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     AccessibilityConfigNotifier accessibilityConfig = ref.watch(accessibilityConfigProvider);
 
-    return Column(
-      children: <Widget>[
-        for (ThemeBrightness value in ThemeBrightness.values)
-          ListTile(
-            title: Text(value.toLocalization(context)),
-            trailing: (dark ? accessibilityConfig.darkThemeBrightness : accessibilityConfig.themeBrightness) == value ? const Icon(Icons.check) : null,
-            onTap: () => dark ? accessibilityConfig.setDarkThemeBrightness(value) : accessibilityConfig.setThemeBrightness(value),
-          ),
-      ],
+    return SingleChildScrollView(
+      child: Column(
+        children: <Widget>[
+          for (ThemeBrightness value in ThemeBrightness.values)
+            ListTile(
+              title: Text(value.toLocalization(context)),
+              trailing: (dark ? accessibilityConfig.darkThemeBrightness : accessibilityConfig.themeBrightness) == value ? const Icon(Icons.check) : null,
+              onTap: () => dark ? accessibilityConfig.setDarkThemeBrightness(value) : accessibilityConfig.setThemeBrightness(value),
+            ),
+        ],
+      ),
     );
   }
 }

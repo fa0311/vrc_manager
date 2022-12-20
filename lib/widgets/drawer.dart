@@ -20,32 +20,34 @@ class AccountList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Column(
-      children: [
-        for (AccountConfig account in ref.watch(accountListConfigProvider).accountList)
-          ListTile(
-            title: Text(
-              account.displayName ?? AppLocalizations.of(context)!.unknown,
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          for (AccountConfig account in ref.watch(accountListConfigProvider).accountList)
+            ListTile(
+              title: Text(
+                account.displayName ?? AppLocalizations.of(context)!.unknown,
+              ),
+              onTap: () async {
+                ref.read(accountConfigProvider).login(account);
+              },
             ),
-            onTap: () async {
-              ref.read(accountConfigProvider).login(account);
-            },
-          ),
-        const Divider(),
-        ListTile(
-          leading: const Icon(Icons.settings),
-          title: Text(AppLocalizations.of(context)!.accountSwitchSetting),
-          onTap: () => Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => const VRChatMobileSplash(
-                login: VRChatMobileSettingsOtherAccount(),
-                child: VRChatMobileSettingsOtherAccount(),
+          const Divider(),
+          ListTile(
+            leading: const Icon(Icons.settings),
+            title: Text(AppLocalizations.of(context)!.accountSwitchSetting),
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => const VRChatMobileSplash(
+                  login: VRChatMobileSettingsOtherAccount(),
+                  child: VRChatMobileSettingsOtherAccount(),
+                ),
               ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
@@ -112,12 +114,11 @@ class NormalDrawer extends ConsumerWidget {
               Column(children: [
                 const Divider(),
                 ListTile(
-                  onTap: () => Navigator.pushAndRemoveUntil(
+                  onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (_) => const VRChatMobileSettings(),
                     ),
-                    (_) => false,
                   ),
                   leading: const Icon(Icons.settings),
                   title: Text(AppLocalizations.of(context)!.setting),

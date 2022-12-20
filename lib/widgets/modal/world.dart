@@ -20,13 +20,15 @@ class WorldDetailsModalBottom extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Column(
-      children: [
-        ShareUrlTileWidget(url: Uri.https("vrchat.com", "/home/world/${world.id}")),
-        FavoriteListTileWidget(world: world),
-        LaunchWorldListTileWidget(world: world),
-        OpenInJsonViewer(content: world.content),
-      ],
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          ShareUrlTileWidget(url: Uri.https("vrchat.com", "/home/world/${world.id}")),
+          FavoriteListTileWidget(world: world),
+          LaunchWorldListTileWidget(world: world),
+          OpenInJsonViewer(content: world.content),
+        ],
+      ),
     );
   }
 }
@@ -39,13 +41,15 @@ class InstanceDetailsModalBottom extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Column(
-      children: [
-        ShareInstanceTileWidget(worldId: world.id, instanceId: instance.instanceId),
-        FavoriteListTileWidget(world: world),
-        SelfInviteListTileWidget(instance: instance),
-        OpenInJsonViewer(content: instance.content),
-      ],
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          ShareInstanceTileWidget(worldId: world.id, instanceId: instance.instanceId),
+          FavoriteListTileWidget(world: world),
+          SelfInviteListTileWidget(instance: instance),
+          OpenInJsonViewer(content: instance.content),
+        ],
+      ),
     );
   }
 }
@@ -59,14 +63,16 @@ class UserInstanceDetailsModalBottom extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Column(
-      children: [
-        ShareUrlTileWidget(url: Uri.https("vrchat.com", "/home/user/${user.id}")),
-        ShareInstanceTileWidget(worldId: world.id, instanceId: instance.instanceId),
-        FavoriteListTileWidget(world: world),
-        SelfInviteListTileWidget(instance: instance),
-        OpenInJsonViewer(content: instance.content),
-      ],
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          ShareUrlTileWidget(url: Uri.https("vrchat.com", "/home/user/${user.id}")),
+          ShareInstanceTileWidget(worldId: world.id, instanceId: instance.instanceId),
+          FavoriteListTileWidget(world: world),
+          SelfInviteListTileWidget(instance: instance),
+          OpenInJsonViewer(content: instance.content),
+        ],
+      ),
     );
   }
 }
