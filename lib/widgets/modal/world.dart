@@ -14,41 +14,61 @@ import 'package:vrc_manager/widgets/modal.dart';
 import 'package:vrc_manager/widgets/modal/share.dart';
 import 'package:vrc_manager/widgets/world.dart';
 
-List<Widget> worldDetailsModalBottom(
-  VRChatWorld world,
-) {
-  return [
-    ShareUrlTileWidget(url: Uri.https("vrchat.com", "/home/world/${world.id}")),
-    FavoriteListTileWidget(world: world),
-    LaunchWorldListTileWidget(world: world),
-    OpenInJsonViewer(content: world.content),
-  ];
+class WorldDetailsModalBottom extends ConsumerWidget {
+  final VRChatWorld world;
+  const WorldDetailsModalBottom({super.key, required this.world});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Column(
+      children: [
+        ShareUrlTileWidget(url: Uri.https("vrchat.com", "/home/world/${world.id}")),
+        FavoriteListTileWidget(world: world),
+        LaunchWorldListTileWidget(world: world),
+        OpenInJsonViewer(content: world.content),
+      ],
+    );
+  }
 }
 
-List<Widget> instanceDetailsModalBottom(
-  VRChatWorld world,
-  VRChatInstance instance,
-) {
-  return [
-    ShareInstanceTileWidget(worldId: world.id, instanceId: instance.instanceId),
-    FavoriteListTileWidget(world: world),
-    SelfInviteListTileWidget(instance: instance),
-    OpenInJsonViewer(content: instance.content),
-  ];
+class InstanceDetailsModalBottom extends ConsumerWidget {
+  final VRChatWorld world;
+  final VRChatInstance instance;
+
+  const InstanceDetailsModalBottom({super.key, required this.world, required this.instance});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Column(
+      children: [
+        ShareInstanceTileWidget(worldId: world.id, instanceId: instance.instanceId),
+        FavoriteListTileWidget(world: world),
+        SelfInviteListTileWidget(instance: instance),
+        OpenInJsonViewer(content: instance.content),
+      ],
+    );
+  }
 }
 
-List<Widget> userInstanceDetailsModalBottom(
-  VRChatUser user,
-  VRChatWorld world,
-  VRChatInstance instance,
-) {
-  return [
-    ShareUrlTileWidget(url: Uri.https("vrchat.com", "/home/user/${user.id}")),
-    ShareInstanceTileWidget(worldId: world.id, instanceId: instance.instanceId),
-    FavoriteListTileWidget(world: world),
-    SelfInviteListTileWidget(instance: instance),
-    OpenInJsonViewer(content: instance.content),
-  ];
+class UserInstanceDetailsModalBottom extends ConsumerWidget {
+  final VRChatUser user;
+  final VRChatWorld world;
+  final VRChatInstance instance;
+
+  const UserInstanceDetailsModalBottom({super.key, required this.user, required this.world, required this.instance});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Column(
+      children: [
+        ShareUrlTileWidget(url: Uri.https("vrchat.com", "/home/user/${user.id}")),
+        ShareInstanceTileWidget(worldId: world.id, instanceId: instance.instanceId),
+        FavoriteListTileWidget(world: world),
+        SelfInviteListTileWidget(instance: instance),
+        OpenInJsonViewer(content: instance.content),
+      ],
+    );
+  }
 }
 
 class SelfInviteListTileWidget extends ConsumerWidget {
@@ -79,9 +99,7 @@ class FavoriteListTileWidget extends ConsumerWidget {
       onTap: () {
         showModalBottomSheetStatelessWidget(
           context: context,
-          builder: () {
-            return FavoriteAction(world: world);
-          },
+          builder: () => FavoriteAction(world: world),
         );
       },
     );
@@ -99,9 +117,7 @@ class LaunchWorldListTileWidget extends ConsumerWidget {
       onTap: () {
         showModalBottomSheetStatelessWidget(
           context: context,
-          builder: () {
-            return LaunchWorld(world: world);
-          },
+          builder: () => LaunchWorld(world: world),
         );
       },
     );

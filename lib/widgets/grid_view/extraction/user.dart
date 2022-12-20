@@ -46,9 +46,7 @@ class ExtractionUser extends ConsumerGridWidget {
               onLongPress: () {
                 showModalBottomSheetStatelessWidget(
                   context: context,
-                  builder: () {
-                    return Column(children: userDetailsModalBottom(user, userStatus));
-                  },
+                  builder: () => UserDetailsModalBottom(user: user, status: userStatus),
                 );
               },
               children: [
@@ -81,9 +79,7 @@ class ExtractionUser extends ConsumerGridWidget {
               onLongPress: () {
                 showModalBottomSheetStatelessWidget(
                   context: context,
-                  builder: () {
-                    return Column(children: userDetailsModalBottom(user, userStatus));
-                  },
+                  builder: () => UserDetailsModalBottom(user: user, status: userStatus),
                 );
               },
               children: [
@@ -118,9 +114,7 @@ class ExtractionUser extends ConsumerGridWidget {
               onLongPress: () {
                 showModalBottomSheetStatelessWidget(
                   context: context,
-                  builder: () {
-                    return Column(children: userDetailsModalBottom(user, status!));
-                  },
+                  builder: () => UserDetailsModalBottom(user: user, status: status!),
                 );
               },
               children: [

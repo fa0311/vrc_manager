@@ -52,9 +52,7 @@ class VRChatMobileWorld extends ConsumerWidget {
               onPressed: () {
                 showModalBottomSheetStatelessWidget(
                   context: context,
-                  builder: () {
-                    return Column(children: worldDetailsModalBottom(data.world));
-                  },
+                  builder: () => WorldDetailsModalBottom(world: data.world),
                 );
               },
             )

@@ -186,9 +186,7 @@ List<Widget> bioLink(BuildContext context, List<Uri> bioLinks) {
         onLongPress: () {
           showModalBottomSheetStatelessWidget(
             context: context,
-            builder: () {
-              return Column(children: shareUrlListTile(url));
-            },
+            builder: () => ShareUrlListTile(url: url),
           );
         },
         child: Padding(

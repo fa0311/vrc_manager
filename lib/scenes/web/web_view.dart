@@ -67,9 +67,7 @@ class VRChatMobileWebView extends ConsumerWidget {
               onPressed: () {
                 showModalBottomSheetStatelessWidget(
                   context: context,
-                  builder: () {
-                    return Column(children: shareUrlListTile(url, browserExternalForce: true));
-                  },
+                  builder: () => ShareUrlListTile(url: url, browserExternalForce: true),
                 );
               },
             ),

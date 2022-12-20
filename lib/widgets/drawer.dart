@@ -72,9 +72,7 @@ class NormalDrawer extends ConsumerWidget {
                 onLongPress: () {
                   showModalBottomSheetStatelessWidget(
                     context: context,
-                    builder: () {
-                      return Column(children: selfUserModalBottom(account!.data!));
-                    },
+                    builder: () => SelfUserModalBottom(user: account!.data!),
                   );
                 },
                 child: UserAccountsDrawerHeader(

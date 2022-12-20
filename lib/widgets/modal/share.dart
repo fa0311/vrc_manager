@@ -18,24 +18,49 @@ import 'package:vrc_manager/storage/accessibility.dart';
 import 'package:vrc_manager/widgets/modal.dart';
 import 'package:vrc_manager/widgets/share.dart';
 
-List<Widget> shareUrlListTile(Uri url, {bool browserExternalForce = false}) {
-  return [
-    ShareListTileWidget(text: url.toString()),
-    CopyListTileWidget(text: url.toString()),
-    if (!browserExternalForce) OpenInBrowserListTileWidget(url: url),
-    if (url.host != "vrchat.com" && browserExternalForce) OpenInBrowserExternalForceListTileWidget(url: url),
-  ];
+class ShareUrlListTile extends ConsumerWidget {
+  final Uri url;
+  final bool browserExternalForce;
+
+  const ShareUrlListTile({
+    super.key,
+    required this.url,
+    this.browserExternalForce = false,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Column(
+      children: [
+        ShareListTileWidget(text: url.toString()),
+        CopyListTileWidget(text: url.toString()),
+        if (!browserExternalForce) OpenInBrowserListTileWidget(url: url),
+        if (url.host != "vrchat.com" && browserExternalForce) OpenInBrowserExternalForceListTileWidget(url: url),
+      ],
+    );
+  }
 }
 
-List<Widget> shareInstanceListTile(String worldId, String instanceId) {
-  Uri url = Uri.https("vrchat.com", "/home/launch", {"worldId": worldId, "instanceId": instanceId});
-  return [
-    ShareListTileWidget(text: url.toString()),
-    CopyListTileWidget(text: url.toString()),
-    OpenInBrowserListTileWidget(url: url),
-    if (Platform.isWindows)
-      OpenInWindowsListTileWidget(url: Uri(scheme: "vrchat", path: "launch", queryParameters: {"ref": "vrchat.com", "id": "$worldId:$instanceId"})),
-  ];
+class ShareInstanceListTile extends ConsumerWidget {
+  final String worldId;
+  final String instanceId;
+
+  const ShareInstanceListTile({super.key, required this.worldId, required this.instanceId});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    Uri url = Uri.https("vrchat.com", "/home/launch", {"worldId": worldId, "instanceId": instanceId});
+
+    return Column(
+      children: [
+        ShareListTileWidget(text: url.toString()),
+        CopyListTileWidget(text: url.toString()),
+        OpenInBrowserListTileWidget(url: url),
+        if (Platform.isWindows)
+          OpenInWindowsListTileWidget(url: Uri(scheme: "vrchat", path: "launch", queryParameters: {"ref": "vrchat.com", "id": "$worldId:$instanceId"})),
+      ],
+    );
+  }
 }
 
 class ShareListTileWidget extends ConsumerWidget {
@@ -140,9 +165,7 @@ class ShareUrlTileWidget extends ConsumerWidget {
       onTap: () {
         showModalBottomSheetStatelessWidget(
           context: context,
-          builder: () {
-            return Column(children: shareUrlListTile(url));
-          },
+          builder: () => ShareUrlListTile(url: url),
         );
       },
     );
@@ -161,9 +184,7 @@ class ShareInstanceTileWidget extends ConsumerWidget {
       onTap: () {
         showModalBottomSheetStatelessWidget(
           context: context,
-          builder: () {
-            return Column(children: shareInstanceListTile(worldId, instanceId));
-          },
+          builder: () => ShareInstanceListTile(worldId: worldId, instanceId: instanceId),
         );
       },
     );

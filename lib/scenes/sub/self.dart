@@ -73,9 +73,7 @@ class VRChatMobileSelf extends ConsumerWidget {
               onPressed: () {
                 showModalBottomSheetStatelessWidget(
                   context: context,
-                  builder: () {
-                    return Column(children: selfUserModalBottom(data.user));
-                  },
+                  builder: () => SelfUserModalBottom(user: data.user),
                 );
               },
             ),

@@ -46,9 +46,7 @@ class ExtractionFavoriteWorld extends ConsumerGridWidget {
                 onLongPress: () {
                   showModalBottomSheetStatelessWidget(
                     context: context,
-                    builder: () {
-                      return Column(children: [FavoriteListTileWidget(world: world)]);
-                    },
+                    builder: () => Column(children: [FavoriteListTileWidget(world: world)]),
                   );
                 },
                 right: config.removeButton
@@ -105,9 +103,7 @@ class ExtractionFavoriteWorld extends ConsumerGridWidget {
               onLongPress: () {
                 showModalBottomSheetStatelessWidget(
                   context: context,
-                  builder: () {
-                    return Column(children: [FavoriteListTileWidget(world: world)]);
-                  },
+                  builder: () => Column(children: [FavoriteListTileWidget(world: world)]),
                 );
               },
               stack: config.removeButton

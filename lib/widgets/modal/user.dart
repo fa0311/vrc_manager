@@ -13,27 +13,39 @@ import 'package:vrc_manager/widgets/modal.dart';
 import 'package:vrc_manager/widgets/modal/share.dart';
 import 'package:vrc_manager/widgets/user.dart';
 
-List<Widget> selfUserModalBottom(
-  VRChatUserSelf user,
-) {
-  return [
-    EditBioTileWidget(user: user),
-    EditNoteTileWidget(user: user),
-    ShareUrlTileWidget(url: Uri.https("vrchat.com", "/home/user/${user.id}")),
-    OpenInJsonViewer(content: user.content),
-  ];
+class SelfUserModalBottom extends ConsumerWidget {
+  final VRChatUserSelf user;
+  const SelfUserModalBottom({super.key, required this.user});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Column(
+      children: [
+        EditBioTileWidget(user: user),
+        EditNoteTileWidget(user: user),
+        ShareUrlTileWidget(url: Uri.https("vrchat.com", "/home/user/${user.id}")),
+        OpenInJsonViewer(content: user.content),
+      ],
+    );
+  }
 }
 
-List<Widget> userDetailsModalBottom(
-  VRChatUser user,
-  VRChatFriendStatus status,
-) {
-  return [
-    EditNoteTileWidget(user: user),
-    ShareUrlTileWidget(url: Uri.https("vrchat.com", "/home/user/${user.id}")),
-    ProfileActionTileWidget(status: status, user: user),
-    OpenInJsonViewer(content: user.content),
-  ];
+class UserDetailsModalBottom extends ConsumerWidget {
+  final VRChatUser user;
+  final VRChatFriendStatus status;
+  const UserDetailsModalBottom({super.key, required this.user, required this.status});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Column(
+      children: [
+        EditNoteTileWidget(user: user),
+        ShareUrlTileWidget(url: Uri.https("vrchat.com", "/home/user/${user.id}")),
+        ProfileActionTileWidget(status: status, user: user),
+        OpenInJsonViewer(content: user.content),
+      ],
+    );
+  }
 }
 
 class EditNoteTileWidget extends ConsumerWidget {
@@ -78,9 +90,7 @@ class ProfileActionTileWidget extends ConsumerWidget {
       onTap: () {
         showModalBottomSheetStatelessWidget(
           context: context,
-          builder: () {
-            return ProfileAction(status: status, user: user);
-          },
+          builder: () => ProfileAction(status: status, user: user),
         );
       },
     );

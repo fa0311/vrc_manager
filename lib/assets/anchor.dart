@@ -35,9 +35,7 @@ List<InlineSpan> textToAnchor(BuildContext context, String text) {
                     if (Uri.tryParse(text!) != null) {
                       showModalBottomSheetStatelessWidget(
                         context: context,
-                        builder: () {
-                          return Column(children: shareUrlListTile(Uri.parse(text)));
-                        },
+                        builder: () => ShareUrlListTile(url: Uri.parse(text)),
                       );
                     }
                   }
@@ -64,9 +62,7 @@ List<InlineSpan> textToAnchor(BuildContext context, String text) {
                     if (Uri.tryParse(text!) != null) {
                       showModalBottomSheetStatelessWidget(
                         context: context,
-                        builder: () {
-                          return Column(children: shareUrlListTile(Uri.parse(text)));
-                        },
+                        builder: () => ShareUrlListTile(url: Uri.parse(text)),
                       );
                     }
                   }

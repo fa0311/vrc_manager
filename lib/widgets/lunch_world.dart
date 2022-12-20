@@ -87,9 +87,7 @@ class SelectWordType extends ConsumerWidget {
             String instanceId = await genInstanceId(vrchatLoginSession: vrchatLoginSession, region: regionText, type: "public", canRequestInvite: false);
             showModalBottomSheetStatelessWidget(
               context: context,
-              builder: () {
-                return Column(children: shareInstanceListTile(world.id, instanceId));
-              },
+              builder: () => ShareInstanceListTile(worldId: world.id, instanceId: instanceId),
             );
           },
         ),
@@ -101,9 +99,7 @@ class SelectWordType extends ConsumerWidget {
             String instanceId = await genInstanceId(vrchatLoginSession: vrchatLoginSession, region: regionText, type: "hidden", canRequestInvite: false);
             showModalBottomSheetStatelessWidget(
               context: context,
-              builder: () {
-                return Column(children: shareInstanceListTile(world.id, instanceId));
-              },
+              builder: () => ShareInstanceListTile(worldId: world.id, instanceId: instanceId),
             );
           },
         ),
@@ -115,9 +111,7 @@ class SelectWordType extends ConsumerWidget {
             String instanceId = await genInstanceId(vrchatLoginSession: vrchatLoginSession, region: regionText, type: "friends", canRequestInvite: false);
             showModalBottomSheetStatelessWidget(
               context: context,
-              builder: () {
-                return Column(children: shareInstanceListTile(world.id, instanceId));
-              },
+              builder: () => ShareInstanceListTile(worldId: world.id, instanceId: instanceId),
             );
           },
         ),
@@ -129,9 +123,7 @@ class SelectWordType extends ConsumerWidget {
             String instanceId = await genInstanceId(vrchatLoginSession: vrchatLoginSession, region: regionText, type: "private", canRequestInvite: true);
             showModalBottomSheetStatelessWidget(
               context: context,
-              builder: () {
-                return Column(children: shareInstanceListTile(world.id, instanceId));
-              },
+              builder: () => ShareInstanceListTile(worldId: world.id, instanceId: instanceId),
             );
           },
         ),
@@ -143,9 +135,7 @@ class SelectWordType extends ConsumerWidget {
             String instanceId = await genInstanceId(vrchatLoginSession: vrchatLoginSession, region: regionText, type: "private", canRequestInvite: false);
             showModalBottomSheetStatelessWidget(
               context: context,
-              builder: () {
-                return Column(children: shareInstanceListTile(world.id, instanceId));
-              },
+              builder: () => ShareInstanceListTile(worldId: world.id, instanceId: instanceId),
             );
           },
         )

@@ -52,9 +52,7 @@ class ExtractionFriend extends ConsumerGridWidget {
               onLongPress: () {
                 showModalBottomSheetStatelessWidget(
                   context: context,
-                  builder: () {
-                    return Column(children: userDetailsModalBottom(user, VRChatFriendStatus(isFriend: true, incomingRequest: false, outgoingRequest: false)));
-                  },
+                  builder: () => UserDetailsModalBottom(user: user, status: VRChatFriendStatus(isFriend: true, incomingRequest: false, outgoingRequest: false)),
                 );
               },
               bottom: () {
@@ -103,9 +101,7 @@ class ExtractionFriend extends ConsumerGridWidget {
               onLongPress: () {
                 showModalBottomSheetStatelessWidget(
                   context: context,
-                  builder: () {
-                    return Column(children: userDetailsModalBottom(user, VRChatFriendStatus(isFriend: true, incomingRequest: false, outgoingRequest: false)));
-                  },
+                  builder: () => UserDetailsModalBottom(user: user, status: VRChatFriendStatus(isFriend: true, incomingRequest: false, outgoingRequest: false)),
                 );
               },
               bottom: () {
@@ -150,15 +146,14 @@ class ExtractionFriend extends ConsumerGridWidget {
                 showModalBottomSheetStatelessWidget(
                   context: context,
                   builder: () {
-                    return Column(children: [
-                      if (config.worldDetails &&
-                          !["private", "offline", "traveling"].contains(user.location) &&
-                          locationMap[worldId] != null &&
-                          instanceMap[user.location] != null)
-                        ...userInstanceDetailsModalBottom(user, locationMap[worldId]!, instanceMap[user.location]!)
-                      else
-                        ...userDetailsModalBottom(user, VRChatFriendStatus(isFriend: true, incomingRequest: false, outgoingRequest: false))
-                    ]);
+                    if (config.worldDetails &&
+                        !["private", "offline", "traveling"].contains(user.location) &&
+                        locationMap[worldId] != null &&
+                        instanceMap[user.location] != null) {
+                      return UserInstanceDetailsModalBottom(user: user, world: locationMap[worldId]!, instance: instanceMap[user.location]!);
+                    } else {
+                      return UserDetailsModalBottom(user: user, status: VRChatFriendStatus(isFriend: true, incomingRequest: false, outgoingRequest: false));
+                    }
                   },
                 );
               },

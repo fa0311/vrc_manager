@@ -34,9 +34,7 @@ Widget instanceWidget(
         onLongPress: () {
           showModalBottomSheetStatelessWidget(
             context: context,
-            builder: () {
-              return Column(children: instanceDetailsModalBottom(world, instance));
-            },
+            builder: () => InstanceDetailsModalBottom(world: world, instance: instance),
           );
         },
         children: [
