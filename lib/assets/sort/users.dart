@@ -58,8 +58,6 @@ sortByLocationMapFromUser(List<VRChatUser> userList) {
     if (locationB == "traveling") return -1;
     if (inLocation[locationA]!.count > inLocation[locationB]!.count) return -1;
     if (inLocation[locationA]!.count < inLocation[locationB]!.count) return 1;
-    if (inLocation[locationA]!.id > inLocation[locationB]!.id) return -1;
-    if (inLocation[locationA]!.id < inLocation[locationB]!.id) return 1;
     return 0;
   });
 }
