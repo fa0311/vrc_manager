@@ -13,7 +13,7 @@ import 'package:share_plus/share_plus.dart';
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/scenes/sub/json_viewer.dart';
-import 'package:vrc_manager/scenes/sub/splash.dart';
+import 'package:vrc_manager/scenes/core/splash.dart';
 import 'package:vrc_manager/storage/accessibility.dart';
 import 'package:vrc_manager/widgets/modal.dart';
 import 'package:vrc_manager/widgets/share.dart';

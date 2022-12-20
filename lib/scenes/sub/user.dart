@@ -12,7 +12,7 @@ import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
 import 'package:vrc_manager/scenes/sub/self.dart';
-import 'package:vrc_manager/scenes/sub/splash.dart';
+import 'package:vrc_manager/scenes/core/splash.dart';
 import 'package:vrc_manager/widgets/drawer.dart';
 import 'package:vrc_manager/widgets/grid_view/widget/world.dart';
 import 'package:vrc_manager/widgets/modal.dart';

@@ -14,7 +14,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets/error.dart';
-import 'package:vrc_manager/scenes/sub/splash.dart';
+import 'package:vrc_manager/scenes/core/splash.dart';
 import 'package:vrc_manager/storage/account.dart';
 import 'package:vrc_manager/widgets/drawer.dart';
 import 'package:vrc_manager/widgets/modal.dart';
@@ -152,7 +152,7 @@ class VRChatMobileLogin extends ConsumerWidget {
           ),
         ],
       ),
-      drawer: const SimpleDrawer(),
+      drawer: const NormalDrawer(),
       body: Padding(
         padding: const EdgeInsets.all(32.0),
         child: Column(

@@ -11,7 +11,6 @@ import 'package:vrc_manager/scenes/setting/accessibility.dart';
 import 'package:vrc_manager/scenes/setting/account.dart';
 import 'package:vrc_manager/scenes/setting/help.dart';
 import 'package:vrc_manager/scenes/setting/permissions.dart';
-import 'package:vrc_manager/scenes/sub/splash.dart';
 import 'package:vrc_manager/widgets/drawer.dart';
 
 class VRChatMobileSettings extends ConsumerWidget {
@@ -24,7 +23,7 @@ class VRChatMobileSettings extends ConsumerWidget {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.setting),
       ),
-      drawer: ref.read(accountConfigProvider).isLogout() ? const NormalDrawer() : const SimpleDrawer(),
+      drawer: const NormalDrawer(),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Container(

@@ -7,7 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
-import 'package:vrc_manager/scenes/sub/splash.dart';
+import 'package:vrc_manager/scenes/core/splash.dart';
 import 'package:vrc_manager/storage/account.dart';
 
 class VRChatMobileSettingsOtherAccount extends ConsumerWidget {

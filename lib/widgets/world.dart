@@ -12,7 +12,7 @@ import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets/date.dart';
 import 'package:vrc_manager/assets/error.dart';
 import 'package:vrc_manager/scenes/main/worlds_favorite.dart';
-import 'package:vrc_manager/scenes/sub/splash.dart';
+import 'package:vrc_manager/scenes/core/splash.dart';
 
 class OnTheWebsite extends ConsumerWidget {
   final bool half;

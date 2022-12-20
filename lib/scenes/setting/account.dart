@@ -10,7 +10,7 @@ import 'package:vrc_manager/assets/flutter/text_stream.dart';
 import 'package:vrc_manager/scenes/setting/other_account.dart';
 import 'package:vrc_manager/scenes/setting/token.dart';
 import 'package:vrc_manager/scenes/sub/login.dart';
-import 'package:vrc_manager/scenes/sub/splash.dart';
+import 'package:vrc_manager/scenes/core/splash.dart';
 
 class VRChatMobileSettingsAccount extends ConsumerWidget {
   const VRChatMobileSettingsAccount({super.key});

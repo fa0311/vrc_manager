@@ -92,6 +92,8 @@ class AccountConfig extends ChangeNotifier {
   String? password;
   String? displayName;
   bool rememberLoginInfo = false;
+  VRChatUserSelfOverload? data;
+
   AccountConfig(this.uid);
 
   Future init() async {
@@ -152,6 +154,7 @@ class AccountConfig extends ChangeNotifier {
   Future<bool> tokenCheck() async {
     VRChatAPI vrchatLoginSession = VRChatAPI(cookie: cookie);
     return await vrchatLoginSession.user().then((VRChatUserSelfOverload response) {
+      data = response;
       setDisplayName(response.displayName);
       return true;
     }).catchError((status) {
