@@ -9,9 +9,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:vrc_manager/assets/flutter/url_parser.dart';
+import 'package:vrc_manager/scenes/sub/login.dart';
 
 // Project imports:
-import 'package:vrc_manager/scenes/sub/login.dart';
 import 'package:vrc_manager/scenes/web/web_view_policies.dart';
 import 'package:vrc_manager/storage/account.dart';
 import 'package:vrc_manager/storage/grid_modal.dart';
@@ -48,20 +48,22 @@ final splashProvider = FutureProvider<SplashData>((ref) async {
   }
 
   if (!accountConfig.isLogout()) {
+    print("isLogout");
     return SplashData.login;
   }
 
   if (!await accountConfig.loggedAccount!.tokenCheck()) {
+    print("tokenCheck");
     return SplashData.login;
   }
 
+  print("home");
   return SplashData.home;
 });
 
 class VRChatMobileSplash extends ConsumerWidget {
   final Widget child;
-  final bool login;
-  const VRChatMobileSplash({Key? key, required this.child, this.login = true}) : super(key: key);
+  const VRChatMobileSplash({Key? key, required this.child}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -92,7 +94,7 @@ class VRChatMobileSplash extends ConsumerWidget {
               }
               return child;
             case SplashData.login:
-              return login ? const VRChatMobileLogin() : child;
+              return const VRChatMobileLogin();
             case SplashData.userPolicy:
               return const VRChatMobileWebViewUserPolicy();
           }

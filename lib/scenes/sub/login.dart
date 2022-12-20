@@ -130,7 +130,7 @@ class VRChatMobileLogin extends ConsumerWidget {
       if (login.requiresTwoFactorAuth) {
         totp();
       } else if (login.verified) {
-        save();
+        await save();
       } else {
         login.content.addAll({"lastEndpoint": "api/1/auth/user"});
         throw Exception(errorLog(login.content));

@@ -73,11 +73,7 @@ class AccountConfigNotifier extends ChangeNotifier {
   }
 
   List<String> getAccountList() {
-    List<String> uidList = [];
-    for (AccountConfig account in accountList) {
-      uidList.add(account.uid);
-    }
-    return uidList;
+    return [for (AccountConfig account in accountList) account.uid];
   }
 
   Future addAccount(AccountConfig accountConfig) async {

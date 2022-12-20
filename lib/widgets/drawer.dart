@@ -37,7 +37,6 @@ class AccountList extends ConsumerWidget {
             context,
             MaterialPageRoute(
               builder: (_) => const VRChatMobileSplash(
-                login: false,
                 child: VRChatMobileSettingsOtherAccount(),
               ),
             ),
