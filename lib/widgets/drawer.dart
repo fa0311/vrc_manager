@@ -9,9 +9,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vrc_manager/scenes/main/main.dart';
 import 'package:vrc_manager/scenes/main/settings.dart';
 import 'package:vrc_manager/scenes/setting/other_account.dart';
-import 'package:vrc_manager/scenes/sub/splash.dart';
+import 'package:vrc_manager/scenes/core/splash.dart';
+import 'package:vrc_manager/scenes/sub/self.dart';
 import 'package:vrc_manager/storage/account.dart';
 import 'package:vrc_manager/widgets/modal.dart';
+import 'package:vrc_manager/widgets/modal/user.dart';
 
 class AccountList extends ConsumerWidget {
   const AccountList({super.key});
@@ -53,40 +55,53 @@ class NormalDrawer extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    AccountConfig? account = ref.watch(accountConfigProvider).loggedAccount;
+
     return Drawer(
       child: SafeArea(
         child: Column(
           children: <Widget>[
-            UserAccountsDrawerHeader(
-              accountName: const Text("User Name"),
-              accountEmail: const Text("User Email"),
-              currentAccountPicture: const CircleAvatar(
-                backgroundColor: Colors.white,
-              ),
-              otherAccountsPictures: [
-                InkWell(
-                  onTap: () => print("image clicked"),
-                  child: const CircleAvatar(
-                    backgroundColor: Colors.white,
+            if (account?.data != null)
+              GestureDetector(
+                onTapUp: (_) => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const VRChatMobileSelf(),
                   ),
                 ),
-              ],
-            ),
+                onLongPress: () {
+                  showModalBottomSheetStatelessWidget(
+                    context: context,
+                    builder: () {
+                      return Column(children: selfUserModalBottom(account!.data!));
+                    },
+                  );
+                },
+                child: UserAccountsDrawerHeader(
+                  accountName: Text(account!.data!.username),
+                  accountEmail: Text(account.data!.statusDescription ?? ""),
+                  currentAccountPicture: CircleAvatar(
+                    backgroundColor: Colors.white,
+                    backgroundImage: NetworkImage(account.data!.profilePicOverride ?? account.data!.currentAvatarImageUrl),
+                  ),
+                ),
+              ),
             Expanded(
               child: SingleChildScrollView(
                 child: Column(
                   children: <Widget>[
-                    ListTile(
-                      onTap: () => Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => const VRChatMobileHome(),
+                    if (ref.read(accountConfigProvider).isLogout())
+                      ListTile(
+                        onTap: () => Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const VRChatMobileHome(),
+                          ),
+                          (_) => false,
                         ),
-                        (_) => false,
+                        leading: const Icon(Icons.home),
+                        title: Text(AppLocalizations.of(context)!.home),
                       ),
-                      leading: const Icon(Icons.home),
-                      title: Text(AppLocalizations.of(context)!.home),
-                    ),
                     TextButton(
                       onPressed: () => Navigator.pop(context),
                       child: Text(AppLocalizations.of(context)!.close),
@@ -122,12 +137,11 @@ class NormalDrawer extends ConsumerWidget {
               Row(
                 children: <Widget>[
                   IconButton(
-                    onPressed: () => Navigator.pushAndRemoveUntil(
+                    onPressed: () => Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (_) => const VRChatMobileSettings(),
                       ),
-                      (_) => false,
                     ),
                     icon: const Icon(Icons.settings),
                   ),
@@ -140,67 +154,6 @@ class NormalDrawer extends ConsumerWidget {
                   ),
                 ],
               )
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class SimpleDrawer extends ConsumerWidget {
-  const SimpleDrawer({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return Drawer(
-      child: SafeArea(
-        child: Column(
-          children: <Widget>[
-            Expanded(
-              child: Column(children: <Widget>[
-                ListTile(
-                  onTap: () => Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => const VRChatMobileHome(),
-                    ),
-                    (_) => false,
-                  ),
-                  leading: const Icon(Icons.home),
-                  title: Text(AppLocalizations.of(context)!.home),
-                ),
-                TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: Text(AppLocalizations.of(context)!.close),
-                )
-              ]),
-            ),
-            Align(
-              alignment: FractionalOffset.bottomCenter,
-              child: Column(
-                children: <Widget>[
-                  ListTile(
-                    onTap: () => Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => const VRChatMobileSettings(),
-                      ),
-                      (_) => false,
-                    ),
-                    leading: const Icon(Icons.settings),
-                    title: Text(AppLocalizations.of(context)!.setting),
-                  ),
-                  ListTile(
-                    onTap: () => showModalBottomSheetStatelessWidget(
-                      context: context,
-                      builder: () => const AccountList(),
-                    ),
-                    leading: const Icon(Icons.account_circle),
-                    title: Text(AppLocalizations.of(context)!.accountSwitch),
-                  ),
-                ],
-              ),
-            ),
           ],
         ),
       ),
