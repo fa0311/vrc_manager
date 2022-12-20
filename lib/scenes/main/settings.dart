@@ -11,7 +11,6 @@ import 'package:vrc_manager/scenes/setting/accessibility.dart';
 import 'package:vrc_manager/scenes/setting/account.dart';
 import 'package:vrc_manager/scenes/setting/help.dart';
 import 'package:vrc_manager/scenes/setting/permissions.dart';
-import 'package:vrc_manager/widgets/drawer.dart';
 
 class VRChatMobileSettings extends ConsumerWidget {
   const VRChatMobileSettings({Key? key}) : super(key: key);
