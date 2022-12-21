@@ -61,7 +61,7 @@ class EditNoteTileWidget extends ConsumerWidget {
     return ListTile(
       title: Text(AppLocalizations.of(context)!.editNote),
       onTap: () {
-        showDialog(context: context, builder: (context) => editNote(user));
+        showDialog(context: context, builder: (context) => EditNote(user: user));
       },
     );
   }
@@ -76,7 +76,7 @@ class EditBioTileWidget extends ConsumerWidget {
     return ListTile(
       title: Text(AppLocalizations.of(context)!.editBio),
       onTap: () {
-        showDialog(context: context, builder: (context) => editBio(user));
+        showDialog(context: context, builder: (context) => EditBio(user: user));
       },
     );
   }

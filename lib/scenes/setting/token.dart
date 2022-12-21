@@ -11,8 +11,9 @@ import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
 import 'package:vrc_manager/scenes/core/splash.dart';
 
-final tokenControllerProvider =
-    StateProvider<TextEditingController>((ref) => TextEditingController(text: ref.read(accountConfigProvider).loggedAccount!.cookie));
+final tokenControllerProvider = StateProvider<TextEditingController>((ref) {
+  return TextEditingController(text: ref.watch(accountConfigProvider).loggedAccount!.cookie);
+});
 
 class VRChatMobileTokenSetting extends ConsumerWidget {
   final bool offline;

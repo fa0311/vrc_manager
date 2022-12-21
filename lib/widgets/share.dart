@@ -15,7 +15,7 @@ import 'package:vrc_manager/scenes/web/web_view.dart';
 
 Future openInBrowser(BuildContext context, Uri url, {bool forceExternal = false}) async {
   if (!forceExternal && (Platform.isAndroid || Platform.isIOS)) {
-    if (/* ref.read(appConfig.forceExternalBrowser) && */ url.host != "vrchat.com") {
+    if (url.host != "vrchat.com") {
       if (await canLaunchUrl(url)) {
         await launchUrl(url, mode: LaunchMode.externalApplication);
       }

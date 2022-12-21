@@ -50,7 +50,7 @@ class ExtractionUser extends ConsumerGridWidget {
                 );
               },
               children: [
-                username(user),
+                Username(user: user),
               ],
             );
           }(),
@@ -83,7 +83,7 @@ class ExtractionUser extends ConsumerGridWidget {
                 );
               },
               children: [
-                username(user, diameter: 12),
+                Username(user: user, diameter: 12),
                 for (String text in [
                   if (user.statusDescription != null) user.statusDescription!,
                 ].whereType<String>()) ...[
@@ -121,7 +121,7 @@ class ExtractionUser extends ConsumerGridWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    username(user, diameter: 15),
+                    Username(user: user, diameter: 15),
                     if (user.statusDescription != null) Text(user.statusDescription!, style: const TextStyle(fontSize: 10)),
                   ],
                 ),

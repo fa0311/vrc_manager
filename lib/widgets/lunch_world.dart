@@ -54,18 +54,20 @@ class LaunchWorld extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Column(
-      children: [
-        for (VRChatRegion region in VRChatRegion.values)
-          ListTile(
-            leading: RegionWidget(region: region),
-            title: Text(region.name),
-            onTap: () => showModalBottomSheetStatelessWidget(
-              context: context,
-              builder: () => SelectWordType(world: world, regionText: region.name),
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          for (VRChatRegion region in VRChatRegion.values)
+            ListTile(
+              leading: RegionWidget(region: region),
+              title: Text(region.name),
+              onTap: () => showModalBottomSheetStatelessWidget(
+                context: context,
+                builder: () => SelectWordType(world: world, regionText: region.name),
+              ),
             ),
-          ),
-      ],
+        ],
+      ),
     );
   }
 }
@@ -80,69 +82,71 @@ class SelectWordType extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount!.cookie);
 
-    return Column(
-      children: [
-        ListTile(
-          title: Text(AppLocalizations.of(context)!.vrchatPublic),
-          onTap: () async {
-            String instanceId = await genInstanceId(vrchatLoginSession: vrchatLoginSession, region: regionText, type: "public", canRequestInvite: false);
-            // ignore: use_build_context_synchronously
-            Navigator.of(context).popUntil((route) => route.isFirst);
-            showModalBottomSheetStatelessWidget(
-              context: context,
-              builder: () => ShareInstanceListTile(worldId: world.id, instanceId: instanceId),
-            );
-          },
-        ),
-        ListTile(
-          title: Text(AppLocalizations.of(context)!.vrchatFriendsPlus),
-          onTap: () async {
-            String instanceId = await genInstanceId(vrchatLoginSession: vrchatLoginSession, region: regionText, type: "hidden", canRequestInvite: false);
-            // ignore: use_build_context_synchronously
-            Navigator.of(context).popUntil((route) => route.isFirst);
-            showModalBottomSheetStatelessWidget(
-              context: context,
-              builder: () => ShareInstanceListTile(worldId: world.id, instanceId: instanceId),
-            );
-          },
-        ),
-        ListTile(
-          title: Text(AppLocalizations.of(context)!.vrchatFriends),
-          onTap: () async {
-            String instanceId = await genInstanceId(vrchatLoginSession: vrchatLoginSession, region: regionText, type: "friends", canRequestInvite: false);
-            // ignore: use_build_context_synchronously
-            Navigator.of(context).popUntil((route) => route.isFirst);
-            showModalBottomSheetStatelessWidget(
-              context: context,
-              builder: () => ShareInstanceListTile(worldId: world.id, instanceId: instanceId),
-            );
-          },
-        ),
-        ListTile(
-          title: Text(AppLocalizations.of(context)!.vrchatInvitePlus),
-          onTap: () async {
-            String instanceId = await genInstanceId(vrchatLoginSession: vrchatLoginSession, region: regionText, type: "private", canRequestInvite: true);
-            // ignore: use_build_context_synchronously
-            Navigator.of(context).popUntil((route) => route.isFirst);
-            showModalBottomSheetStatelessWidget(
-              context: context,
-              builder: () => ShareInstanceListTile(worldId: world.id, instanceId: instanceId),
-            );
-          },
-        ),
-        ListTile(
-          title: Text(AppLocalizations.of(context)!.vrchatInvite),
-          onTap: () async {
-            String instanceId = await genInstanceId(vrchatLoginSession: vrchatLoginSession, region: regionText, type: "private", canRequestInvite: false);
-            // ignore: use_build_context_synchronously
-            Navigator.of(context).popUntil((route) => route.isFirst);
-            showModalBottomSheetStatelessWidget(
-              context: context,
-              builder: () => ShareInstanceListTile(worldId: world.id, instanceId: instanceId),
-            );
-          },
-        )
-      ],
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          ListTile(
+            title: Text(AppLocalizations.of(context)!.vrchatPublic),
+            onTap: () async {
+              String instanceId = await genInstanceId(vrchatLoginSession: vrchatLoginSession, region: regionText, type: "public", canRequestInvite: false);
+              // ignore: use_build_context_synchronously
+              Navigator.of(context).popUntil((route) => route.isFirst);
+              showModalBottomSheetStatelessWidget(
+                context: context,
+                builder: () => ShareInstanceListTile(worldId: world.id, instanceId: instanceId),
+              );
+            },
+          ),
+          ListTile(
+            title: Text(AppLocalizations.of(context)!.vrchatFriendsPlus),
+            onTap: () async {
+              String instanceId = await genInstanceId(vrchatLoginSession: vrchatLoginSession, region: regionText, type: "hidden", canRequestInvite: false);
+              // ignore: use_build_context_synchronously
+              Navigator.of(context).popUntil((route) => route.isFirst);
+              showModalBottomSheetStatelessWidget(
+                context: context,
+                builder: () => ShareInstanceListTile(worldId: world.id, instanceId: instanceId),
+              );
+            },
+          ),
+          ListTile(
+            title: Text(AppLocalizations.of(context)!.vrchatFriends),
+            onTap: () async {
+              String instanceId = await genInstanceId(vrchatLoginSession: vrchatLoginSession, region: regionText, type: "friends", canRequestInvite: false);
+              // ignore: use_build_context_synchronously
+              Navigator.of(context).popUntil((route) => route.isFirst);
+              showModalBottomSheetStatelessWidget(
+                context: context,
+                builder: () => ShareInstanceListTile(worldId: world.id, instanceId: instanceId),
+              );
+            },
+          ),
+          ListTile(
+            title: Text(AppLocalizations.of(context)!.vrchatInvitePlus),
+            onTap: () async {
+              String instanceId = await genInstanceId(vrchatLoginSession: vrchatLoginSession, region: regionText, type: "private", canRequestInvite: true);
+              // ignore: use_build_context_synchronously
+              Navigator.of(context).popUntil((route) => route.isFirst);
+              showModalBottomSheetStatelessWidget(
+                context: context,
+                builder: () => ShareInstanceListTile(worldId: world.id, instanceId: instanceId),
+              );
+            },
+          ),
+          ListTile(
+            title: Text(AppLocalizations.of(context)!.vrchatInvite),
+            onTap: () async {
+              String instanceId = await genInstanceId(vrchatLoginSession: vrchatLoginSession, region: regionText, type: "private", canRequestInvite: false);
+              // ignore: use_build_context_synchronously
+              Navigator.of(context).popUntil((route) => route.isFirst);
+              showModalBottomSheetStatelessWidget(
+                context: context,
+                builder: () => ShareInstanceListTile(worldId: world.id, instanceId: instanceId),
+              );
+            },
+          )
+        ],
+      ),
     );
   }
 }

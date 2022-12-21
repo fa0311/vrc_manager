@@ -99,7 +99,7 @@ class VRChatMobileSelf extends ConsumerWidget {
                   error: (err, stack) => Text('Error: $err'),
                   data: (data) => Column(
                     children: [
-                      userProfile(context, data.user),
+                      UserProfile(user: data.user),
                       Container(
                         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
                         child: () {

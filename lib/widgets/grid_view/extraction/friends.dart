@@ -64,7 +64,7 @@ class ExtractionFriend extends ConsumerGridWidget {
                 return InstanceWidget(world: locationMap[worldId]!, instance: instanceMap[user.location]!, card: false);
               }(),
               children: [
-                username(user),
+                Username(user: user),
                 for (String text in [
                   if (user.statusDescription != null) user.statusDescription!,
                   if (!["private", "offline", "traveling"].contains(user.location)) locationMap[worldId]?.name,
@@ -113,7 +113,7 @@ class ExtractionFriend extends ConsumerGridWidget {
                 return InstanceWidget(world: locationMap[worldId]!, instance: instanceMap[user.location]!, card: false, half: true);
               }(),
               children: [
-                username(user, diameter: 12),
+                Username(user: user, diameter: 12),
                 for (String text in [
                   if (user.statusDescription != null) user.statusDescription!,
                 ].whereType<String>()) ...[
@@ -161,7 +161,7 @@ class ExtractionFriend extends ConsumerGridWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    username(user, diameter: 15),
+                    Username(user: user, diameter: 15),
                     if (user.statusDescription != null) Text(user.statusDescription!, style: const TextStyle(fontSize: 10)),
                   ],
                 ),
