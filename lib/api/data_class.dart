@@ -343,9 +343,17 @@ class VRChatInstance {
     name = content['name'];
     ownerId = content['ownerId'];
     permanent = content['permanent'];
-    photonRegion = VRChatRegion.values.byName(content['photonRegion']);
+    try {
+      photonRegion = VRChatRegion.values.byName(content['photonRegion']);
+    } on ArgumentError {
+      photonRegion = VRChatRegion.us;
+    }
     platforms = VRChatPlatforms.fromJson(content['platforms']);
-    region = VRChatRegion.values.byName(content['region']);
+    try {
+      region = VRChatRegion.values.byName(content['region']);
+    } on ArgumentError {
+      region = VRChatRegion.us;
+    }
     secureName = content['secureName'];
     shortName = content['shortName'];
     strict = content['strict'] ?? false;
