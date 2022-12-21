@@ -5,13 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:logger/logger.dart';
 
 // Project imports:
 import 'package:vrc_manager/scenes/core/splash.dart';
+import 'package:vrc_manager/scenes/setting/logger.dart';
 import 'package:vrc_manager/storage/accessibility.dart';
 
-// Project imports:
-
+ConsoleOutputExt loggerOutput = ConsoleOutputExt();
+Logger logger = Logger(output: loggerOutput);
 
 main() {
   runApp(const ProviderScope(child: VRChatMobile()));

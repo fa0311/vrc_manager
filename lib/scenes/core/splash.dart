@@ -22,7 +22,6 @@ import 'package:vrc_manager/widgets/grid_modal/config.dart';
 
 final accountConfigProvider = ChangeNotifierProvider<AccountConfigNotifier>((ref) => AccountConfigNotifier());
 final accountListConfigProvider = ChangeNotifierProvider<AccountListConfigNotifier>((ref) => AccountListConfigNotifier());
-
 final isFirstProvider = StateProvider<bool>((ref) => true);
 
 enum SplashData {

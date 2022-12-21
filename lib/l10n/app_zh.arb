@@ -9,7 +9,6 @@
     "ok": "认可",
     "no": "没有",
     "cancel": "取消",
-    "report": "报告",
     "send": "发送",
     "save": "拯救",
     "saved": "被拯救的",
@@ -45,7 +44,6 @@
     "@____________________MENU____________________": {},
     "close": "关闭",
     "setting": "设置",
-    "help": "帮助",
     "@____________________LOGIN____________________": {},
     "login": "登录",
     "username": "用户名称",
@@ -143,6 +141,7 @@
     "notSupported": "不支持",
     "notSupportedDetails": "此设备不支持此权限",
     "@____________________HELP____________________": {},
+    "help": "帮助",
     "contribution": "贡献",
     "contributionDetails": "为Github上的开发做出贡献",
     "reportDetails": "报告错误并要求开发人员提供新功能",
@@ -153,5 +152,7 @@
     "version": "版本",
     "versionDetails": "当前版本: {version}",
     "license": "许可证",
-    "licenseDetails": "检查许可证信息"
+    "licenseDetails": "检查许可证信息",
+    "@____________________REPORT____________________": {},
+    "report": "报告"
 }

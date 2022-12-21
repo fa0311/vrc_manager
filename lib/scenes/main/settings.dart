@@ -11,6 +11,7 @@ import 'package:vrc_manager/scenes/core/splash.dart';
 import 'package:vrc_manager/scenes/setting/accessibility.dart';
 import 'package:vrc_manager/scenes/setting/account.dart';
 import 'package:vrc_manager/scenes/setting/help.dart';
+import 'package:vrc_manager/scenes/setting/logger.dart';
 import 'package:vrc_manager/scenes/setting/permissions.dart';
 
 class VRChatMobileSettings extends ConsumerWidget {
@@ -32,11 +33,7 @@ class VRChatMobileSettings extends ConsumerWidget {
                 ListTile(
                   leading: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const <Widget>[
-                      Icon(
-                        Icons.accessibility,
-                      ),
-                    ],
+                    children: const <Widget>[Icon(Icons.accessibility)],
                   ),
                   title: Text(AppLocalizations.of(context)!.accessibility),
                   onTap: () => Navigator.push(
@@ -52,11 +49,7 @@ class VRChatMobileSettings extends ConsumerWidget {
                 ListTile(
                   leading: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const <Widget>[
-                      Icon(
-                        Icons.account_circle,
-                      ),
-                    ],
+                    children: const <Widget>[Icon(Icons.account_circle)],
                   ),
                   title: Text(AppLocalizations.of(context)!.account),
                   onTap: () => Navigator.push(
@@ -72,11 +65,7 @@ class VRChatMobileSettings extends ConsumerWidget {
                 ListTile(
                   leading: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const <Widget>[
-                      Icon(
-                        Icons.admin_panel_settings,
-                      ),
-                    ],
+                    children: const <Widget>[Icon(Icons.admin_panel_settings)],
                   ),
                   title: Text(AppLocalizations.of(context)!.permissions),
                   onTap: () => Navigator.push(
@@ -92,11 +81,7 @@ class VRChatMobileSettings extends ConsumerWidget {
                 ListTile(
                   leading: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const <Widget>[
-                      Icon(
-                        Icons.help,
-                      ),
-                    ],
+                    children: const <Widget>[Icon(Icons.help)],
                   ),
                   title: Text(AppLocalizations.of(context)!.help),
                   onTap: () => Navigator.push(
@@ -108,7 +93,20 @@ class VRChatMobileSettings extends ConsumerWidget {
                       ),
                     ),
                   ),
-                )
+                ),
+                ListTile(
+                  leading: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const <Widget>[Icon(Icons.note)],
+                  ),
+                  title: Text(AppLocalizations.of(context)!.log),
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const LoggerReport(),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),

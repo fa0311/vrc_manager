@@ -26,55 +26,55 @@ class VRChatMobileHelp extends ConsumerWidget {
         title: Text(AppLocalizations.of(context)!.help),
       ),
       body: SafeArea(
-        child: SizedBox(
-          child: SingleChildScrollView(
-            child: Container(
-              padding: const EdgeInsets.only(top: 10),
-              child: Column(
-                children: <Widget>[
-                  ListTile(
-                      title: Text(AppLocalizations.of(context)!.contribution),
-                      subtitle: Text(AppLocalizations.of(context)!.contributionDetails),
-                      onTap: () => openInBrowser(context, Uri.https("github.com", "/fa0311/vrc_manager"))),
-                  ListTile(
-                      title: Text(AppLocalizations.of(context)!.report),
-                      subtitle: Text(AppLocalizations.of(context)!.reportDetails),
-                      onTap: () => openInBrowser(context, Uri.https("github.com", "/fa0311/vrc_manager/issues/new/choose"))),
-                  ListTile(
-                    title: Text(AppLocalizations.of(context)!.developerInfo),
-                    subtitle: Text(AppLocalizations.of(context)!.developerInfoDetails),
-                    onTap: () => openInBrowser(context, Uri.https("twitter.com", "/faa0311")),
-                  ),
-                  ListTile(
-                    title: Text(AppLocalizations.of(context)!.rateTheApp),
-                    subtitle: Text(AppLocalizations.of(context)!.rateTheAppDetails),
-                    onTap: () => openInBrowser(context, Uri.https("play.google.com", "/store/apps/details?id=com.yuki0311.vrc_manager")),
-                  ),
-                  version.when(
-                    loading: () => ListTile(
-                      title: Text(AppLocalizations.of(context)!.version),
-                      trailing: const Padding(
-                        padding: EdgeInsets.only(right: 2, top: 2),
-                        child: SizedBox(width: 20, height: 20, child: CircularProgressIndicator()),
-                      ),
-                    ),
-                    error: (err, stack) => ListTile(
-                      title: Text(AppLocalizations.of(context)!.version),
-                      subtitle: Text('Error: $err\n$stack'),
-                    ),
-                    data: (data) => ListTile(
-                      title: Text(AppLocalizations.of(context)!.version),
-                      subtitle: Text(AppLocalizations.of(context)!.versionDetails(data.version)),
-                      onTap: () => openInBrowser(context, Uri.https("github.com", "/fa0311/vrc_manager/releases")),
+        child: SingleChildScrollView(
+          child: Container(
+            padding: const EdgeInsets.only(top: 10),
+            child: Column(
+              children: <Widget>[
+                ListTile(
+                  title: Text(AppLocalizations.of(context)!.contribution),
+                  subtitle: Text(AppLocalizations.of(context)!.contributionDetails),
+                  onTap: () => openInBrowser(context, Uri.https("github.com", "/fa0311/vrc_manager")),
+                ),
+                ListTile(
+                  title: Text(AppLocalizations.of(context)!.report),
+                  subtitle: Text(AppLocalizations.of(context)!.reportDetails),
+                  onTap: () => openInBrowser(context, Uri.https("github.com", "/fa0311/vrc_manager/issues/new/choose")),
+                ),
+                ListTile(
+                  title: Text(AppLocalizations.of(context)!.developerInfo),
+                  subtitle: Text(AppLocalizations.of(context)!.developerInfoDetails),
+                  onTap: () => openInBrowser(context, Uri.https("twitter.com", "/faa0311")),
+                ),
+                ListTile(
+                  title: Text(AppLocalizations.of(context)!.rateTheApp),
+                  subtitle: Text(AppLocalizations.of(context)!.rateTheAppDetails),
+                  onTap: () => openInBrowser(context, Uri.https("play.google.com", "/store/apps/details?id=com.yuki0311.vrc_manager")),
+                ),
+                version.when(
+                  loading: () => ListTile(
+                    title: Text(AppLocalizations.of(context)!.version),
+                    trailing: const Padding(
+                      padding: EdgeInsets.only(right: 2, top: 2),
+                      child: SizedBox(width: 20, height: 20, child: CircularProgressIndicator()),
                     ),
                   ),
-                  ListTile(
-                    title: Text(AppLocalizations.of(context)!.license),
-                    subtitle: Text(AppLocalizations.of(context)!.licenseDetails),
-                    onTap: () => showLicense(context),
+                  error: (err, stack) => ListTile(
+                    title: Text(AppLocalizations.of(context)!.version),
+                    subtitle: Text('Error: $err\n$stack'),
                   ),
-                ],
-              ),
+                  data: (data) => ListTile(
+                    title: Text(AppLocalizations.of(context)!.version),
+                    subtitle: Text(AppLocalizations.of(context)!.versionDetails(data.version)),
+                    onTap: () => openInBrowser(context, Uri.https("github.com", "/fa0311/vrc_manager/releases")),
+                  ),
+                ),
+                ListTile(
+                  title: Text(AppLocalizations.of(context)!.license),
+                  subtitle: Text(AppLocalizations.of(context)!.licenseDetails),
+                  onTap: () => showLicense(context),
+                ),
+              ],
             ),
           ),
         ),

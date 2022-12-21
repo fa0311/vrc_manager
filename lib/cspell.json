@@ -27,6 +27,8 @@
     /* Flutter */
     "unfocus",
     "ARGB",
+    /* Dart */
+    "sublist",
     /* Library */
     "cupertino",
     "fluttertoast",

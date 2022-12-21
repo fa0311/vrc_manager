@@ -9,7 +9,6 @@
     "ok": "OK",
     "no": "NO",
     "cancel": "CANCELAR.",
-    "report": "INFORME",
     "send": "ENVIAR",
     "save": "Guardar",
     "saved": "Guardado",
@@ -45,7 +44,6 @@
     "@____________________MENU____________________": {},
     "close": "Cerrar",
     "setting": "Ajustes",
-    "help": "Ayuda",
     "@____________________LOGIN____________________": {},
     "login": "Inicio de sesión",
     "username": "Nombre de usuario",
@@ -143,6 +141,7 @@
     "notSupported": "No se admite",
     "notSupportedDetails": "Este permiso no es compatible con este dispositivo",
     "@____________________HELP____________________": {},
+    "help": "Ayuda",
     "contribution": "Contribuir",
     "contributionDetails": "Contribuir al desarrollo en Github",
     "reportDetails": "Informar de los errores y solicitar nuevas funciones a los desarrolladores",
@@ -153,5 +152,7 @@
     "version": "Versión",
     "versionDetails": "Versión actual: {version}",
     "license": "Licencia",
-    "licenseDetails": "Comprobar la información de la licencia"
+    "licenseDetails": "Comprobar la información de la licencia",
+    "@____________________REPORT____________________": {},
+    "report": "INFORME"
 }

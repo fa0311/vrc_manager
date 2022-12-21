@@ -14,6 +14,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 // Project imports:
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
+import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/core/splash.dart';
 import 'package:vrc_manager/storage/account.dart';
 import 'package:vrc_manager/widgets/config_modal/locale.dart';
@@ -110,16 +111,19 @@ class VRChatMobileLogin extends ConsumerWidget {
     }
 
     onPressedTotp() async {
-      VRChatLogin login = await ref.read(loginDataProvider).session.loginTotp(ref.read(totpControllerProvider).text).catchError((status) {
-        errorSnackBar(status);
-      });
-      if (login.verified) {
-        Navigator.of(context).popUntil((route) => route.isFirst);
-        save();
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(AppLocalizations.of(context)!.incorrectLogin)),
-        );
+      try {
+        VRChatLogin login = await ref.read(loginDataProvider).session.loginTotp(ref.read(totpControllerProvider).text);
+        if (login.verified) {
+          Navigator.of(context).popUntil((route) => route.isFirst);
+          save();
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(AppLocalizations.of(context)!.incorrectLogin)),
+          );
+        }
+      } catch (e) {
+        logger.e(e);
+        errorSnackBar(e);
       }
     }
 
@@ -153,18 +157,21 @@ class VRChatMobileLogin extends ConsumerWidget {
     }
 
     onPressed() async {
-      final session = ref.watch(loginDataProvider).session;
-      VRChatLogin login = await session.login(ref.read(userControllerProvider).text, ref.read(passwordControllerProvider).text).catchError((status) {
-        errorSnackBar(status);
-      });
-      if (login.requiresTwoFactorAuth) {
-        totp();
-      } else if (login.verified) {
-        await save();
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(AppLocalizations.of(context)!.incorrectLogin)),
-        );
+      try {
+        final session = ref.watch(loginDataProvider).session;
+        VRChatLogin login = await session.login(ref.read(userControllerProvider).text, ref.read(passwordControllerProvider).text);
+        if (login.requiresTwoFactorAuth) {
+          totp();
+        } else if (login.verified) {
+          await save();
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(AppLocalizations.of(context)!.incorrectLogin)),
+          );
+        }
+      } catch (e) {
+        logger.e(e);
+        errorSnackBar(e);
       }
     }
 
