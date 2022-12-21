@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 
 // Package imports:
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
@@ -22,8 +23,8 @@ enum CurrentIndex {
   online(icon: Icons.wb_sunny),
   offline(icon: Icons.bedtime),
   search(icon: Icons.search),
-  notify(icon: Icons.notifications),
-  favorite(icon: Icons.favorite);
+  favorite(icon: Icons.favorite),
+  notify(icon: Icons.notifications);
 
   Widget toWidget() {
     switch (this) {
@@ -41,7 +42,18 @@ enum CurrentIndex {
   }
 
   String toLocalization(BuildContext context) {
-    return name;
+    switch (this) {
+      case CurrentIndex.online:
+        return AppLocalizations.of(context)!.onlineFriends;
+      case CurrentIndex.offline:
+        return AppLocalizations.of(context)!.offlineFriends;
+      case CurrentIndex.search:
+        return AppLocalizations.of(context)!.search;
+      case CurrentIndex.favorite:
+        return AppLocalizations.of(context)!.favoriteWorlds;
+      case CurrentIndex.notify:
+        return AppLocalizations.of(context)!.friendRequest;
+    }
   }
 
   final IconData icon;
@@ -79,7 +91,7 @@ class VRChatMobileHome extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Bottom Menu"),
+        title: Text(currentIndex.toLocalization(context)),
         actions: [
           IconButton(
             icon: const Icon(Icons.more_vert),
