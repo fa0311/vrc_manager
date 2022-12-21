@@ -41,7 +41,7 @@ class VRChatMobileSettingsAccessibility extends ConsumerWidget {
                   ),
                 ),
                 ListTile(
-                  title: Text(AppLocalizations.of(context)!.theme),
+                  title: Text(AppLocalizations.of(context)!.deviceLightTheme),
                   subtitle: Text(accessibilityConfig.themeBrightness.toLocalization(context)),
                   onTap: () => showModalBottomSheetStatelessWidget(
                     context: context,
@@ -51,7 +51,7 @@ class VRChatMobileSettingsAccessibility extends ConsumerWidget {
                   ),
                 ),
                 ListTile(
-                  title: Text(AppLocalizations.of(context)!.theme),
+                  title: Text(AppLocalizations.of(context)!.deviceDarkTheme),
                   subtitle: Text(accessibilityConfig.darkThemeBrightness.toLocalization(context)),
                   onTap: () => showModalBottomSheetStatelessWidget(
                     context: context,

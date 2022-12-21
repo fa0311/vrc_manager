@@ -25,9 +25,7 @@ class LocaleModal extends ConsumerWidget {
               trailing: accessibilityConfig.languageCode == value ? const Icon(Icons.check) : null,
               subtitle: Text(
                 AppLocalizations.of(context)!.translatorDetails(
-                  lookupAppLocalizations(
-                    Locale(value.name, ""),
-                  ).contributor,
+                  lookupAppLocalizations(Locale(value.name, "")).contributor,
                 ),
               ),
               onTap: () {
