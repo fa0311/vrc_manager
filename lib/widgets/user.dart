@@ -147,7 +147,6 @@ class EditBio extends ConsumerWidget {
             user.bio = user.bio == "" ? null : user.bio;
             ref.read(vrchatUserCountProvider.notifier).state++;
             ref.read(editBioProvider.notifier).state = false;
-            // ignore: use_build_context_synchronously
             Navigator.pop(context);
           },
         ),
@@ -189,7 +188,6 @@ class EditNote extends ConsumerWidget {
             user.note = user.note == "" ? null : user.note;
             ref.read(vrchatUserCountProvider.notifier).state++;
             ref.read(editNoteProvider.notifier).state = false;
-            // ignore: use_build_context_synchronously
             Navigator.pop(context);
           },
         ),

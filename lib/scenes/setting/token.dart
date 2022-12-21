@@ -11,7 +11,7 @@ import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
 import 'package:vrc_manager/scenes/core/splash.dart';
 
-final tokenControllerProvider = StateProvider<TextEditingController>((ref) {
+final tokenControllerProvider = StateProvider.autoDispose<TextEditingController>((ref) {
   return TextEditingController(text: ref.watch(accountConfigProvider).loggedAccount!.cookie);
 });
 
@@ -45,19 +45,9 @@ class VRChatMobileTokenSetting extends ConsumerWidget {
                     child: Text(AppLocalizations.of(context)!.save),
                     onPressed: () {
                       ref.read(accountConfigProvider).loggedAccount!.setCookie(tokenController.text);
-                      showDialog(
-                        context: context,
-                        builder: (_) {
-                          return AlertDialog(
-                            title: Text(AppLocalizations.of(context)!.saved),
-                            actions: <Widget>[
-                              TextButton(
-                                child: Text(AppLocalizations.of(context)!.close),
-                                onPressed: () => Navigator.pop(context),
-                              ),
-                            ],
-                          );
-                        },
+                      ref.read(accountConfigProvider).login(ref.read(accountConfigProvider).loggedAccount!);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text(AppLocalizations.of(context)!.saved)),
                       );
                     },
                   ),
@@ -65,34 +55,12 @@ class VRChatMobileTokenSetting extends ConsumerWidget {
                     child: Text(AppLocalizations.of(context)!.login),
                     onPressed: () {
                       VRChatAPI(cookie: tokenController.text).user().then((VRChatUserSelfOverload response) {
-                        showDialog(
-                          context: context,
-                          builder: (_) {
-                            return AlertDialog(
-                              title: Text(AppLocalizations.of(context)!.success),
-                              actions: <Widget>[
-                                TextButton(
-                                  child: Text(AppLocalizations.of(context)!.close),
-                                  onPressed: () => Navigator.pop(context),
-                                ),
-                              ],
-                            );
-                          },
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text(AppLocalizations.of(context)!.success)),
                         );
                       }).catchError((status) {
-                        showDialog(
-                          context: context,
-                          builder: (_) {
-                            return AlertDialog(
-                              title: Text(AppLocalizations.of(context)!.failed),
-                              actions: <Widget>[
-                                TextButton(
-                                  child: Text(AppLocalizations.of(context)!.close),
-                                  onPressed: () => Navigator.pop(context),
-                                ),
-                              ],
-                            );
-                          },
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text(AppLocalizations.of(context)!.failed)),
                         );
                       });
                     },

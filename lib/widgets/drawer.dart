@@ -90,7 +90,7 @@ class NormalDrawer extends ConsumerWidget {
               child: SingleChildScrollView(
                 child: Column(
                   children: <Widget>[
-                    if (ref.read(accountConfigProvider).isLogout())
+                    if (account?.data != null)
                       ListTile(
                         onTap: () => Navigator.pushAndRemoveUntil(
                           context,

@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
+import 'package:vrc_manager/scenes/core/splash.dart';
 import 'package:vrc_manager/scenes/setting/accessibility.dart';
 import 'package:vrc_manager/scenes/setting/account.dart';
 import 'package:vrc_manager/scenes/setting/help.dart';
@@ -41,7 +42,10 @@ class VRChatMobileSettings extends ConsumerWidget {
                   onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (BuildContext context) => const VRChatMobileSettingsAccessibility(),
+                      builder: (BuildContext context) => const VRChatMobileSplash(
+                        login: VRChatMobileSettingsAccessibility(),
+                        child: VRChatMobileSettingsAccessibility(),
+                      ),
                     ),
                   ),
                 ),
@@ -58,7 +62,10 @@ class VRChatMobileSettings extends ConsumerWidget {
                   onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (BuildContext context) => const VRChatMobileSettingsAccount(),
+                      builder: (BuildContext context) => const VRChatMobileSplash(
+                        login: VRChatMobileSettingsAccount(),
+                        child: VRChatMobileSettingsAccount(),
+                      ),
                     ),
                   ),
                 ),
@@ -75,7 +82,10 @@ class VRChatMobileSettings extends ConsumerWidget {
                   onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (BuildContext context) => const VRChatMobileSettingsPermissions(),
+                      builder: (BuildContext context) => const VRChatMobileSplash(
+                        login: VRChatMobileSettingsPermissions(),
+                        child: VRChatMobileSettingsPermissions(),
+                      ),
                     ),
                   ),
                 ),
@@ -92,7 +102,10 @@ class VRChatMobileSettings extends ConsumerWidget {
                   onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (BuildContext context) => const VRChatMobileHelp(),
+                      builder: (BuildContext context) => const VRChatMobileSplash(
+                        login: VRChatMobileHelp(),
+                        child: VRChatMobileHelp(),
+                      ),
                     ),
                   ),
                 )

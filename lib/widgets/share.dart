@@ -38,11 +38,6 @@ Future copyToClipboard(BuildContext context, String text) async {
   final ClipboardData data = ClipboardData(text: text);
   await Clipboard.setData(data);
   if (Platform.isAndroid || Platform.isIOS) {
-    /*
-    * To be fixed in the next stable version.
-    * if(context.mounted)
-    */
-    // ignore: use_build_context_synchronously
     Fluttertoast.showToast(msg: AppLocalizations.of(context)!.copied);
   }
 }

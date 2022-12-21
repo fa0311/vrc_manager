@@ -24,6 +24,7 @@ class AccountListConfigNotifier extends ChangeNotifier {
   }
 
   Future addAccount(AccountConfig accountConfig) async {
+    if (accountList.contains(accountConfig)) return;
     accountList.add(accountConfig);
     notifyListeners();
     await setStorageList("account_index_list", getAccountList());
@@ -158,6 +159,7 @@ class AccountConfig extends ChangeNotifier {
       setDisplayName(response.displayName);
       return true;
     }).catchError((status) {
+      data = null;
       return false;
     });
   }

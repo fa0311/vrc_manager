@@ -72,7 +72,6 @@ class VRChatMobileWebViewUserPolicy extends ConsumerWidget {
                 child: ElevatedButton(
                   onPressed: () async {
                     ref.read(userPolicyConfigProvider).setAgree(true);
-                    // ignore: use_build_context_synchronously
                     Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(

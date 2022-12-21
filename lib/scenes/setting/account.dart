@@ -10,7 +10,6 @@ import 'package:vrc_manager/assets/flutter/text_stream.dart';
 import 'package:vrc_manager/scenes/core/splash.dart';
 import 'package:vrc_manager/scenes/setting/other_account.dart';
 import 'package:vrc_manager/scenes/setting/token.dart';
-import 'package:vrc_manager/scenes/sub/login.dart';
 
 class VRChatMobileSettingsAccount extends ConsumerWidget {
   const VRChatMobileSettingsAccount({super.key});
@@ -45,14 +44,9 @@ class VRChatMobileSettingsAccount extends ConsumerWidget {
                               ),
                               TextButton(
                                 onPressed: () {
-                                  Navigator.pushAndRemoveUntil(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (BuildContext context) => const VRChatMobileLogin(),
-                                    ),
-                                    (_) => false,
-                                  );
-                                  ref.watch(accountConfigProvider).loggedAccount!.removeCookie();
+                                  ref.read(accountConfigProvider).loggedAccount!.removeCookie();
+                                  ref.read(accountConfigProvider).login(ref.read(accountConfigProvider).loggedAccount!);
+                                  Navigator.pop(context);
                                 },
                                 child: Text(AppLocalizations.of(context)!.logout),
                               ),
@@ -83,6 +77,8 @@ class VRChatMobileSettingsAccount extends ConsumerWidget {
                                     ..removePassword()
                                     ..removeDisplayName()
                                     ..setRememberLoginInfo(false);
+                                  ref.read(accountConfigProvider).login(ref.read(accountConfigProvider).loggedAccount!);
+                                  Navigator.pop(context);
                                 },
                                 child: Text(AppLocalizations.of(context)!.delete),
                               ),
@@ -99,7 +95,10 @@ class VRChatMobileSettingsAccount extends ConsumerWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (BuildContext context) => const VRChatMobileTokenSetting(),
+                          builder: (_) => const VRChatMobileSplash(
+                            login: VRChatMobileTokenSetting(),
+                            child: VRChatMobileTokenSetting(),
+                          ),
                         ),
                       )
                     },
@@ -110,7 +109,10 @@ class VRChatMobileSettingsAccount extends ConsumerWidget {
                     onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (BuildContext context) => const VRChatMobileSettingsOtherAccount(),
+                        builder: (_) => const VRChatMobileSplash(
+                          login: VRChatMobileSettingsOtherAccount(),
+                          child: VRChatMobileSettingsOtherAccount(),
+                        ),
                       ),
                     ),
                   )
