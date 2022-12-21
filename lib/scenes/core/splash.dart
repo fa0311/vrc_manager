@@ -1,18 +1,19 @@
 // Dart imports:
 
-// Flutter imports:
+// Dart imports:
 import 'dart:io';
 
+// Flutter imports:
 import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
+
+// Project imports:
 import 'package:vrc_manager/assets/flutter/url_parser.dart';
 import 'package:vrc_manager/scenes/main/main.dart';
 import 'package:vrc_manager/scenes/sub/login.dart';
-
-// Project imports:
 import 'package:vrc_manager/scenes/web/web_view_policies.dart';
 import 'package:vrc_manager/storage/account.dart';
 import 'package:vrc_manager/storage/grid_modal.dart';
