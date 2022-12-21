@@ -25,53 +25,55 @@ class GridModal extends ConsumerWidget {
     String searchingText = ref.read(searchBoxControllerProvider).text;
     GridConfigNotifier config = ref.watch(gridConfigProvider(type));
     GridModalConfigData gridModalConfig = getGridModalConfig(type: type, text: searchingText);
-    return Column(
-      children: <Widget>[
-        if (gridModalConfig.sortMode.isNotEmpty)
-          ListTile(
-            title: Text(AppLocalizations.of(context)!.sort),
-            subtitle: Text(config.sortMode.toLocalization(context)),
-            onTap: () => showModalBottomSheetStatelessWidget(
-              context: context,
-              builder: () => GridSortModal(type: type),
+    return SingleChildScrollView(
+      child: Column(
+        children: <Widget>[
+          if (gridModalConfig.sortMode.isNotEmpty)
+            ListTile(
+              title: Text(AppLocalizations.of(context)!.sort),
+              subtitle: Text(config.sortMode.toLocalization(context)),
+              onTap: () => showModalBottomSheetStatelessWidget(
+                context: context,
+                builder: () => GridSortModal(type: type),
+              ),
             ),
-          ),
-        if (gridModalConfig.displayMode.isNotEmpty)
-          ListTile(
-            title: Text(AppLocalizations.of(context)!.display),
-            subtitle: Text(config.displayMode.toLocalization(context)),
-            onTap: () => showModalBottomSheetStatelessWidget(
-              context: context,
-              builder: () => GridDisplayModeModal(type: type),
+          if (gridModalConfig.displayMode.isNotEmpty)
+            ListTile(
+              title: Text(AppLocalizations.of(context)!.display),
+              subtitle: Text(config.displayMode.toLocalization(context)),
+              onTap: () => showModalBottomSheetStatelessWidget(
+                context: context,
+                builder: () => GridDisplayModeModal(type: type),
+              ),
             ),
-          ),
-        if (gridModalConfig.joinable)
-          SwitchListTile(
-            value: config.joinable,
-            title: Text(AppLocalizations.of(context)!.showOnlyAvailable),
-            onChanged: (bool e) => config.setJoinable(e),
-          ),
-        if (gridModalConfig.worldDetails)
-          SwitchListTile(
-            value: config.worldDetails,
-            title: Text(AppLocalizations.of(context)!.worldDetails),
-            onChanged: (bool e) => config.setWorldDetails(e),
-          ),
-        if (gridModalConfig.removeButton)
-          SwitchListTile(
-            value: config.removeButton,
-            title: Text(AppLocalizations.of(context)!.worldUnfavoriteButton),
-            onChanged: (bool e) => config.setRemoveButton(e),
-          ),
-        if (gridModalConfig.url != null)
-          ListTile(
-            title: Text(AppLocalizations.of(context)!.openInBrowser),
-            onTap: () {
-              Navigator.pop(context);
-              openInBrowser(context, gridModalConfig.url!);
-            },
-          ),
-      ],
+          if (gridModalConfig.joinable)
+            SwitchListTile(
+              value: config.joinable,
+              title: Text(AppLocalizations.of(context)!.showOnlyAvailable),
+              onChanged: (bool e) => config.setJoinable(e),
+            ),
+          if (gridModalConfig.worldDetails)
+            SwitchListTile(
+              value: config.worldDetails,
+              title: Text(AppLocalizations.of(context)!.worldDetails),
+              onChanged: (bool e) => config.setWorldDetails(e),
+            ),
+          if (gridModalConfig.removeButton)
+            SwitchListTile(
+              value: config.removeButton,
+              title: Text(AppLocalizations.of(context)!.worldUnfavoriteButton),
+              onChanged: (bool e) => config.setRemoveButton(e),
+            ),
+          if (gridModalConfig.url != null)
+            ListTile(
+              title: Text(AppLocalizations.of(context)!.openInBrowser),
+              onTap: () {
+                Navigator.pop(context);
+                openInBrowser(context, gridModalConfig.url!);
+              },
+            ),
+        ],
+      ),
     );
   }
 }
