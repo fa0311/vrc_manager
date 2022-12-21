@@ -104,10 +104,10 @@ class VRChatMobileUser extends ConsumerWidget {
                       Container(
                         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
                         child: () {
-                          if (data.user.location == "private") return privateWorld(context);
-                          if (data.user.location == "traveling") return privateWorld(context);
+                          if (data.user.location == "private") return const PrivateWorld();
+                          if (data.user.location == "traveling") return const TravelingWorld();
                           if (data.user.location == "offline") return null;
-                          return data.world == null ? null : instanceWidget(context, data.world!, data.instance!);
+                          return data.world == null ? null : InstanceWidget(world: data.world!, instance: data.instance!);
                         }(),
                       ),
                     ],

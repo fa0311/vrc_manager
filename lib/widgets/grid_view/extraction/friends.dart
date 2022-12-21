@@ -57,11 +57,11 @@ class ExtractionFriend extends ConsumerGridWidget {
               },
               bottom: () {
                 if (!config.worldDetails) return null;
-                if (user.location == "private") return privateWorld(context, card: false);
-                if (user.location == "traveling") return travelingWorld(context, card: false);
+                if (user.location == "private") return const PrivateWorld(card: false);
+                if (user.location == "traveling") return const TravelingWorld(card: false);
                 if (user.location == "offline") return const OnTheWebsite();
                 if (locationMap[worldId] == null) return null;
-                return instanceWidget(context, locationMap[worldId]!, instanceMap[user.location]!, card: false);
+                return InstanceWidget(world: locationMap[worldId]!, instance: instanceMap[user.location]!, card: false);
               }(),
               children: [
                 username(user),
@@ -105,15 +105,12 @@ class ExtractionFriend extends ConsumerGridWidget {
                 );
               },
               bottom: () {
-                print(user.location);
-                print(instanceMap[user.location]);
-
                 if (!config.worldDetails) return null;
-                if (user.location == "private") return privateWorld(context, card: false, half: true);
-                if (user.location == "traveling") return travelingWorld(context, card: false, half: true);
+                if (user.location == "private") return const PrivateWorld(card: false, half: true);
+                if (user.location == "traveling") return const TravelingWorld(card: false, half: true);
                 if (user.location == "offline") return const OnTheWebsite(half: true);
                 if (locationMap[worldId] == null) return null;
-                return instanceWidget(context, locationMap[worldId]!, instanceMap[user.location]!, card: false, half: true);
+                return InstanceWidget(world: locationMap[worldId]!, instance: instanceMap[user.location]!, card: false, half: true);
               }(),
               children: [
                 username(user, diameter: 12),
