@@ -10,7 +10,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets/date.dart';
-import 'package:vrc_manager/assets/error.dart';
 import 'package:vrc_manager/scenes/core/splash.dart';
 import 'package:vrc_manager/scenes/main/worlds_favorite.dart';
 
@@ -168,8 +167,6 @@ class FavoriteAction extends ConsumerWidget {
                         favoriteWorld = VRChatFavoriteWorld.fromFavorite(world, favorite, favoriteData.group.name);
                         favoriteData.list.add(favoriteWorld!);
                         favoriteWorldData = favoriteData;
-                      }).catchError((status) {
-                        apiError(context, status);
                       });
                     }
                     loadingWorldData = null;

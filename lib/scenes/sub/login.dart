@@ -1,6 +1,7 @@
 // Dart imports:
 
 // Dart imports:
+import 'dart:convert';
 import 'dart:math';
 
 // Flutter imports:
@@ -13,7 +14,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 // Project imports:
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
-import 'package:vrc_manager/assets/error.dart';
 import 'package:vrc_manager/scenes/core/splash.dart';
 import 'package:vrc_manager/storage/account.dart';
 import 'package:vrc_manager/widgets/config_modal/locale.dart';
@@ -65,6 +65,33 @@ class VRChatMobileLogin extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    errorSnackBar(dynamic status) {
+      VRChatError content;
+
+      try {
+        content = VRChatError.fromJson(json.decode(status.message));
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(AppLocalizations.of(context)!.incorrectLogin)),
+        );
+        return;
+      }
+
+      if (content.message == 'Too many requests') {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(AppLocalizations.of(context)!.tooManyRequests)),
+        );
+      } else if (content.message == '"Invalid Username/Email or Password"') {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(AppLocalizations.of(context)!.invalidLoginInfo)),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(AppLocalizations.of(context)!.incorrectLogin)),
+        );
+      }
+    }
+
     Future save() async {
       AccountConfig config = ref.read(loginDataProvider).accountConfig;
       config.setUserId(ref.read(userControllerProvider).text);
@@ -83,11 +110,16 @@ class VRChatMobileLogin extends ConsumerWidget {
     }
 
     onPressedTotp() async {
-      VRChatLogin login = await ref.read(loginDataProvider).session.loginTotp(ref.read(totpControllerProvider).text);
+      VRChatLogin login = await ref.read(loginDataProvider).session.loginTotp(ref.read(totpControllerProvider).text).catchError((status) {
+        errorSnackBar(status);
+      });
       if (login.verified) {
-        await save();
+        Navigator.of(context).popUntil((route) => route.isFirst);
+        save();
       } else {
-        // errorDialog(context, AppLocalizations.of(context)!.incorrectLogin);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(AppLocalizations.of(context)!.incorrectLogin)),
+        );
       }
     }
 
@@ -95,30 +127,26 @@ class VRChatMobileLogin extends ConsumerWidget {
       showDialog(
         context: context,
         builder: (_) {
-          return Consumer(
-            builder: (context, ref, child) {
-              final totpController = ref.watch(totpControllerProvider);
-              return AlertDialog(
-                title: Text(
-                  AppLocalizations.of(context)!.twoFactorAuthentication,
-                ),
-                content: TextFormField(
-                  keyboardType: TextInputType.number,
-                  controller: totpController,
-                  onFieldSubmitted: (String e) => onPressedTotp(),
-                  decoration: InputDecoration(labelText: AppLocalizations.of(context)!.authenticationCode),
-                  maxLength: 6,
-                ),
-                actions: [
-                  TextButton(
-                    child: ref.read(waitProvider)
-                        ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator())
-                        : Text(AppLocalizations.of(context)!.send),
-                    onPressed: () => onPressedTotp(),
-                  ),
-                ],
-              );
-            },
+          final totpController = ref.watch(totpControllerProvider);
+          return AlertDialog(
+            title: Text(
+              AppLocalizations.of(context)!.twoFactorAuthentication,
+            ),
+            content: TextFormField(
+              keyboardType: TextInputType.number,
+              controller: totpController,
+              onFieldSubmitted: (String e) => onPressedTotp(),
+              decoration: InputDecoration(labelText: AppLocalizations.of(context)!.authenticationCode),
+              maxLength: 6,
+            ),
+            actions: [
+              TextButton(
+                child: ref.read(waitProvider)
+                    ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator())
+                    : Text(AppLocalizations.of(context)!.send),
+                onPressed: () => onPressedTotp(),
+              ),
+            ],
           );
         },
       );
@@ -126,14 +154,17 @@ class VRChatMobileLogin extends ConsumerWidget {
 
     onPressed() async {
       final session = ref.watch(loginDataProvider).session;
-      VRChatLogin login = await session.login(ref.read(userControllerProvider).text, ref.read(passwordControllerProvider).text);
+      VRChatLogin login = await session.login(ref.read(userControllerProvider).text, ref.read(passwordControllerProvider).text).catchError((status) {
+        errorSnackBar(status);
+      });
       if (login.requiresTwoFactorAuth) {
         totp();
       } else if (login.verified) {
         await save();
       } else {
-        login.content.addAll({"lastEndpoint": "api/1/auth/user"});
-        throw Exception(errorLog(login.content));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(AppLocalizations.of(context)!.incorrectLogin)),
+        );
       }
     }
 
