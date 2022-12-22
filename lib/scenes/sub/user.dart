@@ -10,12 +10,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 // Project imports:
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
-import 'package:vrc_manager/assets/flutter/text_stream.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/core/splash.dart';
 import 'package:vrc_manager/scenes/setting/logger.dart';
 import 'package:vrc_manager/scenes/sub/self.dart';
-import 'package:vrc_manager/storage/accessibility.dart';
 import 'package:vrc_manager/widgets/drawer.dart';
 import 'package:vrc_manager/widgets/grid_view/widget/world.dart';
 import 'package:vrc_manager/widgets/modal.dart';
@@ -37,7 +35,7 @@ class VRChatMobileUserData {
 }
 
 final vrchatMobileUserProvider = FutureProvider.family<VRChatMobileUserData, String>((ref, userId) async {
-  VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount!.cookie);
+  VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "");
   late VRChatUser user;
   late VRChatFriendStatus status;
   VRChatWorld? world;
@@ -70,8 +68,6 @@ class VRChatMobileUser extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    AccessibilityConfigNotifier accessibilityConfig = ref.watch(accessibilityConfigProvider);
-    textStream(context: context, forceExternal: accessibilityConfig.forceExternalBrowser);
     AsyncValue<VRChatMobileUserData> data = ref.watch(vrchatMobileUserProvider(userId));
 
     return Scaffold(

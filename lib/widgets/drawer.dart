@@ -7,7 +7,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
 import 'package:vrc_manager/scenes/core/splash.dart';
-import 'package:vrc_manager/scenes/main/main.dart';
 import 'package:vrc_manager/scenes/main/settings.dart';
 import 'package:vrc_manager/scenes/setting/other_account.dart';
 import 'package:vrc_manager/scenes/sub/self.dart';
@@ -95,7 +94,7 @@ class NormalDrawer extends ConsumerWidget {
                         onTap: () => Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(
-                            builder: (_) => const VRChatMobileHome(),
+                            builder: (_) => const VRChatMobileSplash(),
                           ),
                           (_) => false,
                         ),

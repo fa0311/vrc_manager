@@ -7,7 +7,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 // Project imports:
-import 'package:vrc_manager/assets/flutter/text_stream.dart';
 import 'package:vrc_manager/assets/license.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/setting/logger.dart';
@@ -22,7 +21,6 @@ class VRChatMobileHelp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     AccessibilityConfigNotifier accessibilityConfig = ref.watch(accessibilityConfigProvider);
-    textStream(context: context, forceExternal: accessibilityConfig.forceExternalBrowser);
     AsyncValue<PackageInfo> version = ref.watch(vrchatMobileVersionProvider);
 
     return Scaffold(

@@ -20,14 +20,14 @@ class GridConfigNotifier extends ChangeNotifier {
   bool removeButton = false;
 
   GridConfigNotifier({required this.id}) {
-    List<Future> futureList = [];
-    futureList.add(getStorage("sort", id: id.name).then((String? value) => sortMode = SortMode.values.byName(value!)));
-    futureList.add(getStorage("display_mode", id: id.name).then((String? value) => displayMode = DisplayMode.values.byName(value!)));
-    futureList.add(getStorage("descending", id: id.name).then((String? value) => descending = (value == "true")));
-    futureList.add(getStorage("joinable", id: id.name).then((String? value) => joinable = (value == "true")));
-    futureList.add(getStorage("world_details", id: id.name).then((String? value) => worldDetails = (value == "true")));
-    futureList.add(getStorage("remove_button", id: id.name).then((String? value) => removeButton = (value == "true")));
-    Future.wait(futureList).then((_) => notifyListeners());
+    Future.wait([
+      getStorage("sort", id: id.name).then((String? value) => sortMode = SortMode.values.byName(value!)),
+      getStorage("display_mode", id: id.name).then((String? value) => displayMode = DisplayMode.values.byName(value!)),
+      getStorage("descending", id: id.name).then((String? value) => descending = (value == "true")),
+      getStorage("joinable", id: id.name).then((String? value) => joinable = (value == "true")),
+      getStorage("world_details", id: id.name).then((String? value) => worldDetails = (value == "true")),
+      getStorage("remove_button", id: id.name).then((String? value) => removeButton = (value == "true")),
+    ]).whenComplete(() => notifyListeners());
   }
 
   Future setSort(SortMode value) async {

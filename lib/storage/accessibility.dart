@@ -20,12 +20,12 @@ class AccessibilityConfigNotifier extends ChangeNotifier {
 
   AccessibilityConfigNotifier() {
     Future.wait([
-      getStorage("language_code").then((String? value) => languageCode = LanguageCode.values.byName(value!)).catchError((_) {}),
-      getStorage("theme_brightness").then((String? value) => themeBrightness = ThemeBrightness.values.byName(value!)).catchError((_) {}),
-      getStorage("dark_theme_brightness").then((String? value) => themeBrightness = ThemeBrightness.values.byName(value!)).catchError((_) {}),
+      getStorage("language_code").then((String? value) => languageCode = LanguageCode.values.byName(value!)),
+      getStorage("theme_brightness").then((String? value) => themeBrightness = ThemeBrightness.values.byName(value!)),
+      getStorage("dark_theme_brightness").then((String? value) => themeBrightness = ThemeBrightness.values.byName(value!)),
       getStorage("force_external_browser").then((String? value) => forceExternalBrowser = (value == "true")),
       getStorage("debug_mode").then((String? value) => debugMode = (value == "true")),
-    ]).then((_) => notifyListeners());
+    ]).whenComplete(() => notifyListeners());
   }
 
   Future setLanguageCode(LanguageCode value) async {

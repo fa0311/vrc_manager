@@ -28,7 +28,7 @@ class ExtractionFavoriteWorld extends ConsumerGridWidget {
 
   @override
   Widget normal(BuildContext context, WidgetRef ref, GridConfigNotifier config) {
-    VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount!.cookie);
+    VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "");
     return StatefulBuilder(
       builder: (BuildContext context, setState) => RenderGrid(
         width: 600,
@@ -85,7 +85,7 @@ class ExtractionFavoriteWorld extends ConsumerGridWidget {
 
   @override
   Widget simple(BuildContext context, WidgetRef ref, GridConfigNotifier config) {
-    VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount!.cookie);
+    VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "");
     return RenderGrid(
       width: 320,
       height: 64,

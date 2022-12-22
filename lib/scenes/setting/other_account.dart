@@ -6,9 +6,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
-import 'package:vrc_manager/assets/flutter/text_stream.dart';
 import 'package:vrc_manager/scenes/core/splash.dart';
-import 'package:vrc_manager/storage/accessibility.dart';
 import 'package:vrc_manager/storage/account.dart';
 
 class VRChatMobileSettingsOtherAccount extends ConsumerWidget {
@@ -16,9 +14,6 @@ class VRChatMobileSettingsOtherAccount extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    AccessibilityConfigNotifier accessibilityConfig = ref.watch(accessibilityConfigProvider);
-    textStream(context: context, forceExternal: accessibilityConfig.forceExternalBrowser);
-
     return WillPopScope(
       onWillPop: () async {
         if (!ref.read(accountListConfigProvider).accountList.contains(ref.read(accountConfigProvider).loggedAccount)) {

@@ -7,7 +7,6 @@ import 'package:webview_flutter/webview_flutter.dart';
 
 // Project imports:
 import 'package:vrc_manager/api/main.dart';
-import 'package:vrc_manager/assets/flutter/text_stream.dart';
 import 'package:vrc_manager/assets/session.dart';
 import 'package:vrc_manager/scenes/core/splash.dart';
 import 'package:vrc_manager/storage/accessibility.dart';
@@ -27,7 +26,6 @@ class VRChatMobileWebView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     AccessibilityConfigNotifier accessibilityConfig = ref.watch(accessibilityConfigProvider);
-    textStream(context: context, forceExternal: accessibilityConfig.forceExternalBrowser);
     VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "");
 
     WebViewController? webViewController = ref.watch(webViewControllerProvider);
@@ -80,7 +78,7 @@ class VRChatMobileWebView extends ConsumerWidget {
             ref.read(webViewControllerProvider.notifier).state = value;
           },
           navigationDelegate: (NavigationRequest request) async {
-            if (ref.read(accessibilityConfigProvider).forceExternalBrowser && Uri.parse(request.url).host != "vrchat.com") {
+            if (ref.watch(accessibilityConfigProvider).forceExternalBrowser && Uri.parse(request.url).host != "vrchat.com") {
               Widget? value = await openInBrowser(
                 url: Uri.parse(request.url),
                 forceExternal: accessibilityConfig.forceExternalBrowser,

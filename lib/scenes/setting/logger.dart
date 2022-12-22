@@ -8,7 +8,6 @@ import 'package:logger/logger.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/assets/date.dart';
-import 'package:vrc_manager/assets/flutter/text_stream.dart';
 import 'package:vrc_manager/main.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -65,7 +64,6 @@ class ErrorPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     AccessibilityConfigNotifier accessibilityConfig = ref.watch(accessibilityConfigProvider);
-    textStream(context: context, forceExternal: accessibilityConfig.forceExternalBrowser);
 
     ref.watch(loggerReportCounterProvider);
     return Column(

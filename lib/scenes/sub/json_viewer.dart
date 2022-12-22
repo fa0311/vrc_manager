@@ -10,8 +10,6 @@ import 'package:flutter_json_viewer/flutter_json_viewer.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
-import 'package:vrc_manager/assets/flutter/text_stream.dart';
-import 'package:vrc_manager/storage/accessibility.dart';
 import 'package:vrc_manager/widgets/modal.dart';
 import 'package:vrc_manager/widgets/modal/share.dart';
 
@@ -21,9 +19,6 @@ class VRChatMobileJsonViewer extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    AccessibilityConfigNotifier accessibilityConfig = ref.watch(accessibilityConfigProvider);
-    textStream(context: context, forceExternal: accessibilityConfig.forceExternalBrowser);
-
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.jsonViewer),

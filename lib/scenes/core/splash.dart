@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 // Package imports:
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
+import 'package:vrc_manager/assets/flutter/text_stream.dart';
 
 // Project imports:
 import 'package:vrc_manager/assets/flutter/url_parser.dart';
@@ -79,6 +80,7 @@ class VRChatMobileSplash extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     AsyncValue<SplashData> data = ref.watch(splashProvider);
     AccessibilityConfigNotifier accessibilityConfig = ref.watch(accessibilityConfigProvider);
+    textStream(context: context, forceExternal: accessibilityConfig.forceExternalBrowser);
 
     return Scaffold(
       body: data.when(
@@ -99,13 +101,17 @@ class VRChatMobileSplash extends ConsumerWidget {
         data: (SplashData data) {
           switch (data) {
             case SplashData.home:
-              if (Platform.isAndroid || Platform.isIOS) {
-                ReceiveSharingIntent.getInitialText().then((String? initialText) {
-                  if (initialText != null) {
-                    urlParser(url: Uri.parse(initialText), forceExternal: accessibilityConfig.forceExternalBrowser);
-                  }
-                });
-              }
+              () async {
+                if (!Platform.isAndroid && !Platform.isIOS) return;
+                if (!ref.read(isFirstProvider)) return;
+                String? initialText = await ReceiveSharingIntent.getInitialText();
+                if (initialText == null) return;
+                Widget? value = await urlParser(url: Uri.parse(initialText), forceExternal: accessibilityConfig.forceExternalBrowser);
+                if (value == null) return;
+                Navigator.of(context).popUntil((route) => route.isFirst);
+                Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => value));
+                ref.read(isFirstProvider.notifier).state = false;
+              }();
               return child;
             case SplashData.login:
               return login;

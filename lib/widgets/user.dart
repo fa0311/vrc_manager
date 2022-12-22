@@ -123,7 +123,7 @@ class EditBio extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     bool wait = ref.watch(editBioProvider);
-    VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount!.cookie);
+    VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "");
     TextEditingController controller = ref.watch(bioControllerProvider(user));
 
     return AlertDialog(
@@ -167,7 +167,7 @@ class EditNote extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     bool wait = ref.watch(editNoteProvider);
-    VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount!.cookie);
+    VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "");
     TextEditingController controller = ref.watch(noteControllerProvider(user));
 
     return AlertDialog(
