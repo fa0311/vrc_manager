@@ -18,6 +18,7 @@ import 'package:vrc_manager/assets/date.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/core/splash.dart';
 import 'package:vrc_manager/scenes/sub/self.dart';
+import 'package:vrc_manager/storage/accessibility.dart';
 import 'package:vrc_manager/widgets/modal.dart';
 import 'package:vrc_manager/widgets/modal/share.dart';
 import 'package:vrc_manager/widgets/share.dart';
@@ -89,12 +90,7 @@ class UserProfile extends ConsumerWidget {
           ConstrainedBox(
             constraints: const BoxConstraints(maxHeight: 200),
             child: SingleChildScrollView(
-              child: RichText(
-                text: TextSpan(
-                  children: textToAnchor(context, user.bio ?? ""),
-                  style: TextStyle(color: Theme.of(context).textTheme.bodyText2?.color),
-                ),
-              ),
+              child: TextToAnchor(text: user.bio ?? ""),
             ),
           ),
         if (user.bioLinks.isNotEmpty) BioLink(bioLinks: user.bioLinks),
@@ -207,13 +203,25 @@ class BioLink extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    AccessibilityConfigNotifier accessibilityConfig = ref.watch(accessibilityConfigProvider);
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         for (Uri url in bioLinks)
           InkWell(
             borderRadius: BorderRadius.circular(20),
-            onTap: () => openInBrowser(context, url),
+            onTap: () async {
+              Widget? value = await openInBrowser(
+                url: url,
+                forceExternal: accessibilityConfig.forceExternalBrowser,
+              );
+              if (value != null) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (BuildContext context) => value),
+                );
+              }
+            },
             onLongPress: () {
               showModalBottomSheetStatelessWidget(
                 context: context,

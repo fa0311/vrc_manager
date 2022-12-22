@@ -13,13 +13,15 @@ import 'package:vrc_manager/scenes/setting/account.dart';
 import 'package:vrc_manager/scenes/setting/help.dart';
 import 'package:vrc_manager/scenes/setting/logger.dart';
 import 'package:vrc_manager/scenes/setting/permissions.dart';
+import 'package:vrc_manager/storage/accessibility.dart';
 
 class VRChatMobileSettings extends ConsumerWidget {
   const VRChatMobileSettings({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    textStream(context);
+    AccessibilityConfigNotifier accessibilityConfig = ref.watch(accessibilityConfigProvider);
+    textStream(context: context, forceExternal: accessibilityConfig.forceExternalBrowser);
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.setting),

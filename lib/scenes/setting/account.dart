@@ -10,13 +10,15 @@ import 'package:vrc_manager/assets/flutter/text_stream.dart';
 import 'package:vrc_manager/scenes/core/splash.dart';
 import 'package:vrc_manager/scenes/setting/other_account.dart';
 import 'package:vrc_manager/scenes/setting/token.dart';
+import 'package:vrc_manager/storage/accessibility.dart';
 
 class VRChatMobileSettingsAccount extends ConsumerWidget {
   const VRChatMobileSettingsAccount({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    textStream(context);
+    AccessibilityConfigNotifier accessibilityConfig = ref.watch(accessibilityConfigProvider);
+    textStream(context: context, forceExternal: accessibilityConfig.forceExternalBrowser);
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.setting),

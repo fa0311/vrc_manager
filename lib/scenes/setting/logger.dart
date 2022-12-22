@@ -5,11 +5,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:vrc_manager/assets/date.dart';
+import 'package:vrc_manager/assets/flutter/text_stream.dart';
 import 'package:vrc_manager/main.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:vrc_manager/storage/accessibility.dart';
 import 'package:vrc_manager/widgets/share.dart';
 
 final loggerReportCounterProvider = StateProvider<int>((ref) => 0);
@@ -59,6 +61,9 @@ class ErrorPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    AccessibilityConfigNotifier accessibilityConfig = ref.watch(accessibilityConfigProvider);
+    textStream(context: context, forceExternal: accessibilityConfig.forceExternalBrowser);
+
     ref.watch(loggerReportCounterProvider);
     return Column(
       children: [
@@ -95,7 +100,17 @@ class ErrorPage extends ConsumerWidget {
                   text += '\n';
                   text += state.lines.join('\n').replaceAll(RegExp(r'\u001b\[([0-9]|;)+m'), '');
                   await copyToClipboard(context, text);
-                  openInBrowser(context, Uri.https("github.com", "/fa0311/vrc_manager/issues/new", {"template": "redirected-from-app.yml"}));
+
+                  Widget? value = await openInBrowser(
+                    url: Uri.https("github.com", "/fa0311/vrc_manager/issues/new", {"template": "redirected-from-app.yml"}),
+                    forceExternal: accessibilityConfig.forceExternalBrowser,
+                  );
+                  if (value != null) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (BuildContext context) => value),
+                    );
+                  }
                 },
               ),
               children: [

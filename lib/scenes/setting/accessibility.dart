@@ -20,8 +20,8 @@ class VRChatMobileSettingsAccessibility extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    textStream(context);
     AccessibilityConfigNotifier accessibilityConfig = ref.watch(accessibilityConfigProvider);
+    textStream(context: context, forceExternal: accessibilityConfig.forceExternalBrowser);
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.setting),

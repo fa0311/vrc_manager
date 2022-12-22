@@ -107,12 +107,22 @@ class OpenInBrowserListTileWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    AccessibilityConfigNotifier accessibilityConfig = ref.watch(accessibilityConfigProvider);
     return ListTile(
       leading: const Icon(Icons.open_in_browser),
       title: Text(AppLocalizations.of(context)!.openInBrowser),
-      onTap: () {
+      onTap: () async {
         Navigator.pop(context);
-        openInBrowser(context, url);
+        Widget? value = await openInBrowser(
+          url: url,
+          forceExternal: accessibilityConfig.forceExternalBrowser,
+        );
+        if (value != null) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (BuildContext context) => value),
+          );
+        }
       },
     );
   }
@@ -127,9 +137,18 @@ class OpenInBrowserExternalForceListTileWidget extends ConsumerWidget {
     return ListTile(
       leading: const Icon(Icons.open_in_browser),
       title: Text(AppLocalizations.of(context)!.openInExternalBrowser),
-      onTap: () {
+      onTap: () async {
         Navigator.pop(context);
-        openInBrowser(context, url, forceExternal: true);
+        Widget? value = await openInBrowser(
+          url: url,
+          forceExternal: true,
+        );
+        if (value != null) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (BuildContext context) => value),
+          );
+        }
       },
     );
   }
@@ -241,12 +260,23 @@ class OpenInWindowsListTileWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    AccessibilityConfigNotifier accessibilityConfig = ref.watch(accessibilityConfigProvider);
+
     return ListTile(
       leading: const Icon(Icons.laptop_windows),
       title: Text(AppLocalizations.of(context)!.openInVrchat),
-      onTap: () {
+      onTap: () async {
         Navigator.pop(context);
-        openInBrowser(context, url);
+        Widget? value = await openInBrowser(
+          url: url,
+          forceExternal: accessibilityConfig.forceExternalBrowser,
+        );
+        if (value != null) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (BuildContext context) => value),
+          );
+        }
       },
     );
   }

@@ -13,25 +13,21 @@ import 'package:url_launcher/url_launcher.dart';
 // Project imports:
 import 'package:vrc_manager/scenes/web/web_view.dart';
 
-Future openInBrowser(BuildContext context, Uri url, {bool forceExternal = false}) async {
-  if (!forceExternal && (Platform.isAndroid || Platform.isIOS)) {
-    if (url.host != "vrchat.com") {
+Future<Widget?> openInBrowser({required Uri url, required bool forceExternal}) async {
+  if (Platform.isAndroid || Platform.isIOS) {
+    if (!forceExternal || url.host == "vrchat.com") {
+      return VRChatMobileWebView(initUrl: url);
+    } else {
       if (await canLaunchUrl(url)) {
         await launchUrl(url, mode: LaunchMode.externalApplication);
       }
-    } else {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (BuildContext context) => VRChatMobileWebView(initUrl: url),
-        ),
-      );
     }
   } else {
     if (await canLaunchUrl(url)) {
       await launchUrl(url);
     }
   }
+  return null;
 }
 
 Future copyToClipboard(BuildContext context, String text) async {

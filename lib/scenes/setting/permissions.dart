@@ -12,6 +12,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 // Project imports:
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
 import 'package:vrc_manager/main.dart';
+import 'package:vrc_manager/storage/accessibility.dart';
 
 final domainStageVerificationProvider = FutureProvider<bool>((ref) async {
   if (await DomainVerificationManager.isSupported) {
@@ -49,7 +50,8 @@ class VRChatMobileSettingsPermissions extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    textStream(context);
+    AccessibilityConfigNotifier accessibilityConfig = ref.watch(accessibilityConfigProvider);
+    textStream(context: context, forceExternal: accessibilityConfig.forceExternalBrowser);
 
     ref.listen<AppLifecycleState>(appLifecycleProvider, (previous, next) {
       if (next == AppLifecycleState.resumed) {

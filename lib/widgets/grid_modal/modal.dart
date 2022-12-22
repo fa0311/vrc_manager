@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
 import 'package:vrc_manager/scenes/main/search.dart';
+import 'package:vrc_manager/storage/accessibility.dart';
 import 'package:vrc_manager/storage/grid_modal.dart';
 import 'package:vrc_manager/widgets/grid_modal/config.dart';
 import 'package:vrc_manager/widgets/modal.dart';
@@ -25,6 +26,7 @@ class GridModal extends ConsumerWidget {
     String searchingText = ref.read(searchBoxControllerProvider).text;
     GridConfigNotifier config = ref.watch(gridConfigProvider(type));
     GridModalConfigData gridModalConfig = getGridModalConfig(type: type, text: searchingText);
+    AccessibilityConfigNotifier accessibilityConfig = ref.watch(accessibilityConfigProvider);
     return SingleChildScrollView(
       child: Column(
         children: <Widget>[
@@ -67,9 +69,18 @@ class GridModal extends ConsumerWidget {
           if (gridModalConfig.url != null)
             ListTile(
               title: Text(AppLocalizations.of(context)!.openInBrowser),
-              onTap: () {
+              onTap: () async {
                 Navigator.pop(context);
-                openInBrowser(context, gridModalConfig.url!);
+                Widget? value = await openInBrowser(
+                  url: gridModalConfig.url!,
+                  forceExternal: accessibilityConfig.forceExternalBrowser,
+                );
+                if (value != null) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (BuildContext context) => value),
+                  );
+                }
               },
             ),
         ],

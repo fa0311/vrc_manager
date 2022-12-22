@@ -17,6 +17,7 @@ import 'package:vrc_manager/scenes/main/main.dart';
 import 'package:vrc_manager/scenes/setting/logger.dart';
 import 'package:vrc_manager/scenes/sub/login.dart';
 import 'package:vrc_manager/scenes/web/web_view_policies.dart';
+import 'package:vrc_manager/storage/accessibility.dart';
 import 'package:vrc_manager/storage/account.dart';
 import 'package:vrc_manager/storage/grid_modal.dart';
 import 'package:vrc_manager/storage/user_policy.dart';
@@ -77,6 +78,7 @@ class VRChatMobileSplash extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     AsyncValue<SplashData> data = ref.watch(splashProvider);
+    AccessibilityConfigNotifier accessibilityConfig = ref.watch(accessibilityConfigProvider);
 
     return Scaffold(
       body: data.when(
@@ -100,7 +102,7 @@ class VRChatMobileSplash extends ConsumerWidget {
               if (Platform.isAndroid || Platform.isIOS) {
                 ReceiveSharingIntent.getInitialText().then((String? initialText) {
                   if (initialText != null) {
-                    urlParser(context, Uri.parse(initialText));
+                    urlParser(url: Uri.parse(initialText), forceExternal: accessibilityConfig.forceExternalBrowser);
                   }
                 });
               }

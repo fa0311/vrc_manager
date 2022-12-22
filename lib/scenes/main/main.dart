@@ -11,6 +11,7 @@ import 'package:vrc_manager/scenes/main/friend_request.dart';
 import 'package:vrc_manager/scenes/main/friends.dart';
 import 'package:vrc_manager/scenes/main/search.dart';
 import 'package:vrc_manager/scenes/main/worlds_favorite.dart';
+import 'package:vrc_manager/storage/accessibility.dart';
 import 'package:vrc_manager/widgets/drawer.dart';
 import 'package:vrc_manager/widgets/grid_modal/config.dart';
 import 'package:vrc_manager/widgets/grid_modal/modal.dart';
@@ -65,7 +66,8 @@ class VRChatMobileHome extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    textStream(context);
+    AccessibilityConfigNotifier accessibilityConfig = ref.watch(accessibilityConfigProvider);
+    textStream(context: context, forceExternal: accessibilityConfig.forceExternalBrowser);
     final CurrentIndex currentIndex = ref.watch(currentIndexProvider);
     final PageController controller = PageController(initialPage: currentIndex.index);
 

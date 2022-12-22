@@ -97,7 +97,14 @@ class VRChatMobileWebViewUserPolicy extends ConsumerWidget {
             javascriptMode: JavascriptMode.unrestricted,
           );
         } else {
-          openInBrowser(context, url, forceExternal: true);
+          openInBrowser(url: url, forceExternal: true).then((value) {
+            if (value == null) return;
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (BuildContext context) => value),
+            );
+          });
+
           return Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,

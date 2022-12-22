@@ -14,8 +14,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 // Project imports:
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
+import 'package:vrc_manager/assets/flutter/text_stream.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/core/splash.dart';
+import 'package:vrc_manager/storage/accessibility.dart';
 import 'package:vrc_manager/storage/account.dart';
 import 'package:vrc_manager/widgets/config_modal/locale.dart';
 import 'package:vrc_manager/widgets/drawer.dart';
@@ -66,6 +68,9 @@ class VRChatMobileLogin extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    AccessibilityConfigNotifier accessibilityConfig = ref.watch(accessibilityConfigProvider);
+    textStream(context: context, forceExternal: accessibilityConfig.forceExternalBrowser);
+
     errorSnackBar(dynamic status) {
       VRChatError content;
 
@@ -263,9 +268,19 @@ class VRChatMobileLogin extends ConsumerWidget {
                         onPressed: () => Navigator.pop(context),
                       ),
                       TextButton(
-                        onPressed: () {
+                        onPressed: () async {
                           Navigator.pop(context);
-                          openInBrowser(context, Uri.https("vrchat.com", "/home/login"));
+
+                          Widget? value = await openInBrowser(
+                            url: Uri.https("vrchat.com", "/home/login"),
+                            forceExternal: accessibilityConfig.forceExternalBrowser,
+                          );
+                          if (value != null) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (BuildContext context) => value),
+                            );
+                          }
                         },
                         child: Text(AppLocalizations.of(context)!.openInBrowser),
                       ),

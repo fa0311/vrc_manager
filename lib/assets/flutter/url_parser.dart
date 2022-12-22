@@ -6,36 +6,18 @@ import 'package:vrc_manager/scenes/sub/user.dart';
 import 'package:vrc_manager/scenes/sub/world.dart';
 import 'package:vrc_manager/widgets/share.dart';
 
-void urlParser(BuildContext context, Uri url) {
+Future<Widget?> urlParser({required Uri url, required bool forceExternal}) async {
   final List<String> path = url.path.split("/");
   final Map<String, String> queryParameters = url.queryParameters;
   if (path.length < 2) {
-    return;
+    return null;
   } else if (path[2] == "launch") {
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(
-        builder: (BuildContext context) => VRChatMobileWorld(worldId: queryParameters["worldId"] ?? ""),
-      ),
-      (_) => false,
-    );
+    return VRChatMobileWorld(worldId: queryParameters["worldId"] ?? "");
   } else if (path[2] == "world") {
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(
-        builder: (BuildContext context) => VRChatMobileWorld(worldId: path[3]),
-      ),
-      (_) => false,
-    );
+    return VRChatMobileWorld(worldId: path[3]);
   } else if (path[2] == "user") {
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(
-        builder: (BuildContext context) => VRChatMobileUser(userId: path[3]),
-      ),
-      (_) => false,
-    );
+    return VRChatMobileUser(userId: path[3]);
   } else {
-    openInBrowser(context, url);
+    return await openInBrowser(url: url, forceExternal: forceExternal);
   }
 }

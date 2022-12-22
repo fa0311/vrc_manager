@@ -16,7 +16,7 @@ import 'package:vrc_manager/widgets/modal/share.dart';
 import 'package:vrc_manager/widgets/share.dart';
 
 final timeStampProvider = StateProvider<int>((ref) => 0);
-final urlProvider = StateProvider<Uri?>((ref) => null);
+final urlProvider = StateProvider.autoDispose<Uri?>((ref) => null);
 final webViewControllerProvider = StateProvider<WebViewController?>((ref) => null);
 
 class VRChatMobileWebView extends ConsumerWidget {
@@ -26,13 +26,13 @@ class VRChatMobileWebView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    textStream(context);
+    AccessibilityConfigNotifier accessibilityConfig = ref.watch(accessibilityConfigProvider);
+    textStream(context: context, forceExternal: accessibilityConfig.forceExternalBrowser);
     VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount!.cookie);
 
-    WebViewController? webViewController = ref.read(webViewControllerProvider);
+    WebViewController? webViewController = ref.watch(webViewControllerProvider);
 
     final cookieManager = CookieManager();
-    int timeStamp = ref.read(timeStampProvider);
     Uri url = ref.watch(urlProvider) ?? initUrl;
 
     final cookieMap = Session().decodeCookie(vrchatLoginSession.getCookie());
@@ -47,11 +47,11 @@ class VRChatMobileWebView extends ConsumerWidget {
     }
 
     Future<bool> exitApp(BuildContext context) async {
-      if (DateTime.now().millisecondsSinceEpoch - timeStamp < 200) {
+      if (DateTime.now().millisecondsSinceEpoch - ref.read(timeStampProvider) < 200) {
         return true;
       } else if (await webViewController!.canGoBack()) {
-        webViewController!.goBack();
-        timeStamp = DateTime.now().millisecondsSinceEpoch;
+        webViewController.goBack();
+        ref.read(timeStampProvider.notifier).state = DateTime.now().millisecondsSinceEpoch;
         return false;
       }
       return true;
@@ -77,14 +77,23 @@ class VRChatMobileWebView extends ConsumerWidget {
           initialUrl: url.toString(),
           javascriptMode: JavascriptMode.unrestricted,
           onWebViewCreated: (WebViewController value) {
-            webViewController = value;
+            ref.read(webViewControllerProvider.notifier).state = value;
           },
-          navigationDelegate: (NavigationRequest request) {
-            if (ref.read(accessibilityConfigProvider).forceExternalBrowser && url.host != "vrchat.com") {
-              openInBrowser(context, url);
+          navigationDelegate: (NavigationRequest request) async {
+            if (ref.read(accessibilityConfigProvider).forceExternalBrowser && Uri.parse(request.url).host != "vrchat.com") {
+              Widget? value = await openInBrowser(
+                url: Uri.parse(request.url),
+                forceExternal: accessibilityConfig.forceExternalBrowser,
+              );
+              if (value != null) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (BuildContext context) => value),
+                );
+              }
               return NavigationDecision.prevent;
             } else {
-              ref.watch(urlProvider.notifier).state = Uri.parse(request.url);
+              ref.read(urlProvider.notifier).state = Uri.parse(request.url);
               return NavigationDecision.navigate;
             }
           },

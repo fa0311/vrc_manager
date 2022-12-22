@@ -11,6 +11,7 @@ import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/core/splash.dart';
+import 'package:vrc_manager/storage/accessibility.dart';
 
 final tokenControllerProvider = StateProvider.autoDispose<TextEditingController>((ref) {
   return TextEditingController(text: ref.watch(accountConfigProvider).loggedAccount!.cookie);
@@ -23,8 +24,9 @@ class VRChatMobileTokenSetting extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     TextEditingController tokenController = ref.watch(tokenControllerProvider);
+    AccessibilityConfigNotifier accessibilityConfig = ref.watch(accessibilityConfigProvider);
+    textStream(context: context, forceExternal: accessibilityConfig.forceExternalBrowser);
 
-    textStream(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.token),
@@ -60,7 +62,7 @@ class VRChatMobileTokenSetting extends ConsumerWidget {
                           SnackBar(content: Text(AppLocalizations.of(context)!.success)),
                         );
                       }).catchError((e) {
-                        logger.e(e);
+                        logger.w(e);
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(content: Text(AppLocalizations.of(context)!.failed)),
                         );
