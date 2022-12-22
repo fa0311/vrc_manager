@@ -21,8 +21,8 @@ class GridConfigNotifier extends ChangeNotifier {
 
   GridConfigNotifier({required this.id}) {
     List<Future> futureList = [];
-    futureList.add(getStorage("sort", id: id.name).then((String? value) => sortMode = SortMode.values.byName(value!)).catchError((onError) {}));
-    futureList.add(getStorage("display_mode", id: id.name).then((String? value) => displayMode = DisplayMode.values.byName(value!)).catchError((onError) {}));
+    futureList.add(getStorage("sort", id: id.name).then((String? value) => sortMode = SortMode.values.byName(value!)));
+    futureList.add(getStorage("display_mode", id: id.name).then((String? value) => displayMode = DisplayMode.values.byName(value!)));
     futureList.add(getStorage("descending", id: id.name).then((String? value) => descending = (value == "true")));
     futureList.add(getStorage("joinable", id: id.name).then((String? value) => joinable = (value == "true")));
     futureList.add(getStorage("world_details", id: id.name).then((String? value) => worldDetails = (value == "true")));

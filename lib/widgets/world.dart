@@ -8,12 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
 import 'package:vrc_manager/api/data_class.dart';
-import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets/date.dart';
-import 'package:vrc_manager/main.dart';
-import 'package:vrc_manager/scenes/core/splash.dart';
-import 'package:vrc_manager/scenes/main/worlds_favorite.dart';
-import 'package:vrc_manager/scenes/setting/logger.dart';
 
 class OnTheWebsite extends ConsumerWidget {
   final bool half;
@@ -64,24 +59,16 @@ class WorldProfile extends ConsumerWidget {
             )),
         ConstrainedBox(
           constraints: const BoxConstraints(maxHeight: 200),
-          child: SingleChildScrollView(
-            child: Text(world.description ?? ""),
-          ),
+          child: SingleChildScrollView(child: Text(world.description ?? "")),
         ),
         Text(
-          AppLocalizations.of(context)!.occupants(
-            world.occupants,
-          ),
+          AppLocalizations.of(context)!.occupants(world.occupants),
         ),
         Text(
-          AppLocalizations.of(context)!.privateOccupants(
-            world.privateOccupants,
-          ),
+          AppLocalizations.of(context)!.privateOccupants(world.privateOccupants),
         ),
         Text(
-          AppLocalizations.of(context)!.favorites(
-            world.favorites,
-          ),
+          AppLocalizations.of(context)!.favorites(world.favorites),
         ),
         Text(
           AppLocalizations.of(context)!.createdAt(
@@ -94,94 +81,6 @@ class WorldProfile extends ConsumerWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-class FavoriteAction extends ConsumerWidget {
-  final VRChatLimitedWorld world;
-  const FavoriteAction({super.key, required this.world});
-
-  VRChatFavoriteWorld? getFavoriteWorld(List<FavoriteWorldData> favoriteWorld) {
-    for (FavoriteWorldData favoriteWorld in favoriteWorld) {
-      for (VRChatFavoriteWorld favoriteWorld in favoriteWorld.list) {
-        if (world.id == favoriteWorld.id) {
-          return favoriteWorld;
-        }
-      }
-    }
-    return null;
-  }
-
-  FavoriteWorldData? getFavoriteData(List<FavoriteWorldData> favoriteWorld) {
-    for (FavoriteWorldData favoriteData in favoriteWorld) {
-      for (VRChatFavoriteWorld favoriteWorld in favoriteData.list) {
-        if (world.id == favoriteWorld.id) {
-          return favoriteData;
-        }
-      }
-    }
-    return null;
-  }
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount!.cookie);
-    AsyncValue<VRChatMobileWorldFavoriteData> data = ref.watch(vrchatMobileWorldFavoriteSortProvider);
-
-    FavoriteWorldData? loadingWorldData;
-
-    return data.when(
-      loading: () => const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()),
-      error: (err, stack) {
-        logger.w(err, err, stack);
-        return const ErrorPage();
-      },
-      data: (data) {
-        return Column(
-          children: [
-            for (FavoriteWorldData favoriteData in data.favoriteWorld)
-              () {
-                VRChatFavoriteWorld? favoriteWorld = getFavoriteWorld(data.favoriteWorld);
-                FavoriteWorldData? favoriteWorldData = getFavoriteData(data.favoriteWorld);
-                return ListTile(
-                  title: Text(favoriteData.group.displayName),
-                  trailing: loadingWorldData == favoriteData
-                      ? const Padding(
-                          padding: EdgeInsets.only(right: 2, top: 2),
-                          child: SizedBox(width: 20, height: 20, child: CircularProgressIndicator()),
-                        )
-                      : favoriteWorldData == favoriteData
-                          ? const Icon(Icons.check)
-                          : null,
-                  onTap: () async {
-                    loadingWorldData = favoriteData;
-                    bool value = favoriteWorldData == favoriteData;
-                    if (value || favoriteWorld != null) {
-                      await vrchatLoginSession.deleteFavorites(favoriteWorld!.favoriteId).catchError((e) {
-                        logger.e(e);
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: ErrorSnackBar(e)));
-                      });
-                      favoriteWorldData!.list.remove(favoriteWorld);
-                      favoriteWorld = null;
-                      favoriteWorldData = null;
-                    }
-                    if (!value && favoriteWorldData != favoriteData) {
-                      VRChatFavorite favorite = await vrchatLoginSession.addFavorites("world", world.id, favoriteData.group.name).catchError((e) {
-                        logger.e(e);
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: ErrorSnackBar(e)));
-                      });
-                      favoriteWorld = VRChatFavoriteWorld.fromFavorite(world, favorite, favoriteData.group.name);
-                      favoriteData.list.add(favoriteWorld!);
-                      favoriteWorldData = favoriteData;
-                    }
-                    loadingWorldData = null;
-                  },
-                );
-              }(),
-          ],
-        );
-      },
     );
   }
 }

@@ -26,6 +26,8 @@ class FavoriteWorldData {
   FavoriteWorldData({required this.group, required this.list});
 }
 
+final vrchatMobileWorldFavoriteCounterProvider = StateProvider<int>((ref) => 0);
+
 final vrchatMobileWorldFavoriteSortProvider = FutureProvider<VRChatMobileWorldFavoriteData>((ref) async {
   Future getFavoriteWorld(FavoriteWorldData favoriteWorld) async {
     VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount!.cookie);
@@ -69,6 +71,7 @@ class VRChatMobileWorldsFavorite extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     AsyncValue<VRChatMobileWorldFavoriteData> data = ref.watch(vrchatMobileWorldFavoriteSortProvider);
+    ref.watch(vrchatMobileWorldFavoriteCounterProvider);
 
     return RefreshIndicator(
       onRefresh: () => ref.refresh(vrchatMobileWorldFavoriteSortProvider.future),
