@@ -13,7 +13,10 @@ import 'package:vrc_manager/scenes/setting/logger.dart';
 import 'package:vrc_manager/storage/accessibility.dart';
 
 ConsoleOutputExt loggerOutput = ConsoleOutputExt();
-Logger logger = Logger(output: loggerOutput);
+Logger logger = Logger(
+  printer: PrettyPrinterExt(methodCount: 8),
+  output: loggerOutput,
+);
 
 main() {
   runApp(const ProviderScope(child: VRChatMobile()));

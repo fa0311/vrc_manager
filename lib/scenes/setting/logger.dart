@@ -33,12 +33,46 @@ class OutputEventExt extends OutputEvent {
   OutputEventExt(OutputEvent event) : super(event.level, event.lines);
 }
 
+class PrettyPrinterExt extends PrettyPrinter {
+  @override
+  PrettyPrinterExt({
+    stackTraceBeginIndex = 0,
+    methodCount = 2,
+    errorMethodCount = 8,
+    lineLength = 120,
+    colors = true,
+    printEmojis = true,
+    printTime = false,
+    excludeBox = const {},
+    noBoxingByDefault = false,
+  }) : super(
+          stackTraceBeginIndex: stackTraceBeginIndex,
+          methodCount: methodCount,
+          errorMethodCount: errorMethodCount,
+          lineLength: lineLength,
+          colors: colors,
+          printEmojis: printEmojis,
+          printTime: printTime,
+          excludeBox: excludeBox,
+          noBoxingByDefault: noBoxingByDefault,
+        );
+
+  @override
+  List<String> log(LogEvent event) {
+    return [
+      [PrettyPrinter.levelEmojis[event.level]!, event.message.toString()].join(''),
+      ...super.log(event)
+    ];
+  }
+}
+
 class LoggerReport extends ConsumerWidget {
   const LoggerReport({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     ref.watch(loggerReportCounterProvider);
+
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.log),
@@ -85,7 +119,7 @@ class ErrorPage extends ConsumerWidget {
         for (OutputEventExt state in loggerOutput.state.reversed)
           Card(
             child: ExpansionTile(
-              title: Text(state.lines[state.lines.length - 2].replaceAll(RegExp(r'\u001b\[([0-9]|;)+m'), '').replaceAll('│ ', '')),
+              title: Text(state.lines.first.replaceAll(RegExp(r'\u001b\[([0-9]|;)+m'), '').replaceAll('│ ', '')),
               subtitle: Text(generalDateDifference(context, state.time)),
               trailing: OutlinedButton(
                 child: Text(AppLocalizations.of(context)!.report),
@@ -100,7 +134,7 @@ class ErrorPage extends ConsumerWidget {
                   JsonEncoder encoder = const JsonEncoder.withIndent("     ");
                   String text = encoder.convert(logs);
                   text += '\n';
-                  text += state.lines.join('\n').replaceAll(RegExp(r'\u001b\[([0-9]|;)+m'), '');
+                  text += state.lines.sublist(1).join('\n').replaceAll(RegExp(r'\u001b\[([0-9]|;)+m'), '');
                   await copyToClipboard(context, text);
 
                   Widget? value = await openInBrowser(
@@ -118,7 +152,7 @@ class ErrorPage extends ConsumerWidget {
               children: [
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
-                  child: Text(state.lines.join('\n').replaceAll(RegExp(r'\u001b\[([0-9]|;)+m'), '')),
+                  child: Text(state.lines.sublist(1).join('\n').replaceAll(RegExp(r'\u001b\[([0-9]|;)+m'), '')),
                 )
               ],
             ),
