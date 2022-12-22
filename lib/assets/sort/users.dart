@@ -29,7 +29,6 @@ List<VRChatUser> sortUsers(GridConfigNotifier config, List<VRChatUser> userList)
 
 Map<String, int> numberOfFriendsInLocation(List<VRChatUser> userList) {
   Map<String, int> inLocation = {};
-  int id = 0;
   for (VRChatUser user in userList) {
     String location = user.location;
     inLocation[location] = (inLocation[location] ?? 0) + 1;
