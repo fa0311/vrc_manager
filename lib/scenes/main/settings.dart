@@ -83,6 +83,19 @@ class VRChatMobileSettings extends ConsumerWidget {
                 ListTile(
                   leading: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
+                    children: const <Widget>[Icon(Icons.note)],
+                  ),
+                  title: Text(AppLocalizations.of(context)!.log),
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const LoggerReport(),
+                    ),
+                  ),
+                ),
+                ListTile(
+                  leading: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: const <Widget>[Icon(Icons.help)],
                   ),
                   title: Text(AppLocalizations.of(context)!.help),
@@ -93,19 +106,6 @@ class VRChatMobileSettings extends ConsumerWidget {
                         login: VRChatMobileHelp(),
                         child: VRChatMobileHelp(),
                       ),
-                    ),
-                  ),
-                ),
-                ListTile(
-                  leading: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: const <Widget>[Icon(Icons.note)],
-                  ),
-                  title: Text(AppLocalizations.of(context)!.log),
-                  onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => const LoggerReport(),
                     ),
                   ),
                 ),
