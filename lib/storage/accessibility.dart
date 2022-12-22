@@ -15,7 +15,6 @@ class AccessibilityConfigNotifier extends ChangeNotifier {
   LanguageCode languageCode = LanguageCode.en;
   ThemeBrightness themeBrightness = ThemeBrightness.light;
   ThemeBrightness darkThemeBrightness = ThemeBrightness.dark;
-  bool dontShowErrorDialog = false;
   bool forceExternalBrowser = false;
   bool debugMode = false;
 
@@ -24,7 +23,6 @@ class AccessibilityConfigNotifier extends ChangeNotifier {
       getStorage("language_code").then((String? value) => languageCode = LanguageCode.values.byName(value!)).catchError((_) {}),
       getStorage("theme_brightness").then((String? value) => themeBrightness = ThemeBrightness.values.byName(value!)).catchError((_) {}),
       getStorage("dark_theme_brightness").then((String? value) => themeBrightness = ThemeBrightness.values.byName(value!)).catchError((_) {}),
-      getStorage("dont_show_error_dialog").then((String? value) => dontShowErrorDialog = (value == "true")),
       getStorage("force_external_browser").then((String? value) => forceExternalBrowser = (value == "true")),
       getStorage("debug_mode").then((String? value) => debugMode = (value == "true")),
     ]).then((_) => notifyListeners());
@@ -46,12 +44,6 @@ class AccessibilityConfigNotifier extends ChangeNotifier {
     darkThemeBrightness = value;
     notifyListeners();
     return await setStorage("dark_theme_brightness", darkThemeBrightness.name);
-  }
-
-  Future setDontShowErrorDialog(bool value) async {
-    dontShowErrorDialog = value;
-    notifyListeners();
-    return await setStorage("dont_show_error_dialog", dontShowErrorDialog ? "true" : "false");
   }
 
   Future setForceExternalBrowser(bool value) async {

@@ -10,6 +10,7 @@ import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/core/splash.dart';
+import 'package:vrc_manager/scenes/setting/logger.dart';
 import 'package:vrc_manager/widgets/modal.dart';
 import 'package:vrc_manager/widgets/modal/share.dart';
 import 'package:vrc_manager/widgets/user.dart';
@@ -113,49 +114,71 @@ class ProfileAction extends ConsumerWidget {
     VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount!.cookie);
 
     sendFriendRequest() {
-      vrchatLoginSession.sendFriendRequest(user.id).catchError((e) {
+      vrchatLoginSession.sendFriendRequest(user.id).then((value) {
+        Navigator.of(context).pop();
+      }).catchError((e) {
         logger.e(e);
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: ErrorSnackBar(e)));
+        Navigator.of(context).popUntil((route) => route.isFirst);
       });
       status.outgoingRequest = true;
     }
 
     acceptFriendRequest() {
-      vrchatLoginSession.acceptFriendRequestByUid(user.id).catchError((e) {
+      vrchatLoginSession.acceptFriendRequestByUid(user.id).then((value) {
+        Navigator.of(context).pop();
+      }).catchError((e) {
         logger.e(e);
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: ErrorSnackBar(e)));
+        Navigator.of(context).popUntil((route) => route.isFirst);
       });
       status.isFriend = true;
       status.incomingRequest = false;
     }
 
     deleteFriendRequest() {
-      vrchatLoginSession.deleteFriendRequest(user.id).catchError((e) {
+      vrchatLoginSession.deleteFriendRequest(user.id).then((value) {
+        Navigator.of(context).pop();
+      }).catchError((e) {
         logger.e(e);
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: ErrorSnackBar(e)));
+        Navigator.of(context).popUntil((route) => route.isFirst);
       });
       status.outgoingRequest = false;
     }
 
     deleteFriend() {
-      AlertDialog(
-        title: Text(
-          AppLocalizations.of(context)!.unfriend,
-        ),
-        actions: <Widget>[
-          TextButton(
-            child: Text(AppLocalizations.of(context)!.cancel),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-          TextButton(
-            onPressed: () {
-              vrchatLoginSession.deleteFriend(user.id).catchError((e) {
-                logger.e(e);
-              });
-              status.isFriend = false;
-            },
-            child: Text(AppLocalizations.of(context)!.unfriendConfirm),
-          ),
-        ],
+      showDialog(
+        context: context,
+        builder: (_) {
+          return AlertDialog(
+            title: Text(
+              AppLocalizations.of(context)!.unfriendConfirm,
+            ),
+            actions: <Widget>[
+              TextButton(
+                child: Text(AppLocalizations.of(context)!.cancel),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+              TextButton(
+                onPressed: () {
+                  vrchatLoginSession.deleteFriend(user.id).then((value) {
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pop();
+                  }).catchError((e) {
+                    logger.e(e);
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: ErrorSnackBar(e)));
+                    Navigator.of(context).popUntil((route) => route.isFirst);
+                  });
+                  status.isFriend = false;
+                },
+                child: Text(AppLocalizations.of(context)!.unfriend),
+              ),
+            ],
+          );
+        },
       );
     }
 

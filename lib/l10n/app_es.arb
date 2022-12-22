@@ -21,7 +21,7 @@
     "vrchatInvitePlus": "Invite+",
     "vrchatInvite": "Invite",
     "@____________________ERROR_DIALOG____________________": {},
-    "errorDialog": "Se ha producido un error",
+    "error": "Se ha producido un error",
     "parseError": "Error de análisis",
     "socketException": "No se puede conectar a Internet",
     "unknownError": "Error desconocido",

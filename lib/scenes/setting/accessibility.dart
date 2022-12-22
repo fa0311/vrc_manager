@@ -58,11 +58,6 @@ class VRChatMobileSettingsAccessibility extends ConsumerWidget {
                     builder: () => const ThemeBrightnessModal(dark: true),
                   ),
                 ),
-                SwitchListTile(
-                    value: accessibilityConfig.dontShowErrorDialog,
-                    title: Text(AppLocalizations.of(context)!.dontShowErrorDialog),
-                    subtitle: Text(AppLocalizations.of(context)!.dontShowErrorDialogDetails),
-                    onChanged: (bool e) => accessibilityConfig.setDontShowErrorDialog(e)),
                 if (!Platform.isWindows)
                   SwitchListTile(
                     value: accessibilityConfig.forceExternalBrowser,

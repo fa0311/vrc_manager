@@ -8,7 +8,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 // Project imports:
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
+import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/core/splash.dart';
+import 'package:vrc_manager/scenes/setting/logger.dart';
 import 'package:vrc_manager/widgets/lunch_world.dart';
 import 'package:vrc_manager/widgets/modal.dart';
 import 'package:vrc_manager/widgets/modal/share.dart';
@@ -88,7 +90,10 @@ class SelfInviteListTileWidget extends ConsumerWidget {
     return ListTile(
       title: Text(AppLocalizations.of(context)!.joinInstance),
       onTap: () {
-        selfInvite(vrchatLoginSession: vrchatLoginSession, instance: instance);
+        vrchatLoginSession.selfInvite(instance.location, instance.shortName ?? "").catchError((e) {
+          logger.e(e);
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: ErrorSnackBar(e)));
+        });
       },
     );
   }

@@ -1,9 +1,11 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/assets/date.dart';
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
 import 'package:vrc_manager/main.dart';
@@ -123,5 +125,43 @@ class ErrorPage extends ConsumerWidget {
           ),
       ],
     );
+  }
+}
+
+class ErrorSnackBar extends ConsumerWidget {
+  final dynamic status;
+  const ErrorSnackBar(this.status, {super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    VRChatError content;
+
+    if (status is HttpException) {
+      try {
+        if (status.message.startsWith('<html>')) {
+          content = VRChatError.fromHtml(status.message);
+        } else {
+          content = VRChatError.fromJson(json.decode(status.message));
+        }
+      } catch (e) {
+        return Text(AppLocalizations.of(context)!.unknownError);
+      }
+
+      if (content.message == 'Too many requests') {
+        return Text(AppLocalizations.of(context)!.tooManyRequests);
+      } else if (content.message == '"Invalid Username/Email or Password"') {
+        return Text(AppLocalizations.of(context)!.invalidLoginInfo);
+      } else {
+        return Text(content.message);
+      }
+    } else if (status is TypeError) {
+      return Text(AppLocalizations.of(context)!.parseError);
+    } else if (status is FormatException) {
+      return Text(AppLocalizations.of(context)!.parseError);
+    } else if (status is SocketException) {
+      return Text(AppLocalizations.of(context)!.socketException);
+    } else {
+      return Text(AppLocalizations.of(context)!.unknownError);
+    }
   }
 }

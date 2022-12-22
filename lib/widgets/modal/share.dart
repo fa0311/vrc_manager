@@ -14,6 +14,7 @@ import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/core/splash.dart';
+import 'package:vrc_manager/scenes/setting/logger.dart';
 import 'package:vrc_manager/scenes/sub/json_viewer.dart';
 import 'package:vrc_manager/storage/accessibility.dart';
 import 'package:vrc_manager/widgets/modal.dart';
@@ -229,9 +230,11 @@ class InviteVrchatListTileWidget extends ConsumerWidget {
       onTap: () async {
         VRChatSecureName secureId = await vrchatLoginSession.shortName(location).catchError((e) {
           logger.e(e);
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: ErrorSnackBar(e)));
         });
         await vrchatLoginSession.selfInvite(location, secureId.shortName ?? secureId.secureName ?? "").catchError((e) {
           logger.e(e);
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: ErrorSnackBar(e)));
         });
 
         showDialog(

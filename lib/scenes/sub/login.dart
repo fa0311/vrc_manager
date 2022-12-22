@@ -1,7 +1,6 @@
 // Dart imports:
 
 // Dart imports:
-import 'dart:convert';
 import 'dart:math';
 
 // Flutter imports:
@@ -17,6 +16,7 @@ import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/core/splash.dart';
+import 'package:vrc_manager/scenes/setting/logger.dart';
 import 'package:vrc_manager/storage/accessibility.dart';
 import 'package:vrc_manager/storage/account.dart';
 import 'package:vrc_manager/widgets/config_modal/locale.dart';
@@ -71,33 +71,6 @@ class VRChatMobileLogin extends ConsumerWidget {
     AccessibilityConfigNotifier accessibilityConfig = ref.watch(accessibilityConfigProvider);
     textStream(context: context, forceExternal: accessibilityConfig.forceExternalBrowser);
 
-    errorSnackBar(dynamic status) {
-      VRChatError content;
-
-      try {
-        content = VRChatError.fromJson(json.decode(status.message));
-      } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(AppLocalizations.of(context)!.incorrectLogin)),
-        );
-        return;
-      }
-
-      if (content.message == 'Too many requests') {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(AppLocalizations.of(context)!.tooManyRequests)),
-        );
-      } else if (content.message == '"Invalid Username/Email or Password"') {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(AppLocalizations.of(context)!.invalidLoginInfo)),
-        );
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(AppLocalizations.of(context)!.incorrectLogin)),
-        );
-      }
-    }
-
     Future save() async {
       AccountConfig config = ref.read(loginDataProvider).accountConfig;
       config.setUserId(ref.read(userControllerProvider).text);
@@ -128,7 +101,7 @@ class VRChatMobileLogin extends ConsumerWidget {
         }
       } catch (e) {
         logger.e(e);
-        errorSnackBar(e);
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: ErrorSnackBar(e)));
       }
     }
 
@@ -176,7 +149,7 @@ class VRChatMobileLogin extends ConsumerWidget {
         }
       } catch (e) {
         logger.e(e);
-        errorSnackBar(e);
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: ErrorSnackBar(e)));
       }
     }
 

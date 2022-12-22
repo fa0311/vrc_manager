@@ -98,12 +98,6 @@ class WorldProfile extends ConsumerWidget {
   }
 }
 
-Future selfInvite({required VRChatAPI vrchatLoginSession, required VRChatInstance instance}) async {
-  await vrchatLoginSession.selfInvite(instance.location, instance.shortName ?? "").catchError((e) {
-    logger.e(e);
-  });
-}
-
 class FavoriteAction extends ConsumerWidget {
   final VRChatLimitedWorld world;
   const FavoriteAction({super.key, required this.world});
@@ -166,6 +160,7 @@ class FavoriteAction extends ConsumerWidget {
                     if (value || favoriteWorld != null) {
                       await vrchatLoginSession.deleteFavorites(favoriteWorld!.favoriteId).catchError((e) {
                         logger.e(e);
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: ErrorSnackBar(e)));
                       });
                       favoriteWorldData!.list.remove(favoriteWorld);
                       favoriteWorld = null;
@@ -174,6 +169,7 @@ class FavoriteAction extends ConsumerWidget {
                     if (!value && favoriteWorldData != favoriteData) {
                       VRChatFavorite favorite = await vrchatLoginSession.addFavorites("world", world.id, favoriteData.group.name).catchError((e) {
                         logger.e(e);
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: ErrorSnackBar(e)));
                       });
                       favoriteWorld = VRChatFavoriteWorld.fromFavorite(world, favorite, favoriteData.group.name);
                       favoriteData.list.add(favoriteWorld!);
