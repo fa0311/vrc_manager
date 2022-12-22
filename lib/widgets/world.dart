@@ -141,7 +141,7 @@ class FavoriteAction extends ConsumerWidget {
       loading: () => const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()),
       error: (err, stack) {
         logger.w(err, err, stack);
-        return ErrorPage(err: err, stack: stack);
+        return const ErrorPage();
       },
       data: (data) {
         return Column(

@@ -108,7 +108,7 @@ class VRChatMobileSelf extends ConsumerWidget {
                   loading: () => const Center(child: CircularProgressIndicator()),
                   error: (err, stack) {
                     logger.w(err, err, stack);
-                    return ErrorPage(err: err, stack: stack);
+                    return const ErrorPage();
                   },
                   data: (data) => Column(
                     children: [

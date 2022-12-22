@@ -12,6 +12,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:vrc_manager/widgets/share.dart';
 
+final loggerReportCounterProvider = StateProvider<int>((ref) => 0);
+
 class ConsoleOutputExt extends ConsoleOutput {
   List<OutputEventExt> state = [];
   @override
@@ -32,51 +34,17 @@ class LoggerReport extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ref.watch(loggerReportCounterProvider);
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.log),
       ),
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              Card(
-                child: ListTile(
-                  title: Text(AppLocalizations.of(context)!.reportMessage2),
-                ),
-              ),
-              for (OutputEventExt state in loggerOutput.state.reversed)
-                Card(
-                  child: ExpansionTile(
-                    title: Text(state.lines[state.lines.length - 2].replaceAll(RegExp(r'\u001b\[([0-9]|;)+m'), '').replaceAll('│ ', '')),
-                    subtitle: Text(generalDateDifference(context, state.time)),
-                    trailing: OutlinedButton(
-                      child: Text(AppLocalizations.of(context)!.report),
-                      onPressed: () async {
-                        PackageInfo packageInfo = await PackageInfo.fromPlatform();
-                        DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
-                        BaseDeviceInfo deviceInfo = await deviceInfoPlugin.deviceInfo;
-                        Map<String, dynamic> logs = {
-                          "version": packageInfo.version,
-                          "deviceInfo": deviceInfo.data,
-                        };
-                        JsonEncoder encoder = const JsonEncoder.withIndent("     ");
-                        String text = encoder.convert(logs);
-                        text += '\n';
-                        text += state.lines.join('\n').replaceAll(RegExp(r'\u001b\[([0-9]|;)+m'), '');
-                        await copyToClipboard(context, text);
-                        openInBrowser(context, Uri.https("github.com", "/fa0311/vrc_manager/issues/new", {"template": "redirected-from-app.yml"}));
-                      },
-                    ),
-                    children: [
-                      SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Text(state.lines.join('\n').replaceAll(RegExp(r'\u001b\[([0-9]|;)+m'), '')),
-                      )
-                    ],
-                  ),
-                ),
-            ],
+        child: RefreshIndicator(
+          onRefresh: () async => ref.read(loggerReportCounterProvider.notifier).state++,
+          child: const SingleChildScrollView(
+            physics: AlwaysScrollableScrollPhysics(),
+            child: ErrorPage(message: true),
           ),
         ),
       ),
@@ -85,20 +53,28 @@ class LoggerReport extends ConsumerWidget {
 }
 
 class ErrorPage extends ConsumerWidget {
-  final Object err;
-  final StackTrace stack;
-  const ErrorPage({super.key, required this.err, required this.stack});
+  final bool message;
+
+  const ErrorPage({super.key, this.message = false});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ref.watch(loggerReportCounterProvider);
     return Column(
       children: [
-        Card(
-          child: ListTile(
-            title: Text(AppLocalizations.of(context)!.error),
-            subtitle: Text([AppLocalizations.of(context)!.reportMessage1, AppLocalizations.of(context)!.reportMessage2].join('\n')),
+        if (message)
+          Card(
+            child: ListTile(
+              title: Text(AppLocalizations.of(context)!.reportMessage2),
+            ),
           ),
-        ),
+        if (!message)
+          Card(
+            child: ListTile(
+              title: Text(AppLocalizations.of(context)!.error),
+              subtitle: Text([AppLocalizations.of(context)!.reportMessage1, AppLocalizations.of(context)!.reportMessage2].join('\n')),
+            ),
+          ),
         for (OutputEventExt state in loggerOutput.state.reversed)
           Card(
             child: ExpansionTile(
