@@ -27,25 +27,18 @@ List<VRChatUser> sortUsers(GridConfigNotifier config, List<VRChatUser> userList)
   }
 }
 
-class LocationDataClass {
-  int id;
-  int count = 0;
-  LocationDataClass(this.id);
-}
-
-Map<String, LocationDataClass> numberOfFriendsInLocation(List<VRChatUser> userList) {
-  Map<String, LocationDataClass> inLocation = {};
+Map<String, int> numberOfFriendsInLocation(List<VRChatUser> userList) {
+  Map<String, int> inLocation = {};
   int id = 0;
   for (VRChatUser user in userList) {
     String location = user.location;
-    inLocation[location] ??= LocationDataClass(++id);
-    inLocation[location]!.count++;
+    inLocation[location] = (inLocation[location] ?? 0) + 1;
   }
   return inLocation;
 }
 
 sortByLocationMapFromUser(List<VRChatUser> userList) {
-  Map<String, LocationDataClass> inLocation = numberOfFriendsInLocation(userList);
+  Map<String, int> inLocation = numberOfFriendsInLocation(userList);
   userList.sort((userA, userB) {
     String locationA = userA.location;
     String locationB = userB.location;
@@ -56,8 +49,18 @@ sortByLocationMapFromUser(List<VRChatUser> userList) {
     if (locationB == "private") return -1;
     if (locationA == "traveling") return 1;
     if (locationB == "traveling") return -1;
-    if (inLocation[locationA]!.count > inLocation[locationB]!.count) return -1;
-    if (inLocation[locationA]!.count < inLocation[locationB]!.count) return 1;
+    if (inLocation[locationA]! > inLocation[locationB]!) return -1;
+    if (inLocation[locationA]! < inLocation[locationB]!) return 1;
+
+    List<int> userBytesA = utf8.encode(locationA);
+    List<int> userBytesB = utf8.encode(locationB);
+
+    for (int i = 0; i < userBytesA.length && i < userBytesB.length; i++) {
+      if (userBytesA[i] < userBytesB[i]) return -1;
+      if (userBytesA[i] > userBytesB[i]) return 1;
+    }
+    if (userBytesA.length < userBytesB.length) return -1;
+    if (userBytesA.length > userBytesB.length) return 1;
     return 0;
   });
 }
