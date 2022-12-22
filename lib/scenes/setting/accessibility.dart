@@ -6,116 +6,69 @@ import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
-import 'package:vrchat_mobile_client/assets/flutter/text_stream.dart';
-import 'package:vrchat_mobile_client/assets/storage.dart';
-import 'package:vrchat_mobile_client/main.dart';
-import 'package:vrchat_mobile_client/widgets/change_locale_dialog.dart';
+import 'package:vrc_manager/storage/accessibility.dart';
+import 'package:vrc_manager/widgets/config_modal/locale.dart';
+import 'package:vrc_manager/widgets/config_modal/theme.dart';
+import 'package:vrc_manager/widgets/modal.dart';
 
-class VRChatMobileSettingsAccessibility extends StatefulWidget {
+class VRChatMobileSettingsAccessibility extends ConsumerWidget {
   const VRChatMobileSettingsAccessibility({Key? key}) : super(key: key);
 
   @override
-  State<VRChatMobileSettingsAccessibility> createState() => _SettingAccessibilityPageState();
-}
-
-class _SettingAccessibilityPageState extends State<VRChatMobileSettingsAccessibility> {
-  bool theme = false;
-  bool forceExternalBrowser = false;
-  bool sontShowErrorDialog = false;
-
-  _changeSwitchTheme(bool e) {
-    setStorage("theme_brightness", e ? "dark" : "light").then(
-      (_) => Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(
-          builder: (BuildContext context) => const VRChatMobile(),
-        ),
-        (_) => false,
-      ),
-    );
-  }
-
-  _changeSwitchForceExternalBrowser(bool e) {
-    setStorage("force_external_browser", e ? "true" : "false").then(
-      (_) => setState(() => forceExternalBrowser = e),
-    );
-  }
-
-  _changeSwitchShowErrorDialog(bool e) {
-    setStorage("dont_show_error_dialog", e ? "true" : "false").then(
-      (_) => setState(() => sontShowErrorDialog = e),
-    );
-  }
-
-  _SettingAccessibilityPageState() {
-    getStorage("theme_brightness").then(
-      (response) {
-        setState(
-          () => theme = (response == "dark"),
-        );
-      },
-    );
-    getStorage("force_external_browser").then(
-      (response) {
-        setState(
-          () => forceExternalBrowser = (response == "true"),
-        );
-      },
-    );
-    getStorage("dont_show_error_dialog").then(
-      (response) {
-        setState(
-          () => sontShowErrorDialog = (response == "true"),
-        );
-      },
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    textStream(context);
+  Widget build(BuildContext context, WidgetRef ref) {
+    AccessibilityConfigNotifier accessibilityConfig = ref.watch(accessibilityConfigProvider);
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.setting),
       ),
       body: SafeArea(
-        child: SizedBox(
-          child: SingleChildScrollView(
-            child: Container(
-              padding: const EdgeInsets.only(top: 10),
-              child: Column(
-                children: <Widget>[
-                  ListTile(
-                    title: Text(AppLocalizations.of(context)!.language),
-                    subtitle: Text(AppLocalizations.of(context)!.languageDetails),
-                    onTap: () => showLocaleModalBottomSheet(context),
+        child: SingleChildScrollView(
+          child: Container(
+            padding: const EdgeInsets.only(top: 10),
+            child: Column(
+              children: <Widget>[
+                ListTile(
+                  title: Text(AppLocalizations.of(context)!.language),
+                  subtitle: Text(accessibilityConfig.languageCode.text),
+                  onTap: () => showModalBottomSheetStatelessWidget(
+                    context: context,
+                    builder: () => const LocaleModal(),
                   ),
-                  const Divider(),
+                ),
+                ListTile(
+                  title: Text(AppLocalizations.of(context)!.deviceLightTheme),
+                  subtitle: Text(accessibilityConfig.themeBrightness.toLocalization(context)),
+                  onTap: () => showModalBottomSheetStatelessWidget(
+                    context: context,
+                    builder: () => const ThemeBrightnessModal(
+                      dark: false,
+                    ),
+                  ),
+                ),
+                ListTile(
+                  title: Text(AppLocalizations.of(context)!.deviceDarkTheme),
+                  subtitle: Text(accessibilityConfig.darkThemeBrightness.toLocalization(context)),
+                  onTap: () => showModalBottomSheetStatelessWidget(
+                    context: context,
+                    builder: () => const ThemeBrightnessModal(dark: true),
+                  ),
+                ),
+                if (!Platform.isWindows)
                   SwitchListTile(
-                    value: theme,
-                    title: Text(AppLocalizations.of(context)!.darkTheme),
-                    subtitle: Text("${AppLocalizations.of(context)!.darkThemeDetails1}\n${AppLocalizations.of(context)!.darkThemeDetails2}"),
-                    onChanged: _changeSwitchTheme,
+                    value: accessibilityConfig.forceExternalBrowser,
+                    title: Text(AppLocalizations.of(context)!.forceExternalBrowser),
+                    subtitle: Text(AppLocalizations.of(context)!.forceExternalBrowserDetails),
+                    onChanged: (bool e) => accessibilityConfig.setForceExternalBrowser(e),
                   ),
-                  const Divider(),
-                  SwitchListTile(
-                    value: sontShowErrorDialog,
-                    title: Text(AppLocalizations.of(context)!.dontShowErrorDialog),
-                    subtitle: Text(AppLocalizations.of(context)!.dontShowErrorDialogDetails),
-                    onChanged: _changeSwitchShowErrorDialog,
-                  ),
-                  if (!Platform.isWindows) const Divider(),
-                  if (!Platform.isWindows)
-                    SwitchListTile(
-                      value: forceExternalBrowser,
-                      title: Text(AppLocalizations.of(context)!.forceExternalBrowser),
-                      subtitle: Text(AppLocalizations.of(context)!.forceExternalBrowserDetails),
-                      onChanged: _changeSwitchForceExternalBrowser,
-                    )
-                ],
-              ),
+                SwitchListTile(
+                  value: accessibilityConfig.debugMode,
+                  title: Text(AppLocalizations.of(context)!.debugMode),
+                  onChanged: (bool e) => accessibilityConfig.setDebugMode(e),
+                )
+              ],
             ),
           ),
         ),

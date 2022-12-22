@@ -1,16 +1,27 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
 
-// Project imports:
-import 'package:vrchat_mobile_client/assets/vrchat/status.dart';
+// Package imports:
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-Container status(String status, {double diameter = 20}) {
-  return Container(
-    width: diameter,
-    height: diameter,
-    decoration: BoxDecoration(
-      shape: BoxShape.circle,
-      color: Color(getVrchatStatus()[status] ?? 0xFFFFFFFF),
-    ),
-  );
+// Project imports:
+import 'package:vrc_manager/api/enum/status.dart';
+
+// Project imports:
+class StatusWidget extends ConsumerWidget {
+  final VRChatStatusData status;
+  final double diameter;
+  const StatusWidget({required this.status, this.diameter = 20, Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Container(
+      width: diameter,
+      height: diameter,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: status.toColor(),
+      ),
+    );
+  }
 }

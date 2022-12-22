@@ -1,0 +1,43 @@
+{
+  "enabled": true,
+  "version": "0.2",
+  "language": "en",
+  "words": [
+    /* Service Name */
+    "bandsintown",
+    "behance",
+    "codepen",
+    "dribbble",
+    "fivehundredpix",
+    "flickr",
+    "pinterest",
+    "rdio",
+    "sharethis",
+    "smugmug",
+    "soundcloud",
+    "squarespace",
+    "vevo",
+    "vrchat",
+    "vsco",
+    "wechat",
+    /* API */
+    "standalonewindows",
+    "totp",
+    "twofactorauth",
+    /* Flutter */
+    "unfocus",
+    "ARGB",
+    /* Dart */
+    "sublist",
+    /* Library */
+    "cupertino",
+    "fluttertoast",
+    "agconnect",
+    "riverpod",
+    /* Name */
+    "yuki",
+    /* Other */
+    "dont"
+  ],
+  "ignorePaths": ["l10n/**", "api/enum/lang.dart"]
+}

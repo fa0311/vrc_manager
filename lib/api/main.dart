@@ -1,13 +1,22 @@
 // Project imports:
-import 'package:vrchat_mobile_client/api/data_class.dart';
-import 'package:vrchat_mobile_client/assets/session.dart';
+import 'package:vrc_manager/api/data_class.dart';
+import 'package:vrc_manager/assets/session.dart';
 
 class VRChatAPI {
   VRChatAPI({String cookie = ""}) {
     vrchatSession.headers["cookie"] = cookie;
   }
 
+  String getCookie() {
+    return vrchatSession.headers["cookie"] ?? "";
+  }
+
+  setCookie(String? cookie) {
+    vrchatSession.headers["cookie"] = cookie ?? "";
+  }
+
   Map<String, String> apiKey() {
+    // cspell:disable-next-line
     return <String, String>{"apiKey": "JlE5Jldo5Jibnk5O5hTx6XVqsJu4WJ26"};
   }
 
@@ -49,7 +58,7 @@ class VRChatAPI {
 
   // Self
 
-  Future<VRChatUserOverload> user() {
+  Future<VRChatUserSelfOverload> user() {
     return vrchatSession
         .get(
           endpoint(
@@ -57,7 +66,7 @@ class VRChatAPI {
             apiKey(),
           ),
         )
-        .then((value) => VRChatUserOverload.fromJson(value));
+        .then((value) => VRChatUserSelfOverload.fromJson(value));
   }
 
   // User
@@ -82,7 +91,7 @@ class VRChatAPI {
         {"targetUserId": uid, "note": note}).then((value) => VRChatUserNotes.fromJson(value));
   }
 
-  Future<VRChatfriendStatus> friendStatus(String uid) {
+  Future<VRChatFriendStatus> friendStatus(String uid) {
     return vrchatSession
         .get(
           endpoint(
@@ -90,7 +99,7 @@ class VRChatAPI {
             apiKey(),
           ),
         )
-        .then((value) => VRChatfriendStatus.fromJson(value));
+        .then((value) => VRChatFriendStatus.fromJson(value));
   }
 
   Future<VRChatNotifications> sendFriendRequest(String uid) {
@@ -139,7 +148,7 @@ class VRChatAPI {
 
   // Friends
 
-  Future<VRChatUserList> friends({int offset = 0, bool offline = false}) {
+  Future<List<VRChatFriends>> friends({int offset = 0, bool offline = false}) {
     final param = {
       "offline": offline.toString(),
       "offset": offset.toString(),
@@ -151,7 +160,7 @@ class VRChatAPI {
         .get(
           endpoint('api/1/auth/user/friends', param),
         )
-        .then((value) => VRChatUserList.fromJson(value));
+        .then((value) => [for (dynamic content in value) VRChatFriends.fromJson(content)]);
   }
 
   Future<VRChatStatus> deleteFriend(String uid) {
@@ -167,7 +176,7 @@ class VRChatAPI {
 
   // Search
 
-  Future<VRChatUserLimitedList> searchUsers(String search, {int offset = 0, String sort = "relevance", bool fuzzy = false}) {
+  Future<List<VRChatUser>> searchUsers(String search, {int offset = 0, String sort = "relevance", bool fuzzy = false}) {
     final param = {
       "sort": sort,
       "fuzzy": fuzzy.toString(),
@@ -184,10 +193,10 @@ class VRChatAPI {
             param,
           ),
         )
-        .then((value) => VRChatUserLimitedList.fromJson(value));
+        .then((value) => [for (dynamic content in value) VRChatUser.fromJson(content)]);
   }
 
-  Future<VRChatLimitedWorldList> searchWorlds(String search, {int offset = 0, String sort = "relevance", bool fuzzy = false}) {
+  Future<List<VRChatLimitedWorld>> searchWorlds(String search, {int offset = 0, String sort = "relevance", bool fuzzy = false}) {
     final param = {
       "sort": sort,
       "fuzzy": fuzzy.toString(),
@@ -204,12 +213,12 @@ class VRChatAPI {
             param,
           ),
         )
-        .then((value) => VRChatLimitedWorldList.fromJson(value));
+        .then((value) => [for (dynamic content in value) VRChatLimitedWorld.fromJson(content)]);
   }
 
   // Favorite
 
-  Future<VRChatFavoriteGroupList> favoriteGroups(String type, {int offset = 0}) {
+  Future<List<VRChatFavoriteGroup>> favoriteGroups(String type, {int offset = 0}) {
     final param = {
       "type": type,
       "offset": offset.toString(),
@@ -221,7 +230,7 @@ class VRChatAPI {
         .get(
           endpoint('api/1/favorite/groups', param),
         )
-        .then((value) => VRChatFavoriteGroupList.fromJson(value));
+        .then((value) => [for (dynamic content in value) VRChatFavoriteGroup.fromJson(content)]);
   }
 
   Future<VRChatFavorite> addFavorites(String type, String id, String tags) {
@@ -247,7 +256,7 @@ class VRChatAPI {
 
   // Notify
 
-  Future<VRChatNotificationsList> notifications({String type = "all", int offset = 0, String after = "", bool hidden = true}) {
+  Future<List<VRChatNotifications>> notifications({String type = "all", int offset = 0, String after = "", bool hidden = true}) {
     final param = <String, String>{
       "sent": "false",
       "type": type,
@@ -264,7 +273,7 @@ class VRChatAPI {
         .get(
           endpoint('api/1/auth/user/notifications', param),
         )
-        .then((value) => VRChatNotificationsList.fromJson(value));
+        .then((value) => [for (dynamic content in value) VRChatNotifications.fromJson(content)]);
   }
 
   Future<VRChatNotifications> notificationsSee(String fid) {
@@ -291,7 +300,7 @@ class VRChatAPI {
         .then((value) => VRChatWorld.fromJson(value));
   }
 
-  Future<VRChatFavoriteWorldList> favoritesWorlds(String type, {int offset = 0}) {
+  Future<List<VRChatFavoriteWorld>> favoritesWorlds(String type, {int offset = 0}) {
     final param = {
       "tag": type,
       "offset": offset.toString(),
@@ -303,7 +312,7 @@ class VRChatAPI {
         .get(
           endpoint('api/1/worlds/favorites', param),
         )
-        .then((value) => VRChatFavoriteWorldList.fromJson(value));
+        .then((value) => [for (dynamic content in value) VRChatFavoriteWorld.fromJson(content)]);
   }
 
   // Instance
@@ -353,23 +362,23 @@ class VRChatAPI {
 
   // Change
 
-  Future<VRChatUserOverload> changeName(String uid, String username, String password) {
+  Future<VRChatUserSelfOverload> changeName(String uid, String username, String password) {
     return vrchatSession.put(
       endpoint(
         'api/1/users/$uid',
         apiKey(),
       ),
       {"currentPassword": password, "displayName": username},
-    ).then((value) => VRChatUserOverload.fromJson(value));
+    ).then((value) => VRChatUserSelfOverload.fromJson(value));
   }
 
-  Future<VRChatUserPut> changeBio(String uid, String bio) {
+  Future<VRChatUserSelf> changeBio(String uid, String bio) {
     return vrchatSession.put(
       endpoint(
         'api/1/users/$uid',
         apiKey(),
       ),
       {"bio": bio},
-    ).then((value) => VRChatUserPut.fromJson(value));
+    ).then((value) => VRChatUserSelf.fromJson(value));
   }
 }
