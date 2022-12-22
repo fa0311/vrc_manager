@@ -99,8 +99,8 @@ class VRChatMobileLogin extends ConsumerWidget {
             SnackBar(content: Text(AppLocalizations.of(context)!.incorrectLogin)),
           );
         }
-      } catch (e) {
-        logger.e(e);
+      } catch (e, trace) {
+        logger.e(getMessage(e), e, trace);
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: ErrorSnackBar(e)));
       }
     }
@@ -147,8 +147,8 @@ class VRChatMobileLogin extends ConsumerWidget {
             SnackBar(content: Text(AppLocalizations.of(context)!.incorrectLogin)),
           );
         }
-      } catch (e) {
-        logger.e(e);
+      } catch (e, trace) {
+        logger.e(getMessage(e), e, trace);
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: ErrorSnackBar(e)));
       }
     }

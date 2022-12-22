@@ -142,7 +142,7 @@ class EditBio extends ConsumerWidget {
           onPressed: () async {
             ref.read(editBioProvider.notifier).state = true;
             await vrchatLoginSession.changeBio(user.id, user.bio = controller.text).catchError((e) {
-              logger.e(e);
+              logger.e(getMessage(e), e);
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: ErrorSnackBar(e)));
             });
             user.bio = user.bio == "" ? null : user.bio;
@@ -186,7 +186,7 @@ class EditNote extends ConsumerWidget {
           onPressed: () async {
             ref.read(editNoteProvider.notifier).state = true;
             await vrchatLoginSession.userNotes(user.id, user.note = controller.text).catchError((e) {
-              logger.e(e);
+              logger.e(getMessage(e), e);
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: ErrorSnackBar(e)));
             });
             user.note = user.note == "" ? null : user.note;

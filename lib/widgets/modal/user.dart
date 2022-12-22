@@ -117,7 +117,7 @@ class ProfileAction extends ConsumerWidget {
       vrchatLoginSession.sendFriendRequest(user.id).then((value) {
         Navigator.of(context).pop();
       }).catchError((e) {
-        logger.e(e);
+        logger.e(getMessage(e), e);
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: ErrorSnackBar(e)));
         Navigator.of(context).popUntil((route) => route.isFirst);
       });
@@ -128,7 +128,7 @@ class ProfileAction extends ConsumerWidget {
       vrchatLoginSession.acceptFriendRequestByUid(user.id).then((value) {
         Navigator.of(context).pop();
       }).catchError((e) {
-        logger.e(e);
+        logger.e(getMessage(e), e);
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: ErrorSnackBar(e)));
         Navigator.of(context).popUntil((route) => route.isFirst);
       });
@@ -140,7 +140,7 @@ class ProfileAction extends ConsumerWidget {
       vrchatLoginSession.deleteFriendRequest(user.id).then((value) {
         Navigator.of(context).pop();
       }).catchError((e) {
-        logger.e(e);
+        logger.e(getMessage(e), e);
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: ErrorSnackBar(e)));
         Navigator.of(context).popUntil((route) => route.isFirst);
       });
@@ -168,7 +168,7 @@ class ProfileAction extends ConsumerWidget {
                     Navigator.of(context).pop();
                     Navigator.of(context).pop();
                   }).catchError((e) {
-                    logger.e(e);
+                    logger.e(getMessage(e), e);
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: ErrorSnackBar(e)));
                     Navigator.of(context).popUntil((route) => route.isFirst);
                   });

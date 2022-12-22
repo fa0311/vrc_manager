@@ -36,16 +36,16 @@ final vrchatMobileFriendsProvider = FutureProvider.family<VRChatMobileFriendsDat
   do {
     int offset = userList.length;
     List<VRChatFriends> users = await vrchatLoginSession.friends(offline: offline, offset: offset).catchError((e) {
-      logger.e(e);
+      logger.e(getMessage(e), e);
     });
     userList.addAll(users);
     if (!offline) {
       for (VRChatFriends user in users) {
         futureList.add(getWorld(vrchatLoginSession: vrchatLoginSession, user: user, locationMap: locationMap).catchError((e) {
-          logger.e(e);
+          logger.e(getMessage(e), e);
         }));
         futureList.add(getInstance(vrchatLoginSession: vrchatLoginSession, user: user, instanceMap: instanceMap).catchError((e) {
-          logger.e(e);
+          logger.e(getMessage(e), e);
         }));
       }
     }
@@ -71,8 +71,8 @@ class VRChatMobileFriends extends ConsumerWidget {
           alignment: Alignment.center,
           child: data.when(
             loading: () => const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()),
-            error: (err, stack) {
-              logger.w(err, err, stack);
+            error: (e, trace) {
+              logger.w(getMessage(e), e, trace);
               return const ErrorPage();
             },
             data: (data) => ExtractionFriend(

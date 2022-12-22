@@ -10,6 +10,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
 import 'package:vrc_manager/assets/license.dart';
 import 'package:vrc_manager/main.dart';
+import 'package:vrc_manager/scenes/setting/logger.dart';
 import 'package:vrc_manager/storage/accessibility.dart';
 import 'package:vrc_manager/widgets/share.dart';
 
@@ -106,8 +107,8 @@ class VRChatMobileHelp extends ConsumerWidget {
                       child: SizedBox(width: 20, height: 20, child: CircularProgressIndicator()),
                     ),
                   ),
-                  error: (err, stack) {
-                    logger.w(err, err, stack);
+                  error: (e, trace) {
+                    logger.w(getMessage(e), e, trace);
                     return ListTile(
                       title: Text(AppLocalizations.of(context)!.version),
                       subtitle: Text(AppLocalizations.of(context)!.error),

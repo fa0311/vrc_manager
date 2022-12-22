@@ -11,6 +11,7 @@ import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/core/splash.dart';
+import 'package:vrc_manager/scenes/setting/logger.dart';
 import 'package:vrc_manager/storage/accessibility.dart';
 
 final tokenControllerProvider = StateProvider.autoDispose<TextEditingController>((ref) {
@@ -62,7 +63,7 @@ class VRChatMobileTokenSetting extends ConsumerWidget {
                           SnackBar(content: Text(AppLocalizations.of(context)!.success)),
                         );
                       }).catchError((e) {
-                        logger.w(e);
+                        logger.w(getMessage(e), e);
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(content: Text(AppLocalizations.of(context)!.failed)),
                         );

@@ -67,7 +67,7 @@ final vrchatMobileSearchProvider = FutureProvider<VRChatMobileSearchData>((ref) 
       do {
         int offset = userList.length;
         List<VRChatUser> users = await vrchatLoginSession.searchUsers(searchingText, offset: offset).catchError((e) {
-          logger.e(e);
+          logger.e(getMessage(e), e);
         });
         for (VRChatUser user in users) {
           userList.add(user);
@@ -79,7 +79,7 @@ final vrchatMobileSearchProvider = FutureProvider<VRChatMobileSearchData>((ref) 
       do {
         int offset = worldList.length;
         List<VRChatLimitedWorld> worlds = await vrchatLoginSession.searchWorlds(searchingText, offset: offset).catchError((e) {
-          logger.e(e);
+          logger.e(getMessage(e), e);
         });
         for (VRChatLimitedWorld world in worlds) {
           addWorldList(world);
@@ -190,8 +190,8 @@ class VRChatMobileSearchResult extends ConsumerWidget {
     AsyncValue<VRChatMobileSearchData> data = ref.watch(vrchatMobileSearchProvider);
     return data.when(
       loading: () => const Center(child: CircularProgressIndicator()),
-      error: (err, stack) {
-        logger.w(err, err, stack);
+      error: (e, trace) {
+        logger.w(getMessage(e), e, trace);
         return const ErrorPage();
       },
       data: (VRChatMobileSearchData data) {

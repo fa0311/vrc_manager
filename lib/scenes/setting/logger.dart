@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
@@ -33,46 +34,12 @@ class OutputEventExt extends OutputEvent {
   OutputEventExt(OutputEvent event) : super(event.level, event.lines);
 }
 
-class PrettyPrinterExt extends PrettyPrinter {
-  @override
-  PrettyPrinterExt({
-    stackTraceBeginIndex = 0,
-    methodCount = 2,
-    errorMethodCount = 8,
-    lineLength = 120,
-    colors = true,
-    printEmojis = true,
-    printTime = false,
-    excludeBox = const {},
-    noBoxingByDefault = false,
-  }) : super(
-          stackTraceBeginIndex: stackTraceBeginIndex,
-          methodCount: methodCount,
-          errorMethodCount: errorMethodCount,
-          lineLength: lineLength,
-          colors: colors,
-          printEmojis: printEmojis,
-          printTime: printTime,
-          excludeBox: excludeBox,
-          noBoxingByDefault: noBoxingByDefault,
-        );
-
-  @override
-  List<String> log(LogEvent event) {
-    return [
-      [PrettyPrinter.levelEmojis[event.level]!, event.message.toString()].join(''),
-      ...super.log(event)
-    ];
-  }
-}
-
 class LoggerReport extends ConsumerWidget {
   const LoggerReport({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     ref.watch(loggerReportCounterProvider);
-
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.log),
@@ -119,7 +86,7 @@ class ErrorPage extends ConsumerWidget {
         for (OutputEventExt state in loggerOutput.state.reversed)
           Card(
             child: ExpansionTile(
-              title: Text(state.lines.first.replaceAll(RegExp(r'\u001b\[([0-9]|;)+m'), '').replaceAll('│ ', '')),
+              title: Text(state.lines[state.lines.length - 2].replaceAll(RegExp(r'\u001b\[([0-9]|;)+m'), '').replaceAll('│ ', '')),
               subtitle: Text(generalDateDifference(context, state.time)),
               trailing: OutlinedButton(
                 child: Text(AppLocalizations.of(context)!.report),
@@ -134,7 +101,7 @@ class ErrorPage extends ConsumerWidget {
                   JsonEncoder encoder = const JsonEncoder.withIndent("     ");
                   String text = encoder.convert(logs);
                   text += '\n';
-                  text += state.lines.sublist(1).join('\n').replaceAll(RegExp(r'\u001b\[([0-9]|;)+m'), '');
+                  text += state.lines.join('\n').replaceAll(RegExp(r'\u001b\[([0-9]|;)+m'), '');
                   await copyToClipboard(context, text);
 
                   Widget? value = await openInBrowser(
@@ -152,7 +119,7 @@ class ErrorPage extends ConsumerWidget {
               children: [
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
-                  child: Text(state.lines.sublist(1).join('\n').replaceAll(RegExp(r'\u001b\[([0-9]|;)+m'), '')),
+                  child: Text(state.lines.join('\n').replaceAll(RegExp(r'\u001b\[([0-9]|;)+m'), '')),
                 )
               ],
             ),
@@ -168,25 +135,31 @@ class ErrorSnackBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    VRChatError content;
+    VRChatError vrchatError;
 
     if (status is HttpException) {
       try {
         if (status.message.startsWith('<html>')) {
-          content = VRChatError.fromHtml(status.message);
+          vrchatError = VRChatError.fromHtml(status.message);
         } else {
-          content = VRChatError.fromJson(json.decode(status.message));
+          dynamic content = json.decode(status.message);
+          if (kDebugMode) print(AnsiColor.fg(199)(content.toString()));
+          try {
+            vrchatError = VRChatError.fromJson(content);
+          } catch (e) {
+            return Text(otherError(context: context, content: content));
+          }
         }
       } catch (e) {
         return Text(AppLocalizations.of(context)!.unknownError);
       }
 
-      if (content.message == 'Too many requests') {
+      if (vrchatError.message == 'Too many requests') {
         return Text(AppLocalizations.of(context)!.tooManyRequests);
-      } else if (content.message == '"Invalid Username/Email or Password"') {
+      } else if (vrchatError.message == '"Invalid Username/Email or Password"') {
         return Text(AppLocalizations.of(context)!.invalidLoginInfo);
       } else {
-        return Text(content.message);
+        return Text(vrchatError.message);
       }
     } else if (status is TypeError) {
       return Text(AppLocalizations.of(context)!.parseError);
@@ -198,4 +171,17 @@ class ErrorSnackBar extends ConsumerWidget {
       return Text(AppLocalizations.of(context)!.unknownError);
     }
   }
+}
+
+String otherError({required BuildContext context, required dynamic content}) {
+  try {
+    VRChatLogin.fromJson(content);
+    return AppLocalizations.of(context)!.incorrectLogin;
+  } catch (e) {
+    return AppLocalizations.of(context)!.unknownError;
+  }
+}
+
+String getMessage(Object e) {
+  return e.toString().split(':').first;
 }

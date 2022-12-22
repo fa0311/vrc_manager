@@ -28,7 +28,7 @@ class VRChatMobileWebView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     AccessibilityConfigNotifier accessibilityConfig = ref.watch(accessibilityConfigProvider);
     textStream(context: context, forceExternal: accessibilityConfig.forceExternalBrowser);
-    VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount!.cookie);
+    VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "");
 
     WebViewController? webViewController = ref.watch(webViewControllerProvider);
 

@@ -26,13 +26,13 @@ final vrchatMobileFriendsRequestProvider = FutureProvider<VRChatMobileFriendRequ
   do {
     int offset = futureList.length;
     List<VRChatNotifications> notify = await vrchatLoginSession.notifications(type: "friendRequest", offset: offset).catchError((e) {
-      logger.e(e);
+      logger.e(getMessage(e), e);
     });
     for (VRChatNotifications requestUser in notify) {
       futureList.add(vrchatLoginSession.users(requestUser.senderUserId).then((VRChatUser user) {
         userList.add(user);
       }).catchError((e) {
-        logger.e(e);
+        logger.e(getMessage(e), e);
       }));
     }
     len = notify.length;
@@ -57,8 +57,8 @@ class VRChatMobileFriendRequest extends ConsumerWidget {
           alignment: Alignment.center,
           child: data.when(
             loading: () => const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()),
-            error: (err, stack) {
-              logger.w(err, err, stack);
+            error: (e, trace) {
+              logger.w(getMessage(e), e, trace);
               return const ErrorPage();
             },
             data: (data) => ExtractionUser(id: GridModalConfigType.favoriteWorlds, userList: data.userList, status: status),

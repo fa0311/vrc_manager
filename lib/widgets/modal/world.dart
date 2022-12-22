@@ -91,7 +91,7 @@ class SelfInviteListTileWidget extends ConsumerWidget {
       title: Text(AppLocalizations.of(context)!.joinInstance),
       onTap: () {
         vrchatLoginSession.selfInvite(instance.location, instance.shortName ?? "").catchError((e) {
-          logger.e(e);
+          logger.e(getMessage(e), e);
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: ErrorSnackBar(e)));
         });
       },
@@ -171,8 +171,8 @@ class FavoriteAction extends ConsumerWidget {
 
     return data.when(
       loading: () => const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()),
-      error: (err, stack) {
-        logger.w(err, err, stack);
+      error: (e, trace) {
+        logger.w(getMessage(e), e, trace);
         return const ErrorPage();
       },
       data: (data) {
@@ -198,7 +198,7 @@ class FavoriteAction extends ConsumerWidget {
                       bool value = favoriteWorldData == favoriteData;
                       if (value || favoriteWorld != null) {
                         await vrchatLoginSession.deleteFavorites(favoriteWorld!.favoriteId).catchError((e) {
-                          logger.e(e);
+                          logger.e(getMessage(e), e);
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: ErrorSnackBar(e)));
                         });
                         favoriteWorldData!.list.remove(favoriteWorld);
@@ -207,7 +207,7 @@ class FavoriteAction extends ConsumerWidget {
                       }
                       if (!value && favoriteWorldData != favoriteData) {
                         VRChatFavorite favorite = await vrchatLoginSession.addFavorites("world", world.id, favoriteData.group.name).catchError((e) {
-                          logger.e(e);
+                          logger.e(getMessage(e), e);
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: ErrorSnackBar(e)));
                         });
                         favoriteWorld = VRChatFavoriteWorld.fromFavorite(world, favorite, favoriteData.group.name);

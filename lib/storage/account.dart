@@ -6,6 +6,7 @@ import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets/storage.dart';
 import 'package:vrc_manager/main.dart';
+import 'package:vrc_manager/scenes/setting/logger.dart';
 
 class AccountListConfigNotifier extends ChangeNotifier {
   List<AccountConfig> accountList = [];
@@ -160,7 +161,7 @@ class AccountConfig extends ChangeNotifier {
       setDisplayName(response.displayName);
       return true;
     }).catchError((e) {
-      logger.e(e);
+      logger.e(getMessage(e), e);
       data = null;
       return false;
     });

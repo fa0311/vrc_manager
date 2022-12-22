@@ -31,7 +31,7 @@ final vrchatMobileUserProvider = FutureProvider.family<VRChatMobileWorldData, St
 
   late VRChatWorld world;
   await vrchatLoginSession.worlds(worldId).then((value) => world = value).catchError((e) {
-    logger.e(e);
+    logger.e(getMessage(e), e);
   });
   return VRChatMobileWorldData(world: world);
 });
@@ -51,8 +51,8 @@ class VRChatMobileWorld extends ConsumerWidget {
         title: Text(AppLocalizations.of(context)!.world),
         actions: data.when(
           loading: () => null,
-          error: (err, stack) {
-            logger.w(err, err, stack);
+          error: (e, trace) {
+            logger.w(getMessage(e), e, trace);
             return null;
           },
           data: (data) => [
@@ -83,8 +83,8 @@ class VRChatMobileWorld extends ConsumerWidget {
               builder: (context, ref, child) {
                 return data.when(
                   loading: () => const Center(child: CircularProgressIndicator()),
-                  error: (err, stack) {
-                    logger.w(err, err, stack);
+                  error: (e, trace) {
+                    logger.w(getMessage(e), e, trace);
                     return const ErrorPage();
                   },
                   data: (data) => WorldProfile(world: data.world),

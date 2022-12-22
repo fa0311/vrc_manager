@@ -14,6 +14,7 @@ import 'package:vrc_manager/api/enum/region.dart';
 import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/core/splash.dart';
+import 'package:vrc_manager/scenes/setting/logger.dart';
 import 'package:vrc_manager/widgets/modal.dart';
 import 'package:vrc_manager/widgets/modal/share.dart';
 import 'package:vrc_manager/widgets/region.dart';
@@ -34,7 +35,7 @@ String genRandNumber([int length = 5]) {
 
 Future<String> genInstanceId({required VRChatAPI vrchatLoginSession, required String region, required String type, required bool canRequestInvite}) async {
   VRChatUserSelfOverload user = await vrchatLoginSession.user().catchError((e) {
-    logger.e(e);
+    logger.e(getMessage(e), e);
   });
   String url = genRandNumber();
 

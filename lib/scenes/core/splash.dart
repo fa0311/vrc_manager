@@ -92,8 +92,8 @@ class VRChatMobileSplash extends ConsumerWidget {
             ),
           ),
         ),
-        error: (err, stack) {
-          logger.w(err, err, stack);
+        error: (e, trace) {
+          logger.w(getMessage(e), e, trace);
           return const ErrorPage();
         },
         data: (SplashData data) {

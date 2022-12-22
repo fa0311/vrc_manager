@@ -14,7 +14,7 @@ import 'package:vrc_manager/storage/accessibility.dart';
 
 ConsoleOutputExt loggerOutput = ConsoleOutputExt();
 Logger logger = Logger(
-  printer: PrettyPrinterExt(methodCount: 8),
+  printer: PrettyPrinter(methodCount: 8),
   output: loggerOutput,
 );
 

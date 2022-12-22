@@ -11,7 +11,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 // Project imports:
-import 'package:vrc_manager/scenes/main/main.dart';
 import 'package:vrc_manager/storage/user_policy.dart';
 import 'package:vrc_manager/widgets/modal.dart';
 import 'package:vrc_manager/widgets/modal/share.dart';
@@ -72,13 +71,6 @@ class VRChatMobileWebViewUserPolicy extends ConsumerWidget {
                 child: ElevatedButton(
                   onPressed: () async {
                     ref.read(userPolicyConfigProvider).setAgree(true);
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
-                        builder: (BuildContext context) => const VRChatMobileHome(),
-                      ),
-                      (_) => false,
-                    );
                   },
                   child: Text(
                     AppLocalizations.of(context)!.agree,

@@ -45,20 +45,20 @@ final vrchatMobileUserProvider = FutureProvider.family<VRChatMobileUserData, Str
 
   await Future.wait([
     vrchatLoginSession.users(userId).then((value) => user = value).catchError((e) {
-      logger.e(e);
+      logger.e(getMessage(e), e);
     }),
     vrchatLoginSession.friendStatus(userId).then((value) => status = value).catchError((e) {
-      logger.e(e);
+      logger.e(getMessage(e), e);
     }),
   ]);
   if (["private", "offline", "traveling"].contains(user.location)) return VRChatMobileUserData(user: user, status: status);
 
   await Future.wait([
     vrchatLoginSession.worlds(user.location.split(":")[0]).then((value) => world = value).catchError((e) {
-      logger.e(e);
+      logger.e(getMessage(e), e);
     }),
     vrchatLoginSession.instances(user.location).then((value) => instance = value).catchError((e) {
-      logger.e(e);
+      logger.e(getMessage(e), e);
     }),
   ]);
   return VRChatMobileUserData(user: user, status: status, world: world, instance: instance);
@@ -79,8 +79,8 @@ class VRChatMobileUser extends ConsumerWidget {
         title: Text(AppLocalizations.of(context)!.home),
         actions: data.when(
           loading: () => null,
-          error: (err, stack) {
-            logger.w(err, err, stack);
+          error: (e, trace) {
+            logger.w(getMessage(e), e, trace);
             return null;
           },
           data: (data) => [
@@ -112,8 +112,8 @@ class VRChatMobileUser extends ConsumerWidget {
                 ref.watch(vrchatUserCountProvider);
                 return data.when(
                   loading: () => const Center(child: CircularProgressIndicator()),
-                  error: (err, stack) {
-                    logger.w(err, err, stack);
+                  error: (e, trace) {
+                    logger.w(getMessage(e), e, trace);
                     return const ErrorPage();
                   },
                   data: (data) => Column(
