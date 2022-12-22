@@ -18,7 +18,7 @@ class VRChatMobileFriendRequestData {
   VRChatMobileFriendRequestData({required this.userList});
 }
 
-final vrchatMobileFriendsProvider = FutureProvider<VRChatMobileFriendRequestData>((ref) async {
+final vrchatMobileFriendsRequestProvider = FutureProvider<VRChatMobileFriendRequestData>((ref) async {
   VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount!.cookie);
   List<Future> futureList = [];
   List<VRChatUser> userList = [];
@@ -46,11 +46,11 @@ class VRChatMobileFriendRequest extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    AsyncValue<VRChatMobileFriendRequestData> data = ref.watch(vrchatMobileFriendsProvider);
+    AsyncValue<VRChatMobileFriendRequestData> data = ref.watch(vrchatMobileFriendsRequestProvider);
     VRChatFriendStatus status = VRChatFriendStatus(isFriend: false, incomingRequest: true, outgoingRequest: false);
 
     return RefreshIndicator(
-      onRefresh: () => ref.refresh(vrchatMobileFriendsProvider.future),
+      onRefresh: () => ref.refresh(vrchatMobileFriendsRequestProvider.future),
       child: SingleChildScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
         child: Container(
