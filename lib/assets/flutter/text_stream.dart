@@ -1,8 +1,10 @@
 // Dart imports:
 import 'dart:io';
 
-// Package imports:
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 
 // Project imports:

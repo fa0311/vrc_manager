@@ -1,8 +1,8 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
-import 'package:vrc_manager/scenes/core/splash.dart';
 
 // Project imports:
+import 'package:vrc_manager/scenes/core/splash.dart';
 import 'package:vrc_manager/scenes/sub/user.dart';
 import 'package:vrc_manager/scenes/sub/world.dart';
 import 'package:vrc_manager/widgets/share.dart';

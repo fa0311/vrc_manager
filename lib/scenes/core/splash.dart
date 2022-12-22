@@ -9,9 +9,9 @@ import 'package:flutter/material.dart';
 // Package imports:
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
-import 'package:vrc_manager/assets/flutter/text_stream.dart';
 
 // Project imports:
+import 'package:vrc_manager/assets/flutter/text_stream.dart';
 import 'package:vrc_manager/assets/flutter/url_parser.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/main/main.dart';
