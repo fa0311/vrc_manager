@@ -11,7 +11,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
+import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/core/splash.dart';
+import 'package:vrc_manager/scenes/setting/logger.dart';
 import 'package:vrc_manager/widgets/drawer.dart';
 import 'package:vrc_manager/widgets/grid_view/widget/world.dart';
 import 'package:vrc_manager/widgets/modal.dart';
@@ -34,21 +36,26 @@ final vrchatUserCountProvider = StateProvider<int>((ref) => 0);
 
 final vrchatMobileSelfProvider = FutureProvider<VRChatMobileSelfData>((ref) async {
   final VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.read(accountConfigProvider).loggedAccount!.cookie);
-  late VRChatUserSelfOverload user;
   VRChatWorld? world;
   VRChatInstance? instance;
 
-  await Future.wait([
-    vrchatLoginSession.user().then((value) => user = value),
-  ]);
-  await Future.wait([
-    vrchatLoginSession.users(user.id).then((value) => user.note = value.note),
-  ]);
+  VRChatUserSelfOverload user = await vrchatLoginSession.user().catchError((e) {
+    logger.e(e);
+  });
+
+  await vrchatLoginSession.users(user.id).then((value) => user.note = value.note).catchError((e) {
+    logger.e(e);
+  });
+
   if (["private", "offline", "traveling"].contains(user.location)) return VRChatMobileSelfData(user: user);
 
   await Future.wait([
-    vrchatLoginSession.worlds(user.location.split(":")[0]).then((value) => world = value),
-    vrchatLoginSession.instances(user.location).then((value) => instance = value),
+    vrchatLoginSession.worlds(user.location.split(":")[0]).then((value) => world = value).catchError((e) {
+      logger.e(e);
+    }),
+    vrchatLoginSession.instances(user.location).then((value) => instance = value).catchError((e) {
+      logger.e(e);
+    }),
   ]);
   return VRChatMobileSelfData(user: user, world: world, instance: instance);
 });
@@ -66,7 +73,10 @@ class VRChatMobileSelf extends ConsumerWidget {
         title: Text(AppLocalizations.of(context)!.home),
         actions: data.when(
           loading: () => null,
-          error: (err, stack) => null,
+          error: (err, stack) {
+            logger.w(err, err, stack);
+            return null;
+          },
           data: (data) => [
             IconButton(
               icon: const Icon(Icons.more_vert),
@@ -96,7 +106,10 @@ class VRChatMobileSelf extends ConsumerWidget {
                 ref.watch(vrchatUserCountProvider);
                 return data.when(
                   loading: () => const Center(child: CircularProgressIndicator()),
-                  error: (err, stack) => Text('Error: $err'),
+                  error: (err, stack) {
+                    logger.w(err, err, stack);
+                    return ErrorPage(err: err, stack: stack);
+                  },
                   data: (data) => Column(
                     children: [
                       UserProfile(user: data.user),

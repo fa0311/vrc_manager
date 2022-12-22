@@ -7,7 +7,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 // Project imports:
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
+import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/core/splash.dart';
+import 'package:vrc_manager/scenes/setting/logger.dart';
 import 'package:vrc_manager/widgets/grid_modal/config.dart';
 import 'package:vrc_manager/widgets/grid_view/extraction/favorite_world.dart';
 
@@ -30,7 +32,9 @@ final vrchatMobileWorldFavoriteSortProvider = FutureProvider<VRChatMobileWorldFa
     int len;
     do {
       int offset = favoriteWorld.list.length;
-      List<VRChatFavoriteWorld> worlds = await vrchatLoginSession.favoritesWorlds(favoriteWorld.group.name, offset: offset);
+      List<VRChatFavoriteWorld> worlds = await vrchatLoginSession.favoritesWorlds(favoriteWorld.group.name, offset: offset).catchError((e) {
+        logger.e(e);
+      });
       for (VRChatFavoriteWorld world in worlds) {
         favoriteWorld.list.add(world);
       }
@@ -44,7 +48,9 @@ final vrchatMobileWorldFavoriteSortProvider = FutureProvider<VRChatMobileWorldFa
   int len = 0;
   do {
     int offset = favoriteWorld.length;
-    List<VRChatFavoriteGroup> favoriteGroupList = await vrchatLoginSession.favoriteGroups("world", offset: offset);
+    List<VRChatFavoriteGroup> favoriteGroupList = await vrchatLoginSession.favoriteGroups("world", offset: offset).catchError((e) {
+      logger.e(e);
+    });
     for (VRChatFavoriteGroup group in favoriteGroupList) {
       FavoriteWorldData favorite = FavoriteWorldData(group: group, list: []);
       futureList.add(getFavoriteWorld(favorite));
@@ -72,7 +78,10 @@ class VRChatMobileWorldsFavorite extends ConsumerWidget {
           alignment: Alignment.center,
           child: data.when(
             loading: () => const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()),
-            error: (err, stack) => Text('Error: $err'),
+            error: (err, stack) {
+              logger.w(err, err, stack);
+              return ErrorPage(err: err, stack: stack);
+            },
             data: (data) {
               return Column(children: [
                 for (FavoriteWorldData favoriteWorld in data.favoriteWorld)

@@ -12,6 +12,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/enum/region.dart';
 import 'package:vrc_manager/api/main.dart';
+import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/core/splash.dart';
 import 'package:vrc_manager/widgets/modal.dart';
 import 'package:vrc_manager/widgets/modal/share.dart';
@@ -32,7 +33,9 @@ String genRandNumber([int length = 5]) {
 }
 
 Future<String> genInstanceId({required VRChatAPI vrchatLoginSession, required String region, required String type, required bool canRequestInvite}) async {
-  VRChatUserSelfOverload user = await vrchatLoginSession.user();
+  VRChatUserSelfOverload user = await vrchatLoginSession.user().catchError((e) {
+    logger.e(e);
+  });
   String url = genRandNumber();
 
   if (["hidden", "friends", "private"].contains(type)) {

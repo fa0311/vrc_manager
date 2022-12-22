@@ -12,6 +12,7 @@ import 'package:share_plus/share_plus.dart';
 // Project imports:
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
+import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/core/splash.dart';
 import 'package:vrc_manager/scenes/sub/json_viewer.dart';
 import 'package:vrc_manager/storage/accessibility.dart';
@@ -207,8 +208,12 @@ class InviteVrchatListTileWidget extends ConsumerWidget {
       leading: const Icon(Icons.mail),
       title: Text(AppLocalizations.of(context)!.joinInstance),
       onTap: () async {
-        VRChatSecureName secureId = await vrchatLoginSession.shortName(location);
-        await vrchatLoginSession.selfInvite(location, secureId.shortName ?? secureId.secureName ?? "");
+        VRChatSecureName secureId = await vrchatLoginSession.shortName(location).catchError((e) {
+          logger.e(e);
+        });
+        await vrchatLoginSession.selfInvite(location, secureId.shortName ?? secureId.secureName ?? "").catchError((e) {
+          logger.e(e);
+        });
 
         showDialog(
           context: context,

@@ -9,7 +9,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
+import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/core/splash.dart';
+import 'package:vrc_manager/scenes/setting/logger.dart';
 import 'package:vrc_manager/widgets/drawer.dart';
 import 'package:vrc_manager/widgets/modal.dart';
 import 'package:vrc_manager/widgets/modal/world.dart';
@@ -27,7 +29,9 @@ final vrchatMobileUserProvider = FutureProvider.family<VRChatMobileWorldData, St
   VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount!.cookie);
 
   late VRChatWorld world;
-  await Future.wait([vrchatLoginSession.worlds(worldId).then((value) => world = value)]);
+  await vrchatLoginSession.worlds(worldId).then((value) => world = value).catchError((e) {
+    logger.e(e);
+  });
   return VRChatMobileWorldData(world: world);
 });
 
@@ -45,7 +49,10 @@ class VRChatMobileWorld extends ConsumerWidget {
         title: Text(AppLocalizations.of(context)!.world),
         actions: data.when(
           loading: () => null,
-          error: (err, stack) => null,
+          error: (err, stack) {
+            logger.w(err, err, stack);
+            return null;
+          },
           data: (data) => [
             IconButton(
               icon: const Icon(Icons.more_vert),
@@ -74,7 +81,10 @@ class VRChatMobileWorld extends ConsumerWidget {
               builder: (context, ref, child) {
                 return data.when(
                   loading: () => const Center(child: CircularProgressIndicator()),
-                  error: (err, stack) => Text('Error: $err'),
+                  error: (err, stack) {
+                    logger.w(err, err, stack);
+                    return ErrorPage(err: err, stack: stack);
+                  },
                   data: (data) => WorldProfile(world: data.world),
                 );
               },

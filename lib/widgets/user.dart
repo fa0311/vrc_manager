@@ -15,6 +15,7 @@ import 'package:vrc_manager/api/enum/icon.dart';
 import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets/anchor.dart';
 import 'package:vrc_manager/assets/date.dart';
+import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/core/splash.dart';
 import 'package:vrc_manager/scenes/sub/self.dart';
 import 'package:vrc_manager/widgets/modal.dart';
@@ -143,7 +144,9 @@ class EditBio extends ConsumerWidget {
           child: wait ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator()) : Text(AppLocalizations.of(context)!.save),
           onPressed: () async {
             ref.read(editBioProvider.notifier).state = true;
-            await vrchatLoginSession.changeBio(user.id, user.bio = controller.text);
+            await vrchatLoginSession.changeBio(user.id, user.bio = controller.text).catchError((e) {
+              logger.e(e);
+            });
             user.bio = user.bio == "" ? null : user.bio;
             ref.read(vrchatUserCountProvider.notifier).state++;
             ref.read(editBioProvider.notifier).state = false;
@@ -184,7 +187,9 @@ class EditNote extends ConsumerWidget {
           child: wait ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator()) : Text(AppLocalizations.of(context)!.save),
           onPressed: () async {
             ref.read(editNoteProvider.notifier).state = true;
-            await vrchatLoginSession.userNotes(user.id, user.note = controller.text);
+            await vrchatLoginSession.userNotes(user.id, user.note = controller.text).catchError((e) {
+              logger.e(e);
+            });
             user.note = user.note == "" ? null : user.note;
             ref.read(vrchatUserCountProvider.notifier).state++;
             ref.read(editNoteProvider.notifier).state = false;

@@ -12,7 +12,9 @@ import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 
 // Project imports:
 import 'package:vrc_manager/assets/flutter/url_parser.dart';
+import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/main/main.dart';
+import 'package:vrc_manager/scenes/setting/logger.dart';
 import 'package:vrc_manager/scenes/sub/login.dart';
 import 'package:vrc_manager/scenes/web/web_view_policies.dart';
 import 'package:vrc_manager/storage/account.dart';
@@ -88,7 +90,10 @@ class VRChatMobileSplash extends ConsumerWidget {
             ),
           ),
         ),
-        error: (err, stack) => Text('Error: $err'),
+        error: (err, stack) {
+          logger.w(err, err, stack);
+          return ErrorPage(err: err, stack: stack);
+        },
         data: (SplashData data) {
           switch (data) {
             case SplashData.home:

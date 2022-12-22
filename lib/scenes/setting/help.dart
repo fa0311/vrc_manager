@@ -9,6 +9,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 // Project imports:
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
 import 'package:vrc_manager/assets/license.dart';
+import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/widgets/share.dart';
 
 final vrchatMobileVersionProvider = FutureProvider((ref) async => await PackageInfo.fromPlatform());
@@ -59,10 +60,13 @@ class VRChatMobileHelp extends ConsumerWidget {
                       child: SizedBox(width: 20, height: 20, child: CircularProgressIndicator()),
                     ),
                   ),
-                  error: (err, stack) => ListTile(
-                    title: Text(AppLocalizations.of(context)!.version),
-                    subtitle: Text('Error: $err\n$stack'),
-                  ),
+                  error: (err, stack) {
+                    logger.w(err, err, stack);
+                    return ListTile(
+                      title: Text(AppLocalizations.of(context)!.version),
+                      subtitle: Text(AppLocalizations.of(context)!.error),
+                    );
+                  },
                   data: (data) => ListTile(
                     title: Text(AppLocalizations.of(context)!.version),
                     subtitle: Text(AppLocalizations.of(context)!.versionDetails(data.version)),

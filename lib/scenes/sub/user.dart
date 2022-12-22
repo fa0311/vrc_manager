@@ -11,7 +11,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
+import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/core/splash.dart';
+import 'package:vrc_manager/scenes/setting/logger.dart';
 import 'package:vrc_manager/scenes/sub/self.dart';
 import 'package:vrc_manager/widgets/drawer.dart';
 import 'package:vrc_manager/widgets/grid_view/widget/world.dart';
@@ -41,14 +43,22 @@ final vrchatMobileUserProvider = FutureProvider.family<VRChatMobileUserData, Str
   VRChatInstance? instance;
 
   await Future.wait([
-    vrchatLoginSession.users(userId).then((value) => user = value),
-    vrchatLoginSession.friendStatus(userId).then((value) => status = value),
+    vrchatLoginSession.users(userId).then((value) => user = value).catchError((e) {
+      logger.e(e);
+    }),
+    vrchatLoginSession.friendStatus(userId).then((value) => status = value).catchError((e) {
+      logger.e(e);
+    }),
   ]);
   if (["private", "offline", "traveling"].contains(user.location)) return VRChatMobileUserData(user: user, status: status);
 
   await Future.wait([
-    vrchatLoginSession.worlds(user.location.split(":")[0]).then((value) => world = value),
-    vrchatLoginSession.instances(user.location).then((value) => instance = value),
+    vrchatLoginSession.worlds(user.location.split(":")[0]).then((value) => world = value).catchError((e) {
+      logger.e(e);
+    }),
+    vrchatLoginSession.instances(user.location).then((value) => instance = value).catchError((e) {
+      logger.e(e);
+    }),
   ]);
   return VRChatMobileUserData(user: user, status: status, world: world, instance: instance);
 });
@@ -67,7 +77,10 @@ class VRChatMobileUser extends ConsumerWidget {
         title: Text(AppLocalizations.of(context)!.home),
         actions: data.when(
           loading: () => null,
-          error: (err, stack) => null,
+          error: (err, stack) {
+            logger.w(err, err, stack);
+            return null;
+          },
           data: (data) => [
             IconButton(
               icon: const Icon(Icons.more_vert),
@@ -97,7 +110,10 @@ class VRChatMobileUser extends ConsumerWidget {
                 ref.watch(vrchatUserCountProvider);
                 return data.when(
                   loading: () => const Center(child: CircularProgressIndicator()),
-                  error: (err, stack) => Text('Error: $err'),
+                  error: (err, stack) {
+                    logger.w(err, err, stack);
+                    return ErrorPage(err: err, stack: stack);
+                  },
                   data: (data) => Column(
                     children: [
                       UserProfile(user: data.user),

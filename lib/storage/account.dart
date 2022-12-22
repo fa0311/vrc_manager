@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets/storage.dart';
+import 'package:vrc_manager/main.dart';
 
 class AccountListConfigNotifier extends ChangeNotifier {
   List<AccountConfig> accountList = [];
@@ -158,7 +159,8 @@ class AccountConfig extends ChangeNotifier {
       data = response;
       setDisplayName(response.displayName);
       return true;
-    }).catchError((status) {
+    }).catchError((e) {
+      logger.e(e);
       data = null;
       return false;
     });

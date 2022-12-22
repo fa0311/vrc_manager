@@ -8,8 +8,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 // Project imports:
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
+import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/core/splash.dart';
 import 'package:vrc_manager/scenes/main/main.dart';
+import 'package:vrc_manager/scenes/setting/logger.dart';
 import 'package:vrc_manager/storage/grid_modal.dart';
 import 'package:vrc_manager/widgets/grid_modal/config.dart';
 import 'package:vrc_manager/widgets/grid_view/extraction/user.dart';
@@ -64,7 +66,9 @@ final vrchatMobileSearchProvider = FutureProvider<VRChatMobileSearchData>((ref) 
     case SearchMode.users:
       do {
         int offset = userList.length;
-        List<VRChatUser> users = await vrchatLoginSession.searchUsers(searchingText, offset: offset);
+        List<VRChatUser> users = await vrchatLoginSession.searchUsers(searchingText, offset: offset).catchError((e) {
+          logger.e(e);
+        });
         for (VRChatUser user in users) {
           userList.add(user);
         }
@@ -74,7 +78,9 @@ final vrchatMobileSearchProvider = FutureProvider<VRChatMobileSearchData>((ref) 
     case SearchMode.worlds:
       do {
         int offset = worldList.length;
-        List<VRChatLimitedWorld> worlds = await vrchatLoginSession.searchWorlds(searchingText, offset: offset);
+        List<VRChatLimitedWorld> worlds = await vrchatLoginSession.searchWorlds(searchingText, offset: offset).catchError((e) {
+          logger.e(e);
+        });
         for (VRChatLimitedWorld world in worlds) {
           addWorldList(world);
         }
@@ -184,7 +190,10 @@ class VRChatMobileSearchResult extends ConsumerWidget {
     AsyncValue<VRChatMobileSearchData> data = ref.watch(vrchatMobileSearchProvider);
     return data.when(
       loading: () => const Center(child: CircularProgressIndicator()),
-      error: (err, stack) => Text('Error: $err'),
+      error: (err, stack) {
+        logger.w(err, err, stack);
+        return ErrorPage(err: err, stack: stack);
+      },
       data: (VRChatMobileSearchData data) {
         List<VRChatUser> userList = data.userList;
         List<VRChatLimitedWorld> worldList = data.worldList;

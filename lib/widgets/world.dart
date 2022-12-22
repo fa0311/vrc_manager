@@ -10,8 +10,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets/date.dart';
+import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/core/splash.dart';
 import 'package:vrc_manager/scenes/main/worlds_favorite.dart';
+import 'package:vrc_manager/scenes/setting/logger.dart';
 
 class OnTheWebsite extends ConsumerWidget {
   final bool half;
@@ -97,7 +99,9 @@ class WorldProfile extends ConsumerWidget {
 }
 
 Future selfInvite({required VRChatAPI vrchatLoginSession, required VRChatInstance instance}) async {
-  await vrchatLoginSession.selfInvite(instance.location, instance.shortName ?? "");
+  await vrchatLoginSession.selfInvite(instance.location, instance.shortName ?? "").catchError((e) {
+    logger.e(e);
+  });
 }
 
 class FavoriteAction extends ConsumerWidget {
@@ -135,7 +139,10 @@ class FavoriteAction extends ConsumerWidget {
 
     return data.when(
       loading: () => const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()),
-      error: (err, stack) => Text('Error: $err'),
+      error: (err, stack) {
+        logger.w(err, err, stack);
+        return ErrorPage(err: err, stack: stack);
+      },
       data: (data) {
         return Column(
           children: [
@@ -157,17 +164,20 @@ class FavoriteAction extends ConsumerWidget {
                     loadingWorldData = favoriteData;
                     bool value = favoriteWorldData == favoriteData;
                     if (value || favoriteWorld != null) {
-                      await vrchatLoginSession.deleteFavorites(favoriteWorld!.favoriteId);
+                      await vrchatLoginSession.deleteFavorites(favoriteWorld!.favoriteId).catchError((e) {
+                        logger.e(e);
+                      });
                       favoriteWorldData!.list.remove(favoriteWorld);
                       favoriteWorld = null;
                       favoriteWorldData = null;
                     }
                     if (!value && favoriteWorldData != favoriteData) {
-                      await vrchatLoginSession.addFavorites("world", world.id, favoriteData.group.name).then((VRChatFavorite favorite) {
-                        favoriteWorld = VRChatFavoriteWorld.fromFavorite(world, favorite, favoriteData.group.name);
-                        favoriteData.list.add(favoriteWorld!);
-                        favoriteWorldData = favoriteData;
+                      VRChatFavorite favorite = await vrchatLoginSession.addFavorites("world", world.id, favoriteData.group.name).catchError((e) {
+                        logger.e(e);
                       });
+                      favoriteWorld = VRChatFavoriteWorld.fromFavorite(world, favorite, favoriteData.group.name);
+                      favoriteData.list.add(favoriteWorld!);
+                      favoriteWorldData = favoriteData;
                     }
                     loadingWorldData = null;
                   },

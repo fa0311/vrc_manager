@@ -1,5 +1,4 @@
 // Flutter imports:
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 // Package imports:
@@ -8,7 +7,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 // Project imports:
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
+import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/core/splash.dart';
+import 'package:vrc_manager/scenes/setting/logger.dart';
 import 'package:vrc_manager/widgets/grid_modal/config.dart';
 import 'package:vrc_manager/widgets/grid_view/extraction/user.dart';
 
@@ -24,12 +25,14 @@ final vrchatMobileFriendsProvider = FutureProvider<VRChatMobileFriendRequestData
   int len;
   do {
     int offset = futureList.length;
-    List<VRChatNotifications> notify = await vrchatLoginSession.notifications(type: "friendRequest", offset: offset);
+    List<VRChatNotifications> notify = await vrchatLoginSession.notifications(type: "friendRequest", offset: offset).catchError((e) {
+      logger.e(e);
+    });
     for (VRChatNotifications requestUser in notify) {
       futureList.add(vrchatLoginSession.users(requestUser.senderUserId).then((VRChatUser user) {
         userList.add(user);
-      }).catchError((status) {
-        if (kDebugMode) print(status);
+      }).catchError((e) {
+        logger.e(e);
       }));
     }
     len = notify.length;
@@ -54,7 +57,10 @@ class VRChatMobileFriendRequest extends ConsumerWidget {
           alignment: Alignment.center,
           child: data.when(
             loading: () => const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()),
-            error: (err, stack) => Text('Error: $err'),
+            error: (err, stack) {
+              logger.w(err, err, stack);
+              return ErrorPage(err: err, stack: stack);
+            },
             data: (data) => ExtractionUser(id: GridModalConfigType.favoriteWorlds, userList: data.userList, status: status),
           ),
         ),

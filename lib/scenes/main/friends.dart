@@ -1,5 +1,4 @@
 // Flutter imports:
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 // Package imports:
@@ -9,7 +8,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets/api/get.dart';
+import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/core/splash.dart';
+import 'package:vrc_manager/scenes/setting/logger.dart';
 import 'package:vrc_manager/widgets/grid_modal/config.dart';
 import 'package:vrc_manager/widgets/grid_view/extraction/friends.dart';
 
@@ -34,15 +35,17 @@ final vrchatMobileFriendsProvider = FutureProvider.family<VRChatMobileFriendsDat
   int len;
   do {
     int offset = userList.length;
-    List<VRChatFriends> users = await vrchatLoginSession.friends(offline: offline, offset: offset);
+    List<VRChatFriends> users = await vrchatLoginSession.friends(offline: offline, offset: offset).catchError((e) {
+      logger.e(e);
+    });
     userList.addAll(users);
     if (!offline) {
       for (VRChatFriends user in users) {
-        futureList.add(getWorld(vrchatLoginSession: vrchatLoginSession, user: user, locationMap: locationMap).catchError((status) {
-          if (kDebugMode) print(status);
+        futureList.add(getWorld(vrchatLoginSession: vrchatLoginSession, user: user, locationMap: locationMap).catchError((e) {
+          logger.e(e);
         }));
-        futureList.add(getInstance(vrchatLoginSession: vrchatLoginSession, user: user, instanceMap: instanceMap).catchError((status) {
-          if (kDebugMode) print(status);
+        futureList.add(getInstance(vrchatLoginSession: vrchatLoginSession, user: user, instanceMap: instanceMap).catchError((e) {
+          logger.e(e);
         }));
       }
     }
@@ -68,7 +71,10 @@ class VRChatMobileFriends extends ConsumerWidget {
           alignment: Alignment.center,
           child: data.when(
             loading: () => const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()),
-            error: (err, stack) => Text('Error: $err\n$stack'),
+            error: (err, stack) {
+              logger.w(err, err, stack);
+              return ErrorPage(err: err, stack: stack);
+            },
             data: (data) => ExtractionFriend(
               id: offline ? GridModalConfigType.offlineFriends : GridModalConfigType.onlineFriends,
               userList: data.userList,

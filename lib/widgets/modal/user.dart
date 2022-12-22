@@ -8,6 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 // Project imports:
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
+import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/core/splash.dart';
 import 'package:vrc_manager/widgets/modal.dart';
 import 'package:vrc_manager/widgets/modal/share.dart';
@@ -112,18 +113,24 @@ class ProfileAction extends ConsumerWidget {
     VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount!.cookie);
 
     sendFriendRequest() {
-      vrchatLoginSession.sendFriendRequest(user.id);
+      vrchatLoginSession.sendFriendRequest(user.id).catchError((e) {
+        logger.e(e);
+      });
       status.outgoingRequest = true;
     }
 
     acceptFriendRequest() {
-      vrchatLoginSession.acceptFriendRequestByUid(user.id);
+      vrchatLoginSession.acceptFriendRequestByUid(user.id).catchError((e) {
+        logger.e(e);
+      });
       status.isFriend = true;
       status.incomingRequest = false;
     }
 
     deleteFriendRequest() {
-      vrchatLoginSession.deleteFriendRequest(user.id);
+      vrchatLoginSession.deleteFriendRequest(user.id).catchError((e) {
+        logger.e(e);
+      });
       status.outgoingRequest = false;
     }
 
@@ -141,7 +148,9 @@ class ProfileAction extends ConsumerWidget {
           ),
           TextButton(
             onPressed: () {
-              vrchatLoginSession.deleteFriend(user.id);
+              vrchatLoginSession.deleteFriend(user.id).catchError((e) {
+                logger.e(e);
+              });
               status.isFriend = false;
             },
             child: Text(AppLocalizations.of(context)!.unfriendConfirm),

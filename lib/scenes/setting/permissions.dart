@@ -11,6 +11,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
+import 'package:vrc_manager/main.dart';
 
 final domainStageVerificationProvider = FutureProvider<bool>((ref) async {
   if (await DomainVerificationManager.isSupported) {
@@ -99,7 +100,13 @@ class VRChatMobileSettingsPermissions extends ConsumerWidget {
                     ListTile(
                       leading: domainStageVerification.when(
                         loading: () => const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()),
-                        error: (err, stack) => Text('Error: $err\n$stack'),
+                        error: (err, stack) {
+                          logger.w(err, err, stack);
+                          return const Icon(
+                            Icons.close,
+                            color: Colors.red,
+                          );
+                        },
                         data: (data) {
                           if (data) {
                             return const Icon(
