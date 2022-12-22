@@ -150,4 +150,42 @@ class ExtractionFavoriteWorld extends ConsumerGridWidget {
       ],
     );
   }
+
+  @override
+  Widget textOnly(BuildContext context, WidgetRef ref, GridConfigNotifier config) {
+    return RenderGrid(
+      width: 400,
+      height: config.worldDetails ? 39 : 26,
+      children: [
+        for (VRChatLimitedWorld world in sortWorlds(config, favoriteWorld) as List<VRChatFavoriteWorld>)
+          () {
+            return GenericTemplateText(
+              onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id),
+                  )),
+              onLongPress: () {
+                showModalBottomSheetStatelessWidget(
+                  context: context,
+                  builder: () => WorldDetailsModalBottom(world: world),
+                );
+              },
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(world.name,
+                        style: const TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                        )),
+                  ],
+                ),
+              ],
+            );
+          }(),
+      ].whereType<Widget>().toList(),
+    );
+  }
 }
