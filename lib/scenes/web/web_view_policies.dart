@@ -47,7 +47,6 @@ class VRChatMobileWebViewUserPolicy extends ConsumerWidget {
               blurRadius: 5,
             ),
           ],
-          color: Colors.white,
         ),
         child: SizedBox(
           height: 50,
