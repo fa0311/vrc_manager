@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 ThemeData blackTheme() {
   Color black = const Color.fromARGB(255, 0, 0, 0);
-  Color grey = const Color.fromARGB(255, 10, 10, 10);
+  Color grey = const Color.fromARGB(255, 20, 20, 20);
   return ThemeData(
     brightness: Brightness.dark,
     backgroundColor: black,
@@ -16,6 +16,7 @@ ThemeData blackTheme() {
     primaryColorLight: black,
     scaffoldBackgroundColor: black,
     secondaryHeaderColor: black,
+    colorScheme: const ColorScheme.dark(),
   );
 }
 
@@ -35,5 +36,9 @@ ThemeData trueBlackTheme() {
     scaffoldBackgroundColor: black,
     secondaryHeaderColor: black,
     splashColor: const Color.fromARGB(255, 20, 20, 20),
+    colorScheme: ColorScheme.dark(
+      primary: const Color.fromARGB(255, 80, 80, 80),
+      surface: black,
+    ),
   );
 }
