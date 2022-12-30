@@ -27,7 +27,7 @@ class ConsoleOutputExt extends ConsoleOutput {
   @override
   void output(OutputEvent event) {
     OutputEventExt eventExt = OutputEventExt(event);
-    super.output(eventExt);
+    if (kDebugMode) super.output(eventExt);
     state.add(eventExt);
   }
 }
