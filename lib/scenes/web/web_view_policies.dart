@@ -39,10 +39,11 @@ class VRChatMobileWebViewUserPolicy extends ConsumerWidget {
         ],
       ),
       bottomNavigationBar: Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.onPrimary,
           boxShadow: [
             BoxShadow(
-              color: Color.fromARGB(30, 0, 0, 0),
+              color: Theme.of(context).colorScheme.shadow.withOpacity(0.2),
               spreadRadius: 5,
               blurRadius: 5,
             ),

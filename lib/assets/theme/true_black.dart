@@ -16,7 +16,7 @@ ThemeData blackTheme() {
     primaryColorLight: black,
     scaffoldBackgroundColor: black,
     secondaryHeaderColor: black,
-    colorScheme: const ColorScheme.dark(),
+    primarySwatch: Colors.grey,
   );
 }
 
@@ -36,9 +36,6 @@ ThemeData trueBlackTheme() {
     scaffoldBackgroundColor: black,
     secondaryHeaderColor: black,
     splashColor: const Color.fromARGB(255, 20, 20, 20),
-    colorScheme: ColorScheme.dark(
-      primary: const Color.fromARGB(255, 80, 80, 80),
-      surface: black,
-    ),
+    primarySwatch: Colors.grey,
   );
 }
