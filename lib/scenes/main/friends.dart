@@ -13,6 +13,7 @@ import 'package:vrc_manager/scenes/core/splash.dart';
 import 'package:vrc_manager/scenes/setting/logger.dart';
 import 'package:vrc_manager/widgets/grid_modal/config.dart';
 import 'package:vrc_manager/widgets/grid_view/extraction/friends.dart';
+import 'package:vrc_manager/widgets/loading.dart';
 
 class VRChatMobileFriendsData {
   Map<String, VRChatWorld?> locationMap;
@@ -64,21 +65,18 @@ class VRChatMobileFriends extends ConsumerWidget {
     AsyncValue<VRChatMobileFriendsData> data = ref.watch(vrchatMobileFriendsProvider(offline));
 
     return data.when(
-      loading: () => Container(alignment: Alignment.center, child: const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator())),
+      loading: () => const Loading(),
       error: (e, trace) {
         logger.w(getMessage(e), e, trace);
         return const ErrorPage();
       },
       data: (data) => RefreshIndicator(
         onRefresh: () => ref.refresh(vrchatMobileFriendsProvider(offline).future),
-        child: SingleChildScrollView(
-          physics: const AlwaysScrollableScrollPhysics(),
-          child: ExtractionFriend(
-            id: offline ? GridModalConfigType.offlineFriends : GridModalConfigType.onlineFriends,
-            userList: data.userList,
-            locationMap: data.locationMap,
-            instanceMap: data.instanceMap,
-          ),
+        child: ExtractionFriend(
+          id: offline ? GridModalConfigType.offlineFriends : GridModalConfigType.onlineFriends,
+          userList: data.userList,
+          locationMap: data.locationMap,
+          instanceMap: data.instanceMap,
         ),
       ),
     );
