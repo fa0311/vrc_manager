@@ -1,8 +1,8 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 // Package imports:
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
@@ -14,8 +14,6 @@ import 'package:vrc_manager/scenes/setting/logger.dart';
 import 'package:vrc_manager/scenes/sub/login.dart';
 import 'package:vrc_manager/storage/account.dart';
 import 'package:vrc_manager/widgets/loading.dart';
-import 'package:vrc_manager/widgets/modal.dart';
-import 'package:vrc_manager/widgets/modal/share.dart';
 
 final GlobalKey webViewKey = GlobalKey();
 
