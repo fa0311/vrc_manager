@@ -15,7 +15,9 @@ import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/core/splash.dart';
+import 'package:vrc_manager/scenes/main/main.dart';
 import 'package:vrc_manager/scenes/setting/logger.dart';
+import 'package:vrc_manager/scenes/web/web_view_login.dart';
 import 'package:vrc_manager/storage/accessibility.dart';
 import 'package:vrc_manager/storage/account.dart';
 import 'package:vrc_manager/widgets/config_modal/locale.dart';
@@ -222,43 +224,28 @@ class VRChatMobileLogin extends ConsumerWidget {
             ),
             TextButton(
               child: Text(
-                AppLocalizations.of(context)!.cantLogin,
+                AppLocalizations.of(context)!.openInBrowser,
                 style: const TextStyle(
                   fontSize: 14,
                 ),
               ),
-              onPressed: () => showDialog(
-                context: context,
-                builder: (_) {
-                  return AlertDialog(
-                    title: Text(AppLocalizations.of(context)!.cantLogin),
-                    content: Text(AppLocalizations.of(context)!.cantLoginDetails),
-                    actions: <Widget>[
-                      TextButton(
-                        child: Text(AppLocalizations.of(context)!.cancel),
-                        onPressed: () => Navigator.pop(context),
+              onPressed: () async {
+                Widget? value = await openInBrowser(
+                  url: Uri.https("vrchat.com", "/home/login"),
+                  forceExternal: accessibilityConfig.forceExternalBrowser,
+                );
+                if (value != null) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => const VRChatMobileSplash(
+                        login: VRChatMobileWebViewLogin(),
+                        child: VRChatMobileHome(),
                       ),
-                      TextButton(
-                        onPressed: () async {
-                          Navigator.pop(context);
-
-                          Widget? value = await openInBrowser(
-                            url: Uri.https("vrchat.com", "/home/login"),
-                            forceExternal: accessibilityConfig.forceExternalBrowser,
-                          );
-                          if (value != null) {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (BuildContext context) => value),
-                            );
-                          }
-                        },
-                        child: Text(AppLocalizations.of(context)!.openInBrowser),
-                      ),
-                    ],
+                    ),
                   );
-                },
-              ),
+                }
+              },
             ),
           ],
         ),

@@ -180,7 +180,7 @@ packages:
       name: flutter_inappwebview
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.7.2+2"
+    version: "5.7.2+3"
   flutter_json_viewer:
     dependency: "direct main"
     description:
