@@ -1,6 +1,7 @@
 // Dart imports:
 
 // Dart imports:
+import 'dart:io';
 import 'dart:math';
 
 // Flutter imports:
@@ -18,12 +19,10 @@ import 'package:vrc_manager/scenes/core/splash.dart';
 import 'package:vrc_manager/scenes/main/main.dart';
 import 'package:vrc_manager/scenes/setting/logger.dart';
 import 'package:vrc_manager/scenes/web/web_view_login.dart';
-import 'package:vrc_manager/storage/accessibility.dart';
 import 'package:vrc_manager/storage/account.dart';
 import 'package:vrc_manager/widgets/config_modal/locale.dart';
 import 'package:vrc_manager/widgets/drawer.dart';
 import 'package:vrc_manager/widgets/modal.dart';
-import 'package:vrc_manager/widgets/share.dart';
 
 class VRChatMobileLoginData {
   AccountConfig accountConfig;
@@ -69,8 +68,6 @@ class VRChatMobileLogin extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    AccessibilityConfigNotifier accessibilityConfig = ref.watch(accessibilityConfigProvider);
-
     Future save() async {
       AccountConfig config = ref.read(loginDataProvider).accountConfig;
       config.setUserId(ref.read(userControllerProvider).text);
@@ -222,19 +219,15 @@ class VRChatMobileLogin extends ConsumerWidget {
                     ),
               onPressed: () => onPressed(),
             ),
-            TextButton(
-              child: Text(
-                AppLocalizations.of(context)!.openInBrowser,
-                style: const TextStyle(
-                  fontSize: 14,
+            if (Platform.isAndroid || Platform.isIOS)
+              TextButton(
+                child: Text(
+                  AppLocalizations.of(context)!.loginBrowser,
+                  style: const TextStyle(
+                    fontSize: 14,
+                  ),
                 ),
-              ),
-              onPressed: () async {
-                Widget? value = await openInBrowser(
-                  url: Uri.https("vrchat.com", "/home/login"),
-                  forceExternal: accessibilityConfig.forceExternalBrowser,
-                );
-                if (value != null) {
+                onPressed: () async {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -244,9 +237,8 @@ class VRChatMobileLogin extends ConsumerWidget {
                       ),
                     ),
                   );
-                }
-              },
-            ),
+                },
+              ),
           ],
         ),
       ),

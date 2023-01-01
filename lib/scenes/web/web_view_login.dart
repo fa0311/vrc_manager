@@ -63,19 +63,7 @@ class VRChatMobileWebViewLogin extends ConsumerWidget {
     return WillPopScope(
       onWillPop: () => exitApp(context),
       child: Scaffold(
-        appBar: AppBar(
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.share),
-              onPressed: () {
-                showModalBottomSheetStatelessWidget(
-                  context: context,
-                  builder: () => ShareUrlListTile(url: initUrl, browserExternalForce: true),
-                );
-              },
-            ),
-          ],
-        ),
+        appBar: AppBar(),
         body: data.when(
           loading: () => const Loading(),
           error: (e, trace) {
