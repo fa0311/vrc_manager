@@ -55,8 +55,7 @@
     "twoFactorAuthentication": "2段階認証",
     "authenticationCode": "認証コード",
     "unknown": "名無し",
-    "cantLogin": "ログインできない",
-    "cantLoginDetails": "vrchat.com でログインできるか確認してください",
+    "loginBrowser": "ブラウザでログイン",
     "@____________________LOGIN_ERROR_DIALOG____________________": {},
     "incorrectLogin": "ログイン情報が間違っています",
     "@____________________HOME____________________": {},
@@ -171,12 +170,12 @@
     "versionDetails": "現在のバージョン: {version}",
     "license": "License",
     "licenseDetails": "License情報を確認します",
+    "@____________________REPORT____________________": {},
+    "report": "Report",
+    "log": "Log",
     "@____________________USER_POLICY____________________": {},
     "userPolicy": "ユーザーポリシー",
     "agree": "同意",
     "disagree": "同意しない",
-    "lookAtYourBrowser": "ブラウザを確認してください",
-    "@____________________REPORT____________________": {},
-    "report": "報告",
-    "log": "ログ"
+    "lookAtYourBrowser": "ブラウザを確認してください"
 }
