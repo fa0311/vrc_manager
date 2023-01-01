@@ -11,7 +11,8 @@ import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/core/splash.dart';
 import 'package:vrc_manager/scenes/setting/logger.dart';
 import 'package:vrc_manager/widgets/grid_modal/config.dart';
-import 'package:vrc_manager/widgets/grid_view/extraction/user.dart';
+import 'package:vrc_manager/widgets/grid_view/extraction/render_grid/user.dart';
+import 'package:vrc_manager/widgets/loading.dart';
 
 class VRChatMobileFriendRequestData {
   List<VRChatUser> userList;
@@ -49,19 +50,20 @@ class VRChatMobileFriendRequest extends ConsumerWidget {
     AsyncValue<VRChatMobileFriendRequestData> data = ref.watch(vrchatMobileFriendsRequestProvider);
     VRChatFriendStatus status = VRChatFriendStatus(isFriend: false, incomingRequest: true, outgoingRequest: false);
 
-    return RefreshIndicator(
-      onRefresh: () => ref.refresh(vrchatMobileFriendsRequestProvider.future),
-      child: SingleChildScrollView(
-        physics: const AlwaysScrollableScrollPhysics(),
-        child: Container(
-          alignment: Alignment.center,
-          child: data.when(
-            loading: () => const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()),
-            error: (e, trace) {
-              logger.w(getMessage(e), e, trace);
-              return const ErrorPage();
-            },
-            data: (data) => ExtractionUser(id: GridModalConfigType.favoriteWorlds, userList: data.userList, status: status),
+    return data.when(
+      loading: () => const Loading(),
+      error: (e, trace) {
+        logger.w(getMessage(e), e, trace);
+        return const ErrorPage();
+      },
+      data: (data) => RefreshIndicator(
+        onRefresh: () => ref.refresh(vrchatMobileFriendsRequestProvider.future),
+        child: SizedBox(
+          height: double.infinity,
+          width: double.infinity,
+          child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            child: ExtractionUser(id: GridModalConfigType.favoriteWorlds, userList: data.userList, status: status),
           ),
         ),
       ),

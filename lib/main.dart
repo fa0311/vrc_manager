@@ -1,4 +1,5 @@
 // Flutter imports:
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 // Package imports:
@@ -14,8 +15,10 @@ import 'package:vrc_manager/storage/accessibility.dart';
 
 ConsoleOutputExt loggerOutput = ConsoleOutputExt();
 Logger logger = Logger(
+  filter: ProductionFilter(),
   printer: PrettyPrinter(methodCount: 8),
   output: loggerOutput,
+  level: kDebugMode ? Level.verbose : Level.warning,
 );
 
 main() {

@@ -14,8 +14,9 @@ import 'package:vrc_manager/scenes/main/main.dart';
 import 'package:vrc_manager/scenes/setting/logger.dart';
 import 'package:vrc_manager/storage/grid_modal.dart';
 import 'package:vrc_manager/widgets/grid_modal/config.dart';
-import 'package:vrc_manager/widgets/grid_view/extraction/user.dart';
-import 'package:vrc_manager/widgets/grid_view/extraction/world.dart';
+import 'package:vrc_manager/widgets/grid_view/extraction/render_grid/user.dart';
+import 'package:vrc_manager/widgets/grid_view/extraction/render_grid/world.dart';
+import 'package:vrc_manager/widgets/loading.dart';
 import 'package:vrc_manager/widgets/modal.dart';
 
 final vrchatMobileSearchModeProvider = StateProvider<SearchMode>((ref) => SearchMode.users);
@@ -102,10 +103,11 @@ class VRChatMobileSearch extends ConsumerWidget {
     return RefreshIndicator(
       onRefresh: () => ref.refresh(vrchatMobileSearchProvider.future),
       notificationPredicate: (notification) => count > 0,
-      child: SingleChildScrollView(
-        physics: const AlwaysScrollableScrollPhysics(),
-        child: Container(
-          alignment: Alignment.center,
+      child: SizedBox(
+        height: double.infinity,
+        width: double.infinity,
+        child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
           child: Column(
             children: [
               Container(
@@ -189,19 +191,25 @@ class VRChatMobileSearchResult extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     AsyncValue<VRChatMobileSearchData> data = ref.watch(vrchatMobileSearchProvider);
     return data.when(
-      loading: () => const Center(child: CircularProgressIndicator()),
+      loading: () => const Loading(),
       error: (e, trace) {
         logger.w(getMessage(e), e, trace);
         return const ErrorPage();
       },
       data: (VRChatMobileSearchData data) {
-        List<VRChatUser> userList = data.userList;
-        List<VRChatLimitedWorld> worldList = data.worldList;
-        if (userList.isNotEmpty) {
-          return ExtractionUser(id: GridModalConfigType.searchUsers, userList: data.userList, status: null);
+        if (data.userList.isNotEmpty) {
+          return ExtractionUser(
+            id: GridModalConfigType.searchUsers,
+            userList: data.userList,
+            physics: const NeverScrollableScrollPhysics(),
+          );
         }
-        if (worldList.isNotEmpty) {
-          return ExtractionWorld(id: GridModalConfigType.searchWorlds, worldList: worldList);
+        if (data.worldList.isNotEmpty) {
+          return ExtractionWorld(
+            id: GridModalConfigType.searchWorlds,
+            worldList: data.worldList,
+            physics: const NeverScrollableScrollPhysics(),
+          );
         }
         return Container();
       },

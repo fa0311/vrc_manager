@@ -7,8 +7,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
 import 'package:vrc_manager/scenes/core/splash.dart';
-import 'package:vrc_manager/scenes/main/settings.dart';
 import 'package:vrc_manager/scenes/setting/other_account.dart';
+import 'package:vrc_manager/scenes/setting/settings.dart';
 import 'package:vrc_manager/scenes/sub/self.dart';
 import 'package:vrc_manager/storage/account.dart';
 import 'package:vrc_manager/widgets/modal.dart';

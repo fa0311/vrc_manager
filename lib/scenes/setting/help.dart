@@ -100,6 +100,7 @@ class VRChatMobileHelp extends ConsumerWidget {
                 version.when(
                   loading: () => ListTile(
                     title: Text(AppLocalizations.of(context)!.version),
+                    subtitle: const Text(""),
                     trailing: const Padding(
                       padding: EdgeInsets.only(right: 2, top: 2),
                       child: SizedBox(width: 20, height: 20, child: CircularProgressIndicator()),

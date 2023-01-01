@@ -11,7 +11,8 @@ import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/core/splash.dart';
 import 'package:vrc_manager/scenes/setting/logger.dart';
 import 'package:vrc_manager/widgets/grid_modal/config.dart';
-import 'package:vrc_manager/widgets/grid_view/extraction/favorite_world.dart';
+import 'package:vrc_manager/widgets/grid_view/extraction/render_grid/favorite_world.dart';
+import 'package:vrc_manager/widgets/loading.dart';
 
 class VRChatMobileWorldFavoriteData {
   List<FavoriteWorldData> favoriteWorld;
@@ -73,30 +74,33 @@ class VRChatMobileWorldsFavorite extends ConsumerWidget {
     AsyncValue<VRChatMobileWorldFavoriteData> data = ref.watch(vrchatMobileWorldFavoriteSortProvider);
     ref.watch(vrchatMobileWorldFavoriteCounterProvider);
 
-    return RefreshIndicator(
-      onRefresh: () => ref.refresh(vrchatMobileWorldFavoriteSortProvider.future),
-      child: SingleChildScrollView(
-        physics: const AlwaysScrollableScrollPhysics(),
-        child: Container(
-          alignment: Alignment.center,
-          child: data.when(
-            loading: () => const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()),
-            error: (e, trace) {
-              logger.w(getMessage(e), e, trace);
-              return const ErrorPage();
-            },
-            data: (data) {
-              return Column(children: [
-                for (FavoriteWorldData favoriteWorld in data.favoriteWorld)
-                  if (favoriteWorld.list.isNotEmpty) ...[
-                    Text(favoriteWorld.group.displayName),
-                    ExtractionFavoriteWorld(id: GridModalConfigType.favoriteWorlds, favoriteWorld: favoriteWorld.list),
-                  ],
-              ]);
-            },
+    return data.when(
+      loading: () => const Loading(),
+      error: (e, trace) {
+        logger.w(getMessage(e), e, trace);
+        return const ErrorPage();
+      },
+      data: (data) {
+        return RefreshIndicator(
+          onRefresh: () => ref.refresh(vrchatMobileWorldFavoriteSortProvider.future),
+          child: SizedBox(
+            height: double.infinity,
+            width: double.infinity,
+            child: SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              child: Column(
+                children: [
+                  for (FavoriteWorldData favoriteWorld in data.favoriteWorld)
+                    if (favoriteWorld.list.isNotEmpty) ...[
+                      Text(favoriteWorld.group.displayName),
+                      ExtractionFavoriteWorld(id: GridModalConfigType.favoriteWorlds, favoriteWorld: favoriteWorld.list),
+                    ],
+                ],
+              ),
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

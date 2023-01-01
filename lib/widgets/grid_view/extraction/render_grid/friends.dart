@@ -23,6 +23,7 @@ class ExtractionFriend extends ConsumerGridWidget {
   final List<VRChatFriends> userList;
   final Map<String, VRChatWorld?> locationMap;
   final Map<String, VRChatInstance?> instanceMap;
+  final ScrollPhysics? physics;
 
   const ExtractionFriend({
     super.key,
@@ -30,6 +31,7 @@ class ExtractionFriend extends ConsumerGridWidget {
     required this.userList,
     required this.locationMap,
     required this.instanceMap,
+    this.physics,
   });
 
   @override
@@ -40,7 +42,7 @@ class ExtractionFriend extends ConsumerGridWidget {
       children: [
         for (VRChatFriends user in sortUsers(config, userList) as List<VRChatFriends>)
           () {
-            if (["private", "offline", "traveling"].contains(user.location) && config.joinable) return null;
+            if (config.joinable && ["private", "offline", "traveling"].contains(user.location)) return null;
             String worldId = user.location.split(":")[0];
             return GenericTemplate(
               imageUrl: user.profilePicOverride ?? user.currentAvatarThumbnailImageUrl,
@@ -88,7 +90,7 @@ class ExtractionFriend extends ConsumerGridWidget {
       children: [
         for (VRChatFriends user in sortUsers(config, userList) as List<VRChatFriends>)
           () {
-            if (["private", "offline", "traveling"].contains(user.location) && config.joinable) return null;
+            if (config.joinable && ["private", "offline", "traveling"].contains(user.location)) return null;
             String worldId = user.location.split(":")[0];
             return GenericTemplate(
               imageUrl: user.profilePicOverride ?? user.currentAvatarThumbnailImageUrl,
@@ -134,7 +136,7 @@ class ExtractionFriend extends ConsumerGridWidget {
       children: [
         for (VRChatFriends user in sortUsers(config, userList) as List<VRChatFriends>)
           () {
-            if (["private", "offline", "traveling"].contains(user.location) && config.joinable) return null;
+            if (config.joinable && ["private", "offline", "traveling"].contains(user.location)) return null;
             String worldId = user.location.split(":")[0];
             return GenericTemplateText(
               onTap: () => Navigator.push(

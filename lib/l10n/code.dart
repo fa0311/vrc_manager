@@ -1,9 +1,9 @@
 enum LanguageCode {
   en("English"),
   ja("日本語"),
-  es("español"),
+  es("Español"),
   pt("Português"),
-  ru("русский"),
+  ru("Pусский"),
   th("ไทย"),
   zh("简体中文");
 

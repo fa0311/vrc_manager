@@ -18,12 +18,14 @@ import 'package:vrc_manager/widgets/user.dart';
 class ExtractionUser extends ConsumerGridWidget {
   final List<VRChatUser> userList;
   final VRChatFriendStatus? status;
+  final ScrollPhysics? physics;
 
   const ExtractionUser({
     super.key,
     required super.id,
     required this.userList,
-    required this.status,
+    this.status,
+    this.physics,
   });
 
   @override
@@ -35,7 +37,7 @@ class ExtractionUser extends ConsumerGridWidget {
       children: [
         for (VRChatUser user in sortUsers(config, userList))
           () {
-            if (["private", "offline", "traveling"].contains(user.location) && config.joinable) return null;
+            if (config.joinable && ["private", "offline", "traveling"].contains(user.location)) return null;
             return GenericTemplate(
               imageUrl: user.profilePicOverride ?? user.currentAvatarThumbnailImageUrl,
               onTap: () => Navigator.push(
@@ -67,7 +69,7 @@ class ExtractionUser extends ConsumerGridWidget {
       children: [
         for (VRChatUser user in sortUsers(config, userList))
           () {
-            if (["private", "offline", "traveling"].contains(user.location) && config.joinable) return null;
+            if (config.joinable && ["private", "offline", "traveling"].contains(user.location)) return null;
             return GenericTemplate(
               imageUrl: user.profilePicOverride ?? user.currentAvatarThumbnailImageUrl,
               half: true,
@@ -104,7 +106,7 @@ class ExtractionUser extends ConsumerGridWidget {
       children: [
         for (VRChatUser user in sortUsers(config, userList))
           () {
-            if (["private", "offline", "traveling"].contains(user.location) && config.joinable) return null;
+            if (config.joinable && ["private", "offline", "traveling"].contains(user.location)) return null;
             return GenericTemplateText(
               onTap: () => Navigator.push(
                   context,

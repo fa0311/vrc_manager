@@ -12,7 +12,8 @@ import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/core/splash.dart';
 import 'package:vrc_manager/scenes/setting/logger.dart';
 import 'package:vrc_manager/widgets/grid_modal/config.dart';
-import 'package:vrc_manager/widgets/grid_view/extraction/friends.dart';
+import 'package:vrc_manager/widgets/grid_view/extraction/render_grid/friends.dart';
+import 'package:vrc_manager/widgets/loading.dart';
 
 class VRChatMobileFriendsData {
   Map<String, VRChatWorld?> locationMap;
@@ -63,19 +64,20 @@ class VRChatMobileFriends extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     AsyncValue<VRChatMobileFriendsData> data = ref.watch(vrchatMobileFriendsProvider(offline));
 
-    return RefreshIndicator(
-      onRefresh: () => ref.refresh(vrchatMobileFriendsProvider(offline).future),
-      child: SingleChildScrollView(
-        physics: const AlwaysScrollableScrollPhysics(),
-        child: Container(
-          alignment: Alignment.center,
-          child: data.when(
-            loading: () => const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()),
-            error: (e, trace) {
-              logger.w(getMessage(e), e, trace);
-              return const ErrorPage();
-            },
-            data: (data) => ExtractionFriend(
+    return data.when(
+      loading: () => const Loading(),
+      error: (e, trace) {
+        logger.w(getMessage(e), e, trace);
+        return const ErrorPage();
+      },
+      data: (data) => RefreshIndicator(
+        onRefresh: () => ref.refresh(vrchatMobileFriendsProvider(offline).future),
+        child: SizedBox(
+          height: double.infinity,
+          width: double.infinity,
+          child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            child: ExtractionFriend(
               id: offline ? GridModalConfigType.offlineFriends : GridModalConfigType.onlineFriends,
               userList: data.userList,
               locationMap: data.locationMap,

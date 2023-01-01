@@ -6,6 +6,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class RenderGrid extends ConsumerWidget {
+  final int width;
+  final int height;
+  final List<Widget> children;
+
   const RenderGrid({
     super.key,
     required this.width,
@@ -13,27 +17,36 @@ class RenderGrid extends ConsumerWidget {
     required this.children,
   });
 
-  final int width;
-  final int height;
-  final List<Widget> children;
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     double screenSize = MediaQuery.of(context).size.width;
+    int crossAxisCount = screenSize ~/ width + 1;
 
-    return GridView.count(
-      crossAxisCount: screenSize ~/ width + 1,
-      crossAxisSpacing: 0,
-      mainAxisSpacing: 0,
-      childAspectRatio: screenSize / (screenSize ~/ width + 1) / height,
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      children: children,
+    return SizedBox(
+      height: (height * ((children.length + 1) ~/ crossAxisCount)).toDouble(),
+      child: GridView.count(
+        physics: const NeverScrollableScrollPhysics(),
+        crossAxisCount: crossAxisCount,
+        crossAxisSpacing: 0,
+        mainAxisSpacing: 0,
+        childAspectRatio: screenSize / crossAxisCount / height,
+        children: children,
+      ),
     );
   }
 }
 
 class GenericTemplate extends ConsumerWidget {
+  final List<Widget> children;
+  final String imageUrl;
+  final void Function()? onTap;
+  final void Function()? onLongPress;
+  final Widget? bottom;
+  final List<Widget>? right;
+  final List<Widget>? stack;
+  final bool card;
+  final bool half;
+
   const GenericTemplate({
     super.key,
     required this.children,
@@ -46,16 +59,6 @@ class GenericTemplate extends ConsumerWidget {
     this.card = true,
     this.half = false,
   });
-
-  final List<Widget> children;
-  final String imageUrl;
-  final void Function()? onTap;
-  final void Function()? onLongPress;
-  final Widget? bottom;
-  final List<Widget>? right;
-  final List<Widget>? stack;
-  final bool card;
-  final bool half;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -129,6 +132,12 @@ class GenericTemplate extends ConsumerWidget {
 }
 
 class GenericTemplateText extends ConsumerWidget {
+  final List<Widget> children;
+  final void Function()? onTap;
+  final void Function()? onLongPress;
+  final List<Widget>? stack;
+  final bool card;
+
   const GenericTemplateText({
     super.key,
     required this.children,
@@ -137,12 +146,6 @@ class GenericTemplateText extends ConsumerWidget {
     this.stack,
     this.card = true,
   });
-
-  final List<Widget> children;
-  final void Function()? onTap;
-  final void Function()? onLongPress;
-  final List<Widget>? stack;
-  final bool card;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

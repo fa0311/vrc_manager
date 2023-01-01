@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 // Package imports:
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:vrc_manager/widgets/config_modal/locale.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 // Project imports:
@@ -28,6 +29,15 @@ class VRChatMobileWebViewUserPolicy extends ConsumerWidget {
         title: Text(AppLocalizations.of(context)!.userPolicy),
         actions: <Widget>[
           IconButton(
+            icon: const Icon(
+              Icons.translate,
+            ),
+            onPressed: () => showModalBottomSheetStatelessWidget(
+              context: context,
+              builder: () => const LocaleModal(),
+            ),
+          ),
+          IconButton(
             icon: const Icon(Icons.more_vert),
             onPressed: () {
               showModalBottomSheetStatelessWidget(
@@ -39,10 +49,11 @@ class VRChatMobileWebViewUserPolicy extends ConsumerWidget {
         ],
       ),
       bottomNavigationBar: Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.onPrimary,
           boxShadow: [
             BoxShadow(
-              color: Color.fromARGB(30, 0, 0, 0),
+              color: Theme.of(context).colorScheme.shadow.withOpacity(0.2),
               spreadRadius: 5,
               blurRadius: 5,
             ),

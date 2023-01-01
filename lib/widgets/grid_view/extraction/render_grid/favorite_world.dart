@@ -6,7 +6,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
 import 'package:vrc_manager/api/data_class.dart';
+import 'package:vrc_manager/api/main.dart';
+import 'package:vrc_manager/assets/api/post.dart';
 import 'package:vrc_manager/assets/sort/worlds.dart';
+import 'package:vrc_manager/scenes/core/splash.dart';
 import 'package:vrc_manager/scenes/sub/world.dart';
 import 'package:vrc_manager/storage/grid_modal.dart';
 import 'package:vrc_manager/widgets/grid_view/extraction/consumer.dart';
@@ -14,18 +17,26 @@ import 'package:vrc_manager/widgets/grid_view/template/template.dart';
 import 'package:vrc_manager/widgets/modal.dart';
 import 'package:vrc_manager/widgets/modal/world.dart';
 
-class ExtractionWorld extends ConsumerGridWidget {
-  final List<VRChatLimitedWorld> worldList;
+class ExtractionFavoriteWorld extends ConsumerGridWidget {
+  final List<VRChatFavoriteWorld> favoriteWorld;
+  final ScrollPhysics? physics;
 
-  const ExtractionWorld({super.key, required super.id, required this.worldList});
+  const ExtractionFavoriteWorld({
+    super.key,
+    required super.id,
+    required this.favoriteWorld,
+    this.physics,
+  });
 
   @override
   Widget normal(BuildContext context, WidgetRef ref, GridConfigNotifier config) {
+    VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "");
+
     return RenderGrid(
       width: 600,
       height: 130,
       children: [
-        for (VRChatLimitedWorld world in sortWorlds(config, worldList))
+        for (VRChatFavoriteWorld world in sortWorlds(config, favoriteWorld) as List<VRChatFavoriteWorld>)
           () {
             return GenericTemplate(
               imageUrl: world.thumbnailImageUrl,
@@ -40,6 +51,19 @@ class ExtractionWorld extends ConsumerGridWidget {
                   builder: () => WorldDetailsModalBottom(world: world),
                 );
               },
+              right: config.removeButton
+                  ? [
+                      SizedBox(
+                        width: 50,
+                        child: IconButton(
+                          constraints: const BoxConstraints(),
+                          padding: const EdgeInsets.all(0),
+                          onPressed: () => delete(vrchatLoginSession: vrchatLoginSession, world: world, favoriteWorld: favoriteWorld),
+                          icon: const Icon(Icons.delete),
+                        ),
+                      ),
+                    ]
+                  : null,
               children: [
                 SizedBox(
                   child: Text(
@@ -62,11 +86,12 @@ class ExtractionWorld extends ConsumerGridWidget {
 
   @override
   Widget simple(BuildContext context, WidgetRef ref, GridConfigNotifier config) {
+    VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "");
     return RenderGrid(
       width: 320,
       height: 64,
       children: [
-        for (VRChatLimitedWorld world in sortWorlds(config, worldList))
+        for (VRChatFavoriteWorld world in sortWorlds(config, favoriteWorld) as List<VRChatFavoriteWorld>)
           () {
             return GenericTemplate(
               imageUrl: world.thumbnailImageUrl,
@@ -82,6 +107,30 @@ class ExtractionWorld extends ConsumerGridWidget {
                   builder: () => WorldDetailsModalBottom(world: world),
                 );
               },
+              stack: config.removeButton
+                  ? [
+                      SizedBox(
+                        height: 17,
+                        width: 17,
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            color: Colors.red,
+                            borderRadius: BorderRadius.only(
+                              bottomRight: Radius.circular(10),
+                            ),
+                          ),
+                        ),
+                      ),
+                      IconButton(
+                        iconSize: 15,
+                        color: Colors.white,
+                        constraints: const BoxConstraints(),
+                        padding: const EdgeInsets.all(0),
+                        onPressed: () => delete(vrchatLoginSession: vrchatLoginSession, world: world, favoriteWorld: favoriteWorld),
+                        icon: const Icon(Icons.delete),
+                      ),
+                    ]
+                  : null,
               children: [
                 SizedBox(
                   width: double.infinity,
@@ -109,7 +158,7 @@ class ExtractionWorld extends ConsumerGridWidget {
       width: 400,
       height: config.worldDetails ? 39 : 26,
       children: [
-        for (VRChatLimitedWorld world in sortWorlds(config, worldList))
+        for (VRChatFavoriteWorld world in sortWorlds(config, favoriteWorld) as List<VRChatFavoriteWorld>)
           () {
             return GenericTemplateText(
               onTap: () => Navigator.push(
@@ -137,7 +186,7 @@ class ExtractionWorld extends ConsumerGridWidget {
               ],
             );
           }(),
-      ].whereType<Widget>().toList(),
+      ],
     );
   }
 }
