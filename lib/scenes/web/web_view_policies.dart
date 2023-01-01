@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 // Package imports:
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:vrc_manager/widgets/config_modal/locale.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 // Project imports:
@@ -27,6 +28,15 @@ class VRChatMobileWebViewUserPolicy extends ConsumerWidget {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.userPolicy),
         actions: <Widget>[
+          IconButton(
+            icon: const Icon(
+              Icons.translate,
+            ),
+            onPressed: () => showModalBottomSheetStatelessWidget(
+              context: context,
+              builder: () => const LocaleModal(),
+            ),
+          ),
           IconButton(
             icon: const Icon(Icons.more_vert),
             onPressed: () {
