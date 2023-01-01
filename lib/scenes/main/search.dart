@@ -14,8 +14,8 @@ import 'package:vrc_manager/scenes/main/main.dart';
 import 'package:vrc_manager/scenes/setting/logger.dart';
 import 'package:vrc_manager/storage/grid_modal.dart';
 import 'package:vrc_manager/widgets/grid_modal/config.dart';
-import 'package:vrc_manager/widgets/grid_view/extraction/user.dart';
-import 'package:vrc_manager/widgets/grid_view/extraction/world.dart';
+import 'package:vrc_manager/widgets/grid_view/extraction/render_grid/user.dart';
+import 'package:vrc_manager/widgets/grid_view/extraction/render_grid/world.dart';
 import 'package:vrc_manager/widgets/loading.dart';
 import 'package:vrc_manager/widgets/modal.dart';
 

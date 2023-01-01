@@ -11,7 +11,7 @@ import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/core/splash.dart';
 import 'package:vrc_manager/scenes/setting/logger.dart';
 import 'package:vrc_manager/widgets/grid_modal/config.dart';
-import 'package:vrc_manager/widgets/grid_view/extraction/favorite_world.dart';
+import 'package:vrc_manager/widgets/grid_view/extraction/render_grid/favorite_world.dart';
 import 'package:vrc_manager/widgets/loading.dart';
 
 class VRChatMobileWorldFavoriteData {
