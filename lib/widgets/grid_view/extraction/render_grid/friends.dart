@@ -36,10 +36,6 @@ class ExtractionFriend extends ConsumerGridWidget {
 
   @override
   Widget normal(BuildContext context, WidgetRef ref, GridConfigNotifier config) {
-    if (config.joinable) {
-      userList.removeWhere((user) => ["private", "offline", "traveling"].contains(user.location));
-    }
-
     return RenderGrid(
       width: 600,
       height: config.worldDetails ? 235 : 130,
@@ -47,6 +43,7 @@ class ExtractionFriend extends ConsumerGridWidget {
       children: [
         for (VRChatFriends user in sortUsers(config, userList) as List<VRChatFriends>)
           () {
+            if (config.joinable && ["private", "offline", "traveling"].contains(user.location)) return null;
             String worldId = user.location.split(":")[0];
             return GenericTemplate(
               imageUrl: user.profilePicOverride ?? user.currentAvatarThumbnailImageUrl,
@@ -82,15 +79,12 @@ class ExtractionFriend extends ConsumerGridWidget {
               ],
             );
           }(),
-      ],
+      ].whereType<Widget>().toList(),
     );
   }
 
   @override
   Widget simple(BuildContext context, WidgetRef ref, GridConfigNotifier config) {
-    if (config.joinable) {
-      userList.removeWhere((user) => ["private", "offline", "traveling"].contains(user.location));
-    }
     return RenderGrid(
       width: 320,
       height: config.worldDetails ? 119 : 64,
@@ -98,6 +92,7 @@ class ExtractionFriend extends ConsumerGridWidget {
       children: [
         for (VRChatFriends user in sortUsers(config, userList) as List<VRChatFriends>)
           () {
+            if (config.joinable && ["private", "offline", "traveling"].contains(user.location)) return null;
             String worldId = user.location.split(":")[0];
             return GenericTemplate(
               imageUrl: user.profilePicOverride ?? user.currentAvatarThumbnailImageUrl,
@@ -131,16 +126,12 @@ class ExtractionFriend extends ConsumerGridWidget {
               ],
             );
           }(),
-      ],
+      ].whereType<Widget>().toList(),
     );
   }
 
   @override
   Widget textOnly(BuildContext context, WidgetRef ref, GridConfigNotifier config) {
-    if (config.joinable) {
-      userList.removeWhere((user) => ["private", "offline", "traveling"].contains(user.location));
-    }
-
     return RenderGrid(
       width: 400,
       height: config.worldDetails ? 39 : 26,
@@ -148,8 +139,8 @@ class ExtractionFriend extends ConsumerGridWidget {
       children: [
         for (VRChatFriends user in sortUsers(config, userList) as List<VRChatFriends>)
           () {
+            if (config.joinable && ["private", "offline", "traveling"].contains(user.location)) return null;
             String worldId = user.location.split(":")[0];
-
             return GenericTemplateText(
               onTap: () => Navigator.push(
                   context,
@@ -190,7 +181,7 @@ class ExtractionFriend extends ConsumerGridWidget {
               ],
             );
           }(),
-      ],
+      ].whereType<Widget>().toList(),
     );
   }
 }
