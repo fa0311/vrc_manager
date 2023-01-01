@@ -1,5 +1,6 @@
 enum VRChatInstanceType {
   public,
   hidden,
-  friends;
+  friends,
+  private;
 }

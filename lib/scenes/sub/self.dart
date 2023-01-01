@@ -20,12 +20,14 @@ import 'package:vrc_manager/widgets/modal/user.dart';
 import 'package:vrc_manager/widgets/user.dart';
 
 class VRChatMobileSelfData {
-  VRChatUserSelfOverload user;
+  VRChatUserSelf user;
+  VRChatUserSelfOverload data;
   VRChatWorld? world;
   VRChatInstance? instance;
 
   VRChatMobileSelfData({
     required this.user,
+    required this.data,
     this.world,
     this.instance,
   });
@@ -38,7 +40,11 @@ final vrchatMobileSelfProvider = FutureProvider<VRChatMobileSelfData>((ref) asyn
   VRChatWorld? world;
   VRChatInstance? instance;
 
-  VRChatUserSelfOverload user = await vrchatLoginSession.user().catchError((e) {
+  VRChatUserSelfOverload data = await vrchatLoginSession.user().catchError((e) {
+    logger.e(getMessage(e), e);
+  });
+
+  VRChatUserSelf user = await vrchatLoginSession.selfUser(data.id).catchError((e) {
     logger.e(getMessage(e), e);
   });
 
@@ -46,7 +52,7 @@ final vrchatMobileSelfProvider = FutureProvider<VRChatMobileSelfData>((ref) asyn
     logger.e(getMessage(e), e);
   });
 
-  if (["private", "offline", "traveling"].contains(user.location)) return VRChatMobileSelfData(user: user);
+  if (["private", "offline", "traveling"].contains(user.location)) return VRChatMobileSelfData(user: user, data: data);
 
   await Future.wait([
     vrchatLoginSession.worlds(user.location.split(":")[0]).then((value) => world = value).catchError((e) {
@@ -56,7 +62,7 @@ final vrchatMobileSelfProvider = FutureProvider<VRChatMobileSelfData>((ref) asyn
       logger.e(getMessage(e), e);
     }),
   ]);
-  return VRChatMobileSelfData(user: user, world: world, instance: instance);
+  return VRChatMobileSelfData(user: user, data: data, world: world, instance: instance);
 });
 
 class VRChatMobileSelf extends ConsumerWidget {

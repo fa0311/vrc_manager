@@ -82,6 +82,17 @@ class VRChatAPI {
         .then((value) => VRChatUser.fromJson(value));
   }
 
+  Future<VRChatUserSelf> selfUser(String uid) {
+    return vrchatSession
+        .get(
+          endpoint(
+            'api/1/users/$uid',
+            apiKey(),
+          ),
+        )
+        .then((value) => VRChatUserSelf.fromJson(value));
+  }
+
   Future<VRChatUserNotes> userNotes(String uid, String note) {
     return vrchatSession.post(
         endpoint(

@@ -112,6 +112,7 @@
     "@____________________WORLD____________________": {},
     "world": "World",
     "privateWorld": "Private World",
+    "loadingWorld": "Loading World",
     "traveling": "traveling",
     "onTheWebsite": "On the website",
     "occupants": "Number of users: {data}",
