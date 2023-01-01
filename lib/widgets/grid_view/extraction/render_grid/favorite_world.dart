@@ -35,7 +35,6 @@ class ExtractionFavoriteWorld extends ConsumerGridWidget {
     return RenderGrid(
       width: 600,
       height: 130,
-      physics: const NeverScrollableScrollPhysics(),
       children: [
         for (VRChatFavoriteWorld world in sortWorlds(config, favoriteWorld) as List<VRChatFavoriteWorld>)
           () {
@@ -91,7 +90,6 @@ class ExtractionFavoriteWorld extends ConsumerGridWidget {
     return RenderGrid(
       width: 320,
       height: 64,
-      physics: const NeverScrollableScrollPhysics(),
       children: [
         for (VRChatFavoriteWorld world in sortWorlds(config, favoriteWorld) as List<VRChatFavoriteWorld>)
           () {
@@ -159,7 +157,6 @@ class ExtractionFavoriteWorld extends ConsumerGridWidget {
     return RenderGrid(
       width: 400,
       height: config.worldDetails ? 39 : 26,
-      physics: const NeverScrollableScrollPhysics(),
       children: [
         for (VRChatFavoriteWorld world in sortWorlds(config, favoriteWorld) as List<VRChatFavoriteWorld>)
           () {

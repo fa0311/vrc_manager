@@ -39,7 +39,6 @@ class ExtractionFriend extends ConsumerGridWidget {
     return RenderGrid(
       width: 600,
       height: config.worldDetails ? 235 : 130,
-      physics: physics ?? const AlwaysScrollableScrollPhysics(),
       children: [
         for (VRChatFriends user in sortUsers(config, userList) as List<VRChatFriends>)
           () {
@@ -88,7 +87,6 @@ class ExtractionFriend extends ConsumerGridWidget {
     return RenderGrid(
       width: 320,
       height: config.worldDetails ? 119 : 64,
-      physics: physics ?? const AlwaysScrollableScrollPhysics(),
       children: [
         for (VRChatFriends user in sortUsers(config, userList) as List<VRChatFriends>)
           () {
@@ -135,7 +133,6 @@ class ExtractionFriend extends ConsumerGridWidget {
     return RenderGrid(
       width: 400,
       height: config.worldDetails ? 39 : 26,
-      physics: physics ?? const AlwaysScrollableScrollPhysics(),
       children: [
         for (VRChatFriends user in sortUsers(config, userList) as List<VRChatFriends>)
           () {

@@ -9,14 +9,12 @@ class RenderGrid extends ConsumerWidget {
   final int width;
   final int height;
   final List<Widget> children;
-  final ScrollPhysics? physics;
 
   const RenderGrid({
     super.key,
     required this.width,
     required this.height,
     required this.children,
-    this.physics,
   });
 
   @override

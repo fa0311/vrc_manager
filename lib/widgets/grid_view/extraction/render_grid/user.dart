@@ -34,7 +34,6 @@ class ExtractionUser extends ConsumerGridWidget {
     return RenderGrid(
       width: 600,
       height: config.worldDetails ? 235 : 130,
-      physics: physics ?? const AlwaysScrollableScrollPhysics(),
       children: [
         for (VRChatUser user in sortUsers(config, userList))
           () {
@@ -67,7 +66,6 @@ class ExtractionUser extends ConsumerGridWidget {
     return RenderGrid(
       width: 320,
       height: config.worldDetails ? 119 : 64,
-      physics: physics ?? const AlwaysScrollableScrollPhysics(),
       children: [
         for (VRChatUser user in sortUsers(config, userList))
           () {
@@ -105,7 +103,6 @@ class ExtractionUser extends ConsumerGridWidget {
     return RenderGrid(
       width: 400,
       height: config.worldDetails ? 39 : 26,
-      physics: const AlwaysScrollableScrollPhysics(),
       children: [
         for (VRChatUser user in sortUsers(config, userList))
           () {
