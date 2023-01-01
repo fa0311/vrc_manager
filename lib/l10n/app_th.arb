@@ -137,6 +137,8 @@
     "darkTheme": "ธีมสีเข้ม",
     "blackTheme": "ธีมสีดำ",
     "trueBlackTheme": "ธีมสีดำที่แท้จริง",
+    "highContrastLightTheme": "ธีมแสงคอนทราสต์สูง",
+    "highContrastDarkTheme": "ธีมสีเข้มที่มีคอนทราสต์สูง",
     "forceExternalBrowser": "เหนือกว่า บังคับเบราว์เซอร์ภายนอก",
     "forceExternalBrowserDetails": "บังคับให้เบราว์เซอร์ภายนอกเปิดขึ้นเมื่อเปิดเบราว์เซอร์ ออกจากระบบ",
     "debugMode": "โหมดดีบัก",

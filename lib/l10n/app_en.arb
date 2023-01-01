@@ -137,6 +137,8 @@
     "darkTheme": "Dark theme",
     "blackTheme": "Black theme",
     "trueBlackTheme": "True black theme",
+    "highContrastLightTheme": "High contrast light theme",
+    "highContrastDarkTheme": "High contrast dark theme",
     "forceExternalBrowser": "Force external browsers",
     "forceExternalBrowserDetails": "Force opening of an external browser when opening a browser",
     "debugMode": "Debug mode",

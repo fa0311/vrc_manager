@@ -11,7 +11,9 @@ enum ThemeBrightness {
   light,
   dark,
   black,
-  trueBlack;
+  trueBlack,
+  highContrastLight,
+  highContrastDark;
 
   String toLocalization(BuildContext context) {
     switch (this) {
@@ -23,6 +25,10 @@ enum ThemeBrightness {
         return AppLocalizations.of(context)!.blackTheme;
       case ThemeBrightness.trueBlack:
         return AppLocalizations.of(context)!.trueBlackTheme;
+      case ThemeBrightness.highContrastLight:
+        return AppLocalizations.of(context)!.highContrastLightTheme;
+      case ThemeBrightness.highContrastDark:
+        return AppLocalizations.of(context)!.highContrastDarkTheme;
     }
   }
 
@@ -31,14 +37,15 @@ enum ThemeBrightness {
       case ThemeBrightness.light:
         return ThemeData(brightness: Brightness.light);
       case ThemeBrightness.dark:
-        return ThemeData(
-          brightness: Brightness.dark,
-          primarySwatch: Colors.grey,
-        );
+        return ThemeData(brightness: Brightness.dark, primarySwatch: Colors.grey);
       case ThemeBrightness.black:
         return blackTheme();
       case ThemeBrightness.trueBlack:
         return trueBlackTheme();
+      case ThemeBrightness.highContrastLight:
+        return highContrastLightTheme();
+      case ThemeBrightness.highContrastDark:
+        return highContrastDarkTheme();
     }
   }
 }

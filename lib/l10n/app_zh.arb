@@ -137,6 +137,8 @@
     "darkTheme": "深色主题",
     "blackTheme": "黑色主题",
     "trueBlackTheme": "真正的黑色主题",
+    "highContrastLightTheme": "高对比度的灯光主题",
+    "highContrastDarkTheme": "高对比度的黑暗主题",
     "forceExternalBrowser": "强制使用外部浏览器",
     "forceExternalBrowserDetails": "打开浏览器时，强制打开一个外部浏览器",
     "debugMode": "调试模式",

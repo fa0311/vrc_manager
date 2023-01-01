@@ -137,6 +137,8 @@
     "darkTheme": "Темная тема",
     "blackTheme": "Черная тема",
     "trueBlackTheme": "Настоящая черная тема",
+    "highContrastLightTheme": "Высококонтрастная светлая тема",
+    "highContrastDarkTheme": "Высококонтрастная темная тема",
     "forceExternalBrowser": "Принудительное использование внешнего браузера",
     "forceExternalBrowserDetails": "Принудительное открытие внешнего браузера при открытии браузера",
     "debugMode": "Режим отладки",

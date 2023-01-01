@@ -137,6 +137,8 @@
     "darkTheme": "Tema sombrio",
     "blackTheme": "Tema negro",
     "trueBlackTheme": "Tema negro verdadero",
+    "highContrastLightTheme": "Tema de luz de alto contraste",
+    "highContrastDarkTheme": "Tema escuro de alto contraste",
     "forceExternalBrowser": "Forçar navegador externo",
     "forceExternalBrowserDetails": "Força um navegador externo a abrir ao abrir o navegador",
     "debugMode": "Modo de depuração",

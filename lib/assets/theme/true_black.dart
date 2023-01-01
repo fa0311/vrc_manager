@@ -39,3 +39,17 @@ ThemeData trueBlackTheme() {
     primarySwatch: Colors.grey,
   );
 }
+
+ThemeData highContrastLightTheme() {
+  return ThemeData(
+    brightness: Brightness.light,
+    colorScheme: const ColorScheme.highContrastLight(),
+  );
+}
+
+ThemeData highContrastDarkTheme() {
+  return ThemeData(
+    brightness: Brightness.dark,
+    colorScheme: const ColorScheme.highContrastDark(),
+  );
+}

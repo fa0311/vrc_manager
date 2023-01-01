@@ -137,6 +137,8 @@
     "darkTheme": "ダークテーマ",
     "blackTheme": "ブラックテーマ",
     "trueBlackTheme": "真っ黒テーマ",
+    "highContrastLightTheme": "ハイコントラストライトテーマ",
+    "highContrastDarkTheme": "ハイコントラストダークテーマ",
     "forceExternalBrowser": "外部のブラウザを強制する",
     "forceExternalBrowserDetails": "ブラウザを開く際に外部のブラウザを強制的に開きます",
     "debugMode": "デバッグモード",
