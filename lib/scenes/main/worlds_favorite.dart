@@ -83,16 +83,20 @@ class VRChatMobileWorldsFavorite extends ConsumerWidget {
       data: (data) {
         return RefreshIndicator(
           onRefresh: () => ref.refresh(vrchatMobileWorldFavoriteSortProvider.future),
-          child: SingleChildScrollView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            child: Column(
-              children: [
-                for (FavoriteWorldData favoriteWorld in data.favoriteWorld)
-                  if (favoriteWorld.list.isNotEmpty) ...[
-                    Text(favoriteWorld.group.displayName),
-                    ExtractionFavoriteWorld(id: GridModalConfigType.favoriteWorlds, favoriteWorld: favoriteWorld.list),
-                  ],
-              ],
+          child: SizedBox(
+            height: double.infinity,
+            width: double.infinity,
+            child: SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              child: Column(
+                children: [
+                  for (FavoriteWorldData favoriteWorld in data.favoriteWorld)
+                    if (favoriteWorld.list.isNotEmpty) ...[
+                      Text(favoriteWorld.group.displayName),
+                      ExtractionFavoriteWorld(id: GridModalConfigType.favoriteWorlds, favoriteWorld: favoriteWorld.list),
+                    ],
+                ],
+              ),
             ),
           ),
         );

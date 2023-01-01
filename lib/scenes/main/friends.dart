@@ -72,11 +72,18 @@ class VRChatMobileFriends extends ConsumerWidget {
       },
       data: (data) => RefreshIndicator(
         onRefresh: () => ref.refresh(vrchatMobileFriendsProvider(offline).future),
-        child: ExtractionFriend(
-          id: offline ? GridModalConfigType.offlineFriends : GridModalConfigType.onlineFriends,
-          userList: data.userList,
-          locationMap: data.locationMap,
-          instanceMap: data.instanceMap,
+        child: SizedBox(
+          height: double.infinity,
+          width: double.infinity,
+          child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            child: ExtractionFriend(
+              id: offline ? GridModalConfigType.offlineFriends : GridModalConfigType.onlineFriends,
+              userList: data.userList,
+              locationMap: data.locationMap,
+              instanceMap: data.instanceMap,
+            ),
+          ),
         ),
       ),
     );

@@ -58,7 +58,14 @@ class VRChatMobileFriendRequest extends ConsumerWidget {
       },
       data: (data) => RefreshIndicator(
         onRefresh: () => ref.refresh(vrchatMobileFriendsRequestProvider.future),
-        child: ExtractionUser(id: GridModalConfigType.favoriteWorlds, userList: data.userList, status: status),
+        child: SizedBox(
+          height: double.infinity,
+          width: double.infinity,
+          child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            child: ExtractionUser(id: GridModalConfigType.favoriteWorlds, userList: data.userList, status: status),
+          ),
+        ),
       ),
     );
   }

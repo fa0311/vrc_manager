@@ -22,129 +22,126 @@ class ExtractionWorld extends ConsumerGridWidget {
 
   @override
   Widget normal(BuildContext context, WidgetRef ref, GridConfigNotifier config) {
-    List<VRChatLimitedWorld> sortedWorldList = sortWorlds(config, worldList);
-
     return RenderGrid(
       width: 600,
       height: 130,
       physics: physics ?? const AlwaysScrollableScrollPhysics(),
-      itemCount: sortedWorldList.length,
-      itemBuilder: (BuildContext context, int index) {
-        VRChatLimitedWorld world = sortedWorldList[index];
-        return GenericTemplate(
-          imageUrl: world.thumbnailImageUrl,
-          onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id),
-              )),
-          onLongPress: () {
-            showModalBottomSheetStatelessWidget(
-              context: context,
-              builder: () => WorldDetailsModalBottom(world: world),
-            );
-          },
-          children: [
-            SizedBox(
-              child: Text(
-                world.name,
-                overflow: TextOverflow.ellipsis,
-                maxLines: 2,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 15,
-                  height: 1,
+      children: [
+        for (VRChatLimitedWorld world in sortWorlds(config, worldList))
+          () {
+            return GenericTemplate(
+              imageUrl: world.thumbnailImageUrl,
+              onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id),
+                  )),
+              onLongPress: () {
+                showModalBottomSheetStatelessWidget(
+                  context: context,
+                  builder: () => WorldDetailsModalBottom(world: world),
+                );
+              },
+              children: [
+                SizedBox(
+                  child: Text(
+                    world.name,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 2,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15,
+                      height: 1,
+                    ),
+                  ),
                 ),
-              ),
-            ),
-          ],
-        );
-      },
+              ],
+            );
+          }(),
+      ],
     );
   }
 
   @override
   Widget simple(BuildContext context, WidgetRef ref, GridConfigNotifier config) {
-    List<VRChatLimitedWorld> sortedWorldList = sortWorlds(config, worldList);
-
     return RenderGrid(
       width: 320,
       height: 64,
       physics: physics ?? const AlwaysScrollableScrollPhysics(),
-      itemCount: sortedWorldList.length,
-      itemBuilder: (BuildContext context, int index) {
-        VRChatLimitedWorld world = sortedWorldList[index];
-        return GenericTemplate(
-          imageUrl: world.thumbnailImageUrl,
-          half: true,
-          onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id),
-              )),
-          onLongPress: () {
-            showModalBottomSheetStatelessWidget(
-              context: context,
-              builder: () => WorldDetailsModalBottom(world: world),
-            );
-          },
-          children: [
-            SizedBox(
-              width: double.infinity,
-              child: Text(
-                world.name,
-                overflow: TextOverflow.ellipsis,
-                maxLines: 2,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 10,
-                  height: 1,
+      children: [
+        for (VRChatLimitedWorld world in sortWorlds(config, worldList))
+          () {
+            return GenericTemplate(
+              imageUrl: world.thumbnailImageUrl,
+              half: true,
+              onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id),
+                  )),
+              onLongPress: () {
+                showModalBottomSheetStatelessWidget(
+                  context: context,
+                  builder: () => WorldDetailsModalBottom(world: world),
+                );
+              },
+              children: [
+                SizedBox(
+                  width: double.infinity,
+                  child: Text(
+                    world.name,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 2,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 10,
+                      height: 1,
+                    ),
+                  ),
                 ),
-              ),
-            ),
-          ],
-        );
-      },
+              ],
+            );
+          }(),
+      ],
     );
   }
 
   @override
   Widget textOnly(BuildContext context, WidgetRef ref, GridConfigNotifier config) {
-    List<VRChatLimitedWorld> sortedWorldList = sortWorlds(config, worldList);
-
     return RenderGrid(
       width: 400,
       height: config.worldDetails ? 39 : 26,
       physics: physics ?? const AlwaysScrollableScrollPhysics(),
-      itemCount: sortedWorldList.length,
-      itemBuilder: (BuildContext context, int index) {
-        VRChatLimitedWorld world = sortedWorldList[index];
-        return GenericTemplateText(
-          onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id),
-              )),
-          onLongPress: () {
-            showModalBottomSheetStatelessWidget(
-              context: context,
-              builder: () => WorldDetailsModalBottom(world: world),
-            );
-          },
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        for (VRChatLimitedWorld world in sortWorlds(config, worldList))
+          () {
+            return GenericTemplateText(
+              onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id),
+                  )),
+              onLongPress: () {
+                showModalBottomSheetStatelessWidget(
+                  context: context,
+                  builder: () => WorldDetailsModalBottom(world: world),
+                );
+              },
               children: [
-                Text(world.name,
-                    style: const TextStyle(
-                      fontSize: 10,
-                      fontWeight: FontWeight.bold,
-                    )),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(world.name,
+                        style: const TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                        )),
+                  ],
+                ),
               ],
-            ),
-          ],
-        );
-      },
+            );
+          }(),
+      ],
     );
   }
 }

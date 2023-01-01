@@ -8,16 +8,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class RenderGrid extends ConsumerWidget {
   final int width;
   final int height;
-  final IndexedWidgetBuilder itemBuilder;
-  final int itemCount;
+  final List<Widget> children;
   final ScrollPhysics? physics;
 
   const RenderGrid({
     super.key,
     required this.width,
     required this.height,
-    required this.itemBuilder,
-    required this.itemCount,
+    required this.children,
     this.physics,
   });
 
@@ -27,17 +25,14 @@ class RenderGrid extends ConsumerWidget {
     int crossAxisCount = screenSize ~/ width + 1;
 
     return SizedBox(
-      height: height * (itemCount ~/ crossAxisCount + 1).toDouble(),
-      child: GridView.builder(
-        itemCount: itemCount,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: crossAxisCount,
-          crossAxisSpacing: 0,
-          mainAxisSpacing: 0,
-          childAspectRatio: screenSize / crossAxisCount / height,
-        ),
-        itemBuilder: itemBuilder,
-        physics: physics,
+      height: (height * ((children.length + 1) ~/ crossAxisCount)).toDouble(),
+      child: GridView.count(
+        physics: const NeverScrollableScrollPhysics(),
+        crossAxisCount: crossAxisCount,
+        crossAxisSpacing: 0,
+        mainAxisSpacing: 0,
+        childAspectRatio: screenSize / crossAxisCount / height,
+        children: children,
       ),
     );
   }
