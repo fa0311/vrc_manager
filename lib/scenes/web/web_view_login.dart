@@ -35,6 +35,8 @@ final webViewInitProvider = FutureProvider.autoDispose<void>((ref) async {
         name: key,
         url: url,
         value: cookieMap[key] ?? "",
+        isSecure: true,
+        isHttpOnly: true,
       )
   ]);
 });
@@ -102,7 +104,6 @@ class VRChatMobileWebViewLogin extends ConsumerWidget {
               }
               AccountConfig config = ref.read(loginDataProvider).accountConfig;
               config.setCookie(Session().encodeCookie(cookieMap));
-              config.setRememberLoginInfo(ref.read(rememberPasswordProvider));
               ref.read(accountListConfigProvider).addAccount(config);
               await ref.read(accountConfigProvider).login(config);
             },
