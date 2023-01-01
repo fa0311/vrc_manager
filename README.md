@@ -3,6 +3,9 @@
 VRChat の非公式な API を利用した VRChat のモバイルクライアント<br>
 Flutter で作成されたシンプルな UI が特徴的です<br>
 
+## <!> Updates from v3.x.x to v4.0.0 are not automatic.
+Download the latest app from [release](https://github.com/fa0311/vrc_manager/releases).
+
 ## 特徴
 
 - **マルチプラットフォーム** Android Windows(iOS 用の PullRequest Build は歓迎します)
