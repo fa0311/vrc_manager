@@ -104,6 +104,7 @@ class VRChatMobileUser extends ConsumerWidget {
               loading: () => const Loading(),
               error: (e, trace) {
                 logger.w(getMessage(e), e, trace);
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: ErrorSnackBar(e)));
                 return ScrollWidget(
                   onRefresh: () => ref.refresh((vrchatMobileUserProvider(userId).future)),
                   child: ErrorPage(loggerReport: ref.read(loggerReportProvider)),

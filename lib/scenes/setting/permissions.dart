@@ -99,6 +99,7 @@ class VRChatMobileSettingsPermissions extends ConsumerWidget {
                       loading: () => const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()),
                       error: (e, trace) {
                         logger.w(getMessage(e), e, trace);
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: ErrorSnackBar(e)));
                         return const Icon(
                           Icons.close,
                           color: Colors.red,

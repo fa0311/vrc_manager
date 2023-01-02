@@ -109,6 +109,7 @@ class VRChatMobileHelp extends ConsumerWidget {
                   ),
                   error: (e, trace) {
                     logger.w(getMessage(e), e, trace);
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: ErrorSnackBar(e)));
                     return ListTile(
                       title: Text(AppLocalizations.of(context)!.version),
                       subtitle: Text(AppLocalizations.of(context)!.error),

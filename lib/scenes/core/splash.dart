@@ -95,6 +95,7 @@ class VRChatMobileSplash extends ConsumerWidget {
           ),
           error: (e, trace) {
             logger.w(getMessage(e), e, trace);
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: ErrorSnackBar(e)));
             return ScrollWidget(
               onRefresh: () => ref.refresh(splashProvider.future),
               child: ErrorPage(loggerReport: ref.read(loggerReportProvider)),

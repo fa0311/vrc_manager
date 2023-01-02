@@ -184,6 +184,7 @@ class EditNote extends ConsumerWidget {
       loading: () => const Center(child: CircularProgressIndicator()),
       error: (e, trace) {
         logger.w(getMessage(e), e, trace);
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: ErrorSnackBar(e)));
         return ScrollWidget(
           onRefresh: () => ref.refresh(vrchatMobileSelfProvider.future),
           child: ErrorPage(loggerReport: ref.read(loggerReportProvider)),
