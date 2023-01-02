@@ -1,4 +1,5 @@
 // Flutter imports:
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 // Package imports:
@@ -80,8 +81,13 @@ class NormalDrawer extends ConsumerWidget {
                   decoration: BoxDecoration(color: Theme.of(context).colorScheme.background),
                   accountName: Text(account!.data!.username),
                   accountEmail: Text(account.data!.statusDescription ?? ""),
-                  currentAccountPicture: CircleAvatar(
-                    backgroundImage: NetworkImage(account.data!.profilePicOverride ?? account.data!.currentAvatarImageUrl),
+                  currentAccountPicture: CachedNetworkImage(
+                    imageUrl: account.data!.profilePicOverride ?? account.data!.currentAvatarImageUrl.toString(),
+                    fit: BoxFit.fitWidth,
+                    progressIndicatorBuilder: (context, url, downloadProgress) =>
+                        const Padding(padding: EdgeInsets.all(20), child: CircularProgressIndicator()),
+                    errorWidget: (context, url, error) => const Icon(Icons.error),
+                    imageBuilder: (context, imageProvider) => CircleAvatar(backgroundImage: imageProvider),
                   ),
                 ),
               ),
