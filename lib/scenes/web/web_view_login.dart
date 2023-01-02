@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 // Package imports:
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:vrc_manager/api/assets/assets.dart';
 
 // Project imports:
 import 'package:vrc_manager/api/main.dart';
@@ -23,7 +24,6 @@ final webViewControllerProvider = StateProvider<InAppWebViewController?>((ref) =
 
 final webViewInitProvider = FutureProvider.autoDispose<void>((ref) async {
   VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "");
-  Uri url = Uri.https("vrchat.com");
   CookieManager cookieManager = CookieManager.instance();
   await cookieManager.deleteAllCookies();
   final cookieMap = Session().decodeCookie(vrchatLoginSession.getCookie());
@@ -31,7 +31,7 @@ final webViewInitProvider = FutureProvider.autoDispose<void>((ref) async {
     for (String key in cookieMap.keys)
       cookieManager.setCookie(
         name: key,
-        url: url,
+        url: VRChatAssets.vrchat,
         value: cookieMap[key] ?? "",
         isSecure: true,
         isHttpOnly: true,
@@ -44,7 +44,7 @@ class VRChatMobileWebViewLogin extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    Uri initUrl = ref.watch(urlProvider) ?? Uri.https("vrchat.com", "/home/login");
+    Uri initUrl = ref.watch(urlProvider) ?? VRChatAssets.login;
     InAppWebViewController? webViewController = ref.watch(webViewControllerProvider);
     AsyncValue<void> data = ref.watch(webViewInitProvider);
     Future<bool> exitApp(BuildContext context) async {
@@ -81,9 +81,8 @@ class VRChatMobileWebViewLogin extends ConsumerWidget {
             },
             onTitleChanged: (controller, title) async {
               if (title != "Home - VRChat") return;
-              Uri url = Uri.https("vrchat.com");
               CookieManager cookieManager = CookieManager.instance();
-              List<Cookie> cookieList = await cookieManager.getCookies(url: url);
+              List<Cookie> cookieList = await cookieManager.getCookies(url: VRChatAssets.vrchat);
               Map<String, String> cookieMap = {};
               for (Cookie cookie in cookieList) {
                 cookieMap[cookie.name] = cookie.value;

@@ -6,10 +6,11 @@ import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:vrc_manager/api/assets/instance_type.dart';
 
 // Project imports:
 import 'package:vrc_manager/api/data_class.dart';
-import 'package:vrc_manager/api/enum/region.dart';
+import 'package:vrc_manager/api/assets/region.dart';
 import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/core/splash.dart';
@@ -33,20 +34,20 @@ String genRandNumber([int length = 5]) {
   return randomStr;
 }
 
-Future<String> genInstanceId({required VRChatAPI vrchatLoginSession, required String region, required String type, required bool canRequestInvite}) async {
+Future<String> genInstanceId({required VRChatAPI vrchatLoginSession, required String region, required VRChatInstanceTypeExt type}) async {
   VRChatUserSelfOverload user = await vrchatLoginSession.user().catchError((e) {
     logger.e(getMessage(e), e);
   });
   String url = genRandNumber();
 
-  if (["hidden", "friends", "private"].contains(type)) {
+  if ([VRChatInstanceType.hidden, VRChatInstanceType.friends, VRChatInstanceType.private].contains(type.type)) {
     url += "~$type(${user.id})";
   }
-  if (canRequestInvite) {
+  if (type.canRequestInvite) {
     url += "~canRequestInvite";
   }
   url += "~region($region)";
-  if (["hidden", "friends", "private"].contains(type)) {
+  if ([VRChatInstanceType.hidden, VRChatInstanceType.friends, VRChatInstanceType.private].contains(type.type)) {
     url += "~nonce(${genRandHex(48)})";
   }
   return url;
@@ -93,8 +94,7 @@ class SelectWordType extends ConsumerWidget {
             ListTile(
               title: Text(type.toLocalization(context)),
               onTap: () async {
-                String instanceId =
-                    await genInstanceId(vrchatLoginSession: vrchatLoginSession, region: regionText, type: type.text, canRequestInvite: type.canRequestInvite);
+                String instanceId = await genInstanceId(vrchatLoginSession: vrchatLoginSession, region: regionText, type: type);
                 Navigator.of(context).popUntil((route) => route.isFirst);
                 showModalBottomSheetStatelessWidget(
                   context: context,

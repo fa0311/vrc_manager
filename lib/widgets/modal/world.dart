@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 // Package imports:
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:vrc_manager/api/assets/assets.dart';
 
 // Project imports:
 import 'package:vrc_manager/api/data_class.dart';
@@ -25,7 +26,7 @@ class WorldDetailsModalBottom extends ConsumerWidget {
     return SingleChildScrollView(
       child: Column(
         children: [
-          ShareUrlTileWidget(url: Uri.https("vrchat.com", "/home/world/${world.id}")),
+          ShareUrlTileWidget(url: VRChatAssets.worlds.resolve(world.id)),
           FavoriteListTileWidget(world: world),
           LaunchWorldListTileWidget(world: world),
           OpenInJsonViewer(content: world.content),
@@ -68,7 +69,7 @@ class UserInstanceDetailsModalBottom extends ConsumerWidget {
     return SingleChildScrollView(
       child: Column(
         children: [
-          ShareUrlTileWidget(url: Uri.https("vrchat.com", "/home/user/${user.id}")),
+          ShareUrlTileWidget(url: VRChatAssets.user.resolve(user.id)),
           ShareInstanceTileWidget(worldId: world.id, instanceId: instance.instanceId),
           FavoriteListTileWidget(world: world),
           SelfInviteListTileWidget(instance: instance),

@@ -15,6 +15,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 
 // Project imports:
 import 'package:vrc_manager/api/data_class.dart';
+import 'package:vrc_manager/assets.dart';
 import 'package:vrc_manager/assets/date.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/storage/accessibility.dart';
@@ -107,7 +108,7 @@ class ErrorPage extends ConsumerWidget {
                   await copyToClipboard(context, text);
 
                   Widget? value = await openInBrowser(
-                    url: Uri.https("github.com", "/fa0311/vrc_manager/issues/new", {"template": "redirected-from-app.yml"}),
+                    url: Assets.report,
                     forceExternal: accessibilityConfig.forceExternalBrowser,
                   );
                   if (value != null) {

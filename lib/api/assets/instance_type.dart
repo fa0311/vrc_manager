@@ -4,3 +4,9 @@ enum VRChatInstanceType {
   friends,
   private;
 }
+
+enum VRChatInstanceIdOther {
+  traveling,
+  private,
+  offline;
+}

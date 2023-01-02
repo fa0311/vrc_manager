@@ -4,10 +4,11 @@ import 'package:flutter/material.dart';
 // Package imports:
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:vrc_manager/api/assets/assets.dart';
 
 // Project imports:
 import 'package:vrc_manager/api/data_class.dart';
-import 'package:vrc_manager/api/enum/instance_type.dart';
+import 'package:vrc_manager/api/assets/instance_type.dart';
 import 'package:vrc_manager/scenes/sub/world.dart';
 import 'package:vrc_manager/widgets/grid_view/template/template.dart';
 import 'package:vrc_manager/widgets/modal.dart';
@@ -15,16 +16,16 @@ import 'package:vrc_manager/widgets/modal/world.dart';
 import 'package:vrc_manager/widgets/region.dart';
 
 enum VRChatInstanceTypeExt {
-  public(text: "public", canRequestInvite: false),
-  friendsPlus(text: "hidden", canRequestInvite: false),
-  friends(text: "friends", canRequestInvite: false),
-  invitePlus(text: "private", canRequestInvite: true),
-  invite(text: "private", canRequestInvite: false);
+  public(type: VRChatInstanceType.public, canRequestInvite: false),
+  friendsPlus(type: VRChatInstanceType.hidden, canRequestInvite: false),
+  friends(type: VRChatInstanceType.friends, canRequestInvite: false),
+  invitePlus(type: VRChatInstanceType.private, canRequestInvite: true),
+  invite(type: VRChatInstanceType.private, canRequestInvite: false);
 
-  final String text;
+  final VRChatInstanceType type;
   final bool canRequestInvite;
 
-  const VRChatInstanceTypeExt({required this.text, required this.canRequestInvite});
+  const VRChatInstanceTypeExt({required this.type, required this.canRequestInvite});
 
   String toLocalization(BuildContext context) {
     switch (this) {
@@ -151,15 +152,8 @@ class PrivateWorld extends ConsumerWidget {
     return GenericTemplate(
       card: card,
       half: half,
-      imageUrl: "https://assets.vrchat.com/www/images/default_private_image.png",
+      imageUrl: VRChatAssets.defaultPrivateImage.toString(),
       children: [
-        SizedBox(
-          width: double.infinity,
-          child: Text(
-            "Private",
-            style: TextStyle(fontSize: half ? 10 : 15),
-          ),
-        ),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 2),
           child: SizedBox(
@@ -193,7 +187,7 @@ class TravelingWorld extends ConsumerWidget {
     return GenericTemplate(
       card: card,
       half: half,
-      imageUrl: "https://assets.vrchat.com/www/images/default_between_image.png",
+      imageUrl: VRChatAssets.defaultBetweenImage.toString(),
       children: [
         SizedBox(
           width: double.infinity,

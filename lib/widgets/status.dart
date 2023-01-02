@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
-import 'package:vrc_manager/api/enum/status.dart';
+import 'package:vrc_manager/api/assets/status.dart';
 
 // Project imports:
 class StatusWidget extends ConsumerWidget {

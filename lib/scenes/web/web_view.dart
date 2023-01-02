@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:vrc_manager/api/assets/assets.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 // Project imports:
@@ -39,7 +40,7 @@ class VRChatMobileWebView extends ConsumerWidget {
         WebViewCookie(
           name: key,
           value: cookieMap[key] ?? "",
-          domain: ".vrchat.com",
+          domain: VRChatAssets.vrchat.host,
         ),
       );
     }
@@ -78,7 +79,7 @@ class VRChatMobileWebView extends ConsumerWidget {
             ref.read(webViewControllerProvider.notifier).state = value;
           },
           navigationDelegate: (NavigationRequest request) async {
-            if (ref.watch(accessibilityConfigProvider).forceExternalBrowser && Uri.parse(request.url).host != "vrchat.com") {
+            if (ref.watch(accessibilityConfigProvider).forceExternalBrowser && Uri.parse(request.url).host != VRChatAssets.vrchat.host) {
               Widget? value = await openInBrowser(
                 url: Uri.parse(request.url),
                 forceExternal: accessibilityConfig.forceExternalBrowser,

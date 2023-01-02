@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 // Package imports:
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:vrc_manager/api/assets/instance_type.dart';
 
 // Project imports:
 import 'package:vrc_manager/api/data_class.dart';
@@ -52,7 +53,7 @@ final vrchatMobileSelfProvider = FutureProvider<VRChatMobileSelfData>((ref) asyn
     logger.e(getMessage(e), e);
   });
 
-  if (["private", "offline", "traveling"].contains(user.location)) return VRChatMobileSelfData(user: user, data: data);
+  if (VRChatInstanceIdOther.values.any((id) => id.name == user.location)) return VRChatMobileSelfData(user: user, data: data);
 
   await Future.wait([
     vrchatLoginSession.worlds(user.location.split(":")[0]).then((value) => world = value).catchError((e) {
@@ -120,9 +121,9 @@ class VRChatMobileSelf extends ConsumerWidget {
                       Container(
                         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
                         child: () {
-                          if (data.user.location == "private") return const PrivateWorld();
-                          if (data.user.location == "traveling") return const TravelingWorld();
-                          if (data.user.location == "offline") return null;
+                          if (data.user.location == VRChatInstanceIdOther.private.name) return const PrivateWorld();
+                          if (data.user.location == VRChatInstanceIdOther.traveling.name) return const TravelingWorld();
+                          if (data.user.location == VRChatInstanceIdOther.offline.name) return null;
                           return data.world == null ? null : InstanceWidget(world: data.world!, instance: data.instance!);
                         }(),
                       ),

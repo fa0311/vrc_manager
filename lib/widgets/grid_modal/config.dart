@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:vrc_manager/api/assets/assets.dart';
 
 enum GridModalConfigType {
   onlineFriends,
@@ -83,7 +84,7 @@ GridModalConfigData getGridModalConfig({
   switch (type) {
     case GridModalConfigType.onlineFriends:
       return GridModalConfigData()
-        ..url = Uri.https("vrchat.com", "/home/locations")
+        ..url = VRChatAssets.locations
         ..joinable = true
         ..worldDetails = true
         ..sortMode = [
@@ -99,7 +100,7 @@ GridModalConfigData getGridModalConfig({
         ];
     case GridModalConfigType.offlineFriends:
       return GridModalConfigData()
-        ..url = Uri.https("vrchat.com", "/home/locations")
+        ..url = VRChatAssets.locations
         ..sortMode = [
           SortMode.normal,
           SortMode.name,
@@ -112,7 +113,7 @@ GridModalConfigData getGridModalConfig({
         ];
     case GridModalConfigType.friendsRequest:
       return GridModalConfigData()
-        ..url = Uri.https("vrchat.com", "/home/messages")
+        ..url = VRChatAssets.messages
         ..sortMode = [
           SortMode.normal,
           SortMode.name,
@@ -124,7 +125,7 @@ GridModalConfigData getGridModalConfig({
         ];
     case GridModalConfigType.searchUsers:
       return GridModalConfigData()
-        ..url = Uri.https("vrchat.com", "/home/search/$text")
+        ..url = VRChatAssets.search.resolve(text)
         ..displayMode = [
           DisplayMode.normal,
           DisplayMode.simple,
@@ -136,7 +137,7 @@ GridModalConfigData getGridModalConfig({
         ];
     case GridModalConfigType.searchWorlds:
       return GridModalConfigData()
-        ..url = Uri.https("vrchat.com", "/home/search/$text")
+        ..url = VRChatAssets.search.resolve(text)
         ..displayMode = [
           DisplayMode.normal,
           DisplayMode.simple,
@@ -153,7 +154,7 @@ GridModalConfigData getGridModalConfig({
         ];
     case GridModalConfigType.favoriteWorlds:
       return GridModalConfigData()
-        ..url = Uri.https("vrchat.com", "/home/worlds")
+        ..url = VRChatAssets.favoritesWorlds
         ..removeButton = true
         ..displayMode = [
           DisplayMode.normal,

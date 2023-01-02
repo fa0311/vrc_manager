@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 // Package imports:
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:vrc_manager/assets.dart';
 import 'package:vrc_manager/widgets/config_modal/locale.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -19,8 +20,6 @@ import 'package:vrc_manager/widgets/share.dart';
 
 class VRChatMobileWebViewUserPolicy extends ConsumerWidget {
   const VRChatMobileWebViewUserPolicy({Key? key}) : super(key: key);
-
-  static Uri url = Uri.https("github.com", "/fa0311/vrc_manager/blob/master/docs/user_policies/ja.md");
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -42,7 +41,7 @@ class VRChatMobileWebViewUserPolicy extends ConsumerWidget {
             onPressed: () {
               showModalBottomSheetStatelessWidget(
                 context: context,
-                builder: () => ShareUrlListTile(url: url, browserExternalForce: true),
+                builder: () => ShareUrlListTile(url: Assets.userPolicy, browserExternalForce: true),
               );
             },
           ),
@@ -95,11 +94,11 @@ class VRChatMobileWebViewUserPolicy extends ConsumerWidget {
       body: () {
         if (Platform.isAndroid || Platform.isIOS) {
           return WebView(
-            initialUrl: url.toString(),
+            initialUrl: Assets.userPolicy.toString(),
             javascriptMode: JavascriptMode.unrestricted,
           );
         } else {
-          openInBrowser(url: url, forceExternal: true).then((value) {
+          openInBrowser(url: Assets.userPolicy, forceExternal: true).then((value) {
             if (value == null) return;
             Navigator.push(
               context,

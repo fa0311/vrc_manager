@@ -1,7 +1,7 @@
 // Project imports:
-import 'package:vrc_manager/api/enum/instance_type.dart';
-import 'package:vrc_manager/api/enum/region.dart';
-import 'enum/status.dart';
+import 'package:vrc_manager/api/assets/instance_type.dart';
+import 'package:vrc_manager/api/assets/region.dart';
+import 'assets/status.dart';
 
 class VRChatStatus {
   dynamic content;
@@ -172,7 +172,7 @@ class VRChatUser {
     statusDescription = content['statusDescription'] == "" ? null : content['statusDescription'];
     tags = content['tags'].cast<String>();
     userIcon = content['userIcon'];
-    location = content['location'] == "" ? "offline" : content['location'] ?? "offline";
+    location = content['location'] == "" ? VRChatInstanceIdOther.offline.name : content['location'] ?? VRChatInstanceIdOther.offline.name;
 
     allowAvatarCopying = content['allowAvatarCopying'] ?? false;
     for (dynamic link in content['bioLinks'] ?? []) {

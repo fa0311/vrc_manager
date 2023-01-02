@@ -11,8 +11,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 // Project imports:
 import 'package:vrc_manager/api/data_class.dart';
-import 'package:vrc_manager/api/enum/icon.dart';
+import 'package:vrc_manager/api/assets/icon.dart';
 import 'package:vrc_manager/api/main.dart';
+import 'package:vrc_manager/assets.dart';
 import 'package:vrc_manager/assets/anchor.dart';
 import 'package:vrc_manager/assets/date.dart';
 import 'package:vrc_manager/main.dart';
@@ -235,7 +236,7 @@ class BioLink extends ConsumerWidget {
               padding: const EdgeInsets.all(5),
               child: Ink(
                 child: SvgPicture.asset(
-                  "assets/svg/${byVrchatExternalServices(url)}.svg",
+                  Assets.svg.resolve("${byVrchatExternalServices(url).text}.svg").toFilePath(),
                   width: 20,
                   height: 20,
                   color: Color(byVrchatExternalServices(url).color),

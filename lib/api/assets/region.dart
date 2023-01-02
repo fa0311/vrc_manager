@@ -1,3 +1,5 @@
+import 'package:vrc_manager/api/assets/assets.dart';
+
 enum VRChatRegion {
   us(text: "/www/images/Region_US.png"),
   use(text: "/www/images/Region_US.png"),
@@ -6,7 +8,7 @@ enum VRChatRegion {
 
   final String text;
   Uri toUri() {
-    return Uri.https('assets.vrchat.com', text);
+    return VRChatAssets.assets.resolve(text);
   }
 
   const VRChatRegion({required this.text});

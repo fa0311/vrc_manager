@@ -9,13 +9,14 @@ import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:vrc_manager/api/assets/assets.dart';
 
 // Project imports:
 import 'package:vrc_manager/scenes/web/web_view.dart';
 
 Future<Widget?> openInBrowser({required Uri url, required bool forceExternal}) async {
   if (Platform.isAndroid || Platform.isIOS) {
-    if (!forceExternal || url.host == "vrchat.com") {
+    if (!forceExternal || url.host == VRChatAssets.vrchat.host) {
       return VRChatMobileWebView(initUrl: url);
     } else {
       if (await canLaunchUrl(url)) {
