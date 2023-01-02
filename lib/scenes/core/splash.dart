@@ -83,42 +83,41 @@ class VRChatMobileSplash extends ConsumerWidget {
     textStream(context: context, forceExternal: accessibilityConfig.forceExternalBrowser);
 
     return Scaffold(
-      body: data.when(
-        loading: () => SizedBox(
-          width: MediaQuery.of(context).size.width,
-          child: const Center(
+      body: SafeArea(
+        child: data.when(
+          loading: () => const Center(
             child: SizedBox(
               width: 100,
               height: 100,
               child: CircularProgressIndicator(strokeWidth: 8),
             ),
           ),
+          error: (e, trace) {
+            logger.w(getMessage(e), e, trace);
+            return const ErrorPage();
+          },
+          data: (SplashData data) {
+            switch (data) {
+              case SplashData.home:
+                () async {
+                  if (!Platform.isAndroid && !Platform.isIOS) return;
+                  if (!ref.read(isFirstProvider)) return;
+                  String? initialText = await ReceiveSharingIntent.getInitialText();
+                  if (initialText == null) return;
+                  Widget? value = await urlParser(url: Uri.parse(initialText), forceExternal: accessibilityConfig.forceExternalBrowser);
+                  if (value == null) return;
+                  Navigator.of(context).popUntil((route) => route.isFirst);
+                  Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => value));
+                  ref.read(isFirstProvider.notifier).state = false;
+                }();
+                return child;
+              case SplashData.login:
+                return login;
+              case SplashData.userPolicy:
+                return const VRChatMobileWebViewUserPolicy();
+            }
+          },
         ),
-        error: (e, trace) {
-          logger.w(getMessage(e), e, trace);
-          return const ErrorPage();
-        },
-        data: (SplashData data) {
-          switch (data) {
-            case SplashData.home:
-              () async {
-                if (!Platform.isAndroid && !Platform.isIOS) return;
-                if (!ref.read(isFirstProvider)) return;
-                String? initialText = await ReceiveSharingIntent.getInitialText();
-                if (initialText == null) return;
-                Widget? value = await urlParser(url: Uri.parse(initialText), forceExternal: accessibilityConfig.forceExternalBrowser);
-                if (value == null) return;
-                Navigator.of(context).popUntil((route) => route.isFirst);
-                Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => value));
-                ref.read(isFirstProvider.notifier).state = false;
-              }();
-              return child;
-            case SplashData.login:
-              return login;
-            case SplashData.userPolicy:
-              return const VRChatMobileWebViewUserPolicy();
-          }
-        },
       ),
     );
   }

@@ -26,84 +26,81 @@ class VRChatMobileSettingsOtherAccount extends ConsumerWidget {
           title: Text(AppLocalizations.of(context)!.accountSwitchSetting),
         ),
         body: SafeArea(
-          child: SizedBox(
-            width: MediaQuery.of(context).size.width,
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  for (AccountConfig account in ref.watch(accountListConfigProvider).accountList)
-                    Card(
-                      elevation: 20.0,
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(5),
-                        onTap: () async {
-                          await ref.read(accountConfigProvider).login(account);
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Row(
-                            children: <Widget>[
-                              Expanded(
-                                child: SizedBox(
-                                  width: double.infinity,
-                                  child: Text(
-                                    account.displayName ?? AppLocalizations.of(context)!.unknown,
-                                    style: const TextStyle(fontWeight: FontWeight.bold),
-                                  ),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                for (AccountConfig account in ref.watch(accountListConfigProvider).accountList)
+                  Card(
+                    elevation: 20.0,
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(5),
+                      onTap: () async {
+                        await ref.read(accountConfigProvider).login(account);
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Row(
+                          children: <Widget>[
+                            Expanded(
+                              child: SizedBox(
+                                width: double.infinity,
+                                child: Text(
+                                  account.displayName ?? AppLocalizations.of(context)!.unknown,
+                                  style: const TextStyle(fontWeight: FontWeight.bold),
                                 ),
                               ),
-                              SizedBox(
-                                width: 50,
-                                child: IconButton(
-                                  onPressed: () {
-                                    showDialog(
-                                      context: context,
-                                      builder: (_) {
-                                        return AlertDialog(
-                                          title: Text(AppLocalizations.of(context)!.deleteLoginInfoConfirm),
-                                          actions: <Widget>[
-                                            TextButton(
-                                              child: Text(AppLocalizations.of(context)!.cancel),
-                                              onPressed: () => Navigator.pop(context),
-                                            ),
-                                            TextButton(
-                                              onPressed: () {
-                                                ref.read(accountListConfigProvider).removeAccount(account);
-                                                Navigator.pop(context);
-                                              },
-                                              child: Text(AppLocalizations.of(context)!.delete),
-                                            ),
-                                          ],
-                                        );
-                                      },
-                                    );
-                                  },
-                                  icon: const Icon(Icons.delete),
-                                ),
+                            ),
+                            SizedBox(
+                              width: 50,
+                              child: IconButton(
+                                onPressed: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (_) {
+                                      return AlertDialog(
+                                        title: Text(AppLocalizations.of(context)!.deleteLoginInfoConfirm),
+                                        actions: <Widget>[
+                                          TextButton(
+                                            child: Text(AppLocalizations.of(context)!.cancel),
+                                            onPressed: () => Navigator.pop(context),
+                                          ),
+                                          TextButton(
+                                            onPressed: () {
+                                              ref.read(accountListConfigProvider).removeAccount(account);
+                                              Navigator.pop(context);
+                                            },
+                                            child: Text(AppLocalizations.of(context)!.delete),
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                },
+                                icon: const Icon(Icons.delete),
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
-                  TextButton(
-                    style: ElevatedButton.styleFrom(
-                      foregroundColor: Colors.grey,
-                    ),
-                    onPressed: () {
-                      ref.read(accountConfigProvider).logout();
-                      Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => const VRChatMobileSplash(),
-                        ),
-                        (_) => false,
-                      );
-                    },
-                    child: Text(AppLocalizations.of(context)!.addAccount),
                   ),
-                ],
-              ),
+                TextButton(
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.grey,
+                  ),
+                  onPressed: () {
+                    ref.read(accountConfigProvider).logout();
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const VRChatMobileSplash(),
+                      ),
+                      (_) => false,
+                    );
+                  },
+                  child: Text(AppLocalizations.of(context)!.addAccount),
+                ),
+              ],
             ),
           ),
         ),
