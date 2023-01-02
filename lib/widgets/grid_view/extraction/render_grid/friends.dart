@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 // Package imports:
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:vrc_manager/api/assets/instance_type.dart';
 
 // Project imports:
+import 'package:vrc_manager/api/assets/instance_type.dart';
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/assets/sort/users.dart';
 import 'package:vrc_manager/scenes/sub/user.dart';
@@ -117,11 +117,7 @@ class ExtractionFriend extends ConsumerGridWidget {
               }(),
               children: [
                 Username(user: user, diameter: 12),
-                for (String text in [
-                  if (user.statusDescription != null) user.statusDescription!,
-                ].whereType<String>()) ...[
-                  Text(text, style: const TextStyle(fontSize: 10)),
-                ],
+                if (user.statusDescription != null) Text(user.statusDescription!, style: const TextStyle(fontSize: 10)),
               ],
             );
           }(),

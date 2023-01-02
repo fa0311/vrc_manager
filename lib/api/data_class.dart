@@ -186,7 +186,7 @@ class VRChatUser {
     lastActivity = content['last_activity'];
     lastLogin = content['last_login'] == null || content['last_login'] == "" ? null : DateTime.parse(content['last_login']);
     state = content['state'];
-    note = content['note'] == "" ? null : content['note'];
+    note = content['note'];
   }
 }
 

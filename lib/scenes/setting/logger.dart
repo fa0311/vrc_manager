@@ -19,9 +19,10 @@ import 'package:vrc_manager/assets.dart';
 import 'package:vrc_manager/assets/date.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/storage/accessibility.dart';
+import 'package:vrc_manager/widgets/scroll.dart';
 import 'package:vrc_manager/widgets/share.dart';
 
-final loggerReportCounterProvider = StateProvider<int>((ref) => 0);
+final loggerReportProvider = StateProvider<Iterable<OutputEventExt>>((ref) => loggerOutput.state.reversed);
 
 class ConsoleOutputExt extends ConsoleOutput {
   List<OutputEventExt> state = [];
@@ -43,15 +44,15 @@ class LoggerReport extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.watch(loggerReportCounterProvider);
+    Iterable<OutputEventExt> log = ref.watch(loggerReportProvider);
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.log),
       ),
       body: SafeArea(
-        child: RefreshIndicator(
-          onRefresh: () async => ref.read(loggerReportCounterProvider.notifier).state++,
-          child: const ErrorPage(message: true),
+        child: ScrollWidget(
+          onRefresh: () async => ref.refresh(loggerReportProvider.notifier),
+          child: ErrorPage(message: true, loggerReport: log),
         ),
       ),
     );
@@ -60,74 +61,74 @@ class LoggerReport extends ConsumerWidget {
 
 class ErrorPage extends ConsumerWidget {
   final bool message;
+  final Iterable<OutputEventExt> loggerReport;
 
-  const ErrorPage({super.key, this.message = false});
+  const ErrorPage({
+    super.key,
+    required this.loggerReport,
+    this.message = false,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     AccessibilityConfigNotifier accessibilityConfig = ref.watch(accessibilityConfigProvider);
 
-    ref.watch(loggerReportCounterProvider);
-    return SingleChildScrollView(
-      physics: const AlwaysScrollableScrollPhysics(),
-      child: Column(
-        children: [
-          if (message)
-            Card(
-              child: ListTile(
-                title: Text(AppLocalizations.of(context)!.reportMessage2),
-              ),
+    return Column(
+      children: [
+        if (message)
+          Card(
+            child: ListTile(
+              title: Text(AppLocalizations.of(context)!.reportMessage2),
             ),
-          if (!message)
-            Card(
-              child: ListTile(
-                title: Text(AppLocalizations.of(context)!.error),
-                subtitle: Text([AppLocalizations.of(context)!.reportMessage1, AppLocalizations.of(context)!.reportMessage2].join('\n')),
-              ),
+          ),
+        if (!message)
+          Card(
+            child: ListTile(
+              title: Text(AppLocalizations.of(context)!.error),
+              subtitle: Text([AppLocalizations.of(context)!.reportMessage1, AppLocalizations.of(context)!.reportMessage2].join('\n')),
             ),
-          for (OutputEventExt state in loggerOutput.state.reversed)
-            Card(
-              child: ExpansionTile(
-                title: Text(state.lines[state.lines.length - 2].replaceAll(RegExp(r'\u001b\[([0-9]|;)+m'), '').replaceAll('│ ', '')),
-                subtitle: Text(generalDateDifference(context, state.time)),
-                trailing: OutlinedButton(
-                  child: Text(AppLocalizations.of(context)!.report),
-                  onPressed: () async {
-                    PackageInfo packageInfo = await PackageInfo.fromPlatform();
-                    DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
-                    BaseDeviceInfo deviceInfo = await deviceInfoPlugin.deviceInfo;
-                    Map<String, dynamic> logs = {
-                      "version": packageInfo.version,
-                      "deviceInfo": deviceInfo.data,
-                    };
-                    JsonEncoder encoder = const JsonEncoder.withIndent("     ");
-                    String text = encoder.convert(logs);
-                    text += '\n';
-                    text += state.lines.join('\n').replaceAll(RegExp(r'\u001b\[([0-9]|;)+m'), '');
-                    await copyToClipboard(context, text);
-
-                    Widget? value = await openInBrowser(
-                      url: Assets.report,
-                      forceExternal: accessibilityConfig.forceExternalBrowser,
+          ),
+        for (OutputEventExt state in loggerReport)
+          Card(
+            child: ExpansionTile(
+              title: Text(state.lines[state.lines.length - 2].replaceAll(RegExp(r'\u001b\[([0-9]|;)+m'), '').replaceAll('│ ', '')),
+              subtitle: Text(generalDateDifference(context, state.time)),
+              trailing: OutlinedButton(
+                child: Text(AppLocalizations.of(context)!.report),
+                onPressed: () async {
+                  PackageInfo packageInfo = await PackageInfo.fromPlatform();
+                  DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
+                  BaseDeviceInfo deviceInfo = await deviceInfoPlugin.deviceInfo;
+                  Map<String, dynamic> logs = {
+                    "version": packageInfo.version,
+                    "deviceInfo": deviceInfo.data,
+                  };
+                  JsonEncoder encoder = const JsonEncoder.withIndent("     ");
+                  String text = encoder.convert(logs);
+                  text += '\n';
+                  text += state.lines.join('\n').replaceAll(RegExp(r'\u001b\[([0-9]|;)+m'), '');
+                  await copyToClipboard(context, text);
+                  Widget? value = await openInBrowser(
+                    url: Assets.report,
+                    forceExternal: accessibilityConfig.forceExternalBrowser,
+                  );
+                  if (value != null) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (BuildContext context) => value),
                     );
-                    if (value != null) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (BuildContext context) => value),
-                      );
-                    }
-                  },
-                ),
-                children: [
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Text(state.lines.join('\n').replaceAll(RegExp(r'\u001b\[([0-9]|;)+m'), '')),
-                  )
-                ],
+                  }
+                },
               ),
+              children: [
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Text(state.lines.join('\n').replaceAll(RegExp(r'\u001b\[([0-9]|;)+m'), '')),
+                )
+              ],
             ),
-        ],
-      ),
+          ),
+      ],
     );
   }
 }

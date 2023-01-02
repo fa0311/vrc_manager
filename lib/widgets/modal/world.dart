@@ -4,18 +4,20 @@ import 'package:flutter/material.dart';
 // Package imports:
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:vrc_manager/api/assets/assets.dart';
 
 // Project imports:
+import 'package:vrc_manager/api/assets/assets.dart';
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/core/splash.dart';
 import 'package:vrc_manager/scenes/main/worlds_favorite.dart';
 import 'package:vrc_manager/scenes/setting/logger.dart';
+import 'package:vrc_manager/widgets/loading.dart';
 import 'package:vrc_manager/widgets/lunch_world.dart';
 import 'package:vrc_manager/widgets/modal.dart';
 import 'package:vrc_manager/widgets/modal/share.dart';
+import 'package:vrc_manager/widgets/scroll.dart';
 
 class WorldDetailsModalBottom extends ConsumerWidget {
   final VRChatLimitedWorld world;
@@ -171,10 +173,13 @@ class FavoriteAction extends ConsumerWidget {
     FavoriteWorldData? loadingWorldData = ref.watch(loadingWorldDataProvider);
 
     return data.when(
-      loading: () => const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()),
+      loading: () => const Loading(),
       error: (e, trace) {
         logger.w(getMessage(e), e, trace);
-        return const ErrorPage();
+        return ScrollWidget(
+          onRefresh: () => ref.refresh((vrchatMobileWorldFavoriteSortProvider.future)),
+          child: ErrorPage(loggerReport: ref.read(loggerReportProvider)),
+        );
       },
       data: (data) {
         return SingleChildScrollView(

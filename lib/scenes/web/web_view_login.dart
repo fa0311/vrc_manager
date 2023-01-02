@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 // Package imports:
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:vrc_manager/api/assets/assets.dart';
 
 // Project imports:
+import 'package:vrc_manager/api/assets/assets.dart';
 import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets/session.dart';
 import 'package:vrc_manager/main.dart';
@@ -15,6 +15,7 @@ import 'package:vrc_manager/scenes/setting/logger.dart';
 import 'package:vrc_manager/scenes/sub/login.dart';
 import 'package:vrc_manager/storage/account.dart';
 import 'package:vrc_manager/widgets/loading.dart';
+import 'package:vrc_manager/widgets/scroll.dart';
 
 final GlobalKey webViewKey = GlobalKey();
 
@@ -66,7 +67,11 @@ class VRChatMobileWebViewLogin extends ConsumerWidget {
           loading: () => const Loading(),
           error: (e, trace) {
             logger.w(getMessage(e), e, trace);
-            return const ErrorPage();
+
+            return ScrollWidget(
+              onRefresh: () => ref.refresh((webViewInitProvider.future)),
+              child: ErrorPage(loggerReport: ref.read(loggerReportProvider)),
+            );
           },
           data: (data) => InAppWebView(
             key: webViewKey,

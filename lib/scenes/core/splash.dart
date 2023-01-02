@@ -23,6 +23,7 @@ import 'package:vrc_manager/storage/account.dart';
 import 'package:vrc_manager/storage/grid_modal.dart';
 import 'package:vrc_manager/storage/user_policy.dart';
 import 'package:vrc_manager/widgets/grid_modal/config.dart';
+import 'package:vrc_manager/widgets/scroll.dart';
 
 final accountConfigProvider = ChangeNotifierProvider<AccountConfigNotifier>((ref) => AccountConfigNotifier());
 final accountListConfigProvider = ChangeNotifierProvider<AccountListConfigNotifier>((ref) => AccountListConfigNotifier());
@@ -94,7 +95,10 @@ class VRChatMobileSplash extends ConsumerWidget {
           ),
           error: (e, trace) {
             logger.w(getMessage(e), e, trace);
-            return const ErrorPage();
+            return ScrollWidget(
+              onRefresh: () => ref.refresh(splashProvider.future),
+              child: ErrorPage(loggerReport: ref.read(loggerReportProvider)),
+            );
           },
           data: (SplashData data) {
             switch (data) {

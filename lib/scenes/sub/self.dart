@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 // Package imports:
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:vrc_manager/api/assets/instance_type.dart';
 
 // Project imports:
+import 'package:vrc_manager/api/assets/instance_type.dart';
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/main.dart';
@@ -16,8 +16,10 @@ import 'package:vrc_manager/scenes/core/splash.dart';
 import 'package:vrc_manager/scenes/setting/logger.dart';
 import 'package:vrc_manager/widgets/drawer.dart';
 import 'package:vrc_manager/widgets/grid_view/widget/world.dart';
+import 'package:vrc_manager/widgets/loading.dart';
 import 'package:vrc_manager/widgets/modal.dart';
 import 'package:vrc_manager/widgets/modal/user.dart';
+import 'package:vrc_manager/widgets/scroll.dart';
 import 'package:vrc_manager/widgets/user.dart';
 
 class VRChatMobileSelfData {
@@ -46,10 +48,6 @@ final vrchatMobileSelfProvider = FutureProvider<VRChatMobileSelfData>((ref) asyn
   });
 
   VRChatUserSelf user = await vrchatLoginSession.selfUser(data.id).catchError((e) {
-    logger.e(getMessage(e), e);
-  });
-
-  await vrchatLoginSession.users(user.id).then((value) => user.note = value.note).catchError((e) {
     logger.e(getMessage(e), e);
   });
 
@@ -97,25 +95,23 @@ class VRChatMobileSelf extends ConsumerWidget {
       ),
       drawer: Navigator.of(context).canPop() ? null : const NormalDrawer(),
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Container(
-            alignment: Alignment.center,
-            padding: const EdgeInsets.only(
-              top: 10,
-              bottom: 0,
-              right: 30,
-              left: 30,
-            ),
-            child: Consumer(
-              builder: (context, ref, child) {
-                ref.watch(vrchatUserCountProvider);
-                return data.when(
-                  loading: () => const Center(child: CircularProgressIndicator()),
-                  error: (e, trace) {
-                    logger.w(getMessage(e), e, trace);
-                    return const ErrorPage();
-                  },
-                  data: (data) => Column(
+        child: Consumer(
+          builder: (context, ref, child) {
+            ref.watch(vrchatUserCountProvider);
+            return data.when(
+              loading: () => const Loading(),
+              error: (e, trace) {
+                logger.w(getMessage(e), e, trace);
+                return ScrollWidget(
+                  onRefresh: () => ref.refresh(vrchatMobileSelfProvider.future),
+                  child: ErrorPage(loggerReport: ref.read(loggerReportProvider)),
+                );
+              },
+              data: (data) => ScrollWidget(
+                onRefresh: () => ref.refresh(vrchatMobileSelfProvider.future),
+                child: Container(
+                  padding: const EdgeInsets.only(top: 10, right: 30, left: 30),
+                  child: Column(
                     children: [
                       UserProfile(user: data.user),
                       Container(
@@ -129,10 +125,10 @@ class VRChatMobileSelf extends ConsumerWidget {
                       ),
                     ],
                   ),
-                );
-              },
-            ),
-          ),
+                ),
+              ),
+            );
+          },
         ),
       ),
     );
