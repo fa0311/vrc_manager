@@ -67,7 +67,7 @@ class VRChatMobileSelf extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.home),
+        title: Text(AppLocalizations.of(context)!.user),
         actions: data.when(
           loading: () => null,
           error: (e, trace) {

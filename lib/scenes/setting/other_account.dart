@@ -84,21 +84,24 @@ class VRChatMobileSettingsOtherAccount extends ConsumerWidget {
                       ),
                     ),
                   ),
-                TextButton(
-                  style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.grey,
+                Container(
+                  alignment: Alignment.center,
+                  child: TextButton(
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: Colors.grey,
+                    ),
+                    onPressed: () {
+                      ref.read(accountConfigProvider).logout();
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const VRChatMobileSplash(),
+                        ),
+                        (_) => false,
+                      );
+                    },
+                    child: Text(AppLocalizations.of(context)!.addAccount),
                   ),
-                  onPressed: () {
-                    ref.read(accountConfigProvider).logout();
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => const VRChatMobileSplash(),
-                      ),
-                      (_) => false,
-                    );
-                  },
-                  child: Text(AppLocalizations.of(context)!.addAccount),
                 ),
               ],
             ),
