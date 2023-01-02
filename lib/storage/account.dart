@@ -84,13 +84,13 @@ class AccountConfigNotifier extends ChangeNotifier {
   }
 
   bool isLogout() {
-    return loggedAccount != null;
+    return loggedAccount == null || loggedAccount!.cookie == null;
   }
 }
 
 class AccountConfig extends ChangeNotifier {
   final String uid;
-  String cookie = "";
+  String? cookie;
   String? userId;
   String? password;
   String? displayName;
@@ -102,9 +102,9 @@ class AccountConfig extends ChangeNotifier {
   Future init() async {
     await Future.wait([
       getLoginSession("cookie", uid).then((value) => cookie = value ?? ""),
-      getLoginSession("user_id", uid).then((value) => userId = value ?? ""),
-      getLoginSession("password", uid).then((value) => password = value ?? ""),
-      getLoginSession("display_name", uid).then((value) => displayName = value ?? ""),
+      getLoginSession("user_id", uid).then((value) => userId = value),
+      getLoginSession("password", uid).then((value) => password = value),
+      getLoginSession("display_name", uid).then((value) => displayName = value),
       getLoginSession("remember_login_info", uid).then((value) => rememberLoginInfo = (value == "true"))
     ]);
   }
@@ -155,7 +155,7 @@ class AccountConfig extends ChangeNotifier {
   }
 
   Future<bool> tokenCheck() async {
-    VRChatAPI vrchatLoginSession = VRChatAPI(cookie: cookie);
+    VRChatAPI vrchatLoginSession = VRChatAPI(cookie: cookie ?? "");
     return await vrchatLoginSession.user().then((VRChatUserSelfOverload response) {
       data = response;
       setDisplayName(response.displayName);

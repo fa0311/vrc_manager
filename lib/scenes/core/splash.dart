@@ -57,7 +57,7 @@ final splashProvider = FutureProvider<SplashData>((ref) async {
     return SplashData.userPolicy;
   }
 
-  if (!accountConfig.isLogout()) {
+  if (accountConfig.isLogout()) {
     return SplashData.login;
   }
 

@@ -161,7 +161,7 @@ class EditBio extends ConsumerWidget {
 final editNoteProvider = StateProvider<bool>((ref) => false);
 
 final noteControllerProvider = FutureProvider.family<TextEditingController, VRChatUser>((ref, user) async {
-  final VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.read(accountConfigProvider).loggedAccount!.cookie);
+  final VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.read(accountConfigProvider).loggedAccount!.cookie ?? "");
   if (user.note == null) {
     await vrchatLoginSession.users(user.id).then((value) => user.note = value.note).catchError((e) {
       logger.e(getMessage(e), e);
