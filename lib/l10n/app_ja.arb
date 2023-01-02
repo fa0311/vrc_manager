@@ -112,7 +112,7 @@
     "@____________________WORLD____________________": {},
     "world": "ワールド",
     "privateWorld": "プライベートワールド",
-    "traveling": "移動中",
+    "loadingWorld": "ワールドをロード中",
     "onTheWebsite": "Webサイト上でオンライン",
     "occupants": "プレイヤー数: {data}",
     "privateOccupants": "プライベートのプレイヤー数: {data}",

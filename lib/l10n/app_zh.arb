@@ -112,7 +112,7 @@
     "@____________________WORLD____________________": {},
     "world": "世界",
     "privateWorld": "私人世界",
-    "traveling": "在移动中",
+    "loadingWorld": "载入世界",
     "onTheWebsite": "在网站上在线",
     "occupants": "玩家数量: {data}",
     "privateOccupants": "私人玩家的数量: {data}",

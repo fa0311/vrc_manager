@@ -72,7 +72,7 @@ class ExtractionFriend extends ConsumerGridWidget {
                   if (user.statusDescription != null) user.statusDescription!,
                   if (!VRChatInstanceIdOther.values.any((id) => id.name == user.location)) locationMap[worldId]?.name,
                   if (user.location == VRChatInstanceIdOther.private.name) AppLocalizations.of(context)!.privateWorld,
-                  if (user.location == VRChatInstanceIdOther.traveling.name) AppLocalizations.of(context)!.traveling,
+                  if (user.location == VRChatInstanceIdOther.traveling.name) AppLocalizations.of(context)!.loadingWorld,
                 ].whereType<String>()) ...[
                   Text(text, style: const TextStyle(fontSize: 15)),
                 ],
@@ -167,7 +167,7 @@ class ExtractionFriend extends ConsumerGridWidget {
                 if (config.worldDetails)
                   Text(() {
                     if (user.location == VRChatInstanceIdOther.offline.name) return AppLocalizations.of(context)!.privateWorld;
-                    if (user.location == VRChatInstanceIdOther.traveling.name) return AppLocalizations.of(context)!.traveling;
+                    if (user.location == VRChatInstanceIdOther.traveling.name) return AppLocalizations.of(context)!.loadingWorld;
                     if (user.location == VRChatInstanceIdOther.offline.name) return AppLocalizations.of(context)!.onTheWebsite;
                     if (locationMap[worldId] == null) return "";
                     return locationMap[worldId]!.name;
