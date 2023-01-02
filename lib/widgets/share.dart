@@ -9,9 +9,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:vrc_manager/api/assets/assets.dart';
 
 // Project imports:
+import 'package:vrc_manager/api/assets/assets.dart';
 import 'package:vrc_manager/scenes/web/web_view.dart';
 
 Future<Widget?> openInBrowser({required Uri url, required bool forceExternal}) async {
