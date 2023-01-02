@@ -41,5 +41,6 @@
     /* Other */
     "dont"
   ],
-  "ignorePaths": ["l10n/**", "api/assets/lang.dart"]
+  "ignorePaths": ["l10n/**", "api/assets/lang.dart"],
+  "files": ["lib/**"]
 }

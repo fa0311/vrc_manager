@@ -507,9 +507,11 @@ packages:
   receive_sharing_intent:
     dependency: "direct main"
     description:
-      name: receive_sharing_intent
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "."
+      ref: "723863b"
+      resolved-ref: "723863b4328b3ce9bbeea183aa97012d59bad1fd"
+      url: "https://github.com/mwolffalonso/receive_sharing_intent.git"
+    source: git
     version: "1.4.5"
   riverpod:
     dependency: transitive
