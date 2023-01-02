@@ -47,47 +47,48 @@ class VRChatMobileWebViewUserPolicy extends ConsumerWidget {
           ),
         ],
       ),
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.onPrimary,
-          boxShadow: [
-            BoxShadow(
-              color: Theme.of(context).colorScheme.shadow.withOpacity(0.2),
-              spreadRadius: 5,
-              blurRadius: 5,
-            ),
-          ],
-        ),
-        child: SizedBox(
-          height: 50,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Spacer(),
-              Expanded(
-                flex: 2,
-                child: ElevatedButton(
-                  onPressed: () => SystemNavigator.pop(),
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.grey),
-                  child: Text(
-                    AppLocalizations.of(context)!.disagree,
-                  ),
-                ),
+      bottomNavigationBar: BottomAppBar(
+        child: Container(
+          decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: Theme.of(context).colorScheme.shadow.withOpacity(0.2),
+                spreadRadius: 5,
+                blurRadius: 5,
               ),
-              const Spacer(),
-              Expanded(
-                flex: 2,
-                child: ElevatedButton(
-                  onPressed: () async {
-                    ref.read(userPolicyConfigProvider).setAgree(true);
-                  },
-                  child: Text(
-                    AppLocalizations.of(context)!.agree,
-                  ),
-                ),
-              ),
-              const Spacer(),
             ],
+          ),
+          child: SizedBox(
+            height: 50,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Spacer(),
+                Expanded(
+                  flex: 2,
+                  child: ElevatedButton(
+                    onPressed: () => SystemNavigator.pop(),
+                    style: ElevatedButton.styleFrom(backgroundColor: Colors.grey),
+                    child: Text(
+                      AppLocalizations.of(context)!.disagree,
+                    ),
+                  ),
+                ),
+                const Spacer(),
+                Expanded(
+                  flex: 2,
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      ref.read(userPolicyConfigProvider).setAgree(true);
+                    },
+                    child: Text(
+                      AppLocalizations.of(context)!.agree,
+                    ),
+                  ),
+                ),
+                const Spacer(),
+              ],
+            ),
           ),
         ),
       ),
