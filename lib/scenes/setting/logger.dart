@@ -51,10 +51,7 @@ class LoggerReport extends ConsumerWidget {
       body: SafeArea(
         child: RefreshIndicator(
           onRefresh: () async => ref.read(loggerReportCounterProvider.notifier).state++,
-          child: const SingleChildScrollView(
-            physics: AlwaysScrollableScrollPhysics(),
-            child: ErrorPage(message: true),
-          ),
+          child: const ErrorPage(message: true),
         ),
       ),
     );
@@ -71,63 +68,66 @@ class ErrorPage extends ConsumerWidget {
     AccessibilityConfigNotifier accessibilityConfig = ref.watch(accessibilityConfigProvider);
 
     ref.watch(loggerReportCounterProvider);
-    return Column(
-      children: [
-        if (message)
-          Card(
-            child: ListTile(
-              title: Text(AppLocalizations.of(context)!.reportMessage2),
-            ),
-          ),
-        if (!message)
-          Card(
-            child: ListTile(
-              title: Text(AppLocalizations.of(context)!.error),
-              subtitle: Text([AppLocalizations.of(context)!.reportMessage1, AppLocalizations.of(context)!.reportMessage2].join('\n')),
-            ),
-          ),
-        for (OutputEventExt state in loggerOutput.state.reversed)
-          Card(
-            child: ExpansionTile(
-              title: Text(state.lines[state.lines.length - 2].replaceAll(RegExp(r'\u001b\[([0-9]|;)+m'), '').replaceAll('│ ', '')),
-              subtitle: Text(generalDateDifference(context, state.time)),
-              trailing: OutlinedButton(
-                child: Text(AppLocalizations.of(context)!.report),
-                onPressed: () async {
-                  PackageInfo packageInfo = await PackageInfo.fromPlatform();
-                  DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
-                  BaseDeviceInfo deviceInfo = await deviceInfoPlugin.deviceInfo;
-                  Map<String, dynamic> logs = {
-                    "version": packageInfo.version,
-                    "deviceInfo": deviceInfo.data,
-                  };
-                  JsonEncoder encoder = const JsonEncoder.withIndent("     ");
-                  String text = encoder.convert(logs);
-                  text += '\n';
-                  text += state.lines.join('\n').replaceAll(RegExp(r'\u001b\[([0-9]|;)+m'), '');
-                  await copyToClipboard(context, text);
-
-                  Widget? value = await openInBrowser(
-                    url: Assets.report,
-                    forceExternal: accessibilityConfig.forceExternalBrowser,
-                  );
-                  if (value != null) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (BuildContext context) => value),
-                    );
-                  }
-                },
+    return SingleChildScrollView(
+      physics: const AlwaysScrollableScrollPhysics(),
+      child: Column(
+        children: [
+          if (message)
+            Card(
+              child: ListTile(
+                title: Text(AppLocalizations.of(context)!.reportMessage2),
               ),
-              children: [
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Text(state.lines.join('\n').replaceAll(RegExp(r'\u001b\[([0-9]|;)+m'), '')),
-                )
-              ],
             ),
-          ),
-      ],
+          if (!message)
+            Card(
+              child: ListTile(
+                title: Text(AppLocalizations.of(context)!.error),
+                subtitle: Text([AppLocalizations.of(context)!.reportMessage1, AppLocalizations.of(context)!.reportMessage2].join('\n')),
+              ),
+            ),
+          for (OutputEventExt state in loggerOutput.state.reversed)
+            Card(
+              child: ExpansionTile(
+                title: Text(state.lines[state.lines.length - 2].replaceAll(RegExp(r'\u001b\[([0-9]|;)+m'), '').replaceAll('│ ', '')),
+                subtitle: Text(generalDateDifference(context, state.time)),
+                trailing: OutlinedButton(
+                  child: Text(AppLocalizations.of(context)!.report),
+                  onPressed: () async {
+                    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+                    DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
+                    BaseDeviceInfo deviceInfo = await deviceInfoPlugin.deviceInfo;
+                    Map<String, dynamic> logs = {
+                      "version": packageInfo.version,
+                      "deviceInfo": deviceInfo.data,
+                    };
+                    JsonEncoder encoder = const JsonEncoder.withIndent("     ");
+                    String text = encoder.convert(logs);
+                    text += '\n';
+                    text += state.lines.join('\n').replaceAll(RegExp(r'\u001b\[([0-9]|;)+m'), '');
+                    await copyToClipboard(context, text);
+
+                    Widget? value = await openInBrowser(
+                      url: Assets.report,
+                      forceExternal: accessibilityConfig.forceExternalBrowser,
+                    );
+                    if (value != null) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (BuildContext context) => value),
+                      );
+                    }
+                  },
+                ),
+                children: [
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Text(state.lines.join('\n').replaceAll(RegExp(r'\u001b\[([0-9]|;)+m'), '')),
+                  )
+                ],
+              ),
+            ),
+        ],
+      ),
     );
   }
 }
