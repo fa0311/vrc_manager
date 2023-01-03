@@ -24,6 +24,7 @@
     "standalonewindows",
     "totp",
     "twofactorauth",
+    "moderations",
     /* Flutter */
     "unfocus",
     "ARGB",
@@ -40,5 +41,6 @@
     /* Other */
     "dont"
   ],
-  "ignorePaths": ["l10n/**", "api/enum/lang.dart"]
+  "ignorePaths": ["l10n/**", "api/assets/lang.dart"],
+  "files": ["lib/**"]
 }

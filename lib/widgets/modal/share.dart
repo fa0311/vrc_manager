@@ -10,6 +10,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:share_plus/share_plus.dart';
 
 // Project imports:
+import 'package:vrc_manager/api/assets/assets.dart';
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/main.dart';
@@ -38,7 +39,7 @@ class ShareUrlListTile extends ConsumerWidget {
           ShareListTileWidget(text: url.toString()),
           CopyListTileWidget(text: url.toString()),
           if (!browserExternalForce) OpenInBrowserListTileWidget(url: url),
-          if (url.host != "vrchat.com" && browserExternalForce) OpenInBrowserExternalForceListTileWidget(url: url),
+          if (url.host != VRChatAssets.vrchat.host && browserExternalForce) OpenInBrowserExternalForceListTileWidget(url: url),
         ],
       ),
     );
@@ -53,7 +54,7 @@ class ShareInstanceListTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    Uri url = Uri.https("vrchat.com", "/home/launch", {"worldId": worldId, "instanceId": instanceId});
+    Uri url = VRChatAssets.launch.replace(queryParameters: {"worldId": worldId, "instanceId": instanceId});
 
     return SingleChildScrollView(
       child: Column(
@@ -62,7 +63,8 @@ class ShareInstanceListTile extends ConsumerWidget {
           CopyListTileWidget(text: url.toString()),
           OpenInBrowserListTileWidget(url: url),
           if (Platform.isWindows)
-            OpenInWindowsListTileWidget(url: Uri(scheme: "vrchat", path: "launch", queryParameters: {"ref": "vrchat.com", "id": "$worldId:$instanceId"})),
+            OpenInWindowsListTileWidget(
+                url: VRChatAssets.vrchatScheme.replace(path: "launch", queryParameters: {"ref": VRChatAssets.vrchat.host, "id": "$worldId:$instanceId"})),
         ],
       ),
     );

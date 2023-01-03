@@ -6,6 +6,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
+import 'package:vrc_manager/api/assets/assets.dart';
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/main.dart';
@@ -26,7 +27,7 @@ class SelfUserModalBottom extends ConsumerWidget {
         children: [
           EditBioTileWidget(user: user),
           EditNoteTileWidget(user: user),
-          ShareUrlTileWidget(url: Uri.https("vrchat.com", "/home/user/${user.id}")),
+          ShareUrlTileWidget(url: VRChatAssets.user.resolve(user.id)),
           OpenInJsonViewer(content: user.content),
         ],
       ),
@@ -45,7 +46,7 @@ class UserDetailsModalBottom extends ConsumerWidget {
       child: Column(
         children: [
           EditNoteTileWidget(user: user),
-          ShareUrlTileWidget(url: Uri.https("vrchat.com", "/home/user/${user.id}")),
+          ShareUrlTileWidget(url: VRChatAssets.user.resolve(user.id)),
           ProfileActionTileWidget(status: status, user: user),
           OpenInJsonViewer(content: user.content),
         ],

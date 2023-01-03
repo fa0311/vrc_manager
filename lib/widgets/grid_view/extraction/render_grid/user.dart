@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
+import 'package:vrc_manager/api/assets/instance_type.dart';
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/assets/sort/users.dart';
 import 'package:vrc_manager/scenes/sub/user.dart';
@@ -37,7 +38,7 @@ class ExtractionUser extends ConsumerGridWidget {
       children: [
         for (VRChatUser user in sortUsers(config, userList))
           () {
-            if (config.joinable && ["private", "offline", "traveling"].contains(user.location)) return null;
+            if (config.joinable && VRChatInstanceIdOther.values.any((id) => id.name == user.location)) return null;
             return GenericTemplate(
               imageUrl: user.profilePicOverride ?? user.currentAvatarThumbnailImageUrl,
               onTap: () => Navigator.push(
@@ -69,7 +70,7 @@ class ExtractionUser extends ConsumerGridWidget {
       children: [
         for (VRChatUser user in sortUsers(config, userList))
           () {
-            if (config.joinable && ["private", "offline", "traveling"].contains(user.location)) return null;
+            if (config.joinable && VRChatInstanceIdOther.values.any((id) => id.name == user.location)) return null;
             return GenericTemplate(
               imageUrl: user.profilePicOverride ?? user.currentAvatarThumbnailImageUrl,
               half: true,
@@ -106,7 +107,7 @@ class ExtractionUser extends ConsumerGridWidget {
       children: [
         for (VRChatUser user in sortUsers(config, userList))
           () {
-            if (config.joinable && ["private", "offline", "traveling"].contains(user.location)) return null;
+            if (config.joinable && VRChatInstanceIdOther.values.any((id) => id.name == user.location)) return null;
             return GenericTemplateText(
               onTap: () => Navigator.push(
                   context,

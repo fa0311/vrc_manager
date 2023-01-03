@@ -29,45 +29,42 @@ class VRChatMobileTokenSetting extends ConsumerWidget {
         title: Text(AppLocalizations.of(context)!.token),
       ),
       body: SafeArea(
-        child: SizedBox(
-          width: MediaQuery.of(context).size.width,
-          child: SingleChildScrollView(
-            child: Container(
-              padding: const EdgeInsets.all(32.0),
-              child: Column(
-                children: <Widget>[
-                  TextField(
-                    controller: tokenController,
-                    maxLines: null,
-                    decoration: InputDecoration(labelText: AppLocalizations.of(context)!.cookie),
-                  ),
-                  ElevatedButton(
-                    child: Text(AppLocalizations.of(context)!.save),
-                    onPressed: () {
-                      ref.read(accountConfigProvider).loggedAccount!.setCookie(tokenController.text);
-                      ref.read(accountConfigProvider).login(ref.read(accountConfigProvider).loggedAccount!);
+        child: SingleChildScrollView(
+          child: Container(
+            padding: const EdgeInsets.all(32.0),
+            child: Column(
+              children: <Widget>[
+                TextField(
+                  controller: tokenController,
+                  maxLines: null,
+                  decoration: InputDecoration(labelText: AppLocalizations.of(context)!.cookie),
+                ),
+                ElevatedButton(
+                  child: Text(AppLocalizations.of(context)!.save),
+                  onPressed: () {
+                    ref.read(accountConfigProvider).loggedAccount!.setCookie(tokenController.text);
+                    ref.read(accountConfigProvider).login(ref.read(accountConfigProvider).loggedAccount!);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text(AppLocalizations.of(context)!.saved)),
+                    );
+                  },
+                ),
+                ElevatedButton(
+                  child: Text(AppLocalizations.of(context)!.login),
+                  onPressed: () {
+                    VRChatAPI(cookie: tokenController.text).user().then((VRChatUserSelfOverload response) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(AppLocalizations.of(context)!.saved)),
+                        SnackBar(content: Text(AppLocalizations.of(context)!.success)),
                       );
-                    },
-                  ),
-                  ElevatedButton(
-                    child: Text(AppLocalizations.of(context)!.login),
-                    onPressed: () {
-                      VRChatAPI(cookie: tokenController.text).user().then((VRChatUserSelfOverload response) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text(AppLocalizations.of(context)!.success)),
-                        );
-                      }).catchError((e) {
-                        logger.w(getMessage(e), e);
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text(AppLocalizations.of(context)!.failed)),
-                        );
-                      });
-                    },
-                  ),
-                ],
-              ),
+                    }).catchError((e) {
+                      logger.w(getMessage(e), e);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text(AppLocalizations.of(context)!.failed)),
+                      );
+                    });
+                  },
+                ),
+              ],
             ),
           ),
         ),

@@ -88,43 +88,42 @@ class VRChatMobileSettingsPermissions extends ConsumerWidget {
         title: Text(AppLocalizations.of(context)!.permissions),
       ),
       body: SafeArea(
-        child: SizedBox(
-          child: SingleChildScrollView(
-            child: Container(
-              padding: const EdgeInsets.only(top: 10),
-              child: Column(
-                children: <Widget>[
-                  if (Platform.isAndroid || Platform.isIOS)
-                    ListTile(
-                      leading: domainStageVerification.when(
-                        loading: () => const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()),
-                        error: (e, trace) {
-                          logger.w(getMessage(e), e, trace);
+        child: SingleChildScrollView(
+          child: Container(
+            padding: const EdgeInsets.only(top: 10),
+            child: Column(
+              children: <Widget>[
+                if (Platform.isAndroid || Platform.isIOS)
+                  ListTile(
+                    leading: domainStageVerification.when(
+                      loading: () => const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()),
+                      error: (e, trace) {
+                        logger.w(getMessage(e), e, trace);
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: ErrorSnackBar(e)));
+                        return const Icon(
+                          Icons.close,
+                          color: Colors.red,
+                        );
+                      },
+                      data: (data) {
+                        if (data) {
+                          return const Icon(
+                            Icons.check,
+                            color: Colors.green,
+                          );
+                        } else {
                           return const Icon(
                             Icons.close,
                             color: Colors.red,
                           );
-                        },
-                        data: (data) {
-                          if (data) {
-                            return const Icon(
-                              Icons.check,
-                              color: Colors.green,
-                            );
-                          } else {
-                            return const Icon(
-                              Icons.close,
-                              color: Colors.red,
-                            );
-                          }
-                        },
-                      ),
-                      title: Text(AppLocalizations.of(context)!.domainVerification),
-                      subtitle: Text(AppLocalizations.of(context)!.domainVerificationDetails),
-                      onTap: () => domainRequest(),
+                        }
+                      },
                     ),
-                ],
-              ),
+                    title: Text(AppLocalizations.of(context)!.domainVerification),
+                    subtitle: Text(AppLocalizations.of(context)!.domainVerificationDetails),
+                    onTap: () => domainRequest(),
+                  ),
+              ],
             ),
           ),
         ),

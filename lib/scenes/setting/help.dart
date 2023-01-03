@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 // Project imports:
+import 'package:vrc_manager/assets.dart';
 import 'package:vrc_manager/assets/license.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/setting/logger.dart';
@@ -38,7 +39,7 @@ class VRChatMobileHelp extends ConsumerWidget {
                   subtitle: Text(AppLocalizations.of(context)!.contributionDetails),
                   onTap: () async {
                     Widget? value = await openInBrowser(
-                      url: Uri.https("github.com", "/fa0311/vrc_manager"),
+                      url: Assets.repository,
                       forceExternal: accessibilityConfig.forceExternalBrowser,
                     );
                     if (value != null) {
@@ -54,7 +55,7 @@ class VRChatMobileHelp extends ConsumerWidget {
                   subtitle: Text(AppLocalizations.of(context)!.reportDetails),
                   onTap: () async {
                     Widget? value = await openInBrowser(
-                      url: Uri.https("github.com", "/fa0311/vrc_manager/issues/new/choose"),
+                      url: Assets.issues,
                       forceExternal: accessibilityConfig.forceExternalBrowser,
                     );
                     if (value != null) {
@@ -70,7 +71,7 @@ class VRChatMobileHelp extends ConsumerWidget {
                   subtitle: Text(AppLocalizations.of(context)!.developerInfoDetails),
                   onTap: () async {
                     Widget? value = await openInBrowser(
-                      url: Uri.https("twitter.com", "/faa0311"),
+                      url: Assets.contact,
                       forceExternal: accessibilityConfig.forceExternalBrowser,
                     );
                     if (value != null) {
@@ -86,7 +87,7 @@ class VRChatMobileHelp extends ConsumerWidget {
                   subtitle: Text(AppLocalizations.of(context)!.rateTheAppDetails),
                   onTap: () async {
                     Widget? value = await openInBrowser(
-                      url: Uri.https("play.google.com", "/store/apps/details", {"id": "com.yuki0311.vrc_manager"}),
+                      url: Assets.rate,
                       forceExternal: accessibilityConfig.forceExternalBrowser,
                     );
                     if (value != null) {
@@ -108,6 +109,7 @@ class VRChatMobileHelp extends ConsumerWidget {
                   ),
                   error: (e, trace) {
                     logger.w(getMessage(e), e, trace);
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: ErrorSnackBar(e)));
                     return ListTile(
                       title: Text(AppLocalizations.of(context)!.version),
                       subtitle: Text(AppLocalizations.of(context)!.error),
@@ -118,7 +120,7 @@ class VRChatMobileHelp extends ConsumerWidget {
                     subtitle: Text(AppLocalizations.of(context)!.versionDetails(data.version)),
                     onTap: () async {
                       Widget? value = await openInBrowser(
-                        url: Uri.https("github.com", "/fa0311/vrc_manager/releases"),
+                        url: Assets.release,
                         forceExternal: accessibilityConfig.forceExternalBrowser,
                       );
                       if (value != null) {

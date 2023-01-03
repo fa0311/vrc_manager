@@ -12,8 +12,10 @@ import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/core/splash.dart';
 import 'package:vrc_manager/scenes/setting/logger.dart';
 import 'package:vrc_manager/widgets/drawer.dart';
+import 'package:vrc_manager/widgets/loading.dart';
 import 'package:vrc_manager/widgets/modal.dart';
 import 'package:vrc_manager/widgets/modal/world.dart';
+import 'package:vrc_manager/widgets/scroll.dart';
 import 'package:vrc_manager/widgets/world.dart';
 
 class VRChatMobileWorldData {
@@ -24,7 +26,7 @@ class VRChatMobileWorldData {
   });
 }
 
-final vrchatMobileUserProvider = FutureProvider.family<VRChatMobileWorldData, String>((ref, worldId) async {
+final vrchatMobileWorldProvider = FutureProvider.family<VRChatMobileWorldData, String>((ref, worldId) async {
   VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "");
 
   late VRChatWorld world;
@@ -40,7 +42,7 @@ class VRChatMobileWorld extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    AsyncValue<VRChatMobileWorldData> data = ref.watch(vrchatMobileUserProvider(worldId));
+    AsyncValue<VRChatMobileWorldData> data = ref.watch(vrchatMobileWorldProvider(worldId));
 
     return Scaffold(
       appBar: AppBar(
@@ -66,28 +68,27 @@ class VRChatMobileWorld extends ConsumerWidget {
       ),
       drawer: Navigator.of(context).canPop() ? null : const NormalDrawer(),
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Container(
-            alignment: Alignment.center,
-            padding: const EdgeInsets.only(
-              top: 10,
-              bottom: 0,
-              right: 30,
-              left: 30,
-            ),
-            child: Consumer(
-              builder: (context, ref, child) {
-                return data.when(
-                  loading: () => const Center(child: CircularProgressIndicator()),
-                  error: (e, trace) {
-                    logger.w(getMessage(e), e, trace);
-                    return const ErrorPage();
-                  },
-                  data: (data) => WorldProfile(world: data.world),
+        child: Consumer(
+          builder: (context, ref, child) {
+            return data.when(
+              loading: () => const Loading(),
+              error: (e, trace) {
+                logger.w(getMessage(e), e, trace);
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: ErrorSnackBar(e)));
+                return ScrollWidget(
+                  onRefresh: () => ref.refresh((vrchatMobileWorldProvider(worldId).future)),
+                  child: ErrorPage(loggerReport: ref.read(loggerReportProvider)),
                 );
               },
-            ),
-          ),
+              data: (data) => ScrollWidget(
+                onRefresh: () => ref.refresh((vrchatMobileWorldProvider(worldId).future)),
+                child: Container(
+                  padding: const EdgeInsets.only(top: 10, right: 30, left: 30),
+                  child: WorldProfile(world: data.world),
+                ),
+              ),
+            );
+          },
         ),
       ),
     );

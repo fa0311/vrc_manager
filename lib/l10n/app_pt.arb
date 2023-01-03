@@ -112,7 +112,7 @@
     "@____________________WORLD____________________": {},
     "world": "Mundo",
     "privateWorld": "Mundo privado",
-    "traveling": "Em movimento",
+    "loadingWorld": "Mundo da Carga",
     "onTheWebsite": "Online no site",
     "occupants": "Número de jogadores: {data}",
     "privateOccupants": "Número de jogadores privados: {data}",

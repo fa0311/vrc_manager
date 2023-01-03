@@ -40,7 +40,11 @@ dependencies:
   flutter_launcher_icons: ^0.11.0
   package_info_plus: ^3.0.2
   flutter_svg: ^1.1.0
-  receive_sharing_intent: ^1.4.5
+  # receive_sharing_intent: ^1.4.5
+  receive_sharing_intent:
+    git:
+      url: https://github.com/mwolffalonso/receive_sharing_intent.git
+      ref: 723863b
   share_plus: ^6.3.0
   flutter_json_viewer: ^1.0.1
   flutter_localizations:

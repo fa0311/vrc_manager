@@ -13,6 +13,7 @@ import 'package:vrc_manager/scenes/setting/logger.dart';
 import 'package:vrc_manager/widgets/grid_modal/config.dart';
 import 'package:vrc_manager/widgets/grid_view/extraction/render_grid/favorite_world.dart';
 import 'package:vrc_manager/widgets/loading.dart';
+import 'package:vrc_manager/widgets/scroll.dart';
 
 class VRChatMobileWorldFavoriteData {
   List<FavoriteWorldData> favoriteWorld;
@@ -78,26 +79,23 @@ class VRChatMobileWorldsFavorite extends ConsumerWidget {
       loading: () => const Loading(),
       error: (e, trace) {
         logger.w(getMessage(e), e, trace);
-        return const ErrorPage();
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: ErrorSnackBar(e)));
+        return ScrollWidget(
+          onRefresh: () => ref.refresh(vrchatMobileWorldFavoriteSortProvider.future),
+          child: ErrorPage(loggerReport: ref.read(loggerReportProvider)),
+        );
       },
       data: (data) {
-        return RefreshIndicator(
+        return ScrollWidget(
           onRefresh: () => ref.refresh(vrchatMobileWorldFavoriteSortProvider.future),
-          child: SizedBox(
-            height: double.infinity,
-            width: double.infinity,
-            child: SingleChildScrollView(
-              physics: const AlwaysScrollableScrollPhysics(),
-              child: Column(
-                children: [
-                  for (FavoriteWorldData favoriteWorld in data.favoriteWorld)
-                    if (favoriteWorld.list.isNotEmpty) ...[
-                      Text(favoriteWorld.group.displayName),
-                      ExtractionFavoriteWorld(id: GridModalConfigType.favoriteWorlds, favoriteWorld: favoriteWorld.list),
-                    ],
+          child: Column(
+            children: [
+              for (FavoriteWorldData favoriteWorld in data.favoriteWorld)
+                if (favoriteWorld.list.isNotEmpty) ...[
+                  Text(favoriteWorld.group.displayName),
+                  ExtractionFavoriteWorld(id: GridModalConfigType.favoriteWorlds, favoriteWorld: favoriteWorld.list),
                 ],
-              ),
-            ),
+            ],
           ),
         );
       },

@@ -15,12 +15,14 @@ import 'package:package_info_plus/package_info_plus.dart';
 
 // Project imports:
 import 'package:vrc_manager/api/data_class.dart';
+import 'package:vrc_manager/assets.dart';
 import 'package:vrc_manager/assets/date.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/storage/accessibility.dart';
+import 'package:vrc_manager/widgets/scroll.dart';
 import 'package:vrc_manager/widgets/share.dart';
 
-final loggerReportCounterProvider = StateProvider<int>((ref) => 0);
+final loggerReportProvider = StateProvider<Iterable<OutputEventExt>>((ref) => loggerOutput.state.reversed);
 
 class ConsoleOutputExt extends ConsoleOutput {
   List<OutputEventExt> state = [];
@@ -42,18 +44,15 @@ class LoggerReport extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.watch(loggerReportCounterProvider);
+    Iterable<OutputEventExt> log = ref.watch(loggerReportProvider);
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.log),
       ),
       body: SafeArea(
-        child: RefreshIndicator(
-          onRefresh: () async => ref.read(loggerReportCounterProvider.notifier).state++,
-          child: const SingleChildScrollView(
-            physics: AlwaysScrollableScrollPhysics(),
-            child: ErrorPage(message: true),
-          ),
+        child: ScrollWidget(
+          onRefresh: () async => ref.refresh(loggerReportProvider.notifier),
+          child: ErrorPage(message: true, loggerReport: log),
         ),
       ),
     );
@@ -62,14 +61,18 @@ class LoggerReport extends ConsumerWidget {
 
 class ErrorPage extends ConsumerWidget {
   final bool message;
+  final Iterable<OutputEventExt> loggerReport;
 
-  const ErrorPage({super.key, this.message = false});
+  const ErrorPage({
+    super.key,
+    required this.loggerReport,
+    this.message = false,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     AccessibilityConfigNotifier accessibilityConfig = ref.watch(accessibilityConfigProvider);
 
-    ref.watch(loggerReportCounterProvider);
     return Column(
       children: [
         if (message)
@@ -85,7 +88,7 @@ class ErrorPage extends ConsumerWidget {
               subtitle: Text([AppLocalizations.of(context)!.reportMessage1, AppLocalizations.of(context)!.reportMessage2].join('\n')),
             ),
           ),
-        for (OutputEventExt state in loggerOutput.state.reversed)
+        for (OutputEventExt state in loggerReport)
           Card(
             child: ExpansionTile(
               title: Text(state.lines[state.lines.length - 2].replaceAll(RegExp(r'\u001b\[([0-9]|;)+m'), '').replaceAll('│ ', '')),
@@ -105,9 +108,8 @@ class ErrorPage extends ConsumerWidget {
                   text += '\n';
                   text += state.lines.join('\n').replaceAll(RegExp(r'\u001b\[([0-9]|;)+m'), '');
                   await copyToClipboard(context, text);
-
                   Widget? value = await openInBrowser(
-                    url: Uri.https("github.com", "/fa0311/vrc_manager/issues/new", {"template": "redirected-from-app.yml"}),
+                    url: Assets.report,
                     forceExternal: accessibilityConfig.forceExternalBrowser,
                   );
                   if (value != null) {

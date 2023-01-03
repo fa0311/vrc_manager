@@ -112,7 +112,7 @@
     "@____________________WORLD____________________": {},
     "world": "World โลก",
     "privateWorld": "ส่วนตัว ขณะ",
-    "traveling": "เดินทาง",
+    "loadingWorld": "กำลังโหลดโลก",
     "onTheWebsite": "จำนวนผู้เล่น",
     "occupants": "ออนไลน์บนเว็บไซต์ : {data}",
     "privateOccupants": "จำนวนผู้เล่นในส่วนตัว: {data}",

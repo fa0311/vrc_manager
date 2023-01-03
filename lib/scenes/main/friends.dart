@@ -14,6 +14,7 @@ import 'package:vrc_manager/scenes/setting/logger.dart';
 import 'package:vrc_manager/widgets/grid_modal/config.dart';
 import 'package:vrc_manager/widgets/grid_view/extraction/render_grid/friends.dart';
 import 'package:vrc_manager/widgets/loading.dart';
+import 'package:vrc_manager/widgets/scroll.dart';
 
 class VRChatMobileFriendsData {
   Map<String, VRChatWorld?> locationMap;
@@ -68,22 +69,19 @@ class VRChatMobileFriends extends ConsumerWidget {
       loading: () => const Loading(),
       error: (e, trace) {
         logger.w(getMessage(e), e, trace);
-        return const ErrorPage();
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: ErrorSnackBar(e)));
+        return ScrollWidget(
+          onRefresh: () => ref.refresh(vrchatMobileFriendsProvider(offline).future),
+          child: ErrorPage(loggerReport: ref.read(loggerReportProvider)),
+        );
       },
-      data: (data) => RefreshIndicator(
+      data: (data) => ScrollWidget(
         onRefresh: () => ref.refresh(vrchatMobileFriendsProvider(offline).future),
-        child: SizedBox(
-          height: double.infinity,
-          width: double.infinity,
-          child: SingleChildScrollView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            child: ExtractionFriend(
-              id: offline ? GridModalConfigType.offlineFriends : GridModalConfigType.onlineFriends,
-              userList: data.userList,
-              locationMap: data.locationMap,
-              instanceMap: data.instanceMap,
-            ),
-          ),
+        child: ExtractionFriend(
+          id: offline ? GridModalConfigType.offlineFriends : GridModalConfigType.onlineFriends,
+          userList: data.userList,
+          locationMap: data.locationMap,
+          instanceMap: data.instanceMap,
         ),
       ),
     );

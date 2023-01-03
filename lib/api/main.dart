@@ -1,4 +1,5 @@
 // Project imports:
+import 'package:vrc_manager/api/assets/assets.dart';
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/assets/session.dart';
 
@@ -16,19 +17,12 @@ class VRChatAPI {
   }
 
   Map<String, String> apiKey() {
-    // cspell:disable-next-line
-    return <String, String>{"apiKey": "JlE5Jldo5Jibnk5O5hTx6XVqsJu4WJ26"};
+    return <String, String>{"apiKey": VRChatAssets.apiKey};
   }
 
   final Session vrchatSession = Session();
   Uri endpoint(String path, [Map<String, String>? queryParameters]) {
-    return Uri(
-      scheme: 'https',
-      host: 'vrchat.com',
-      port: 443,
-      path: path,
-      queryParameters: queryParameters ?? {},
-    );
+    return VRChatAssets.vrchat.replace(path: path, queryParameters: queryParameters ?? {});
   }
 
   // Login
@@ -80,6 +74,17 @@ class VRChatAPI {
           ),
         )
         .then((value) => VRChatUser.fromJson(value));
+  }
+
+  Future<VRChatUserSelf> selfUser(String uid) {
+    return vrchatSession
+        .get(
+          endpoint(
+            'api/1/users/$uid',
+            apiKey(),
+          ),
+        )
+        .then((value) => VRChatUserSelf.fromJson(value));
   }
 
   Future<VRChatUserNotes> userNotes(String uid, String note) {
@@ -260,15 +265,13 @@ class VRChatAPI {
     final param = <String, String>{
       "sent": "false",
       "type": type,
-      "after": after,
-      "hidden": hidden.toString(),
+      if (after != "") "after": after,
+      if (type != "friendRequest") "hidden": hidden.toString(),
       "offset": offset.toString(),
       "n": "50",
     }..addAll(
         apiKey(),
       );
-    if (type == "friendRequest") param.remove("hidden");
-    if (param["after"] == "") param.remove("after");
     return vrchatSession
         .get(
           endpoint('api/1/auth/user/notifications', param),

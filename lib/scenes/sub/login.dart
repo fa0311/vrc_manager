@@ -14,6 +14,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 // Project imports:
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
+import 'package:vrc_manager/assets.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/core/splash.dart';
 import 'package:vrc_manager/scenes/main/main.dart';
@@ -31,10 +32,8 @@ class VRChatMobileLoginData {
 }
 
 String genUid([int length = 64]) {
-  // cspell:disable-next-line
-  const charset = '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._';
   final Random random = Random.secure();
-  return List.generate(length, (_) => charset[random.nextInt(charset.length)]).join();
+  return List.generate(length, (_) => Assets.charset[random.nextInt(Assets.charset.length)]).join();
 }
 
 final isPasswordObscureProvider = StateProvider.autoDispose<bool>((ref) => true);
@@ -55,12 +54,12 @@ final rememberPasswordProvider = StateProvider.autoDispose<bool>((ref) {
 
 final loginDataProvider = StateProvider.autoDispose<VRChatMobileLoginData>((ref) {
   AccountConfig accountConfig;
-  if (ref.read(accountConfigProvider).isLogout()) {
+  if (!ref.read(accountConfigProvider).isLogout()) {
     accountConfig = ref.read(accountConfigProvider).loggedAccount!;
   } else {
     accountConfig = AccountConfig(genUid());
   }
-  return VRChatMobileLoginData(accountConfig: accountConfig, session: VRChatAPI(cookie: accountConfig.cookie));
+  return VRChatMobileLoginData(accountConfig: accountConfig, session: VRChatAPI(cookie: accountConfig.cookie ?? ""));
 });
 
 class VRChatMobileLogin extends ConsumerWidget {

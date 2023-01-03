@@ -2,6 +2,7 @@
 import 'dart:convert';
 
 // Project imports:
+import 'package:vrc_manager/api/assets/instance_type.dart';
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/storage/grid_modal.dart';
 import 'package:vrc_manager/widgets/grid_modal/config.dart';
@@ -42,12 +43,12 @@ sortByLocationMapFromUser(List<VRChatUser> userList) {
     String locationA = userA.location;
     String locationB = userB.location;
     if (locationA == locationB) return 0;
-    if (locationA == "offline") return 1;
-    if (locationB == "offline") return -1;
-    if (locationA == "private") return 1;
-    if (locationB == "private") return -1;
-    if (locationA == "traveling") return 1;
-    if (locationB == "traveling") return -1;
+    if (locationA == VRChatInstanceIdOther.offline.name) return 1;
+    if (locationB == VRChatInstanceIdOther.offline.name) return -1;
+    if (locationA == VRChatInstanceIdOther.private.name) return 1;
+    if (locationB == VRChatInstanceIdOther.private.name) return -1;
+    if (locationA == VRChatInstanceIdOther.traveling.name) return 1;
+    if (locationB == VRChatInstanceIdOther.traveling.name) return -1;
     if (inLocation[locationA]! > inLocation[locationB]!) return -1;
     if (inLocation[locationA]! < inLocation[locationB]!) return 1;
 

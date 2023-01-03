@@ -10,9 +10,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 // Project imports:
+import 'package:vrc_manager/api/assets/icon.dart';
 import 'package:vrc_manager/api/data_class.dart';
-import 'package:vrc_manager/api/enum/icon.dart';
 import 'package:vrc_manager/api/main.dart';
+import 'package:vrc_manager/assets.dart';
 import 'package:vrc_manager/assets/anchor.dart';
 import 'package:vrc_manager/assets/date.dart';
 import 'package:vrc_manager/main.dart';
@@ -22,6 +23,7 @@ import 'package:vrc_manager/scenes/sub/self.dart';
 import 'package:vrc_manager/storage/accessibility.dart';
 import 'package:vrc_manager/widgets/modal.dart';
 import 'package:vrc_manager/widgets/modal/share.dart';
+import 'package:vrc_manager/widgets/scroll.dart';
 import 'package:vrc_manager/widgets/share.dart';
 import 'package:vrc_manager/widgets/status.dart';
 
@@ -158,7 +160,15 @@ class EditBio extends ConsumerWidget {
 
 final editNoteProvider = StateProvider<bool>((ref) => false);
 
-final noteControllerProvider = StateProvider.family<TextEditingController, VRChatUser>((ref, user) => TextEditingController(text: user.note));
+final noteControllerProvider = FutureProvider.family<TextEditingController, VRChatUser>((ref, user) async {
+  final VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.read(accountConfigProvider).loggedAccount!.cookie ?? "");
+  if (user.note == null) {
+    await vrchatLoginSession.users(user.id).then((value) => user.note = value.note).catchError((e) {
+      logger.e(getMessage(e), e);
+    });
+  }
+  return TextEditingController(text: user.note);
+});
 
 class EditNote extends ConsumerWidget {
   final VRChatUser user;
@@ -168,34 +178,45 @@ class EditNote extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     bool wait = ref.watch(editNoteProvider);
     VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "");
-    TextEditingController controller = ref.watch(noteControllerProvider(user));
+    AsyncValue<TextEditingController> data = ref.watch(noteControllerProvider(user));
 
-    return AlertDialog(
-      content: TextField(
-        controller: controller,
-        maxLines: null,
-        decoration: InputDecoration(labelText: AppLocalizations.of(context)!.editNote),
+    return data.when(
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (e, trace) {
+        logger.w(getMessage(e), e, trace);
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: ErrorSnackBar(e)));
+        return ScrollWidget(
+          onRefresh: () => ref.refresh(vrchatMobileSelfProvider.future),
+          child: ErrorPage(loggerReport: ref.read(loggerReportProvider)),
+        );
+      },
+      data: (data) => AlertDialog(
+        content: TextField(
+          controller: data,
+          maxLines: null,
+          decoration: InputDecoration(labelText: AppLocalizations.of(context)!.editNote),
+        ),
+        actions: <Widget>[
+          TextButton(
+            child: Text(AppLocalizations.of(context)!.close),
+            onPressed: () => Navigator.pop(context),
+          ),
+          TextButton(
+            child: wait ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator()) : Text(AppLocalizations.of(context)!.save),
+            onPressed: () async {
+              ref.read(editNoteProvider.notifier).state = true;
+              await vrchatLoginSession.userNotes(user.id, user.note = data.text).catchError((e) {
+                logger.e(getMessage(e), e);
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: ErrorSnackBar(e)));
+              });
+              user.note = user.note == "" ? null : user.note;
+              ref.read(vrchatUserCountProvider.notifier).state++;
+              ref.read(editNoteProvider.notifier).state = false;
+              Navigator.pop(context);
+            },
+          ),
+        ],
       ),
-      actions: <Widget>[
-        TextButton(
-          child: Text(AppLocalizations.of(context)!.close),
-          onPressed: () => Navigator.pop(context),
-        ),
-        TextButton(
-          child: wait ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator()) : Text(AppLocalizations.of(context)!.save),
-          onPressed: () async {
-            ref.read(editNoteProvider.notifier).state = true;
-            await vrchatLoginSession.userNotes(user.id, user.note = controller.text).catchError((e) {
-              logger.e(getMessage(e), e);
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: ErrorSnackBar(e)));
-            });
-            user.note = user.note == "" ? null : user.note;
-            ref.read(vrchatUserCountProvider.notifier).state++;
-            ref.read(editNoteProvider.notifier).state = false;
-            Navigator.pop(context);
-          },
-        ),
-      ],
     );
   }
 }
@@ -235,7 +256,7 @@ class BioLink extends ConsumerWidget {
               padding: const EdgeInsets.all(5),
               child: Ink(
                 child: SvgPicture.asset(
-                  "assets/svg/${byVrchatExternalServices(url)}.svg",
+                  Assets.svg.resolve("${byVrchatExternalServices(url).text}.svg").toFilePath(),
                   width: 20,
                   height: 20,
                   color: Color(byVrchatExternalServices(url).color),

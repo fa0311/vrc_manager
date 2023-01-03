@@ -8,19 +8,18 @@ import 'package:flutter/services.dart';
 // Package imports:
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:vrc_manager/widgets/config_modal/locale.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 // Project imports:
+import 'package:vrc_manager/assets.dart';
 import 'package:vrc_manager/storage/user_policy.dart';
+import 'package:vrc_manager/widgets/config_modal/locale.dart';
 import 'package:vrc_manager/widgets/modal.dart';
 import 'package:vrc_manager/widgets/modal/share.dart';
 import 'package:vrc_manager/widgets/share.dart';
 
 class VRChatMobileWebViewUserPolicy extends ConsumerWidget {
   const VRChatMobileWebViewUserPolicy({Key? key}) : super(key: key);
-
-  static Uri url = Uri.https("github.com", "/fa0311/vrc_manager/blob/master/docs/user_policies/ja.md");
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -42,7 +41,7 @@ class VRChatMobileWebViewUserPolicy extends ConsumerWidget {
             onPressed: () {
               showModalBottomSheetStatelessWidget(
                 context: context,
-                builder: () => ShareUrlListTile(url: url, browserExternalForce: true),
+                builder: () => ShareUrlListTile(url: Assets.userPolicy, browserExternalForce: true),
               );
             },
           ),
@@ -50,7 +49,7 @@ class VRChatMobileWebViewUserPolicy extends ConsumerWidget {
       ),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.onPrimary,
+          color: Theme.of(context).cardColor,
           boxShadow: [
             BoxShadow(
               color: Theme.of(context).colorScheme.shadow.withOpacity(0.2),
@@ -95,11 +94,11 @@ class VRChatMobileWebViewUserPolicy extends ConsumerWidget {
       body: () {
         if (Platform.isAndroid || Platform.isIOS) {
           return WebView(
-            initialUrl: url.toString(),
+            initialUrl: Assets.userPolicy.toString(),
             javascriptMode: JavascriptMode.unrestricted,
           );
         } else {
-          openInBrowser(url: url, forceExternal: true).then((value) {
+          openInBrowser(url: Assets.userPolicy, forceExternal: true).then((value) {
             if (value == null) return;
             Navigator.push(
               context,
@@ -107,29 +106,27 @@ class VRChatMobileWebViewUserPolicy extends ConsumerWidget {
             );
           });
 
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  AppLocalizations.of(context)!.lookAtYourBrowser,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                AppLocalizations.of(context)!.lookAtYourBrowser,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                ),
+              ),
+              const Padding(
+                padding: EdgeInsets.all(16.0),
+                child: SizedBox(
+                  width: 50,
+                  height: 50,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 6,
                   ),
                 ),
-                const Padding(
-                  padding: EdgeInsets.all(16.0),
-                  child: SizedBox(
-                    width: 50,
-                    height: 50,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 6,
-                    ),
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           );
         }
       }(),

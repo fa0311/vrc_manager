@@ -6,6 +6,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
+import 'package:vrc_manager/api/assets/instance_type.dart';
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/assets/sort/users.dart';
 import 'package:vrc_manager/scenes/sub/user.dart';
@@ -42,7 +43,7 @@ class ExtractionFriend extends ConsumerGridWidget {
       children: [
         for (VRChatFriends user in sortUsers(config, userList) as List<VRChatFriends>)
           () {
-            if (config.joinable && ["private", "offline", "traveling"].contains(user.location)) return null;
+            if (config.joinable && VRChatInstanceIdOther.values.any((id) => id.name == user.location)) return null;
             String worldId = user.location.split(":")[0];
             return GenericTemplate(
               imageUrl: user.profilePicOverride ?? user.currentAvatarThumbnailImageUrl,
@@ -59,9 +60,9 @@ class ExtractionFriend extends ConsumerGridWidget {
               },
               bottom: () {
                 if (!config.worldDetails) return null;
-                if (user.location == "private") return const PrivateWorld(card: false);
-                if (user.location == "traveling") return const TravelingWorld(card: false);
-                if (user.location == "offline") return const OnTheWebsite();
+                if (user.location == VRChatInstanceIdOther.private.name) return const PrivateWorld(card: false);
+                if (user.location == VRChatInstanceIdOther.traveling.name) return const TravelingWorld(card: false);
+                if (user.location == VRChatInstanceIdOther.offline.name) return const OnTheWebsite();
                 if (locationMap[worldId] == null) return null;
                 return InstanceWidget(world: locationMap[worldId]!, instance: instanceMap[user.location]!, card: false);
               }(),
@@ -69,9 +70,9 @@ class ExtractionFriend extends ConsumerGridWidget {
                 Username(user: user),
                 for (String text in [
                   if (user.statusDescription != null) user.statusDescription!,
-                  if (!["private", "offline", "traveling"].contains(user.location)) locationMap[worldId]?.name,
-                  if (user.location == "private") AppLocalizations.of(context)!.privateWorld,
-                  if (user.location == "traveling") AppLocalizations.of(context)!.traveling,
+                  if (!VRChatInstanceIdOther.values.any((id) => id.name == user.location)) locationMap[worldId]?.name,
+                  if (user.location == VRChatInstanceIdOther.private.name) AppLocalizations.of(context)!.privateWorld,
+                  if (user.location == VRChatInstanceIdOther.traveling.name) AppLocalizations.of(context)!.loadingWorld,
                 ].whereType<String>()) ...[
                   Text(text, style: const TextStyle(fontSize: 15)),
                 ],
@@ -90,7 +91,7 @@ class ExtractionFriend extends ConsumerGridWidget {
       children: [
         for (VRChatFriends user in sortUsers(config, userList) as List<VRChatFriends>)
           () {
-            if (config.joinable && ["private", "offline", "traveling"].contains(user.location)) return null;
+            if (config.joinable && VRChatInstanceIdOther.values.any((id) => id.name == user.location)) return null;
             String worldId = user.location.split(":")[0];
             return GenericTemplate(
               imageUrl: user.profilePicOverride ?? user.currentAvatarThumbnailImageUrl,
@@ -108,19 +109,15 @@ class ExtractionFriend extends ConsumerGridWidget {
               },
               bottom: () {
                 if (!config.worldDetails) return null;
-                if (user.location == "private") return const PrivateWorld(card: false, half: true);
-                if (user.location == "traveling") return const TravelingWorld(card: false, half: true);
-                if (user.location == "offline") return const OnTheWebsite(half: true);
+                if (user.location == VRChatInstanceIdOther.private.name) return const PrivateWorld(card: false, half: true);
+                if (user.location == VRChatInstanceIdOther.traveling.name) return const TravelingWorld(card: false, half: true);
+                if (user.location == VRChatInstanceIdOther.offline.name) return const OnTheWebsite(half: true);
                 if (locationMap[worldId] == null) return null;
                 return InstanceWidget(world: locationMap[worldId]!, instance: instanceMap[user.location]!, card: false, half: true);
               }(),
               children: [
                 Username(user: user, diameter: 12),
-                for (String text in [
-                  if (user.statusDescription != null) user.statusDescription!,
-                ].whereType<String>()) ...[
-                  Text(text, style: const TextStyle(fontSize: 10)),
-                ],
+                if (user.statusDescription != null) Text(user.statusDescription!, style: const TextStyle(fontSize: 10)),
               ],
             );
           }(),
@@ -136,7 +133,7 @@ class ExtractionFriend extends ConsumerGridWidget {
       children: [
         for (VRChatFriends user in sortUsers(config, userList) as List<VRChatFriends>)
           () {
-            if (config.joinable && ["private", "offline", "traveling"].contains(user.location)) return null;
+            if (config.joinable && VRChatInstanceIdOther.values.any((id) => id.name == user.location)) return null;
             String worldId = user.location.split(":")[0];
             return GenericTemplateText(
               onTap: () => Navigator.push(
@@ -149,7 +146,7 @@ class ExtractionFriend extends ConsumerGridWidget {
                   context: context,
                   builder: () {
                     if (config.worldDetails &&
-                        !["private", "offline", "traveling"].contains(user.location) &&
+                        !VRChatInstanceIdOther.values.any((id) => id.name == user.location) &&
                         locationMap[worldId] != null &&
                         instanceMap[user.location] != null) {
                       return UserInstanceDetailsModalBottom(user: user, world: locationMap[worldId]!, instance: instanceMap[user.location]!);
@@ -169,9 +166,9 @@ class ExtractionFriend extends ConsumerGridWidget {
                 ),
                 if (config.worldDetails)
                   Text(() {
-                    if (user.location == "private") return AppLocalizations.of(context)!.privateWorld;
-                    if (user.location == "traveling") return AppLocalizations.of(context)!.traveling;
-                    if (user.location == "offline") return AppLocalizations.of(context)!.onTheWebsite;
+                    if (user.location == VRChatInstanceIdOther.offline.name) return AppLocalizations.of(context)!.privateWorld;
+                    if (user.location == VRChatInstanceIdOther.traveling.name) return AppLocalizations.of(context)!.loadingWorld;
+                    if (user.location == VRChatInstanceIdOther.offline.name) return AppLocalizations.of(context)!.onTheWebsite;
                     if (locationMap[worldId] == null) return "";
                     return locationMap[worldId]!.name;
                   }(), style: const TextStyle(fontSize: 12, height: 1)),

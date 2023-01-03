@@ -8,6 +8,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
+import 'package:vrc_manager/api/assets/instance_type.dart';
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/main.dart';
@@ -15,12 +16,14 @@ import 'package:vrc_manager/scenes/core/splash.dart';
 import 'package:vrc_manager/scenes/setting/logger.dart';
 import 'package:vrc_manager/widgets/drawer.dart';
 import 'package:vrc_manager/widgets/grid_view/widget/world.dart';
+import 'package:vrc_manager/widgets/loading.dart';
 import 'package:vrc_manager/widgets/modal.dart';
 import 'package:vrc_manager/widgets/modal/user.dart';
+import 'package:vrc_manager/widgets/scroll.dart';
 import 'package:vrc_manager/widgets/user.dart';
 
 class VRChatMobileSelfData {
-  VRChatUserSelfOverload user;
+  VRChatUserSelf user;
   VRChatWorld? world;
   VRChatInstance? instance;
 
@@ -34,19 +37,15 @@ class VRChatMobileSelfData {
 final vrchatUserCountProvider = StateProvider<int>((ref) => 0);
 
 final vrchatMobileSelfProvider = FutureProvider<VRChatMobileSelfData>((ref) async {
-  final VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.read(accountConfigProvider).loggedAccount!.cookie);
+  final VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.read(accountConfigProvider).loggedAccount!.cookie ?? "");
   VRChatWorld? world;
   VRChatInstance? instance;
 
-  VRChatUserSelfOverload user = await vrchatLoginSession.user().catchError((e) {
+  VRChatUserSelf user = await vrchatLoginSession.selfUser(ref.read(accountConfigProvider).loggedAccount?.data?.id ?? "").catchError((e) {
     logger.e(getMessage(e), e);
   });
 
-  await vrchatLoginSession.users(user.id).then((value) => user.note = value.note).catchError((e) {
-    logger.e(getMessage(e), e);
-  });
-
-  if (["private", "offline", "traveling"].contains(user.location)) return VRChatMobileSelfData(user: user);
+  if (VRChatInstanceIdOther.values.any((id) => id.name == user.location)) return VRChatMobileSelfData(user: user);
 
   await Future.wait([
     vrchatLoginSession.worlds(user.location.split(":")[0]).then((value) => world = value).catchError((e) {
@@ -68,7 +67,7 @@ class VRChatMobileSelf extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.home),
+        title: Text(AppLocalizations.of(context)!.user),
         actions: data.when(
           loading: () => null,
           error: (e, trace) {
@@ -90,42 +89,41 @@ class VRChatMobileSelf extends ConsumerWidget {
       ),
       drawer: Navigator.of(context).canPop() ? null : const NormalDrawer(),
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Container(
-            alignment: Alignment.center,
-            padding: const EdgeInsets.only(
-              top: 10,
-              bottom: 0,
-              right: 30,
-              left: 30,
-            ),
-            child: Consumer(
-              builder: (context, ref, child) {
-                ref.watch(vrchatUserCountProvider);
-                return data.when(
-                  loading: () => const Center(child: CircularProgressIndicator()),
-                  error: (e, trace) {
-                    logger.w(getMessage(e), e, trace);
-                    return const ErrorPage();
-                  },
-                  data: (data) => Column(
+        child: Consumer(
+          builder: (context, ref, child) {
+            ref.watch(vrchatUserCountProvider);
+            return data.when(
+              loading: () => const Loading(),
+              error: (e, trace) {
+                logger.w(getMessage(e), e, trace);
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: ErrorSnackBar(e)));
+                return ScrollWidget(
+                  onRefresh: () => ref.refresh(vrchatMobileSelfProvider.future),
+                  child: ErrorPage(loggerReport: ref.read(loggerReportProvider)),
+                );
+              },
+              data: (data) => ScrollWidget(
+                onRefresh: () => ref.refresh(vrchatMobileSelfProvider.future),
+                child: Container(
+                  padding: const EdgeInsets.only(top: 10, right: 30, left: 30),
+                  child: Column(
                     children: [
                       UserProfile(user: data.user),
                       Container(
                         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
                         child: () {
-                          if (data.user.location == "private") return const PrivateWorld();
-                          if (data.user.location == "traveling") return const TravelingWorld();
-                          if (data.user.location == "offline") return null;
+                          if (data.user.location == VRChatInstanceIdOther.private.name) return const PrivateWorld();
+                          if (data.user.location == VRChatInstanceIdOther.traveling.name) return const TravelingWorld();
+                          if (data.user.location == VRChatInstanceIdOther.offline.name) return null;
                           return data.world == null ? null : InstanceWidget(world: data.world!, instance: data.instance!);
                         }(),
                       ),
                     ],
                   ),
-                );
-              },
-            ),
-          ),
+                ),
+              ),
+            );
+          },
         ),
       ),
     );

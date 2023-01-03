@@ -6,7 +6,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
-import 'package:vrc_manager/api/enum/region.dart';
+import 'package:vrc_manager/api/assets/region.dart';
 
 class RegionWidget extends ConsumerWidget {
   final VRChatRegion region;
