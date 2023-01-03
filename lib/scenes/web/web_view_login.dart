@@ -85,7 +85,7 @@ class VRChatMobileWebViewLogin extends ConsumerWidget {
               ref.read(webViewControllerProvider.notifier).state = value;
             },
             onTitleChanged: (controller, title) async {
-              if (title != "Home - VRChat") return;
+              if (title != VRChatAssets.homeTitle) return;
               CookieManager cookieManager = CookieManager.instance();
               List<Cookie> cookieList = await cookieManager.getCookies(url: VRChatAssets.vrchat);
               Map<String, String> cookieMap = {};

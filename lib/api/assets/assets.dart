@@ -6,6 +6,9 @@ class VRChatAssets {
   // cspell:disable-next-line
   static String apiKey = "JlE5Jldo5Jibnk5O5hTx6XVqsJu4WJ26";
 
+  static String homeTitle = "Home - VRChat";
+  static String loginTitle = "Login - VRChat";
+
   static Uri login = VRChatAssets.vrchat.resolve("/home/login");
   static Uri user = VRChatAssets.vrchat.resolve("/home/user/");
   static Uri launch = VRChatAssets.vrchat.resolve("/home/launch");
