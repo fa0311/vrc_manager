@@ -112,14 +112,14 @@ class ProfileAction extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "");
+    VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "", logger: logger);
 
     sendFriendRequest() {
       vrchatLoginSession.sendFriendRequest(user.id).then((value) {
         Navigator.of(context).pop();
       }).catchError((e, trace) {
         logger.e(getMessage(e), e, trace);
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: ErrorSnackBar(e)));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage(context: context, status: e))));
         Navigator.of(context).popUntil((route) => route.isFirst);
       });
       status.outgoingRequest = true;
@@ -130,7 +130,7 @@ class ProfileAction extends ConsumerWidget {
         Navigator.of(context).pop();
       }).catchError((e, trace) {
         logger.e(getMessage(e), e, trace);
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: ErrorSnackBar(e)));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage(context: context, status: e))));
         Navigator.of(context).popUntil((route) => route.isFirst);
       });
       status.isFriend = true;
@@ -142,7 +142,7 @@ class ProfileAction extends ConsumerWidget {
         Navigator.of(context).pop();
       }).catchError((e, trace) {
         logger.e(getMessage(e), e, trace);
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: ErrorSnackBar(e)));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage(context: context, status: e))));
         Navigator.of(context).popUntil((route) => route.isFirst);
       });
       status.outgoingRequest = false;
@@ -170,7 +170,7 @@ class ProfileAction extends ConsumerWidget {
                     Navigator.of(context).pop();
                   }).catchError((e, trace) {
                     logger.e(getMessage(e), e, trace);
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: ErrorSnackBar(e)));
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage(context: context, status: e))));
                     Navigator.of(context).popUntil((route) => route.isFirst);
                   });
                   status.isFriend = false;

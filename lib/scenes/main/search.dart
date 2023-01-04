@@ -46,7 +46,7 @@ class VRChatMobileSearchData {
 }
 
 final vrchatMobileSearchProvider = FutureProvider<VRChatMobileSearchData>((ref) async {
-  VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "");
+  VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "", logger: logger);
   List<VRChatUser> userList = [];
   List<VRChatLimitedWorld> worldList = [];
   int len;
@@ -188,7 +188,6 @@ class VRChatMobileSearchResult extends ConsumerWidget {
       loading: () => const Loading(),
       error: (e, trace) {
         logger.w(getMessage(e), e, trace);
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: ErrorSnackBar(e)));
         return ErrorPage(loggerReport: ref.read(loggerReportProvider));
       },
       data: (VRChatMobileSearchData data) {

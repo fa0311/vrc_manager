@@ -38,7 +38,7 @@ class VRChatMobileUserData {
 }
 
 final vrchatMobileUserProvider = FutureProvider.family<VRChatMobileUserData, String>((ref, userId) async {
-  VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "");
+  VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "", logger: logger);
   late VRChatUser user;
   late VRChatFriendStatus status;
   VRChatWorld? world;
@@ -103,8 +103,7 @@ class VRChatMobileUser extends ConsumerWidget {
             return data.when(
               loading: () => const Loading(),
               error: (e, trace) {
-                logger.w(getMessage(e), e, trace);
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: ErrorSnackBar(e)));
+                logger.w(e, e, trace);
                 return ScrollWidget(
                   onRefresh: () => ref.refresh((vrchatMobileUserProvider(userId).future)),
                   child: ErrorPage(loggerReport: ref.read(loggerReportProvider)),

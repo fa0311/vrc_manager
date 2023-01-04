@@ -224,7 +224,7 @@ class InviteVrchatListTileWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "");
+    VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "", logger: logger);
 
     return ListTile(
       leading: const Icon(Icons.mail),
@@ -232,11 +232,11 @@ class InviteVrchatListTileWidget extends ConsumerWidget {
       onTap: () async {
         VRChatSecureName secureId = await vrchatLoginSession.shortName(location).catchError((e, trace) {
           logger.e(getMessage(e), e, trace);
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: ErrorSnackBar(e)));
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage(context: context, status: e))));
         });
         await vrchatLoginSession.selfInvite(location, secureId.shortName ?? secureId.secureName ?? "").catchError((e, trace) {
           logger.e(getMessage(e), e, trace);
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: ErrorSnackBar(e)));
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage(context: context, status: e))));
         });
 
         showDialog(

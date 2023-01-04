@@ -155,7 +155,7 @@ class AccountConfig extends ChangeNotifier {
   }
 
   Future<bool> tokenCheck() async {
-    VRChatAPI vrchatLoginSession = VRChatAPI(cookie: cookie ?? "");
+    VRChatAPI vrchatLoginSession = VRChatAPI(cookie: cookie ?? "", logger: logger);
     return await vrchatLoginSession.user().then((VRChatUserSelfOverload response) {
       data = response;
       setDisplayName(response.displayName);

@@ -37,7 +37,7 @@ class VRChatMobileSelfData {
 final vrchatUserCountProvider = StateProvider<int>((ref) => 0);
 
 final vrchatMobileSelfProvider = FutureProvider<VRChatMobileSelfData>((ref) async {
-  final VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.read(accountConfigProvider).loggedAccount!.cookie ?? "");
+  final VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.read(accountConfigProvider).loggedAccount!.cookie ?? "", logger: logger);
   VRChatWorld? world;
   VRChatInstance? instance;
 
@@ -96,7 +96,6 @@ class VRChatMobileSelf extends ConsumerWidget {
               loading: () => const Loading(),
               error: (e, trace) {
                 logger.w(getMessage(e), e, trace);
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: ErrorSnackBar(e)));
                 return ScrollWidget(
                   onRefresh: () => ref.refresh(vrchatMobileSelfProvider.future),
                   child: ErrorPage(loggerReport: ref.read(loggerReportProvider)),

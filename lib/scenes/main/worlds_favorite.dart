@@ -32,7 +32,7 @@ final vrchatMobileWorldFavoriteCounterProvider = StateProvider<int>((ref) => 0);
 
 final vrchatMobileWorldFavoriteSortProvider = FutureProvider<VRChatMobileWorldFavoriteData>((ref) async {
   Future getFavoriteWorld(FavoriteWorldData favoriteWorld) async {
-    VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "");
+    VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "", logger: logger);
     int len;
     do {
       int offset = favoriteWorld.list.length;
@@ -46,7 +46,7 @@ final vrchatMobileWorldFavoriteSortProvider = FutureProvider<VRChatMobileWorldFa
     } while (len == 50);
   }
 
-  VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "");
+  VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "", logger: logger);
   List<Future> futureList = [];
   List<FavoriteWorldData> favoriteWorld = [];
   int len = 0;
@@ -79,7 +79,6 @@ class VRChatMobileWorldsFavorite extends ConsumerWidget {
       loading: () => const Loading(),
       error: (e, trace) {
         logger.w(getMessage(e), e, trace);
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: ErrorSnackBar(e)));
         return ScrollWidget(
           onRefresh: () => ref.refresh(vrchatMobileWorldFavoriteSortProvider.future),
           child: ErrorPage(loggerReport: ref.read(loggerReportProvider)),

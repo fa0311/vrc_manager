@@ -14,7 +14,7 @@ import 'package:vrc_manager/scenes/setting/logger.dart';
 import 'package:vrc_manager/storage/accessibility.dart';
 
 ConsoleOutputExt loggerOutput = ConsoleOutputExt();
-Logger logger = Logger(
+Logger logger = LoggerExt(
   filter: ProductionFilter(),
   printer: PrettyPrinter(methodCount: 8),
   output: loggerOutput,

@@ -88,14 +88,14 @@ class SelfInviteListTileWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "");
+    VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "", logger: logger);
 
     return ListTile(
       title: Text(AppLocalizations.of(context)!.joinInstance),
       onTap: () {
         vrchatLoginSession.selfInvite(instance.location, instance.shortName ?? "").catchError((e, trace) {
           logger.e(getMessage(e), e, trace);
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: ErrorSnackBar(e)));
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage(context: context, status: e))));
         });
       },
     );
@@ -168,7 +168,7 @@ class FavoriteAction extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "");
+    VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "", logger: logger);
     AsyncValue<VRChatMobileWorldFavoriteData> data = ref.watch(vrchatMobileWorldFavoriteSortProvider);
     FavoriteWorldData? loadingWorldData = ref.watch(loadingWorldDataProvider);
 
@@ -176,7 +176,6 @@ class FavoriteAction extends ConsumerWidget {
       loading: () => const Loading(),
       error: (e, trace) {
         logger.w(getMessage(e), e, trace);
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: ErrorSnackBar(e)));
         return ScrollWidget(
           onRefresh: () => ref.refresh((vrchatMobileWorldFavoriteSortProvider.future)),
           child: ErrorPage(loggerReport: ref.read(loggerReportProvider)),
@@ -206,7 +205,7 @@ class FavoriteAction extends ConsumerWidget {
                       if (value || favoriteWorld != null) {
                         await vrchatLoginSession.deleteFavorites(favoriteWorld!.favoriteId).catchError((e, trace) {
                           logger.e(getMessage(e), e, trace);
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: ErrorSnackBar(e)));
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage(context: context, status: e))));
                         });
                         favoriteWorldData!.list.remove(favoriteWorld);
                         favoriteWorld = null;
@@ -215,7 +214,7 @@ class FavoriteAction extends ConsumerWidget {
                       if (!value && favoriteWorldData != favoriteData) {
                         VRChatFavorite favorite = await vrchatLoginSession.addFavorites("world", world.id, favoriteData.group.name).catchError((e, trace) {
                           logger.e(getMessage(e), e, trace);
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: ErrorSnackBar(e)));
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage(context: context, status: e))));
                         });
                         favoriteWorld = VRChatFavoriteWorld.fromFavorite(world, favorite, favoriteData.group.name);
                         favoriteData.list.add(favoriteWorld!);

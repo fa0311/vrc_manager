@@ -59,7 +59,7 @@ final loginDataProvider = StateProvider.autoDispose<VRChatMobileLoginData>((ref)
   } else {
     accountConfig = AccountConfig(genUid());
   }
-  return VRChatMobileLoginData(accountConfig: accountConfig, session: VRChatAPI(cookie: accountConfig.cookie ?? ""));
+  return VRChatMobileLoginData(accountConfig: accountConfig, session: VRChatAPI(cookie: accountConfig.cookie ?? "", logger: logger));
 });
 
 class VRChatMobileLogin extends ConsumerWidget {
@@ -97,7 +97,7 @@ class VRChatMobileLogin extends ConsumerWidget {
         }
       } catch (e, trace) {
         logger.e(getMessage(e), e, trace);
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: ErrorSnackBar(e)));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage(context: context, status: e))));
       }
     }
 
@@ -145,7 +145,7 @@ class VRChatMobileLogin extends ConsumerWidget {
         }
       } catch (e, trace) {
         logger.e(getMessage(e), e, trace);
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: ErrorSnackBar(e)));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage(context: context, status: e))));
       }
     }
 

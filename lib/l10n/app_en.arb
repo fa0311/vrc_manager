@@ -175,6 +175,7 @@
     "@____________________REPORT____________________": {},
     "report": "Report",
     "log": "Log",
+    "viewDetailedLogs": "View detailed logs",
     "@____________________USER_POLICY____________________": {},
     "userPolicy": "User Policy",
     "agree": "Agree",

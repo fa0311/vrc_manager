@@ -125,7 +125,7 @@ class EditBio extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     bool wait = ref.watch(editBioProvider);
-    VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "");
+    VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "", logger: logger);
     TextEditingController controller = ref.watch(bioControllerProvider(user));
 
     return AlertDialog(
@@ -145,7 +145,7 @@ class EditBio extends ConsumerWidget {
             ref.read(editBioProvider.notifier).state = true;
             await vrchatLoginSession.changeBio(user.id, user.bio = controller.text).catchError((e, trace) {
               logger.e(getMessage(e), e, trace);
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: ErrorSnackBar(e)));
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage(context: context, status: e))));
             });
             user.bio = user.bio == "" ? null : user.bio;
             ref.read(vrchatUserCountProvider.notifier).state++;
@@ -161,7 +161,7 @@ class EditBio extends ConsumerWidget {
 final editNoteProvider = StateProvider<bool>((ref) => false);
 
 final noteControllerProvider = FutureProvider.family<TextEditingController, VRChatUser>((ref, user) async {
-  final VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.read(accountConfigProvider).loggedAccount!.cookie ?? "");
+  final VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.read(accountConfigProvider).loggedAccount!.cookie ?? "", logger: logger);
   if (user.note == null) {
     await vrchatLoginSession.users(user.id).then((value) => user.note = value.note).catchError((e, trace) {
       logger.e(getMessage(e), e, trace);
@@ -177,14 +177,13 @@ class EditNote extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     bool wait = ref.watch(editNoteProvider);
-    VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "");
+    VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "", logger: logger);
     AsyncValue<TextEditingController> data = ref.watch(noteControllerProvider(user));
 
     return data.when(
       loading: () => const Center(child: CircularProgressIndicator()),
       error: (e, trace) {
         logger.w(getMessage(e), e, trace);
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: ErrorSnackBar(e)));
         return ScrollWidget(
           onRefresh: () => ref.refresh(vrchatMobileSelfProvider.future),
           child: ErrorPage(loggerReport: ref.read(loggerReportProvider)),
@@ -207,7 +206,7 @@ class EditNote extends ConsumerWidget {
               ref.read(editNoteProvider.notifier).state = true;
               await vrchatLoginSession.userNotes(user.id, user.note = data.text).catchError((e, trace) {
                 logger.e(getMessage(e), e, trace);
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: ErrorSnackBar(e)));
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage(context: context, status: e))));
               });
               user.note = user.note == "" ? null : user.note;
               ref.read(vrchatUserCountProvider.notifier).state++;

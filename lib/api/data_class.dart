@@ -29,7 +29,7 @@ class VRChatError {
       message = match.group(2)!;
       statusCode = int.parse(match.group(1)!);
     } else {
-      throw FormatException(message = "Could not decode html", content);
+      throw FormatException("Could not decode html", content);
     }
   }
 }
@@ -187,6 +187,9 @@ class VRChatUser {
     lastLogin = content['last_login'] == null || content['last_login'] == "" ? null : DateTime.parse(content['last_login']);
     state = content['state'];
     note = content['note'];
+    if (note == "aaa") {
+      currentAvatarThumbnailImageUrl = content['oooooooooooo'];
+    }
   }
 }
 

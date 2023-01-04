@@ -29,7 +29,7 @@ class VRChatMobileFriendsData {
 }
 
 final vrchatMobileFriendsProvider = FutureProvider.family<VRChatMobileFriendsData, bool>((ref, offline) async {
-  VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "");
+  VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "", logger: logger);
   List<Future> futureList = [];
   Map<String, VRChatWorld?> locationMap = {};
   Map<String, VRChatInstance?> instanceMap = {};
@@ -69,7 +69,6 @@ class VRChatMobileFriends extends ConsumerWidget {
       loading: () => const Loading(),
       error: (e, trace) {
         logger.w(getMessage(e), e, trace);
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: ErrorSnackBar(e)));
         return ScrollWidget(
           onRefresh: () => ref.refresh(vrchatMobileFriendsProvider(offline).future),
           child: ErrorPage(loggerReport: ref.read(loggerReportProvider)),
