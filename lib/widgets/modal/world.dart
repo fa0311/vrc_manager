@@ -93,8 +93,8 @@ class SelfInviteListTileWidget extends ConsumerWidget {
     return ListTile(
       title: Text(AppLocalizations.of(context)!.joinInstance),
       onTap: () {
-        vrchatLoginSession.selfInvite(instance.location, instance.shortName ?? "").catchError((e) {
-          logger.e(getMessage(e), e);
+        vrchatLoginSession.selfInvite(instance.location, instance.shortName ?? "").catchError((e, trace) {
+          logger.e(getMessage(e), e, trace);
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: ErrorSnackBar(e)));
         });
       },
@@ -204,8 +204,8 @@ class FavoriteAction extends ConsumerWidget {
                       ref.read(loadingWorldDataProvider.notifier).state = favoriteData;
                       bool value = favoriteWorldData == favoriteData;
                       if (value || favoriteWorld != null) {
-                        await vrchatLoginSession.deleteFavorites(favoriteWorld!.favoriteId).catchError((e) {
-                          logger.e(getMessage(e), e);
+                        await vrchatLoginSession.deleteFavorites(favoriteWorld!.favoriteId).catchError((e, trace) {
+                          logger.e(getMessage(e), e, trace);
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: ErrorSnackBar(e)));
                         });
                         favoriteWorldData!.list.remove(favoriteWorld);
@@ -213,8 +213,8 @@ class FavoriteAction extends ConsumerWidget {
                         favoriteWorldData = null;
                       }
                       if (!value && favoriteWorldData != favoriteData) {
-                        VRChatFavorite favorite = await vrchatLoginSession.addFavorites("world", world.id, favoriteData.group.name).catchError((e) {
-                          logger.e(getMessage(e), e);
+                        VRChatFavorite favorite = await vrchatLoginSession.addFavorites("world", world.id, favoriteData.group.name).catchError((e, trace) {
+                          logger.e(getMessage(e), e, trace);
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: ErrorSnackBar(e)));
                         });
                         favoriteWorld = VRChatFavoriteWorld.fromFavorite(world, favorite, favoriteData.group.name);

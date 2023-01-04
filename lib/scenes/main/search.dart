@@ -68,8 +68,8 @@ final vrchatMobileSearchProvider = FutureProvider<VRChatMobileSearchData>((ref) 
     case SearchMode.users:
       do {
         int offset = userList.length;
-        List<VRChatUser> users = await vrchatLoginSession.searchUsers(searchingText, offset: offset).catchError((e) {
-          logger.e(getMessage(e), e);
+        List<VRChatUser> users = await vrchatLoginSession.searchUsers(searchingText, offset: offset).catchError((e, trace) {
+          logger.e(getMessage(e), e, trace);
         });
         for (VRChatUser user in users) {
           userList.add(user);
@@ -80,8 +80,8 @@ final vrchatMobileSearchProvider = FutureProvider<VRChatMobileSearchData>((ref) 
     case SearchMode.worlds:
       do {
         int offset = worldList.length;
-        List<VRChatLimitedWorld> worlds = await vrchatLoginSession.searchWorlds(searchingText, offset: offset).catchError((e) {
-          logger.e(getMessage(e), e);
+        List<VRChatLimitedWorld> worlds = await vrchatLoginSession.searchWorlds(searchingText, offset: offset).catchError((e, trace) {
+          logger.e(getMessage(e), e, trace);
         });
         for (VRChatLimitedWorld world in worlds) {
           addWorldList(world);

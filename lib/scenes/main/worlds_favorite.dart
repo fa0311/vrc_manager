@@ -36,8 +36,8 @@ final vrchatMobileWorldFavoriteSortProvider = FutureProvider<VRChatMobileWorldFa
     int len;
     do {
       int offset = favoriteWorld.list.length;
-      List<VRChatFavoriteWorld> worlds = await vrchatLoginSession.favoritesWorlds(favoriteWorld.group.name, offset: offset).catchError((e) {
-        logger.e(getMessage(e), e);
+      List<VRChatFavoriteWorld> worlds = await vrchatLoginSession.favoritesWorlds(favoriteWorld.group.name, offset: offset).catchError((e, trace) {
+        logger.e(getMessage(e), e, trace);
       });
       for (VRChatFavoriteWorld world in worlds) {
         favoriteWorld.list.add(world);
@@ -52,8 +52,8 @@ final vrchatMobileWorldFavoriteSortProvider = FutureProvider<VRChatMobileWorldFa
   int len = 0;
   do {
     int offset = favoriteWorld.length;
-    List<VRChatFavoriteGroup> favoriteGroupList = await vrchatLoginSession.favoriteGroups("world", offset: offset).catchError((e) {
-      logger.e(getMessage(e), e);
+    List<VRChatFavoriteGroup> favoriteGroupList = await vrchatLoginSession.favoriteGroups("world", offset: offset).catchError((e, trace) {
+      logger.e(getMessage(e), e, trace);
     });
     for (VRChatFavoriteGroup group in favoriteGroupList) {
       FavoriteWorldData favorite = FavoriteWorldData(group: group, list: []);

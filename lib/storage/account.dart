@@ -160,8 +160,8 @@ class AccountConfig extends ChangeNotifier {
       data = response;
       setDisplayName(response.displayName);
       return true;
-    }).catchError((e) {
-      logger.e(getMessage(e), e);
+    }).catchError((e, trace) {
+      logger.e(getMessage(e), e, trace);
       data = null;
       return false;
     });

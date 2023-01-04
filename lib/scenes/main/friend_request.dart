@@ -27,14 +27,14 @@ final vrchatMobileFriendsRequestProvider = FutureProvider<VRChatMobileFriendRequ
   int len;
   do {
     int offset = futureList.length;
-    List<VRChatNotifications> notify = await vrchatLoginSession.notifications(type: "friendRequest", offset: offset).catchError((e) {
-      logger.e(getMessage(e), e);
+    List<VRChatNotifications> notify = await vrchatLoginSession.notifications(type: "friendRequest", offset: offset).catchError((e, trace) {
+      logger.e(getMessage(e), e, trace);
     });
     for (VRChatNotifications requestUser in notify) {
       futureList.add(vrchatLoginSession.users(requestUser.senderUserId).then((VRChatUser user) {
         userList.add(user);
-      }).catchError((e) {
-        logger.e(getMessage(e), e);
+      }).catchError((e, trace) {
+        logger.e(getMessage(e), e, trace);
       }));
     }
     len = notify.length;

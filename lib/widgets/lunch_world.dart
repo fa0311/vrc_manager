@@ -35,8 +35,8 @@ String genRandNumber([int length = 5]) {
 }
 
 Future<String> genInstanceId({required VRChatAPI vrchatLoginSession, required String region, required VRChatInstanceTypeExt type}) async {
-  VRChatUserSelfOverload user = await vrchatLoginSession.user().catchError((e) {
-    logger.e(getMessage(e), e);
+  VRChatUserSelfOverload user = await vrchatLoginSession.user().catchError((e, trace) {
+    logger.e(getMessage(e), e, trace);
   });
   String url = genRandNumber();
 

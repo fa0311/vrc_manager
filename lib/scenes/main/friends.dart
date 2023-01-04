@@ -37,17 +37,17 @@ final vrchatMobileFriendsProvider = FutureProvider.family<VRChatMobileFriendsDat
   int len;
   do {
     int offset = userList.length;
-    List<VRChatFriends> users = await vrchatLoginSession.friends(offline: offline, offset: offset).catchError((e) {
-      logger.e(getMessage(e), e);
+    List<VRChatFriends> users = await vrchatLoginSession.friends(offline: offline, offset: offset).catchError((e, trace) {
+      logger.e(getMessage(e), e, trace);
     });
     userList.addAll(users);
     if (!offline) {
       for (VRChatFriends user in users) {
-        futureList.add(getWorld(vrchatLoginSession: vrchatLoginSession, user: user, locationMap: locationMap).catchError((e) {
-          logger.e(getMessage(e), e);
+        futureList.add(getWorld(vrchatLoginSession: vrchatLoginSession, user: user, locationMap: locationMap).catchError((e, trace) {
+          logger.e(getMessage(e), e, trace);
         }));
-        futureList.add(getInstance(vrchatLoginSession: vrchatLoginSession, user: user, instanceMap: instanceMap).catchError((e) {
-          logger.e(getMessage(e), e);
+        futureList.add(getInstance(vrchatLoginSession: vrchatLoginSession, user: user, instanceMap: instanceMap).catchError((e, trace) {
+          logger.e(getMessage(e), e, trace);
         }));
       }
     }

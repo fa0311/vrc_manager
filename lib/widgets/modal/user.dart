@@ -117,8 +117,8 @@ class ProfileAction extends ConsumerWidget {
     sendFriendRequest() {
       vrchatLoginSession.sendFriendRequest(user.id).then((value) {
         Navigator.of(context).pop();
-      }).catchError((e) {
-        logger.e(getMessage(e), e);
+      }).catchError((e, trace) {
+        logger.e(getMessage(e), e, trace);
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: ErrorSnackBar(e)));
         Navigator.of(context).popUntil((route) => route.isFirst);
       });
@@ -128,8 +128,8 @@ class ProfileAction extends ConsumerWidget {
     acceptFriendRequest() {
       vrchatLoginSession.acceptFriendRequestByUid(user.id).then((value) {
         Navigator.of(context).pop();
-      }).catchError((e) {
-        logger.e(getMessage(e), e);
+      }).catchError((e, trace) {
+        logger.e(getMessage(e), e, trace);
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: ErrorSnackBar(e)));
         Navigator.of(context).popUntil((route) => route.isFirst);
       });
@@ -140,8 +140,8 @@ class ProfileAction extends ConsumerWidget {
     deleteFriendRequest() {
       vrchatLoginSession.deleteFriendRequest(user.id).then((value) {
         Navigator.of(context).pop();
-      }).catchError((e) {
-        logger.e(getMessage(e), e);
+      }).catchError((e, trace) {
+        logger.e(getMessage(e), e, trace);
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: ErrorSnackBar(e)));
         Navigator.of(context).popUntil((route) => route.isFirst);
       });
@@ -168,8 +168,8 @@ class ProfileAction extends ConsumerWidget {
                   vrchatLoginSession.deleteFriend(user.id).then((value) {
                     Navigator.of(context).pop();
                     Navigator.of(context).pop();
-                  }).catchError((e) {
-                    logger.e(getMessage(e), e);
+                  }).catchError((e, trace) {
+                    logger.e(getMessage(e), e, trace);
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: ErrorSnackBar(e)));
                     Navigator.of(context).popUntil((route) => route.isFirst);
                   });

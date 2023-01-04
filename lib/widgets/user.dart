@@ -143,8 +143,8 @@ class EditBio extends ConsumerWidget {
           child: wait ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator()) : Text(AppLocalizations.of(context)!.save),
           onPressed: () async {
             ref.read(editBioProvider.notifier).state = true;
-            await vrchatLoginSession.changeBio(user.id, user.bio = controller.text).catchError((e) {
-              logger.e(getMessage(e), e);
+            await vrchatLoginSession.changeBio(user.id, user.bio = controller.text).catchError((e, trace) {
+              logger.e(getMessage(e), e, trace);
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: ErrorSnackBar(e)));
             });
             user.bio = user.bio == "" ? null : user.bio;
@@ -163,8 +163,8 @@ final editNoteProvider = StateProvider<bool>((ref) => false);
 final noteControllerProvider = FutureProvider.family<TextEditingController, VRChatUser>((ref, user) async {
   final VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.read(accountConfigProvider).loggedAccount!.cookie ?? "");
   if (user.note == null) {
-    await vrchatLoginSession.users(user.id).then((value) => user.note = value.note).catchError((e) {
-      logger.e(getMessage(e), e);
+    await vrchatLoginSession.users(user.id).then((value) => user.note = value.note).catchError((e, trace) {
+      logger.e(getMessage(e), e, trace);
     });
   }
   return TextEditingController(text: user.note);
@@ -205,8 +205,8 @@ class EditNote extends ConsumerWidget {
             child: wait ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator()) : Text(AppLocalizations.of(context)!.save),
             onPressed: () async {
               ref.read(editNoteProvider.notifier).state = true;
-              await vrchatLoginSession.userNotes(user.id, user.note = data.text).catchError((e) {
-                logger.e(getMessage(e), e);
+              await vrchatLoginSession.userNotes(user.id, user.note = data.text).catchError((e, trace) {
+                logger.e(getMessage(e), e, trace);
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: ErrorSnackBar(e)));
               });
               user.note = user.note == "" ? null : user.note;

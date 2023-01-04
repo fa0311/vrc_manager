@@ -230,12 +230,12 @@ class InviteVrchatListTileWidget extends ConsumerWidget {
       leading: const Icon(Icons.mail),
       title: Text(AppLocalizations.of(context)!.joinInstance),
       onTap: () async {
-        VRChatSecureName secureId = await vrchatLoginSession.shortName(location).catchError((e) {
-          logger.e(getMessage(e), e);
+        VRChatSecureName secureId = await vrchatLoginSession.shortName(location).catchError((e, trace) {
+          logger.e(getMessage(e), e, trace);
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: ErrorSnackBar(e)));
         });
-        await vrchatLoginSession.selfInvite(location, secureId.shortName ?? secureId.secureName ?? "").catchError((e) {
-          logger.e(getMessage(e), e);
+        await vrchatLoginSession.selfInvite(location, secureId.shortName ?? secureId.secureName ?? "").catchError((e, trace) {
+          logger.e(getMessage(e), e, trace);
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: ErrorSnackBar(e)));
         });
 
