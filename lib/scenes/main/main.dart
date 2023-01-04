@@ -59,6 +59,21 @@ enum CurrentIndex {
   const CurrentIndex({required this.icon});
 }
 
+class FastScrollPhysics extends ScrollPhysics {
+  const FastScrollPhysics({ScrollPhysics? parent}) : super(parent: parent);
+  @override
+  FastScrollPhysics applyTo(ScrollPhysics? ancestor) {
+    return FastScrollPhysics(parent: buildParent(ancestor));
+  }
+
+  @override
+  SpringDescription get spring => const SpringDescription(
+        mass: 80,
+        stiffness: 100,
+        damping: 1,
+      );
+}
+
 class VRChatMobileHome extends ConsumerWidget {
   const VRChatMobileHome({Key? key}) : super(key: key);
 
@@ -88,6 +103,7 @@ class VRChatMobileHome extends ConsumerWidget {
     }
 
     return Scaffold(
+      drawerEdgeDragWidth: MediaQuery.of(context).padding.left + 40,
       appBar: AppBar(
         title: Text(currentIndex.toLocalization(context)),
         actions: [
@@ -104,6 +120,7 @@ class VRChatMobileHome extends ConsumerWidget {
       body: SafeArea(
         child: PageView(
           controller: controller,
+          physics: const FastScrollPhysics(),
           children: [for (CurrentIndex scene in CurrentIndex.values) scene.toWidget()],
           onPageChanged: (int index) {
             ref.read(currentIndexProvider.notifier).state = CurrentIndex.values[index];
