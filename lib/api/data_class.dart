@@ -187,9 +187,6 @@ class VRChatUser {
     lastLogin = content['last_login'] == null || content['last_login'] == "" ? null : DateTime.parse(content['last_login']);
     state = content['state'];
     note = content['note'];
-    if (note == "aaa") {
-      currentAvatarThumbnailImageUrl = content['oooooooooooo'];
-    }
   }
 }
 
