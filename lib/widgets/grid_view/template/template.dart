@@ -23,7 +23,7 @@ class RenderGrid extends ConsumerWidget {
     int crossAxisCount = screenSize ~/ width + 1;
 
     return SizedBox(
-      height: (height * ((children.length + 1) ~/ crossAxisCount)).toDouble(),
+      height: (height * (children.length / crossAxisCount).ceil()).toDouble(),
       child: GridView.count(
         physics: const NeverScrollableScrollPhysics(),
         crossAxisCount: crossAxisCount,
