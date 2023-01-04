@@ -75,7 +75,7 @@ final vrchatMobileSearchProvider = FutureProvider<VRChatMobileSearchData>((ref) 
           userList.add(user);
         }
         len = users.length;
-      } while (len == 50 && userList.length < 200);
+      } while (len > 0 && userList.length < 200);
       break;
     case SearchMode.worlds:
       do {
@@ -87,7 +87,7 @@ final vrchatMobileSearchProvider = FutureProvider<VRChatMobileSearchData>((ref) 
           addWorldList(world);
         }
         len = worlds.length;
-      } while (len == 50 && worldList.length < 200);
+      } while (len > 0 && worldList.length < 200);
       break;
   }
 

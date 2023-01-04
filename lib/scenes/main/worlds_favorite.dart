@@ -43,7 +43,7 @@ final vrchatMobileWorldFavoriteSortProvider = FutureProvider<VRChatMobileWorldFa
         favoriteWorld.list.add(world);
       }
       len = worlds.length;
-    } while (len == 50);
+    } while (len > 0);
   }
 
   VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "", logger: logger);
@@ -61,7 +61,7 @@ final vrchatMobileWorldFavoriteSortProvider = FutureProvider<VRChatMobileWorldFa
       favoriteWorld.add(favorite);
     }
     len = favoriteGroupList.length;
-  } while (len == 50);
+  } while (len > 0);
 
   await Future.wait(futureList);
   return VRChatMobileWorldFavoriteData(favoriteWorld: favoriteWorld);

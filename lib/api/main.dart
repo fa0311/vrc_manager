@@ -180,7 +180,7 @@ class VRChatAPI {
             try {
               return VRChatFriends.fromJson(content);
             } catch (e, trace) {
-              logger?.e(e, encoder.convert(value), trace);
+              logger?.e(e, encoder.convert(content), trace);
               if (ignoreErrors) return null;
               rethrow;
             }
@@ -217,7 +217,7 @@ class VRChatAPI {
             try {
               return VRChatUser.fromJson(content);
             } catch (e, trace) {
-              logger?.e(e, encoder.convert(value), trace);
+              logger?.e(e, encoder.convert(content), trace);
               if (ignoreErrors) return null;
               rethrow;
             }
@@ -241,7 +241,7 @@ class VRChatAPI {
             try {
               return VRChatLimitedWorld.fromJson(content);
             } catch (e, trace) {
-              logger?.e(e, encoder.convert(value), trace);
+              logger?.e(e, encoder.convert(content), trace);
               if (ignoreErrors) return null;
               rethrow;
             }
@@ -265,7 +265,7 @@ class VRChatAPI {
             try {
               return VRChatFavoriteGroup.fromJson(content);
             } catch (e, trace) {
-              logger?.e(e, encoder.convert(value), trace);
+              logger?.e(e, encoder.convert(content), trace);
               if (ignoreErrors) return null;
               rethrow;
             }
@@ -310,7 +310,7 @@ class VRChatAPI {
             try {
               return VRChatNotifications.fromJson(content);
             } catch (e, trace) {
-              logger?.e(e, encoder.convert(value), trace);
+              logger?.e(e, encoder.convert(content), trace);
               if (ignoreErrors) return null;
               rethrow;
             }
@@ -356,7 +356,7 @@ class VRChatAPI {
             try {
               return VRChatFavoriteWorld.fromJson(content);
             } catch (e, trace) {
-              logger?.e(e, encoder.convert(value), trace);
+              logger?.e(e, encoder.convert(content), trace);
               if (ignoreErrors) return null;
               rethrow;
             }

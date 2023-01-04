@@ -38,7 +38,7 @@ final vrchatMobileFriendsRequestProvider = FutureProvider<VRChatMobileFriendRequ
       }));
     }
     len = notify.length;
-  } while (len == 50);
+  } while (len > 0);
   await Future.wait(futureList);
   return VRChatMobileFriendRequestData(userList: userList);
 });

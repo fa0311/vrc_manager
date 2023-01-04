@@ -52,7 +52,7 @@ final vrchatMobileFriendsProvider = FutureProvider.family<VRChatMobileFriendsDat
       }
     }
     len = users.length;
-  } while (len == 50);
+  } while (len > 0);
   await Future.wait(futureList);
   return VRChatMobileFriendsData(locationMap: locationMap, instanceMap: instanceMap, userList: userList);
 });
