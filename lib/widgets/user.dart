@@ -31,7 +31,8 @@ import 'package:vrc_manager/widgets/status.dart';
 class Username extends ConsumerWidget {
   final VRChatUser user;
   final double diameter;
-  const Username({super.key, required this.user, this.diameter = 20});
+  final FontWeight fontWeight;
+  const Username({super.key, required this.user, this.diameter = 20, this.fontWeight = FontWeight.bold});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -44,7 +45,7 @@ class Username extends ConsumerWidget {
           child: Text(
             user.displayName,
             style: TextStyle(
-              fontWeight: FontWeight.bold,
+              fontWeight: fontWeight,
               fontSize: diameter,
             ),
           ),
