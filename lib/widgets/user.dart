@@ -21,6 +21,7 @@ import 'package:vrc_manager/scenes/core/splash.dart';
 import 'package:vrc_manager/scenes/setting/logger.dart';
 import 'package:vrc_manager/scenes/sub/self.dart';
 import 'package:vrc_manager/storage/accessibility.dart';
+import 'package:vrc_manager/widgets/future/button.dart';
 import 'package:vrc_manager/widgets/modal.dart';
 import 'package:vrc_manager/widgets/modal/share.dart';
 import 'package:vrc_manager/widgets/scroll.dart';
@@ -114,8 +115,6 @@ class UserProfile extends ConsumerWidget {
   }
 }
 
-final editBioProvider = StateProvider<bool>((ref) => false);
-
 final bioControllerProvider = StateProvider.family<TextEditingController, VRChatUser>((ref, user) => TextEditingController(text: user.bio));
 
 class EditBio extends ConsumerWidget {
@@ -124,7 +123,6 @@ class EditBio extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    bool wait = ref.watch(editBioProvider);
     VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "", logger: logger);
     TextEditingController controller = ref.watch(bioControllerProvider(user));
 
@@ -139,17 +137,15 @@ class EditBio extends ConsumerWidget {
           child: Text(AppLocalizations.of(context)!.close),
           onPressed: () => Navigator.pop(context),
         ),
-        TextButton(
-          child: wait ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator()) : Text(AppLocalizations.of(context)!.save),
+        FutureButton(
+          child: Text(AppLocalizations.of(context)!.save),
           onPressed: () async {
-            ref.read(editBioProvider.notifier).state = true;
             await vrchatLoginSession.changeBio(user.id, user.bio = controller.text).catchError((e, trace) {
               logger.e(getMessage(e), e, trace);
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage(context: context, status: e))));
             });
             user.bio = user.bio == "" ? null : user.bio;
             ref.read(vrchatUserCountProvider.notifier).state++;
-            ref.read(editBioProvider.notifier).state = false;
             Navigator.pop(context);
           },
         ),
@@ -157,8 +153,6 @@ class EditBio extends ConsumerWidget {
     );
   }
 }
-
-final editNoteProvider = StateProvider<bool>((ref) => false);
 
 final noteControllerProvider = FutureProvider.family<TextEditingController, VRChatUser>((ref, user) async {
   final VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.read(accountConfigProvider).loggedAccount!.cookie ?? "", logger: logger);
@@ -176,7 +170,6 @@ class EditNote extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    bool wait = ref.watch(editNoteProvider);
     VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "", logger: logger);
     AsyncValue<TextEditingController> data = ref.watch(noteControllerProvider(user));
 
@@ -200,17 +193,15 @@ class EditNote extends ConsumerWidget {
             child: Text(AppLocalizations.of(context)!.close),
             onPressed: () => Navigator.pop(context),
           ),
-          TextButton(
-            child: wait ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator()) : Text(AppLocalizations.of(context)!.save),
+          FutureButton(
+            child: Text(AppLocalizations.of(context)!.save),
             onPressed: () async {
-              ref.read(editNoteProvider.notifier).state = true;
               await vrchatLoginSession.userNotes(user.id, user.note = data.text).catchError((e, trace) {
                 logger.e(getMessage(e), e, trace);
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage(context: context, status: e))));
               });
               user.note = user.note == "" ? null : user.note;
               ref.read(vrchatUserCountProvider.notifier).state++;
-              ref.read(editNoteProvider.notifier).state = false;
               Navigator.pop(context);
             },
           ),

@@ -11,6 +11,7 @@ import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/core/splash.dart';
 import 'package:vrc_manager/scenes/setting/logger.dart';
+import 'package:vrc_manager/widgets/future/button.dart';
 
 final tokenControllerProvider = StateProvider.autoDispose<TextEditingController>((ref) {
   return TextEditingController(text: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "");
@@ -39,20 +40,22 @@ class VRChatMobileTokenSetting extends ConsumerWidget {
                   maxLines: null,
                   decoration: InputDecoration(labelText: AppLocalizations.of(context)!.cookie),
                 ),
-                ElevatedButton(
-                  child: Text(AppLocalizations.of(context)!.save),
-                  onPressed: () {
-                    ref.read(accountConfigProvider).loggedAccount!.setCookie(tokenController.text);
-                    ref.read(accountConfigProvider).login(ref.read(accountConfigProvider).loggedAccount!);
+                FutureButton(
+                  type: ButtonType.elevatedButton,
+                  onPressed: () async {
+                    await ref.read(accountConfigProvider).loggedAccount!.setCookie(tokenController.text);
+                    await ref.read(accountConfigProvider).login(ref.read(accountConfigProvider).loggedAccount!);
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text(AppLocalizations.of(context)!.saved)),
                     );
                   },
+                  child: Text(AppLocalizations.of(context)!.save),
                 ),
-                ElevatedButton(
+                FutureButton(
+                  type: ButtonType.elevatedButton,
                   child: Text(AppLocalizations.of(context)!.login),
-                  onPressed: () {
-                    VRChatAPI(cookie: tokenController.text, logger: logger).user().then((VRChatUserSelfOverload response) {
+                  onPressed: () async {
+                    await VRChatAPI(cookie: tokenController.text, logger: logger).user().then((VRChatUserSelfOverload response) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text(AppLocalizations.of(context)!.success)),
                       );

@@ -21,6 +21,7 @@ import 'package:vrc_manager/scenes/main/main.dart';
 import 'package:vrc_manager/scenes/setting/logger.dart';
 import 'package:vrc_manager/scenes/web/web_view_login.dart';
 import 'package:vrc_manager/storage/account.dart';
+import 'package:vrc_manager/widgets/future/button.dart';
 import 'package:vrc_manager/widgets/config_modal/locale.dart';
 import 'package:vrc_manager/widgets/drawer.dart';
 import 'package:vrc_manager/widgets/modal.dart';
@@ -37,8 +38,6 @@ String genUid([int length = 64]) {
 }
 
 final isPasswordObscureProvider = StateProvider.autoDispose<bool>((ref) => true);
-final waitProvider = StateProvider.autoDispose<bool>((ref) => false);
-final waitTotpProvider = StateProvider.autoDispose<bool>((ref) => false);
 final totpControllerProvider = StateProvider.autoDispose<TextEditingController>((ref) => TextEditingController());
 
 final userControllerProvider = StateProvider.autoDispose<TextEditingController>((ref) {
@@ -118,10 +117,8 @@ class VRChatMobileLogin extends ConsumerWidget {
               maxLength: 6,
             ),
             actions: [
-              TextButton(
-                child: ref.read(waitProvider)
-                    ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator())
-                    : Text(AppLocalizations.of(context)!.send),
+              FutureButton(
+                child: Text(AppLocalizations.of(context)!.send),
                 onPressed: () => onPressedTotp(),
               ),
             ],
@@ -210,13 +207,10 @@ class VRChatMobileLogin extends ConsumerWidget {
                 onChanged: (e) => ref.read(rememberPasswordProvider.notifier).update((state) => e),
               );
             }),
-            ElevatedButton(
-              child: ref.read(waitProvider)
-                  ? SizedBox(width: 20, height: 20, child: CircularProgressIndicator(color: Theme.of(context).colorScheme.onPrimary))
-                  : Text(
-                      AppLocalizations.of(context)!.login,
-                    ),
+            FutureButton(
               onPressed: () => onPressed(),
+              type: ButtonType.elevatedButton,
+              child: Text(AppLocalizations.of(context)!.login),
             ),
             if (Platform.isAndroid || Platform.isIOS)
               TextButton(
