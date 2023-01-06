@@ -10,8 +10,8 @@
 
 ## 翻訳
 
-- [Issues](/issues/new?assignees=&labels=bug&template=translation-error.yml)
-- [lib/l10n](/develop/lib/l10n)
+- [Issues](https://github.com/fa0311/vrc_manager/issues/new?assignees=&labels=bug&template=translation-error.yml)
+- [lib/l10n](../../lib/l10n)
 
 ### アイコン
 
