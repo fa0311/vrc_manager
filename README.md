@@ -4,11 +4,6 @@
 
 <div align="center">
   <p>
-    VRChat mobile client using VRChat's unofficial API<br>
-    Features a material UI created in Flutter<br>
-  </p>
-  <h2>- Feature -</h2>
-  <p>
     <b>Multi platform</b> Android, Windows (unfortunately I don't have a Macbook😫)<br>
     <b>Multilingual support</b>  en, ja, es, pt, ru, th, zh<br>
     <b>Support for multiple login methods</b> 2fa, WebView, Token<br>
@@ -19,8 +14,8 @@
     <b>Supports dark themes</b> 6 different themes and 3 different display methods<br>
   </p>
 </div>
-<br>
----
+
+[English](README.md) / [Japanese](README-ja.md)
 
 <img width="20%" src="docs/img/screenshots1.png"><img width="20%" src="docs/img/screenshots2.png"><img width="20%" src="docs/img/screenshots3.png"><img width="20%" src="docs/img/screenshots4.png"><img width="20%" src="docs/img/screenshots5.png">
 

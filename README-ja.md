@@ -4,11 +4,6 @@
 
 <div align="center">
   <p>
-    VRChat の非公式な API を利用した VRChat のモバイルクライアント<br>
-    Flutter で作成されたシンプルな UI が特徴的です<br>
-  </p>
-  <h2>- 特徴 -</h2>
-  <p>
     <b>マルチプラットフォーム</b> Android, Windows(残念ながら Macbook を持っていません😫)<br>
     <b>多言語対応</b>  en, ja, es, pt, ru, th, zh<br>
     <b>複数のログイン方法に対応</b> 2fa, WebView, Token<br>
@@ -19,8 +14,8 @@
     <b>ダークテーマに対応</b> 6種類のテーマと3種類の表示方法<br>
   </p>
 </div>
-<br>
----
+
+[English](README.md) / [Japanese](README-ja.md)
 
 <img width="20%" src="docs/img/screenshots1.png"><img width="20%" src="docs/img/screenshots2.png"><img width="20%" src="docs/img/screenshots3.png"><img width="20%" src="docs/img/screenshots4.png"><img width="20%" src="docs/img/screenshots5.png">
 
