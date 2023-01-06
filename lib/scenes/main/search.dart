@@ -195,14 +195,12 @@ class VRChatMobileSearchResult extends ConsumerWidget {
           return ExtractionUser(
             id: GridModalConfigType.searchUsers,
             userList: data.userList,
-            physics: const NeverScrollableScrollPhysics(),
           );
         }
         if (data.worldList.isNotEmpty) {
           return ExtractionWorld(
             id: GridModalConfigType.searchWorlds,
             worldList: data.worldList,
-            physics: const NeverScrollableScrollPhysics(),
           );
         }
         return Container();

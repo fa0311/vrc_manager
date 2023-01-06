@@ -20,6 +20,9 @@
     "vrchat",
     "vsco",
     "wechat",
+    /* Product */
+    "Macbook",
+    "appgallery",
     /* API */
     "standalonewindows",
     "totp",
@@ -29,6 +32,7 @@
     "unfocus",
     "autofocus",
     "ARGB",
+    "pubspec",
     /* Dart */
     "sublist",
     /* Library */
@@ -39,9 +43,21 @@
     "inappwebview",
     /* Name */
     "yuki",
+    "Tupper",
     /* Other */
     "dont"
   ],
-  "ignorePaths": ["l10n/**", "api/assets/lang.dart"],
-  "files": ["lib/**"]
+  "ignorePaths": [
+    /*Flutter*/
+    "android/**",
+    "build/**",
+    "ios/**",
+    "windows/**",
+    "pubspec.yaml",
+    /*Extension*/
+    "*kra",
+    /* Other */
+    "lib/l10n/**",
+    "lib/api/assets/lang.dart"
+  ]
 }

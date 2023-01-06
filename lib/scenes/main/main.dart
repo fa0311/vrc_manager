@@ -123,6 +123,7 @@ class VRChatMobileHome extends ConsumerWidget {
           physics: const FastScrollPhysics(),
           children: [for (CurrentIndex scene in CurrentIndex.values) scene.toWidget()],
           onPageChanged: (int index) {
+            WidgetsBinding.instance.focusManager.primaryFocus?.unfocus();
             ref.read(currentIndexProvider.notifier).state = CurrentIndex.values[index];
             ref.read(gridModalConfigIdProvider.notifier).state = getGridConfig(CurrentIndex.values[index]);
           },
