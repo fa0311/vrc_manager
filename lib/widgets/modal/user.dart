@@ -12,6 +12,8 @@ import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/core/splash.dart';
 import 'package:vrc_manager/scenes/setting/logger.dart';
+import 'package:vrc_manager/widgets/future/button.dart';
+import 'package:vrc_manager/widgets/future/tile.dart';
 import 'package:vrc_manager/widgets/modal.dart';
 import 'package:vrc_manager/widgets/modal/share.dart';
 import 'package:vrc_manager/widgets/user.dart';
@@ -114,8 +116,8 @@ class ProfileAction extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "", logger: logger);
 
-    sendFriendRequest() {
-      vrchatLoginSession.sendFriendRequest(user.id).then((value) {
+    Future sendFriendRequest() async {
+      await vrchatLoginSession.sendFriendRequest(user.id).then((value) {
         Navigator.of(context).pop();
       }).catchError((e, trace) {
         logger.e(getMessage(e), e, trace);
@@ -125,8 +127,8 @@ class ProfileAction extends ConsumerWidget {
       status.outgoingRequest = true;
     }
 
-    acceptFriendRequest() {
-      vrchatLoginSession.acceptFriendRequestByUid(user.id).then((value) {
+    Future acceptFriendRequest() async {
+      await vrchatLoginSession.acceptFriendRequestByUid(user.id).then((value) {
         Navigator.of(context).pop();
       }).catchError((e, trace) {
         logger.e(getMessage(e), e, trace);
@@ -137,8 +139,8 @@ class ProfileAction extends ConsumerWidget {
       status.incomingRequest = false;
     }
 
-    deleteFriendRequest() {
-      vrchatLoginSession.deleteFriendRequest(user.id).then((value) {
+    Future deleteFriendRequest() async {
+      await vrchatLoginSession.deleteFriendRequest(user.id).then((value) {
         Navigator.of(context).pop();
       }).catchError((e, trace) {
         logger.e(getMessage(e), e, trace);
@@ -163,9 +165,9 @@ class ProfileAction extends ConsumerWidget {
                   Navigator.pop(context);
                 },
               ),
-              TextButton(
-                onPressed: () {
-                  vrchatLoginSession.deleteFriend(user.id).then((value) {
+              FutureButton(
+                onPressed: () async {
+                  await vrchatLoginSession.deleteFriend(user.id).then((value) {
                     Navigator.of(context).pop();
                     Navigator.of(context).pop();
                   }).catchError((e, trace) {
@@ -187,7 +189,7 @@ class ProfileAction extends ConsumerWidget {
       child: Column(
         children: [
           if (!status.isFriend && !status.incomingRequest && !status.outgoingRequest)
-            ListTile(
+            FutureTile(
               leading: const Icon(Icons.person_add),
               title: Text(AppLocalizations.of(context)!.friendRequest),
               onTap: sendFriendRequest,
@@ -199,19 +201,19 @@ class ProfileAction extends ConsumerWidget {
               onTap: deleteFriend,
             ),
           if (!status.isFriend && status.outgoingRequest)
-            ListTile(
+            FutureTile(
               leading: const Icon(Icons.person_remove),
               title: Text(AppLocalizations.of(context)!.requestCancel),
               onTap: deleteFriendRequest,
             ),
           if (!status.isFriend && status.incomingRequest)
-            ListTile(
+            FutureTile(
               leading: const Icon(Icons.person_add),
               title: Text(AppLocalizations.of(context)!.allowFriends),
               onTap: acceptFriendRequest,
             ),
           if (!status.isFriend && status.incomingRequest)
-            ListTile(
+            FutureTile(
               leading: const Icon(Icons.person_remove),
               title: Text(AppLocalizations.of(context)!.denyFriends),
               onTap: deleteFriendRequest,

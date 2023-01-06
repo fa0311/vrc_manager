@@ -12,6 +12,7 @@ import 'package:vrc_manager/assets/license.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/setting/logger.dart';
 import 'package:vrc_manager/storage/accessibility.dart';
+import 'package:vrc_manager/widgets/future/tile.dart';
 import 'package:vrc_manager/widgets/share.dart';
 
 final vrchatMobileVersionProvider = FutureProvider((ref) async => await PackageInfo.fromPlatform());
@@ -34,7 +35,7 @@ class VRChatMobileHelp extends ConsumerWidget {
             padding: const EdgeInsets.only(top: 10),
             child: Column(
               children: <Widget>[
-                ListTile(
+                FutureTile(
                   title: Text(AppLocalizations.of(context)!.contribution),
                   subtitle: Text(AppLocalizations.of(context)!.contributionDetails),
                   onTap: () async {
@@ -50,7 +51,7 @@ class VRChatMobileHelp extends ConsumerWidget {
                     }
                   },
                 ),
-                ListTile(
+                FutureTile(
                   title: Text(AppLocalizations.of(context)!.report),
                   subtitle: Text(AppLocalizations.of(context)!.reportDetails),
                   onTap: () async {
@@ -66,7 +67,7 @@ class VRChatMobileHelp extends ConsumerWidget {
                     }
                   },
                 ),
-                ListTile(
+                FutureTile(
                   title: Text(AppLocalizations.of(context)!.developerInfo),
                   subtitle: Text(AppLocalizations.of(context)!.developerInfoDetails),
                   onTap: () async {
@@ -82,7 +83,7 @@ class VRChatMobileHelp extends ConsumerWidget {
                     }
                   },
                 ),
-                ListTile(
+                FutureTile(
                   title: Text(AppLocalizations.of(context)!.rateTheApp),
                   subtitle: Text(AppLocalizations.of(context)!.rateTheAppDetails),
                   onTap: () async {
@@ -114,7 +115,7 @@ class VRChatMobileHelp extends ConsumerWidget {
                       subtitle: Text(AppLocalizations.of(context)!.error),
                     );
                   },
-                  data: (data) => ListTile(
+                  data: (data) => FutureTile(
                     title: Text(AppLocalizations.of(context)!.version),
                     subtitle: Text(AppLocalizations.of(context)!.versionDetails(data.version)),
                     onTap: () async {
@@ -131,7 +132,7 @@ class VRChatMobileHelp extends ConsumerWidget {
                     },
                   ),
                 ),
-                ListTile(
+                FutureTile(
                   title: Text(AppLocalizations.of(context)!.license),
                   subtitle: Text(AppLocalizations.of(context)!.licenseDetails),
                   onTap: () => showLicense(context),

@@ -13,6 +13,7 @@ import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/core/splash.dart';
 import 'package:vrc_manager/scenes/main/worlds_favorite.dart';
 import 'package:vrc_manager/scenes/setting/logger.dart';
+import 'package:vrc_manager/widgets/future/tile.dart';
 import 'package:vrc_manager/widgets/loading.dart';
 import 'package:vrc_manager/widgets/lunch_world.dart';
 import 'package:vrc_manager/widgets/modal.dart';
@@ -91,10 +92,10 @@ class SelfInviteListTileWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "", logger: logger);
 
-    return ListTile(
+    return FutureTile(
       title: Text(AppLocalizations.of(context)!.joinInstance),
-      onTap: () {
-        vrchatLoginSession.selfInvite(instance.location, instance.shortName ?? "").catchError((e, trace) {
+      onTap: () async {
+        await vrchatLoginSession.selfInvite(instance.location, instance.shortName ?? "").catchError((e, trace) {
           logger.e(getMessage(e), e, trace);
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage(context: context, status: e))));
         });
@@ -128,7 +129,7 @@ class FavoriteRemoveTileWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "", logger: logger);
-    return ListTile(
+    return FutureTile(
       title: Text(AppLocalizations.of(context)!.removeFavoriteWorlds),
       onTap: () async {
         await vrchatLoginSession.deleteFavorites(favoriteWorld.favoriteId).catchError((e, trace) {
@@ -157,8 +158,6 @@ class LaunchWorldListTileWidget extends ConsumerWidget {
     );
   }
 }
-
-final loadingWorldDataProvider = StateProvider<FavoriteWorldData?>((ref) => null);
 
 class FavoriteAction extends ConsumerWidget {
   final VRChatLimitedWorld world;
@@ -189,8 +188,7 @@ class FavoriteAction extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "", logger: logger);
-    AsyncValue<VRChatMobileWorldFavoriteData> data = ref.watch(vrchatMobileWorldFavoriteSortProvider);
-    FavoriteWorldData? loadingWorldData = ref.watch(loadingWorldDataProvider);
+    final data = ref.watch(vrchatMobileWorldFavoriteSortProvider);
 
     return data.when(
       loading: () => const Loading(),
@@ -209,18 +207,11 @@ class FavoriteAction extends ConsumerWidget {
                 () {
                   VRChatFavoriteWorld? favoriteWorld = getFavoriteWorld(data.favoriteWorld);
                   FavoriteWorldData? favoriteWorldData = getFavoriteData(data.favoriteWorld);
-                  return ListTile(
+                  ref.watch(vrchatMobileWorldFavoriteCounterProvider);
+                  return FutureTile(
                     title: Text(favoriteData.group.displayName),
-                    trailing: loadingWorldData == favoriteData
-                        ? const Padding(
-                            padding: EdgeInsets.only(right: 2, top: 2),
-                            child: SizedBox(width: 20, height: 20, child: CircularProgressIndicator()),
-                          )
-                        : favoriteWorldData == favoriteData
-                            ? const Icon(Icons.check)
-                            : null,
+                    trailing: favoriteWorldData == favoriteData ? const Icon(Icons.check) : null,
                     onTap: () async {
-                      ref.read(loadingWorldDataProvider.notifier).state = favoriteData;
                       bool value = favoriteWorldData == favoriteData;
                       if (value || favoriteWorld != null) {
                         await vrchatLoginSession.deleteFavorites(favoriteWorld!.favoriteId).catchError((e, trace) {
@@ -240,9 +231,7 @@ class FavoriteAction extends ConsumerWidget {
                         favoriteData.list.add(favoriteWorld!);
                         favoriteWorldData = favoriteData;
                       }
-
                       ref.read(vrchatMobileWorldFavoriteCounterProvider.notifier).state++;
-                      ref.read(loadingWorldDataProvider.notifier).state = null;
                     },
                   );
                 }(),

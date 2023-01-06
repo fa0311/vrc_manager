@@ -15,6 +15,7 @@ import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/core/splash.dart';
 import 'package:vrc_manager/scenes/setting/logger.dart';
+import 'package:vrc_manager/widgets/future/tile.dart';
 import 'package:vrc_manager/widgets/grid_view/widget/world.dart';
 import 'package:vrc_manager/widgets/modal.dart';
 import 'package:vrc_manager/widgets/modal/share.dart';
@@ -91,7 +92,7 @@ class SelectWordType extends ConsumerWidget {
       child: Column(
         children: [
           for (VRChatInstanceTypeExt type in VRChatInstanceTypeExt.values)
-            ListTile(
+            FutureTile(
               title: Text(type.toLocalization(context)),
               onTap: () async {
                 String instanceId = await genInstanceId(vrchatLoginSession: vrchatLoginSession, region: regionText, type: type);
