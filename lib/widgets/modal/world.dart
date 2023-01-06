@@ -18,6 +18,7 @@ import 'package:vrc_manager/widgets/loading.dart';
 import 'package:vrc_manager/widgets/lunch_world.dart';
 import 'package:vrc_manager/widgets/modal.dart';
 import 'package:vrc_manager/widgets/modal/share.dart';
+import 'package:vrc_manager/widgets/modal/user.dart';
 import 'package:vrc_manager/widgets/scroll.dart';
 
 class WorldDetailsModalBottom extends ConsumerWidget {
@@ -29,10 +30,10 @@ class WorldDetailsModalBottom extends ConsumerWidget {
     return SingleChildScrollView(
       child: Column(
         children: [
+          if (world is VRChatFavoriteWorld) FavoriteRemoveTileWidget(favoriteWorld: world as VRChatFavoriteWorld),
+          LaunchWorldListTileWidget(world: world),
+          FavoriteListTileWidget(world: world),
           if (world.id != "???") ShareUrlTileWidget(url: VRChatAssets.worlds.resolve(world.id)),
-          if (world.id != "???") FavoriteListTileWidget(world: world),
-          if (world.id == "???" && world is VRChatFavoriteWorld) FavoriteRemoveTileWidget(favoriteWorld: world as VRChatFavoriteWorld),
-          if (world.id != "???") LaunchWorldListTileWidget(world: world),
           OpenInJsonViewer(content: world.content),
         ],
       ),
@@ -51,9 +52,9 @@ class InstanceDetailsModalBottom extends ConsumerWidget {
     return SingleChildScrollView(
       child: Column(
         children: [
-          ShareInstanceTileWidget(worldId: world.id, instanceId: instance.instanceId),
-          FavoriteListTileWidget(world: world),
           SelfInviteListTileWidget(instance: instance),
+          FavoriteListTileWidget(world: world),
+          ShareInstanceTileWidget(worldId: world.id, instanceId: instance.instanceId),
           OpenInJsonViewer(content: instance.content),
         ],
       ),
@@ -70,13 +71,16 @@ class UserInstanceDetailsModalBottom extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    VRChatFriendStatus userStatus = VRChatFriendStatus(isFriend: false, incomingRequest: false, outgoingRequest: false);
+
     return SingleChildScrollView(
       child: Column(
         children: [
-          ShareUrlTileWidget(url: VRChatAssets.user.resolve(user.id)),
-          ShareInstanceTileWidget(worldId: world.id, instanceId: instance.instanceId),
+          EditNoteTileWidget(user: user),
+          ProfileActionTileWidget(status: userStatus, user: user),
           FavoriteListTileWidget(world: world),
           SelfInviteListTileWidget(instance: instance),
+          ShareUrlTileWidget(url: VRChatAssets.user.resolve(user.id)),
           OpenInJsonViewer(content: instance.content),
         ],
       ),
@@ -110,6 +114,7 @@ class FavoriteListTileWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    if (world.id == "???") return Container();
     return ListTile(
       title: Text(AppLocalizations.of(context)!.addFavoriteWorlds),
       onTap: () {
@@ -128,6 +133,7 @@ class FavoriteRemoveTileWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    if (favoriteWorld.id != "???") return Container();
     VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "", logger: logger);
     return FutureTile(
       title: Text(AppLocalizations.of(context)!.removeFavoriteWorlds),
@@ -147,6 +153,7 @@ class LaunchWorldListTileWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    if (world.id == "???") return Container();
     return ListTile(
       title: Text(AppLocalizations.of(context)!.launchWorld),
       onTap: () {

@@ -48,8 +48,8 @@ class UserDetailsModalBottom extends ConsumerWidget {
       child: Column(
         children: [
           EditNoteTileWidget(user: user),
-          ShareUrlTileWidget(url: VRChatAssets.user.resolve(user.id)),
           ProfileActionTileWidget(status: status, user: user),
+          ShareUrlTileWidget(url: VRChatAssets.user.resolve(user.id)),
           OpenInJsonViewer(content: user.content),
         ],
       ),

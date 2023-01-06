@@ -21,9 +21,9 @@ import 'package:vrc_manager/scenes/main/main.dart';
 import 'package:vrc_manager/scenes/setting/logger.dart';
 import 'package:vrc_manager/scenes/web/web_view_login.dart';
 import 'package:vrc_manager/storage/account.dart';
-import 'package:vrc_manager/widgets/future/button.dart';
 import 'package:vrc_manager/widgets/config_modal/locale.dart';
 import 'package:vrc_manager/widgets/drawer.dart';
+import 'package:vrc_manager/widgets/future/button.dart';
 import 'package:vrc_manager/widgets/modal.dart';
 
 class VRChatMobileLoginData {

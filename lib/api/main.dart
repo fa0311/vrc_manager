@@ -1,7 +1,10 @@
 // Dart imports:
 import 'dart:convert';
 
+// Package imports:
 import 'package:logger/logger.dart';
+
+// Project imports:
 import 'package:vrc_manager/api/assets/assets.dart';
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/assets/session.dart';
