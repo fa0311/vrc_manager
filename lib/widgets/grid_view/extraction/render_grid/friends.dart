@@ -165,7 +165,7 @@ class ExtractionFriend extends ConsumerGridWidget {
                     if (user.location == VRChatInstanceIdOther.offline.name) return AppLocalizations.of(context)!.onTheWebsite;
                     if (locationMap[worldId] == null) return "";
                     return locationMap[worldId]!.name;
-                  }(), style: const TextStyle(fontSize: 12, height: 1)),
+                  }(), style: const TextStyle(fontSize: 10, height: 1)),
               ],
             );
           }(),
