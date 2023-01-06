@@ -30,11 +30,13 @@ class ExtractionWorld extends ConsumerGridWidget {
           () {
             return GenericTemplate(
               imageUrl: world.thumbnailImageUrl,
-              onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id),
-                  )),
+              onTap: world.id == "???"
+                  ? null
+                  : () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id),
+                      )),
               onLongPress: () {
                 showModalBottomSheetStatelessWidget(
                   context: context,
@@ -72,11 +74,13 @@ class ExtractionWorld extends ConsumerGridWidget {
             return GenericTemplate(
               imageUrl: world.thumbnailImageUrl,
               half: true,
-              onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id),
-                  )),
+              onTap: world.id == "???"
+                  ? null
+                  : () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id),
+                      )),
               onLongPress: () {
                 showModalBottomSheetStatelessWidget(
                   context: context,
@@ -113,11 +117,13 @@ class ExtractionWorld extends ConsumerGridWidget {
         for (VRChatLimitedWorld world in sortWorlds(config, worldList))
           () {
             return GenericTemplateText(
-              onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id),
-                  )),
+              onTap: world.id == "???"
+                  ? null
+                  : () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id),
+                      )),
               onLongPress: () {
                 showModalBottomSheetStatelessWidget(
                   context: context,

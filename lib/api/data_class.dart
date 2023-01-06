@@ -278,6 +278,10 @@ class VRChatLimitedWorld {
   late DateTime updatedAt;
 
   VRChatLimitedWorld.fromJson(this.content) {
+    if (content['releaseStatus'] == "hidden") {
+      fromJsonHidden();
+      return;
+    }
     authorId = content['authorId'];
     authorName = content['authorName'];
     capacity = content['capacity'];
@@ -299,6 +303,31 @@ class VRChatLimitedWorld {
       limitedUnityPackages.add(LimitedUnityPackages.fromJson(package));
     }
     updatedAt = DateTime.parse(content['updated_at']);
+  }
+
+  fromJsonHidden() {
+    // want Union in Dart.
+    authorId = content['authorId'] ?? "???";
+    authorName = content['authorName'];
+    capacity = content['capacity'];
+    createdAt = DateTime.utc(0);
+    favorites = content['favorites'] ?? 0;
+    heat = content['heat'] ?? 0;
+    id = content['id'];
+    imageUrl = content['imageUrl'];
+    labsPublicationDate = null;
+    name = content['name'] ?? "???";
+    occupants = content['occupants'];
+    organization = content['organization'] ?? "???";
+    popularity = content['popularity'] ?? 0;
+    publicationDate = DateTime.utc(0);
+    releaseStatus = content['releaseStatus'];
+    tags = (content['tags'] ?? []).cast<String>();
+    thumbnailImageUrl = content['thumbnailImageUrl'];
+    for (dynamic package in content['unityPackages'] ?? []) {
+      limitedUnityPackages.add(LimitedUnityPackages.fromJson(package));
+    }
+    updatedAt = DateTime.utc(0);
   }
 }
 

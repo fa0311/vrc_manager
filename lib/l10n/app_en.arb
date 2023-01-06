@@ -96,6 +96,7 @@
     "openInJsonViewer": "Open in json viewer",
     "joinInstance": "Invite me",
     "addFavoriteWorlds": "Add favorite worlds",
+    "removeFavoriteWorlds": "Remove favorite worlds",
     "editBio": "Edit bio",
     "editNote": "Edit note",
     "@__USER_DIALOG__": {},

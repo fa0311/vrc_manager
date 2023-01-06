@@ -28,9 +28,10 @@ class WorldDetailsModalBottom extends ConsumerWidget {
     return SingleChildScrollView(
       child: Column(
         children: [
-          ShareUrlTileWidget(url: VRChatAssets.worlds.resolve(world.id)),
-          FavoriteListTileWidget(world: world),
-          LaunchWorldListTileWidget(world: world),
+          if (world.id != "???") ShareUrlTileWidget(url: VRChatAssets.worlds.resolve(world.id)),
+          if (world.id != "???") FavoriteListTileWidget(world: world),
+          if (world.id == "???" && world is VRChatFavoriteWorld) FavoriteRemoveTileWidget(favoriteWorld: world as VRChatFavoriteWorld),
+          if (world.id != "???") LaunchWorldListTileWidget(world: world),
           OpenInJsonViewer(content: world.content),
         ],
       ),
@@ -115,6 +116,25 @@ class FavoriteListTileWidget extends ConsumerWidget {
           context: context,
           builder: () => FavoriteAction(world: world),
         );
+      },
+    );
+  }
+}
+
+class FavoriteRemoveTileWidget extends ConsumerWidget {
+  final VRChatFavoriteWorld favoriteWorld;
+  const FavoriteRemoveTileWidget({super.key, required this.favoriteWorld});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "", logger: logger);
+    return ListTile(
+      title: Text(AppLocalizations.of(context)!.removeFavoriteWorlds),
+      onTap: () async {
+        await vrchatLoginSession.deleteFavorites(favoriteWorld.favoriteId).catchError((e, trace) {
+          logger.e(getMessage(e), e, trace);
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage(context: context, status: e))));
+        });
       },
     );
   }
