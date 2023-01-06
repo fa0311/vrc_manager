@@ -2,6 +2,7 @@
 
 // Dart imports:
 import 'dart:io';
+import 'dart:math';
 
 // Flutter imports:
 import 'package:flutter/material.dart';
@@ -11,8 +12,9 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
+import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
-import 'package:vrc_manager/assets/storage2.dart';
+import 'package:vrc_manager/assets.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/core/splash.dart';
 import 'package:vrc_manager/scenes/main/main.dart';
@@ -22,7 +24,6 @@ import 'package:vrc_manager/storage/account.dart';
 import 'package:vrc_manager/widgets/future/button.dart';
 import 'package:vrc_manager/widgets/config_modal/locale.dart';
 import 'package:vrc_manager/widgets/drawer.dart';
-import 'package:vrc_manager/widgets/loading.dart';
 import 'package:vrc_manager/widgets/modal.dart';
 
 class VRChatMobileLoginData {
@@ -31,28 +32,33 @@ class VRChatMobileLoginData {
   VRChatMobileLoginData({required this.accountConfig, required this.session});
 }
 
-final usernameControllerProvider = StateProvider<TextEditingController>((ref) => TextEditingController());
-final passwordControllerProvider = StateProvider<TextEditingController>((ref) => TextEditingController());
-final passwordObscureProvider = StateProvider<bool>((ref) => true);
-final rememberLoginInfoProvider = StateProvider<bool>((ref) => false);
-final totpControllerProvider = StateProvider<TextEditingController>((ref) => TextEditingController());
+String genUid([int length = 64]) {
+  final Random random = Random.secure();
+  return List.generate(length, (_) => Assets.charset[random.nextInt(Assets.charset.length)]).join();
+}
 
-// =====================
+final isPasswordObscureProvider = StateProvider.autoDispose<bool>((ref) => true);
+final totpControllerProvider = StateProvider.autoDispose<TextEditingController>((ref) => TextEditingController());
 
-final loginStorageProvider = FutureProvider<void>((ref) async {
-  final id = await ref.watch(selectedIdProvider.future);
-  final storage = ConfigStorage(id: id);
-  await Future.wait([
-    storage.getSecure(key: ConfigStorageKey.username).then((value) {
-      ref.read(usernameControllerProvider.notifier).state.text = value ?? "";
-    }),
-    storage.getSecure(key: ConfigStorageKey.password).then((value) {
-      ref.read(passwordControllerProvider.notifier).state.text = value ?? "";
-    }),
-    storage.getBool(key: ConfigStorageKey.rememberLoginInfoKey).then((value) {
-      ref.read(rememberLoginInfoProvider.notifier).state = value ?? false;
-    }),
-  ]);
+final userControllerProvider = StateProvider.autoDispose<TextEditingController>((ref) {
+  return TextEditingController()..text = ref.read(loginDataProvider).accountConfig.userId ?? "";
+});
+
+final passwordControllerProvider = StateProvider.autoDispose<TextEditingController>((ref) {
+  return TextEditingController()..text = ref.read(loginDataProvider).accountConfig.password ?? "";
+});
+final rememberPasswordProvider = StateProvider.autoDispose<bool>((ref) {
+  return ref.read(loginDataProvider).accountConfig.rememberLoginInfo;
+});
+
+final loginDataProvider = StateProvider.autoDispose<VRChatMobileLoginData>((ref) {
+  AccountConfig accountConfig;
+  if (!ref.read(accountConfigProvider).isLogout()) {
+    accountConfig = ref.read(accountConfigProvider).loggedAccount!;
+  } else {
+    accountConfig = AccountConfig(genUid());
+  }
+  return VRChatMobileLoginData(accountConfig: accountConfig, session: VRChatAPI(cookie: accountConfig.cookie ?? "", logger: logger));
 });
 
 class VRChatMobileLogin extends ConsumerWidget {
@@ -60,33 +66,34 @@ class VRChatMobileLogin extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final data = ref.watch(loginStorageProvider);
-
-    final usernameController = ref.watch(usernameControllerProvider);
-    final passwordController = ref.watch(passwordControllerProvider);
-    final totpController = ref.watch(totpControllerProvider);
-    final passwordObscure = ref.watch(passwordObscureProvider);
-    final rememberLoginInfo = ref.watch(rememberLoginInfoProvider);
-
     Future save() async {
-      final id = await ref.read(selectedIdProvider.future);
-      final storage = ConfigStorage(id: id);
-      storage.setSecure(key: ConfigStorageKey.username, value: usernameController.text);
-      storage.setBool(key: ConfigStorageKey.rememberLoginInfoKey, value: rememberLoginInfo);
-      if (passwordObscure) {
-        storage.setSecure(key: ConfigStorageKey.password, value: passwordController.text);
+      AccountConfig config = ref.read(loginDataProvider).accountConfig;
+      config.setUserId(ref.read(userControllerProvider).text);
+
+      if (ref.read(rememberPasswordProvider)) {
+        config.setPassword(ref.read(passwordControllerProvider).text);
+      } else {
+        config.setPassword("");
       }
-      logger.i("saved");
-      return await ref.refresh(selectedIdProvider);
+
+      config.setCookie(ref.read(loginDataProvider).session.getCookie());
+      config.setRememberLoginInfo(ref.read(rememberPasswordProvider));
+      ref.read(accountListConfigProvider).addAccount(config);
+
+      await ref.read(accountConfigProvider).login(config);
     }
 
-    Future onPressedTotp() async {
+    onPressedTotp() async {
       try {
-        final session = await ref.read(getSessionProvider.future);
-        final response = await session.auth.verify2fa(totpController.text);
-        if (response.error != null) throw response.error!;
-        await save();
-        Navigator.of(context).popUntil((route) => route.isFirst);
+        VRChatLogin login = await ref.read(loginDataProvider).session.loginTotp(ref.read(totpControllerProvider).text);
+        if (login.verified) {
+          Navigator.of(context).popUntil((route) => route.isFirst);
+          save();
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(AppLocalizations.of(context)!.incorrectLogin)),
+          );
+        }
       } catch (e, trace) {
         logger.e(getMessage(e), e, trace);
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage(context: context, status: e))));
@@ -94,34 +101,45 @@ class VRChatMobileLogin extends ConsumerWidget {
     }
 
     totp() {
-      return AlertDialog(
-        title: Text(
-          AppLocalizations.of(context)!.twoFactorAuthentication,
-        ),
-        content: TextFormField(
-          keyboardType: TextInputType.number,
-          controller: totpController,
-          onFieldSubmitted: (String e) => onPressedTotp(),
-          decoration: InputDecoration(labelText: AppLocalizations.of(context)!.authenticationCode),
-          maxLength: 6,
-        ),
-        actions: [
-          FutureButton(
-            child: Text(AppLocalizations.of(context)!.send),
-            onPressed: () => onPressedTotp(),
-          ),
-        ],
+      showDialog(
+        context: context,
+        builder: (_) {
+          final totpController = ref.watch(totpControllerProvider);
+          return AlertDialog(
+            title: Text(
+              AppLocalizations.of(context)!.twoFactorAuthentication,
+            ),
+            content: TextFormField(
+              keyboardType: TextInputType.number,
+              controller: totpController,
+              onFieldSubmitted: (String e) => onPressedTotp(),
+              decoration: InputDecoration(labelText: AppLocalizations.of(context)!.authenticationCode),
+              maxLength: 6,
+            ),
+            actions: [
+              FutureButton(
+                child: Text(AppLocalizations.of(context)!.send),
+                onPressed: () => onPressedTotp(),
+              ),
+            ],
+          );
+        },
       );
     }
 
-    Future onPressed() async {
+    onPressed() async {
       try {
-        final session = await ref.read(getSessionProvider.future);
-        final response = await session.auth.login(username: usernameController.text, password: passwordController.text);
-
-        if (response.error != null) throw response.error!;
-        if (response.requiresTwoFactorAuth) return showDialog(context: context, builder: (_) => totp());
-        await save();
+        final session = ref.watch(loginDataProvider).session;
+        VRChatLogin login = await session.login(ref.read(userControllerProvider).text, ref.read(passwordControllerProvider).text);
+        if (login.requiresTwoFactorAuth) {
+          totp();
+        } else if (login.verified) {
+          await save();
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(AppLocalizations.of(context)!.incorrectLogin)),
+          );
+        }
       } catch (e, trace) {
         logger.e(getMessage(e), e, trace);
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage(context: context, status: e))));
@@ -144,73 +162,78 @@ class VRChatMobileLogin extends ConsumerWidget {
         ],
       ),
       drawer: const NormalDrawer(),
-      body: data.when(
-        loading: () => const Loading(),
-        error: (e, trace) {
-          logger.w(getMessage(e), e, trace);
-          return ErrorPage(loggerReport: ref.read(loggerReportProvider));
-        },
-        data: (_) {
-          return Padding(
-            padding: const EdgeInsets.all(32.0),
-            child: Column(
-              children: <Widget>[
-                TextFormField(
-                  controller: usernameController,
+      body: Padding(
+        padding: const EdgeInsets.all(32.0),
+        child: Column(
+          children: <Widget>[
+            Consumer(
+              builder: (context, ref, child) {
+                final userController = ref.watch(userControllerProvider);
+                return TextFormField(
+                  controller: userController,
                   decoration: InputDecoration(labelText: AppLocalizations.of(context)!.usernameOrEmail),
-                ),
-                TextFormField(
-                  obscureText: passwordObscure,
+                );
+              },
+            ),
+            Consumer(
+              builder: (context, ref, child) {
+                final isPasswordObscure = ref.watch(isPasswordObscureProvider);
+                final passwordController = ref.watch(passwordControllerProvider);
+                return TextFormField(
+                  obscureText: isPasswordObscure,
                   controller: passwordController,
-                  onFieldSubmitted: (_) => onPressed(),
+                  onFieldSubmitted: (String e) => onPressed(),
                   decoration: InputDecoration(
                     labelText: AppLocalizations.of(context)!.password,
                     suffixIcon: IconButton(
-                      icon: Icon(passwordObscure ? Icons.visibility_off : Icons.visibility),
-                      onPressed: () => ref.read(passwordObscureProvider.notifier).update((state) => !state),
+                      icon: Icon(isPasswordObscure ? Icons.visibility_off : Icons.visibility),
+                      onPressed: () => ref.read(isPasswordObscureProvider.notifier).update((state) => !state),
                     ),
                   ),
-                ),
-                SwitchListTile(
-                  value: rememberLoginInfo,
-                  title: Text(
-                    AppLocalizations.of(context)!.rememberPassword,
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.primary,
-                      fontSize: 14,
-                    ),
+                );
+              },
+            ),
+            Consumer(builder: (context, ref, child) {
+              final rememberPassword = ref.watch(rememberPasswordProvider);
+              return SwitchListTile(
+                value: rememberPassword,
+                title: Text(
+                  AppLocalizations.of(context)!.rememberPassword,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.primary,
+                    fontSize: 14,
                   ),
-                  onChanged: (e) => ref.read(rememberLoginInfoProvider.notifier).state = e,
                 ),
-                FutureButton(
-                  onPressed: () => onPressed(),
-                  type: ButtonType.elevatedButton,
-                  child: Text(AppLocalizations.of(context)!.login),
+                onChanged: (e) => ref.read(rememberPasswordProvider.notifier).update((state) => e),
+              );
+            }),
+            FutureButton(
+              onPressed: () => onPressed(),
+              type: ButtonType.elevatedButton,
+              child: Text(AppLocalizations.of(context)!.login),
+            ),
+            if (Platform.isAndroid || Platform.isIOS)
+              TextButton(
+                child: Text(
+                  AppLocalizations.of(context)!.loginBrowser,
+                  style: const TextStyle(
+                    fontSize: 14,
+                  ),
                 ),
-                if (Platform.isAndroid || Platform.isIOS)
-                  TextButton(
-                    child: Text(
-                      AppLocalizations.of(context)!.loginBrowser,
-                      style: const TextStyle(
-                        fontSize: 14,
+                onPressed: () async {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => const VRChatMobileSplash(
+                        login: VRChatMobileWebViewLogin(),
+                        child: VRChatMobileHome(),
                       ),
                     ),
-                    onPressed: () async {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (BuildContext context) => const VRChatMobileSplash(
-                            login: VRChatMobileWebViewLogin(),
-                            child: VRChatMobileHome(),
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-              ],
-            ),
-          );
-        },
+                  );
+                },
+              ),
+          ],
+        ),
       ),
     );
   }

@@ -8,7 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 // Project imports:
 import 'package:vrc_manager/api/assets/instance_type.dart';
 import 'package:vrc_manager/api/data_class.dart';
-import 'package:vrc_manager/assets/sort/sort2.dart';
+import 'package:vrc_manager/assets/sort/users.dart';
 import 'package:vrc_manager/scenes/sub/user.dart';
 import 'package:vrc_manager/storage/grid_modal.dart';
 import 'package:vrc_manager/widgets/grid_view/extraction/consumer.dart';
@@ -19,12 +19,11 @@ import 'package:vrc_manager/widgets/modal/user.dart';
 import 'package:vrc_manager/widgets/modal/world.dart';
 import 'package:vrc_manager/widgets/user.dart';
 import 'package:vrc_manager/widgets/world.dart';
-import 'package:vrchat_dart/vrchat_dart.dart';
 
 class ExtractionFriend extends ConsumerGridWidget {
-  final List<LimitedUser> userList;
-  final Map<String, World?> locationMap;
-  final Map<String, Instance?> instanceMap;
+  final List<VRChatFriends> userList;
+  final Map<String, VRChatWorld?> locationMap;
+  final Map<String, VRChatInstance?> instanceMap;
   final ScrollPhysics? physics;
 
   const ExtractionFriend({
@@ -42,12 +41,12 @@ class ExtractionFriend extends ConsumerGridWidget {
       width: 600,
       height: config.worldDetails ? 235 : 130,
       children: [
-        for (final user in sortUsers(config, userList))
+        for (VRChatFriends user in sortUsers(config, userList) as List<VRChatFriends>)
           () {
             if (config.joinable && VRChatInstanceIdOther.values.any((id) => id.name == user.location)) return null;
             String worldId = user.location.split(":")[0];
             return GenericTemplate(
-              imageUrl: user.profilePicOverride,
+              imageUrl: user.profilePicOverride ?? user.currentAvatarThumbnailImageUrl,
               onTap: () => Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -70,7 +69,7 @@ class ExtractionFriend extends ConsumerGridWidget {
               children: [
                 Username(user: user),
                 for (String text in [
-                  user.statusDescription,
+                  if (user.statusDescription != null) user.statusDescription!,
                   if (!VRChatInstanceIdOther.values.any((id) => id.name == user.location)) locationMap[worldId]?.name,
                   if (user.location == VRChatInstanceIdOther.private.name) AppLocalizations.of(context)!.privateWorld,
                   if (user.location == VRChatInstanceIdOther.traveling.name) AppLocalizations.of(context)!.loadingWorld,

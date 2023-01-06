@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
+import 'package:vrc_manager/api/data_class.dart';
+import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets/api/get.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/core/splash.dart';
@@ -13,12 +15,11 @@ import 'package:vrc_manager/widgets/grid_modal/config.dart';
 import 'package:vrc_manager/widgets/grid_view/extraction/render_grid/friends.dart';
 import 'package:vrc_manager/widgets/loading.dart';
 import 'package:vrc_manager/widgets/scroll.dart';
-import 'package:vrchat_dart/vrchat_dart.dart';
 
 class VRChatMobileFriendsData {
-  Map<String, World?> locationMap;
-  Map<String, Instance?> instanceMap;
-  List<LimitedUser> userList;
+  Map<String, VRChatWorld?> locationMap;
+  Map<String, VRChatInstance?> instanceMap;
+  List<VRChatFriends> userList;
 
   VRChatMobileFriendsData({
     required this.locationMap,
@@ -28,31 +29,29 @@ class VRChatMobileFriendsData {
 }
 
 final vrchatMobileFriendsProvider = FutureProvider.family<VRChatMobileFriendsData, bool>((ref, offline) async {
-  final session = await ref.read(getSessionProvider.future);
-
+  VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "", logger: logger);
   List<Future> futureList = [];
-  Map<String, World?> locationMap = {};
-  Map<String, Instance?> instanceMap = {};
-  List<LimitedUser> userList = [];
+  Map<String, VRChatWorld?> locationMap = {};
+  Map<String, VRChatInstance?> instanceMap = {};
+  List<VRChatFriends> userList = [];
   int len;
   do {
     int offset = userList.length;
-    final users = await session.rawApi.getFriendsApi().getFriends(offline: offline, offset: offset).catchError((e, trace) {
+    List<VRChatFriends> users = await vrchatLoginSession.friends(offline: offline, offset: offset).catchError((e, trace) {
       logger.e(getMessage(e), e, trace);
     });
-    userList.addAll(users.data!);
-
+    userList.addAll(users);
     if (!offline) {
-      for (LimitedUser user in users.data!) {
-        futureList.add(getWorld(session: session, user: user, locationMap: locationMap).catchError((e, trace) {
+      for (VRChatFriends user in users) {
+        futureList.add(getWorld(vrchatLoginSession: vrchatLoginSession, user: user, locationMap: locationMap).catchError((e, trace) {
           logger.e(getMessage(e), e, trace);
         }));
-        futureList.add(getInstance(session: session, user: user, instanceMap: instanceMap).catchError((e, trace) {
+        futureList.add(getInstance(vrchatLoginSession: vrchatLoginSession, user: user, instanceMap: instanceMap).catchError((e, trace) {
           logger.e(getMessage(e), e, trace);
         }));
       }
     }
-    len = users.data!.length;
+    len = users.length;
   } while (len > 0);
   await Future.wait(futureList);
   return VRChatMobileFriendsData(locationMap: locationMap, instanceMap: instanceMap, userList: userList);
