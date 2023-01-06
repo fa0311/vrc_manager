@@ -10,8 +10,8 @@
 
 ## 翻訳
 
-- [Issues](issues/new?assignees=&labels=bug&template=translation-error.yml)
-- [lib/l10n](tree/develop/lib/l10n)
+- [Issues](/issues/new?assignees=&labels=bug&template=translation-error.yml)
+- [lib/l10n](/develop/lib/l10n)
 
 ### アイコン
 
