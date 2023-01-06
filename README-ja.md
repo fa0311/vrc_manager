@@ -33,7 +33,7 @@
 
 ## ドキュメント
 
-開発・翻訳を手伝ってみませんか？ [**contribute**](docs/contribute/en.md)
+開発・翻訳を手伝ってみませんか？ [**貢献**](docs/contribute/ja.md)
 
 ## 免責事項
 
