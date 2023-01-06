@@ -59,6 +59,8 @@ dependencies:
   cached_network_image: ^3.2.1
   flutter_riverpod: ^2.0.2
   logger: ^1.1.0
+  vrchat_dart: ^2.4.0
+  dio: ^4.0.6
 
 dev_dependencies:
   flutter_test:

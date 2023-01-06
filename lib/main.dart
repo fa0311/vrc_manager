@@ -16,7 +16,7 @@ import 'package:vrc_manager/storage/accessibility.dart';
 ConsoleOutputExt loggerOutput = ConsoleOutputExt();
 Logger logger = LoggerExt(
   filter: ProductionFilter(),
-  printer: PrettyPrinter(methodCount: 8),
+  printer: PrettyPrinter(methodCount: 0),
   output: loggerOutput,
   level: kDebugMode ? Level.verbose : Level.warning,
 );

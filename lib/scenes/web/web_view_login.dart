@@ -12,8 +12,6 @@ import 'package:vrc_manager/assets/session.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/core/splash.dart';
 import 'package:vrc_manager/scenes/setting/logger.dart';
-import 'package:vrc_manager/scenes/sub/login.dart';
-import 'package:vrc_manager/storage/account.dart';
 import 'package:vrc_manager/widgets/loading.dart';
 import 'package:vrc_manager/widgets/scroll.dart';
 
@@ -91,10 +89,6 @@ class VRChatMobileWebViewLogin extends ConsumerWidget {
               for (Cookie cookie in cookieList) {
                 cookieMap[cookie.name] = cookie.value;
               }
-              AccountConfig config = ref.read(loginDataProvider).accountConfig;
-              config.setCookie(Session().encodeCookie(cookieMap));
-              ref.read(accountListConfigProvider).addAccount(config);
-              await ref.read(accountConfigProvider).login(config);
             },
           ),
         ),

@@ -64,6 +64,26 @@ Future<bool> removeStorage(String key, {String id = ""}) async {
   }
 }
 
+Future<bool?> getStorageBool(String key, {String id = ""}) async {
+  try {
+    final SharedPreferences storage = await SharedPreferences.getInstance();
+    return storage.getBool("$key$id");
+  } catch (e, trace) {
+    logger.w(getMessage(e), e, trace);
+    return null;
+  }
+}
+
+Future<bool> setStorageBool(String key, bool value, {String id = ""}) async {
+  try {
+    final SharedPreferences storage = await SharedPreferences.getInstance();
+    return await storage.setBool("$key$id", value);
+  } catch (e, trace) {
+    logger.w(getMessage(e), e, trace);
+    return false;
+  }
+}
+
 Future<List<String>> getStorageList(String key, {String id = ""}) async {
   try {
     final SharedPreferences storage = await SharedPreferences.getInstance();

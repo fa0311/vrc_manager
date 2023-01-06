@@ -1,7 +1,8 @@
 class Assets {
   static Uri svg = Uri.directory("assets/svg/");
+
   // cspell:disable-next-line
-  static String charset = '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._';
+  static String charset = '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz';
 
   static Uri github = Uri.https("github.com");
   static Uri twitter = Uri.https("twitter.com");
