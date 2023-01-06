@@ -30,8 +30,8 @@ import 'package:vrc_manager/widgets/status.dart';
 
 class Username extends ConsumerWidget {
   final VRChatUser user;
-  final double diameter;
-  final FontWeight fontWeight;
+  final double? diameter;
+  final FontWeight? fontWeight;
   const Username({super.key, required this.user, this.diameter = 20, this.fontWeight = FontWeight.bold});
 
   @override
@@ -39,7 +39,7 @@ class Username extends ConsumerWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        StatusWidget(status: user.status, diameter: diameter - 2),
+        StatusWidget(status: user.status, diameter: diameter ?? 20 - 2),
         Padding(
           padding: const EdgeInsets.only(left: 2, right: 5),
           child: Text(

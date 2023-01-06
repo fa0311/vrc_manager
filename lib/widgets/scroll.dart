@@ -25,6 +25,7 @@ class ScrollWidget extends ConsumerWidget {
         height: double.infinity,
         width: double.infinity,
         child: SingleChildScrollView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           physics: const AlwaysScrollableScrollPhysics(),
           child: child,
         ),

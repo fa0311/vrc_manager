@@ -16,137 +16,116 @@ import 'package:vrc_manager/widgets/modal/world.dart';
 
 class ExtractionWorld extends ConsumerGridWidget {
   final List<VRChatLimitedWorld> worldList;
-  final ScrollPhysics? physics;
 
-  const ExtractionWorld({super.key, required super.id, required this.worldList, this.physics});
+  const ExtractionWorld({
+    super.key,
+    required super.id,
+    required this.worldList,
+  });
 
   @override
-  Widget normal(BuildContext context, WidgetRef ref, GridConfigNotifier config) {
-    return RenderGrid(
-      width: 600,
-      height: 130,
-      children: [
-        for (VRChatLimitedWorld world in sortWorlds(config, worldList))
-          () {
-            return GenericTemplate(
-              imageUrl: world.thumbnailImageUrl,
-              onTap: world.id == "???"
-                  ? null
-                  : () => Navigator.push(
+  List<Widget> normal(BuildContext context, WidgetRef ref, GridConfigNotifier config, ConsumerGridStyle style) {
+    return [
+      for (VRChatLimitedWorld world in sortWorlds(config, worldList))
+        () {
+          return GenericTemplate(
+            imageUrl: world.thumbnailImageUrl,
+            onTap: world.id == "???"
+                ? null
+                : () => Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id),
-                      )),
-              onLongPress: () {
-                showModalBottomSheetStatelessWidget(
-                  context: context,
-                  builder: () => WorldDetailsModalBottom(world: world),
-                );
-              },
-              children: [
-                SizedBox(
-                  child: Text(
-                    world.name,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 2,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 15,
-                      height: 1,
-                    ),
-                  ),
-                ),
-              ],
-            );
-          }(),
-      ],
-    );
-  }
-
-  @override
-  Widget simple(BuildContext context, WidgetRef ref, GridConfigNotifier config) {
-    return RenderGrid(
-      width: 320,
-      height: 64,
-      children: [
-        for (VRChatLimitedWorld world in sortWorlds(config, worldList))
-          () {
-            return GenericTemplate(
-              imageUrl: world.thumbnailImageUrl,
-              half: true,
-              onTap: world.id == "???"
-                  ? null
-                  : () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id),
-                      )),
-              onLongPress: () {
-                showModalBottomSheetStatelessWidget(
-                  context: context,
-                  builder: () => WorldDetailsModalBottom(world: world),
-                );
-              },
-              children: [
-                SizedBox(
-                  width: double.infinity,
-                  child: Text(
-                    world.name,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 2,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 10,
-                      height: 1,
-                    ),
-                  ),
-                ),
-              ],
-            );
-          }(),
-      ],
-    );
-  }
-
-  @override
-  Widget textOnly(BuildContext context, WidgetRef ref, GridConfigNotifier config) {
-    return RenderGrid(
-      width: 400,
-      height: config.worldDetails ? 39 : 26,
-      children: [
-        for (VRChatLimitedWorld world in sortWorlds(config, worldList))
-          () {
-            return GenericTemplateText(
-              onTap: world.id == "???"
-                  ? null
-                  : () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id),
-                      )),
-              onLongPress: () {
-                showModalBottomSheetStatelessWidget(
-                  context: context,
-                  builder: () => WorldDetailsModalBottom(world: world),
-                );
-              },
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      world.name,
-                      style: const TextStyle(
-                        fontSize: 10,
-                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                  ],
+            onLongPress: () {
+              showModalBottomSheetStatelessWidget(
+                context: context,
+                builder: () => WorldDetailsModalBottom(world: world),
+              );
+            },
+            children: [
+              SizedBox(
+                child: Text(
+                  world.name,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 2,
+                  style: style.title,
                 ),
-              ],
-            );
-          }(),
-      ],
-    );
+              ),
+            ],
+          );
+        }(),
+    ];
+  }
+
+  @override
+  List<Widget> simple(BuildContext context, WidgetRef ref, GridConfigNotifier config, ConsumerGridStyle style) {
+    return [
+      for (VRChatLimitedWorld world in sortWorlds(config, worldList))
+        () {
+          return GenericTemplate(
+            imageUrl: world.thumbnailImageUrl,
+            half: true,
+            onTap: world.id == "???"
+                ? null
+                : () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id),
+                      ),
+                    ),
+            onLongPress: () {
+              showModalBottomSheetStatelessWidget(
+                context: context,
+                builder: () => WorldDetailsModalBottom(world: world),
+              );
+            },
+            children: [
+              SizedBox(
+                width: double.infinity,
+                child: Text(
+                  world.name,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 2,
+                  style: style.title,
+                ),
+              ),
+            ],
+          );
+        }(),
+    ];
+  }
+
+  @override
+  List<Widget> textOnly(BuildContext context, WidgetRef ref, GridConfigNotifier config, ConsumerGridStyle style) {
+    return [
+      for (VRChatLimitedWorld world in sortWorlds(config, worldList))
+        () {
+          return GenericTemplateText(
+            onTap: world.id == "???"
+                ? null
+                : () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id),
+                    )),
+            onLongPress: () {
+              showModalBottomSheetStatelessWidget(
+                context: context,
+                builder: () => WorldDetailsModalBottom(world: world),
+              );
+            },
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(world.name, style: style.title),
+                ],
+              ),
+            ],
+          );
+        }(),
+    ];
   }
 }
