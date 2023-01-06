@@ -157,13 +157,7 @@ class ExtractionFriend extends ConsumerGridWidget {
                 );
               },
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Username(user: user, diameter: 15),
-                    if (user.statusDescription != null) Text(user.statusDescription!, style: const TextStyle(fontSize: 10)),
-                  ],
-                ),
+                Username(user: user, diameter: 10, fontWeight: FontWeight.bold),
                 if (config.worldDetails)
                   Text(() {
                     if (user.location == VRChatInstanceIdOther.offline.name) return AppLocalizations.of(context)!.privateWorld;
@@ -171,7 +165,7 @@ class ExtractionFriend extends ConsumerGridWidget {
                     if (user.location == VRChatInstanceIdOther.offline.name) return AppLocalizations.of(context)!.onTheWebsite;
                     if (locationMap[worldId] == null) return "";
                     return locationMap[worldId]!.name;
-                  }(), style: const TextStyle(fontSize: 12, height: 1)),
+                  }(), style: const TextStyle(fontSize: 10, height: 1)),
               ],
             );
           }(),

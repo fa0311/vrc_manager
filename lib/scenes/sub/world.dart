@@ -27,11 +27,11 @@ class VRChatMobileWorldData {
 }
 
 final vrchatMobileWorldProvider = FutureProvider.family<VRChatMobileWorldData, String>((ref, worldId) async {
-  VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "");
+  VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "", logger: logger);
 
   late VRChatWorld world;
-  await vrchatLoginSession.worlds(worldId).then((value) => world = value).catchError((e) {
-    logger.e(getMessage(e), e);
+  await vrchatLoginSession.worlds(worldId).then((value) => world = value).catchError((e, trace) {
+    logger.e(getMessage(e), e, trace);
   });
   return VRChatMobileWorldData(world: world);
 });
@@ -74,7 +74,6 @@ class VRChatMobileWorld extends ConsumerWidget {
               loading: () => const Loading(),
               error: (e, trace) {
                 logger.w(getMessage(e), e, trace);
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: ErrorSnackBar(e)));
                 return ScrollWidget(
                   onRefresh: () => ref.refresh((vrchatMobileWorldProvider(worldId).future)),
                   child: ErrorPage(loggerReport: ref.read(loggerReportProvider)),

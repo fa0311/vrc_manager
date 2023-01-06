@@ -15,8 +15,8 @@ Future getWorld({
   String wid = user.location.split(":")[0];
   if (VRChatInstanceIdOther.values.any((id) => id.name == user.location) || locationMap.containsKey(wid)) return;
   locationMap[wid] = null;
-  locationMap[wid] = await vrchatLoginSession.worlds(wid).catchError((e) {
-    logger.e(getMessage(e), e);
+  locationMap[wid] = await vrchatLoginSession.worlds(wid).catchError((e, trace) {
+    logger.e(getMessage(e), e, trace);
   });
 }
 
@@ -28,8 +28,8 @@ Future getWorldFromFavorite({
   String wid = favoriteGroup.id;
   if (VRChatInstanceIdOther.values.any((id) => id.name == wid) || locationMap.containsKey(wid)) return;
   locationMap[wid] = null;
-  locationMap[wid] = await vrchatLoginSession.worlds(wid).catchError((e) {
-    logger.e(getMessage(e), e);
+  locationMap[wid] = await vrchatLoginSession.worlds(wid).catchError((e, trace) {
+    logger.e(getMessage(e), e, trace);
   });
 }
 
@@ -40,7 +40,7 @@ Future getInstance({
 }) async {
   if (VRChatInstanceIdOther.values.any((id) => id.name == user.location) || instanceMap.containsKey(user.location)) return;
   instanceMap[user.location] = null;
-  instanceMap[user.location] = await vrchatLoginSession.instances(user.location).catchError((e) {
-    logger.e(getMessage(e), e);
+  instanceMap[user.location] = await vrchatLoginSession.instances(user.location).catchError((e, trace) {
+    logger.e(getMessage(e), e, trace);
   });
 }

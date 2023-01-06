@@ -24,7 +24,7 @@ final urlProvider = StateProvider.autoDispose<Uri?>((ref) => null);
 final webViewControllerProvider = StateProvider<InAppWebViewController?>((ref) => null);
 
 final webViewInitProvider = FutureProvider.autoDispose<void>((ref) async {
-  VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "");
+  VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "", logger: logger);
   CookieManager cookieManager = CookieManager.instance();
   await cookieManager.deleteAllCookies();
   final cookieMap = Session().decodeCookie(vrchatLoginSession.getCookie());
@@ -67,7 +67,6 @@ class VRChatMobileWebViewLogin extends ConsumerWidget {
           loading: () => const Loading(),
           error: (e, trace) {
             logger.w(getMessage(e), e, trace);
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: ErrorSnackBar(e)));
             return ScrollWidget(
               onRefresh: () => ref.refresh((webViewInitProvider.future)),
               child: ErrorPage(loggerReport: ref.read(loggerReportProvider)),

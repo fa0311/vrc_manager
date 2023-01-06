@@ -9,6 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vrc_manager/scenes/main/search.dart';
 import 'package:vrc_manager/storage/accessibility.dart';
 import 'package:vrc_manager/storage/grid_modal.dart';
+import 'package:vrc_manager/widgets/future/tile.dart';
 import 'package:vrc_manager/widgets/grid_modal/config.dart';
 import 'package:vrc_manager/widgets/modal.dart';
 import 'package:vrc_manager/widgets/share.dart';
@@ -67,7 +68,7 @@ class GridModal extends ConsumerWidget {
               onChanged: (bool e) => config.setRemoveButton(e),
             ),
           if (gridModalConfig.url != null)
-            ListTile(
+            FutureTile(
               title: Text(AppLocalizations.of(context)!.openInBrowser),
               onTap: () async {
                 Navigator.pop(context);
@@ -109,9 +110,10 @@ class GridSortModal extends ConsumerWidget {
         children: <Widget>[
           for (SortMode sort in gridModalConfig.sortMode)
             ListTile(
-                title: Text(sort.toLocalization(context)),
-                trailing: config.sortMode == sort ? const Icon(Icons.check) : null,
-                onTap: () => config.setSort(sort)),
+              title: Text(sort.toLocalization(context)),
+              trailing: config.sortMode == sort ? const Icon(Icons.check) : null,
+              onTap: () => config.setSort(sort),
+            ),
           SwitchListTile(
             value: config.descending,
             title: Text(AppLocalizations.of(context)!.descending),

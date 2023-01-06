@@ -38,28 +38,28 @@ class VRChatMobileUserData {
 }
 
 final vrchatMobileUserProvider = FutureProvider.family<VRChatMobileUserData, String>((ref, userId) async {
-  VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "");
+  VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "", logger: logger);
   late VRChatUser user;
   late VRChatFriendStatus status;
   VRChatWorld? world;
   VRChatInstance? instance;
 
   await Future.wait([
-    vrchatLoginSession.users(userId).then((value) => user = value).catchError((e) {
-      logger.e(getMessage(e), e);
+    vrchatLoginSession.users(userId).then((value) => user = value).catchError((e, trace) {
+      logger.e(getMessage(e), e, trace);
     }),
-    vrchatLoginSession.friendStatus(userId).then((value) => status = value).catchError((e) {
-      logger.e(getMessage(e), e);
+    vrchatLoginSession.friendStatus(userId).then((value) => status = value).catchError((e, trace) {
+      logger.e(getMessage(e), e, trace);
     }),
   ]);
   if (VRChatInstanceIdOther.values.any((id) => id.name == user.location)) return VRChatMobileUserData(user: user, status: status);
 
   await Future.wait([
-    vrchatLoginSession.worlds(user.location.split(":")[0]).then((value) => world = value).catchError((e) {
-      logger.e(getMessage(e), e);
+    vrchatLoginSession.worlds(user.location.split(":")[0]).then((value) => world = value).catchError((e, trace) {
+      logger.e(getMessage(e), e, trace);
     }),
-    vrchatLoginSession.instances(user.location).then((value) => instance = value).catchError((e) {
-      logger.e(getMessage(e), e);
+    vrchatLoginSession.instances(user.location).then((value) => instance = value).catchError((e, trace) {
+      logger.e(getMessage(e), e, trace);
     }),
   ]);
   return VRChatMobileUserData(user: user, status: status, world: world, instance: instance);
@@ -103,8 +103,7 @@ class VRChatMobileUser extends ConsumerWidget {
             return data.when(
               loading: () => const Loading(),
               error: (e, trace) {
-                logger.w(getMessage(e), e, trace);
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: ErrorSnackBar(e)));
+                logger.w(e, e, trace);
                 return ScrollWidget(
                   onRefresh: () => ref.refresh((vrchatMobileUserProvider(userId).future)),
                   child: ErrorPage(loggerReport: ref.read(loggerReportProvider)),

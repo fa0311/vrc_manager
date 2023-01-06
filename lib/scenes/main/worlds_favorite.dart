@@ -32,28 +32,28 @@ final vrchatMobileWorldFavoriteCounterProvider = StateProvider<int>((ref) => 0);
 
 final vrchatMobileWorldFavoriteSortProvider = FutureProvider<VRChatMobileWorldFavoriteData>((ref) async {
   Future getFavoriteWorld(FavoriteWorldData favoriteWorld) async {
-    VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "");
+    VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "", logger: logger);
     int len;
     do {
       int offset = favoriteWorld.list.length;
-      List<VRChatFavoriteWorld> worlds = await vrchatLoginSession.favoritesWorlds(favoriteWorld.group.name, offset: offset).catchError((e) {
-        logger.e(getMessage(e), e);
+      List<VRChatFavoriteWorld> worlds = await vrchatLoginSession.favoritesWorlds(favoriteWorld.group.name, offset: offset).catchError((e, trace) {
+        logger.e(getMessage(e), e, trace);
       });
       for (VRChatFavoriteWorld world in worlds) {
         favoriteWorld.list.add(world);
       }
       len = worlds.length;
-    } while (len == 50);
+    } while (len > 0);
   }
 
-  VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "");
+  VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "", logger: logger);
   List<Future> futureList = [];
   List<FavoriteWorldData> favoriteWorld = [];
   int len = 0;
   do {
     int offset = favoriteWorld.length;
-    List<VRChatFavoriteGroup> favoriteGroupList = await vrchatLoginSession.favoriteGroups("world", offset: offset).catchError((e) {
-      logger.e(getMessage(e), e);
+    List<VRChatFavoriteGroup> favoriteGroupList = await vrchatLoginSession.favoriteGroups("world", offset: offset).catchError((e, trace) {
+      logger.e(getMessage(e), e, trace);
     });
     for (VRChatFavoriteGroup group in favoriteGroupList) {
       FavoriteWorldData favorite = FavoriteWorldData(group: group, list: []);
@@ -61,7 +61,7 @@ final vrchatMobileWorldFavoriteSortProvider = FutureProvider<VRChatMobileWorldFa
       favoriteWorld.add(favorite);
     }
     len = favoriteGroupList.length;
-  } while (len == 50);
+  } while (len > 0);
 
   await Future.wait(futureList);
   return VRChatMobileWorldFavoriteData(favoriteWorld: favoriteWorld);
@@ -79,7 +79,6 @@ class VRChatMobileWorldsFavorite extends ConsumerWidget {
       loading: () => const Loading(),
       error: (e, trace) {
         logger.w(getMessage(e), e, trace);
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: ErrorSnackBar(e)));
         return ScrollWidget(
           onRefresh: () => ref.refresh(vrchatMobileWorldFavoriteSortProvider.future),
           child: ErrorPage(loggerReport: ref.read(loggerReportProvider)),

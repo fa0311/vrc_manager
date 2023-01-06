@@ -101,6 +101,7 @@ class ExtractionUser extends ConsumerGridWidget {
 
   @override
   Widget textOnly(BuildContext context, WidgetRef ref, GridConfigNotifier config) {
+    VRChatFriendStatus userStatus = status ?? VRChatFriendStatus(isFriend: false, incomingRequest: false, outgoingRequest: false);
     return RenderGrid(
       width: 400,
       height: config.worldDetails ? 39 : 26,
@@ -117,17 +118,11 @@ class ExtractionUser extends ConsumerGridWidget {
               onLongPress: () {
                 showModalBottomSheetStatelessWidget(
                   context: context,
-                  builder: () => UserDetailsModalBottom(user: user, status: status!),
+                  builder: () => UserDetailsModalBottom(user: user, status: userStatus),
                 );
               },
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Username(user: user, diameter: 15),
-                    if (user.statusDescription != null) Text(user.statusDescription!, style: const TextStyle(fontSize: 10)),
-                  ],
-                ),
+                Username(user: user, diameter: 10, fontWeight: FontWeight.bold),
               ],
             );
           }(),

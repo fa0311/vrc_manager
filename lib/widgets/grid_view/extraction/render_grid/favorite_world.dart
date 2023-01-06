@@ -9,6 +9,7 @@ import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets/api/post.dart';
 import 'package:vrc_manager/assets/sort/worlds.dart';
+import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/core/splash.dart';
 import 'package:vrc_manager/scenes/sub/world.dart';
 import 'package:vrc_manager/storage/grid_modal.dart';
@@ -30,7 +31,7 @@ class ExtractionFavoriteWorld extends ConsumerGridWidget {
 
   @override
   Widget normal(BuildContext context, WidgetRef ref, GridConfigNotifier config) {
-    VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "");
+    VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "", logger: logger);
 
     return RenderGrid(
       width: 600,
@@ -40,11 +41,13 @@ class ExtractionFavoriteWorld extends ConsumerGridWidget {
           () {
             return GenericTemplate(
               imageUrl: world.thumbnailImageUrl,
-              onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id),
-                  )),
+              onTap: world.id == "???"
+                  ? null
+                  : () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id),
+                      )),
               onLongPress: () {
                 showModalBottomSheetStatelessWidget(
                   context: context,
@@ -86,7 +89,7 @@ class ExtractionFavoriteWorld extends ConsumerGridWidget {
 
   @override
   Widget simple(BuildContext context, WidgetRef ref, GridConfigNotifier config) {
-    VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "");
+    VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "", logger: logger);
     return RenderGrid(
       width: 320,
       height: 64,
@@ -96,11 +99,13 @@ class ExtractionFavoriteWorld extends ConsumerGridWidget {
             return GenericTemplate(
               imageUrl: world.thumbnailImageUrl,
               half: true,
-              onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id),
-                  )),
+              onTap: world.id == "???"
+                  ? null
+                  : () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id),
+                      )),
               onLongPress: () {
                 showModalBottomSheetStatelessWidget(
                   context: context,
@@ -176,11 +181,13 @@ class ExtractionFavoriteWorld extends ConsumerGridWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(world.name,
-                        style: const TextStyle(
-                          fontSize: 10,
-                          fontWeight: FontWeight.bold,
-                        )),
+                    Text(
+                      world.name,
+                      style: const TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ],
                 ),
               ],

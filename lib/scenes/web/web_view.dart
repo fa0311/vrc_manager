@@ -9,6 +9,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:vrc_manager/api/assets/assets.dart';
 import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets/session.dart';
+import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/core/splash.dart';
 import 'package:vrc_manager/storage/accessibility.dart';
 import 'package:vrc_manager/widgets/modal.dart';
@@ -27,7 +28,7 @@ class VRChatMobileWebView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     AccessibilityConfigNotifier accessibilityConfig = ref.watch(accessibilityConfigProvider);
-    VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "");
+    VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "", logger: logger);
 
     WebViewController? webViewController = ref.watch(webViewControllerProvider);
 

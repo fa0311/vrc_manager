@@ -18,6 +18,7 @@ import 'package:vrc_manager/scenes/core/splash.dart';
 import 'package:vrc_manager/scenes/setting/logger.dart';
 import 'package:vrc_manager/scenes/sub/json_viewer.dart';
 import 'package:vrc_manager/storage/accessibility.dart';
+import 'package:vrc_manager/widgets/future/tile.dart';
 import 'package:vrc_manager/widgets/modal.dart';
 import 'package:vrc_manager/widgets/share.dart';
 
@@ -77,12 +78,10 @@ class ShareListTileWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return ListTile(
+    return FutureTile(
       leading: const Icon(Icons.share),
       title: Text(AppLocalizations.of(context)!.share),
-      onTap: () {
-        Share.share(text);
-      },
+      onTap: () => Share.share(text),
     );
   }
 }
@@ -93,12 +92,12 @@ class CopyListTileWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return ListTile(
+    return FutureTile(
       leading: const Icon(Icons.copy),
       title: Text(AppLocalizations.of(context)!.copy),
-      onTap: () {
+      onTap: () async {
+        await copyToClipboard(context, text);
         Navigator.pop(context);
-        copyToClipboard(context, text);
       },
     );
   }
@@ -224,19 +223,19 @@ class InviteVrchatListTileWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "");
+    VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "", logger: logger);
 
-    return ListTile(
+    return FutureTile(
       leading: const Icon(Icons.mail),
       title: Text(AppLocalizations.of(context)!.joinInstance),
       onTap: () async {
-        VRChatSecureName secureId = await vrchatLoginSession.shortName(location).catchError((e) {
-          logger.e(getMessage(e), e);
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: ErrorSnackBar(e)));
+        VRChatSecureName secureId = await vrchatLoginSession.shortName(location).catchError((e, trace) {
+          logger.e(getMessage(e), e, trace);
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage(context: context, status: e))));
         });
-        await vrchatLoginSession.selfInvite(location, secureId.shortName ?? secureId.secureName ?? "").catchError((e) {
-          logger.e(getMessage(e), e);
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: ErrorSnackBar(e)));
+        await vrchatLoginSession.selfInvite(location, secureId.shortName ?? secureId.secureName ?? "").catchError((e, trace) {
+          logger.e(getMessage(e), e, trace);
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage(context: context, status: e))));
         });
 
         showDialog(
@@ -267,7 +266,7 @@ class OpenInWindowsListTileWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     AccessibilityConfigNotifier accessibilityConfig = ref.watch(accessibilityConfigProvider);
 
-    return ListTile(
+    return FutureTile(
       leading: const Icon(Icons.laptop_windows),
       title: Text(AppLocalizations.of(context)!.openInVrchat),
       onTap: () async {

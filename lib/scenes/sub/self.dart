@@ -37,22 +37,22 @@ class VRChatMobileSelfData {
 final vrchatUserCountProvider = StateProvider<int>((ref) => 0);
 
 final vrchatMobileSelfProvider = FutureProvider<VRChatMobileSelfData>((ref) async {
-  final VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.read(accountConfigProvider).loggedAccount!.cookie ?? "");
+  final VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.read(accountConfigProvider).loggedAccount!.cookie ?? "", logger: logger);
   VRChatWorld? world;
   VRChatInstance? instance;
 
-  VRChatUserSelf user = await vrchatLoginSession.selfUser(ref.read(accountConfigProvider).loggedAccount?.data?.id ?? "").catchError((e) {
-    logger.e(getMessage(e), e);
+  VRChatUserSelf user = await vrchatLoginSession.selfUser(ref.read(accountConfigProvider).loggedAccount?.data?.id ?? "").catchError((e, trace) {
+    logger.e(getMessage(e), e, trace);
   });
 
   if (VRChatInstanceIdOther.values.any((id) => id.name == user.location)) return VRChatMobileSelfData(user: user);
 
   await Future.wait([
-    vrchatLoginSession.worlds(user.location.split(":")[0]).then((value) => world = value).catchError((e) {
-      logger.e(getMessage(e), e);
+    vrchatLoginSession.worlds(user.location.split(":")[0]).then((value) => world = value).catchError((e, trace) {
+      logger.e(getMessage(e), e, trace);
     }),
-    vrchatLoginSession.instances(user.location).then((value) => instance = value).catchError((e) {
-      logger.e(getMessage(e), e);
+    vrchatLoginSession.instances(user.location).then((value) => instance = value).catchError((e, trace) {
+      logger.e(getMessage(e), e, trace);
     }),
   ]);
   return VRChatMobileSelfData(user: user, world: world, instance: instance);
@@ -96,7 +96,6 @@ class VRChatMobileSelf extends ConsumerWidget {
               loading: () => const Loading(),
               error: (e, trace) {
                 logger.w(getMessage(e), e, trace);
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: ErrorSnackBar(e)));
                 return ScrollWidget(
                   onRefresh: () => ref.refresh(vrchatMobileSelfProvider.future),
                   child: ErrorPage(loggerReport: ref.read(loggerReportProvider)),

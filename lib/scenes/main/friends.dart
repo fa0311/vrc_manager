@@ -29,7 +29,7 @@ class VRChatMobileFriendsData {
 }
 
 final vrchatMobileFriendsProvider = FutureProvider.family<VRChatMobileFriendsData, bool>((ref, offline) async {
-  VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "");
+  VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "", logger: logger);
   List<Future> futureList = [];
   Map<String, VRChatWorld?> locationMap = {};
   Map<String, VRChatInstance?> instanceMap = {};
@@ -37,22 +37,22 @@ final vrchatMobileFriendsProvider = FutureProvider.family<VRChatMobileFriendsDat
   int len;
   do {
     int offset = userList.length;
-    List<VRChatFriends> users = await vrchatLoginSession.friends(offline: offline, offset: offset).catchError((e) {
-      logger.e(getMessage(e), e);
+    List<VRChatFriends> users = await vrchatLoginSession.friends(offline: offline, offset: offset).catchError((e, trace) {
+      logger.e(getMessage(e), e, trace);
     });
     userList.addAll(users);
     if (!offline) {
       for (VRChatFriends user in users) {
-        futureList.add(getWorld(vrchatLoginSession: vrchatLoginSession, user: user, locationMap: locationMap).catchError((e) {
-          logger.e(getMessage(e), e);
+        futureList.add(getWorld(vrchatLoginSession: vrchatLoginSession, user: user, locationMap: locationMap).catchError((e, trace) {
+          logger.e(getMessage(e), e, trace);
         }));
-        futureList.add(getInstance(vrchatLoginSession: vrchatLoginSession, user: user, instanceMap: instanceMap).catchError((e) {
-          logger.e(getMessage(e), e);
+        futureList.add(getInstance(vrchatLoginSession: vrchatLoginSession, user: user, instanceMap: instanceMap).catchError((e, trace) {
+          logger.e(getMessage(e), e, trace);
         }));
       }
     }
     len = users.length;
-  } while (len == 50);
+  } while (len > 0);
   await Future.wait(futureList);
   return VRChatMobileFriendsData(locationMap: locationMap, instanceMap: instanceMap, userList: userList);
 });
@@ -69,7 +69,6 @@ class VRChatMobileFriends extends ConsumerWidget {
       loading: () => const Loading(),
       error: (e, trace) {
         logger.w(getMessage(e), e, trace);
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: ErrorSnackBar(e)));
         return ScrollWidget(
           onRefresh: () => ref.refresh(vrchatMobileFriendsProvider(offline).future),
           child: ErrorPage(loggerReport: ref.read(loggerReportProvider)),

@@ -27,6 +27,7 @@
     "moderations",
     /* Flutter */
     "unfocus",
+    "autofocus",
     "ARGB",
     /* Dart */
     "sublist",

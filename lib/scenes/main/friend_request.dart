@@ -21,24 +21,24 @@ class VRChatMobileFriendRequestData {
 }
 
 final vrchatMobileFriendsRequestProvider = FutureProvider<VRChatMobileFriendRequestData>((ref) async {
-  VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "");
+  VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "", logger: logger);
   List<Future> futureList = [];
   List<VRChatUser> userList = [];
   int len;
   do {
     int offset = futureList.length;
-    List<VRChatNotifications> notify = await vrchatLoginSession.notifications(type: "friendRequest", offset: offset).catchError((e) {
-      logger.e(getMessage(e), e);
+    List<VRChatNotifications> notify = await vrchatLoginSession.notifications(type: "friendRequest", offset: offset).catchError((e, trace) {
+      logger.e(getMessage(e), e, trace);
     });
     for (VRChatNotifications requestUser in notify) {
       futureList.add(vrchatLoginSession.users(requestUser.senderUserId).then((VRChatUser user) {
         userList.add(user);
-      }).catchError((e) {
-        logger.e(getMessage(e), e);
+      }).catchError((e, trace) {
+        logger.e(getMessage(e), e, trace);
       }));
     }
     len = notify.length;
-  } while (len == 50);
+  } while (len > 0);
   await Future.wait(futureList);
   return VRChatMobileFriendRequestData(userList: userList);
 });
@@ -55,7 +55,6 @@ class VRChatMobileFriendRequest extends ConsumerWidget {
       loading: () => const Loading(),
       error: (e, trace) {
         logger.w(getMessage(e), e, trace);
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: ErrorSnackBar(e)));
         return ScrollWidget(
           onRefresh: () => ref.refresh(vrchatMobileFriendsRequestProvider.future),
           child: ErrorPage(loggerReport: ref.read(loggerReportProvider)),

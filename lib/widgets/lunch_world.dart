@@ -15,6 +15,7 @@ import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/core/splash.dart';
 import 'package:vrc_manager/scenes/setting/logger.dart';
+import 'package:vrc_manager/widgets/future/tile.dart';
 import 'package:vrc_manager/widgets/grid_view/widget/world.dart';
 import 'package:vrc_manager/widgets/modal.dart';
 import 'package:vrc_manager/widgets/modal/share.dart';
@@ -35,8 +36,8 @@ String genRandNumber([int length = 5]) {
 }
 
 Future<String> genInstanceId({required VRChatAPI vrchatLoginSession, required String region, required VRChatInstanceTypeExt type}) async {
-  VRChatUserSelfOverload user = await vrchatLoginSession.user().catchError((e) {
-    logger.e(getMessage(e), e);
+  VRChatUserSelfOverload user = await vrchatLoginSession.user().catchError((e, trace) {
+    logger.e(getMessage(e), e, trace);
   });
   String url = genRandNumber();
 
@@ -85,13 +86,13 @@ class SelectWordType extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "");
+    VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "", logger: logger);
 
     return SingleChildScrollView(
       child: Column(
         children: [
           for (VRChatInstanceTypeExt type in VRChatInstanceTypeExt.values)
-            ListTile(
+            FutureTile(
               title: Text(type.toLocalization(context)),
               onTap: () async {
                 String instanceId = await genInstanceId(vrchatLoginSession: vrchatLoginSession, region: regionText, type: type);
