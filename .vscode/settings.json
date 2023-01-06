@@ -1,3 +1,6 @@
 {
-  "dart.lineLength": 160
+  "dart.lineLength": 160,
+  "markdownlint.config": {
+    "MD033": false
+  }
 }
