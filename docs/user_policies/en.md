@@ -9,7 +9,7 @@ In the event of any inconsistency between this English privacy policy and the co
 
 ## Use of data
 
-Personal data obtained through the use of the Service is governed by the [privacy policy](./privacy_policy/en.md).
+Personal data obtained through the use of the Service is governed by the [privacy policy](. /privacy_policy/en.md).
 
 ## Account and registration
 
