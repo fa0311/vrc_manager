@@ -57,6 +57,7 @@ dependencies:
   device_info_plus: ^8.0.0
   fluttertoast: ^8.0.9
   cached_network_image: ^3.2.1
+  agconnect_core: ^1.2.0+300
   flutter_riverpod: ^2.0.2
   logger: ^1.1.0
 

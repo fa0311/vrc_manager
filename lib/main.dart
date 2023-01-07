@@ -12,6 +12,7 @@ import 'package:logger/logger.dart';
 import 'package:vrc_manager/scenes/core/splash.dart';
 import 'package:vrc_manager/scenes/setting/logger.dart';
 import 'package:vrc_manager/storage/accessibility.dart';
+import 'package:vrc_manager/init_hms.dart';
 
 ConsoleOutputExt loggerOutput = ConsoleOutputExt();
 Logger logger = LoggerExt(
@@ -22,6 +23,7 @@ Logger logger = LoggerExt(
 );
 
 main() {
+  initHMS();
   runApp(const ProviderScope(child: VRChatMobile()));
 }
 
