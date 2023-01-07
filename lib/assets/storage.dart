@@ -2,54 +2,84 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-Future<String?> getLoginSession(String key, {String? accountIndex}) async {
-  accountIndex ??= await getStorage("account_index");
-  if (accountIndex == null) return null;
-  const FlutterSecureStorage storage = FlutterSecureStorage();
-  return await storage.read(key: "$key$accountIndex");
-}
+// Project imports:
+import 'package:vrc_manager/main.dart';
+import 'package:vrc_manager/scenes/setting/logger.dart';
 
-Future<void> setLoginSession(String key, String value, {String? accountIndex}) async {
-  accountIndex ??= await getStorage("account_index");
-  const FlutterSecureStorage storage = FlutterSecureStorage();
-  return await storage.write(key: "$key$accountIndex", value: value);
-}
-
-Future<void> removeLoginSession(String key, {String? accountIndex}) async {
-  accountIndex ??= await getStorage("account_index");
-  const FlutterSecureStorage storage = FlutterSecureStorage();
-  return await storage.delete(key: "$key$accountIndex");
-}
-
-Future<String?> getStorage(String key) async {
+Future<String?> getLoginSession(String key, String id) async {
   try {
-    final SharedPreferences storage = await SharedPreferences.getInstance();
-    return storage.getString(key);
-  } catch (e) {
+    const FlutterSecureStorage storage = FlutterSecureStorage();
+    return await storage.read(key: "$key$id");
+  } catch (e, trace) {
+    logger.w(getMessage(e), e, trace);
     return null;
   }
 }
 
-Future<bool> setStorage(String key, String value) async {
-  final SharedPreferences storage = await SharedPreferences.getInstance();
-  return await storage.setString(key, value);
+Future<void> setLoginSession(String key, String value, String id) async {
+  try {
+    const FlutterSecureStorage storage = FlutterSecureStorage();
+    return await storage.write(key: "$key$id", value: value);
+  } catch (e, trace) {
+    logger.w(getMessage(e), e, trace);
+  }
 }
 
-Future<bool> removeStorage(String key) async {
-  final SharedPreferences storage = await SharedPreferences.getInstance();
-  return await storage.remove(key);
+Future<void> removeLoginSession(String key, String id) async {
+  try {
+    const FlutterSecureStorage storage = FlutterSecureStorage();
+    return await storage.delete(key: "$key$id");
+  } catch (e, trace) {
+    logger.w(getMessage(e), e, trace);
+  }
 }
 
-Future<List<String>> getStorageList(String key) async {
+Future<String?> getStorage(String key, {String id = ""}) async {
   try {
     final SharedPreferences storage = await SharedPreferences.getInstance();
-    return storage.getStringList(key) ?? [];
-  } catch (e) {
+    return storage.getString("$key$id");
+  } catch (e, trace) {
+    logger.w(getMessage(e), e, trace);
+    return null;
+  }
+}
+
+Future<bool> setStorage(String key, String value, {String id = ""}) async {
+  try {
+    final SharedPreferences storage = await SharedPreferences.getInstance();
+    return await storage.setString("$key$id", value);
+  } catch (e, trace) {
+    logger.w(getMessage(e), e, trace);
+    return false;
+  }
+}
+
+Future<bool> removeStorage(String key, {String id = ""}) async {
+  try {
+    final SharedPreferences storage = await SharedPreferences.getInstance();
+    return await storage.remove("$key$id");
+  } catch (e, trace) {
+    logger.w(getMessage(e), e, trace);
+    return false;
+  }
+}
+
+Future<List<String>> getStorageList(String key, {String id = ""}) async {
+  try {
+    final SharedPreferences storage = await SharedPreferences.getInstance();
+    return storage.getStringList("$key$id") ?? [];
+  } catch (e, trace) {
+    logger.w(getMessage(e), e, trace);
     return [];
   }
 }
 
-Future<bool> setStorageList(String key, List<String> value) async {
-  final SharedPreferences storage = await SharedPreferences.getInstance();
-  return await storage.setStringList(key, value);
+Future<bool> setStorageList(String key, List<String> value, {String id = ""}) async {
+  try {
+    final SharedPreferences storage = await SharedPreferences.getInstance();
+    return await storage.setStringList("$key$id", value);
+  } catch (e, trace) {
+    logger.w(getMessage(e), e, trace);
+    return false;
+  }
 }

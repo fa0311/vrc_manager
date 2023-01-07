@@ -1,0 +1,63 @@
+{
+  "enabled": true,
+  "version": "0.2",
+  "language": "en",
+  "words": [
+    /* Service Name */
+    "bandsintown",
+    "behance",
+    "codepen",
+    "dribbble",
+    "fivehundredpix",
+    "flickr",
+    "pinterest",
+    "rdio",
+    "sharethis",
+    "smugmug",
+    "soundcloud",
+    "squarespace",
+    "vevo",
+    "vrchat",
+    "vsco",
+    "wechat",
+    /* Product */
+    "Macbook",
+    "appgallery",
+    /* API */
+    "standalonewindows",
+    "totp",
+    "twofactorauth",
+    "moderations",
+    /* Flutter */
+    "unfocus",
+    "autofocus",
+    "ARGB",
+    "pubspec",
+    /* Dart */
+    "sublist",
+    /* Library */
+    "cupertino",
+    "fluttertoast",
+    "agconnect",
+    "riverpod",
+    "inappwebview",
+    /* Name */
+    "yuki",
+    "Tupper",
+    /* Other */
+    "dont"
+  ],
+  "ignorePaths": [
+    /*Flutter*/
+    "android/**",
+    "build/**",
+    "ios/**",
+    "windows/**",
+    "pubspec.yaml",
+    /*Extension*/
+    "*kra",
+    /* Other */
+    "lib/l10n/**",
+    "lib/api/assets/lang.dart"
+  ]
+}

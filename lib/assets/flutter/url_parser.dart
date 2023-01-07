@@ -2,40 +2,23 @@
 import 'package:flutter/material.dart';
 
 // Project imports:
-import 'package:vrchat_mobile_client/scenes/user.dart';
-import 'package:vrchat_mobile_client/scenes/world.dart';
-import 'package:vrchat_mobile_client/widgets/share.dart';
+import 'package:vrc_manager/scenes/core/splash.dart';
+import 'package:vrc_manager/scenes/sub/user.dart';
+import 'package:vrc_manager/scenes/sub/world.dart';
+import 'package:vrc_manager/widgets/share.dart';
 
-void urlParser(BuildContext context, String strUri) {
-  final List<String> path = Uri.parse(strUri).path.split("/");
-  final Map<String, String> queryParameters = Uri.parse(strUri).queryParameters;
+Future<Widget?> urlParser({required Uri url, required bool forceExternal}) async {
+  final List<String> path = url.path.split("/");
+  final Map<String, String> queryParameters = url.queryParameters;
   if (path.length < 2) {
-    return;
+    return null;
   } else if (path[2] == "launch") {
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(
-        builder: (BuildContext context) => VRChatMobileWorld(worldId: queryParameters["worldId"] ?? ""),
-      ),
-      (_) => false,
-    );
+    return VRChatMobileSplash(child: VRChatMobileWorld(worldId: queryParameters["worldId"] ?? ""));
   } else if (path[2] == "world") {
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(
-        builder: (BuildContext context) => VRChatMobileWorld(worldId: path[3]),
-      ),
-      (_) => false,
-    );
+    return VRChatMobileSplash(child: VRChatMobileWorld(worldId: path[3]));
   } else if (path[2] == "user") {
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(
-        builder: (BuildContext context) => VRChatMobileUser(userId: path[3]),
-      ),
-      (_) => false,
-    );
+    return VRChatMobileSplash(child: VRChatMobileUser(userId: path[3]));
   } else {
-    openInBrowser(context, strUri);
+    return await openInBrowser(url: url, forceExternal: forceExternal);
   }
 }

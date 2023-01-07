@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.vrchat_mobile_client">
+    package="com.example.vrc_manager">
     <uses-permission android:name="android.permission.INTERNET" />
     <queries>
         <intent>
@@ -9,7 +9,7 @@
     </queries>
 
    <application
-        android:label="VRChatMC"
+        android:label="VRCManager"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
@@ -35,7 +35,7 @@
 
 
 
-            <intent-filter android:autoVerify="true">
+            <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />

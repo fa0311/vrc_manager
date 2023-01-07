@@ -3,37 +3,18 @@ import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
-import 'package:vrchat_mobile_client/assets/dialog.dart';
-import 'package:vrchat_mobile_client/assets/flutter/text_stream.dart';
-import 'package:vrchat_mobile_client/assets/storage.dart';
-import 'package:vrchat_mobile_client/scenes/login.dart';
-import 'package:vrchat_mobile_client/scenes/setting/other_account.dart';
-import 'package:vrchat_mobile_client/scenes/setting/token.dart';
+import 'package:vrc_manager/scenes/core/splash.dart';
+import 'package:vrc_manager/scenes/setting/other_account.dart';
+import 'package:vrc_manager/scenes/setting/token.dart';
 
-class VRChatMobileSettingsAccount extends StatefulWidget {
-  const VRChatMobileSettingsAccount({Key? key}) : super(key: key);
+class VRChatMobileSettingsAccount extends ConsumerWidget {
+  const VRChatMobileSettingsAccount({super.key});
 
   @override
-  State<VRChatMobileSettingsAccount> createState() => _SettingAccountPageState();
-}
-
-class _SettingAccountPageState extends State<VRChatMobileSettingsAccount> {
-  _removeLoginSession() async {
-    removeLoginSession("login_session");
-  }
-
-  _removeLoginInfo() async {
-    removeLoginSession("userid");
-    removeLoginSession("password");
-    removeLoginSession("displayname");
-    setStorage("remember_login_info", "false");
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    textStream(context);
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.setting),
@@ -46,38 +27,65 @@ class _SettingAccountPageState extends State<VRChatMobileSettingsAccount> {
               child: Column(
                 children: <Widget>[
                   ListTile(
-                      title: Text(AppLocalizations.of(context)!.logout),
-                      subtitle: Text(AppLocalizations.of(context)!.logoutDetails),
-                      onTap: () => confirm(
-                            context,
-                            AppLocalizations.of(context)!.logoutConfirm,
-                            AppLocalizations.of(context)!.logout,
-                            () {
-                              Navigator.pushAndRemoveUntil(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (BuildContext context) => const VRChatMobileLogin(),
-                                ),
-                                (_) => false,
-                              );
-                              _removeLoginSession();
-                            },
-                          )),
-                  const Divider(),
+                    title: Text(AppLocalizations.of(context)!.logout),
+                    subtitle: Text(AppLocalizations.of(context)!.logoutDetails),
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (_) {
+                          return AlertDialog(
+                            title: Text(AppLocalizations.of(context)!.logoutConfirm),
+                            actions: <Widget>[
+                              TextButton(
+                                child: Text(AppLocalizations.of(context)!.cancel),
+                                onPressed: () => Navigator.pop(context),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  ref.read(accountConfigProvider).loggedAccount!.removeCookie();
+                                  ref.read(accountConfigProvider).login(ref.read(accountConfigProvider).loggedAccount!);
+                                  Navigator.pop(context);
+                                },
+                                child: Text(AppLocalizations.of(context)!.logout),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
+                  ),
                   ListTile(
                     title: Text(AppLocalizations.of(context)!.deleteLoginInfo),
                     subtitle: Text(AppLocalizations.of(context)!.deleteLoginInfoDetails),
-                    onTap: () => confirm(
-                      context,
-                      AppLocalizations.of(context)!.deleteLoginInfoConfirm,
-                      AppLocalizations.of(context)!.delete,
-                      () {
-                        _removeLoginInfo();
-                        Navigator.pop(context);
-                      },
-                    ),
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (_) {
+                          return AlertDialog(
+                            title: Text(AppLocalizations.of(context)!.deleteLoginInfoConfirm),
+                            actions: <Widget>[
+                              TextButton(
+                                child: Text(AppLocalizations.of(context)!.cancel),
+                                onPressed: () => Navigator.pop(context),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  ref.read(accountConfigProvider).loggedAccount!
+                                    ..removeUserId()
+                                    ..removePassword()
+                                    ..removeDisplayName()
+                                    ..setRememberLoginInfo(false);
+                                  ref.read(accountConfigProvider).login(ref.read(accountConfigProvider).loggedAccount!);
+                                  Navigator.pop(context);
+                                },
+                                child: Text(AppLocalizations.of(context)!.delete),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
                   ),
-                  const Divider(),
                   ListTile(
                     title: Text(AppLocalizations.of(context)!.token),
                     subtitle: Text(AppLocalizations.of(context)!.tokenDetails),
@@ -85,19 +93,24 @@ class _SettingAccountPageState extends State<VRChatMobileSettingsAccount> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (BuildContext context) => const VRChatMobileTokenSetting(),
+                          builder: (_) => const VRChatMobileSplash(
+                            login: VRChatMobileTokenSetting(),
+                            child: VRChatMobileTokenSetting(),
+                          ),
                         ),
                       )
                     },
                   ),
-                  const Divider(),
                   ListTile(
                     title: Text(AppLocalizations.of(context)!.accountSwitchSetting),
                     subtitle: Text(AppLocalizations.of(context)!.accountSwitchSettingDetails),
                     onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (BuildContext context) => const VRChatMobileSettingsOtherAccount(drawer: false),
+                        builder: (_) => const VRChatMobileSplash(
+                          login: VRChatMobileSettingsOtherAccount(),
+                          child: VRChatMobileSettingsOtherAccount(),
+                        ),
                       ),
                     ),
                   )

@@ -1,40 +1,61 @@
 // Flutter imports:
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+// Package imports:
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:logger/logger.dart';
+
 // Project imports:
-import 'package:vrchat_mobile_client/assets/storage.dart';
-import 'package:vrchat_mobile_client/init_hms.dart';
-import 'package:vrchat_mobile_client/material.dart';
-import 'package:vrchat_mobile_client/scenes/home.dart';
+import 'package:vrc_manager/scenes/core/splash.dart';
+import 'package:vrc_manager/scenes/setting/logger.dart';
+import 'package:vrc_manager/storage/accessibility.dart';
+import 'package:vrc_manager/init_hms.dart';
+
+ConsoleOutputExt loggerOutput = ConsoleOutputExt();
+Logger logger = LoggerExt(
+  filter: ProductionFilter(),
+  printer: PrettyPrinter(methodCount: 8),
+  output: loggerOutput,
+  level: kDebugMode ? Level.verbose : Level.warning,
+);
 
 main() {
-  initAppGallery();
-  runApp(const VRChatMobile());
+  initHMS();
+  runApp(const ProviderScope(child: VRChatMobile()));
 }
 
-class VRChatMobile extends StatefulWidget {
+class VRChatMobile extends ConsumerWidget {
   const VRChatMobile({Key? key}) : super(key: key);
 
   @override
-  State<VRChatMobile> createState() => _PageState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    AccessibilityConfigNotifier accessibilityConfig = ref.watch(accessibilityConfigProvider);
 
-class _PageState extends State<VRChatMobile> {
-  String theme = "light";
-  String locale = "en";
-
-  _PageState() {
-    getStorage("theme_brightness").then((response) => setState(() => theme = response ?? "light"));
-    getStorage("language_code").then((response) => setState(() => locale = response ?? "en"));
-    initHMS();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return getMaterialApp(
-      const VRChatMobileHome(init: true),
-      theme,
-      Locale(locale, ''),
+    return MaterialApp(
+      title: 'VRChat Mobile Client',
+      debugShowCheckedModeBanner: false,
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('en', ''),
+        Locale('ja', ''),
+        Locale('es', ''),
+        Locale('pt', ''),
+        Locale('ru', ''),
+        Locale('th', ''),
+        Locale('zh', ''),
+      ],
+      locale: Locale(accessibilityConfig.languageCode.name, ''),
+      theme: accessibilityConfig.themeBrightness.toTheme(),
+      darkTheme: accessibilityConfig.darkThemeBrightness.toTheme(),
+      home: const VRChatMobileSplash(),
     );
   }
 }

@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.yuki0311" "\0"
-            VALUE "FileDescription", "vrchat_mobile_client" "\0"
+            VALUE "FileDescription", "vrc_manager" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "vrchat_mobile_client" "\0"
+            VALUE "InternalName", "vrc_manager" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2022 com.yuki0311. All rights reserved." "\0"
-            VALUE "OriginalFilename", "vrchat_mobile_client.exe" "\0"
-            VALUE "ProductName", "vrchat_mobile_client" "\0"
+            VALUE "OriginalFilename", "vrc_manager.exe" "\0"
+            VALUE "ProductName", "vrc_manager" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END
