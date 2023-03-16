@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 // Package imports:
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:vrc_manager/scenes/core/splash.dart';
 
 class RenderGrid extends ConsumerWidget {
   final int width;
@@ -82,6 +83,9 @@ class GenericTemplate extends ConsumerWidget {
                   width: half ? 50 : 100,
                   child: const Icon(Icons.error),
                 ),
+                httpHeaders: {
+                  "user-agent": ref.watch(accountConfigProvider).userAgent,
+                },
               ),
             ),
             Expanded(

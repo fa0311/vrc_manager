@@ -9,6 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 // Project imports:
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/assets/date.dart';
+import 'package:vrc_manager/scenes/core/splash.dart';
 
 class OnTheWebsite extends ConsumerWidget {
   final bool half;
@@ -50,6 +51,9 @@ class WorldProfile extends ConsumerWidget {
               width: 250.0,
               child: Icon(Icons.error),
             ),
+            httpHeaders: {
+              "user-agent": ref.watch(accountConfigProvider).userAgent,
+            },
           ),
         ),
         Text(world.name,

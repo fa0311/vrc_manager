@@ -81,6 +81,9 @@ class UserProfile extends ConsumerWidget {
               width: 250.0,
               child: Icon(Icons.error),
             ),
+            httpHeaders: {
+              "user-agent": ref.watch(accountConfigProvider).userAgent,
+            },
           ),
         ),
         Container(padding: const EdgeInsets.only(top: 10)),
