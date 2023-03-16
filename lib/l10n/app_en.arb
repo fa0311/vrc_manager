@@ -155,7 +155,7 @@
     "tokenDetails": "View or change your credentials.",
     "cookie": "Cookie",
     "@__PERMISSIONS__": {},
-    "permissions": "permissions",
+    "permissions": "Permissions",
     "domainVerification": "Associate apps with domains",
     "domainVerificationDetails": "Please associate this app with vrchat.com.",
     "notSupported": "Not supported",
