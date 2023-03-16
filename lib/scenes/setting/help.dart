@@ -10,12 +10,11 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:vrc_manager/assets.dart';
 import 'package:vrc_manager/assets/license.dart';
 import 'package:vrc_manager/main.dart';
+import 'package:vrc_manager/scenes/core/splash.dart';
 import 'package:vrc_manager/scenes/setting/logger.dart';
 import 'package:vrc_manager/storage/accessibility.dart';
 import 'package:vrc_manager/widgets/future/tile.dart';
 import 'package:vrc_manager/widgets/share.dart';
-
-final vrchatMobileVersionProvider = FutureProvider((ref) async => await PackageInfo.fromPlatform());
 
 class VRChatMobileHelp extends ConsumerWidget {
   const VRChatMobileHelp({super.key});
@@ -23,7 +22,7 @@ class VRChatMobileHelp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     AccessibilityConfigNotifier accessibilityConfig = ref.watch(accessibilityConfigProvider);
-    AsyncValue<PackageInfo> version = ref.watch(vrchatMobileVersionProvider);
+    AsyncValue<PackageInfo> version = ref.watch(versionProvider);
 
     return Scaffold(
       appBar: AppBar(

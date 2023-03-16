@@ -2,7 +2,7 @@
 
 [Japanese](ja.md) / [English](en.md)
 
-# Introduction
+## Introduction
 
 yuki0311 ("we", "us", "our", "we", "our") sets out the terms and conditions of use for the services provided on various devices for smartphones and mobile devices (the "Services").
 In the event of any inconsistency between this English privacy policy and the corresponding privacy policy in other languages, the Japanese shall prevail.
@@ -16,20 +16,20 @@ Personal data obtained through the use of the Service is governed by the [privac
 You must register for a third party [VRChat](https://hello.vrchat.com/) account to access most features of the Service.
 The Service may use [VRChat](https://hello.vrchat.com/) login credentials to access certain features of the Platform.
 
-## Copyright.
+## Copyright
 
-Please see [MIT LICENCE](/LICENSE) for the copyright of the Service.
+Please see [MIT LICENSE](/LICENSE) for the copyright of the Service.
 
 ## Prohibitions
 
-Please see [MIT LICENCE](/LICENSE) for information on the prohibitions of the Service.
+Please see [MIT LICENSE](/LICENSE) for information on the prohibitions of the Service.
 In addition, the User may not engage in any conduct prohibited by the Service when using third party services.
 
 - [vrchat.com](https://hello.vrchat.com/legal)
 
-## Disclaimer.
+## Disclaimer
 
-Please see [MIT LICENCE](/LICENSE) for a disclaimer of liability for the Service.
+Please see [MIT LICENSE](/LICENSE) for a disclaimer of liability for the Service.
 
 ## Prohibition of transfer of rights and obligations
 
@@ -49,7 +49,7 @@ We may update the User Policy from time to time. As the User Policy is maintaine
 All programmes of the Service are publicly available on Github.
 For more information, see [here](https://github.com/fa0311/vrc_manager).
 
-## How to contact us.
+## How to contact us
 
 If you have any questions regarding this user policy, please contact us at the following email address.
 

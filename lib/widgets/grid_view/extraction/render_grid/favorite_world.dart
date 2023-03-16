@@ -29,7 +29,11 @@ class ExtractionFavoriteWorld extends ConsumerGridWidget {
 
   @override
   List<Widget> normal(BuildContext context, WidgetRef ref, GridConfigNotifier config, ConsumerGridStyle style) {
-    VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "", logger: logger);
+    VRChatAPI vrchatLoginSession = VRChatAPI(
+      cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "",
+      userAgent: ref.watch(accountConfigProvider).userAgent,
+      logger: logger,
+    );
 
     return [
       for (VRChatFavoriteWorld world in sortWorlds(config, favoriteWorld) as List<VRChatFavoriteWorld>)
@@ -83,7 +87,11 @@ class ExtractionFavoriteWorld extends ConsumerGridWidget {
 
   @override
   List<Widget> simple(BuildContext context, WidgetRef ref, GridConfigNotifier config, ConsumerGridStyle style) {
-    VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "", logger: logger);
+    VRChatAPI vrchatLoginSession = VRChatAPI(
+      cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "",
+      userAgent: ref.watch(accountConfigProvider).userAgent,
+      logger: logger,
+    );
     return [
       for (VRChatFavoriteWorld world in sortWorlds(config, favoriteWorld) as List<VRChatFavoriteWorld>)
         () {

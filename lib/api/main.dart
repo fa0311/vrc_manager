@@ -15,8 +15,9 @@ class VRChatAPI {
   final bool ignoreErrors = true;
   final JsonEncoder encoder = const JsonEncoder.withIndent("     ");
 
-  VRChatAPI({String cookie = "", this.logger}) {
+  VRChatAPI({String cookie = "", String userAgent = "", this.logger}) {
     vrchatSession.headers["cookie"] = cookie;
+    vrchatSession.headers["user-agent"] = userAgent;
   }
 
   String getCookie() {
