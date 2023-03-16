@@ -1,9 +1,11 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 // Project imports:
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
+import 'package:vrc_manager/assets.dart';
 import 'package:vrc_manager/assets/storage.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/setting/logger.dart';
@@ -66,9 +68,11 @@ class AccountListConfigNotifier extends ChangeNotifier {
 
 class AccountConfigNotifier extends ChangeNotifier {
   AccountConfig? loggedAccount;
+  String userAgent = "";
 
   init(AccountConfig? account) async {
     loggedAccount = account;
+    await PackageInfo.fromPlatform().then((value) => userAgent = Assets.userAgent(value.version));
   }
 
   Future<bool> logout() async {
@@ -105,7 +109,7 @@ class AccountConfig extends ChangeNotifier {
       getLoginSession("user_id", uid).then((value) => userId = value),
       getLoginSession("password", uid).then((value) => password = value),
       getLoginSession("display_name", uid).then((value) => displayName = value),
-      getLoginSession("remember_login_info", uid).then((value) => rememberLoginInfo = (value == "true"))
+      getLoginSession("remember_login_info", uid).then((value) => rememberLoginInfo = (value == "true")),
     ]);
   }
 
@@ -155,7 +159,11 @@ class AccountConfig extends ChangeNotifier {
   }
 
   Future<bool> tokenCheck() async {
-    VRChatAPI vrchatLoginSession = VRChatAPI(cookie: cookie ?? "", logger: logger);
+    VRChatAPI vrchatLoginSession = VRChatAPI(
+      cookie: cookie ?? "",
+      userAgent: Assets.userAgent((await PackageInfo.fromPlatform()).version),
+      logger: logger,
+    );
     return await vrchatLoginSession.user().then((VRChatUserSelfOverload response) {
       data = response;
       setDisplayName(response.displayName);

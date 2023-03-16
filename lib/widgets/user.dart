@@ -124,7 +124,11 @@ class EditBio extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "", logger: logger);
+    VRChatAPI vrchatLoginSession = VRChatAPI(
+      cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "",
+      userAgent: ref.watch(accountConfigProvider).userAgent,
+      logger: logger,
+    );
     TextEditingController controller = ref.watch(bioControllerProvider(user));
 
     return AlertDialog(
@@ -156,7 +160,11 @@ class EditBio extends ConsumerWidget {
 }
 
 final noteControllerProvider = FutureProvider.family<TextEditingController, VRChatUser>((ref, user) async {
-  final VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.read(accountConfigProvider).loggedAccount!.cookie ?? "", logger: logger);
+  final VRChatAPI vrchatLoginSession = VRChatAPI(
+    cookie: ref.read(accountConfigProvider).loggedAccount!.cookie ?? "",
+    userAgent: ref.watch(accountConfigProvider).userAgent,
+    logger: logger,
+  );
   if (user.note == null) {
     await vrchatLoginSession.users(user.id).then((value) => user.note = value.note).catchError((e, trace) {
       logger.e(getMessage(e), e, trace);
@@ -171,7 +179,11 @@ class EditNote extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "", logger: logger);
+    VRChatAPI vrchatLoginSession = VRChatAPI(
+      cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "",
+      userAgent: ref.watch(accountConfigProvider).userAgent,
+      logger: logger,
+    );
     AsyncValue<TextEditingController> data = ref.watch(noteControllerProvider(user));
 
     return data.when(

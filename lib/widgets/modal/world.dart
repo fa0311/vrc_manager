@@ -94,7 +94,11 @@ class SelfInviteListTileWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "", logger: logger);
+    VRChatAPI vrchatLoginSession = VRChatAPI(
+      cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "",
+      userAgent: ref.watch(accountConfigProvider).userAgent,
+      logger: logger,
+    );
 
     return FutureTile(
       title: Text(AppLocalizations.of(context)!.joinInstance),
@@ -134,7 +138,11 @@ class FavoriteRemoveTileWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     if (favoriteWorld.id != "???") return Container();
-    VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "", logger: logger);
+    VRChatAPI vrchatLoginSession = VRChatAPI(
+      cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "",
+      userAgent: ref.watch(accountConfigProvider).userAgent,
+      logger: logger,
+    );
     return FutureTile(
       title: Text(AppLocalizations.of(context)!.removeFavoriteWorlds),
       onTap: () async {
@@ -194,7 +202,11 @@ class FavoriteAction extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "", logger: logger);
+    VRChatAPI vrchatLoginSession = VRChatAPI(
+      cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "",
+      userAgent: ref.watch(accountConfigProvider).userAgent,
+      logger: logger,
+    );
     final data = ref.watch(vrchatMobileWorldFavoriteSortProvider);
 
     return data.when(

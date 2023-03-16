@@ -32,7 +32,11 @@ final vrchatMobileWorldFavoriteCounterProvider = StateProvider<int>((ref) => 0);
 
 final vrchatMobileWorldFavoriteSortProvider = FutureProvider<VRChatMobileWorldFavoriteData>((ref) async {
   Future getFavoriteWorld(FavoriteWorldData favoriteWorld) async {
-    VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "", logger: logger);
+    VRChatAPI vrchatLoginSession = VRChatAPI(
+      cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "",
+      userAgent: ref.watch(accountConfigProvider).userAgent,
+      logger: logger,
+    );
     int len;
     do {
       int offset = favoriteWorld.list.length;
@@ -46,7 +50,11 @@ final vrchatMobileWorldFavoriteSortProvider = FutureProvider<VRChatMobileWorldFa
     } while (len > 0);
   }
 
-  VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "", logger: logger);
+  VRChatAPI vrchatLoginSession = VRChatAPI(
+    cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "",
+    userAgent: ref.watch(accountConfigProvider).userAgent,
+    logger: logger,
+  );
   List<Future> futureList = [];
   List<FavoriteWorldData> favoriteWorld = [];
   int len = 0;

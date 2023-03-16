@@ -23,6 +23,8 @@
     /* Product */
     "Macbook",
     "appgallery",
+    /* HTTP */
+    "KHTML",
     /* API */
     "standalonewindows",
     "totp",

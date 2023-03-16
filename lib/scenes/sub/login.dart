@@ -58,7 +58,13 @@ final loginDataProvider = StateProvider.autoDispose<VRChatMobileLoginData>((ref)
   } else {
     accountConfig = AccountConfig(genUid());
   }
-  return VRChatMobileLoginData(accountConfig: accountConfig, session: VRChatAPI(cookie: accountConfig.cookie ?? "", logger: logger));
+  return VRChatMobileLoginData(
+      accountConfig: accountConfig,
+      session: VRChatAPI(
+        cookie: accountConfig.cookie ?? "",
+        userAgent: ref.watch(accountConfigProvider).userAgent,
+        logger: logger,
+      ));
 });
 
 class VRChatMobileLogin extends ConsumerWidget {

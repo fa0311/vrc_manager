@@ -223,7 +223,11 @@ class InviteVrchatListTileWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "", logger: logger);
+    VRChatAPI vrchatLoginSession = VRChatAPI(
+      cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "",
+      userAgent: ref.watch(accountConfigProvider).userAgent,
+      logger: logger,
+    );
 
     return FutureTile(
       leading: const Icon(Icons.mail),
