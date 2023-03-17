@@ -1,6 +1,6 @@
 # User policy
 
-[Japanese](ja.md) / [English](en.md)
+[日本語](ja.md) / [English](en.md)
 
 ## Introduction
 
