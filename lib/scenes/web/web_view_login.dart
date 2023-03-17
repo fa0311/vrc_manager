@@ -24,7 +24,11 @@ final urlProvider = StateProvider.autoDispose<Uri?>((ref) => null);
 final webViewControllerProvider = StateProvider<InAppWebViewController?>((ref) => null);
 
 final webViewInitProvider = FutureProvider.autoDispose<void>((ref) async {
-  VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "", logger: logger);
+  VRChatAPI vrchatLoginSession = VRChatAPI(
+    cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "",
+    userAgent: ref.watch(accountConfigProvider).userAgent,
+    logger: logger,
+  );
   CookieManager cookieManager = CookieManager.instance();
   await cookieManager.deleteAllCookies();
   final cookieMap = Session().decodeCookie(vrchatLoginSession.getCookie());

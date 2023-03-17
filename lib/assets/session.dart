@@ -6,7 +6,10 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 class Session {
-  Map<String, String> headers = <String, String>{'cookie': ''};
+  Map<String, String> headers = <String, String>{
+    'cookie': '',
+    'user-agent': '',
+  };
 
   Future<dynamic> get(Uri url) async {
     http.Response response = await http.get(url, headers: headers);

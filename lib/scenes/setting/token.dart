@@ -55,7 +55,11 @@ class VRChatMobileTokenSetting extends ConsumerWidget {
                   type: ButtonType.elevatedButton,
                   child: Text(AppLocalizations.of(context)!.login),
                   onPressed: () async {
-                    await VRChatAPI(cookie: tokenController.text, logger: logger).user().then((VRChatUserSelfOverload response) {
+                    await VRChatAPI(
+                      cookie: tokenController.text,
+                      userAgent: ref.watch(accountConfigProvider).userAgent,
+                      logger: logger,
+                    ).user().then((VRChatUserSelfOverload response) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text(AppLocalizations.of(context)!.success)),
                       );

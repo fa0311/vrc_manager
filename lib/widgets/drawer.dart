@@ -88,6 +88,9 @@ class NormalDrawer extends ConsumerWidget {
                         const Padding(padding: EdgeInsets.all(20), child: CircularProgressIndicator()),
                     errorWidget: (context, url, error) => const Icon(Icons.error),
                     imageBuilder: (context, imageProvider) => CircleAvatar(backgroundImage: imageProvider),
+                    httpHeaders: {
+                      "user-agent": ref.watch(accountConfigProvider).userAgent,
+                    },
                   ),
                 ),
               ),

@@ -29,7 +29,11 @@ class VRChatMobileFriendsData {
 }
 
 final vrchatMobileFriendsProvider = FutureProvider.family<VRChatMobileFriendsData, bool>((ref, offline) async {
-  VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "", logger: logger);
+  VRChatAPI vrchatLoginSession = VRChatAPI(
+    cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "",
+    userAgent: ref.watch(accountConfigProvider).userAgent,
+    logger: logger,
+  );
   List<Future> futureList = [];
   Map<String, VRChatWorld?> locationMap = {};
   Map<String, VRChatInstance?> instanceMap = {};

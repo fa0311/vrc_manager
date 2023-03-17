@@ -27,7 +27,11 @@ class VRChatMobileWorldData {
 }
 
 final vrchatMobileWorldProvider = FutureProvider.family<VRChatMobileWorldData, String>((ref, worldId) async {
-  VRChatAPI vrchatLoginSession = VRChatAPI(cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "", logger: logger);
+  VRChatAPI vrchatLoginSession = VRChatAPI(
+    cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "",
+    userAgent: ref.watch(accountConfigProvider).userAgent,
+    logger: logger,
+  );
 
   late VRChatWorld world;
   await vrchatLoginSession.worlds(worldId).then((value) => world = value).catchError((e, trace) {

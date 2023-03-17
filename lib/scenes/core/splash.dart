@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 
 // Project imports:
@@ -28,6 +29,8 @@ import 'package:vrc_manager/widgets/scroll.dart';
 final accountConfigProvider = ChangeNotifierProvider<AccountConfigNotifier>((ref) => AccountConfigNotifier());
 final accountListConfigProvider = ChangeNotifierProvider<AccountListConfigNotifier>((ref) => AccountListConfigNotifier());
 final isFirstProvider = StateProvider<bool>((ref) => true);
+
+final versionProvider = FutureProvider((ref) async => await PackageInfo.fromPlatform());
 
 enum SplashData {
   home,
