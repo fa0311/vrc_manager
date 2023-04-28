@@ -34,9 +34,7 @@ final vrchatMobileWorldProvider = FutureProvider.family<VRChatMobileWorldData, S
   );
 
   late VRChatWorld world;
-  await vrchatLoginSession.worlds(worldId).then((value) => world = value).catchError((e, trace) {
-    logger.e(getMessage(e), e, trace);
-  });
+  await vrchatLoginSession.worlds(worldId).then((value) => world = value);
   return VRChatMobileWorldData(world: world);
 });
 

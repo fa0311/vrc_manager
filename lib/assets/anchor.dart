@@ -114,7 +114,7 @@ class TextToAnchor extends ConsumerWidget {
             }(),
           ],
         ],
-        style: TextStyle(color: Theme.of(context).textTheme.bodyText2?.color),
+        style: TextStyle(color: Theme.of(context).textTheme.bodyMedium?.color),
       ),
     );
   }

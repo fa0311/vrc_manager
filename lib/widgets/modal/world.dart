@@ -103,10 +103,12 @@ class SelfInviteListTileWidget extends ConsumerWidget {
     return FutureTile(
       title: Text(AppLocalizations.of(context)!.joinInstance),
       onTap: () async {
-        await vrchatLoginSession.selfInvite(instance.location, instance.shortName ?? "").catchError((e, trace) {
+        try {
+          await vrchatLoginSession.selfInvite(instance.location, instance.shortName ?? "");
+        } catch (e, trace) {
           logger.e(getMessage(e), e, trace);
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage(context: context, status: e))));
-        });
+        }
       },
     );
   }
@@ -146,10 +148,12 @@ class FavoriteRemoveTileWidget extends ConsumerWidget {
     return FutureTile(
       title: Text(AppLocalizations.of(context)!.removeFavoriteWorlds),
       onTap: () async {
-        await vrchatLoginSession.deleteFavorites(favoriteWorld.favoriteId).catchError((e, trace) {
+        try {
+          await vrchatLoginSession.deleteFavorites(favoriteWorld.favoriteId);
+        } catch (e, trace) {
           logger.e(getMessage(e), e, trace);
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage(context: context, status: e))));
-        });
+        }
       },
     );
   }
@@ -231,26 +235,25 @@ class FavoriteAction extends ConsumerWidget {
                     title: Text(favoriteData.group.displayName),
                     trailing: favoriteWorldData == favoriteData ? const Icon(Icons.check) : null,
                     onTap: () async {
-                      bool value = favoriteWorldData == favoriteData;
-                      if (value || favoriteWorld != null) {
-                        await vrchatLoginSession.deleteFavorites(favoriteWorld!.favoriteId).catchError((e, trace) {
-                          logger.e(getMessage(e), e, trace);
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage(context: context, status: e))));
-                        });
-                        favoriteWorldData!.list.remove(favoriteWorld);
-                        favoriteWorld = null;
-                        favoriteWorldData = null;
+                      try {
+                        bool value = favoriteWorldData == favoriteData;
+                        if (value || favoriteWorld != null) {
+                          await vrchatLoginSession.deleteFavorites(favoriteWorld!.favoriteId);
+                          favoriteWorldData!.list.remove(favoriteWorld);
+                          favoriteWorld = null;
+                          favoriteWorldData = null;
+                        }
+                        if (!value && favoriteWorldData != favoriteData) {
+                          VRChatFavorite favorite = await vrchatLoginSession.addFavorites("world", world.id, favoriteData.group.name);
+                          favoriteWorld = VRChatFavoriteWorld.fromFavorite(world, favorite, favoriteData.group.name);
+                          favoriteData.list.add(favoriteWorld!);
+                          favoriteWorldData = favoriteData;
+                        }
+                        ref.read(vrchatMobileWorldFavoriteCounterProvider.notifier).state++;
+                      } catch (e, trace) {
+                        logger.e(getMessage(e), e, trace);
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage(context: context, status: e))));
                       }
-                      if (!value && favoriteWorldData != favoriteData) {
-                        VRChatFavorite favorite = await vrchatLoginSession.addFavorites("world", world.id, favoriteData.group.name).catchError((e, trace) {
-                          logger.e(getMessage(e), e, trace);
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage(context: context, status: e))));
-                        });
-                        favoriteWorld = VRChatFavoriteWorld.fromFavorite(world, favorite, favoriteData.group.name);
-                        favoriteData.list.add(favoriteWorld!);
-                        favoriteWorldData = favoriteData;
-                      }
-                      ref.read(vrchatMobileWorldFavoriteCounterProvider.notifier).state++;
                     },
                   );
                 }(),

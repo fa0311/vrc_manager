@@ -233,30 +233,29 @@ class InviteVrchatListTileWidget extends ConsumerWidget {
       leading: const Icon(Icons.mail),
       title: Text(AppLocalizations.of(context)!.joinInstance),
       onTap: () async {
-        VRChatSecureName secureId = await vrchatLoginSession.shortName(location).catchError((e, trace) {
-          logger.e(getMessage(e), e, trace);
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage(context: context, status: e))));
-        });
-        await vrchatLoginSession.selfInvite(location, secureId.shortName ?? secureId.secureName ?? "").catchError((e, trace) {
-          logger.e(getMessage(e), e, trace);
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage(context: context, status: e))));
-        });
+        try {
+          VRChatSecureName secureId = await vrchatLoginSession.shortName(location);
+          await vrchatLoginSession.selfInvite(location, secureId.shortName ?? secureId.secureName ?? "");
 
-        showDialog(
-          context: context,
-          builder: (_) {
-            return AlertDialog(
-              title: Text(AppLocalizations.of(context)!.sendInvite),
-              content: Text(AppLocalizations.of(context)!.selfInviteDetails),
-              actions: <Widget>[
-                TextButton(
-                  child: Text(AppLocalizations.of(context)!.close),
-                  onPressed: () => Navigator.pop(context),
-                ),
-              ],
-            );
-          },
-        );
+          showDialog(
+            context: context,
+            builder: (_) {
+              return AlertDialog(
+                title: Text(AppLocalizations.of(context)!.sendInvite),
+                content: Text(AppLocalizations.of(context)!.selfInviteDetails),
+                actions: <Widget>[
+                  TextButton(
+                    child: Text(AppLocalizations.of(context)!.close),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                ],
+              );
+            },
+          );
+        } catch (e, trace) {
+          logger.e(getMessage(e), e, trace);
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage(context: context, status: e))));
+        }
       },
     );
   }

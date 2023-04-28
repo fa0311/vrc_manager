@@ -38,16 +38,18 @@ final vrchatMobileWorldFavoriteSortProvider = FutureProvider<VRChatMobileWorldFa
       logger: logger,
     );
     int len;
-    do {
-      int offset = favoriteWorld.list.length;
-      List<VRChatFavoriteWorld> worlds = await vrchatLoginSession.favoritesWorlds(favoriteWorld.group.name, offset: offset).catchError((e, trace) {
-        logger.e(getMessage(e), e, trace);
-      });
-      for (VRChatFavoriteWorld world in worlds) {
-        favoriteWorld.list.add(world);
-      }
-      len = worlds.length;
-    } while (len > 0);
+    try {
+      do {
+        int offset = favoriteWorld.list.length;
+        List<VRChatFavoriteWorld> worlds = await vrchatLoginSession.favoritesWorlds(favoriteWorld.group.name, offset: offset);
+        for (VRChatFavoriteWorld world in worlds) {
+          favoriteWorld.list.add(world);
+        }
+        len = worlds.length;
+      } while (len > 0);
+    } catch (e, trace) {
+      logger.e(getMessage(e), e, trace);
+    }
   }
 
   VRChatAPI vrchatLoginSession = VRChatAPI(
@@ -57,19 +59,21 @@ final vrchatMobileWorldFavoriteSortProvider = FutureProvider<VRChatMobileWorldFa
   );
   List<Future> futureList = [];
   List<FavoriteWorldData> favoriteWorld = [];
-  int len = 0;
-  do {
-    int offset = favoriteWorld.length;
-    List<VRChatFavoriteGroup> favoriteGroupList = await vrchatLoginSession.favoriteGroups("world", offset: offset).catchError((e, trace) {
-      logger.e(getMessage(e), e, trace);
-    });
-    for (VRChatFavoriteGroup group in favoriteGroupList) {
-      FavoriteWorldData favorite = FavoriteWorldData(group: group, list: []);
-      futureList.add(getFavoriteWorld(favorite));
-      favoriteWorld.add(favorite);
-    }
-    len = favoriteGroupList.length;
-  } while (len > 0);
+  int len;
+  try {
+    do {
+      int offset = favoriteWorld.length;
+      List<VRChatFavoriteGroup> favoriteGroupList = await vrchatLoginSession.favoriteGroups("world", offset: offset);
+      for (VRChatFavoriteGroup group in favoriteGroupList) {
+        FavoriteWorldData favorite = FavoriteWorldData(group: group, list: []);
+        futureList.add(getFavoriteWorld(favorite));
+        favoriteWorld.add(favorite);
+      }
+      len = favoriteGroupList.length;
+    } while (len > 0);
+  } catch (e, trace) {
+    logger.e(getMessage(e), e, trace);
+  }
 
   await Future.wait(futureList);
   return VRChatMobileWorldFavoriteData(favoriteWorld: favoriteWorld);

@@ -49,22 +49,14 @@ final vrchatMobileUserProvider = FutureProvider.family<VRChatMobileUserData, Str
   VRChatInstance? instance;
 
   await Future.wait([
-    vrchatLoginSession.users(userId).then((value) => user = value).catchError((e, trace) {
-      logger.e(getMessage(e), e, trace);
-    }),
-    vrchatLoginSession.friendStatus(userId).then((value) => status = value).catchError((e, trace) {
-      logger.e(getMessage(e), e, trace);
-    }),
+    vrchatLoginSession.users(userId).then((value) => user = value),
+    vrchatLoginSession.friendStatus(userId).then((value) => status = value),
   ]);
   if (VRChatInstanceIdOther.values.any((id) => id.name == user.location)) return VRChatMobileUserData(user: user, status: status);
 
   await Future.wait([
-    vrchatLoginSession.worlds(user.location.split(":")[0]).then((value) => world = value).catchError((e, trace) {
-      logger.e(getMessage(e), e, trace);
-    }),
-    vrchatLoginSession.instances(user.location).then((value) => instance = value).catchError((e, trace) {
-      logger.e(getMessage(e), e, trace);
-    }),
+    vrchatLoginSession.worlds(user.location.split(":")[0]).then((value) => world = value),
+    vrchatLoginSession.instances(user.location).then((value) => instance = value),
   ]);
   return VRChatMobileUserData(user: user, status: status, world: world, instance: instance);
 });

@@ -148,13 +148,15 @@ class EditBio extends ConsumerWidget {
         FutureButton(
           child: Text(AppLocalizations.of(context)!.save),
           onPressed: () async {
-            await vrchatLoginSession.changeBio(user.id, user.bio = controller.text).catchError((e, trace) {
+            try {
+              await vrchatLoginSession.changeBio(user.id, user.bio = controller.text);
+              user.bio = user.bio == "" ? null : user.bio;
+              ref.read(vrchatUserCountProvider.notifier).state++;
+              Navigator.pop(context);
+            } catch (e, trace) {
               logger.e(getMessage(e), e, trace);
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage(context: context, status: e))));
-            });
-            user.bio = user.bio == "" ? null : user.bio;
-            ref.read(vrchatUserCountProvider.notifier).state++;
-            Navigator.pop(context);
+            }
           },
         ),
       ],
@@ -169,9 +171,7 @@ final noteControllerProvider = FutureProvider.family<TextEditingController, VRCh
     logger: logger,
   );
   if (user.note == null) {
-    await vrchatLoginSession.users(user.id).then((value) => user.note = value.note).catchError((e, trace) {
-      logger.e(getMessage(e), e, trace);
-    });
+    await vrchatLoginSession.users(user.id).then((value) => user.note = value.note);
   }
   return TextEditingController(text: user.note);
 });
@@ -212,13 +212,15 @@ class EditNote extends ConsumerWidget {
           FutureButton(
             child: Text(AppLocalizations.of(context)!.save),
             onPressed: () async {
-              await vrchatLoginSession.userNotes(user.id, user.note = data.text).catchError((e, trace) {
+              try {
+                await vrchatLoginSession.userNotes(user.id, user.note = data.text);
+                user.note = user.note == "" ? null : user.note;
+                ref.read(vrchatUserCountProvider.notifier).state++;
+                Navigator.pop(context);
+              } catch (e, trace) {
                 logger.e(getMessage(e), e, trace);
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage(context: context, status: e))));
-              });
-              user.note = user.note == "" ? null : user.note;
-              ref.read(vrchatUserCountProvider.notifier).state++;
-              Navigator.pop(context);
+              }
             },
           ),
         ],

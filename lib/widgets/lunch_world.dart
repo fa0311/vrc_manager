@@ -14,7 +14,6 @@ import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/core/splash.dart';
-import 'package:vrc_manager/scenes/setting/logger.dart';
 import 'package:vrc_manager/widgets/future/tile.dart';
 import 'package:vrc_manager/widgets/grid_view/widget/world.dart';
 import 'package:vrc_manager/widgets/modal.dart';
@@ -36,9 +35,7 @@ String genRandNumber([int length = 5]) {
 }
 
 Future<String> genInstanceId({required VRChatAPI vrchatLoginSession, required String region, required VRChatInstanceTypeExt type}) async {
-  VRChatUserSelfOverload user = await vrchatLoginSession.user().catchError((e, trace) {
-    logger.e(getMessage(e), e, trace);
-  });
+  VRChatUserSelfOverload user = await vrchatLoginSession.user();
   String url = genRandNumber();
 
   if ([VRChatInstanceType.hidden, VRChatInstanceType.friends, VRChatInstanceType.private].contains(type.type)) {
@@ -99,12 +96,16 @@ class SelectWordType extends ConsumerWidget {
             FutureTile(
               title: Text(type.toLocalization(context)),
               onTap: () async {
-                String instanceId = await genInstanceId(vrchatLoginSession: vrchatLoginSession, region: regionText, type: type);
-                Navigator.of(context).popUntil((route) => route.isFirst);
-                showModalBottomSheetStatelessWidget(
-                  context: context,
-                  builder: () => ShareInstanceListTile(worldId: world.id, instanceId: instanceId),
-                );
+                try {
+                  String instanceId = await genInstanceId(vrchatLoginSession: vrchatLoginSession, region: regionText, type: type);
+                  Navigator.of(context).popUntil((route) => route.isFirst);
+                  showModalBottomSheetStatelessWidget(
+                    context: context,
+                    builder: () => ShareInstanceListTile(worldId: world.id, instanceId: instanceId),
+                  );
+                } catch (e, trace) {
+                  logger.e(e, trace);
+                }
               },
             ),
         ],
