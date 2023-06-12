@@ -53,7 +53,7 @@ class LoggerExt extends Logger {
     final logEvent = LogEvent(level, message, error, stackTrace);
     final output = _printer.log(logEvent);
     if (output.isNotEmpty) {
-      var outputEvent = OutputEventExt(level, output, message, error, stackTrace);
+      var outputEvent = OutputEventExt(logEvent, output, message, error, stackTrace);
       _output.output(outputEvent);
     }
   }

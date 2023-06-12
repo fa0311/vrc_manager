@@ -267,7 +267,7 @@ class BioLink extends ConsumerWidget {
                   Assets.svg.resolve("${byVrchatExternalServices(url).text}.svg").toFilePath(),
                   width: 20,
                   height: 20,
-                  color: Color(byVrchatExternalServices(url).color),
+                  colorFilter: ColorFilter.mode(Color(byVrchatExternalServices(url).color), BlendMode.srcIn),
                   semanticsLabel: url.toString(),
                 ),
               ),

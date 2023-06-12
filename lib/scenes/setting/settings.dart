@@ -29,9 +29,9 @@ class VRChatMobileSettings extends ConsumerWidget {
             child: Column(
               children: <Widget>[
                 ListTile(
-                  leading: Column(
+                  leading: const Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const <Widget>[Icon(Icons.accessibility)],
+                    children: <Widget>[Icon(Icons.accessibility)],
                   ),
                   title: Text(AppLocalizations.of(context)!.accessibility),
                   onTap: () => Navigator.push(
@@ -45,9 +45,9 @@ class VRChatMobileSettings extends ConsumerWidget {
                   ),
                 ),
                 ListTile(
-                  leading: Column(
+                  leading: const Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const <Widget>[Icon(Icons.account_circle)],
+                    children: <Widget>[Icon(Icons.account_circle)],
                   ),
                   title: Text(AppLocalizations.of(context)!.account),
                   onTap: () => Navigator.push(
@@ -61,9 +61,9 @@ class VRChatMobileSettings extends ConsumerWidget {
                   ),
                 ),
                 ListTile(
-                  leading: Column(
+                  leading: const Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const <Widget>[Icon(Icons.admin_panel_settings)],
+                    children: <Widget>[Icon(Icons.admin_panel_settings)],
                   ),
                   title: Text(AppLocalizations.of(context)!.permissions),
                   onTap: () => Navigator.push(
@@ -77,9 +77,9 @@ class VRChatMobileSettings extends ConsumerWidget {
                   ),
                 ),
                 ListTile(
-                  leading: Column(
+                  leading: const Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const <Widget>[Icon(Icons.note)],
+                    children: <Widget>[Icon(Icons.note)],
                   ),
                   title: Text(AppLocalizations.of(context)!.log),
                   onTap: () => Navigator.push(
@@ -90,9 +90,9 @@ class VRChatMobileSettings extends ConsumerWidget {
                   ),
                 ),
                 ListTile(
-                  leading: Column(
+                  leading: const Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const <Widget>[Icon(Icons.help)],
+                    children: <Widget>[Icon(Icons.help)],
                   ),
                   title: Text(AppLocalizations.of(context)!.help),
                   onTap: () => Navigator.push(

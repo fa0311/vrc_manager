@@ -18,7 +18,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 version: 5.0.1+22
 
 environment:
-  sdk: ">=2.17.0 <3.0.0"
+  sdk: ">=2.17.0 <4.0.0"
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -35,26 +35,26 @@ dependencies:
   cupertino_icons: ^1.0.4
   http: ^0.13.4
   shared_preferences: ^2.0.15
-  flutter_secure_storage: ^6.0.0
+  flutter_secure_storage: ^8.0.0
   url_launcher: ^6.1.2
-  flutter_launcher_icons: ^0.11.0
-  package_info_plus: ^3.0.2
-  flutter_svg: ^1.1.0
+  flutter_launcher_icons: ^0.13.1
+  package_info_plus: ^4.0.2
+  flutter_svg: ^2.0.6
   # receive_sharing_intent: ^1.4.5
   receive_sharing_intent:
     git:
       url: https://github.com/mwolffalonso/receive_sharing_intent.git
       ref: 723863b
-  share_plus: ^6.3.0
+  share_plus: ^7.0.2
   flutter_json_viewer: ^1.0.1
   flutter_localizations:
     sdk: flutter
   import_sorter: ^4.6.0
-  intl: ^0.17.0
-  webview_flutter: ^3.0.4
+  intl: ^0.18.0
+  webview_flutter: ^3.0.0
   flutter_inappwebview: ^5.4.3+7
   domain_verification_manager: ^1.0.0
-  device_info_plus: ^8.0.0
+  device_info_plus: ^9.0.2
   fluttertoast: ^8.0.9
   cached_network_image: ^3.2.1
   flutter_riverpod: ^2.0.2
