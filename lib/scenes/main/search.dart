@@ -92,7 +92,7 @@ final vrchatMobileSearchProvider = FutureProvider<VRChatMobileSearchData>((ref) 
         break;
     }
   } catch (e, trace) {
-    logger.e(getMessage(e), e, trace);
+    logger.e(getMessage(e), error: e, stackTrace: trace);
   }
 
   return VRChatMobileSearchData(userList: userList, worldList: worldList);
@@ -191,7 +191,7 @@ class VRChatMobileSearchResult extends ConsumerWidget {
     return data.when(
       loading: () => const Loading(),
       error: (e, trace) {
-        logger.w(getMessage(e), e, trace);
+        logger.w(getMessage(e), error: e, stackTrace: trace);
         return ErrorPage(loggerReport: ref.read(loggerReportProvider));
       },
       data: (VRChatMobileSearchData data) {

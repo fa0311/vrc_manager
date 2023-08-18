@@ -64,7 +64,7 @@ class VRChatMobileTokenSetting extends ConsumerWidget {
                         SnackBar(content: Text(AppLocalizations.of(context)!.success)),
                       );
                     }).catchError((e, trace) {
-                      logger.w(getMessage(e), e, trace);
+                      logger.w(getMessage(e), error: e, stackTrace: trace);
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text(AppLocalizations.of(context)!.failed)),
                       );

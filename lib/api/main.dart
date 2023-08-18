@@ -46,7 +46,7 @@ class VRChatAPI {
       try {
         return VRChatLogin.fromJson(value);
       } catch (e, trace) {
-        logger?.e(e, encoder.convert(value), trace);
+        logger?.e(e, error: encoder.convert(value), stackTrace: trace);
         rethrow;
       }
     });
@@ -60,7 +60,7 @@ class VRChatAPI {
       try {
         return VRChatLogin.fromJson(value);
       } catch (e, trace) {
-        logger?.e(e, encoder.convert(value), trace);
+        logger?.e(e, error: encoder.convert(value), stackTrace: trace);
         rethrow;
       }
     });
@@ -73,7 +73,7 @@ class VRChatAPI {
       try {
         return VRChatUserSelfOverload.fromJson(value);
       } catch (e, trace) {
-        logger?.e(e, encoder.convert(value), trace);
+        logger?.e(e, error: encoder.convert(value), stackTrace: trace);
         rethrow;
       }
     });
@@ -86,7 +86,7 @@ class VRChatAPI {
       try {
         return VRChatUser.fromJson(value);
       } catch (e, trace) {
-        logger?.e(e, encoder.convert(value), trace);
+        logger?.e(e, error: encoder.convert(value), stackTrace: trace);
         rethrow;
       }
     });
@@ -97,7 +97,7 @@ class VRChatAPI {
       try {
         return VRChatUserSelf.fromJson(value);
       } catch (e, trace) {
-        logger?.e(e, encoder.convert(value), trace);
+        logger?.e(e, error: encoder.convert(value), stackTrace: trace);
         rethrow;
       }
     });
@@ -108,7 +108,7 @@ class VRChatAPI {
       try {
         return VRChatUserNotes.fromJson(value);
       } catch (e, trace) {
-        logger?.e(e, encoder.convert(value), trace);
+        logger?.e(e, error: encoder.convert(value), stackTrace: trace);
         rethrow;
       }
     });
@@ -119,7 +119,7 @@ class VRChatAPI {
       try {
         return VRChatFriendStatus.fromJson(value);
       } catch (e, trace) {
-        logger?.e(e, encoder.convert(value), trace);
+        logger?.e(e, error: encoder.convert(value), stackTrace: trace);
         rethrow;
       }
     });
@@ -130,7 +130,7 @@ class VRChatAPI {
       try {
         return VRChatNotifications.fromJson(value);
       } catch (e, trace) {
-        logger?.e(e, encoder.convert(value), trace);
+        logger?.e(e, error: encoder.convert(value), stackTrace: trace);
         rethrow;
       }
     });
@@ -141,7 +141,7 @@ class VRChatAPI {
       try {
         return VRChatStatus.fromJson(value);
       } catch (e, trace) {
-        logger?.e(e, encoder.convert(value), trace);
+        logger?.e(e, error: encoder.convert(value), stackTrace: trace);
         rethrow;
       }
     });
@@ -152,7 +152,7 @@ class VRChatAPI {
       try {
         return VRChatStatus.fromJson(value);
       } catch (e, trace) {
-        logger?.e(e, encoder.convert(value), trace);
+        logger?.e(e, error: encoder.convert(value), stackTrace: trace);
         rethrow;
       }
     });
@@ -163,7 +163,7 @@ class VRChatAPI {
       try {
         return VRChatAcceptFriendRequestByUid.fromJson(value);
       } catch (e, trace) {
-        logger?.e(e, encoder.convert(value), trace);
+        logger?.e(e, error: encoder.convert(value), stackTrace: trace);
         rethrow;
       }
     });
@@ -184,7 +184,7 @@ class VRChatAPI {
             try {
               return VRChatFriends.fromJson(content);
             } catch (e, trace) {
-              logger?.e(e, encoder.convert(content), trace);
+              logger?.e(e, error: encoder.convert(content), stackTrace: trace);
               if (ignoreErrors) return null;
               rethrow;
             }
@@ -198,7 +198,7 @@ class VRChatAPI {
       try {
         return VRChatStatus.fromJson(value);
       } catch (e, trace) {
-        logger?.e(e, encoder.convert(value), trace);
+        logger?.e(e, error: encoder.convert(value), stackTrace: trace);
         rethrow;
       }
     });
@@ -221,7 +221,7 @@ class VRChatAPI {
             try {
               return VRChatUser.fromJson(content);
             } catch (e, trace) {
-              logger?.e(e, encoder.convert(content), trace);
+              logger?.e(e, error: encoder.convert(content), stackTrace: trace);
               if (ignoreErrors) return null;
               rethrow;
             }
@@ -245,7 +245,7 @@ class VRChatAPI {
             try {
               return VRChatLimitedWorld.fromJson(content);
             } catch (e, trace) {
-              logger?.e(e, encoder.convert(content), trace);
+              logger?.e(e, error: encoder.convert(content), stackTrace: trace);
               if (ignoreErrors) return null;
               rethrow;
             }
@@ -269,7 +269,7 @@ class VRChatAPI {
             try {
               return VRChatFavoriteGroup.fromJson(content);
             } catch (e, trace) {
-              logger?.e(e, encoder.convert(content), trace);
+              logger?.e(e, error: encoder.convert(content), stackTrace: trace);
               if (ignoreErrors) return null;
               rethrow;
             }
@@ -290,7 +290,7 @@ class VRChatAPI {
       try {
         return VRChatStatus.fromJson(value);
       } catch (e, trace) {
-        logger?.e(e, encoder.convert(value), trace);
+        logger?.e(e, error: encoder.convert(value), stackTrace: trace);
         rethrow;
       }
     });
@@ -314,7 +314,7 @@ class VRChatAPI {
             try {
               return VRChatNotifications.fromJson(content);
             } catch (e, trace) {
-              logger?.e(e, encoder.convert(content), trace);
+              logger?.e(e, error: encoder.convert(content), stackTrace: trace);
               if (ignoreErrors) return null;
               rethrow;
             }
@@ -328,7 +328,7 @@ class VRChatAPI {
       try {
         return VRChatNotifications.fromJson(value);
       } catch (e, trace) {
-        logger?.e(e, encoder.convert(value), trace);
+        logger?.e(e, error: encoder.convert(value), stackTrace: trace);
         rethrow;
       }
     });
@@ -341,7 +341,7 @@ class VRChatAPI {
       try {
         return VRChatWorld.fromJson(value);
       } catch (e, trace) {
-        logger?.e(e, encoder.convert(value), trace);
+        logger?.e(e, error: encoder.convert(value), stackTrace: trace);
         rethrow;
       }
     });
@@ -360,7 +360,7 @@ class VRChatAPI {
             try {
               return VRChatFavoriteWorld.fromJson(content);
             } catch (e, trace) {
-              logger?.e(e, encoder.convert(content), trace);
+              logger?.e(e, error: encoder.convert(content), stackTrace: trace);
               if (ignoreErrors) return null;
               rethrow;
             }
@@ -376,7 +376,7 @@ class VRChatAPI {
       try {
         return VRChatInstance.fromJson(value);
       } catch (e, trace) {
-        logger?.e(e, encoder.convert(value), trace);
+        logger?.e(e, error: encoder.convert(value), stackTrace: trace);
         rethrow;
       }
     });
@@ -387,7 +387,7 @@ class VRChatAPI {
       try {
         return VRChatNotificationsInvite.fromJson(value);
       } catch (e, trace) {
-        logger?.e(e, encoder.convert(value), trace);
+        logger?.e(e, error: encoder.convert(value), stackTrace: trace);
         rethrow;
       }
     });
@@ -398,7 +398,7 @@ class VRChatAPI {
       try {
         return VRChatSecureName.fromJson(value);
       } catch (e, trace) {
-        logger?.e(e, encoder.convert(value), trace);
+        logger?.e(e, error: encoder.convert(value), stackTrace: trace);
         rethrow;
       }
     });
@@ -409,7 +409,7 @@ class VRChatAPI {
       try {
         return VRChatStatus.fromJson(value);
       } catch (e, trace) {
-        logger?.e(e, encoder.convert(value), trace);
+        logger?.e(e, error: encoder.convert(value), stackTrace: trace);
         rethrow;
       }
     });
@@ -422,7 +422,7 @@ class VRChatAPI {
       try {
         return VRChatUserSelfOverload.fromJson(value);
       } catch (e, trace) {
-        logger?.e(e, encoder.convert(value), trace);
+        logger?.e(e, error: encoder.convert(value), stackTrace: trace);
         rethrow;
       }
     });
@@ -433,7 +433,7 @@ class VRChatAPI {
       try {
         return VRChatUserSelf.fromJson(value);
       } catch (e, trace) {
-        logger?.e(e, encoder.convert(value), trace);
+        logger?.e(e, error: encoder.convert(value), stackTrace: trace);
         rethrow;
       }
     });

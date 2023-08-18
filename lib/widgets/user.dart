@@ -154,7 +154,7 @@ class EditBio extends ConsumerWidget {
               ref.read(vrchatUserCountProvider.notifier).state++;
               Navigator.pop(context);
             } catch (e, trace) {
-              logger.e(getMessage(e), e, trace);
+              logger.e(getMessage(e), error: e, stackTrace: trace);
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage(context: context, status: e))));
             }
           },
@@ -192,7 +192,7 @@ class EditNote extends ConsumerWidget {
     return data.when(
       loading: () => const Center(child: CircularProgressIndicator()),
       error: (e, trace) {
-        logger.w(getMessage(e), e, trace);
+        logger.w(getMessage(e), error: e, stackTrace: trace);
         return ScrollWidget(
           onRefresh: () => ref.refresh(vrchatMobileSelfProvider.future),
           child: ErrorPage(loggerReport: ref.read(loggerReportProvider)),
@@ -218,7 +218,7 @@ class EditNote extends ConsumerWidget {
                 ref.read(vrchatUserCountProvider.notifier).state++;
                 Navigator.pop(context);
               } catch (e, trace) {
-                logger.e(getMessage(e), e, trace);
+                logger.e(getMessage(e), error: e, stackTrace: trace);
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage(context: context, status: e))));
               }
             },
@@ -267,7 +267,7 @@ class BioLink extends ConsumerWidget {
                   Assets.svg.resolve("${byVrchatExternalServices(url).text}.svg").toFilePath(),
                   width: 20,
                   height: 20,
-                  colorFilter: ColorFilter.mode(Color(byVrchatExternalServices(url).color), BlendMode.srcIn),
+                  // colorFilter: ColorFilter.mode(Color(byVrchatExternalServices(url).color), BlendMode.srcIn),
                   semanticsLabel: url.toString(),
                 ),
               ),

@@ -18,7 +18,7 @@ Future getWorld({
     locationMap[wid] = null;
     locationMap[wid] = await vrchatLoginSession.worlds(wid);
   } catch (e, trace) {
-    logger.e(getMessage(e), e, trace);
+    logger.e(getMessage(e), error: e, stackTrace: trace);
   }
 }
 
@@ -33,7 +33,7 @@ Future getWorldFromFavorite({
     locationMap[wid] = null;
     locationMap[wid] = await vrchatLoginSession.worlds(wid);
   } catch (e, trace) {
-    logger.e(getMessage(e), e, trace);
+    logger.e(getMessage(e), error: e, stackTrace: trace);
   }
 }
 
@@ -47,6 +47,6 @@ Future getInstance({
     instanceMap[user.location] = null;
     instanceMap[user.location] = await vrchatLoginSession.instances(user.location);
   } catch (e, trace) {
-    logger.e(getMessage(e), e, trace);
+    logger.e(getMessage(e), error: e, stackTrace: trace);
   }
 }

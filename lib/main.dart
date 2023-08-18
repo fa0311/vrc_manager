@@ -18,7 +18,7 @@ Logger logger = LoggerExt(
   filter: ProductionFilter(),
   printer: PrettyPrinter(methodCount: 8),
   output: loggerOutput,
-  level: kDebugMode ? Level.verbose : Level.warning,
+  level: kDebugMode ? Level.trace : Level.warning,
 );
 
 main() {

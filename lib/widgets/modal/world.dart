@@ -106,7 +106,7 @@ class SelfInviteListTileWidget extends ConsumerWidget {
         try {
           await vrchatLoginSession.selfInvite(instance.location, instance.shortName ?? "");
         } catch (e, trace) {
-          logger.e(getMessage(e), e, trace);
+          logger.e(getMessage(e), error: e, stackTrace: trace);
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage(context: context, status: e))));
         }
       },
@@ -151,7 +151,7 @@ class FavoriteRemoveTileWidget extends ConsumerWidget {
         try {
           await vrchatLoginSession.deleteFavorites(favoriteWorld.favoriteId);
         } catch (e, trace) {
-          logger.e(getMessage(e), e, trace);
+          logger.e(getMessage(e), error: e, stackTrace: trace);
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage(context: context, status: e))));
         }
       },
@@ -216,7 +216,7 @@ class FavoriteAction extends ConsumerWidget {
     return data.when(
       loading: () => const Loading(),
       error: (e, trace) {
-        logger.w(getMessage(e), e, trace);
+        logger.w(getMessage(e), error: e, stackTrace: trace);
         return ScrollWidget(
           onRefresh: () => ref.refresh((vrchatMobileWorldFavoriteSortProvider.future)),
           child: ErrorPage(loggerReport: ref.read(loggerReportProvider)),
@@ -251,7 +251,7 @@ class FavoriteAction extends ConsumerWidget {
                         }
                         ref.read(vrchatMobileWorldFavoriteCounterProvider.notifier).state++;
                       } catch (e, trace) {
-                        logger.e(getMessage(e), e, trace);
+                        logger.e(getMessage(e), error: e, stackTrace: trace);
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage(context: context, status: e))));
                       }
                     },
