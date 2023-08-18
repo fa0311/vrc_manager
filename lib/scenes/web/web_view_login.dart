@@ -70,7 +70,7 @@ class VRChatMobileWebViewLogin extends ConsumerWidget {
         body: data.when(
           loading: () => const Loading(),
           error: (e, trace) {
-            logger.w(getMessage(e), e, trace);
+            logger.w(getMessage(e), error: e, stackTrace: trace);
             return ScrollWidget(
               onRefresh: () => ref.refresh((webViewInitProvider.future)),
               child: ErrorPage(loggerReport: ref.read(loggerReportProvider)),

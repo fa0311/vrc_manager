@@ -11,7 +11,7 @@ Future<String?> getLoginSession(String key, String id) async {
     const FlutterSecureStorage storage = FlutterSecureStorage();
     return await storage.read(key: "$key$id");
   } catch (e, trace) {
-    logger.w(getMessage(e), e, trace);
+    logger.w(getMessage(e), error: e, stackTrace: trace);
     return null;
   }
 }
@@ -21,7 +21,7 @@ Future<void> setLoginSession(String key, String value, String id) async {
     const FlutterSecureStorage storage = FlutterSecureStorage();
     return await storage.write(key: "$key$id", value: value);
   } catch (e, trace) {
-    logger.w(getMessage(e), e, trace);
+    logger.w(getMessage(e), error: e, stackTrace: trace);
   }
 }
 
@@ -30,7 +30,7 @@ Future<void> removeLoginSession(String key, String id) async {
     const FlutterSecureStorage storage = FlutterSecureStorage();
     return await storage.delete(key: "$key$id");
   } catch (e, trace) {
-    logger.w(getMessage(e), e, trace);
+    logger.w(getMessage(e), error: e, stackTrace: trace);
   }
 }
 
@@ -39,7 +39,7 @@ Future<String?> getStorage(String key, {String id = ""}) async {
     final SharedPreferences storage = await SharedPreferences.getInstance();
     return storage.getString("$key$id");
   } catch (e, trace) {
-    logger.w(getMessage(e), e, trace);
+    logger.w(getMessage(e), error: e, stackTrace: trace);
     return null;
   }
 }
@@ -49,7 +49,7 @@ Future<bool> setStorage(String key, String value, {String id = ""}) async {
     final SharedPreferences storage = await SharedPreferences.getInstance();
     return await storage.setString("$key$id", value);
   } catch (e, trace) {
-    logger.w(getMessage(e), e, trace);
+    logger.w(getMessage(e), error: e, stackTrace: trace);
     return false;
   }
 }
@@ -59,7 +59,7 @@ Future<bool> removeStorage(String key, {String id = ""}) async {
     final SharedPreferences storage = await SharedPreferences.getInstance();
     return await storage.remove("$key$id");
   } catch (e, trace) {
-    logger.w(getMessage(e), e, trace);
+    logger.w(getMessage(e), error: e, stackTrace: trace);
     return false;
   }
 }
@@ -69,7 +69,7 @@ Future<List<String>> getStorageList(String key, {String id = ""}) async {
     final SharedPreferences storage = await SharedPreferences.getInstance();
     return storage.getStringList("$key$id") ?? [];
   } catch (e, trace) {
-    logger.w(getMessage(e), e, trace);
+    logger.w(getMessage(e), error: e, stackTrace: trace);
     return [];
   }
 }
@@ -79,7 +79,7 @@ Future<bool> setStorageList(String key, List<String> value, {String id = ""}) as
     final SharedPreferences storage = await SharedPreferences.getInstance();
     return await storage.setStringList("$key$id", value);
   } catch (e, trace) {
-    logger.w(getMessage(e), e, trace);
+    logger.w(getMessage(e), error: e, stackTrace: trace);
     return false;
   }
 }

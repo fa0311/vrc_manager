@@ -68,31 +68,31 @@ final vrchatMobileSearchProvider = FutureProvider<VRChatMobileSearchData>((ref) 
     worldList.add(world);
   }
 
-  switch (searchingMode) {
-    case SearchMode.users:
-      do {
-        int offset = userList.length;
-        List<VRChatUser> users = await vrchatLoginSession.searchUsers(searchingText, offset: offset).catchError((e, trace) {
-          logger.e(getMessage(e), e, trace);
-        });
-        for (VRChatUser user in users) {
-          userList.add(user);
-        }
-        len = users.length;
-      } while (len > 0 && userList.length < 200);
-      break;
-    case SearchMode.worlds:
-      do {
-        int offset = worldList.length;
-        List<VRChatLimitedWorld> worlds = await vrchatLoginSession.searchWorlds(searchingText, offset: offset).catchError((e, trace) {
-          logger.e(getMessage(e), e, trace);
-        });
-        for (VRChatLimitedWorld world in worlds) {
-          addWorldList(world);
-        }
-        len = worlds.length;
-      } while (len > 0 && worldList.length < 200);
-      break;
+  try {
+    switch (searchingMode) {
+      case SearchMode.users:
+        do {
+          int offset = userList.length;
+          List<VRChatUser> users = await vrchatLoginSession.searchUsers(searchingText, offset: offset);
+          for (VRChatUser user in users) {
+            userList.add(user);
+          }
+          len = users.length;
+        } while (len > 0 && userList.length < 200);
+        break;
+      case SearchMode.worlds:
+        do {
+          int offset = worldList.length;
+          List<VRChatLimitedWorld> worlds = await vrchatLoginSession.searchWorlds(searchingText, offset: offset);
+          for (VRChatLimitedWorld world in worlds) {
+            addWorldList(world);
+          }
+          len = worlds.length;
+        } while (len > 0 && worldList.length < 200);
+        break;
+    }
+  } catch (e, trace) {
+    logger.e(getMessage(e), error: e, stackTrace: trace);
   }
 
   return VRChatMobileSearchData(userList: userList, worldList: worldList);
@@ -191,7 +191,7 @@ class VRChatMobileSearchResult extends ConsumerWidget {
     return data.when(
       loading: () => const Loading(),
       error: (e, trace) {
-        logger.w(getMessage(e), e, trace);
+        logger.w(getMessage(e), error: e, stackTrace: trace);
         return ErrorPage(loggerReport: ref.read(loggerReportProvider));
       },
       data: (VRChatMobileSearchData data) {

@@ -10,8 +10,10 @@ Future delete({
   required VRChatFavoriteWorld world,
   required List<VRChatFavoriteWorld> favoriteWorld,
 }) async {
-  await vrchatLoginSession.deleteFavorites(world.favoriteId).catchError((e) {
+  try {
+    await vrchatLoginSession.deleteFavorites(world.favoriteId);
+    favoriteWorld.remove(world);
+  } catch (e) {
     logger.e(e);
-  });
-  favoriteWorld.remove(world);
+  }
 }

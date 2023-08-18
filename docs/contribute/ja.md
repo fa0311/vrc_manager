@@ -29,24 +29,3 @@ flutter pub get
 ```shell
 flutter run
 ```
-
-### HMS
-
-```shell
-flutter run --no-sound-null-safety
-```
-
-`lib/init_hms.dart` が必要です
-
-```dart
-// ignore_for_file: import_of_legacy_library_into_null_safe
-
-// Package imports:
-import 'package:agconnect_core/agconnect_core.dart';
-
-Future<void> initHMS() async {
-  await AGCApp.instance.setClientId('client_id');
-  await AGCApp.instance.setClientSecret('client_secret');
-  await AGCApp.instance.setApiKey('api_key');
-}
-```

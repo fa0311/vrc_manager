@@ -27,7 +27,7 @@ final loggerReportProvider = StateProvider<Iterable<OutputEventExt>>((ref) => lo
 final loggerFilterProvider = StateProvider<List<Level>>((ref) => [Level.error, Level.info]);
 
 class LoggerExt extends Logger {
-  static Level level = Level.verbose;
+  static Level level = Level.trace;
   final LogFilter _filter;
   final LogPrinter _printer;
   final LogOutput _output;
@@ -48,12 +48,18 @@ class LoggerExt extends Logger {
   }
 
   @override
-  void log(Level level, dynamic message, [dynamic error, StackTrace? stackTrace]) {
-    super.log(level, message, error, stackTrace);
-    final logEvent = LogEvent(level, message, error, stackTrace);
+  void log(
+    Level level,
+    dynamic message, {
+    DateTime? time,
+    Object? error,
+    StackTrace? stackTrace,
+  }) {
+    super.log(level, message, error: error, stackTrace: stackTrace);
+    final logEvent = LogEvent(level, message, error: error, stackTrace: stackTrace);
     final output = _printer.log(logEvent);
     if (output.isNotEmpty) {
-      var outputEvent = OutputEventExt(level, output, message, error, stackTrace);
+      final outputEvent = OutputEventExt(logEvent, output, message, error, stackTrace);
       _output.output(outputEvent);
     }
   }
@@ -168,7 +174,7 @@ class ErrorPage extends ConsumerWidget {
         for (OutputEventExt state in loggerReport.where((e) => loggerFilter.contains(e.level)))
           Card(
             child: ExpansionTile(
-              title: Text((PrettyPrinter.levelEmojis[state.level] ?? "") + errorMessage(context: context, status: state.error)),
+              title: Text((PrettyPrinter.defaultLevelEmojis[state.level] ?? "") + errorMessage(context: context, status: state.error)),
               subtitle: Text(generalDateDifference(context, state.time)),
               trailing: OutlinedButton(
                 child: Text(AppLocalizations.of(context)!.report),
@@ -233,7 +239,7 @@ String errorMessage({required BuildContext context, dynamic status}) {
         vrchatError = VRChatError.fromHtml(status.message);
       } else {
         dynamic content = json.decode(status.message);
-        if (kDebugMode) print(AnsiColor.fg(199)(content.toString()));
+        if (kDebugMode) print(const AnsiColor.fg(199)(content.toString()));
         try {
           vrchatError = VRChatError.fromJson(content);
         } catch (e) {
