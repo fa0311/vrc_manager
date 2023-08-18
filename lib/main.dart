@@ -18,7 +18,7 @@ Logger logger = LoggerExt(
   filter: ProductionFilter(),
   printer: PrettyPrinter(methodCount: 8),
   output: loggerOutput,
-  level: kDebugMode ? Level.verbose : Level.warning,
+  level: kDebugMode ? Level.trace : Level.warning,
 );
 
 main() {
@@ -41,15 +41,7 @@ class VRChatMobile extends ConsumerWidget {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      supportedLocales: const [
-        Locale('en', ''),
-        Locale('ja', ''),
-        Locale('es', ''),
-        Locale('pt', ''),
-        Locale('ru', ''),
-        Locale('th', ''),
-        Locale('zh', ''),
-      ],
+      supportedLocales: AppLocalizations.supportedLocales,
       locale: Locale(accessibilityConfig.languageCode.name, ''),
       theme: accessibilityConfig.themeBrightness.toTheme(),
       darkTheme: accessibilityConfig.darkThemeBrightness.toTheme(),

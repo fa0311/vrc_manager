@@ -148,13 +148,15 @@ class EditBio extends ConsumerWidget {
         FutureButton(
           child: Text(AppLocalizations.of(context)!.save),
           onPressed: () async {
-            await vrchatLoginSession.changeBio(user.id, user.bio = controller.text).catchError((e, trace) {
-              logger.e(getMessage(e), e, trace);
+            try {
+              await vrchatLoginSession.changeBio(user.id, user.bio = controller.text);
+              user.bio = user.bio == "" ? null : user.bio;
+              ref.read(vrchatUserCountProvider.notifier).state++;
+              Navigator.pop(context);
+            } catch (e, trace) {
+              logger.e(getMessage(e), error: e, stackTrace: trace);
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage(context: context, status: e))));
-            });
-            user.bio = user.bio == "" ? null : user.bio;
-            ref.read(vrchatUserCountProvider.notifier).state++;
-            Navigator.pop(context);
+            }
           },
         ),
       ],
@@ -169,9 +171,7 @@ final noteControllerProvider = FutureProvider.family<TextEditingController, VRCh
     logger: logger,
   );
   if (user.note == null) {
-    await vrchatLoginSession.users(user.id).then((value) => user.note = value.note).catchError((e, trace) {
-      logger.e(getMessage(e), e, trace);
-    });
+    await vrchatLoginSession.users(user.id).then((value) => user.note = value.note);
   }
   return TextEditingController(text: user.note);
 });
@@ -192,7 +192,7 @@ class EditNote extends ConsumerWidget {
     return data.when(
       loading: () => const Center(child: CircularProgressIndicator()),
       error: (e, trace) {
-        logger.w(getMessage(e), e, trace);
+        logger.w(getMessage(e), error: e, stackTrace: trace);
         return ScrollWidget(
           onRefresh: () => ref.refresh(vrchatMobileSelfProvider.future),
           child: ErrorPage(loggerReport: ref.read(loggerReportProvider)),
@@ -212,13 +212,15 @@ class EditNote extends ConsumerWidget {
           FutureButton(
             child: Text(AppLocalizations.of(context)!.save),
             onPressed: () async {
-              await vrchatLoginSession.userNotes(user.id, user.note = data.text).catchError((e, trace) {
-                logger.e(getMessage(e), e, trace);
+              try {
+                await vrchatLoginSession.userNotes(user.id, user.note = data.text);
+                user.note = user.note == "" ? null : user.note;
+                ref.read(vrchatUserCountProvider.notifier).state++;
+                Navigator.pop(context);
+              } catch (e, trace) {
+                logger.e(getMessage(e), error: e, stackTrace: trace);
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage(context: context, status: e))));
-              });
-              user.note = user.note == "" ? null : user.note;
-              ref.read(vrchatUserCountProvider.notifier).state++;
-              Navigator.pop(context);
+              }
             },
           ),
         ],
@@ -265,7 +267,7 @@ class BioLink extends ConsumerWidget {
                   Assets.svg.resolve("${byVrchatExternalServices(url).text}.svg").toFilePath(),
                   width: 20,
                   height: 20,
-                  color: Color(byVrchatExternalServices(url).color),
+                  // colorFilter: ColorFilter.mode(Color(byVrchatExternalServices(url).color), BlendMode.srcIn),
                   semanticsLabel: url.toString(),
                 ),
               ),

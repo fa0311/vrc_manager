@@ -97,7 +97,7 @@ class VRChatMobileSplash extends ConsumerWidget {
             ),
           ),
           error: (e, trace) {
-            logger.w(getMessage(e), e, trace);
+            logger.w(getMessage(e), error: e, stackTrace: trace);
             return ScrollWidget(
               onRefresh: () => ref.refresh(splashProvider.future),
               child: ErrorPage(loggerReport: ref.read(loggerReportProvider)),

@@ -171,7 +171,7 @@ class AccountConfig extends ChangeNotifier {
       setDisplayName(response.displayName);
       return true;
     }).catchError((e, trace) {
-      logger.e(getMessage(e), e, trace);
+      logger.e(getMessage(e), error: e, stackTrace: trace);
       data = null;
       return false;
     });

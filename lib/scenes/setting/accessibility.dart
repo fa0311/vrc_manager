@@ -43,9 +43,7 @@ class VRChatMobileSettingsAccessibility extends ConsumerWidget {
                   subtitle: Text(accessibilityConfig.themeBrightness.toLocalization(context)),
                   onTap: () => showModalBottomSheetStatelessWidget(
                     context: context,
-                    builder: () => const ThemeBrightnessModal(
-                      dark: false,
-                    ),
+                    builder: () => const ThemeBrightnessModal(dark: false),
                   ),
                 ),
                 ListTile(

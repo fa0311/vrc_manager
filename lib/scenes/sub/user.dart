@@ -49,22 +49,14 @@ final vrchatMobileUserProvider = FutureProvider.family<VRChatMobileUserData, Str
   VRChatInstance? instance;
 
   await Future.wait([
-    vrchatLoginSession.users(userId).then((value) => user = value).catchError((e, trace) {
-      logger.e(getMessage(e), e, trace);
-    }),
-    vrchatLoginSession.friendStatus(userId).then((value) => status = value).catchError((e, trace) {
-      logger.e(getMessage(e), e, trace);
-    }),
+    vrchatLoginSession.users(userId).then((value) => user = value),
+    vrchatLoginSession.friendStatus(userId).then((value) => status = value),
   ]);
   if (VRChatInstanceIdOther.values.any((id) => id.name == user.location)) return VRChatMobileUserData(user: user, status: status);
 
   await Future.wait([
-    vrchatLoginSession.worlds(user.location.split(":")[0]).then((value) => world = value).catchError((e, trace) {
-      logger.e(getMessage(e), e, trace);
-    }),
-    vrchatLoginSession.instances(user.location).then((value) => instance = value).catchError((e, trace) {
-      logger.e(getMessage(e), e, trace);
-    }),
+    vrchatLoginSession.worlds(user.location.split(":")[0]).then((value) => world = value),
+    vrchatLoginSession.instances(user.location).then((value) => instance = value),
   ]);
   return VRChatMobileUserData(user: user, status: status, world: world, instance: instance);
 });
@@ -83,7 +75,7 @@ class VRChatMobileUser extends ConsumerWidget {
         actions: data.when(
           loading: () => null,
           error: (e, trace) {
-            logger.w(getMessage(e), e, trace);
+            logger.w(getMessage(e), error: e, stackTrace: trace);
             return null;
           },
           data: (data) => [
@@ -107,7 +99,7 @@ class VRChatMobileUser extends ConsumerWidget {
             return data.when(
               loading: () => const Loading(),
               error: (e, trace) {
-                logger.w(e, e, trace);
+                logger.w(e, error: e, stackTrace: trace);
                 return ScrollWidget(
                   onRefresh: () => ref.refresh((vrchatMobileUserProvider(userId).future)),
                   child: ErrorPage(loggerReport: ref.read(loggerReportProvider)),

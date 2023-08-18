@@ -286,8 +286,8 @@ class VRChatLimitedWorld {
     authorName = content['authorName'];
     capacity = content['capacity'];
     createdAt = DateTime.parse(content['created_at']);
-    favorites = content['favorites'];
-    heat = content['heat'];
+    favorites = content['favorites'] ?? 0;
+    heat = content['heat'] ?? 0;
     id = content['id'];
     imageUrl = content['imageUrl'];
     labsPublicationDate = content['labsPublicationDate'] == "none" ? null : DateTime.parse(content['labsPublicationDate']);

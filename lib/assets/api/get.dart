@@ -12,12 +12,14 @@ Future getWorld({
   required VRChatFriends user,
   required Map<String, VRChatWorld?> locationMap,
 }) async {
-  String wid = user.location.split(":")[0];
-  if (VRChatInstanceIdOther.values.any((id) => id.name == user.location) || locationMap.containsKey(wid)) return;
-  locationMap[wid] = null;
-  locationMap[wid] = await vrchatLoginSession.worlds(wid).catchError((e, trace) {
-    logger.e(getMessage(e), e, trace);
-  });
+  try {
+    String wid = user.location.split(":")[0];
+    if (VRChatInstanceIdOther.values.any((id) => id.name == user.location) || locationMap.containsKey(wid)) return;
+    locationMap[wid] = null;
+    locationMap[wid] = await vrchatLoginSession.worlds(wid);
+  } catch (e, trace) {
+    logger.e(getMessage(e), error: e, stackTrace: trace);
+  }
 }
 
 Future getWorldFromFavorite({
@@ -25,12 +27,14 @@ Future getWorldFromFavorite({
   required VRChatFavoriteGroup favoriteGroup,
   required Map<String, VRChatWorld?> locationMap,
 }) async {
-  String wid = favoriteGroup.id;
-  if (VRChatInstanceIdOther.values.any((id) => id.name == wid) || locationMap.containsKey(wid)) return;
-  locationMap[wid] = null;
-  locationMap[wid] = await vrchatLoginSession.worlds(wid).catchError((e, trace) {
-    logger.e(getMessage(e), e, trace);
-  });
+  try {
+    String wid = favoriteGroup.id;
+    if (VRChatInstanceIdOther.values.any((id) => id.name == wid) || locationMap.containsKey(wid)) return;
+    locationMap[wid] = null;
+    locationMap[wid] = await vrchatLoginSession.worlds(wid);
+  } catch (e, trace) {
+    logger.e(getMessage(e), error: e, stackTrace: trace);
+  }
 }
 
 Future getInstance({
@@ -38,9 +42,11 @@ Future getInstance({
   required VRChatFriends user,
   required Map<String, VRChatInstance?> instanceMap,
 }) async {
-  if (VRChatInstanceIdOther.values.any((id) => id.name == user.location) || instanceMap.containsKey(user.location)) return;
-  instanceMap[user.location] = null;
-  instanceMap[user.location] = await vrchatLoginSession.instances(user.location).catchError((e, trace) {
-    logger.e(getMessage(e), e, trace);
-  });
+  try {
+    if (VRChatInstanceIdOther.values.any((id) => id.name == user.location) || instanceMap.containsKey(user.location)) return;
+    instanceMap[user.location] = null;
+    instanceMap[user.location] = await vrchatLoginSession.instances(user.location);
+  } catch (e, trace) {
+    logger.e(getMessage(e), error: e, stackTrace: trace);
+  }
 }

@@ -6,8 +6,6 @@ ThemeData blackTheme() {
   Color grey = const Color.fromARGB(255, 20, 20, 20);
   return ThemeData(
     brightness: Brightness.dark,
-    backgroundColor: black,
-    bottomAppBarColor: black,
     canvasColor: grey,
     cardColor: grey,
     dialogBackgroundColor: black,
@@ -16,7 +14,9 @@ ThemeData blackTheme() {
     primaryColorLight: black,
     scaffoldBackgroundColor: black,
     secondaryHeaderColor: black,
-    primarySwatch: Colors.grey,
+    appBarTheme: AppBarTheme(color: grey),
+    bottomAppBarTheme: BottomAppBarTheme(color: black),
+    colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.grey, brightness: Brightness.dark).copyWith(background: black),
   );
 }
 
@@ -24,8 +24,6 @@ ThemeData trueBlackTheme() {
   Color black = const Color.fromARGB(255, 0, 0, 0);
   return ThemeData(
     brightness: Brightness.dark,
-    backgroundColor: black,
-    bottomAppBarColor: black,
     canvasColor: black,
     cardColor: black,
     dialogBackgroundColor: black,
@@ -36,7 +34,9 @@ ThemeData trueBlackTheme() {
     scaffoldBackgroundColor: black,
     secondaryHeaderColor: black,
     splashColor: const Color.fromARGB(255, 20, 20, 20),
-    primarySwatch: Colors.grey,
+    appBarTheme: AppBarTheme(color: black),
+    bottomAppBarTheme: BottomAppBarTheme(color: black),
+    colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.grey, brightness: Brightness.dark).copyWith(background: black),
   );
 }
 

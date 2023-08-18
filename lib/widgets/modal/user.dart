@@ -124,7 +124,7 @@ class ProfileAction extends ConsumerWidget {
       await vrchatLoginSession.sendFriendRequest(user.id).then((value) {
         Navigator.of(context).pop();
       }).catchError((e, trace) {
-        logger.e(getMessage(e), e, trace);
+        logger.e(getMessage(e), error: e, stackTrace: trace);
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage(context: context, status: e))));
         Navigator.of(context).popUntil((route) => route.isFirst);
       });
@@ -135,7 +135,7 @@ class ProfileAction extends ConsumerWidget {
       await vrchatLoginSession.acceptFriendRequestByUid(user.id).then((value) {
         Navigator.of(context).pop();
       }).catchError((e, trace) {
-        logger.e(getMessage(e), e, trace);
+        logger.e(getMessage(e), error: e, stackTrace: trace);
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage(context: context, status: e))));
         Navigator.of(context).popUntil((route) => route.isFirst);
       });
@@ -147,7 +147,7 @@ class ProfileAction extends ConsumerWidget {
       await vrchatLoginSession.deleteFriendRequest(user.id).then((value) {
         Navigator.of(context).pop();
       }).catchError((e, trace) {
-        logger.e(getMessage(e), e, trace);
+        logger.e(getMessage(e), error: e, stackTrace: trace);
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage(context: context, status: e))));
         Navigator.of(context).popUntil((route) => route.isFirst);
       });
@@ -175,7 +175,7 @@ class ProfileAction extends ConsumerWidget {
                     Navigator.of(context).pop();
                     Navigator.of(context).pop();
                   }).catchError((e, trace) {
-                    logger.e(getMessage(e), e, trace);
+                    logger.e(getMessage(e), error: e, stackTrace: trace);
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage(context: context, status: e))));
                     Navigator.of(context).popUntil((route) => route.isFirst);
                   });
