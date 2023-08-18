@@ -104,7 +104,7 @@ class SelectWordType extends ConsumerWidget {
                     builder: () => ShareInstanceListTile(worldId: world.id, instanceId: instanceId),
                   );
                 } catch (e, trace) {
-                  logger.e(e, trace);
+                  logger.e(e, stackTrace: trace);
                 }
               },
             ),

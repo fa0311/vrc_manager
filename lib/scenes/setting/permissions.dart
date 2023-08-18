@@ -98,7 +98,7 @@ class VRChatMobileSettingsPermissions extends ConsumerWidget {
                     leading: domainStageVerification.when(
                       loading: () => const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()),
                       error: (e, trace) {
-                        logger.w(getMessage(e), e, trace);
+                        logger.w(getMessage(e), error: e, stackTrace: trace);
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage(context: context, status: e))));
                         return const Icon(
                           Icons.close,

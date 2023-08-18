@@ -48,7 +48,7 @@ final vrchatMobileWorldFavoriteSortProvider = FutureProvider<VRChatMobileWorldFa
         len = worlds.length;
       } while (len > 0);
     } catch (e, trace) {
-      logger.e(getMessage(e), e, trace);
+      logger.e(getMessage(e), error: e, stackTrace: trace);
     }
   }
 
@@ -72,7 +72,7 @@ final vrchatMobileWorldFavoriteSortProvider = FutureProvider<VRChatMobileWorldFa
       len = favoriteGroupList.length;
     } while (len > 0);
   } catch (e, trace) {
-    logger.e(getMessage(e), e, trace);
+    logger.e(getMessage(e), error: e, stackTrace: trace);
   }
 
   await Future.wait(futureList);
@@ -90,7 +90,7 @@ class VRChatMobileWorldsFavorite extends ConsumerWidget {
     return data.when(
       loading: () => const Loading(),
       error: (e, trace) {
-        logger.w(getMessage(e), e, trace);
+        logger.w(getMessage(e), error: e, stackTrace: trace);
         return ScrollWidget(
           onRefresh: () => ref.refresh(vrchatMobileWorldFavoriteSortProvider.future),
           child: ErrorPage(loggerReport: ref.read(loggerReportProvider)),

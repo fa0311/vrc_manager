@@ -52,7 +52,7 @@ class VRChatMobileWorld extends ConsumerWidget {
         actions: data.when(
           loading: () => null,
           error: (e, trace) {
-            logger.w(getMessage(e), e, trace);
+            logger.w(getMessage(e), error: e, stackTrace: trace);
             return null;
           },
           data: (data) => [
@@ -75,7 +75,7 @@ class VRChatMobileWorld extends ConsumerWidget {
             return data.when(
               loading: () => const Loading(),
               error: (e, trace) {
-                logger.w(getMessage(e), e, trace);
+                logger.w(getMessage(e), error: e, stackTrace: trace);
                 return ScrollWidget(
                   onRefresh: () => ref.refresh((vrchatMobileWorldProvider(worldId).future)),
                   child: ErrorPage(loggerReport: ref.read(loggerReportProvider)),

@@ -108,7 +108,7 @@ class VRChatMobileHelp extends ConsumerWidget {
                     ),
                   ),
                   error: (e, trace) {
-                    logger.w(getMessage(e), e, trace);
+                    logger.w(getMessage(e), error: e, stackTrace: trace);
                     return ListTile(
                       title: Text(AppLocalizations.of(context)!.version),
                       subtitle: Text(AppLocalizations.of(context)!.error),

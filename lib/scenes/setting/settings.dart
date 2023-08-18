@@ -31,7 +31,7 @@ class VRChatMobileSettings extends ConsumerWidget {
                 ListTile(
                   leading: const Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[Icon(Icons.accessibility)],
+                    children: [Icon(Icons.accessibility)],
                   ),
                   title: Text(AppLocalizations.of(context)!.accessibility),
                   onTap: () => Navigator.push(

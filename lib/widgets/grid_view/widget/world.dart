@@ -20,7 +20,8 @@ enum VRChatInstanceTypeExt {
   friendsPlus(type: VRChatInstanceType.hidden, canRequestInvite: false),
   friends(type: VRChatInstanceType.friends, canRequestInvite: false),
   invitePlus(type: VRChatInstanceType.private, canRequestInvite: true),
-  invite(type: VRChatInstanceType.private, canRequestInvite: false);
+  invite(type: VRChatInstanceType.private, canRequestInvite: false),
+  group(type: VRChatInstanceType.group, canRequestInvite: true);
 
   final VRChatInstanceType type;
   final bool canRequestInvite;
@@ -39,6 +40,8 @@ enum VRChatInstanceTypeExt {
         return AppLocalizations.of(context)!.vrchatInvitePlus;
       case VRChatInstanceTypeExt.invite:
         return AppLocalizations.of(context)!.vrchatInvite;
+      case VRChatInstanceTypeExt.group:
+        return AppLocalizations.of(context)!.vrchatGroup;
     }
   }
 }
@@ -53,6 +56,8 @@ VRChatInstanceTypeExt toVRChatInstanceTypeExt(VRChatInstanceType type, bool canR
       return VRChatInstanceTypeExt.friends;
     case VRChatInstanceType.private:
       return canRequestInvite ? VRChatInstanceTypeExt.invitePlus : VRChatInstanceTypeExt.invite;
+    case VRChatInstanceType.group:
+      return VRChatInstanceTypeExt.group;
   }
 }
 
