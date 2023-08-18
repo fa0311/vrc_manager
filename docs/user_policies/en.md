@@ -9,7 +9,7 @@ In the event of any inconsistency between this English privacy policy and the co
 
 ## Use of data
 
-Personal data obtained through the use of the Service is governed by the [privacy policy](. /privacy_policy/en.md).
+Personal data obtained through the use of the Service is governed by the [privacy policy](../privacy_policy/en.md).
 
 ## Account and registration
 
@@ -42,7 +42,7 @@ In the event of disputes regarding the Service, the court with jurisdiction over
 
 ## Changes to the User Policy
 
-We may update the User Policy from time to time. As the User Policy is maintained on Github, you will be notified of changes when we post a new User Policy on this page by enabling Notifications on Github. These changes will take effect immediately after they are posted on this page. More information about notifications can be found [here](https://docs.github.com/en/account-and-profile/managing-subscriptions-and-notifications-on-github/setting-up- notifications/configuring-notifications).
+We may update the User Policy from time to time. As the User Policy is maintained on Github, you will be notified of changes when we post a new User Policy on this page by enabling Notifications on Github. These changes will take effect immediately after they are posted on this page. More information about notifications can be found [here](https://docs.github.com/en/account-and-profile/managing-subscriptions-and-notifications-on-github/setting-up-notifications/configuring-notifications).
 
 ## Transparency of the Service
 
