@@ -51,7 +51,7 @@ dependencies:
     sdk: flutter
   import_sorter: ^4.6.0
   intl: ^0.18.0
-  webview_flutter: <4.0.0
+  webview_flutter: ^4.4.1
   flutter_inappwebview: ^5.4.3+7
   domain_verification_manager: ^1.0.0
   device_info_plus: ^9.0.2
