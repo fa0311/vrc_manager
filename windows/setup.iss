@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "VRCManager"
-#define MyAppVersion "3.4.0"
+#define MyAppVersion "5.0.3"
 #define MyAppPublisher "yuki"
 #define MyAppURL "https://yuki0311.com/"
 #define MyAppExeName "vrc_manager.exe"

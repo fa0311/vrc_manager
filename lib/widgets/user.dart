@@ -264,10 +264,10 @@ class BioLink extends ConsumerWidget {
               padding: const EdgeInsets.all(5),
               child: Ink(
                 child: SvgPicture.asset(
-                  Assets.svg.resolve("${byVrchatExternalServices(url).text}.svg").toFilePath(),
+                  Assets.svg.resolve("${byVrchatExternalServices(url).text}.svg").toFilePath(windows: false),
                   width: 20,
                   height: 20,
-                  // colorFilter: ColorFilter.mode(Color(byVrchatExternalServices(url).color), BlendMode.srcIn),
+                  colorFilter: ColorFilter.mode(Color(byVrchatExternalServices(url).color), BlendMode.srcIn),
                   semanticsLabel: url.toString(),
                 ),
               ),
