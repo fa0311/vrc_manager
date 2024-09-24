@@ -1,9 +1,7 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
-
 // Package imports:
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 // Project imports:
 import 'package:vrc_manager/api/assets/instance_type.dart';
 import 'package:vrc_manager/api/data_class.dart';
@@ -35,7 +33,7 @@ class ExtractionUser extends ConsumerGridWidget {
         () {
           if (config.joinable && VRChatInstanceIdOther.values.any((id) => id.name == user.location)) return null;
           return GenericTemplate(
-            imageUrl: user.profilePicOverride ?? user.currentAvatarThumbnailImageUrl,
+            imageUrl: user.profilePicOverride ?? user.currentAvatarThumbnailImageUrl ?? "",
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(
@@ -64,7 +62,7 @@ class ExtractionUser extends ConsumerGridWidget {
         () {
           if (config.joinable && VRChatInstanceIdOther.values.any((id) => id.name == user.location)) return null;
           return GenericTemplate(
-            imageUrl: user.profilePicOverride ?? user.currentAvatarThumbnailImageUrl,
+            imageUrl: user.profilePicOverride ?? user.currentAvatarThumbnailImageUrl ?? "",
             half: true,
             onTap: () => Navigator.push(
               context,

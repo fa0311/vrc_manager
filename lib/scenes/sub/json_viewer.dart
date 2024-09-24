@@ -3,19 +3,17 @@ import 'dart:convert';
 
 // Flutter imports:
 import 'package:flutter/material.dart';
-
 // Package imports:
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_json_viewer/flutter_json_viewer.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 // Project imports:
 import 'package:vrc_manager/widgets/modal.dart';
 import 'package:vrc_manager/widgets/modal/share.dart';
 
 class VRChatMobileJsonViewer extends ConsumerWidget {
   final dynamic content;
-  const VRChatMobileJsonViewer({Key? key, required this.content}) : super(key: key);
+  const VRChatMobileJsonViewer({super.key, required this.content});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

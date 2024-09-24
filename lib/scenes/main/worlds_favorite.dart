@@ -1,9 +1,7 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
-
 // Package imports:
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 // Project imports:
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
@@ -80,7 +78,7 @@ final vrchatMobileWorldFavoriteSortProvider = FutureProvider<VRChatMobileWorldFa
 });
 
 class VRChatMobileWorldsFavorite extends ConsumerWidget {
-  const VRChatMobileWorldsFavorite({Key? key}) : super(key: key);
+  const VRChatMobileWorldsFavorite({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

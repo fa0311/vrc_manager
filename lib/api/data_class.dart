@@ -1,6 +1,7 @@
 // Project imports:
 import 'package:vrc_manager/api/assets/instance_type.dart';
 import 'package:vrc_manager/api/assets/region.dart';
+
 import 'assets/status.dart';
 
 class VRChatStatus {
@@ -133,7 +134,7 @@ class VRChatUser {
 
   late String? bio;
   late String currentAvatarImageUrl;
-  late String currentAvatarThumbnailImageUrl;
+  late String? currentAvatarThumbnailImageUrl;
   late String developerType;
   late String displayName;
   late String? fallbackAvatar;
@@ -242,7 +243,7 @@ class VRChatWorld extends VRChatLimitedWorld {
     description = content['description'] == "" ? null : content['description'];
     featured = content['featured'] ?? false;
     instances = content['instances'].cast<Map<String, int>>();
-    namespace = content['namespace'];
+    // namespace = content['namespace'];
     previewYoutubeId = content['previewYoutubeId'] == "" ? null : content['previewYoutubeId'];
     privateOccupants = content['privateOccupants'];
     publicOccupants = content['publicOccupants'];
@@ -554,7 +555,7 @@ class UnityPackages extends LimitedUnityPackages {
     assetVersion = content['assetVersion'];
     createdAt = content['created_at'] == null ? null : DateTime.parse(content['created_at']);
     id = content['id'];
-    pluginUrl = content['pluginUrl'];
+    // pluginUrl = content['pluginUrl'];
     pluginUrlObject = content['pluginUrlObject'];
     unitySortNumber = content['unitySortNumber'];
   }
