@@ -4,12 +4,9 @@ import 'dart:io';
 // Flutter imports:
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
 // Package imports:
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:webview_flutter/webview_flutter.dart';
-
 // Project imports:
 import 'package:vrc_manager/assets.dart';
 import 'package:vrc_manager/storage/user_policy.dart';
@@ -17,9 +14,10 @@ import 'package:vrc_manager/widgets/config_modal/locale.dart';
 import 'package:vrc_manager/widgets/modal.dart';
 import 'package:vrc_manager/widgets/modal/share.dart';
 import 'package:vrc_manager/widgets/share.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 class VRChatMobileWebViewUserPolicy extends ConsumerWidget {
-  const VRChatMobileWebViewUserPolicy({Key? key}) : super(key: key);
+  const VRChatMobileWebViewUserPolicy({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

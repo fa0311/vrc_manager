@@ -5,12 +5,10 @@ import 'dart:io';
 
 // Flutter imports:
 import 'package:flutter/material.dart';
-
 // Package imports:
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
-
 // Project imports:
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
 import 'package:vrc_manager/assets/flutter/url_parser.dart';
@@ -75,10 +73,10 @@ class VRChatMobileSplash extends ConsumerWidget {
   final Widget child;
   final Widget login;
   const VRChatMobileSplash({
-    Key? key,
+    super.key,
     this.child = const VRChatMobileHome(),
     this.login = const VRChatMobileLogin(),
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

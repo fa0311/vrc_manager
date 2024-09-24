@@ -1,10 +1,7 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
-
 // Package imports:
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:webview_flutter/webview_flutter.dart';
-
 // Project imports:
 import 'package:vrc_manager/api/assets/assets.dart';
 import 'package:vrc_manager/assets/session.dart';
@@ -13,13 +10,14 @@ import 'package:vrc_manager/storage/accessibility.dart';
 import 'package:vrc_manager/widgets/modal.dart';
 import 'package:vrc_manager/widgets/modal/share.dart';
 import 'package:vrc_manager/widgets/share.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 final timeStampProvider = StateProvider<int>((ref) => 0);
 final urlProvider = StateProvider.autoDispose<Uri?>((ref) => null);
 final webViewControllerProvider = StateProvider<WebViewController?>((ref) => null);
 
 class VRChatMobileWebView extends ConsumerWidget {
-  const VRChatMobileWebView({Key? key, required this.initUrl}) : super(key: key);
+  const VRChatMobileWebView({super.key, required this.initUrl});
 
   final Uri initUrl;
 
