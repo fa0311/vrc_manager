@@ -1,10 +1,8 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
-
 // Package imports:
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 // Project imports:
 import 'package:vrc_manager/scenes/main/search.dart';
 import 'package:vrc_manager/storage/accessibility.dart';
@@ -128,7 +126,7 @@ class GridSortModal extends ConsumerWidget {
 class GridDisplayModeModal extends ConsumerWidget {
   final GridModalConfigType type;
 
-  const GridDisplayModeModal({Key? key, required this.type}) : super(key: key);
+  const GridDisplayModeModal({super.key, required this.type});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

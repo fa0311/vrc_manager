@@ -66,7 +66,7 @@ class VRChatMobileWebViewUserPolicy extends ConsumerWidget {
                 flex: 2,
                 child: ElevatedButton(
                   onPressed: () => SystemNavigator.pop(),
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.grey),
+                  style: ElevatedButton.styleFrom(),
                   child: Text(
                     AppLocalizations.of(context)!.disagree,
                   ),

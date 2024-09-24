@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 // Package imports:
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 // Project imports:
 import 'package:vrc_manager/assets/flutter/text_stream.dart';
 import 'package:vrc_manager/assets/flutter/url_parser.dart';
@@ -107,9 +106,8 @@ class VRChatMobileSplash extends ConsumerWidget {
                 () async {
                   if (!Platform.isAndroid && !Platform.isIOS) return;
                   if (!ref.read(isFirstProvider)) return;
-                  String? initialText = await ReceiveSharingIntent.getInitialText();
-                  if (initialText == null) return;
-                  Widget? value = await urlParser(url: Uri.parse(initialText), forceExternal: accessibilityConfig.forceExternalBrowser);
+                  String? initialText = await initTest();
+                  Widget? value = await urlParser(url: Uri.parse(initialText!), forceExternal: accessibilityConfig.forceExternalBrowser);
                   if (value == null) return;
                   Navigator.of(context).popUntil((route) => route.isFirst);
                   Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => value));
