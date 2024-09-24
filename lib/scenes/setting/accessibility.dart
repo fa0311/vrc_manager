@@ -3,11 +3,9 @@ import 'dart:io';
 
 // Flutter imports:
 import 'package:flutter/material.dart';
-
 // Package imports:
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 // Project imports:
 import 'package:vrc_manager/storage/accessibility.dart';
 import 'package:vrc_manager/widgets/config_modal/locale.dart';
@@ -15,7 +13,7 @@ import 'package:vrc_manager/widgets/config_modal/theme.dart';
 import 'package:vrc_manager/widgets/modal.dart';
 
 class VRChatMobileSettingsAccessibility extends ConsumerWidget {
-  const VRChatMobileSettingsAccessibility({Key? key}) : super(key: key);
+  const VRChatMobileSettingsAccessibility({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

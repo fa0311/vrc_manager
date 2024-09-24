@@ -1,10 +1,8 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
-
 // Package imports:
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 // Project imports:
 import 'package:vrc_manager/scenes/main/friend_request.dart';
 import 'package:vrc_manager/scenes/main/friends.dart';
@@ -60,7 +58,7 @@ enum CurrentIndex {
 }
 
 class FastScrollPhysics extends ScrollPhysics {
-  const FastScrollPhysics({ScrollPhysics? parent}) : super(parent: parent);
+  const FastScrollPhysics({super.parent});
   @override
   FastScrollPhysics applyTo(ScrollPhysics? ancestor) {
     return FastScrollPhysics(parent: buildParent(ancestor));
@@ -75,7 +73,7 @@ class FastScrollPhysics extends ScrollPhysics {
 }
 
 class VRChatMobileHome extends ConsumerWidget {
-  const VRChatMobileHome({Key? key}) : super(key: key);
+  const VRChatMobileHome({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

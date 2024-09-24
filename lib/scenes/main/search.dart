@@ -1,10 +1,8 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
-
 // Package imports:
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 // Project imports:
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
@@ -99,7 +97,7 @@ final vrchatMobileSearchProvider = FutureProvider<VRChatMobileSearchData>((ref) 
 });
 
 class VRChatMobileSearch extends ConsumerWidget {
-  const VRChatMobileSearch({Key? key}) : super(key: key);
+  const VRChatMobileSearch({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -183,7 +181,7 @@ class VRChatMobileSearch extends ConsumerWidget {
 }
 
 class VRChatMobileSearchResult extends ConsumerWidget {
-  const VRChatMobileSearchResult({Key? key}) : super(key: key);
+  const VRChatMobileSearchResult({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

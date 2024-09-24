@@ -1,10 +1,8 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
-
 // Package imports:
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 // Project imports:
 import 'package:vrc_manager/api/assets/assets.dart';
 import 'package:vrc_manager/api/main.dart';
@@ -36,7 +34,7 @@ final webViewInitProvider = FutureProvider.autoDispose<void>((ref) async {
     for (String key in cookieMap.keys)
       cookieManager.setCookie(
         name: key,
-        url: VRChatAssets.vrchat,
+        url: WebUri.uri(VRChatAssets.vrchat),
         value: cookieMap[key] ?? "",
         isSecure: true,
         isHttpOnly: true,
@@ -45,7 +43,7 @@ final webViewInitProvider = FutureProvider.autoDispose<void>((ref) async {
 });
 
 class VRChatMobileWebViewLogin extends ConsumerWidget {
-  const VRChatMobileWebViewLogin({Key? key}) : super(key: key);
+  const VRChatMobileWebViewLogin({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -78,7 +76,7 @@ class VRChatMobileWebViewLogin extends ConsumerWidget {
           },
           data: (data) => InAppWebView(
             key: webViewKey,
-            initialUrlRequest: URLRequest(url: initUrl),
+            initialUrlRequest: URLRequest(url: WebUri.uri(initUrl)),
             initialOptions: InAppWebViewGroupOptions(
               crossPlatform: InAppWebViewOptions(
                 useShouldOverrideUrlLoading: true,
@@ -90,7 +88,7 @@ class VRChatMobileWebViewLogin extends ConsumerWidget {
             onTitleChanged: (controller, title) async {
               if (title != VRChatAssets.homeTitle) return;
               CookieManager cookieManager = CookieManager.instance();
-              List<Cookie> cookieList = await cookieManager.getCookies(url: VRChatAssets.vrchat);
+              List<Cookie> cookieList = await cookieManager.getCookies(url: WebUri.uri(VRChatAssets.vrchat));
               Map<String, String> cookieMap = {};
               for (Cookie cookie in cookieList) {
                 cookieMap[cookie.name] = cookie.value;
