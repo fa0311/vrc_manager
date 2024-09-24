@@ -13,7 +13,7 @@ textStream({required BuildContext context, required bool forceExternal}) async {
   if (!Platform.isAndroid && !Platform.isIOS) return;
   await for (final file in FlutterSharingIntent().getMediaStream()) {
     for (final SharedFile sharedFile in file) {
-      if (sharedFile.type == SharedMediaType.TEXT) {
+      if (sharedFile.type == SharedMediaType.TEXT || sharedFile.type == SharedMediaType.URL) {
         String text = sharedFile.value!;
         Widget? value = await urlParser(url: Uri.parse(text), forceExternal: forceExternal);
         if (value == null) return;
@@ -27,7 +27,7 @@ textStream({required BuildContext context, required bool forceExternal}) async {
 Future<String?> initTest() async {
   final sharedFile = await FlutterSharingIntent().getInitialSharing();
   for (final SharedFile sharedFile in sharedFile) {
-    if (sharedFile.type == SharedMediaType.TEXT) {
+    if (sharedFile.type == SharedMediaType.TEXT || sharedFile.type == SharedMediaType.URL) {
       String text = sharedFile.value!;
       return text;
     }

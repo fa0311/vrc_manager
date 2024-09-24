@@ -107,7 +107,8 @@ class VRChatMobileSplash extends ConsumerWidget {
                   if (!Platform.isAndroid && !Platform.isIOS) return;
                   if (!ref.read(isFirstProvider)) return;
                   String? initialText = await initTest();
-                  Widget? value = await urlParser(url: Uri.parse(initialText!), forceExternal: accessibilityConfig.forceExternalBrowser);
+                  if (initialText == null) return;
+                  Widget? value = await urlParser(url: Uri.parse(initialText), forceExternal: accessibilityConfig.forceExternalBrowser);
                   if (value == null) return;
                   Navigator.of(context).popUntil((route) => route.isFirst);
                   Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => value));
