@@ -7,8 +7,7 @@ import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/storage/grid_modal.dart';
 import 'package:vrc_manager/widgets/grid_modal/config.dart';
 
-List<VRChatUser> sortUsers(
-    GridConfigNotifier config, List<VRChatUser> userList) {
+List<VRChatUser> sortUsers(GridConfigNotifier config, List<VRChatUser> userList) {
   switch (config.sortMode) {
     case SortMode.name:
       sortByNameFromUser(userList);
@@ -84,10 +83,12 @@ sortByLastLoginFromUser(List<VRChatUser> userList) {
   userList.sort((userA, userB) {
     if (userA.lastLogin == null) return 1;
     if (userB.lastLogin == null) return -1;
-    if (userA.lastLogin!.millisecondsSinceEpoch >
-        userB.lastLogin!.millisecondsSinceEpoch) return -1;
-    if (userA.lastLogin!.millisecondsSinceEpoch <
-        userB.lastLogin!.millisecondsSinceEpoch) return 1;
+    if (userA.lastLogin!.millisecondsSinceEpoch > userB.lastLogin!.millisecondsSinceEpoch) {
+      return -1;
+    }
+    if (userA.lastLogin!.millisecondsSinceEpoch < userB.lastLogin!.millisecondsSinceEpoch) {
+      return 1;
+    }
     return 0;
   });
 }

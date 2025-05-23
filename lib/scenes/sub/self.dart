@@ -47,8 +47,9 @@ final vrchatMobileSelfProvider =
   VRChatUserSelf user = await vrchatLoginSession
       .selfUser(ref.read(accountConfigProvider).loggedAccount?.data?.id ?? "");
 
-  if (VRChatInstanceIdOther.values.any((id) => id.name == user.location))
+  if (VRChatInstanceIdOther.values.any((id) => id.name == user.location)) {
     return VRChatMobileSelfData(user: user);
+  }
 
   await Future.wait([
     vrchatLoginSession
@@ -118,13 +119,17 @@ class VRChatMobileSelf extends ConsumerWidget {
                             vertical: 10, horizontal: 0),
                         child: () {
                           if (data.user.location ==
-                              VRChatInstanceIdOther.private.name)
+                              VRChatInstanceIdOther.private.name) {
                             return const PrivateWorld();
+                          }
                           if (data.user.location ==
-                              VRChatInstanceIdOther.traveling.name)
+                              VRChatInstanceIdOther.traveling.name) {
                             return const TravelingWorld();
+                          }
                           if (data.user.location ==
-                              VRChatInstanceIdOther.offline.name) return null;
+                              VRChatInstanceIdOther.offline.name) {
+                            return null;
+                          }
                           return data.world == null
                               ? null
                               : InstanceWidget(

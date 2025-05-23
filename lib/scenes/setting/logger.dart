@@ -166,8 +166,9 @@ class ErrorPage extends ConsumerWidget {
                             title: Text(
                                 AppLocalizations.of(context)!.viewDetailedLogs),
                             onChanged: (bool value) {
-                              if (!loggerFilter.remove(Level.warning))
+                              if (!loggerFilter.remove(Level.warning)) {
                                 loggerFilter.add(Level.warning);
+                              }
                               ref.read(loggerFilterProvider.notifier).state = [
                                 ...loggerFilter
                               ];

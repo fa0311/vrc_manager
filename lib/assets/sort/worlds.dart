@@ -54,9 +54,13 @@ sortByNameFromWorlds(List<VRChatLimitedWorld> worldList) {
 sortByUpdatedDateFromWorlds(List<VRChatLimitedWorld> worldList) {
   worldList.sort((userA, userB) {
     if (userA.updatedAt.millisecondsSinceEpoch >
-        userB.updatedAt.millisecondsSinceEpoch) return -1;
+        userB.updatedAt.millisecondsSinceEpoch) {
+      return -1;
+    }
     if (userA.updatedAt.millisecondsSinceEpoch <
-        userB.updatedAt.millisecondsSinceEpoch) return 1;
+        userB.updatedAt.millisecondsSinceEpoch) {
+      return 1;
+    }
     return 0;
   });
 }
@@ -66,9 +70,13 @@ sortByLabsPublicationDateFromWorlds(List<VRChatLimitedWorld> worldList) {
     if (userA.labsPublicationDate == null) return 1;
     if (userB.labsPublicationDate == null) return -1;
     if (userA.labsPublicationDate!.millisecondsSinceEpoch >
-        userB.labsPublicationDate!.millisecondsSinceEpoch) return -1;
+        userB.labsPublicationDate!.millisecondsSinceEpoch) {
+      return -1;
+    }
     if (userA.labsPublicationDate!.millisecondsSinceEpoch <
-        userB.labsPublicationDate!.millisecondsSinceEpoch) return 1;
+        userB.labsPublicationDate!.millisecondsSinceEpoch) {
+      return 1;
+    }
     return 0;
   });
 }

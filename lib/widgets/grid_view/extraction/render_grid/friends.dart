@@ -40,7 +40,9 @@ class ExtractionFriend extends ConsumerGridWidget {
         () {
           if (config.joinable &&
               VRChatInstanceIdOther.values
-                  .any((id) => id.name == user.location)) return null;
+                  .any((id) => id.name == user.location)) {
+            return null;
+          }
           String worldId = user.location.split(":")[0];
           return GenericTemplate(
             imageUrl: user.profilePicOverride ??
@@ -65,12 +67,15 @@ class ExtractionFriend extends ConsumerGridWidget {
             },
             bottom: () {
               if (!config.worldDetails) return null;
-              if (user.location == VRChatInstanceIdOther.private.name)
+              if (user.location == VRChatInstanceIdOther.private.name) {
                 return const PrivateWorld(card: false);
-              if (user.location == VRChatInstanceIdOther.traveling.name)
+              }
+              if (user.location == VRChatInstanceIdOther.traveling.name) {
                 return const TravelingWorld(card: false);
-              if (user.location == VRChatInstanceIdOther.offline.name)
+              }
+              if (user.location == VRChatInstanceIdOther.offline.name) {
                 return const OnTheWebsite();
+              }
               if (locationMap[worldId] == null) return null;
               return InstanceWidget(
                   world: locationMap[worldId]!,
@@ -110,7 +115,9 @@ class ExtractionFriend extends ConsumerGridWidget {
         () {
           if (config.joinable &&
               VRChatInstanceIdOther.values
-                  .any((id) => id.name == user.location)) return null;
+                  .any((id) => id.name == user.location)) {
+            return null;
+          }
           String worldId = user.location.split(":")[0];
           return GenericTemplate(
             imageUrl: user.profilePicOverride ??
@@ -136,12 +143,15 @@ class ExtractionFriend extends ConsumerGridWidget {
             },
             bottom: () {
               if (!config.worldDetails) return null;
-              if (user.location == VRChatInstanceIdOther.private.name)
+              if (user.location == VRChatInstanceIdOther.private.name) {
                 return const PrivateWorld(card: false, half: true);
-              if (user.location == VRChatInstanceIdOther.traveling.name)
+              }
+              if (user.location == VRChatInstanceIdOther.traveling.name) {
                 return const TravelingWorld(card: false, half: true);
-              if (user.location == VRChatInstanceIdOther.offline.name)
+              }
+              if (user.location == VRChatInstanceIdOther.offline.name) {
                 return const OnTheWebsite(half: true);
+              }
               if (locationMap[worldId] == null) return null;
               return InstanceWidget(
                   world: locationMap[worldId]!,
@@ -184,7 +194,9 @@ class ExtractionFriend extends ConsumerGridWidget {
         () {
           if (config.joinable &&
               VRChatInstanceIdOther.values
-                  .any((id) => id.name == user.location)) return null;
+                  .any((id) => id.name == user.location)) {
+            return null;
+          }
           String worldId = user.location.split(":")[0];
           return GenericTemplateText(
             onTap: () => Navigator.push(
@@ -224,12 +236,15 @@ class ExtractionFriend extends ConsumerGridWidget {
                   fontWeight: style.title.fontWeight),
               if (config.worldDetails)
                 Text(() {
-                  if (user.location == VRChatInstanceIdOther.offline.name)
+                  if (user.location == VRChatInstanceIdOther.offline.name) {
                     return AppLocalizations.of(context)!.privateWorld;
-                  if (user.location == VRChatInstanceIdOther.traveling.name)
+                  }
+                  if (user.location == VRChatInstanceIdOther.traveling.name) {
                     return AppLocalizations.of(context)!.loadingWorld;
-                  if (user.location == VRChatInstanceIdOther.offline.name)
+                  }
+                  if (user.location == VRChatInstanceIdOther.offline.name) {
                     return AppLocalizations.of(context)!.onTheWebsite;
+                  }
                   if (locationMap[worldId] == null) return "";
                   return locationMap[worldId]!.name;
                 }(), style: style.details),

@@ -36,7 +36,9 @@ class ExtractionUser extends ConsumerGridWidget {
         () {
           if (config.joinable &&
               VRChatInstanceIdOther.values
-                  .any((id) => id.name == user.location)) return null;
+                  .any((id) => id.name == user.location)) {
+            return null;
+          }
           return GenericTemplate(
             imageUrl: user.profilePicOverride ??
                 user.currentAvatarThumbnailImageUrl ??
@@ -77,7 +79,9 @@ class ExtractionUser extends ConsumerGridWidget {
         () {
           if (config.joinable &&
               VRChatInstanceIdOther.values
-                  .any((id) => id.name == user.location)) return null;
+                  .any((id) => id.name == user.location)) {
+            return null;
+          }
           return GenericTemplate(
             imageUrl: user.profilePicOverride ??
                 user.currentAvatarThumbnailImageUrl ??
@@ -119,7 +123,9 @@ class ExtractionUser extends ConsumerGridWidget {
         () {
           if (config.joinable &&
               VRChatInstanceIdOther.values
-                  .any((id) => id.name == user.location)) return null;
+                  .any((id) => id.name == user.location)) {
+            return null;
+          }
           return GenericTemplateText(
             onTap: () => Navigator.push(
               context,
