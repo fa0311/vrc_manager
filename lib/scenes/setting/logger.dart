@@ -2,21 +2,19 @@
 import 'dart:convert';
 import 'dart:io';
 
+// Package imports:
+import 'package:device_info_plus/device_info_plus.dart';
 // Flutter imports:
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
-// Package imports:
-import 'package:device_info_plus/device_info_plus.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-
 // Project imports:
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/assets.dart';
 import 'package:vrc_manager/assets/date.dart';
+import 'package:vrc_manager/l10n/app_localizations.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/storage/accessibility.dart';
 import 'package:vrc_manager/widgets/modal.dart';

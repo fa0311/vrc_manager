@@ -2,20 +2,19 @@ name: "📓 Report a translation error"
 description: Report error message in vrc_manager.
 labels: ["bug"]
 body:
-
   - type: dropdown
     id: language
     attributes:
       label: Language
       options:
-      - English
-      - 日本語
-      - español
-      - Português
-      - русский
-      - ไทย
-      - 简体中文
-      - Other
+        - English
+        - 日本語
+        - español
+        - Português
+        - русский
+        - ไทย
+        - 简体中文
+        - Other
     validations:
       required: true
 
@@ -24,8 +23,8 @@ body:
     attributes:
       label: Are you a native speaker of the language?
       options:
-      - "True"
-      - "False"
+        - "True"
+        - "False"
     validations:
       required: true
 
@@ -41,12 +40,11 @@ body:
     validations:
       required: true
 
-
   - type: input
     id: incorrect-translation
     attributes:
       label: Incorrect translation
-      description:  Please enter the incorrect translation.
+      description: Please enter the incorrect translation.
       placeholder: "Example: 3 Billion Devices Run Coffee."
     validations:
       required: true
@@ -59,7 +57,6 @@ body:
       placeholder: "Example: 3 Billion Devices Run Java."
     validations:
       required: true
-
 
   - type: textarea
     id: note

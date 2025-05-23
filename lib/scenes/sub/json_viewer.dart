@@ -3,10 +3,10 @@ import 'dart:convert';
 
 // Flutter imports:
 import 'package:flutter/material.dart';
-// Package imports:
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_json_viewer/flutter_json_viewer.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+// Package imports:
+import 'package:vrc_manager/l10n/app_localizations.dart';
 // Project imports:
 import 'package:vrc_manager/widgets/modal.dart';
 import 'package:vrc_manager/widgets/modal/share.dart';

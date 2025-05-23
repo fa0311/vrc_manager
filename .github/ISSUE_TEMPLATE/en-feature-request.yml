@@ -2,7 +2,6 @@ name: "[en] 💡 Request a feature"
 description: Please suggest features you would like to see in vrc_manager
 labels: ["enhancement"]
 body:
-
   - type: textarea
     id: feature-description
     attributes:

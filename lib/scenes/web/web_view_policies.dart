@@ -5,16 +5,16 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 // Package imports:
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 // Project imports:
 import 'package:vrc_manager/assets.dart';
+import 'package:vrc_manager/l10n/app_localizations.dart';
 import 'package:vrc_manager/storage/user_policy.dart';
 import 'package:vrc_manager/widgets/config_modal/locale.dart';
 import 'package:vrc_manager/widgets/modal.dart';
 import 'package:vrc_manager/widgets/modal/share.dart';
 import 'package:vrc_manager/widgets/share.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
 class VRChatMobileWebViewUserPolicy extends ConsumerWidget {
   const VRChatMobileWebViewUserPolicy({super.key});
@@ -91,9 +91,13 @@ class VRChatMobileWebViewUserPolicy extends ConsumerWidget {
       ),
       body: () {
         if (Platform.isAndroid || Platform.isIOS) {
-          return WebView(
-            initialUrl: Assets.userPolicy.toString(),
-            javascriptMode: JavascriptMode.unrestricted,
+          return InAppWebView(
+            initialUrlRequest: URLRequest(url: WebUri(Assets.userPolicy.toString())),
+            initialOptions: InAppWebViewGroupOptions(
+              crossPlatform: InAppWebViewOptions(
+                javaScriptEnabled: true,
+              ),
+            ),
           );
         } else {
           openInBrowser(url: Assets.userPolicy, forceExternal: true).then((value) {

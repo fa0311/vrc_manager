@@ -2,7 +2,6 @@ name: "[ja] 🐛 バグを報告する"
 description: vrc_managerの不具合を報告する。
 labels: ["bug"]
 body:
-
   - type: input
     id: os
     attributes:
