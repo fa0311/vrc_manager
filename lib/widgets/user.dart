@@ -1,14 +1,11 @@
 // Flutter imports:
 
-// Flutter imports:
-import 'package:flutter/material.dart';
-
 // Package imports:
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:vrc_manager/l10n/app_localizations.dart';
+// Flutter imports:
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
 // Project imports:
 import 'package:vrc_manager/api/assets/icon.dart';
 import 'package:vrc_manager/api/data_class.dart';
@@ -16,6 +13,7 @@ import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets.dart';
 import 'package:vrc_manager/assets/anchor.dart';
 import 'package:vrc_manager/assets/date.dart';
+import 'package:vrc_manager/l10n/app_localizations.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/core/splash.dart';
 import 'package:vrc_manager/scenes/setting/logger.dart';
@@ -32,11 +30,7 @@ class Username extends ConsumerWidget {
   final VRChatUser user;
   final double? diameter;
   final FontWeight? fontWeight;
-  const Username(
-      {super.key,
-      required this.user,
-      this.diameter = 20,
-      this.fontWeight = FontWeight.bold});
+  const Username({super.key, required this.user, this.diameter = 20, this.fontWeight = FontWeight.bold});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -72,8 +66,7 @@ class UserProfile extends ConsumerWidget {
           child: CachedNetworkImage(
             imageUrl: user.profilePicOverride ?? user.currentAvatarImageUrl,
             fit: BoxFit.fitWidth,
-            progressIndicatorBuilder: (context, url, downloadProgress) =>
-                const SizedBox(
+            progressIndicatorBuilder: (context, url, downloadProgress) => const SizedBox(
               width: 250,
               child: Padding(
                 padding: EdgeInsets.all(30),
@@ -124,9 +117,7 @@ class UserProfile extends ConsumerWidget {
   }
 }
 
-final bioControllerProvider =
-    StateProvider.family<TextEditingController, VRChatUser>(
-        (ref, user) => TextEditingController(text: user.bio));
+final bioControllerProvider = StateProvider.family<TextEditingController, VRChatUser>((ref, user) => TextEditingController(text: user.bio));
 
 class EditBio extends ConsumerWidget {
   final VRChatUser user;
@@ -145,8 +136,7 @@ class EditBio extends ConsumerWidget {
       content: TextField(
         controller: controller,
         maxLines: null,
-        decoration:
-            InputDecoration(labelText: AppLocalizations.of(context)!.editBio),
+        decoration: InputDecoration(labelText: AppLocalizations.of(context)!.editBio),
       ),
       actions: <Widget>[
         TextButton(
@@ -157,15 +147,13 @@ class EditBio extends ConsumerWidget {
           child: Text(AppLocalizations.of(context)!.save),
           onPressed: () async {
             try {
-              await vrchatLoginSession.changeBio(
-                  user.id, user.bio = controller.text);
+              await vrchatLoginSession.changeBio(user.id, user.bio = controller.text);
               user.bio = user.bio == "" ? null : user.bio;
               ref.read(vrchatUserCountProvider.notifier).state++;
               Navigator.pop(context);
             } catch (e, trace) {
               logger.e(getMessage(e), error: e, stackTrace: trace);
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text(errorMessage(context: context, status: e))));
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage(context: context, status: e))));
             }
           },
         ),
@@ -174,17 +162,14 @@ class EditBio extends ConsumerWidget {
   }
 }
 
-final noteControllerProvider =
-    FutureProvider.family<TextEditingController, VRChatUser>((ref, user) async {
+final noteControllerProvider = FutureProvider.family<TextEditingController, VRChatUser>((ref, user) async {
   final VRChatAPI vrchatLoginSession = VRChatAPI(
     cookie: ref.read(accountConfigProvider).loggedAccount!.cookie ?? "",
     userAgent: ref.watch(accountConfigProvider).userAgent,
     logger: logger,
   );
   if (user.note == null) {
-    await vrchatLoginSession
-        .users(user.id)
-        .then((value) => user.note = value.note);
+    await vrchatLoginSession.users(user.id).then((value) => user.note = value.note);
   }
   return TextEditingController(text: user.note);
 });
@@ -200,8 +185,7 @@ class EditNote extends ConsumerWidget {
       userAgent: ref.watch(accountConfigProvider).userAgent,
       logger: logger,
     );
-    AsyncValue<TextEditingController> data =
-        ref.watch(noteControllerProvider(user));
+    AsyncValue<TextEditingController> data = ref.watch(noteControllerProvider(user));
 
     return data.when(
       loading: () => const Center(child: CircularProgressIndicator()),
@@ -216,8 +200,7 @@ class EditNote extends ConsumerWidget {
         content: TextField(
           controller: data,
           maxLines: null,
-          decoration: InputDecoration(
-              labelText: AppLocalizations.of(context)!.editNote),
+          decoration: InputDecoration(labelText: AppLocalizations.of(context)!.editNote),
         ),
         actions: <Widget>[
           TextButton(
@@ -228,15 +211,13 @@ class EditNote extends ConsumerWidget {
             child: Text(AppLocalizations.of(context)!.save),
             onPressed: () async {
               try {
-                await vrchatLoginSession.userNotes(
-                    user.id, user.note = data.text);
+                await vrchatLoginSession.userNotes(user.id, user.note = data.text);
                 user.note = user.note == "" ? null : user.note;
                 ref.read(vrchatUserCountProvider.notifier).state++;
                 Navigator.pop(context);
               } catch (e, trace) {
                 logger.e(getMessage(e), error: e, stackTrace: trace);
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text(errorMessage(context: context, status: e))));
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage(context: context, status: e))));
               }
             },
           ),
@@ -252,8 +233,7 @@ class BioLink extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    AccessibilityConfigNotifier accessibilityConfig =
-        ref.watch(accessibilityConfigProvider);
+    AccessibilityConfigNotifier accessibilityConfig = ref.watch(accessibilityConfigProvider);
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -282,14 +262,10 @@ class BioLink extends ConsumerWidget {
               padding: const EdgeInsets.all(5),
               child: Ink(
                 child: SvgPicture.asset(
-                  Assets.svg
-                      .resolve("${byVrchatExternalServices(url).text}.svg")
-                      .toFilePath(windows: false),
+                  Assets.svg.resolve("${byVrchatExternalServices(url).text}.svg").toFilePath(windows: false),
                   width: 20,
                   height: 20,
-                  colorFilter: ColorFilter.mode(
-                      Color(byVrchatExternalServices(url).color),
-                      BlendMode.srcIn),
+                  colorFilter: ColorFilter.mode(Color(byVrchatExternalServices(url).color), BlendMode.srcIn),
                   semanticsLabel: url.toString(),
                 ),
               ),

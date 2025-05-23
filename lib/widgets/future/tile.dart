@@ -8,13 +8,7 @@ class FutureTile extends StatefulWidget {
   final Widget? trailing;
 
   final Future Function() onTap;
-  const FutureTile(
-      {super.key,
-      this.title,
-      this.subtitle,
-      this.leading,
-      this.trailing,
-      required this.onTap});
+  const FutureTile({super.key, this.title, this.subtitle, this.leading, this.trailing, required this.onTap});
 
   @override
   FutureTileState createState() => FutureTileState();
@@ -51,8 +45,7 @@ class FutureTileState extends State<FutureTile> {
       trailing: state
           ? const Padding(
               padding: EdgeInsets.only(right: 2, top: 2),
-              child: SizedBox(
-                  width: 20, height: 20, child: CircularProgressIndicator()),
+              child: SizedBox(width: 20, height: 20, child: CircularProgressIndicator()),
             )
           : widget.trailing,
     );

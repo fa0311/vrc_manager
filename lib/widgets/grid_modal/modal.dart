@@ -1,8 +1,8 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 // Package imports:
 import 'package:vrc_manager/l10n/app_localizations.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 // Project imports:
 import 'package:vrc_manager/scenes/main/search.dart';
 import 'package:vrc_manager/storage/accessibility.dart';
@@ -24,10 +24,8 @@ class GridModal extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     String searchingText = ref.read(searchBoxControllerProvider).text;
     GridConfigNotifier config = ref.watch(gridConfigProvider(type));
-    GridModalConfigData gridModalConfig =
-        getGridModalConfig(type: type, text: searchingText);
-    AccessibilityConfigNotifier accessibilityConfig =
-        ref.watch(accessibilityConfigProvider);
+    GridModalConfigData gridModalConfig = getGridModalConfig(type: type, text: searchingText);
+    AccessibilityConfigNotifier accessibilityConfig = ref.watch(accessibilityConfigProvider);
     return SingleChildScrollView(
       child: Column(
         children: <Widget>[
@@ -103,8 +101,7 @@ class GridSortModal extends ConsumerWidget {
     ref.watch(vrchatMobileSearchCounterProvider);
     String searchingText = ref.read(searchBoxControllerProvider).text;
     GridConfigNotifier config = ref.watch(gridConfigProvider(type));
-    GridModalConfigData gridModalConfig =
-        getGridModalConfig(type: type, text: searchingText);
+    GridModalConfigData gridModalConfig = getGridModalConfig(type: type, text: searchingText);
 
     return SingleChildScrollView(
       child: Column(
@@ -112,8 +109,7 @@ class GridSortModal extends ConsumerWidget {
           for (SortMode sort in gridModalConfig.sortMode)
             ListTile(
               title: Text(sort.toLocalization(context)),
-              trailing:
-                  config.sortMode == sort ? const Icon(Icons.check) : null,
+              trailing: config.sortMode == sort ? const Icon(Icons.check) : null,
               onTap: () => config.setSort(sort),
             ),
           SwitchListTile(
@@ -137,8 +133,7 @@ class GridDisplayModeModal extends ConsumerWidget {
     ref.watch(vrchatMobileSearchCounterProvider);
     String text = ref.read(searchBoxControllerProvider).text;
     GridConfigNotifier config = ref.watch(gridConfigProvider(type));
-    GridModalConfigData gridModalConfig =
-        getGridModalConfig(type: type, text: text);
+    GridModalConfigData gridModalConfig = getGridModalConfig(type: type, text: text);
 
     return SingleChildScrollView(
         child: Column(
@@ -146,8 +141,7 @@ class GridDisplayModeModal extends ConsumerWidget {
         for (DisplayMode display in gridModalConfig.displayMode)
           ListTile(
             title: Text(display.toLocalization(context)),
-            trailing:
-                config.displayMode == display ? const Icon(Icons.check) : null,
+            trailing: config.displayMode == display ? const Icon(Icons.check) : null,
             onTap: () => config.setDisplayMode(display),
           ),
       ],

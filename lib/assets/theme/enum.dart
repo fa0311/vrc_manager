@@ -35,8 +35,7 @@ enum ThemeBrightness {
       case ThemeBrightness.light:
         return ThemeData(brightness: Brightness.light);
       case ThemeBrightness.dark:
-        return ThemeData(
-            brightness: Brightness.dark, primarySwatch: Colors.grey);
+        return ThemeData(brightness: Brightness.dark, primarySwatch: Colors.grey);
       case ThemeBrightness.black:
         return blackTheme();
       case ThemeBrightness.trueBlack:

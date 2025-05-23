@@ -26,42 +26,30 @@ class ExtractionUser extends ConsumerGridWidget {
   });
 
   @override
-  List<Widget> normal(BuildContext context, WidgetRef ref,
-      GridConfigNotifier config, ConsumerGridStyle style) {
-    VRChatFriendStatus userStatus = status ??
-        VRChatFriendStatus(
-            isFriend: false, incomingRequest: false, outgoingRequest: false);
+  List<Widget> normal(BuildContext context, WidgetRef ref, GridConfigNotifier config, ConsumerGridStyle style) {
+    VRChatFriendStatus userStatus = status ?? VRChatFriendStatus(isFriend: false, incomingRequest: false, outgoingRequest: false);
     return [
       for (VRChatUser user in sortUsers(config, userList))
         () {
-          if (config.joinable &&
-              VRChatInstanceIdOther.values
-                  .any((id) => id.name == user.location)) {
+          if (config.joinable && VRChatInstanceIdOther.values.any((id) => id.name == user.location)) {
             return null;
           }
           return GenericTemplate(
-            imageUrl: user.profilePicOverride ??
-                user.currentAvatarThumbnailImageUrl ??
-                "",
+            imageUrl: user.profilePicOverride ?? user.currentAvatarThumbnailImageUrl ?? "",
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (BuildContext context) =>
-                    VRChatMobileUser(userId: user.id),
+                builder: (BuildContext context) => VRChatMobileUser(userId: user.id),
               ),
             ),
             onLongPress: () {
               showModalBottomSheetStatelessWidget(
                 context: context,
-                builder: () =>
-                    UserDetailsModalBottom(user: user, status: userStatus),
+                builder: () => UserDetailsModalBottom(user: user, status: userStatus),
               );
             },
             children: [
-              Username(
-                  user: user,
-                  diameter: style.title.fontSize,
-                  fontWeight: style.title.fontWeight),
+              Username(user: user, diameter: style.title.fontSize, fontWeight: style.title.fontWeight),
             ],
           );
         }(),
@@ -69,43 +57,31 @@ class ExtractionUser extends ConsumerGridWidget {
   }
 
   @override
-  List<Widget> simple(BuildContext context, WidgetRef ref,
-      GridConfigNotifier config, ConsumerGridStyle style) {
-    VRChatFriendStatus userStatus = status ??
-        VRChatFriendStatus(
-            isFriend: false, incomingRequest: false, outgoingRequest: false);
+  List<Widget> simple(BuildContext context, WidgetRef ref, GridConfigNotifier config, ConsumerGridStyle style) {
+    VRChatFriendStatus userStatus = status ?? VRChatFriendStatus(isFriend: false, incomingRequest: false, outgoingRequest: false);
     return [
       for (VRChatUser user in sortUsers(config, userList))
         () {
-          if (config.joinable &&
-              VRChatInstanceIdOther.values
-                  .any((id) => id.name == user.location)) {
+          if (config.joinable && VRChatInstanceIdOther.values.any((id) => id.name == user.location)) {
             return null;
           }
           return GenericTemplate(
-            imageUrl: user.profilePicOverride ??
-                user.currentAvatarThumbnailImageUrl ??
-                "",
+            imageUrl: user.profilePicOverride ?? user.currentAvatarThumbnailImageUrl ?? "",
             half: true,
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (BuildContext context) =>
-                    VRChatMobileUser(userId: user.id),
+                builder: (BuildContext context) => VRChatMobileUser(userId: user.id),
               ),
             ),
             onLongPress: () {
               showModalBottomSheetStatelessWidget(
                 context: context,
-                builder: () =>
-                    UserDetailsModalBottom(user: user, status: userStatus),
+                builder: () => UserDetailsModalBottom(user: user, status: userStatus),
               );
             },
             children: [
-              Username(
-                  user: user,
-                  diameter: style.title.fontSize,
-                  fontWeight: style.title.fontWeight),
+              Username(user: user, diameter: style.title.fontSize, fontWeight: style.title.fontWeight),
             ],
           );
         }(),
@@ -113,39 +89,29 @@ class ExtractionUser extends ConsumerGridWidget {
   }
 
   @override
-  List<Widget> textOnly(BuildContext context, WidgetRef ref,
-      GridConfigNotifier config, ConsumerGridStyle style) {
-    VRChatFriendStatus userStatus = status ??
-        VRChatFriendStatus(
-            isFriend: false, incomingRequest: false, outgoingRequest: false);
+  List<Widget> textOnly(BuildContext context, WidgetRef ref, GridConfigNotifier config, ConsumerGridStyle style) {
+    VRChatFriendStatus userStatus = status ?? VRChatFriendStatus(isFriend: false, incomingRequest: false, outgoingRequest: false);
     return [
       for (VRChatUser user in sortUsers(config, userList))
         () {
-          if (config.joinable &&
-              VRChatInstanceIdOther.values
-                  .any((id) => id.name == user.location)) {
+          if (config.joinable && VRChatInstanceIdOther.values.any((id) => id.name == user.location)) {
             return null;
           }
           return GenericTemplateText(
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (BuildContext context) =>
-                    VRChatMobileUser(userId: user.id),
+                builder: (BuildContext context) => VRChatMobileUser(userId: user.id),
               ),
             ),
             onLongPress: () {
               showModalBottomSheetStatelessWidget(
                 context: context,
-                builder: () =>
-                    UserDetailsModalBottom(user: user, status: userStatus),
+                builder: () => UserDetailsModalBottom(user: user, status: userStatus),
               );
             },
             children: [
-              Username(
-                  user: user,
-                  diameter: style.title.fontSize,
-                  fontWeight: style.title.fontWeight),
+              Username(user: user, diameter: style.title.fontSize, fontWeight: style.title.fontWeight),
             ],
           );
         }(),

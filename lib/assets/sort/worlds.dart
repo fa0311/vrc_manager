@@ -6,8 +6,7 @@ import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/storage/grid_modal.dart';
 import 'package:vrc_manager/widgets/grid_modal/config.dart';
 
-List<VRChatLimitedWorld> sortWorlds(
-    GridConfigNotifier config, List<VRChatLimitedWorld> worldList) {
+List<VRChatLimitedWorld> sortWorlds(GridConfigNotifier config, List<VRChatLimitedWorld> worldList) {
   switch (config.sortMode) {
     case SortMode.name:
       sortByNameFromWorlds(worldList);
@@ -53,12 +52,10 @@ sortByNameFromWorlds(List<VRChatLimitedWorld> worldList) {
 
 sortByUpdatedDateFromWorlds(List<VRChatLimitedWorld> worldList) {
   worldList.sort((userA, userB) {
-    if (userA.updatedAt.millisecondsSinceEpoch >
-        userB.updatedAt.millisecondsSinceEpoch) {
+    if (userA.updatedAt.millisecondsSinceEpoch > userB.updatedAt.millisecondsSinceEpoch) {
       return -1;
     }
-    if (userA.updatedAt.millisecondsSinceEpoch <
-        userB.updatedAt.millisecondsSinceEpoch) {
+    if (userA.updatedAt.millisecondsSinceEpoch < userB.updatedAt.millisecondsSinceEpoch) {
       return 1;
     }
     return 0;
@@ -69,12 +66,10 @@ sortByLabsPublicationDateFromWorlds(List<VRChatLimitedWorld> worldList) {
   worldList.sort((userA, userB) {
     if (userA.labsPublicationDate == null) return 1;
     if (userB.labsPublicationDate == null) return -1;
-    if (userA.labsPublicationDate!.millisecondsSinceEpoch >
-        userB.labsPublicationDate!.millisecondsSinceEpoch) {
+    if (userA.labsPublicationDate!.millisecondsSinceEpoch > userB.labsPublicationDate!.millisecondsSinceEpoch) {
       return -1;
     }
-    if (userA.labsPublicationDate!.millisecondsSinceEpoch <
-        userB.labsPublicationDate!.millisecondsSinceEpoch) {
+    if (userA.labsPublicationDate!.millisecondsSinceEpoch < userB.labsPublicationDate!.millisecondsSinceEpoch) {
       return 1;
     }
     return 0;

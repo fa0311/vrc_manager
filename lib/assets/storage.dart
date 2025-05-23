@@ -1,7 +1,6 @@
 // Package imports:
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 // Project imports:
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/setting/logger.dart';
@@ -74,8 +73,7 @@ Future<List<String>> getStorageList(String key, {String id = ""}) async {
   }
 }
 
-Future<bool> setStorageList(String key, List<String> value,
-    {String id = ""}) async {
+Future<bool> setStorageList(String key, List<String> value, {String id = ""}) async {
   try {
     final SharedPreferences storage = await SharedPreferences.getInstance();
     return await storage.setStringList("$key$id", value);

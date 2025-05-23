@@ -28,8 +28,7 @@ class VRChatMobile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    AccessibilityConfigNotifier accessibilityConfig =
-        ref.watch(accessibilityConfigProvider);
+    AccessibilityConfigNotifier accessibilityConfig = ref.watch(accessibilityConfigProvider);
 
     return MaterialApp(
       title: 'VRChat Mobile Client',

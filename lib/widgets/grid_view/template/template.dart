@@ -1,10 +1,8 @@
 // Flutter imports:
-import 'package:flutter/material.dart';
-
 // Package imports:
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 // Project imports:
 import 'package:vrc_manager/scenes/core/splash.dart';
 
@@ -74,8 +72,7 @@ class GenericTemplate extends ConsumerWidget {
               child: CachedNetworkImage(
                 imageUrl: imageUrl,
                 fit: BoxFit.fitWidth,
-                progressIndicatorBuilder: (context, url, downloadProgress) =>
-                    SizedBox(
+                progressIndicatorBuilder: (context, url, downloadProgress) => SizedBox(
                   width: half ? 50 : 100,
                   child: const Padding(
                     padding: EdgeInsets.all(30),
@@ -132,10 +129,7 @@ class GenericTemplate extends ConsumerWidget {
       );
     }
     if (card) {
-      content = Card(
-          elevation: 20.0,
-          margin: EdgeInsets.all(half ? 2 : 5),
-          child: content);
+      content = Card(elevation: 20.0, margin: EdgeInsets.all(half ? 2 : 5), child: content);
     }
     return content;
   }
@@ -177,8 +171,7 @@ class GenericTemplateText extends ConsumerWidget {
       );
     }
     if (card) {
-      content = Card(
-          elevation: 20.0, margin: const EdgeInsets.all(2), child: content);
+      content = Card(elevation: 20.0, margin: const EdgeInsets.all(2), child: content);
     }
     return content;
   }

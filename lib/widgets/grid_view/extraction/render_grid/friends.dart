@@ -32,37 +32,25 @@ class ExtractionFriend extends ConsumerGridWidget {
   });
 
   @override
-  List<Widget> normal(BuildContext context, WidgetRef ref,
-      GridConfigNotifier config, ConsumerGridStyle style) {
+  List<Widget> normal(BuildContext context, WidgetRef ref, GridConfigNotifier config, ConsumerGridStyle style) {
     return [
-      for (VRChatFriends user
-          in sortUsers(config, userList) as List<VRChatFriends>)
+      for (VRChatFriends user in sortUsers(config, userList) as List<VRChatFriends>)
         () {
-          if (config.joinable &&
-              VRChatInstanceIdOther.values
-                  .any((id) => id.name == user.location)) {
+          if (config.joinable && VRChatInstanceIdOther.values.any((id) => id.name == user.location)) {
             return null;
           }
           String worldId = user.location.split(":")[0];
           return GenericTemplate(
-            imageUrl: user.profilePicOverride ??
-                user.currentAvatarThumbnailImageUrl ??
-                "",
+            imageUrl: user.profilePicOverride ?? user.currentAvatarThumbnailImageUrl ?? "",
             onTap: () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (BuildContext context) =>
-                      VRChatMobileUser(userId: user.id),
+                  builder: (BuildContext context) => VRChatMobileUser(userId: user.id),
                 )),
             onLongPress: () {
               showModalBottomSheetStatelessWidget(
                 context: context,
-                builder: () => UserDetailsModalBottom(
-                    user: user,
-                    status: VRChatFriendStatus(
-                        isFriend: true,
-                        incomingRequest: false,
-                        outgoingRequest: false)),
+                builder: () => UserDetailsModalBottom(user: user, status: VRChatFriendStatus(isFriend: true, incomingRequest: false, outgoingRequest: false)),
               );
             },
             bottom: () {
@@ -77,26 +65,15 @@ class ExtractionFriend extends ConsumerGridWidget {
                 return const OnTheWebsite();
               }
               if (locationMap[worldId] == null) return null;
-              return InstanceWidget(
-                  world: locationMap[worldId]!,
-                  instance: instanceMap[user.location]!,
-                  card: false);
+              return InstanceWidget(world: locationMap[worldId]!, instance: instanceMap[user.location]!, card: false);
             }(),
             children: [
-              Username(
-                  user: user,
-                  diameter: style.title.fontSize,
-                  fontWeight: style.title.fontWeight),
+              Username(user: user, diameter: style.title.fontSize, fontWeight: style.title.fontWeight),
               for (String text in [
                 if (user.statusDescription != null) user.statusDescription!,
-                if (!config.worldDetails &&
-                    !VRChatInstanceIdOther.values
-                        .any((id) => id.name == user.location))
-                  locationMap[worldId]?.name,
-                if (user.location == VRChatInstanceIdOther.private.name)
-                  AppLocalizations.of(context)!.privateWorld,
-                if (user.location == VRChatInstanceIdOther.traveling.name)
-                  AppLocalizations.of(context)!.loadingWorld,
+                if (!config.worldDetails && !VRChatInstanceIdOther.values.any((id) => id.name == user.location)) locationMap[worldId]?.name,
+                if (user.location == VRChatInstanceIdOther.private.name) AppLocalizations.of(context)!.privateWorld,
+                if (user.location == VRChatInstanceIdOther.traveling.name) AppLocalizations.of(context)!.loadingWorld,
               ].whereType<String>()) ...[
                 Text(text, style: style.details, maxLines: 1),
               ],
@@ -107,38 +84,26 @@ class ExtractionFriend extends ConsumerGridWidget {
   }
 
   @override
-  List<Widget> simple(BuildContext context, WidgetRef ref,
-      GridConfigNotifier config, ConsumerGridStyle style) {
+  List<Widget> simple(BuildContext context, WidgetRef ref, GridConfigNotifier config, ConsumerGridStyle style) {
     return [
-      for (VRChatFriends user
-          in sortUsers(config, userList) as List<VRChatFriends>)
+      for (VRChatFriends user in sortUsers(config, userList) as List<VRChatFriends>)
         () {
-          if (config.joinable &&
-              VRChatInstanceIdOther.values
-                  .any((id) => id.name == user.location)) {
+          if (config.joinable && VRChatInstanceIdOther.values.any((id) => id.name == user.location)) {
             return null;
           }
           String worldId = user.location.split(":")[0];
           return GenericTemplate(
-            imageUrl: user.profilePicOverride ??
-                user.currentAvatarThumbnailImageUrl ??
-                "",
+            imageUrl: user.profilePicOverride ?? user.currentAvatarThumbnailImageUrl ?? "",
             half: true,
             onTap: () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (BuildContext context) =>
-                      VRChatMobileUser(userId: user.id),
+                  builder: (BuildContext context) => VRChatMobileUser(userId: user.id),
                 )),
             onLongPress: () {
               showModalBottomSheetStatelessWidget(
                 context: context,
-                builder: () => UserDetailsModalBottom(
-                    user: user,
-                    status: VRChatFriendStatus(
-                        isFriend: true,
-                        incomingRequest: false,
-                        outgoingRequest: false)),
+                builder: () => UserDetailsModalBottom(user: user, status: VRChatFriendStatus(isFriend: true, incomingRequest: false, outgoingRequest: false)),
               );
             },
             bottom: () {
@@ -153,29 +118,15 @@ class ExtractionFriend extends ConsumerGridWidget {
                 return const OnTheWebsite(half: true);
               }
               if (locationMap[worldId] == null) return null;
-              return InstanceWidget(
-                  world: locationMap[worldId]!,
-                  instance: instanceMap[user.location]!,
-                  card: false,
-                  half: true);
+              return InstanceWidget(world: locationMap[worldId]!, instance: instanceMap[user.location]!, card: false, half: true);
             }(),
             children: [
-              Username(
-                  user: user,
-                  diameter: style.title.fontSize,
-                  fontWeight: style.title.fontWeight),
+              Username(user: user, diameter: style.title.fontSize, fontWeight: style.title.fontWeight),
               for (String text in [
                 if (user.statusDescription != null) user.statusDescription!,
-                if (!config.worldDetails &&
-                    !VRChatInstanceIdOther.values
-                        .any((id) => id.name == user.location))
-                  locationMap[worldId]?.name,
-                if (!config.worldDetails &&
-                    user.location == VRChatInstanceIdOther.private.name)
-                  AppLocalizations.of(context)!.privateWorld,
-                if (!config.worldDetails &&
-                    user.location == VRChatInstanceIdOther.traveling.name)
-                  AppLocalizations.of(context)!.loadingWorld,
+                if (!config.worldDetails && !VRChatInstanceIdOther.values.any((id) => id.name == user.location)) locationMap[worldId]?.name,
+                if (!config.worldDetails && user.location == VRChatInstanceIdOther.private.name) AppLocalizations.of(context)!.privateWorld,
+                if (!config.worldDetails && user.location == VRChatInstanceIdOther.traveling.name) AppLocalizations.of(context)!.loadingWorld,
               ].whereType<String>()) ...[
                 Text(text, style: style.details, maxLines: 1),
               ],
@@ -186,15 +137,11 @@ class ExtractionFriend extends ConsumerGridWidget {
   }
 
   @override
-  List<Widget> textOnly(BuildContext context, WidgetRef ref,
-      GridConfigNotifier config, ConsumerGridStyle style) {
+  List<Widget> textOnly(BuildContext context, WidgetRef ref, GridConfigNotifier config, ConsumerGridStyle style) {
     return [
-      for (VRChatFriends user
-          in sortUsers(config, userList) as List<VRChatFriends>)
+      for (VRChatFriends user in sortUsers(config, userList) as List<VRChatFriends>)
         () {
-          if (config.joinable &&
-              VRChatInstanceIdOther.values
-                  .any((id) => id.name == user.location)) {
+          if (config.joinable && VRChatInstanceIdOther.values.any((id) => id.name == user.location)) {
             return null;
           }
           String worldId = user.location.split(":")[0];
@@ -202,38 +149,25 @@ class ExtractionFriend extends ConsumerGridWidget {
             onTap: () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (BuildContext context) =>
-                      VRChatMobileUser(userId: user.id),
+                  builder: (BuildContext context) => VRChatMobileUser(userId: user.id),
                 )),
             onLongPress: () {
               showModalBottomSheetStatelessWidget(
                 context: context,
                 builder: () {
                   if (config.worldDetails &&
-                      !VRChatInstanceIdOther.values
-                          .any((id) => id.name == user.location) &&
+                      !VRChatInstanceIdOther.values.any((id) => id.name == user.location) &&
                       locationMap[worldId] != null &&
                       instanceMap[user.location] != null) {
-                    return UserInstanceDetailsModalBottom(
-                        user: user,
-                        world: locationMap[worldId]!,
-                        instance: instanceMap[user.location]!);
+                    return UserInstanceDetailsModalBottom(user: user, world: locationMap[worldId]!, instance: instanceMap[user.location]!);
                   } else {
-                    return UserDetailsModalBottom(
-                        user: user,
-                        status: VRChatFriendStatus(
-                            isFriend: true,
-                            incomingRequest: false,
-                            outgoingRequest: false));
+                    return UserDetailsModalBottom(user: user, status: VRChatFriendStatus(isFriend: true, incomingRequest: false, outgoingRequest: false));
                   }
                 },
               );
             },
             children: [
-              Username(
-                  user: user,
-                  diameter: style.title.fontSize,
-                  fontWeight: style.title.fontWeight),
+              Username(user: user, diameter: style.title.fontSize, fontWeight: style.title.fontWeight),
               if (config.worldDetails)
                 Text(() {
                   if (user.location == VRChatInstanceIdOther.offline.name) {

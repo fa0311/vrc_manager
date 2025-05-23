@@ -23,15 +23,11 @@ import 'package:vrc_manager/storage/user_policy.dart';
 import 'package:vrc_manager/widgets/grid_modal/config.dart';
 import 'package:vrc_manager/widgets/scroll.dart';
 
-final accountConfigProvider = ChangeNotifierProvider<AccountConfigNotifier>(
-    (ref) => AccountConfigNotifier());
-final accountListConfigProvider =
-    ChangeNotifierProvider<AccountListConfigNotifier>(
-        (ref) => AccountListConfigNotifier());
+final accountConfigProvider = ChangeNotifierProvider<AccountConfigNotifier>((ref) => AccountConfigNotifier());
+final accountListConfigProvider = ChangeNotifierProvider<AccountListConfigNotifier>((ref) => AccountListConfigNotifier());
 final isFirstProvider = StateProvider<bool>((ref) => true);
 
-final versionProvider =
-    FutureProvider((ref) async => await PackageInfo.fromPlatform());
+final versionProvider = FutureProvider((ref) async => await PackageInfo.fromPlatform());
 
 enum SplashData {
   home,
@@ -45,10 +41,8 @@ final splashProvider = FutureProvider<SplashData>((ref) async {
   }
 
   AccountConfigNotifier accountConfig = ref.watch(accountConfigProvider);
-  AccountListConfigNotifier accountListConfig =
-      ref.read(accountListConfigProvider);
-  UserPolicyConfigNotifier userPolicyConfig =
-      ref.watch(userPolicyConfigProvider);
+  AccountListConfigNotifier accountListConfig = ref.read(accountListConfigProvider);
+  UserPolicyConfigNotifier userPolicyConfig = ref.watch(userPolicyConfigProvider);
 
   if (accountListConfig.isFirst) {
     await accountListConfig.init();
@@ -86,11 +80,8 @@ class VRChatMobileSplash extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     AsyncValue<SplashData> data = ref.watch(splashProvider);
-    AccessibilityConfigNotifier accessibilityConfig =
-        ref.watch(accessibilityConfigProvider);
-    textStream(
-        context: context,
-        forceExternal: accessibilityConfig.forceExternalBrowser);
+    AccessibilityConfigNotifier accessibilityConfig = ref.watch(accessibilityConfigProvider);
+    textStream(context: context, forceExternal: accessibilityConfig.forceExternalBrowser);
 
     return Scaffold(
       body: SafeArea(
@@ -117,15 +108,10 @@ class VRChatMobileSplash extends ConsumerWidget {
                   if (!ref.read(isFirstProvider)) return;
                   String? initialText = await initTest();
                   if (initialText == null) return;
-                  Widget? value = await urlParser(
-                      url: Uri.parse(initialText),
-                      forceExternal: accessibilityConfig.forceExternalBrowser);
+                  Widget? value = await urlParser(url: Uri.parse(initialText), forceExternal: accessibilityConfig.forceExternalBrowser);
                   if (value == null) return;
                   Navigator.of(context).popUntil((route) => route.isFirst);
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (BuildContext context) => value));
+                  Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => value));
                   ref.read(isFirstProvider.notifier).state = false;
                 }();
                 return child;
