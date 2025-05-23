@@ -13,11 +13,14 @@ abstract class ConsumerGridWidget extends ConsumerWidget {
   final GridModalConfigType id;
   const ConsumerGridWidget({super.key, required this.id});
 
-  List<Widget> normal(BuildContext context, WidgetRef ref, GridConfigNotifier config, ConsumerGridStyle style);
+  List<Widget> normal(BuildContext context, WidgetRef ref,
+      GridConfigNotifier config, ConsumerGridStyle style);
 
-  List<Widget> simple(BuildContext context, WidgetRef ref, GridConfigNotifier config, ConsumerGridStyle style);
+  List<Widget> simple(BuildContext context, WidgetRef ref,
+      GridConfigNotifier config, ConsumerGridStyle style);
 
-  List<Widget> textOnly(BuildContext context, WidgetRef ref, GridConfigNotifier config, ConsumerGridStyle style);
+  List<Widget> textOnly(BuildContext context, WidgetRef ref,
+      GridConfigNotifier config, ConsumerGridStyle style);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

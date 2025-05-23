@@ -34,7 +34,8 @@ class VRChatMobileSelfData {
 
 final vrchatUserCountProvider = StateProvider<int>((ref) => 0);
 
-final vrchatMobileSelfProvider = FutureProvider<VRChatMobileSelfData>((ref) async {
+final vrchatMobileSelfProvider =
+    FutureProvider<VRChatMobileSelfData>((ref) async {
   final VRChatAPI vrchatLoginSession = VRChatAPI(
     cookie: ref.read(accountConfigProvider).loggedAccount!.cookie ?? "",
     userAgent: ref.watch(accountConfigProvider).userAgent,
@@ -43,13 +44,19 @@ final vrchatMobileSelfProvider = FutureProvider<VRChatMobileSelfData>((ref) asyn
   VRChatWorld? world;
   VRChatInstance? instance;
 
-  VRChatUserSelf user = await vrchatLoginSession.selfUser(ref.read(accountConfigProvider).loggedAccount?.data?.id ?? "");
+  VRChatUserSelf user = await vrchatLoginSession
+      .selfUser(ref.read(accountConfigProvider).loggedAccount?.data?.id ?? "");
 
-  if (VRChatInstanceIdOther.values.any((id) => id.name == user.location)) return VRChatMobileSelfData(user: user);
+  if (VRChatInstanceIdOther.values.any((id) => id.name == user.location))
+    return VRChatMobileSelfData(user: user);
 
   await Future.wait([
-    vrchatLoginSession.worlds(user.location.split(":")[0]).then((value) => world = value),
-    vrchatLoginSession.instances(user.location).then((value) => instance = value),
+    vrchatLoginSession
+        .worlds(user.location.split(":")[0])
+        .then((value) => world = value),
+    vrchatLoginSession
+        .instances(user.location)
+        .then((value) => instance = value),
   ]);
 
   return VRChatMobileSelfData(user: user, world: world, instance: instance);
@@ -95,7 +102,8 @@ class VRChatMobileSelf extends ConsumerWidget {
                 logger.w(getMessage(e), error: e, stackTrace: trace);
                 return ScrollWidget(
                   onRefresh: () => ref.refresh(vrchatMobileSelfProvider.future),
-                  child: ErrorPage(loggerReport: ref.read(loggerReportProvider)),
+                  child:
+                      ErrorPage(loggerReport: ref.read(loggerReportProvider)),
                 );
               },
               data: (data) => ScrollWidget(
@@ -106,12 +114,21 @@ class VRChatMobileSelf extends ConsumerWidget {
                     children: [
                       UserProfile(user: data.user),
                       Container(
-                        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 10, horizontal: 0),
                         child: () {
-                          if (data.user.location == VRChatInstanceIdOther.private.name) return const PrivateWorld();
-                          if (data.user.location == VRChatInstanceIdOther.traveling.name) return const TravelingWorld();
-                          if (data.user.location == VRChatInstanceIdOther.offline.name) return null;
-                          return data.world == null ? null : InstanceWidget(world: data.world!, instance: data.instance!);
+                          if (data.user.location ==
+                              VRChatInstanceIdOther.private.name)
+                            return const PrivateWorld();
+                          if (data.user.location ==
+                              VRChatInstanceIdOther.traveling.name)
+                            return const TravelingWorld();
+                          if (data.user.location ==
+                              VRChatInstanceIdOther.offline.name) return null;
+                          return data.world == null
+                              ? null
+                              : InstanceWidget(
+                                  world: data.world!, instance: data.instance!);
                         }(),
                       ),
                     ],

@@ -13,8 +13,10 @@ import 'package:vrc_manager/widgets/grid_modal/config.dart';
 import 'package:vrc_manager/widgets/grid_modal/modal.dart';
 import 'package:vrc_manager/widgets/modal.dart';
 
-final currentIndexProvider = StateProvider<CurrentIndex>((ref) => CurrentIndex.online);
-final gridModalConfigIdProvider = StateProvider<GridModalConfigType>((ref) => GridModalConfigType.onlineFriends);
+final currentIndexProvider =
+    StateProvider<CurrentIndex>((ref) => CurrentIndex.online);
+final gridModalConfigIdProvider = StateProvider<GridModalConfigType>(
+    (ref) => GridModalConfigType.onlineFriends);
 
 enum CurrentIndex {
   online(icon: Icons.wb_sunny),
@@ -78,7 +80,8 @@ class VRChatMobileHome extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final CurrentIndex currentIndex = ref.watch(currentIndexProvider);
-    final PageController controller = PageController(initialPage: currentIndex.index);
+    final PageController controller =
+        PageController(initialPage: currentIndex.index);
 
     getGridConfig(CurrentIndex currentIndex) {
       switch (currentIndex) {
@@ -109,7 +112,8 @@ class VRChatMobileHome extends ConsumerWidget {
             icon: const Icon(Icons.more_vert),
             onPressed: () => showModalBottomSheetStatelessWidget(
               context: context,
-              builder: () => GridModal(type: ref.read(gridModalConfigIdProvider)),
+              builder: () =>
+                  GridModal(type: ref.read(gridModalConfigIdProvider)),
             ),
           ),
         ],
@@ -119,17 +123,23 @@ class VRChatMobileHome extends ConsumerWidget {
         child: PageView(
           controller: controller,
           physics: const FastScrollPhysics(),
-          children: [for (CurrentIndex scene in CurrentIndex.values) scene.toWidget()],
+          children: [
+            for (CurrentIndex scene in CurrentIndex.values) scene.toWidget()
+          ],
           onPageChanged: (int index) {
             WidgetsBinding.instance.focusManager.primaryFocus?.unfocus();
-            ref.read(currentIndexProvider.notifier).state = CurrentIndex.values[index];
-            ref.read(gridModalConfigIdProvider.notifier).state = getGridConfig(CurrentIndex.values[index]);
+            ref.read(currentIndexProvider.notifier).state =
+                CurrentIndex.values[index];
+            ref.read(gridModalConfigIdProvider.notifier).state =
+                getGridConfig(CurrentIndex.values[index]);
           },
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: [
-          for (CurrentIndex scene in CurrentIndex.values) BottomNavigationBarItem(icon: Icon(scene.icon), label: scene.toLocalization(context)),
+          for (CurrentIndex scene in CurrentIndex.values)
+            BottomNavigationBarItem(
+                icon: Icon(scene.icon), label: scene.toLocalization(context)),
         ],
         currentIndex: currentIndex.index,
         onTap: (int index) => controller.jumpToPage(index),

@@ -24,7 +24,8 @@ enum VRChatInstanceTypeExt {
   final VRChatInstanceType type;
   final bool canRequestInvite;
 
-  const VRChatInstanceTypeExt({required this.type, required this.canRequestInvite});
+  const VRChatInstanceTypeExt(
+      {required this.type, required this.canRequestInvite});
 
   String toLocalization(BuildContext context) {
     switch (this) {
@@ -44,7 +45,8 @@ enum VRChatInstanceTypeExt {
   }
 }
 
-VRChatInstanceTypeExt toVRChatInstanceTypeExt(VRChatInstanceType type, bool canRequestInvite) {
+VRChatInstanceTypeExt toVRChatInstanceTypeExt(
+    VRChatInstanceType type, bool canRequestInvite) {
   switch (type) {
     case VRChatInstanceType.public:
       return VRChatInstanceTypeExt.public;
@@ -53,7 +55,9 @@ VRChatInstanceTypeExt toVRChatInstanceTypeExt(VRChatInstanceType type, bool canR
     case VRChatInstanceType.friends:
       return VRChatInstanceTypeExt.friends;
     case VRChatInstanceType.private:
-      return canRequestInvite ? VRChatInstanceTypeExt.invitePlus : VRChatInstanceTypeExt.invite;
+      return canRequestInvite
+          ? VRChatInstanceTypeExt.invitePlus
+          : VRChatInstanceTypeExt.invite;
     case VRChatInstanceType.group:
       return VRChatInstanceTypeExt.group;
   }
@@ -82,13 +86,15 @@ class InstanceWidget extends ConsumerWidget {
       onTap: () => Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id),
+          builder: (BuildContext context) =>
+              VRChatMobileWorld(worldId: world.id),
         ),
       ),
       onLongPress: () {
         showModalBottomSheetStatelessWidget(
           context: context,
-          builder: () => InstanceDetailsModalBottom(world: world, instance: instance),
+          builder: () =>
+              InstanceDetailsModalBottom(world: world, instance: instance),
         );
       },
       children: [
@@ -110,7 +116,9 @@ class InstanceWidget extends ConsumerWidget {
             child: SizedBox(
               width: double.infinity,
               child: Text(
-                toVRChatInstanceTypeExt(instance.type, instance.canRequestInvite).toLocalization(context),
+                toVRChatInstanceTypeExt(
+                        instance.type, instance.canRequestInvite)
+                    .toLocalization(context),
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                   fontSize: half ? 10 : 15,

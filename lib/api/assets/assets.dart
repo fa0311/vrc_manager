@@ -18,16 +18,21 @@ class VRChatAssets {
   static Uri worlds = VRChatAssets.vrchat.resolve("/home/worlds/");
   static Uri content = VRChatAssets.vrchat.resolve("/home/content");
   static Uri avatars = VRChatAssets.vrchat.resolve("/home/avatars");
-  static Uri favoritesWorlds = VRChatAssets.vrchat.resolve("/home/favorites/world/");
-  static Uri favoritesAvatars = VRChatAssets.vrchat.resolve("/home/favorites/avatar/");
+  static Uri favoritesWorlds =
+      VRChatAssets.vrchat.resolve("/home/favorites/world/");
+  static Uri favoritesAvatars =
+      VRChatAssets.vrchat.resolve("/home/favorites/avatar/");
   // cspell:disable-next-line
   static Uri accountLink = VRChatAssets.vrchat.resolve("/home/accountlink");
   // cspell:disable-next-line
-  static Uri playerModerations = VRChatAssets.vrchat.resolve("/home/playermoderations");
+  static Uri playerModerations =
+      VRChatAssets.vrchat.resolve("/home/playermoderations");
   static Uri messages = VRChatAssets.vrchat.resolve("/home/messages");
   static Uri profile = VRChatAssets.vrchat.resolve("/home/profile");
   static Uri search = VRChatAssets.vrchat.resolve("/home/search/");
 
-  static Uri defaultPrivateImage = assets.resolve("/www/images/default_private_image.png");
-  static Uri defaultBetweenImage = assets.resolve("/www/images/default_between_image.png");
+  static Uri defaultPrivateImage =
+      assets.resolve("/www/images/default_private_image.png");
+  static Uri defaultBetweenImage =
+      assets.resolve("/www/images/default_between_image.png");
 }

@@ -11,8 +11,10 @@ import 'package:vrc_manager/scenes/core/splash.dart';
 import 'package:vrc_manager/scenes/setting/logger.dart';
 import 'package:vrc_manager/widgets/future/button.dart';
 
-final tokenControllerProvider = StateProvider.autoDispose<TextEditingController>((ref) {
-  return TextEditingController(text: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "");
+final tokenControllerProvider =
+    StateProvider.autoDispose<TextEditingController>((ref) {
+  return TextEditingController(
+      text: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "");
 });
 
 class VRChatMobileTokenSetting extends ConsumerWidget {
@@ -36,15 +38,22 @@ class VRChatMobileTokenSetting extends ConsumerWidget {
                 TextField(
                   controller: tokenController,
                   maxLines: null,
-                  decoration: InputDecoration(labelText: AppLocalizations.of(context)!.cookie),
+                  decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context)!.cookie),
                 ),
                 FutureButton(
                   type: ButtonType.elevatedButton,
                   onPressed: () async {
-                    await ref.read(accountConfigProvider).loggedAccount!.setCookie(tokenController.text);
-                    await ref.read(accountConfigProvider).login(ref.read(accountConfigProvider).loggedAccount!);
+                    await ref
+                        .read(accountConfigProvider)
+                        .loggedAccount!
+                        .setCookie(tokenController.text);
+                    await ref
+                        .read(accountConfigProvider)
+                        .login(ref.read(accountConfigProvider).loggedAccount!);
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text(AppLocalizations.of(context)!.saved)),
+                      SnackBar(
+                          content: Text(AppLocalizations.of(context)!.saved)),
                     );
                   },
                   child: Text(AppLocalizations.of(context)!.save),
@@ -59,12 +68,16 @@ class VRChatMobileTokenSetting extends ConsumerWidget {
                       logger: logger,
                     ).user().then((VRChatUserSelfOverload response) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(AppLocalizations.of(context)!.success)),
+                        SnackBar(
+                            content:
+                                Text(AppLocalizations.of(context)!.success)),
                       );
                     }).catchError((e, trace) {
                       logger.w(getMessage(e), error: e, stackTrace: trace);
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(AppLocalizations.of(context)!.failed)),
+                        SnackBar(
+                            content:
+                                Text(AppLocalizations.of(context)!.failed)),
                       );
                     });
                   },

@@ -24,7 +24,8 @@ class ExtractionWorld extends ConsumerGridWidget {
   });
 
   @override
-  List<Widget> normal(BuildContext context, WidgetRef ref, GridConfigNotifier config, ConsumerGridStyle style) {
+  List<Widget> normal(BuildContext context, WidgetRef ref,
+      GridConfigNotifier config, ConsumerGridStyle style) {
     return [
       for (VRChatLimitedWorld world in sortWorlds(config, worldList))
         () {
@@ -35,7 +36,8 @@ class ExtractionWorld extends ConsumerGridWidget {
                 : () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id),
+                        builder: (BuildContext context) =>
+                            VRChatMobileWorld(worldId: world.id),
                       ),
                     ),
             onLongPress: () {
@@ -60,7 +62,8 @@ class ExtractionWorld extends ConsumerGridWidget {
   }
 
   @override
-  List<Widget> simple(BuildContext context, WidgetRef ref, GridConfigNotifier config, ConsumerGridStyle style) {
+  List<Widget> simple(BuildContext context, WidgetRef ref,
+      GridConfigNotifier config, ConsumerGridStyle style) {
     return [
       for (VRChatLimitedWorld world in sortWorlds(config, worldList))
         () {
@@ -72,7 +75,8 @@ class ExtractionWorld extends ConsumerGridWidget {
                 : () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id),
+                        builder: (BuildContext context) =>
+                            VRChatMobileWorld(worldId: world.id),
                       ),
                     ),
             onLongPress: () {
@@ -98,7 +102,8 @@ class ExtractionWorld extends ConsumerGridWidget {
   }
 
   @override
-  List<Widget> textOnly(BuildContext context, WidgetRef ref, GridConfigNotifier config, ConsumerGridStyle style) {
+  List<Widget> textOnly(BuildContext context, WidgetRef ref,
+      GridConfigNotifier config, ConsumerGridStyle style) {
     return [
       for (VRChatLimitedWorld world in sortWorlds(config, worldList))
         () {
@@ -108,7 +113,8 @@ class ExtractionWorld extends ConsumerGridWidget {
                 : () => Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id),
+                      builder: (BuildContext context) =>
+                          VRChatMobileWorld(worldId: world.id),
                     )),
             onLongPress: () {
               showModalBottomSheetStatelessWidget(

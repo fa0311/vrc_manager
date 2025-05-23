@@ -74,7 +74,8 @@ class GenericTemplate extends ConsumerWidget {
               child: CachedNetworkImage(
                 imageUrl: imageUrl,
                 fit: BoxFit.fitWidth,
-                progressIndicatorBuilder: (context, url, downloadProgress) => SizedBox(
+                progressIndicatorBuilder: (context, url, downloadProgress) =>
+                    SizedBox(
                   width: half ? 50 : 100,
                   child: const Padding(
                     padding: EdgeInsets.all(30),
@@ -131,7 +132,10 @@ class GenericTemplate extends ConsumerWidget {
       );
     }
     if (card) {
-      content = Card(elevation: 20.0, margin: EdgeInsets.all(half ? 2 : 5), child: content);
+      content = Card(
+          elevation: 20.0,
+          margin: EdgeInsets.all(half ? 2 : 5),
+          child: content);
     }
     return content;
   }
@@ -173,7 +177,8 @@ class GenericTemplateText extends ConsumerWidget {
       );
     }
     if (card) {
-      content = Card(elevation: 20.0, margin: const EdgeInsets.all(2), child: content);
+      content = Card(
+          elevation: 20.0, margin: const EdgeInsets.all(2), child: content);
     }
     return content;
   }

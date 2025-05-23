@@ -27,7 +27,9 @@ class VRChatMobileJsonViewer extends ConsumerWidget {
               showModalBottomSheetStatelessWidget(
                 context: context,
                 builder: () => SingleChildScrollView(
-                  child: Column(children: [CopyListTileWidget(text: jsonEncode(content))]),
+                  child: Column(children: [
+                    CopyListTileWidget(text: jsonEncode(content))
+                  ]),
                 ),
               );
             },

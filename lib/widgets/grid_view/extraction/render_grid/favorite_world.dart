@@ -28,7 +28,8 @@ class ExtractionFavoriteWorld extends ConsumerGridWidget {
   });
 
   @override
-  List<Widget> normal(BuildContext context, WidgetRef ref, GridConfigNotifier config, ConsumerGridStyle style) {
+  List<Widget> normal(BuildContext context, WidgetRef ref,
+      GridConfigNotifier config, ConsumerGridStyle style) {
     VRChatAPI vrchatLoginSession = VRChatAPI(
       cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "",
       userAgent: ref.watch(accountConfigProvider).userAgent,
@@ -36,7 +37,8 @@ class ExtractionFavoriteWorld extends ConsumerGridWidget {
     );
 
     return [
-      for (VRChatFavoriteWorld world in sortWorlds(config, favoriteWorld) as List<VRChatFavoriteWorld>)
+      for (VRChatFavoriteWorld world
+          in sortWorlds(config, favoriteWorld) as List<VRChatFavoriteWorld>)
         () {
           return GenericTemplate(
             imageUrl: world.thumbnailImageUrl,
@@ -45,7 +47,8 @@ class ExtractionFavoriteWorld extends ConsumerGridWidget {
                 : () => Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id),
+                      builder: (BuildContext context) =>
+                          VRChatMobileWorld(worldId: world.id),
                     )),
             onLongPress: () {
               showModalBottomSheetStatelessWidget(
@@ -60,7 +63,10 @@ class ExtractionFavoriteWorld extends ConsumerGridWidget {
                       child: IconButton(
                         constraints: const BoxConstraints(),
                         padding: const EdgeInsets.all(0),
-                        onPressed: () => delete(vrchatLoginSession: vrchatLoginSession, world: world, favoriteWorld: favoriteWorld),
+                        onPressed: () => delete(
+                            vrchatLoginSession: vrchatLoginSession,
+                            world: world,
+                            favoriteWorld: favoriteWorld),
                         icon: const Icon(Icons.delete),
                       ),
                     ),
@@ -86,14 +92,16 @@ class ExtractionFavoriteWorld extends ConsumerGridWidget {
   }
 
   @override
-  List<Widget> simple(BuildContext context, WidgetRef ref, GridConfigNotifier config, ConsumerGridStyle style) {
+  List<Widget> simple(BuildContext context, WidgetRef ref,
+      GridConfigNotifier config, ConsumerGridStyle style) {
     VRChatAPI vrchatLoginSession = VRChatAPI(
       cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "",
       userAgent: ref.watch(accountConfigProvider).userAgent,
       logger: logger,
     );
     return [
-      for (VRChatFavoriteWorld world in sortWorlds(config, favoriteWorld) as List<VRChatFavoriteWorld>)
+      for (VRChatFavoriteWorld world
+          in sortWorlds(config, favoriteWorld) as List<VRChatFavoriteWorld>)
         () {
           return GenericTemplate(
             imageUrl: world.thumbnailImageUrl,
@@ -103,7 +111,8 @@ class ExtractionFavoriteWorld extends ConsumerGridWidget {
                 : () => Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id),
+                      builder: (BuildContext context) =>
+                          VRChatMobileWorld(worldId: world.id),
                     )),
             onLongPress: () {
               showModalBottomSheetStatelessWidget(
@@ -130,7 +139,10 @@ class ExtractionFavoriteWorld extends ConsumerGridWidget {
                       color: Colors.white,
                       constraints: const BoxConstraints(),
                       padding: const EdgeInsets.all(0),
-                      onPressed: () => delete(vrchatLoginSession: vrchatLoginSession, world: world, favoriteWorld: favoriteWorld),
+                      onPressed: () => delete(
+                          vrchatLoginSession: vrchatLoginSession,
+                          world: world,
+                          favoriteWorld: favoriteWorld),
                       icon: const Icon(Icons.delete),
                     ),
                   ]
@@ -156,15 +168,18 @@ class ExtractionFavoriteWorld extends ConsumerGridWidget {
   }
 
   @override
-  List<Widget> textOnly(BuildContext context, WidgetRef ref, GridConfigNotifier config, ConsumerGridStyle style) {
+  List<Widget> textOnly(BuildContext context, WidgetRef ref,
+      GridConfigNotifier config, ConsumerGridStyle style) {
     return [
-      for (VRChatFavoriteWorld world in sortWorlds(config, favoriteWorld) as List<VRChatFavoriteWorld>)
+      for (VRChatFavoriteWorld world
+          in sortWorlds(config, favoriteWorld) as List<VRChatFavoriteWorld>)
         () {
           return GenericTemplateText(
             onTap: () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id),
+                  builder: (BuildContext context) =>
+                      VRChatMobileWorld(worldId: world.id),
                 )),
             onLongPress: () {
               showModalBottomSheetStatelessWidget(

@@ -74,7 +74,8 @@ class AccountConfigNotifier extends ChangeNotifier {
 
   init(AccountConfig? account) async {
     loggedAccount = account;
-    await PackageInfo.fromPlatform().then((value) => userAgent = Assets.userAgent(value.version));
+    await PackageInfo.fromPlatform()
+        .then((value) => userAgent = Assets.userAgent(value.version));
   }
 
   Future<bool> logout() async {
@@ -111,7 +112,8 @@ class AccountConfig extends ChangeNotifier {
       getLoginSession("user_id", uid).then((value) => userId = value),
       getLoginSession("password", uid).then((value) => password = value),
       getLoginSession("display_name", uid).then((value) => displayName = value),
-      getLoginSession("remember_login_info", uid).then((value) => rememberLoginInfo = (value == "true")),
+      getLoginSession("remember_login_info", uid)
+          .then((value) => rememberLoginInfo = (value == "true")),
     ]);
   }
 
@@ -132,7 +134,8 @@ class AccountConfig extends ChangeNotifier {
   }
 
   Future setRememberLoginInfo(bool value) async {
-    return await setLoginSession("remember_login_info", (rememberLoginInfo = value).toString(), uid);
+    return await setLoginSession(
+        "remember_login_info", (rememberLoginInfo = value).toString(), uid);
   }
 
   Future removeCookie() async {
@@ -166,7 +169,9 @@ class AccountConfig extends ChangeNotifier {
       userAgent: Assets.userAgent((await PackageInfo.fromPlatform()).version),
       logger: logger,
     );
-    return await vrchatLoginSession.user().then((VRChatUserSelfOverload response) {
+    return await vrchatLoginSession
+        .user()
+        .then((VRChatUserSelfOverload response) {
       data = response;
       setDisplayName(response.displayName);
       return true;

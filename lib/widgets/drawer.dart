@@ -21,7 +21,8 @@ class AccountList extends ConsumerWidget {
     return SingleChildScrollView(
       child: Column(
         children: [
-          for (AccountConfig account in ref.watch(accountListConfigProvider).accountList)
+          for (AccountConfig account
+              in ref.watch(accountListConfigProvider).accountList)
             ListTile(
               title: Text(
                 account.displayName ?? AppLocalizations.of(context)!.unknown,
@@ -72,20 +73,26 @@ class NormalDrawer extends ConsumerWidget {
                 onLongPress: () {
                   showModalBottomSheetStatelessWidget(
                     context: context,
-                    builder: () => SelfUserModalBottom(user: account!.data!),
+                    builder: () => SelfUserModalBottom(user: account.data!),
                   );
                 },
                 child: UserAccountsDrawerHeader(
-                  decoration: BoxDecoration(color: Theme.of(context).colorScheme.background),
+                  decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.background),
                   accountName: Text(account!.data!.username),
                   accountEmail: Text(account.data!.statusDescription ?? ""),
                   currentAccountPicture: CachedNetworkImage(
-                    imageUrl: account.data!.profilePicOverride ?? account.data!.currentAvatarImageUrl.toString(),
+                    imageUrl: account.data!.profilePicOverride ??
+                        account.data!.currentAvatarImageUrl.toString(),
                     fit: BoxFit.fitWidth,
-                    progressIndicatorBuilder: (context, url, downloadProgress) =>
-                        const Padding(padding: EdgeInsets.all(20), child: CircularProgressIndicator()),
-                    errorWidget: (context, url, error) => const Icon(Icons.error),
-                    imageBuilder: (context, imageProvider) => CircleAvatar(backgroundImage: imageProvider),
+                    progressIndicatorBuilder:
+                        (context, url, downloadProgress) => const Padding(
+                            padding: EdgeInsets.all(20),
+                            child: CircularProgressIndicator()),
+                    errorWidget: (context, url, error) =>
+                        const Icon(Icons.error),
+                    imageBuilder: (context, imageProvider) =>
+                        CircleAvatar(backgroundImage: imageProvider),
                     httpHeaders: {
                       "user-agent": ref.watch(accountConfigProvider).userAgent,
                     },

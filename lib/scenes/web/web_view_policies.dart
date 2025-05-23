@@ -39,7 +39,8 @@ class VRChatMobileWebViewUserPolicy extends ConsumerWidget {
             onPressed: () {
               showModalBottomSheetStatelessWidget(
                 context: context,
-                builder: () => ShareUrlListTile(url: Assets.userPolicy, browserExternalForce: true),
+                builder: () => ShareUrlListTile(
+                    url: Assets.userPolicy, browserExternalForce: true),
               );
             },
           ),
@@ -92,7 +93,8 @@ class VRChatMobileWebViewUserPolicy extends ConsumerWidget {
       body: () {
         if (Platform.isAndroid || Platform.isIOS) {
           return InAppWebView(
-            initialUrlRequest: URLRequest(url: WebUri(Assets.userPolicy.toString())),
+            initialUrlRequest:
+                URLRequest(url: WebUri(Assets.userPolicy.toString())),
             initialOptions: InAppWebViewGroupOptions(
               crossPlatform: InAppWebViewOptions(
                 javaScriptEnabled: true,
@@ -100,7 +102,8 @@ class VRChatMobileWebViewUserPolicy extends ConsumerWidget {
             ),
           );
         } else {
-          openInBrowser(url: Assets.userPolicy, forceExternal: true).then((value) {
+          openInBrowser(url: Assets.userPolicy, forceExternal: true)
+              .then((value) {
             if (value == null) return;
             Navigator.push(
               context,

@@ -18,7 +18,8 @@ class OnTheWebsite extends ConsumerWidget {
     return Container(
       alignment: Alignment.center,
       height: half ? 50 : 100,
-      child: Text(AppLocalizations.of(context)!.onTheWebsite, style: TextStyle(fontSize: half ? 10 : 15)),
+      child: Text(AppLocalizations.of(context)!.onTheWebsite,
+          style: TextStyle(fontSize: half ? 10 : 15)),
     );
   }
 }
@@ -36,7 +37,8 @@ class WorldProfile extends ConsumerWidget {
           child: CachedNetworkImage(
             imageUrl: world.imageUrl,
             fit: BoxFit.fitWidth,
-            progressIndicatorBuilder: (context, url, downloadProgress) => const SizedBox(
+            progressIndicatorBuilder: (context, url, downloadProgress) =>
+                const SizedBox(
               width: 250.0,
               child: Padding(
                 padding: EdgeInsets.all(30),
@@ -67,7 +69,8 @@ class WorldProfile extends ConsumerWidget {
           AppLocalizations.of(context)!.occupants(world.occupants),
         ),
         Text(
-          AppLocalizations.of(context)!.privateOccupants(world.privateOccupants),
+          AppLocalizations.of(context)!
+              .privateOccupants(world.privateOccupants),
         ),
         Text(
           AppLocalizations.of(context)!.favorites(world.favorites),

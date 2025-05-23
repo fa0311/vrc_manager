@@ -28,10 +28,13 @@ class WorldDetailsModalBottom extends ConsumerWidget {
     return SingleChildScrollView(
       child: Column(
         children: [
-          if (world is VRChatFavoriteWorld) FavoriteRemoveTileWidget(favoriteWorld: world as VRChatFavoriteWorld),
+          if (world is VRChatFavoriteWorld)
+            FavoriteRemoveTileWidget(
+                favoriteWorld: world as VRChatFavoriteWorld),
           LaunchWorldListTileWidget(world: world),
           FavoriteListTileWidget(world: world),
-          if (world.id != "???") ShareUrlTileWidget(url: VRChatAssets.worlds.resolve(world.id)),
+          if (world.id != "???")
+            ShareUrlTileWidget(url: VRChatAssets.worlds.resolve(world.id)),
           OpenInJsonViewer(content: world.content),
         ],
       ),
@@ -43,7 +46,8 @@ class InstanceDetailsModalBottom extends ConsumerWidget {
   final VRChatLimitedWorld world;
   final VRChatInstance instance;
 
-  const InstanceDetailsModalBottom({super.key, required this.world, required this.instance});
+  const InstanceDetailsModalBottom(
+      {super.key, required this.world, required this.instance});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -52,7 +56,8 @@ class InstanceDetailsModalBottom extends ConsumerWidget {
         children: [
           SelfInviteListTileWidget(instance: instance),
           FavoriteListTileWidget(world: world),
-          ShareInstanceTileWidget(worldId: world.id, instanceId: instance.instanceId),
+          ShareInstanceTileWidget(
+              worldId: world.id, instanceId: instance.instanceId),
           OpenInJsonViewer(content: instance.content),
         ],
       ),
@@ -65,11 +70,16 @@ class UserInstanceDetailsModalBottom extends ConsumerWidget {
   final VRChatLimitedWorld world;
   final VRChatInstance instance;
 
-  const UserInstanceDetailsModalBottom({super.key, required this.user, required this.world, required this.instance});
+  const UserInstanceDetailsModalBottom(
+      {super.key,
+      required this.user,
+      required this.world,
+      required this.instance});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    VRChatFriendStatus userStatus = VRChatFriendStatus(isFriend: false, incomingRequest: false, outgoingRequest: false);
+    VRChatFriendStatus userStatus = VRChatFriendStatus(
+        isFriend: false, incomingRequest: false, outgoingRequest: false);
 
     return SingleChildScrollView(
       child: Column(
@@ -102,10 +112,12 @@ class SelfInviteListTileWidget extends ConsumerWidget {
       title: Text(AppLocalizations.of(context)!.joinInstance),
       onTap: () async {
         try {
-          await vrchatLoginSession.selfInvite(instance.location, instance.shortName ?? "");
+          await vrchatLoginSession.selfInvite(
+              instance.location, instance.shortName ?? "");
         } catch (e, trace) {
           logger.e(getMessage(e), error: e, stackTrace: trace);
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage(context: context, status: e))));
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text(errorMessage(context: context, status: e))));
         }
       },
     );
@@ -150,7 +162,8 @@ class FavoriteRemoveTileWidget extends ConsumerWidget {
           await vrchatLoginSession.deleteFavorites(favoriteWorld.favoriteId);
         } catch (e, trace) {
           logger.e(getMessage(e), error: e, stackTrace: trace);
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage(context: context, status: e))));
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text(errorMessage(context: context, status: e))));
         }
       },
     );
@@ -216,7 +229,8 @@ class FavoriteAction extends ConsumerWidget {
       error: (e, trace) {
         logger.w(getMessage(e), error: e, stackTrace: trace);
         return ScrollWidget(
-          onRefresh: () => ref.refresh((vrchatMobileWorldFavoriteSortProvider.future)),
+          onRefresh: () =>
+              ref.refresh((vrchatMobileWorldFavoriteSortProvider.future)),
           child: ErrorPage(loggerReport: ref.read(loggerReportProvider)),
         );
       },
@@ -226,31 +240,44 @@ class FavoriteAction extends ConsumerWidget {
             children: [
               for (FavoriteWorldData favoriteData in data.favoriteWorld)
                 () {
-                  VRChatFavoriteWorld? favoriteWorld = getFavoriteWorld(data.favoriteWorld);
-                  FavoriteWorldData? favoriteWorldData = getFavoriteData(data.favoriteWorld);
+                  VRChatFavoriteWorld? favoriteWorld =
+                      getFavoriteWorld(data.favoriteWorld);
+                  FavoriteWorldData? favoriteWorldData =
+                      getFavoriteData(data.favoriteWorld);
                   ref.watch(vrchatMobileWorldFavoriteCounterProvider);
                   return FutureTile(
                     title: Text(favoriteData.group.displayName),
-                    trailing: favoriteWorldData == favoriteData ? const Icon(Icons.check) : null,
+                    trailing: favoriteWorldData == favoriteData
+                        ? const Icon(Icons.check)
+                        : null,
                     onTap: () async {
                       try {
                         bool value = favoriteWorldData == favoriteData;
                         if (value || favoriteWorld != null) {
-                          await vrchatLoginSession.deleteFavorites(favoriteWorld!.favoriteId);
+                          await vrchatLoginSession
+                              .deleteFavorites(favoriteWorld!.favoriteId);
                           favoriteWorldData!.list.remove(favoriteWorld);
                           favoriteWorld = null;
                           favoriteWorldData = null;
                         }
                         if (!value && favoriteWorldData != favoriteData) {
-                          VRChatFavorite favorite = await vrchatLoginSession.addFavorites("world", world.id, favoriteData.group.name);
-                          favoriteWorld = VRChatFavoriteWorld.fromFavorite(world, favorite, favoriteData.group.name);
+                          VRChatFavorite favorite =
+                              await vrchatLoginSession.addFavorites(
+                                  "world", world.id, favoriteData.group.name);
+                          favoriteWorld = VRChatFavoriteWorld.fromFavorite(
+                              world, favorite, favoriteData.group.name);
                           favoriteData.list.add(favoriteWorld!);
                           favoriteWorldData = favoriteData;
                         }
-                        ref.read(vrchatMobileWorldFavoriteCounterProvider.notifier).state++;
+                        ref
+                            .read(vrchatMobileWorldFavoriteCounterProvider
+                                .notifier)
+                            .state++;
                       } catch (e, trace) {
                         logger.e(getMessage(e), error: e, stackTrace: trace);
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage(context: context, status: e))));
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text(
+                                errorMessage(context: context, status: e))));
                       }
                     },
                   );

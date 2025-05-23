@@ -19,7 +19,8 @@ final GlobalKey webViewKey = GlobalKey();
 
 final timeStampProvider = StateProvider<int>((ref) => 0);
 final urlProvider = StateProvider.autoDispose<Uri?>((ref) => null);
-final webViewControllerProvider = StateProvider<InAppWebViewController?>((ref) => null);
+final webViewControllerProvider =
+    StateProvider<InAppWebViewController?>((ref) => null);
 
 final webViewInitProvider = FutureProvider.autoDispose<void>((ref) async {
   VRChatAPI vrchatLoginSession = VRChatAPI(
@@ -48,14 +49,17 @@ class VRChatMobileWebViewLogin extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     Uri initUrl = ref.watch(urlProvider) ?? VRChatAssets.login;
-    InAppWebViewController? webViewController = ref.watch(webViewControllerProvider);
+    InAppWebViewController? webViewController =
+        ref.watch(webViewControllerProvider);
     AsyncValue<void> data = ref.watch(webViewInitProvider);
     Future<bool> exitApp(BuildContext context) async {
-      if (DateTime.now().millisecondsSinceEpoch - ref.read(timeStampProvider) < 200) {
+      if (DateTime.now().millisecondsSinceEpoch - ref.read(timeStampProvider) <
+          200) {
         return true;
       } else if (await webViewController!.canGoBack()) {
         webViewController.goBack();
-        ref.read(timeStampProvider.notifier).state = DateTime.now().millisecondsSinceEpoch;
+        ref.read(timeStampProvider.notifier).state =
+            DateTime.now().millisecondsSinceEpoch;
         return false;
       }
       return true;
@@ -88,7 +92,8 @@ class VRChatMobileWebViewLogin extends ConsumerWidget {
             onTitleChanged: (controller, title) async {
               if (title != VRChatAssets.homeTitle) return;
               CookieManager cookieManager = CookieManager.instance();
-              List<Cookie> cookieList = await cookieManager.getCookies(url: WebUri.uri(VRChatAssets.vrchat));
+              List<Cookie> cookieList = await cookieManager.getCookies(
+                  url: WebUri.uri(VRChatAssets.vrchat));
               Map<String, String> cookieMap = {};
               for (Cookie cookie in cookieList) {
                 cookieMap[cookie.name] = cookie.value;

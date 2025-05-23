@@ -19,7 +19,8 @@ class VRChatMobileHelp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    AccessibilityConfigNotifier accessibilityConfig = ref.watch(accessibilityConfigProvider);
+    AccessibilityConfigNotifier accessibilityConfig =
+        ref.watch(accessibilityConfigProvider);
     AsyncValue<PackageInfo> version = ref.watch(versionProvider);
 
     return Scaffold(
@@ -34,7 +35,8 @@ class VRChatMobileHelp extends ConsumerWidget {
               children: <Widget>[
                 FutureTile(
                   title: Text(AppLocalizations.of(context)!.contribution),
-                  subtitle: Text(AppLocalizations.of(context)!.contributionDetails),
+                  subtitle:
+                      Text(AppLocalizations.of(context)!.contributionDetails),
                   onTap: () async {
                     Widget? value = await openInBrowser(
                       url: Assets.repository,
@@ -43,7 +45,8 @@ class VRChatMobileHelp extends ConsumerWidget {
                     if (value != null) {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (BuildContext context) => value),
+                        MaterialPageRoute(
+                            builder: (BuildContext context) => value),
                       );
                     }
                   },
@@ -59,14 +62,16 @@ class VRChatMobileHelp extends ConsumerWidget {
                     if (value != null) {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (BuildContext context) => value),
+                        MaterialPageRoute(
+                            builder: (BuildContext context) => value),
                       );
                     }
                   },
                 ),
                 FutureTile(
                   title: Text(AppLocalizations.of(context)!.developerInfo),
-                  subtitle: Text(AppLocalizations.of(context)!.developerInfoDetails),
+                  subtitle:
+                      Text(AppLocalizations.of(context)!.developerInfoDetails),
                   onTap: () async {
                     Widget? value = await openInBrowser(
                       url: Assets.contact,
@@ -75,14 +80,16 @@ class VRChatMobileHelp extends ConsumerWidget {
                     if (value != null) {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (BuildContext context) => value),
+                        MaterialPageRoute(
+                            builder: (BuildContext context) => value),
                       );
                     }
                   },
                 ),
                 FutureTile(
                   title: Text(AppLocalizations.of(context)!.rateTheApp),
-                  subtitle: Text(AppLocalizations.of(context)!.rateTheAppDetails),
+                  subtitle:
+                      Text(AppLocalizations.of(context)!.rateTheAppDetails),
                   onTap: () async {
                     Widget? value = await openInBrowser(
                       url: Assets.rate,
@@ -91,7 +98,8 @@ class VRChatMobileHelp extends ConsumerWidget {
                     if (value != null) {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (BuildContext context) => value),
+                        MaterialPageRoute(
+                            builder: (BuildContext context) => value),
                       );
                     }
                   },
@@ -102,7 +110,10 @@ class VRChatMobileHelp extends ConsumerWidget {
                     subtitle: const Text(""),
                     trailing: const Padding(
                       padding: EdgeInsets.only(right: 2, top: 2),
-                      child: SizedBox(width: 20, height: 20, child: CircularProgressIndicator()),
+                      child: SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator()),
                     ),
                   ),
                   error: (e, trace) {
@@ -114,7 +125,8 @@ class VRChatMobileHelp extends ConsumerWidget {
                   },
                   data: (data) => FutureTile(
                     title: Text(AppLocalizations.of(context)!.version),
-                    subtitle: Text(AppLocalizations.of(context)!.versionDetails(data.version)),
+                    subtitle: Text(AppLocalizations.of(context)!
+                        .versionDetails(data.version)),
                     onTap: () async {
                       Widget? value = await openInBrowser(
                         url: Assets.release,
@@ -123,7 +135,8 @@ class VRChatMobileHelp extends ConsumerWidget {
                       if (value != null) {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (BuildContext context) => value),
+                          MaterialPageRoute(
+                              builder: (BuildContext context) => value),
                         );
                       }
                     },

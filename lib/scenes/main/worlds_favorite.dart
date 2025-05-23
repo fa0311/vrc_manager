@@ -28,7 +28,8 @@ class FavoriteWorldData {
 
 final vrchatMobileWorldFavoriteCounterProvider = StateProvider<int>((ref) => 0);
 
-final vrchatMobileWorldFavoriteSortProvider = FutureProvider<VRChatMobileWorldFavoriteData>((ref) async {
+final vrchatMobileWorldFavoriteSortProvider =
+    FutureProvider<VRChatMobileWorldFavoriteData>((ref) async {
   Future getFavoriteWorld(FavoriteWorldData favoriteWorld) async {
     VRChatAPI vrchatLoginSession = VRChatAPI(
       cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "",
@@ -39,7 +40,8 @@ final vrchatMobileWorldFavoriteSortProvider = FutureProvider<VRChatMobileWorldFa
     try {
       do {
         int offset = favoriteWorld.list.length;
-        List<VRChatFavoriteWorld> worlds = await vrchatLoginSession.favoritesWorlds(favoriteWorld.group.name, offset: offset);
+        List<VRChatFavoriteWorld> worlds = await vrchatLoginSession
+            .favoritesWorlds(favoriteWorld.group.name, offset: offset);
         for (VRChatFavoriteWorld world in worlds) {
           favoriteWorld.list.add(world);
         }
@@ -61,7 +63,8 @@ final vrchatMobileWorldFavoriteSortProvider = FutureProvider<VRChatMobileWorldFa
   try {
     do {
       int offset = favoriteWorld.length;
-      List<VRChatFavoriteGroup> favoriteGroupList = await vrchatLoginSession.favoriteGroups("world", offset: offset);
+      List<VRChatFavoriteGroup> favoriteGroupList =
+          await vrchatLoginSession.favoriteGroups("world", offset: offset);
       for (VRChatFavoriteGroup group in favoriteGroupList) {
         FavoriteWorldData favorite = FavoriteWorldData(group: group, list: []);
         futureList.add(getFavoriteWorld(favorite));
@@ -82,7 +85,8 @@ class VRChatMobileWorldsFavorite extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    AsyncValue<VRChatMobileWorldFavoriteData> data = ref.watch(vrchatMobileWorldFavoriteSortProvider);
+    AsyncValue<VRChatMobileWorldFavoriteData> data =
+        ref.watch(vrchatMobileWorldFavoriteSortProvider);
     ref.watch(vrchatMobileWorldFavoriteCounterProvider);
 
     return data.when(
@@ -90,19 +94,23 @@ class VRChatMobileWorldsFavorite extends ConsumerWidget {
       error: (e, trace) {
         logger.w(getMessage(e), error: e, stackTrace: trace);
         return ScrollWidget(
-          onRefresh: () => ref.refresh(vrchatMobileWorldFavoriteSortProvider.future),
+          onRefresh: () =>
+              ref.refresh(vrchatMobileWorldFavoriteSortProvider.future),
           child: ErrorPage(loggerReport: ref.read(loggerReportProvider)),
         );
       },
       data: (data) {
         return ScrollWidget(
-          onRefresh: () => ref.refresh(vrchatMobileWorldFavoriteSortProvider.future),
+          onRefresh: () =>
+              ref.refresh(vrchatMobileWorldFavoriteSortProvider.future),
           child: Column(
             children: [
               for (FavoriteWorldData favoriteWorld in data.favoriteWorld)
                 if (favoriteWorld.list.isNotEmpty) ...[
                   Text(favoriteWorld.group.displayName),
-                  ExtractionFavoriteWorld(id: GridModalConfigType.favoriteWorlds, favoriteWorld: favoriteWorld.list),
+                  ExtractionFavoriteWorld(
+                      id: GridModalConfigType.favoriteWorlds,
+                      favoriteWorld: favoriteWorld.list),
                 ],
             ],
           ),

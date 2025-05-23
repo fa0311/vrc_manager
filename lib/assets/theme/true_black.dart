@@ -16,7 +16,9 @@ ThemeData blackTheme() {
     secondaryHeaderColor: black,
     appBarTheme: AppBarTheme(color: grey),
     bottomAppBarTheme: BottomAppBarTheme(color: black),
-    colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.grey, brightness: Brightness.dark).copyWith(background: black),
+    colorScheme: ColorScheme.fromSwatch(
+            primarySwatch: Colors.grey, brightness: Brightness.dark)
+        .copyWith(background: black),
   );
 }
 
@@ -36,7 +38,9 @@ ThemeData trueBlackTheme() {
     splashColor: const Color.fromARGB(255, 20, 20, 20),
     appBarTheme: AppBarTheme(color: black),
     bottomAppBarTheme: BottomAppBarTheme(color: black),
-    colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.grey, brightness: Brightness.dark).copyWith(background: black),
+    colorScheme: ColorScheme.fromSwatch(
+            primarySwatch: Colors.grey, brightness: Brightness.dark)
+        .copyWith(background: black),
   );
 }
 

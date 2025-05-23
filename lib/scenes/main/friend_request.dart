@@ -18,7 +18,8 @@ class VRChatMobileFriendRequestData {
   VRChatMobileFriendRequestData({required this.userList});
 }
 
-final vrchatMobileFriendsRequestProvider = FutureProvider<VRChatMobileFriendRequestData>((ref) async {
+final vrchatMobileFriendsRequestProvider =
+    FutureProvider<VRChatMobileFriendRequestData>((ref) async {
   VRChatAPI vrchatLoginSession = VRChatAPI(
     cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "",
     userAgent: ref.watch(accountConfigProvider).userAgent,
@@ -30,9 +31,12 @@ final vrchatMobileFriendsRequestProvider = FutureProvider<VRChatMobileFriendRequ
   try {
     do {
       int offset = futureList.length;
-      List<VRChatNotifications> notify = await vrchatLoginSession.notifications(type: "friendRequest", offset: offset);
+      List<VRChatNotifications> notify = await vrchatLoginSession.notifications(
+          type: "friendRequest", offset: offset);
       for (VRChatNotifications requestUser in notify) {
-        futureList.add(vrchatLoginSession.users(requestUser.senderUserId).then((VRChatUser user) {
+        futureList.add(vrchatLoginSession
+            .users(requestUser.senderUserId)
+            .then((VRChatUser user) {
           userList.add(user);
         }).catchError((e, trace) {
           logger.e(getMessage(e), error: e, stackTrace: trace);
@@ -52,21 +56,27 @@ class VRChatMobileFriendRequest extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    AsyncValue<VRChatMobileFriendRequestData> data = ref.watch(vrchatMobileFriendsRequestProvider);
-    VRChatFriendStatus status = VRChatFriendStatus(isFriend: false, incomingRequest: true, outgoingRequest: false);
+    AsyncValue<VRChatMobileFriendRequestData> data =
+        ref.watch(vrchatMobileFriendsRequestProvider);
+    VRChatFriendStatus status = VRChatFriendStatus(
+        isFriend: false, incomingRequest: true, outgoingRequest: false);
 
     return data.when(
       loading: () => const Loading(),
       error: (e, trace) {
         logger.w(getMessage(e), error: e, stackTrace: trace);
         return ScrollWidget(
-          onRefresh: () => ref.refresh(vrchatMobileFriendsRequestProvider.future),
+          onRefresh: () =>
+              ref.refresh(vrchatMobileFriendsRequestProvider.future),
           child: ErrorPage(loggerReport: ref.read(loggerReportProvider)),
         );
       },
       data: (data) => ScrollWidget(
         onRefresh: () => ref.refresh(vrchatMobileFriendsRequestProvider.future),
-        child: ExtractionUser(id: GridModalConfigType.favoriteWorlds, userList: data.userList, status: status),
+        child: ExtractionUser(
+            id: GridModalConfigType.favoriteWorlds,
+            userList: data.userList,
+            status: status),
       ),
     );
   }

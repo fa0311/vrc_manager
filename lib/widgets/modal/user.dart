@@ -38,7 +38,8 @@ class SelfUserModalBottom extends ConsumerWidget {
 class UserDetailsModalBottom extends ConsumerWidget {
   final VRChatUser user;
   final VRChatFriendStatus status;
-  const UserDetailsModalBottom({super.key, required this.user, required this.status});
+  const UserDetailsModalBottom(
+      {super.key, required this.user, required this.status});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -64,7 +65,8 @@ class EditNoteTileWidget extends ConsumerWidget {
     return ListTile(
       title: Text(AppLocalizations.of(context)!.editNote),
       onTap: () {
-        showDialog(context: context, builder: (context) => EditNote(user: user));
+        showDialog(
+            context: context, builder: (context) => EditNote(user: user));
       },
     );
   }
@@ -88,7 +90,8 @@ class EditBioTileWidget extends ConsumerWidget {
 class ProfileActionTileWidget extends ConsumerWidget {
   final VRChatFriendStatus status;
   final VRChatUser user;
-  const ProfileActionTileWidget({super.key, required this.status, required this.user});
+  const ProfileActionTileWidget(
+      {super.key, required this.status, required this.user});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -123,7 +126,8 @@ class ProfileAction extends ConsumerWidget {
         Navigator.of(context).pop();
       }).catchError((e, trace) {
         logger.e(getMessage(e), error: e, stackTrace: trace);
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage(context: context, status: e))));
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(errorMessage(context: context, status: e))));
         Navigator.of(context).popUntil((route) => route.isFirst);
       });
       status.outgoingRequest = true;
@@ -134,7 +138,8 @@ class ProfileAction extends ConsumerWidget {
         Navigator.of(context).pop();
       }).catchError((e, trace) {
         logger.e(getMessage(e), error: e, stackTrace: trace);
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage(context: context, status: e))));
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(errorMessage(context: context, status: e))));
         Navigator.of(context).popUntil((route) => route.isFirst);
       });
       status.isFriend = true;
@@ -146,7 +151,8 @@ class ProfileAction extends ConsumerWidget {
         Navigator.of(context).pop();
       }).catchError((e, trace) {
         logger.e(getMessage(e), error: e, stackTrace: trace);
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage(context: context, status: e))));
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(errorMessage(context: context, status: e))));
         Navigator.of(context).popUntil((route) => route.isFirst);
       });
       status.outgoingRequest = false;
@@ -174,7 +180,9 @@ class ProfileAction extends ConsumerWidget {
                     Navigator.of(context).pop();
                   }).catchError((e, trace) {
                     logger.e(getMessage(e), error: e, stackTrace: trace);
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage(context: context, status: e))));
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content:
+                            Text(errorMessage(context: context, status: e))));
                     Navigator.of(context).popUntil((route) => route.isFirst);
                   });
                   status.isFriend = false;
@@ -190,13 +198,17 @@ class ProfileAction extends ConsumerWidget {
     return SingleChildScrollView(
       child: Column(
         children: [
-          if (!status.isFriend && !status.incomingRequest && !status.outgoingRequest)
+          if (!status.isFriend &&
+              !status.incomingRequest &&
+              !status.outgoingRequest)
             FutureTile(
               leading: const Icon(Icons.person_add),
               title: Text(AppLocalizations.of(context)!.friendRequest),
               onTap: sendFriendRequest,
             ),
-          if (status.isFriend && !status.incomingRequest && !status.outgoingRequest)
+          if (status.isFriend &&
+              !status.incomingRequest &&
+              !status.outgoingRequest)
             ListTile(
               leading: const Icon(Icons.person_remove),
               title: Text(AppLocalizations.of(context)!.unfriend),

@@ -74,7 +74,8 @@ Future<List<String>> getStorageList(String key, {String id = ""}) async {
   }
 }
 
-Future<bool> setStorageList(String key, List<String> value, {String id = ""}) async {
+Future<bool> setStorageList(String key, List<String> value,
+    {String id = ""}) async {
   try {
     final SharedPreferences storage = await SharedPreferences.getInstance();
     return await storage.setStringList("$key$id", value);

@@ -35,7 +35,8 @@ class VRChatMobileSettings extends ConsumerWidget {
                   onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (BuildContext context) => const VRChatMobileSplash(
+                      builder: (BuildContext context) =>
+                          const VRChatMobileSplash(
                         login: VRChatMobileSettingsAccessibility(),
                         child: VRChatMobileSettingsAccessibility(),
                       ),
@@ -51,7 +52,8 @@ class VRChatMobileSettings extends ConsumerWidget {
                   onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (BuildContext context) => const VRChatMobileSplash(
+                      builder: (BuildContext context) =>
+                          const VRChatMobileSplash(
                         login: VRChatMobileSettingsAccount(),
                         child: VRChatMobileSettingsAccount(),
                       ),
@@ -67,7 +69,8 @@ class VRChatMobileSettings extends ConsumerWidget {
                   onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (BuildContext context) => const VRChatMobileSplash(
+                      builder: (BuildContext context) =>
+                          const VRChatMobileSplash(
                         login: VRChatMobileSettingsPermissions(),
                         child: VRChatMobileSettingsPermissions(),
                       ),
@@ -96,7 +99,8 @@ class VRChatMobileSettings extends ConsumerWidget {
                   onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (BuildContext context) => const VRChatMobileSplash(
+                      builder: (BuildContext context) =>
+                          const VRChatMobileSplash(
                         login: VRChatMobileHelp(),
                         child: VRChatMobileHelp(),
                       ),

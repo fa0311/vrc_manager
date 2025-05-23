@@ -12,7 +12,11 @@ class FutureButton extends StatefulWidget {
   final Widget child;
   final Future Function() onPressed;
   final ButtonType type;
-  const FutureButton({super.key, required this.child, required this.onPressed, this.type = ButtonType.textButton});
+  const FutureButton(
+      {super.key,
+      required this.child,
+      required this.onPressed,
+      this.type = ButtonType.textButton});
 
   @override
   FutureButtonState createState() => FutureButtonState();
@@ -46,7 +50,9 @@ class FutureButtonState extends State<FutureButton> {
         width: size.width,
         height: size.height,
         child: Padding(
-          padding: EdgeInsets.symmetric(vertical: (size.height - 20) / 2, horizontal: (size.width - 20) / 2),
+          padding: EdgeInsets.symmetric(
+              vertical: (size.height - 20) / 2,
+              horizontal: (size.width - 20) / 2),
           child: const CircularProgressIndicator(),
         ),
       );

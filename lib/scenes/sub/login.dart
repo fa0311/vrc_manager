@@ -32,24 +32,33 @@ class VRChatMobileLoginData {
 
 String genUid([int length = 64]) {
   final Random random = Random.secure();
-  return List.generate(length, (_) => Assets.charset[random.nextInt(Assets.charset.length)]).join();
+  return List.generate(
+          length, (_) => Assets.charset[random.nextInt(Assets.charset.length)])
+      .join();
 }
 
-final isPasswordObscureProvider = StateProvider.autoDispose<bool>((ref) => true);
-final totpControllerProvider = StateProvider.autoDispose<TextEditingController>((ref) => TextEditingController());
+final isPasswordObscureProvider =
+    StateProvider.autoDispose<bool>((ref) => true);
+final totpControllerProvider = StateProvider.autoDispose<TextEditingController>(
+    (ref) => TextEditingController());
 
-final userControllerProvider = StateProvider.autoDispose<TextEditingController>((ref) {
-  return TextEditingController()..text = ref.read(loginDataProvider).accountConfig.userId ?? "";
+final userControllerProvider =
+    StateProvider.autoDispose<TextEditingController>((ref) {
+  return TextEditingController()
+    ..text = ref.read(loginDataProvider).accountConfig.userId ?? "";
 });
 
-final passwordControllerProvider = StateProvider.autoDispose<TextEditingController>((ref) {
-  return TextEditingController()..text = ref.read(loginDataProvider).accountConfig.password ?? "";
+final passwordControllerProvider =
+    StateProvider.autoDispose<TextEditingController>((ref) {
+  return TextEditingController()
+    ..text = ref.read(loginDataProvider).accountConfig.password ?? "";
 });
 final rememberPasswordProvider = StateProvider.autoDispose<bool>((ref) {
   return ref.read(loginDataProvider).accountConfig.rememberLoginInfo;
 });
 
-final loginDataProvider = StateProvider.autoDispose<VRChatMobileLoginData>((ref) {
+final loginDataProvider =
+    StateProvider.autoDispose<VRChatMobileLoginData>((ref) {
   AccountConfig accountConfig;
   if (!ref.read(accountConfigProvider).isLogout()) {
     accountConfig = ref.read(accountConfigProvider).loggedAccount!;
@@ -89,18 +98,23 @@ class VRChatMobileLogin extends ConsumerWidget {
 
     onPressedTotp() async {
       try {
-        VRChatLogin login = await ref.read(loginDataProvider).session.loginTotp(ref.read(totpControllerProvider).text);
+        VRChatLogin login = await ref
+            .read(loginDataProvider)
+            .session
+            .loginTotp(ref.read(totpControllerProvider).text);
         if (login.verified) {
           Navigator.of(context).popUntil((route) => route.isFirst);
           save();
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(AppLocalizations.of(context)!.incorrectLogin)),
+            SnackBar(
+                content: Text(AppLocalizations.of(context)!.incorrectLogin)),
           );
         }
       } catch (e, trace) {
         logger.e(getMessage(e), error: e, stackTrace: trace);
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage(context: context, status: e))));
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(errorMessage(context: context, status: e))));
       }
     }
 
@@ -117,7 +131,8 @@ class VRChatMobileLogin extends ConsumerWidget {
               keyboardType: TextInputType.number,
               controller: totpController,
               onFieldSubmitted: (String e) => onPressedTotp(),
-              decoration: InputDecoration(labelText: AppLocalizations.of(context)!.authenticationCode),
+              decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context)!.authenticationCode),
               maxLength: 6,
             ),
             actions: [
@@ -134,19 +149,23 @@ class VRChatMobileLogin extends ConsumerWidget {
     onPressed() async {
       try {
         final session = ref.watch(loginDataProvider).session;
-        VRChatLogin login = await session.login(ref.read(userControllerProvider).text, ref.read(passwordControllerProvider).text);
+        VRChatLogin login = await session.login(
+            ref.read(userControllerProvider).text,
+            ref.read(passwordControllerProvider).text);
         if (login.requiresTwoFactorAuth) {
           totp();
         } else if (login.verified) {
           await save();
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(AppLocalizations.of(context)!.incorrectLogin)),
+            SnackBar(
+                content: Text(AppLocalizations.of(context)!.incorrectLogin)),
           );
         }
       } catch (e, trace) {
         logger.e(getMessage(e), error: e, stackTrace: trace);
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage(context: context, status: e))));
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(errorMessage(context: context, status: e))));
       }
     }
 
@@ -175,14 +194,16 @@ class VRChatMobileLogin extends ConsumerWidget {
                 final userController = ref.watch(userControllerProvider);
                 return TextFormField(
                   controller: userController,
-                  decoration: InputDecoration(labelText: AppLocalizations.of(context)!.usernameOrEmail),
+                  decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context)!.usernameOrEmail),
                 );
               },
             ),
             Consumer(
               builder: (context, ref, child) {
                 final isPasswordObscure = ref.watch(isPasswordObscureProvider);
-                final passwordController = ref.watch(passwordControllerProvider);
+                final passwordController =
+                    ref.watch(passwordControllerProvider);
                 return TextFormField(
                   obscureText: isPasswordObscure,
                   controller: passwordController,
@@ -190,8 +211,12 @@ class VRChatMobileLogin extends ConsumerWidget {
                   decoration: InputDecoration(
                     labelText: AppLocalizations.of(context)!.password,
                     suffixIcon: IconButton(
-                      icon: Icon(isPasswordObscure ? Icons.visibility_off : Icons.visibility),
-                      onPressed: () => ref.read(isPasswordObscureProvider.notifier).update((state) => !state),
+                      icon: Icon(isPasswordObscure
+                          ? Icons.visibility_off
+                          : Icons.visibility),
+                      onPressed: () => ref
+                          .read(isPasswordObscureProvider.notifier)
+                          .update((state) => !state),
                     ),
                   ),
                 );
@@ -208,7 +233,9 @@ class VRChatMobileLogin extends ConsumerWidget {
                     fontSize: 14,
                   ),
                 ),
-                onChanged: (e) => ref.read(rememberPasswordProvider.notifier).update((state) => e),
+                onChanged: (e) => ref
+                    .read(rememberPasswordProvider.notifier)
+                    .update((state) => e),
               );
             }),
             FutureButton(
@@ -228,7 +255,8 @@ class VRChatMobileLogin extends ConsumerWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (BuildContext context) => const VRChatMobileSplash(
+                      builder: (BuildContext context) =>
+                          const VRChatMobileSplash(
                         login: VRChatMobileWebViewLogin(),
                         child: VRChatMobileHome(),
                       ),

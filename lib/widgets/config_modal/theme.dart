@@ -15,7 +15,8 @@ class ThemeBrightnessModal extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    AccessibilityConfigNotifier accessibilityConfig = ref.watch(accessibilityConfigProvider);
+    AccessibilityConfigNotifier accessibilityConfig =
+        ref.watch(accessibilityConfigProvider);
 
     return SingleChildScrollView(
       child: Column(
@@ -23,8 +24,15 @@ class ThemeBrightnessModal extends ConsumerWidget {
           for (ThemeBrightness value in ThemeBrightness.values)
             ListTile(
               title: Text(value.toLocalization(context)),
-              trailing: (dark ? accessibilityConfig.darkThemeBrightness : accessibilityConfig.themeBrightness) == value ? const Icon(Icons.check) : null,
-              onTap: () => dark ? accessibilityConfig.setDarkThemeBrightness(value) : accessibilityConfig.setThemeBrightness(value),
+              trailing: (dark
+                          ? accessibilityConfig.darkThemeBrightness
+                          : accessibilityConfig.themeBrightness) ==
+                      value
+                  ? const Icon(Icons.check)
+                  : null,
+              onTap: () => dark
+                  ? accessibilityConfig.setDarkThemeBrightness(value)
+                  : accessibilityConfig.setThemeBrightness(value),
             ),
         ],
       ),

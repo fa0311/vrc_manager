@@ -14,8 +14,13 @@ class VRChatMobileSettingsOtherAccount extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return WillPopScope(
       onWillPop: () async {
-        if (!ref.read(accountListConfigProvider).accountList.contains(ref.read(accountConfigProvider).loggedAccount)) {
-          ref.read(accountConfigProvider).login(ref.read(accountListConfigProvider).accountList.first);
+        if (!ref
+            .read(accountListConfigProvider)
+            .accountList
+            .contains(ref.read(accountConfigProvider).loggedAccount)) {
+          ref
+              .read(accountConfigProvider)
+              .login(ref.read(accountListConfigProvider).accountList.first);
         }
         return true;
       },
@@ -27,7 +32,8 @@ class VRChatMobileSettingsOtherAccount extends ConsumerWidget {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                for (AccountConfig account in ref.watch(accountListConfigProvider).accountList)
+                for (AccountConfig account
+                    in ref.watch(accountListConfigProvider).accountList)
                   Card(
                     elevation: 20.0,
                     child: InkWell(
@@ -43,8 +49,10 @@ class VRChatMobileSettingsOtherAccount extends ConsumerWidget {
                               child: SizedBox(
                                 width: double.infinity,
                                 child: Text(
-                                  account.displayName ?? AppLocalizations.of(context)!.unknown,
-                                  style: const TextStyle(fontWeight: FontWeight.bold),
+                                  account.displayName ??
+                                      AppLocalizations.of(context)!.unknown,
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold),
                                 ),
                               ),
                             ),
@@ -56,18 +64,28 @@ class VRChatMobileSettingsOtherAccount extends ConsumerWidget {
                                     context: context,
                                     builder: (_) {
                                       return AlertDialog(
-                                        title: Text(AppLocalizations.of(context)!.deleteLoginInfoConfirm),
+                                        title: Text(
+                                            AppLocalizations.of(context)!
+                                                .deleteLoginInfoConfirm),
                                         actions: <Widget>[
                                           TextButton(
-                                            child: Text(AppLocalizations.of(context)!.cancel),
-                                            onPressed: () => Navigator.pop(context),
+                                            child: Text(
+                                                AppLocalizations.of(context)!
+                                                    .cancel),
+                                            onPressed: () =>
+                                                Navigator.pop(context),
                                           ),
                                           TextButton(
                                             onPressed: () {
-                                              ref.read(accountListConfigProvider).removeAccount(account);
+                                              ref
+                                                  .read(
+                                                      accountListConfigProvider)
+                                                  .removeAccount(account);
                                               Navigator.pop(context);
                                             },
-                                            child: Text(AppLocalizations.of(context)!.delete),
+                                            child: Text(
+                                                AppLocalizations.of(context)!
+                                                    .delete),
                                           ),
                                         ],
                                       );

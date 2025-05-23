@@ -25,7 +25,8 @@ class VRChatError {
     statusCode = content['error']['status_code'];
   }
   VRChatError.fromHtml(String this.content) {
-    Match match = RegExp(r'<head><title>([0-9]{3})\s?(.*?)</title></head>').firstMatch(content)!;
+    Match match = RegExp(r'<head><title>([0-9]{3})\s?(.*?)</title></head>')
+        .firstMatch(content)!;
     if (match.groupCount == 2) {
       message = match.group(2)!;
       statusCode = int.parse(match.group(1)!);
@@ -42,7 +43,8 @@ class VRChatLogin {
 
   VRChatLogin.fromJson(this.content) {
     verified = content['verified'] ?? content.containsKey('username');
-    if (content.containsKey('requiresTwoFactorAuth')) requiresTwoFactorAuth = true;
+    if (content.containsKey('requiresTwoFactorAuth'))
+      requiresTwoFactorAuth = true;
   }
 }
 
@@ -61,7 +63,9 @@ class VRChatUserSelfOverload extends VRChatUserSelf {
     statusHistory = content['statusHistory'].cast<String>();
     steamId = content['steamId'];
     twoFactorAuthEnabled = content['twoFactorAuthEnabled'];
-    twoFactorAuthEnabledDate = content['twoFactorAuthEnabledDate'] == null ? null : DateTime.parse(content['twoFactorAuthEnabledDate']);
+    twoFactorAuthEnabledDate = content['twoFactorAuthEnabledDate'] == null
+        ? null
+        : DateTime.parse(content['twoFactorAuthEnabledDate']);
   }
 }
 
@@ -90,8 +94,12 @@ class VRChatUserSelf extends VRChatUser {
 
   VRChatUserSelf.fromJson(content) : super.fromJson(content) {
     acceptedTOSVersion = content['acceptedTOSVersion'];
-    accountDeletionDate = content['accountDeletionDate'] == null ? null : DateTime.parse(content['accountDeletionDate']);
-    activeFriends = content['activeFriends'] == null ? [] : content['activeFriends'].cast<String>();
+    accountDeletionDate = content['accountDeletionDate'] == null
+        ? null
+        : DateTime.parse(content['accountDeletionDate']);
+    activeFriends = content['activeFriends'] == null
+        ? []
+        : content['activeFriends'].cast<String>();
     currentAvatar = content['currentAvatar'];
     // currentAvatarAssetUrl = content['currentAvatarAssetUrl'];
     emailVerified = content['emailVerified'];
@@ -125,7 +133,8 @@ class VRChatFriends extends VRChatUser {
     travelingToInstance = content['travelingToInstance'];
     travelingToLocation = content['travelingToLocation'];
     travelingToWorld = content['travelingToWorld'];
-    worldId = content['worldId'] == "" ? location : content['location'] ?? location;
+    worldId =
+        content['worldId'] == "" ? location : content['location'] ?? location;
   }
 }
 
@@ -168,12 +177,18 @@ class VRChatUser {
     id = content['id'];
     isFriend = content['isFriend'];
     lastPlatform = content['last_platform'];
-    profilePicOverride = content['profilePicOverride'] == "" ? null : content['profilePicOverride'];
+    profilePicOverride = content['profilePicOverride'] == ""
+        ? null
+        : content['profilePicOverride'];
     status = byVrchatStatusData(content['status']);
-    statusDescription = content['statusDescription'] == "" ? null : content['statusDescription'];
+    statusDescription = content['statusDescription'] == ""
+        ? null
+        : content['statusDescription'];
     tags = content['tags'].cast<String>();
     userIcon = content['userIcon'];
-    location = content['location'] == "" ? VRChatInstanceIdOther.offline.name : content['location'] ?? VRChatInstanceIdOther.offline.name;
+    location = content['location'] == ""
+        ? VRChatInstanceIdOther.offline.name
+        : content['location'] ?? VRChatInstanceIdOther.offline.name;
 
     allowAvatarCopying = content['allowAvatarCopying'] ?? false;
     for (dynamic link in content['bioLinks'] ?? []) {
@@ -181,11 +196,15 @@ class VRChatUser {
         bioLinks.add(Uri.parse(link));
       }
     }
-    dateJoined = content['date_joined'] == null ? null : DateTime.parse(content['date_joined']);
+    dateJoined = content['date_joined'] == null
+        ? null
+        : DateTime.parse(content['date_joined']);
     friendRequestStatus = content['friendRequestStatus'];
     instanceId = content['instanceId'];
     lastActivity = content['last_activity'];
-    lastLogin = content['last_login'] == null || content['last_login'] == "" ? null : DateTime.parse(content['last_login']);
+    lastLogin = content['last_login'] == null || content['last_login'] == ""
+        ? null
+        : DateTime.parse(content['last_login']);
     state = content['state'];
     note = content['note'];
   }
@@ -217,7 +236,10 @@ class VRChatFriendStatus {
   late bool isFriend;
   late bool outgoingRequest;
 
-  VRChatFriendStatus({required this.isFriend, required this.incomingRequest, required this.outgoingRequest});
+  VRChatFriendStatus(
+      {required this.isFriend,
+      required this.incomingRequest,
+      required this.outgoingRequest});
 
   VRChatFriendStatus.fromJson(this.content) {
     incomingRequest = content['incomingRequest'];
@@ -244,7 +266,8 @@ class VRChatWorld extends VRChatLimitedWorld {
     featured = content['featured'] ?? false;
     instances = content['instances'].cast<Map<String, int>>();
     // namespace = content['namespace'];
-    previewYoutubeId = content['previewYoutubeId'] == "" ? null : content['previewYoutubeId'];
+    previewYoutubeId =
+        content['previewYoutubeId'] == "" ? null : content['previewYoutubeId'];
     privateOccupants = content['privateOccupants'];
     publicOccupants = content['publicOccupants'];
     for (dynamic package in content['unityPackages']) {
@@ -291,12 +314,16 @@ class VRChatLimitedWorld {
     heat = content['heat'] ?? 0;
     id = content['id'];
     imageUrl = content['imageUrl'];
-    labsPublicationDate = content['labsPublicationDate'] == "none" ? null : DateTime.parse(content['labsPublicationDate']);
+    labsPublicationDate = content['labsPublicationDate'] == "none"
+        ? null
+        : DateTime.parse(content['labsPublicationDate']);
     name = content['name'];
     occupants = content['occupants'];
     organization = content['organization'];
     popularity = content['popularity'];
-    publicationDate = content['publicationDate'] == "none" ? null : DateTime.parse(content['publicationDate']);
+    publicationDate = content['publicationDate'] == "none"
+        ? null
+        : DateTime.parse(content['publicationDate']);
     releaseStatus = content['releaseStatus'];
     tags = content['tags'].cast<String>();
     thumbnailImageUrl = content['thumbnailImageUrl'];
@@ -428,7 +455,9 @@ class VRChatFavoriteWorld extends VRChatLimitedWorld {
     favoriteGroup = content['favoriteGroup'];
   }
 
-  VRChatFavoriteWorld.fromFavorite(VRChatLimitedWorld world, VRChatFavorite favorite, String favoriteGroup) : super.fromJson(world.content) {
+  VRChatFavoriteWorld.fromFavorite(
+      VRChatLimitedWorld world, VRChatFavorite favorite, String favoriteGroup)
+      : super.fromJson(world.content) {
     if (world.id != favorite.favoriteId) throw ArgumentError();
     favoriteId = favorite.id;
     favoriteGroup = favoriteGroup;
@@ -553,7 +582,9 @@ class UnityPackages extends LimitedUnityPackages {
     assetUrl = content['assetUrl'];
     assetUrlObject = content['assetUrlObject'];
     assetVersion = content['assetVersion'];
-    createdAt = content['created_at'] == null ? null : DateTime.parse(content['created_at']);
+    createdAt = content['created_at'] == null
+        ? null
+        : DateTime.parse(content['created_at']);
     id = content['id'];
     // pluginUrl = content['pluginUrl'];
     pluginUrlObject = content['pluginUrlObject'];

@@ -18,9 +18,11 @@ import 'package:vrc_manager/widgets/loading.dart';
 import 'package:vrc_manager/widgets/modal.dart';
 import 'package:vrc_manager/widgets/scroll.dart';
 
-final vrchatMobileSearchModeProvider = StateProvider<SearchMode>((ref) => SearchMode.users);
+final vrchatMobileSearchModeProvider =
+    StateProvider<SearchMode>((ref) => SearchMode.users);
 final vrchatMobileSearchCounterProvider = StateProvider<int>((ref) => 0);
-final searchBoxControllerProvider = StateProvider<TextEditingController>((ref) => TextEditingController(text: ''));
+final searchBoxControllerProvider = StateProvider<TextEditingController>(
+    (ref) => TextEditingController(text: ''));
 
 enum SearchMode {
   users,
@@ -43,7 +45,8 @@ class VRChatMobileSearchData {
   VRChatMobileSearchData({required this.userList, required this.worldList});
 }
 
-final vrchatMobileSearchProvider = FutureProvider<VRChatMobileSearchData>((ref) async {
+final vrchatMobileSearchProvider =
+    FutureProvider<VRChatMobileSearchData>((ref) async {
   VRChatAPI vrchatLoginSession = VRChatAPI(
     cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "",
     userAgent: ref.watch(accountConfigProvider).userAgent,
@@ -71,7 +74,8 @@ final vrchatMobileSearchProvider = FutureProvider<VRChatMobileSearchData>((ref) 
       case SearchMode.users:
         do {
           int offset = userList.length;
-          List<VRChatUser> users = await vrchatLoginSession.searchUsers(searchingText, offset: offset);
+          List<VRChatUser> users = await vrchatLoginSession
+              .searchUsers(searchingText, offset: offset);
           for (VRChatUser user in users) {
             userList.add(user);
           }
@@ -81,7 +85,8 @@ final vrchatMobileSearchProvider = FutureProvider<VRChatMobileSearchData>((ref) 
       case SearchMode.worlds:
         do {
           int offset = worldList.length;
-          List<VRChatLimitedWorld> worlds = await vrchatLoginSession.searchWorlds(searchingText, offset: offset);
+          List<VRChatLimitedWorld> worlds = await vrchatLoginSession
+              .searchWorlds(searchingText, offset: offset);
           for (VRChatLimitedWorld world in worlds) {
             addWorldList(world);
           }
@@ -109,7 +114,8 @@ class VRChatMobileSearch extends ConsumerWidget {
       child: Column(
         children: [
           Container(
-            padding: const EdgeInsets.only(top: 10, right: 20, left: 20, bottom: 0),
+            padding:
+                const EdgeInsets.only(top: 10, right: 20, left: 20, bottom: 0),
             child: TextField(
               controller: ref.read(searchBoxControllerProvider),
               decoration: InputDecoration(
@@ -118,10 +124,13 @@ class VRChatMobileSearch extends ConsumerWidget {
                   icon: const Icon(Icons.search),
                   onPressed: () {
                     FocusScopeNode currentScope = FocusScope.of(context);
-                    if (!currentScope.hasPrimaryFocus && currentScope.hasFocus) {
+                    if (!currentScope.hasPrimaryFocus &&
+                        currentScope.hasFocus) {
                       FocusManager.instance.primaryFocus!.unfocus();
                     }
-                    ref.read(vrchatMobileSearchCounterProvider.notifier).state++;
+                    ref
+                        .read(vrchatMobileSearchCounterProvider.notifier)
+                        .state++;
                   },
                 ),
               ),
@@ -144,24 +153,39 @@ class VRChatMobileSearch extends ConsumerWidget {
                   onTap: () => showModalBottomSheetConsumer(
                     context: context,
                     builder: (context, ref, child) {
-                      SearchMode searchMode = ref.watch(vrchatMobileSearchModeProvider);
+                      SearchMode searchMode =
+                          ref.watch(vrchatMobileSearchModeProvider);
                       return SingleChildScrollView(
                         child: Column(
                           children: <Widget>[
                             ListTile(
                               title: Text(AppLocalizations.of(context)!.user),
-                              trailing: searchMode == SearchMode.users ? const Icon(Icons.check) : null,
+                              trailing: searchMode == SearchMode.users
+                                  ? const Icon(Icons.check)
+                                  : null,
                               onTap: () {
-                                ref.read(vrchatMobileSearchModeProvider.notifier).state = SearchMode.users;
-                                ref.read(gridModalConfigIdProvider.notifier).state = GridModalConfigType.searchUsers;
+                                ref
+                                    .read(
+                                        vrchatMobileSearchModeProvider.notifier)
+                                    .state = SearchMode.users;
+                                ref
+                                    .read(gridModalConfigIdProvider.notifier)
+                                    .state = GridModalConfigType.searchUsers;
                               },
                             ),
                             ListTile(
                               title: Text(AppLocalizations.of(context)!.world),
-                              trailing: searchMode == SearchMode.worlds ? const Icon(Icons.check) : null,
+                              trailing: searchMode == SearchMode.worlds
+                                  ? const Icon(Icons.check)
+                                  : null,
                               onTap: () {
-                                ref.read(vrchatMobileSearchModeProvider.notifier).state = SearchMode.worlds;
-                                ref.read(gridModalConfigIdProvider.notifier).state = GridModalConfigType.searchWorlds;
+                                ref
+                                    .read(
+                                        vrchatMobileSearchModeProvider.notifier)
+                                    .state = SearchMode.worlds;
+                                ref
+                                    .read(gridModalConfigIdProvider.notifier)
+                                    .state = GridModalConfigType.searchWorlds;
                               },
                             ),
                           ],
@@ -185,7 +209,8 @@ class VRChatMobileSearchResult extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    AsyncValue<VRChatMobileSearchData> data = ref.watch(vrchatMobileSearchProvider);
+    AsyncValue<VRChatMobileSearchData> data =
+        ref.watch(vrchatMobileSearchProvider);
     return data.when(
       loading: () => const Loading(),
       error: (e, trace) {

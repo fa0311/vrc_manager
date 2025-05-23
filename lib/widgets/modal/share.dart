@@ -40,7 +40,8 @@ class ShareUrlListTile extends ConsumerWidget {
           ShareListTileWidget(text: url.toString()),
           CopyListTileWidget(text: url.toString()),
           if (!browserExternalForce) OpenInBrowserListTileWidget(url: url),
-          if (url.host != VRChatAssets.vrchat.host && browserExternalForce) OpenInBrowserExternalForceListTileWidget(url: url),
+          if (url.host != VRChatAssets.vrchat.host && browserExternalForce)
+            OpenInBrowserExternalForceListTileWidget(url: url),
         ],
       ),
     );
@@ -51,11 +52,13 @@ class ShareInstanceListTile extends ConsumerWidget {
   final String worldId;
   final String instanceId;
 
-  const ShareInstanceListTile({super.key, required this.worldId, required this.instanceId});
+  const ShareInstanceListTile(
+      {super.key, required this.worldId, required this.instanceId});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    Uri url = VRChatAssets.launch.replace(queryParameters: {"worldId": worldId, "instanceId": instanceId});
+    Uri url = VRChatAssets.launch.replace(
+        queryParameters: {"worldId": worldId, "instanceId": instanceId});
 
     return SingleChildScrollView(
       child: Column(
@@ -65,7 +68,12 @@ class ShareInstanceListTile extends ConsumerWidget {
           OpenInBrowserListTileWidget(url: url),
           if (Platform.isWindows)
             OpenInWindowsListTileWidget(
-                url: VRChatAssets.vrchatScheme.replace(path: "launch", queryParameters: {"ref": VRChatAssets.vrchat.host, "id": "$worldId:$instanceId"})),
+                url: VRChatAssets.vrchatScheme.replace(
+                    path: "launch",
+                    queryParameters: {
+                  "ref": VRChatAssets.vrchat.host,
+                  "id": "$worldId:$instanceId"
+                })),
         ],
       ),
     );
@@ -109,7 +117,8 @@ class OpenInBrowserListTileWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    AccessibilityConfigNotifier accessibilityConfig = ref.watch(accessibilityConfigProvider);
+    AccessibilityConfigNotifier accessibilityConfig =
+        ref.watch(accessibilityConfigProvider);
     return ListTile(
       leading: const Icon(Icons.open_in_browser),
       title: Text(AppLocalizations.of(context)!.openInBrowser),
@@ -132,7 +141,8 @@ class OpenInBrowserListTileWidget extends ConsumerWidget {
 
 class OpenInBrowserExternalForceListTileWidget extends ConsumerWidget {
   final Uri url;
-  const OpenInBrowserExternalForceListTileWidget({super.key, required this.url});
+  const OpenInBrowserExternalForceListTileWidget(
+      {super.key, required this.url});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -169,7 +179,8 @@ class OpenInJsonViewer extends ConsumerWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (BuildContext context) => VRChatMobileJsonViewer(content: content),
+              builder: (BuildContext context) =>
+                  VRChatMobileJsonViewer(content: content),
             ),
           );
         },
@@ -201,7 +212,8 @@ class ShareUrlTileWidget extends ConsumerWidget {
 class ShareInstanceTileWidget extends ConsumerWidget {
   final String worldId;
   final String instanceId;
-  const ShareInstanceTileWidget({super.key, required this.worldId, required this.instanceId});
+  const ShareInstanceTileWidget(
+      {super.key, required this.worldId, required this.instanceId});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -210,7 +222,8 @@ class ShareInstanceTileWidget extends ConsumerWidget {
       onTap: () {
         showModalBottomSheetStatelessWidget(
           context: context,
-          builder: () => ShareInstanceListTile(worldId: worldId, instanceId: instanceId),
+          builder: () =>
+              ShareInstanceListTile(worldId: worldId, instanceId: instanceId),
         );
       },
     );
@@ -234,8 +247,10 @@ class InviteVrchatListTileWidget extends ConsumerWidget {
       title: Text(AppLocalizations.of(context)!.joinInstance),
       onTap: () async {
         try {
-          VRChatSecureName secureId = await vrchatLoginSession.shortName(location);
-          await vrchatLoginSession.selfInvite(location, secureId.shortName ?? secureId.secureName ?? "");
+          VRChatSecureName secureId =
+              await vrchatLoginSession.shortName(location);
+          await vrchatLoginSession.selfInvite(
+              location, secureId.shortName ?? secureId.secureName ?? "");
 
           showDialog(
             context: context,
@@ -254,7 +269,8 @@ class InviteVrchatListTileWidget extends ConsumerWidget {
           );
         } catch (e, trace) {
           logger.e(getMessage(e), error: e, stackTrace: trace);
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage(context: context, status: e))));
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text(errorMessage(context: context, status: e))));
         }
       },
     );
@@ -267,7 +283,8 @@ class OpenInWindowsListTileWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    AccessibilityConfigNotifier accessibilityConfig = ref.watch(accessibilityConfigProvider);
+    AccessibilityConfigNotifier accessibilityConfig =
+        ref.watch(accessibilityConfigProvider);
 
     return FutureTile(
       leading: const Icon(Icons.laptop_windows),

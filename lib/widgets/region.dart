@@ -20,7 +20,8 @@ class RegionWidget extends ConsumerWidget {
       child: CachedNetworkImage(
         imageUrl: region.toUri().toString(),
         fit: BoxFit.fitWidth,
-        progressIndicatorBuilder: (context, url, downloadProgress) => const CircularProgressIndicator(),
+        progressIndicatorBuilder: (context, url, downloadProgress) =>
+            const CircularProgressIndicator(),
         errorWidget: (context, url, error) => const Icon(Icons.error),
         httpHeaders: {
           "user-agent": ref.watch(accountConfigProvider).userAgent,

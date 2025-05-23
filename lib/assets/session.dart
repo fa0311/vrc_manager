@@ -13,7 +13,8 @@ class Session {
 
   Future<dynamic> get(Uri url) async {
     http.Response response = await http.get(url, headers: headers);
-    if (response.statusCode != 200) throw HttpException(response.body, uri: url);
+    if (response.statusCode != 200)
+      throw HttpException(response.body, uri: url);
     final dynamic body = json.decode(response.body);
     updateCookie(response);
     return body;
@@ -23,35 +24,43 @@ class Session {
     final headersAuth = Map<String, String>.from(headers)
       ..addAll(
         {
-          'authorization': 'Basic ${base64Encode(utf8.encode('$username:$password'))}',
+          'authorization':
+              'Basic ${base64Encode(utf8.encode('$username:$password'))}',
         },
       );
     http.Response response = await http.get(url, headers: headersAuth);
-    if (response.statusCode != 200) throw HttpException(response.body, uri: url);
+    if (response.statusCode != 200)
+      throw HttpException(response.body, uri: url);
     final dynamic body = json.decode(response.body);
     updateCookie(response);
     return body;
   }
 
   Future<dynamic> post(Uri url, [Object? data]) async {
-    http.Response response = await http.post(url, body: data ?? {}, headers: headers);
-    if (response.statusCode != 200) throw HttpException(response.body, uri: url);
+    http.Response response =
+        await http.post(url, body: data ?? {}, headers: headers);
+    if (response.statusCode != 200)
+      throw HttpException(response.body, uri: url);
     final dynamic body = json.decode(response.body);
     updateCookie(response);
     return body;
   }
 
   Future<dynamic> put(Uri url, [Object? data]) async {
-    http.Response response = await http.put(url, body: data ?? {}, headers: headers);
-    if (response.statusCode != 200) throw HttpException(response.body, uri: url);
+    http.Response response =
+        await http.put(url, body: data ?? {}, headers: headers);
+    if (response.statusCode != 200)
+      throw HttpException(response.body, uri: url);
     final dynamic body = json.decode(response.body);
     updateCookie(response);
     return body;
   }
 
   Future<dynamic> delete(Uri url, [Object? data]) async {
-    http.Response response = await http.delete(url, body: data ?? {}, headers: headers);
-    if (response.statusCode != 200) throw HttpException(response.body, uri: url);
+    http.Response response =
+        await http.delete(url, body: data ?? {}, headers: headers);
+    if (response.statusCode != 200)
+      throw HttpException(response.body, uri: url);
     final dynamic body = json.decode(response.body);
     updateCookie(response);
     return body;

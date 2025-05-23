@@ -35,7 +35,8 @@ class VRChatMobileUserData {
   });
 }
 
-final vrchatMobileUserProvider = FutureProvider.family<VRChatMobileUserData, String>((ref, userId) async {
+final vrchatMobileUserProvider =
+    FutureProvider.family<VRChatMobileUserData, String>((ref, userId) async {
   VRChatAPI vrchatLoginSession = VRChatAPI(
     cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "",
     userAgent: ref.watch(accountConfigProvider).userAgent,
@@ -50,13 +51,19 @@ final vrchatMobileUserProvider = FutureProvider.family<VRChatMobileUserData, Str
     vrchatLoginSession.users(userId).then((value) => user = value),
     vrchatLoginSession.friendStatus(userId).then((value) => status = value),
   ]);
-  if (VRChatInstanceIdOther.values.any((id) => id.name == user.location)) return VRChatMobileUserData(user: user, status: status);
+  if (VRChatInstanceIdOther.values.any((id) => id.name == user.location))
+    return VRChatMobileUserData(user: user, status: status);
 
   await Future.wait([
-    vrchatLoginSession.worlds(user.location.split(":")[0]).then((value) => world = value),
-    vrchatLoginSession.instances(user.location).then((value) => instance = value),
+    vrchatLoginSession
+        .worlds(user.location.split(":")[0])
+        .then((value) => world = value),
+    vrchatLoginSession
+        .instances(user.location)
+        .then((value) => instance = value),
   ]);
-  return VRChatMobileUserData(user: user, status: status, world: world, instance: instance);
+  return VRChatMobileUserData(
+      user: user, status: status, world: world, instance: instance);
 });
 
 class VRChatMobileUser extends ConsumerWidget {
@@ -65,7 +72,8 @@ class VRChatMobileUser extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    AsyncValue<VRChatMobileUserData> data = ref.watch(vrchatMobileUserProvider(userId));
+    AsyncValue<VRChatMobileUserData> data =
+        ref.watch(vrchatMobileUserProvider(userId));
 
     return Scaffold(
       appBar: AppBar(
@@ -82,7 +90,8 @@ class VRChatMobileUser extends ConsumerWidget {
               onPressed: () {
                 showModalBottomSheetStatelessWidget(
                   context: context,
-                  builder: () => UserDetailsModalBottom(user: data.user, status: data.status),
+                  builder: () => UserDetailsModalBottom(
+                      user: data.user, status: data.status),
                 );
               },
             ),
@@ -99,24 +108,36 @@ class VRChatMobileUser extends ConsumerWidget {
               error: (e, trace) {
                 logger.w(e, error: e, stackTrace: trace);
                 return ScrollWidget(
-                  onRefresh: () => ref.refresh((vrchatMobileUserProvider(userId).future)),
-                  child: ErrorPage(loggerReport: ref.read(loggerReportProvider)),
+                  onRefresh: () =>
+                      ref.refresh((vrchatMobileUserProvider(userId).future)),
+                  child:
+                      ErrorPage(loggerReport: ref.read(loggerReportProvider)),
                 );
               },
               data: (data) => ScrollWidget(
-                onRefresh: () => ref.refresh((vrchatMobileUserProvider(userId).future)),
+                onRefresh: () =>
+                    ref.refresh((vrchatMobileUserProvider(userId).future)),
                 child: Container(
                   padding: const EdgeInsets.only(top: 10, right: 30, left: 30),
                   child: Column(
                     children: [
                       UserProfile(user: data.user),
                       Container(
-                        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 10, horizontal: 0),
                         child: () {
-                          if (data.user.location == VRChatInstanceIdOther.private.name) return const PrivateWorld();
-                          if (data.user.location == VRChatInstanceIdOther.traveling.name) return const TravelingWorld();
-                          if (data.user.location == VRChatInstanceIdOther.offline.name) return null;
-                          return data.world == null ? null : InstanceWidget(world: data.world!, instance: data.instance!);
+                          if (data.user.location ==
+                              VRChatInstanceIdOther.private.name)
+                            return const PrivateWorld();
+                          if (data.user.location ==
+                              VRChatInstanceIdOther.traveling.name)
+                            return const TravelingWorld();
+                          if (data.user.location ==
+                              VRChatInstanceIdOther.offline.name) return null;
+                          return data.world == null
+                              ? null
+                              : InstanceWidget(
+                                  world: data.world!, instance: data.instance!);
                         }(),
                       ),
                     ],
