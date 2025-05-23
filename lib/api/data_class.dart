@@ -93,7 +93,7 @@ class VRChatUserSelf extends VRChatUser {
     accountDeletionDate = content['accountDeletionDate'] == null ? null : DateTime.parse(content['accountDeletionDate']);
     activeFriends = content['activeFriends'] == null ? [] : content['activeFriends'].cast<String>();
     currentAvatar = content['currentAvatar'];
-    currentAvatarAssetUrl = content['currentAvatarAssetUrl'];
+    // currentAvatarAssetUrl = content['currentAvatarAssetUrl'];
     emailVerified = content['emailVerified'];
     friendGroupNames = content['friendGroupNames'].cast<String>();
     friendKey = content['friendKey'];
