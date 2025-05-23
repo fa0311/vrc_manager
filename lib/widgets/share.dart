@@ -4,11 +4,13 @@ import 'dart:io';
 // Flutter imports:
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+// Package imports:
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
+
 // Project imports:
 import 'package:vrc_manager/api/assets/assets.dart';
-// Package imports:
 import 'package:vrc_manager/l10n/app_localizations.dart';
 import 'package:vrc_manager/scenes/web/web_view.dart';
 

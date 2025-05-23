@@ -1,8 +1,8 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
+
 // Project imports:
 import 'package:vrc_manager/assets/theme/true_black.dart';
-// Package imports:
 import 'package:vrc_manager/l10n/app_localizations.dart';
 
 enum ThemeBrightness {

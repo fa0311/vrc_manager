@@ -6,10 +6,10 @@ import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:domain_verification_manager/domain_verification_manager.dart';
-import 'package:vrc_manager/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
+import 'package:vrc_manager/l10n/app_localizations.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/setting/logger.dart';
 

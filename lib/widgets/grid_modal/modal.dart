@@ -1,9 +1,11 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 // Package imports:
-import 'package:vrc_manager/l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 // Project imports:
+import 'package:vrc_manager/l10n/app_localizations.dart';
 import 'package:vrc_manager/scenes/main/search.dart';
 import 'package:vrc_manager/storage/accessibility.dart';
 import 'package:vrc_manager/storage/grid_modal.dart';

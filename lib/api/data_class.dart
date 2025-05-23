@@ -1,7 +1,6 @@
 // Project imports:
 import 'package:vrc_manager/api/assets/instance_type.dart';
 import 'package:vrc_manager/api/assets/region.dart';
-
 import 'assets/status.dart';
 
 class VRChatStatus {

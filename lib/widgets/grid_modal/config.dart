@@ -2,9 +2,9 @@
 
 // Flutter imports:
 import 'package:flutter/material.dart';
+
 // Project imports:
 import 'package:vrc_manager/api/assets/assets.dart';
-// Package imports:
 import 'package:vrc_manager/l10n/app_localizations.dart';
 
 enum GridModalConfigType {

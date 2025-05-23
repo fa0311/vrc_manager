@@ -1,7 +1,10 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+
 // Package imports:
+import 'package:intl/intl.dart';
+
+// Project imports:
 import 'package:vrc_manager/l10n/app_localizations.dart';
 
 String generalDateDifference(BuildContext context, DateTime time) {
