@@ -6,6 +6,7 @@ import 'dart:math';
 
 // Flutter imports:
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 // Package imports:
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -70,6 +71,10 @@ class VRChatMobileLogin extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     Future save() async {
+      // The credentials are known-good at this point, so let the platform offer
+      // to store them in the user's password manager.
+      TextInput.finishAutofillContext();
+
       AccountConfig config = ref.read(loginDataProvider).accountConfig;
       config.setUserId(ref.read(userControllerProvider).text);
 
@@ -108,12 +113,15 @@ class VRChatMobileLogin extends ConsumerWidget {
           final totpController = ref.watch(totpControllerProvider);
           return AlertDialog(
             title: Text(AppLocalizations.of(context)!.twoFactorAuthentication),
-            content: TextFormField(
-              keyboardType: TextInputType.number,
-              controller: totpController,
-              onFieldSubmitted: (String e) => onPressedTotp(),
-              decoration: InputDecoration(labelText: AppLocalizations.of(context)!.authenticationCode),
-              maxLength: 6,
+            content: AutofillGroup(
+              child: TextFormField(
+                keyboardType: TextInputType.number,
+                controller: totpController,
+                autofillHints: const [AutofillHints.oneTimeCode],
+                onFieldSubmitted: (String e) => onPressedTotp(),
+                decoration: InputDecoration(labelText: AppLocalizations.of(context)!.authenticationCode),
+                maxLength: 6,
+              ),
             ),
             actions: [FutureButton(child: Text(AppLocalizations.of(context)!.send), onPressed: () => onPressedTotp())],
           );
@@ -151,56 +159,67 @@ class VRChatMobileLogin extends ConsumerWidget {
       drawer: const NormalDrawer(),
       body: Padding(
         padding: const EdgeInsets.all(32.0),
-        child: Column(
-          children: <Widget>[
-            Consumer(
-              builder: (context, ref, child) {
-                final userController = ref.watch(userControllerProvider);
-                return TextFormField(controller: userController, decoration: InputDecoration(labelText: AppLocalizations.of(context)!.usernameOrEmail));
-              },
-            ),
-            Consumer(
-              builder: (context, ref, child) {
-                final isPasswordObscure = ref.watch(isPasswordObscureProvider);
-                final passwordController = ref.watch(passwordControllerProvider);
-                return TextFormField(
-                  obscureText: isPasswordObscure,
-                  controller: passwordController,
-                  onFieldSubmitted: (String e) => onPressed(),
-                  decoration: InputDecoration(
-                    labelText: AppLocalizations.of(context)!.password,
-                    suffixIcon: IconButton(
-                      icon: Icon(isPasswordObscure ? Icons.visibility_off : Icons.visibility),
-                      onPressed: () => ref.read(isPasswordObscureProvider.notifier).update((state) => !state),
-                    ),
-                  ),
-                );
-              },
-            ),
-            Consumer(
-              builder: (context, ref, child) {
-                final rememberPassword = ref.watch(rememberPasswordProvider);
-                return SwitchListTile(
-                  value: rememberPassword,
-                  title: Text(AppLocalizations.of(context)!.rememberPassword, style: TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 14)),
-                  onChanged: (e) => ref.read(rememberPasswordProvider.notifier).update((state) => e),
-                );
-              },
-            ),
-            FutureButton(onPressed: () => onPressed(), type: ButtonType.elevatedButton, child: Text(AppLocalizations.of(context)!.login)),
-            if (Platform.isAndroid || Platform.isIOS)
-              TextButton(
-                child: Text(AppLocalizations.of(context)!.loginBrowser, style: const TextStyle(fontSize: 14)),
-                onPressed: () async {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (BuildContext context) => const VRChatMobileSplash(login: VRChatMobileWebViewLogin(), child: VRChatMobileHome()),
+        // Groups the two fields into a single autofill context so password
+        // managers offer to fill and to save them as one credential.
+        child: AutofillGroup(
+          child: Column(
+            children: <Widget>[
+              Consumer(
+                builder: (context, ref, child) {
+                  final userController = ref.watch(userControllerProvider);
+                  return TextFormField(
+                    controller: userController,
+                    autofillHints: const [AutofillHints.username],
+                    textInputAction: TextInputAction.next,
+                    decoration: InputDecoration(labelText: AppLocalizations.of(context)!.usernameOrEmail),
+                  );
+                },
+              ),
+              Consumer(
+                builder: (context, ref, child) {
+                  final isPasswordObscure = ref.watch(isPasswordObscureProvider);
+                  final passwordController = ref.watch(passwordControllerProvider);
+                  return TextFormField(
+                    obscureText: isPasswordObscure,
+                    controller: passwordController,
+                    autofillHints: const [AutofillHints.password],
+                    textInputAction: TextInputAction.done,
+                    onFieldSubmitted: (String e) => onPressed(),
+                    decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context)!.password,
+                      suffixIcon: IconButton(
+                        icon: Icon(isPasswordObscure ? Icons.visibility_off : Icons.visibility),
+                        onPressed: () => ref.read(isPasswordObscureProvider.notifier).update((state) => !state),
+                      ),
                     ),
                   );
                 },
               ),
-          ],
+              Consumer(
+                builder: (context, ref, child) {
+                  final rememberPassword = ref.watch(rememberPasswordProvider);
+                  return SwitchListTile(
+                    value: rememberPassword,
+                    title: Text(AppLocalizations.of(context)!.rememberPassword, style: TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 14)),
+                    onChanged: (e) => ref.read(rememberPasswordProvider.notifier).update((state) => e),
+                  );
+                },
+              ),
+              FutureButton(onPressed: () => onPressed(), type: ButtonType.elevatedButton, child: Text(AppLocalizations.of(context)!.login)),
+              if (Platform.isAndroid || Platform.isIOS)
+                TextButton(
+                  child: Text(AppLocalizations.of(context)!.loginBrowser, style: const TextStyle(fontSize: 14)),
+                  onPressed: () async {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (BuildContext context) => const VRChatMobileSplash(login: VRChatMobileWebViewLogin(), child: VRChatMobileHome()),
+                      ),
+                    );
+                  },
+                ),
+            ],
+          ),
         ),
       ),
     );
