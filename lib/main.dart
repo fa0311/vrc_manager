@@ -21,7 +21,7 @@ Logger logger = LoggerExt(
   level: kDebugMode ? Level.trace : Level.warning,
 );
 
-main() {
+void main() {
   runApp(const ProviderScope(child: VRChatMobile()));
 }
 

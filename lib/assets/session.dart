@@ -67,7 +67,7 @@ class Session {
     return body;
   }
 
-  updateCookie(http.Response response) {
+  void updateCookie(http.Response response) {
     String? rawCookie = response.headers['set-cookie'];
     if (rawCookie != null) {
       Map<String, String> cookieMap = decodeCookie(headers['cookie'] ?? "");

@@ -53,7 +53,7 @@ class VRChatMobileWebViewUserPolicy extends ConsumerWidget {
           color: Theme.of(context).cardColor,
           boxShadow: [
             BoxShadow(
-              color: Theme.of(context).colorScheme.shadow.withOpacity(0.2),
+              color: Theme.of(context).colorScheme.shadow.withValues(alpha: 0.2),
               spreadRadius: 5,
               blurRadius: 5,
             ),
@@ -97,10 +97,8 @@ class VRChatMobileWebViewUserPolicy extends ConsumerWidget {
           return InAppWebView(
             initialUrlRequest:
                 URLRequest(url: WebUri(Assets.userPolicy.toString())),
-            initialOptions: InAppWebViewGroupOptions(
-              crossPlatform: InAppWebViewOptions(
-                javaScriptEnabled: true,
-              ),
+            initialSettings: InAppWebViewSettings(
+              javaScriptEnabled: true,
             ),
           );
         } else {

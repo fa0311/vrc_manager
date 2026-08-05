@@ -14,8 +14,8 @@ class VRChatMobileSettingsOtherAccount extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return WillPopScope(
-      onWillPop: () async {
+    return PopScope(
+      onPopInvokedWithResult: (bool didPop, Object? result) {
         if (!ref
             .read(accountListConfigProvider)
             .accountList
@@ -24,7 +24,6 @@ class VRChatMobileSettingsOtherAccount extends ConsumerWidget {
               .read(accountConfigProvider)
               .login(ref.read(accountListConfigProvider).accountList.first);
         }
-        return true;
       },
       child: Scaffold(
         appBar: AppBar(

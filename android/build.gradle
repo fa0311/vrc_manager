@@ -10,6 +10,10 @@ allprojects {
                     if (namespace == null) {
                         namespace project.group
                     }
+                    // domain_verification_manager 1.0.0 still pins compileSdk 31, which
+                    // fails checkAarMetadata because its AndroidX dependencies require 34+.
+                    // Align every module on the Flutter-provided compileSdk instead.
+                    compileSdk 36
                 }
             }
         }

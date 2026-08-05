@@ -53,8 +53,7 @@ class VRChatUserSelfOverload extends VRChatUserSelf {
   late bool twoFactorAuthEnabled;
   late DateTime? twoFactorAuthEnabledDate;
 
-  @override
-  VRChatUserSelfOverload.fromJson(content) : super.fromJson(content) {
+  VRChatUserSelfOverload.fromJson(dynamic content) : super.fromJson(content) {
     offlineFriends = content['offlineFriends'].cast<String>();
     onlineFriends = content['onlineFriends'].cast<String>();
     statusHistory = content['statusHistory'].cast<String>();
@@ -87,7 +86,7 @@ class VRChatUserSelf extends VRChatUser {
   late String username;
   late bool unsubscribe;
 
-  VRChatUserSelf.fromJson(content) : super.fromJson(content) {
+  VRChatUserSelf.fromJson(dynamic content) : super.fromJson(content) {
     acceptedTOSVersion = content['acceptedTOSVersion'];
     accountDeletionDate = content['accountDeletionDate'] == null ? null : DateTime.parse(content['accountDeletionDate']);
     activeFriends = content['activeFriends'] == null ? [] : content['activeFriends'].cast<String>();
@@ -119,7 +118,7 @@ class VRChatFriends extends VRChatUser {
   late String? travelingToWorld;
   late String worldId;
 
-  VRChatFriends.fromJson(content) : super.fromJson(content) {
+  VRChatFriends.fromJson(dynamic content) : super.fromJson(content) {
     friendKey = content['friendKey'];
     travelingToInstance = content['travelingToInstance'];
     travelingToLocation = content['travelingToLocation'];
@@ -238,7 +237,7 @@ class VRChatWorld extends VRChatLimitedWorld {
   late int version;
   late int visits;
 
-  VRChatWorld.fromJson(content) : super.fromJson(content) {
+  VRChatWorld.fromJson(dynamic content) : super.fromJson(content) {
     description = content['description'] == "" ? null : content['description'];
     featured = content['featured'] ?? false;
     instances = content['instances'].cast<Map<String, int>>();
@@ -305,7 +304,7 @@ class VRChatLimitedWorld {
     updatedAt = DateTime.parse(content['updated_at']);
   }
 
-  fromJsonHidden() {
+  void fromJsonHidden() {
     // want Union in Dart.
     authorId = content['authorId'] ?? "???";
     authorName = content['authorName'];
@@ -422,7 +421,7 @@ class VRChatFavoriteWorld extends VRChatLimitedWorld {
   late String favoriteId;
   late String favoriteGroup;
 
-  VRChatFavoriteWorld.fromJson(content) : super.fromJson(content) {
+  VRChatFavoriteWorld.fromJson(dynamic content) : super.fromJson(content) {
     favoriteId = content['favoriteId'];
     favoriteGroup = content['favoriteGroup'];
   }
@@ -548,7 +547,7 @@ class UnityPackages extends LimitedUnityPackages {
   late Map? pluginUrlObject; //default {}
   late int unitySortNumber;
 
-  UnityPackages.fromJson(content) : super.fromJson(content) {
+  UnityPackages.fromJson(dynamic content) : super.fromJson(content) {
     assetUrl = content['assetUrl'];
     assetUrlObject = content['assetUrlObject'];
     assetVersion = content['assetVersion'];

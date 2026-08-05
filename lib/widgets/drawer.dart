@@ -80,7 +80,7 @@ class NormalDrawer extends ConsumerWidget {
                   );
                 },
                 child: UserAccountsDrawerHeader(
-                  decoration: BoxDecoration(color: Theme.of(context).colorScheme.background),
+                  decoration: BoxDecoration(color: Theme.of(context).colorScheme.surface),
                   accountName: Text(account!.data!.username),
                   accountEmail: Text(account.data!.statusDescription ?? ""),
                   currentAccountPicture: CachedNetworkImage(

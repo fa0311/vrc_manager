@@ -24,7 +24,7 @@ class VRChatAPI {
     return vrchatSession.headers["cookie"] ?? "";
   }
 
-  setCookie(String? cookie) {
+  void setCookie(String? cookie) {
     vrchatSession.headers["cookie"] = cookie ?? "";
   }
 

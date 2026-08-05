@@ -81,7 +81,7 @@ class ShareListTileWidget extends ConsumerWidget {
     return FutureTile(
       leading: const Icon(Icons.share),
       title: Text(AppLocalizations.of(context)!.share),
-      onTap: () => Share.share(text),
+      onTap: () => SharePlus.instance.share(ShareParams(text: text)),
     );
   }
 }

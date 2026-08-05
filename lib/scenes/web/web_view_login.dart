@@ -67,8 +67,16 @@ class VRChatMobileWebViewLogin extends ConsumerWidget {
       return true;
     }
 
-    return WillPopScope(
-      onWillPop: () => exitApp(context),
+    return PopScope(
+      // The webview consumes back itself while it has history, so the route
+      // pop is gated on exitApp() instead of being allowed unconditionally.
+      canPop: false,
+      onPopInvokedWithResult: (bool didPop, Object? result) async {
+        if (didPop) return;
+        if (await exitApp(context) && context.mounted) {
+          Navigator.pop(context);
+        }
+      },
       child: Scaffold(
         appBar: AppBar(),
         body: data.when(
@@ -83,10 +91,8 @@ class VRChatMobileWebViewLogin extends ConsumerWidget {
           data: (data) => InAppWebView(
             key: webViewKey,
             initialUrlRequest: URLRequest(url: WebUri.uri(initUrl)),
-            initialOptions: InAppWebViewGroupOptions(
-              crossPlatform: InAppWebViewOptions(
-                useShouldOverrideUrlLoading: true,
-              ),
+            initialSettings: InAppWebViewSettings(
+              useShouldOverrideUrlLoading: true,
             ),
             onWebViewCreated: (InAppWebViewController value) {
               ref.read(webViewControllerProvider.notifier).state = value;
