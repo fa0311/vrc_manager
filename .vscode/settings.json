@@ -3,7 +3,6 @@
   "markdownlint.config": {
     "MD033": false
   },
-  "dart.flutterSdkPath": ".fvm/versions/3.32.0",
   "files.associations": {
     "*.arb": "json"
   },
