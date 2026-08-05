@@ -6,10 +6,7 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 class Session {
-  Map<String, String> headers = <String, String>{
-    'cookie': '',
-    'user-agent': '',
-  };
+  Map<String, String> headers = <String, String>{'cookie': '', 'user-agent': ''};
 
   Future<dynamic> get(Uri url) async {
     http.Response response = await http.get(url, headers: headers);
@@ -22,12 +19,7 @@ class Session {
   }
 
   Future<dynamic> basic(Uri url, String username, String password) async {
-    final headersAuth = Map<String, String>.from(headers)
-      ..addAll(
-        {
-          'authorization': 'Basic ${base64Encode(utf8.encode('$username:$password'))}',
-        },
-      );
+    final headersAuth = Map<String, String>.from(headers)..addAll({'authorization': 'Basic ${base64Encode(utf8.encode('$username:$password'))}'});
     http.Response response = await http.get(url, headers: headersAuth);
     if (response.statusCode != 200) {
       throw HttpException(response.body, uri: url);

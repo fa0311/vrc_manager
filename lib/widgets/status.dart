@@ -15,13 +15,6 @@ class StatusWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Container(
-      width: diameter,
-      height: diameter,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: status.toColor(),
-      ),
-    );
+    return Container(width: diameter, height: diameter, decoration: BoxDecoration(shape: BoxShape.circle, color: status.toColor()));
   }
 }

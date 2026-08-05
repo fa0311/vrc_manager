@@ -17,10 +17,7 @@ import 'package:vrc_manager/widgets/share.dart';
 class GridModal extends ConsumerWidget {
   final GridModalConfigType type;
 
-  const GridModal({
-    super.key,
-    required this.type,
-  });
+  const GridModal({super.key, required this.type});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -35,26 +32,16 @@ class GridModal extends ConsumerWidget {
             ListTile(
               title: Text(AppLocalizations.of(context)!.sort),
               subtitle: Text(config.sortMode.toLocalization(context)),
-              onTap: () => showModalBottomSheetStatelessWidget(
-                context: context,
-                builder: () => GridSortModal(type: type),
-              ),
+              onTap: () => showModalBottomSheetStatelessWidget(context: context, builder: () => GridSortModal(type: type)),
             ),
           if (gridModalConfig.displayMode.isNotEmpty)
             ListTile(
               title: Text(AppLocalizations.of(context)!.display),
               subtitle: Text(config.displayMode.toLocalization(context)),
-              onTap: () => showModalBottomSheetStatelessWidget(
-                context: context,
-                builder: () => GridDisplayModeModal(type: type),
-              ),
+              onTap: () => showModalBottomSheetStatelessWidget(context: context, builder: () => GridDisplayModeModal(type: type)),
             ),
           if (gridModalConfig.joinable)
-            SwitchListTile(
-              value: config.joinable,
-              title: Text(AppLocalizations.of(context)!.showOnlyAvailable),
-              onChanged: (bool e) => config.setJoinable(e),
-            ),
+            SwitchListTile(value: config.joinable, title: Text(AppLocalizations.of(context)!.showOnlyAvailable), onChanged: (bool e) => config.setJoinable(e)),
           if (gridModalConfig.worldDetails)
             SwitchListTile(
               value: config.worldDetails,
@@ -72,15 +59,9 @@ class GridModal extends ConsumerWidget {
               title: Text(AppLocalizations.of(context)!.openInBrowser),
               onTap: () async {
                 Navigator.pop(context);
-                Widget? value = await openInBrowser(
-                  url: gridModalConfig.url!,
-                  forceExternal: accessibilityConfig.forceExternalBrowser,
-                );
+                Widget? value = await openInBrowser(url: gridModalConfig.url!, forceExternal: accessibilityConfig.forceExternalBrowser);
                 if (value != null) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (BuildContext context) => value),
-                  );
+                  Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => value));
                 }
               },
             ),
@@ -93,10 +74,7 @@ class GridModal extends ConsumerWidget {
 class GridSortModal extends ConsumerWidget {
   final GridModalConfigType type;
 
-  const GridSortModal({
-    super.key,
-    required this.type,
-  });
+  const GridSortModal({super.key, required this.type});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -114,11 +92,7 @@ class GridSortModal extends ConsumerWidget {
               trailing: config.sortMode == sort ? const Icon(Icons.check) : null,
               onTap: () => config.setSort(sort),
             ),
-          SwitchListTile(
-            value: config.descending,
-            title: Text(AppLocalizations.of(context)!.descending),
-            onChanged: (bool e) => config.setDescending(e),
-          ),
+          SwitchListTile(value: config.descending, title: Text(AppLocalizations.of(context)!.descending), onChanged: (bool e) => config.setDescending(e)),
         ],
       ),
     );
@@ -138,15 +112,16 @@ class GridDisplayModeModal extends ConsumerWidget {
     GridModalConfigData gridModalConfig = getGridModalConfig(type: type, text: text);
 
     return SingleChildScrollView(
-        child: Column(
-      children: <Widget>[
-        for (DisplayMode display in gridModalConfig.displayMode)
-          ListTile(
-            title: Text(display.toLocalization(context)),
-            trailing: config.displayMode == display ? const Icon(Icons.check) : null,
-            onTap: () => config.setDisplayMode(display),
-          ),
-      ],
-    ));
+      child: Column(
+        children: <Widget>[
+          for (DisplayMode display in gridModalConfig.displayMode)
+            ListTile(
+              title: Text(display.toLocalization(context)),
+              trailing: config.displayMode == display ? const Icon(Icons.check) : null,
+              onTap: () => config.setDisplayMode(display),
+            ),
+        ],
+      ),
+    );
   }
 }

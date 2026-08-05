@@ -7,9 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 // Project imports:
 import 'package:vrc_manager/assets/storage.dart';
 
-final userPolicyConfigProvider =
-    ChangeNotifierProvider<UserPolicyConfigNotifier>(
-        (ref) => UserPolicyConfigNotifier());
+final userPolicyConfigProvider = ChangeNotifierProvider<UserPolicyConfigNotifier>((ref) => UserPolicyConfigNotifier());
 
 class UserPolicyConfigNotifier extends ChangeNotifier {
   bool agree = true;
@@ -17,8 +15,7 @@ class UserPolicyConfigNotifier extends ChangeNotifier {
 
   Future init() async {
     isFirst = false;
-    await getStorage("agreed_user_policy")
-        .then((String? value) => agree = (value == "true"));
+    await getStorage("agreed_user_policy").then((String? value) => agree = (value == "true"));
   }
 
   Future setAgree(bool value) async {

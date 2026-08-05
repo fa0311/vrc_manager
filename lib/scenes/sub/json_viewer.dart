@@ -28,26 +28,13 @@ class VRChatMobileJsonViewer extends ConsumerWidget {
             onPressed: () {
               showModalBottomSheetStatelessWidget(
                 context: context,
-                builder: () => SingleChildScrollView(
-                  child: Column(children: [
-                    CopyListTileWidget(text: jsonEncode(content))
-                  ]),
-                ),
+                builder: () => SingleChildScrollView(child: Column(children: [CopyListTileWidget(text: jsonEncode(content))])),
               );
             },
-          )
+          ),
         ],
       ),
-      body: Container(
-        color: Theme.of(context).colorScheme.onPrimary,
-        child: SafeArea(
-          child: ListView(
-            children: [
-              JsonViewer(content),
-            ],
-          ),
-        ),
-      ),
+      body: Container(color: Theme.of(context).colorScheme.onPrimary, child: SafeArea(child: ListView(children: [JsonViewer(content)]))),
     );
   }
 }

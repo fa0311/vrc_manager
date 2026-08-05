@@ -21,13 +21,10 @@ import 'package:vrc_manager/widgets/world.dart';
 class VRChatMobileWorldData {
   VRChatWorld world;
 
-  VRChatMobileWorldData({
-    required this.world,
-  });
+  VRChatMobileWorldData({required this.world});
 }
 
-final vrchatMobileWorldProvider =
-    FutureProvider.family<VRChatMobileWorldData, String>((ref, worldId) async {
+final vrchatMobileWorldProvider = FutureProvider.family<VRChatMobileWorldData, String>((ref, worldId) async {
   VRChatAPI vrchatLoginSession = VRChatAPI(
     cookie: ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "",
     userAgent: ref.watch(accountConfigProvider).userAgent,
@@ -45,8 +42,7 @@ class VRChatMobileWorld extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    AsyncValue<VRChatMobileWorldData> data =
-        ref.watch(vrchatMobileWorldProvider(worldId));
+    AsyncValue<VRChatMobileWorldData> data = ref.watch(vrchatMobileWorldProvider(worldId));
 
     return Scaffold(
       appBar: AppBar(
@@ -57,17 +53,15 @@ class VRChatMobileWorld extends ConsumerWidget {
             logger.w(getMessage(e), error: e, stackTrace: trace);
             return null;
           },
-          data: (data) => [
-            IconButton(
-              icon: const Icon(Icons.more_vert),
-              onPressed: () {
-                showModalBottomSheetStatelessWidget(
-                  context: context,
-                  builder: () => WorldDetailsModalBottom(world: data.world),
-                );
-              },
-            )
-          ],
+          data:
+              (data) => [
+                IconButton(
+                  icon: const Icon(Icons.more_vert),
+                  onPressed: () {
+                    showModalBottomSheetStatelessWidget(context: context, builder: () => WorldDetailsModalBottom(world: data.world));
+                  },
+                ),
+              ],
         ),
       ),
       drawer: Navigator.of(context).canPop() ? null : const NormalDrawer(),
@@ -79,20 +73,15 @@ class VRChatMobileWorld extends ConsumerWidget {
               error: (e, trace) {
                 logger.w(getMessage(e), error: e, stackTrace: trace);
                 return ScrollWidget(
-                  onRefresh: () =>
-                      ref.refresh((vrchatMobileWorldProvider(worldId).future)),
-                  child:
-                      ErrorPage(loggerReport: ref.read(loggerReportProvider)),
+                  onRefresh: () => ref.refresh((vrchatMobileWorldProvider(worldId).future)),
+                  child: ErrorPage(loggerReport: ref.read(loggerReportProvider)),
                 );
               },
-              data: (data) => ScrollWidget(
-                onRefresh: () =>
-                    ref.refresh((vrchatMobileWorldProvider(worldId).future)),
-                child: Container(
-                  padding: const EdgeInsets.only(top: 10, right: 30, left: 30),
-                  child: WorldProfile(world: data.world),
-                ),
-              ),
+              data:
+                  (data) => ScrollWidget(
+                    onRefresh: () => ref.refresh((vrchatMobileWorldProvider(worldId).future)),
+                    child: Container(padding: const EdgeInsets.only(top: 10, right: 30, left: 30), child: WorldProfile(world: data.world)),
+                  ),
             );
           },
         ),

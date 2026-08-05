@@ -26,8 +26,7 @@ final domainStageVerificationProvider = FutureProvider<bool>((ref) async {
 });
 
 final appLifecycleProvider = Provider<AppLifecycleState>((ref) {
-  final observer =
-      VRChatMobileSettingsPermissionsObserver((value) => ref.state = value);
+  final observer = VRChatMobileSettingsPermissionsObserver((value) => ref.state = value);
   final binding = WidgetsBinding.instance..addObserver(observer);
   ref.onDispose(() => binding.removeObserver(observer));
   return AppLifecycleState.resumed;
@@ -64,31 +63,19 @@ class VRChatMobileSettingsPermissions extends ConsumerWidget {
           context: context,
           builder: (_) {
             return AlertDialog(
-              title: Text(
-                AppLocalizations.of(context)!.notSupported,
-              ),
-              content: Text(
-                AppLocalizations.of(context)!.notSupportedDetails,
-              ),
-              actions: [
-                TextButton(
-                  child: Text(AppLocalizations.of(context)!.send),
-                  onPressed: () => Navigator.pop(context),
-                ),
-              ],
+              title: Text(AppLocalizations.of(context)!.notSupported),
+              content: Text(AppLocalizations.of(context)!.notSupportedDetails),
+              actions: [TextButton(child: Text(AppLocalizations.of(context)!.send), onPressed: () => Navigator.pop(context))],
             );
           },
         );
       }
     }
 
-    AsyncValue<bool> domainStageVerification =
-        ref.watch(domainStageVerificationProvider);
+    AsyncValue<bool> domainStageVerification = ref.watch(domainStageVerificationProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.permissions),
-      ),
+      appBar: AppBar(title: Text(AppLocalizations.of(context)!.permissions)),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Container(
@@ -98,37 +85,22 @@ class VRChatMobileSettingsPermissions extends ConsumerWidget {
                 if (Platform.isAndroid || Platform.isIOS)
                   ListTile(
                     leading: domainStageVerification.when(
-                      loading: () => const Padding(
-                          padding: EdgeInsets.only(top: 30),
-                          child: CircularProgressIndicator()),
+                      loading: () => const Padding(padding: EdgeInsets.only(top: 30), child: CircularProgressIndicator()),
                       error: (e, trace) {
                         logger.w(getMessage(e), error: e, stackTrace: trace);
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text(
-                                errorMessage(context: context, status: e))));
-                        return const Icon(
-                          Icons.close,
-                          color: Colors.red,
-                        );
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage(context: context, status: e))));
+                        return const Icon(Icons.close, color: Colors.red);
                       },
                       data: (data) {
                         if (data) {
-                          return const Icon(
-                            Icons.check,
-                            color: Colors.green,
-                          );
+                          return const Icon(Icons.check, color: Colors.green);
                         } else {
-                          return const Icon(
-                            Icons.close,
-                            color: Colors.red,
-                          );
+                          return const Icon(Icons.close, color: Colors.red);
                         }
                       },
                     ),
-                    title:
-                        Text(AppLocalizations.of(context)!.domainVerification),
-                    subtitle: Text(AppLocalizations.of(context)!
-                        .domainVerificationDetails),
+                    title: Text(AppLocalizations.of(context)!.domainVerification),
+                    subtitle: Text(AppLocalizations.of(context)!.domainVerificationDetails),
                     onTap: () => domainRequest(),
                   ),
               ],

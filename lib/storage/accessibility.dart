@@ -9,9 +9,7 @@ import 'package:vrc_manager/assets/storage.dart';
 import 'package:vrc_manager/assets/theme/enum.dart';
 import 'package:vrc_manager/l10n/code.dart';
 
-final accessibilityConfigProvider =
-    ChangeNotifierProvider<AccessibilityConfigNotifier>(
-        (ref) => AccessibilityConfigNotifier());
+final accessibilityConfigProvider = ChangeNotifierProvider<AccessibilityConfigNotifier>((ref) => AccessibilityConfigNotifier());
 
 class AccessibilityConfigNotifier extends ChangeNotifier {
   LanguageCode languageCode = LanguageCode.en;
@@ -22,17 +20,11 @@ class AccessibilityConfigNotifier extends ChangeNotifier {
 
   AccessibilityConfigNotifier() {
     Future.wait([
-      getStorage("language_code").then((String? value) => languageCode =
-          LanguageCode.values.byName(value ?? languageCode.name)),
-      getStorage("theme_brightness").then((String? value) => themeBrightness =
-          ThemeBrightness.values.byName(value ?? themeBrightness.name)),
-      getStorage("dark_theme_brightness").then((String? value) =>
-          darkThemeBrightness =
-              ThemeBrightness.values.byName(value ?? darkThemeBrightness.name)),
-      getStorage("force_external_browser")
-          .then((String? value) => forceExternalBrowser = (value == "true")),
-      getStorage("debug_mode")
-          .then((String? value) => debugMode = (value == "true")),
+      getStorage("language_code").then((String? value) => languageCode = LanguageCode.values.byName(value ?? languageCode.name)),
+      getStorage("theme_brightness").then((String? value) => themeBrightness = ThemeBrightness.values.byName(value ?? themeBrightness.name)),
+      getStorage("dark_theme_brightness").then((String? value) => darkThemeBrightness = ThemeBrightness.values.byName(value ?? darkThemeBrightness.name)),
+      getStorage("force_external_browser").then((String? value) => forceExternalBrowser = (value == "true")),
+      getStorage("debug_mode").then((String? value) => debugMode = (value == "true")),
     ]).whenComplete(() => notifyListeners());
   }
 
@@ -57,8 +49,7 @@ class AccessibilityConfigNotifier extends ChangeNotifier {
   Future setForceExternalBrowser(bool value) async {
     forceExternalBrowser = value;
     notifyListeners();
-    return await setStorage(
-        "force_external_browser", forceExternalBrowser ? "true" : "false");
+    return await setStorage("force_external_browser", forceExternalBrowser ? "true" : "false");
   }
 
   Future setDebugMode(bool value) async {

@@ -15,12 +15,7 @@ class RenderGrid extends ConsumerWidget {
   final int height;
   final List<Widget> children;
 
-  const RenderGrid({
-    super.key,
-    required this.width,
-    required this.height,
-    required this.children,
-  });
+  const RenderGrid({super.key, required this.width, required this.height, required this.children});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -76,61 +71,29 @@ class GenericTemplate extends ConsumerWidget {
               child: CachedNetworkImage(
                 imageUrl: imageUrl,
                 fit: BoxFit.fitWidth,
-                progressIndicatorBuilder: (context, url, downloadProgress) => SizedBox(
-                  width: half ? 50 : 100,
-                  child: const Padding(
-                    padding: EdgeInsets.all(30),
-                    child: CircularProgressIndicator(),
-                  ),
-                ),
-                errorWidget: (context, url, error) => SizedBox(
-                  width: half ? 50 : 100,
-                  child: const Icon(Icons.error),
-                ),
-                httpHeaders: {
-                  "user-agent": ref.watch(accountConfigProvider).userAgent,
-                },
+                progressIndicatorBuilder:
+                    (context, url, downloadProgress) =>
+                        SizedBox(width: half ? 50 : 100, child: const Padding(padding: EdgeInsets.all(30), child: CircularProgressIndicator())),
+                errorWidget: (context, url, error) => SizedBox(width: half ? 50 : 100, child: const Icon(Icons.error)),
+                httpHeaders: {"user-agent": ref.watch(accountConfigProvider).userAgent},
               ),
             ),
             Expanded(
-              child: Padding(
-                padding: EdgeInsets.only(left: half ? 10 : 15),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: children,
-                ),
-              ),
+              child: Padding(padding: EdgeInsets.only(left: half ? 10 : 15), child: Column(mainAxisAlignment: MainAxisAlignment.center, children: children)),
             ),
             if (right != null) ...right!,
           ],
         ),
-        if (bottom != null)
-          Padding(
-            padding: const EdgeInsets.only(top: 5),
-            child: bottom,
-          ),
+        if (bottom != null) Padding(padding: const EdgeInsets.only(top: 5), child: bottom),
       ],
     );
     if (card && stack == null) {
-      content = Container(
-        padding: EdgeInsets.all(half ? 5 : 10),
-        child: content,
-      );
+      content = Container(padding: EdgeInsets.all(half ? 5 : 10), child: content);
     } else if (card) {
-      content = Stack(
-        children: <Widget>[
-          Container(padding: EdgeInsets.all(half ? 5 : 10), child: content),
-          ...stack!,
-        ],
-      );
+      content = Stack(children: <Widget>[Container(padding: EdgeInsets.all(half ? 5 : 10), child: content), ...stack!]);
     }
     if (onTap != null || onLongPress != null) {
-      content = InkWell(
-        borderRadius: BorderRadius.circular(5),
-        onTap: onTap,
-        onLongPress: onLongPress,
-        child: content,
-      );
+      content = InkWell(borderRadius: BorderRadius.circular(5), onTap: onTap, onLongPress: onLongPress, child: content);
     }
     if (card) {
       content = Card(elevation: 20.0, margin: EdgeInsets.all(half ? 2 : 5), child: content);
@@ -146,33 +109,16 @@ class GenericTemplateText extends ConsumerWidget {
   final List<Widget>? stack;
   final bool card;
 
-  const GenericTemplateText({
-    super.key,
-    required this.children,
-    this.onTap,
-    this.onLongPress,
-    this.stack,
-    this.card = true,
-  });
+  const GenericTemplateText({super.key, required this.children, this.onTap, this.onLongPress, this.stack, this.card = true});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    Widget content = Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: children,
-    );
+    Widget content = Column(mainAxisAlignment: MainAxisAlignment.center, children: children);
     if (card && stack != null) {
-      content = Stack(
-        children: <Widget>[content],
-      );
+      content = Stack(children: <Widget>[content]);
     }
     if (onTap != null || onLongPress != null) {
-      content = InkWell(
-        borderRadius: BorderRadius.circular(5),
-        onTap: onTap,
-        onLongPress: onLongPress,
-        child: content,
-      );
+      content = InkWell(borderRadius: BorderRadius.circular(5), onTap: onTap, onLongPress: onLongPress, child: content);
     }
     if (card) {
       content = Card(elevation: 20.0, margin: const EdgeInsets.all(2), child: content);

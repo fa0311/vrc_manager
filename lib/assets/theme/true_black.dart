@@ -41,15 +41,9 @@ ThemeData trueBlackTheme() {
 }
 
 ThemeData highContrastLightTheme() {
-  return ThemeData(
-    brightness: Brightness.light,
-    colorScheme: const ColorScheme.highContrastLight(),
-  );
+  return ThemeData(brightness: Brightness.light, colorScheme: const ColorScheme.highContrastLight());
 }
 
 ThemeData highContrastDarkTheme() {
-  return ThemeData(
-    brightness: Brightness.dark,
-    colorScheme: const ColorScheme.highContrastDark(),
-  );
+  return ThemeData(brightness: Brightness.dark, colorScheme: const ColorScheme.highContrastDark());
 }

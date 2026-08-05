@@ -26,11 +26,7 @@ class ShareUrlListTile extends ConsumerWidget {
   final Uri url;
   final bool browserExternalForce;
 
-  const ShareUrlListTile({
-    super.key,
-    required this.url,
-    this.browserExternalForce = false,
-  });
+  const ShareUrlListTile({super.key, required this.url, this.browserExternalForce = false});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -65,7 +61,8 @@ class ShareInstanceListTile extends ConsumerWidget {
           OpenInBrowserListTileWidget(url: url),
           if (Platform.isWindows)
             OpenInWindowsListTileWidget(
-                url: VRChatAssets.vrchatScheme.replace(path: "launch", queryParameters: {"ref": VRChatAssets.vrchat.host, "id": "$worldId:$instanceId"})),
+              url: VRChatAssets.vrchatScheme.replace(path: "launch", queryParameters: {"ref": VRChatAssets.vrchat.host, "id": "$worldId:$instanceId"}),
+            ),
         ],
       ),
     );
@@ -115,15 +112,9 @@ class OpenInBrowserListTileWidget extends ConsumerWidget {
       title: Text(AppLocalizations.of(context)!.openInBrowser),
       onTap: () async {
         Navigator.pop(context);
-        Widget? value = await openInBrowser(
-          url: url,
-          forceExternal: accessibilityConfig.forceExternalBrowser,
-        );
+        Widget? value = await openInBrowser(url: url, forceExternal: accessibilityConfig.forceExternalBrowser);
         if (value != null) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (BuildContext context) => value),
-          );
+          Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => value));
         }
       },
     );
@@ -141,15 +132,9 @@ class OpenInBrowserExternalForceListTileWidget extends ConsumerWidget {
       title: Text(AppLocalizations.of(context)!.openInExternalBrowser),
       onTap: () async {
         Navigator.pop(context);
-        Widget? value = await openInBrowser(
-          url: url,
-          forceExternal: true,
-        );
+        Widget? value = await openInBrowser(url: url, forceExternal: true);
         if (value != null) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (BuildContext context) => value),
-          );
+          Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => value));
         }
       },
     );
@@ -166,12 +151,7 @@ class OpenInJsonViewer extends ConsumerWidget {
       return ListTile(
         title: Text(AppLocalizations.of(context)!.openInJsonViewer),
         onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (BuildContext context) => VRChatMobileJsonViewer(content: content),
-            ),
-          );
+          Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => VRChatMobileJsonViewer(content: content)));
         },
       );
     } else {
@@ -189,10 +169,7 @@ class ShareUrlTileWidget extends ConsumerWidget {
     return ListTile(
       title: Text(AppLocalizations.of(context)!.share),
       onTap: () {
-        showModalBottomSheetStatelessWidget(
-          context: context,
-          builder: () => ShareUrlListTile(url: url),
-        );
+        showModalBottomSheetStatelessWidget(context: context, builder: () => ShareUrlListTile(url: url));
       },
     );
   }
@@ -208,10 +185,7 @@ class ShareInstanceTileWidget extends ConsumerWidget {
     return ListTile(
       title: Text(AppLocalizations.of(context)!.share),
       onTap: () {
-        showModalBottomSheetStatelessWidget(
-          context: context,
-          builder: () => ShareInstanceListTile(worldId: worldId, instanceId: instanceId),
-        );
+        showModalBottomSheetStatelessWidget(context: context, builder: () => ShareInstanceListTile(worldId: worldId, instanceId: instanceId));
       },
     );
   }
@@ -243,12 +217,7 @@ class InviteVrchatListTileWidget extends ConsumerWidget {
               return AlertDialog(
                 title: Text(AppLocalizations.of(context)!.sendInvite),
                 content: Text(AppLocalizations.of(context)!.selfInviteDetails),
-                actions: <Widget>[
-                  TextButton(
-                    child: Text(AppLocalizations.of(context)!.close),
-                    onPressed: () => Navigator.pop(context),
-                  ),
-                ],
+                actions: <Widget>[TextButton(child: Text(AppLocalizations.of(context)!.close), onPressed: () => Navigator.pop(context))],
               );
             },
           );
@@ -274,15 +243,9 @@ class OpenInWindowsListTileWidget extends ConsumerWidget {
       title: Text(AppLocalizations.of(context)!.openInVrchat),
       onTap: () async {
         Navigator.pop(context);
-        Widget? value = await openInBrowser(
-          url: url,
-          forceExternal: accessibilityConfig.forceExternalBrowser,
-        );
+        Widget? value = await openInBrowser(url: url, forceExternal: accessibilityConfig.forceExternalBrowser);
         if (value != null) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (BuildContext context) => value),
-          );
+          Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => value));
         }
       },
     );

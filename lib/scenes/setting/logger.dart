@@ -23,10 +23,8 @@ import 'package:vrc_manager/widgets/modal.dart';
 import 'package:vrc_manager/widgets/scroll.dart';
 import 'package:vrc_manager/widgets/share.dart';
 
-final loggerReportProvider = StateProvider<Iterable<OutputEventExt>>(
-    (ref) => loggerOutput.state.reversed);
-final loggerFilterProvider =
-    StateProvider<List<Level>>((ref) => [Level.error, Level.info]);
+final loggerReportProvider = StateProvider<Iterable<OutputEventExt>>((ref) => loggerOutput.state.reversed);
+final loggerFilterProvider = StateProvider<List<Level>>((ref) => [Level.error, Level.info]);
 
 class LoggerExt extends Logger {
   static Level level = Level.trace;
@@ -34,15 +32,11 @@ class LoggerExt extends Logger {
   final LogPrinter _printer;
   final LogOutput _output;
 
-  LoggerExt({
-    LogFilter? filter,
-    LogPrinter? printer,
-    LogOutput? output,
-    Level? level,
-  })  : _filter = filter ?? DevelopmentFilter(),
-        _printer = printer ?? PrettyPrinter(),
-        _output = output ?? ConsoleOutput(),
-        super(filter: AlwaysHiddenFilter()) {
+  LoggerExt({LogFilter? filter, LogPrinter? printer, LogOutput? output, Level? level})
+    : _filter = filter ?? DevelopmentFilter(),
+      _printer = printer ?? PrettyPrinter(),
+      _output = output ?? ConsoleOutput(),
+      super(filter: AlwaysHiddenFilter()) {
     _filter.init();
     _filter.level = level ?? Logger.level;
     _printer.init();
@@ -50,20 +44,12 @@ class LoggerExt extends Logger {
   }
 
   @override
-  void log(
-    Level level,
-    dynamic message, {
-    DateTime? time,
-    Object? error,
-    StackTrace? stackTrace,
-  }) {
+  void log(Level level, dynamic message, {DateTime? time, Object? error, StackTrace? stackTrace}) {
     super.log(level, message, error: error, stackTrace: stackTrace);
-    final logEvent =
-        LogEvent(level, message, error: error, stackTrace: stackTrace);
+    final logEvent = LogEvent(level, message, error: error, stackTrace: stackTrace);
     final output = _printer.log(logEvent);
     if (output.isNotEmpty) {
-      final outputEvent =
-          OutputEventExt(logEvent, output, message, error, stackTrace);
+      final outputEvent = OutputEventExt(logEvent, output, message, error, stackTrace);
       _output.output(outputEvent);
     }
   }
@@ -91,8 +77,7 @@ class OutputEventExt extends OutputEvent {
   final StackTrace? stackTrace;
   final DateTime time = DateTime.now();
 
-  OutputEventExt(
-      super.level, super.lines, this.message, this.error, this.stackTrace);
+  OutputEventExt(super.level, super.lines, this.message, this.error, this.stackTrace);
 }
 
 class LoggerReport extends ConsumerWidget {
@@ -102,17 +87,11 @@ class LoggerReport extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     Iterable<OutputEventExt> log = ref.watch(loggerReportProvider);
     return Scaffold(
-      appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.log),
-      ),
+      appBar: AppBar(title: Text(AppLocalizations.of(context)!.log)),
       body: SafeArea(
         child: ScrollWidget(
           onRefresh: () async => ref.refresh(loggerReportProvider.notifier),
-          child: ErrorPage(
-            loggerReport: log,
-            title: Text(AppLocalizations.of(context)!.reportMessage2),
-            hiddenSubtitle: true,
-          ),
+          child: ErrorPage(loggerReport: log, title: Text(AppLocalizations.of(context)!.reportMessage2), hiddenSubtitle: true),
         ),
       ),
     );
@@ -126,71 +105,54 @@ class ErrorPage extends ConsumerWidget {
   final bool hiddenSubtitle;
   final bool hiddenTitle;
 
-  const ErrorPage({
-    super.key,
-    required this.loggerReport,
-    this.title,
-    this.subtitle,
-    this.hiddenTitle = false,
-    this.hiddenSubtitle = false,
-  });
+  const ErrorPage({super.key, required this.loggerReport, this.title, this.subtitle, this.hiddenTitle = false, this.hiddenSubtitle = false});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    AccessibilityConfigNotifier accessibilityConfig =
-        ref.watch(accessibilityConfigProvider);
+    AccessibilityConfigNotifier accessibilityConfig = ref.watch(accessibilityConfigProvider);
     List<Level> loggerFilter = ref.watch(loggerFilterProvider);
 
     return Column(
       children: [
         Card(
           child: ListTile(
-            title: hiddenTitle
-                ? null
-                : title ?? Text(AppLocalizations.of(context)!.error),
-            subtitle: hiddenSubtitle
-                ? null
-                : subtitle ??
-                    Text([
-                      AppLocalizations.of(context)!.reportMessage1,
-                      AppLocalizations.of(context)!.reportMessage2,
-                    ].join('\n')),
+            title: hiddenTitle ? null : title ?? Text(AppLocalizations.of(context)!.error),
+            subtitle:
+                hiddenSubtitle
+                    ? null
+                    : subtitle ?? Text([AppLocalizations.of(context)!.reportMessage1, AppLocalizations.of(context)!.reportMessage2].join('\n')),
             trailing: IconButton(
               icon: const Icon(Icons.more_vert),
-              onPressed: () => showModalBottomSheetConsumer(
-                  context: context,
-                  builder: (context, ref, child) {
-                    List<Level> loggerFilter = ref.watch(loggerFilterProvider);
-                    return SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          SwitchListTile(
-                            title: Text(
-                                AppLocalizations.of(context)!.viewDetailedLogs),
-                            onChanged: (bool value) {
-                              if (!loggerFilter.remove(Level.warning)) {
-                                loggerFilter.add(Level.warning);
-                              }
-                              ref.read(loggerFilterProvider.notifier).state = [
-                                ...loggerFilter
-                              ];
-                            },
-                            value: loggerFilter.contains(Level.warning),
-                          ),
-                        ],
-                      ),
-                    );
-                  }),
+              onPressed:
+                  () => showModalBottomSheetConsumer(
+                    context: context,
+                    builder: (context, ref, child) {
+                      List<Level> loggerFilter = ref.watch(loggerFilterProvider);
+                      return SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            SwitchListTile(
+                              title: Text(AppLocalizations.of(context)!.viewDetailedLogs),
+                              onChanged: (bool value) {
+                                if (!loggerFilter.remove(Level.warning)) {
+                                  loggerFilter.add(Level.warning);
+                                }
+                                ref.read(loggerFilterProvider.notifier).state = [...loggerFilter];
+                              },
+                              value: loggerFilter.contains(Level.warning),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
             ),
           ),
         ),
-        for (OutputEventExt state
-            in loggerReport.where((e) => loggerFilter.contains(e.level)))
+        for (OutputEventExt state in loggerReport.where((e) => loggerFilter.contains(e.level)))
           Card(
             child: ExpansionTile(
-              title: Text(
-                  (PrettyPrinter.defaultLevelEmojis[state.level] ?? "") +
-                      errorMessage(context: context, status: state.error)),
+              title: Text((PrettyPrinter.defaultLevelEmojis[state.level] ?? "") + errorMessage(context: context, status: state.error)),
               subtitle: Text(generalDateDifference(context, state.time)),
               trailing: OutlinedButton(
                 child: Text(AppLocalizations.of(context)!.report),
@@ -210,30 +172,16 @@ class ErrorPage extends ConsumerWidget {
                   JsonEncoder encoder = const JsonEncoder.withIndent("     ");
                   String text = encoder.convert(logs);
                   text += '\n';
-                  text += state.lines
-                      .join('\n')
-                      .replaceAll(RegExp(r'\u001b\[([0-9]|;)+m'), '');
+                  text += state.lines.join('\n').replaceAll(RegExp(r'\u001b\[([0-9]|;)+m'), '');
                   await copyToClipboard(context, text);
-                  Widget? value = await openInBrowser(
-                    url: Assets.report,
-                    forceExternal: accessibilityConfig.forceExternalBrowser,
-                  );
+                  Widget? value = await openInBrowser(url: Assets.report, forceExternal: accessibilityConfig.forceExternalBrowser);
                   if (value != null) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (BuildContext context) => value),
-                    );
+                    Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => value));
                   }
                 },
               ),
               children: [
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Text(state.lines
-                      .join('\n')
-                      .replaceAll(RegExp(r'\u001b\[([0-9]|;)+m'), '')),
-                )
+                SingleChildScrollView(scrollDirection: Axis.horizontal, child: Text(state.lines.join('\n').replaceAll(RegExp(r'\u001b\[([0-9]|;)+m'), ''))),
               ],
             ),
           ),

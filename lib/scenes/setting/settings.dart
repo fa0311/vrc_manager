@@ -19,9 +19,7 @@ class VRChatMobileSettings extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.setting),
-      ),
+      appBar: AppBar(title: Text(AppLocalizations.of(context)!.setting)),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Container(
@@ -29,85 +27,56 @@ class VRChatMobileSettings extends ConsumerWidget {
             child: Column(
               children: <Widget>[
                 ListTile(
-                  leading: const Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [Icon(Icons.accessibility)],
-                  ),
+                  leading: const Column(mainAxisAlignment: MainAxisAlignment.center, children: [Icon(Icons.accessibility)]),
                   title: Text(AppLocalizations.of(context)!.accessibility),
-                  onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (BuildContext context) =>
-                          const VRChatMobileSplash(
-                        login: VRChatMobileSettingsAccessibility(),
-                        child: VRChatMobileSettingsAccessibility(),
+                  onTap:
+                      () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder:
+                              (BuildContext context) =>
+                                  const VRChatMobileSplash(login: VRChatMobileSettingsAccessibility(), child: VRChatMobileSettingsAccessibility()),
+                        ),
                       ),
-                    ),
-                  ),
                 ),
                 ListTile(
-                  leading: const Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[Icon(Icons.account_circle)],
-                  ),
+                  leading: const Column(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[Icon(Icons.account_circle)]),
                   title: Text(AppLocalizations.of(context)!.account),
-                  onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (BuildContext context) =>
-                          const VRChatMobileSplash(
-                        login: VRChatMobileSettingsAccount(),
-                        child: VRChatMobileSettingsAccount(),
+                  onTap:
+                      () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder:
+                              (BuildContext context) => const VRChatMobileSplash(login: VRChatMobileSettingsAccount(), child: VRChatMobileSettingsAccount()),
+                        ),
                       ),
-                    ),
-                  ),
                 ),
                 ListTile(
-                  leading: const Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[Icon(Icons.admin_panel_settings)],
-                  ),
+                  leading: const Column(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[Icon(Icons.admin_panel_settings)]),
                   title: Text(AppLocalizations.of(context)!.permissions),
-                  onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (BuildContext context) =>
-                          const VRChatMobileSplash(
-                        login: VRChatMobileSettingsPermissions(),
-                        child: VRChatMobileSettingsPermissions(),
+                  onTap:
+                      () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder:
+                              (BuildContext context) =>
+                                  const VRChatMobileSplash(login: VRChatMobileSettingsPermissions(), child: VRChatMobileSettingsPermissions()),
+                        ),
                       ),
-                    ),
-                  ),
                 ),
                 ListTile(
-                  leading: const Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[Icon(Icons.note)],
-                  ),
+                  leading: const Column(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[Icon(Icons.note)]),
                   title: Text(AppLocalizations.of(context)!.log),
-                  onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => const LoggerReport(),
-                    ),
-                  ),
+                  onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LoggerReport())),
                 ),
                 ListTile(
-                  leading: const Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[Icon(Icons.help)],
-                  ),
+                  leading: const Column(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[Icon(Icons.help)]),
                   title: Text(AppLocalizations.of(context)!.help),
-                  onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (BuildContext context) =>
-                          const VRChatMobileSplash(
-                        login: VRChatMobileHelp(),
-                        child: VRChatMobileHelp(),
+                  onTap:
+                      () => Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (BuildContext context) => const VRChatMobileSplash(login: VRChatMobileHelp(), child: VRChatMobileHelp())),
                       ),
-                    ),
-                  ),
                 ),
               ],
             ),

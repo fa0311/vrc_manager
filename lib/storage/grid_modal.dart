@@ -8,9 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vrc_manager/assets/storage.dart';
 import 'package:vrc_manager/widgets/grid_modal/config.dart';
 
-final gridConfigProvider =
-    ChangeNotifierProvider.family<GridConfigNotifier, GridModalConfigType>(
-        (ref, id) => GridConfigNotifier(id: id));
+final gridConfigProvider = ChangeNotifierProvider.family<GridConfigNotifier, GridModalConfigType>((ref, id) => GridConfigNotifier(id: id));
 
 class GridConfigNotifier extends ChangeNotifier {
   GridModalConfigType id;
@@ -23,18 +21,12 @@ class GridConfigNotifier extends ChangeNotifier {
 
   GridConfigNotifier({required this.id}) {
     Future.wait([
-      getStorage("sort", id: id.name).then((String? value) =>
-          sortMode = SortMode.values.byName(value ?? sortMode.name)),
-      getStorage("display_mode", id: id.name).then((String? value) =>
-          displayMode = DisplayMode.values.byName(value ?? displayMode.name)),
-      getStorage("descending", id: id.name)
-          .then((String? value) => descending = (value == "true")),
-      getStorage("joinable", id: id.name)
-          .then((String? value) => joinable = (value == "true")),
-      getStorage("world_details", id: id.name)
-          .then((String? value) => worldDetails = (value == "true")),
-      getStorage("remove_button", id: id.name)
-          .then((String? value) => removeButton = (value == "true")),
+      getStorage("sort", id: id.name).then((String? value) => sortMode = SortMode.values.byName(value ?? sortMode.name)),
+      getStorage("display_mode", id: id.name).then((String? value) => displayMode = DisplayMode.values.byName(value ?? displayMode.name)),
+      getStorage("descending", id: id.name).then((String? value) => descending = (value == "true")),
+      getStorage("joinable", id: id.name).then((String? value) => joinable = (value == "true")),
+      getStorage("world_details", id: id.name).then((String? value) => worldDetails = (value == "true")),
+      getStorage("remove_button", id: id.name).then((String? value) => removeButton = (value == "true")),
     ]).whenComplete(() => notifyListeners());
   }
 
@@ -53,28 +45,24 @@ class GridConfigNotifier extends ChangeNotifier {
   Future setDescending(bool value) async {
     descending = value;
     notifyListeners();
-    return await setStorage("descending", descending ? "true" : "false",
-        id: id.name);
+    return await setStorage("descending", descending ? "true" : "false", id: id.name);
   }
 
   Future setJoinable(bool value) async {
     joinable = value;
     notifyListeners();
-    return await setStorage("joinable", joinable ? "true" : "false",
-        id: id.name);
+    return await setStorage("joinable", joinable ? "true" : "false", id: id.name);
   }
 
   Future setWorldDetails(bool value) async {
     worldDetails = value;
     notifyListeners();
-    return await setStorage("world_details", worldDetails ? "true" : "false",
-        id: id.name);
+    return await setStorage("world_details", worldDetails ? "true" : "false", id: id.name);
   }
 
   Future setRemoveButton(bool value) async {
     removeButton = value;
     notifyListeners();
-    return await setStorage("remove_button", removeButton ? "true" : "false",
-        id: id.name);
+    return await setStorage("remove_button", removeButton ? "true" : "false", id: id.name);
   }
 }

@@ -124,10 +124,7 @@ class FavoriteListTileWidget extends ConsumerWidget {
     return ListTile(
       title: Text(AppLocalizations.of(context)!.addFavoriteWorlds),
       onTap: () {
-        showModalBottomSheetStatelessWidget(
-          context: context,
-          builder: () => FavoriteAction(world: world),
-        );
+        showModalBottomSheetStatelessWidget(context: context, builder: () => FavoriteAction(world: world));
       },
     );
   }
@@ -169,10 +166,7 @@ class LaunchWorldListTileWidget extends ConsumerWidget {
     return ListTile(
       title: Text(AppLocalizations.of(context)!.launchWorld),
       onTap: () {
-        showModalBottomSheetStatelessWidget(
-          context: context,
-          builder: () => LaunchWorld(world: world),
-        );
+        showModalBottomSheetStatelessWidget(context: context, builder: () => LaunchWorld(world: world));
       },
     );
   }

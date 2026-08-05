@@ -16,8 +16,7 @@ import 'package:vrc_manager/widgets/share.dart';
 
 final timeStampProvider = StateProvider<int>((ref) => 0);
 final urlProvider = StateProvider.autoDispose<Uri?>((ref) => null);
-final webViewControllerProvider =
-    StateProvider<InAppWebViewController?>((ref) => null);
+final webViewControllerProvider = StateProvider<InAppWebViewController?>((ref) => null);
 
 class VRChatMobileWebView extends ConsumerWidget {
   const VRChatMobileWebView({super.key, required this.initUrl});
@@ -26,13 +25,10 @@ class VRChatMobileWebView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    AccessibilityConfigNotifier accessibilityConfig =
-        ref.watch(accessibilityConfigProvider);
-    String cookies =
-        ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "";
+    AccessibilityConfigNotifier accessibilityConfig = ref.watch(accessibilityConfigProvider);
+    String cookies = ref.watch(accountConfigProvider).loggedAccount?.cookie ?? "";
 
-    InAppWebViewController? webViewController =
-        ref.watch(webViewControllerProvider);
+    InAppWebViewController? webViewController = ref.watch(webViewControllerProvider);
 
     Uri url = ref.watch(urlProvider) ?? initUrl;
 
@@ -42,26 +38,18 @@ class VRChatMobileWebView extends ConsumerWidget {
     void setCookies() async {
       CookieManager cookieManager = CookieManager.instance();
       for (String key in cookieMap.keys) {
-        await cookieManager.setCookie(
-          url: WebUri(url.toString()),
-          name: key,
-          value: cookieMap[key] ?? "",
-          domain: VRChatAssets.vrchat.host,
-        );
+        await cookieManager.setCookie(url: WebUri(url.toString()), name: key, value: cookieMap[key] ?? "", domain: VRChatAssets.vrchat.host);
       }
     }
 
     setCookies();
 
     Future<bool> exitApp(BuildContext context) async {
-      if (DateTime.now().millisecondsSinceEpoch - ref.read(timeStampProvider) <
-          200) {
+      if (DateTime.now().millisecondsSinceEpoch - ref.read(timeStampProvider) < 200) {
         return true;
-      } else if (webViewController != null &&
-          await webViewController.canGoBack()) {
+      } else if (webViewController != null && await webViewController.canGoBack()) {
         await webViewController.goBack();
-        ref.read(timeStampProvider.notifier).state =
-            DateTime.now().millisecondsSinceEpoch;
+        ref.read(timeStampProvider.notifier).state = DateTime.now().millisecondsSinceEpoch;
         return false;
       }
       return true;
@@ -83,21 +71,14 @@ class VRChatMobileWebView extends ConsumerWidget {
             IconButton(
               icon: const Icon(Icons.share),
               onPressed: () {
-                showModalBottomSheetStatelessWidget(
-                  context: context,
-                  builder: () =>
-                      ShareUrlListTile(url: url, browserExternalForce: true),
-                );
+                showModalBottomSheetStatelessWidget(context: context, builder: () => ShareUrlListTile(url: url, browserExternalForce: true));
               },
             ),
           ],
         ),
         body: InAppWebView(
           initialUrlRequest: URLRequest(url: WebUri(url.toString())),
-          initialSettings: InAppWebViewSettings(
-            javaScriptEnabled: true,
-            useShouldOverrideUrlLoading: true,
-          ),
+          initialSettings: InAppWebViewSettings(javaScriptEnabled: true, useShouldOverrideUrlLoading: true),
           onWebViewCreated: (InAppWebViewController controller) {
             ref.read(webViewControllerProvider.notifier).state = controller;
           },
@@ -105,23 +86,14 @@ class VRChatMobileWebView extends ConsumerWidget {
             var request = navigationAction.request;
             var requestUrl = request.url;
 
-            if (requestUrl != null &&
-                ref.watch(accessibilityConfigProvider).forceExternalBrowser &&
-                requestUrl.host != VRChatAssets.vrchat.host) {
-              Widget? value = await openInBrowser(
-                url: Uri.parse(requestUrl.toString()),
-                forceExternal: accessibilityConfig.forceExternalBrowser,
-              );
+            if (requestUrl != null && ref.watch(accessibilityConfigProvider).forceExternalBrowser && requestUrl.host != VRChatAssets.vrchat.host) {
+              Widget? value = await openInBrowser(url: Uri.parse(requestUrl.toString()), forceExternal: accessibilityConfig.forceExternalBrowser);
               if (value != null) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (BuildContext context) => value),
-                );
+                Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => value));
               }
               return NavigationActionPolicy.CANCEL;
             } else if (requestUrl != null) {
-              ref.read(urlProvider.notifier).state =
-                  Uri.parse(requestUrl.toString());
+              ref.read(urlProvider.notifier).state = Uri.parse(requestUrl.toString());
               return NavigationActionPolicy.ALLOW;
             }
             return NavigationActionPolicy.ALLOW;

@@ -74,8 +74,7 @@ class AccountConfigNotifier extends ChangeNotifier {
 
   Future<void> init(AccountConfig? account) async {
     loggedAccount = account;
-    await PackageInfo.fromPlatform()
-        .then((value) => userAgent = Assets.userAgent(value.version));
+    await PackageInfo.fromPlatform().then((value) => userAgent = Assets.userAgent(value.version));
   }
 
   Future<bool> logout() async {
@@ -112,8 +111,7 @@ class AccountConfig extends ChangeNotifier {
       getLoginSession("user_id", uid).then((value) => userId = value),
       getLoginSession("password", uid).then((value) => password = value),
       getLoginSession("display_name", uid).then((value) => displayName = value),
-      getLoginSession("remember_login_info", uid)
-          .then((value) => rememberLoginInfo = (value == "true")),
+      getLoginSession("remember_login_info", uid).then((value) => rememberLoginInfo = (value == "true")),
     ]);
   }
 
@@ -134,8 +132,7 @@ class AccountConfig extends ChangeNotifier {
   }
 
   Future setRememberLoginInfo(bool value) async {
-    return await setLoginSession(
-        "remember_login_info", (rememberLoginInfo = value).toString(), uid);
+    return await setLoginSession("remember_login_info", (rememberLoginInfo = value).toString(), uid);
   }
 
   Future removeCookie() async {
@@ -164,21 +161,18 @@ class AccountConfig extends ChangeNotifier {
   }
 
   Future<bool> tokenCheck() async {
-    VRChatAPI vrchatLoginSession = VRChatAPI(
-      cookie: cookie ?? "",
-      userAgent: Assets.userAgent((await PackageInfo.fromPlatform()).version),
-      logger: logger,
-    );
+    VRChatAPI vrchatLoginSession = VRChatAPI(cookie: cookie ?? "", userAgent: Assets.userAgent((await PackageInfo.fromPlatform()).version), logger: logger);
     return await vrchatLoginSession
         .user()
         .then((VRChatUserSelfOverload response) {
-      data = response;
-      setDisplayName(response.displayName);
-      return true;
-    }).catchError((e, trace) {
-      logger.e(getMessage(e), error: e, stackTrace: trace);
-      data = null;
-      return false;
-    });
+          data = response;
+          setDisplayName(response.displayName);
+          return true;
+        })
+        .catchError((e, trace) {
+          logger.e(getMessage(e), error: e, stackTrace: trace);
+          data = null;
+          return false;
+        });
   }
 }

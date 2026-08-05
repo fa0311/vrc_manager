@@ -21,8 +21,7 @@ final GlobalKey webViewKey = GlobalKey();
 
 final timeStampProvider = StateProvider<int>((ref) => 0);
 final urlProvider = StateProvider.autoDispose<Uri?>((ref) => null);
-final webViewControllerProvider =
-    StateProvider<InAppWebViewController?>((ref) => null);
+final webViewControllerProvider = StateProvider<InAppWebViewController?>((ref) => null);
 
 final webViewInitProvider = FutureProvider.autoDispose<void>((ref) async {
   VRChatAPI vrchatLoginSession = VRChatAPI(
@@ -35,13 +34,7 @@ final webViewInitProvider = FutureProvider.autoDispose<void>((ref) async {
   final cookieMap = Session().decodeCookie(vrchatLoginSession.getCookie());
   await Future.wait([
     for (String key in cookieMap.keys)
-      cookieManager.setCookie(
-        name: key,
-        url: WebUri.uri(VRChatAssets.vrchat),
-        value: cookieMap[key] ?? "",
-        isSecure: true,
-        isHttpOnly: true,
-      )
+      cookieManager.setCookie(name: key, url: WebUri.uri(VRChatAssets.vrchat), value: cookieMap[key] ?? "", isSecure: true, isHttpOnly: true),
   ]);
 });
 
@@ -51,17 +44,14 @@ class VRChatMobileWebViewLogin extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     Uri initUrl = ref.watch(urlProvider) ?? VRChatAssets.login;
-    InAppWebViewController? webViewController =
-        ref.watch(webViewControllerProvider);
+    InAppWebViewController? webViewController = ref.watch(webViewControllerProvider);
     AsyncValue<void> data = ref.watch(webViewInitProvider);
     Future<bool> exitApp(BuildContext context) async {
-      if (DateTime.now().millisecondsSinceEpoch - ref.read(timeStampProvider) <
-          200) {
+      if (DateTime.now().millisecondsSinceEpoch - ref.read(timeStampProvider) < 200) {
         return true;
       } else if (await webViewController!.canGoBack()) {
         webViewController.goBack();
-        ref.read(timeStampProvider.notifier).state =
-            DateTime.now().millisecondsSinceEpoch;
+        ref.read(timeStampProvider.notifier).state = DateTime.now().millisecondsSinceEpoch;
         return false;
       }
       return true;
@@ -83,35 +73,30 @@ class VRChatMobileWebViewLogin extends ConsumerWidget {
           loading: () => const Loading(),
           error: (e, trace) {
             logger.w(getMessage(e), error: e, stackTrace: trace);
-            return ScrollWidget(
-              onRefresh: () => ref.refresh((webViewInitProvider.future)),
-              child: ErrorPage(loggerReport: ref.read(loggerReportProvider)),
-            );
+            return ScrollWidget(onRefresh: () => ref.refresh((webViewInitProvider.future)), child: ErrorPage(loggerReport: ref.read(loggerReportProvider)));
           },
-          data: (data) => InAppWebView(
-            key: webViewKey,
-            initialUrlRequest: URLRequest(url: WebUri.uri(initUrl)),
-            initialSettings: InAppWebViewSettings(
-              useShouldOverrideUrlLoading: true,
-            ),
-            onWebViewCreated: (InAppWebViewController value) {
-              ref.read(webViewControllerProvider.notifier).state = value;
-            },
-            onTitleChanged: (controller, title) async {
-              if (title != VRChatAssets.homeTitle) return;
-              CookieManager cookieManager = CookieManager.instance();
-              List<Cookie> cookieList = await cookieManager.getCookies(
-                  url: WebUri.uri(VRChatAssets.vrchat));
-              Map<String, String> cookieMap = {};
-              for (Cookie cookie in cookieList) {
-                cookieMap[cookie.name] = cookie.value;
-              }
-              AccountConfig config = ref.read(loginDataProvider).accountConfig;
-              config.setCookie(Session().encodeCookie(cookieMap));
-              ref.read(accountListConfigProvider).addAccount(config);
-              await ref.read(accountConfigProvider).login(config);
-            },
-          ),
+          data:
+              (data) => InAppWebView(
+                key: webViewKey,
+                initialUrlRequest: URLRequest(url: WebUri.uri(initUrl)),
+                initialSettings: InAppWebViewSettings(useShouldOverrideUrlLoading: true),
+                onWebViewCreated: (InAppWebViewController value) {
+                  ref.read(webViewControllerProvider.notifier).state = value;
+                },
+                onTitleChanged: (controller, title) async {
+                  if (title != VRChatAssets.homeTitle) return;
+                  CookieManager cookieManager = CookieManager.instance();
+                  List<Cookie> cookieList = await cookieManager.getCookies(url: WebUri.uri(VRChatAssets.vrchat));
+                  Map<String, String> cookieMap = {};
+                  for (Cookie cookie in cookieList) {
+                    cookieMap[cookie.name] = cookie.value;
+                  }
+                  AccountConfig config = ref.read(loginDataProvider).accountConfig;
+                  config.setCookie(Session().encodeCookie(cookieMap));
+                  ref.read(accountListConfigProvider).addAccount(config);
+                  await ref.read(accountConfigProvider).login(config);
+                },
+              ),
         ),
       ),
     );

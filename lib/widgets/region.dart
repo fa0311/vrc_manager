@@ -26,9 +26,7 @@ class RegionWidget extends ConsumerWidget {
         fit: BoxFit.fitWidth,
         progressIndicatorBuilder: (context, url, downloadProgress) => const CircularProgressIndicator(),
         errorWidget: (context, url, error) => const Icon(Icons.error),
-        httpHeaders: {
-          "user-agent": ref.watch(accountConfigProvider).userAgent,
-        },
+        httpHeaders: {"user-agent": ref.watch(accountConfigProvider).userAgent},
       ),
     );
   }

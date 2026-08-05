@@ -42,35 +42,27 @@ class TextToAnchor extends ConsumerWidget {
                     TextSpan(
                       text: "${match!.group(1)}\n",
                       style: const TextStyle(color: Colors.blue),
-                      recognizer: LongPressGestureRecognizer()
-                        ..onLongPressDown = ((details) => timeStamp = DateTime.now().millisecondsSinceEpoch)
-                        ..onLongPress = () {
-                          if (Uri.tryParse(text!) != null) {
-                            showModalBottomSheetStatelessWidget(
-                              context: context,
-                              builder: () => ShareUrlListTile(url: Uri.parse(text)),
-                            );
-                          }
-                        }
-                        ..onLongPressCancel = () async {
-                          if (DateTime.now().millisecondsSinceEpoch - timeStamp < 500) {
-                            if (Uri.tryParse(text!) == null) {
-                              copyToClipboard(context, text);
-                            } else {
-                              Widget? value = await openInBrowser(
-                                url: Uri.parse(text),
-                                forceExternal: accessibilityConfig.forceExternalBrowser,
-                              );
-                              if (value != null) {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (BuildContext context) => value),
-                                );
+                      recognizer:
+                          LongPressGestureRecognizer()
+                            ..onLongPressDown = ((details) => timeStamp = DateTime.now().millisecondsSinceEpoch)
+                            ..onLongPress = () {
+                              if (Uri.tryParse(text!) != null) {
+                                showModalBottomSheetStatelessWidget(context: context, builder: () => ShareUrlListTile(url: Uri.parse(text)));
                               }
                             }
-                          }
-                        },
-                    )
+                            ..onLongPressCancel = () async {
+                              if (DateTime.now().millisecondsSinceEpoch - timeStamp < 500) {
+                                if (Uri.tryParse(text!) == null) {
+                                  copyToClipboard(context, text);
+                                } else {
+                                  Widget? value = await openInBrowser(url: Uri.parse(text), forceExternal: accessibilityConfig.forceExternalBrowser);
+                                  if (value != null) {
+                                    Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => value));
+                                  }
+                                }
+                              }
+                            },
+                    ),
                   ];
                 } else {
                   return [
@@ -78,35 +70,27 @@ class TextToAnchor extends ConsumerWidget {
                     TextSpan(
                       text: "${[for (int i = 3; i <= match!.groupCount; i++) match!.group(i)!].join()}\n",
                       style: const TextStyle(color: Colors.blue),
-                      recognizer: LongPressGestureRecognizer()
-                        ..onLongPressDown = ((details) => timeStamp = DateTime.now().millisecondsSinceEpoch)
-                        ..onLongPress = () {
-                          if (Uri.tryParse(text!) != null) {
-                            showModalBottomSheetStatelessWidget(
-                              context: context,
-                              builder: () => ShareUrlListTile(url: Uri.parse(text)),
-                            );
-                          }
-                        }
-                        ..onLongPressCancel = () async {
-                          if (DateTime.now().millisecondsSinceEpoch - timeStamp < 500) {
-                            if (Uri.tryParse(text!) == null) {
-                              copyToClipboard(context, text);
-                            } else {
-                              Widget? value = await openInBrowser(
-                                url: Uri.parse(text),
-                                forceExternal: accessibilityConfig.forceExternalBrowser,
-                              );
-                              if (value != null) {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (BuildContext context) => value),
-                                );
+                      recognizer:
+                          LongPressGestureRecognizer()
+                            ..onLongPressDown = ((details) => timeStamp = DateTime.now().millisecondsSinceEpoch)
+                            ..onLongPress = () {
+                              if (Uri.tryParse(text!) != null) {
+                                showModalBottomSheetStatelessWidget(context: context, builder: () => ShareUrlListTile(url: Uri.parse(text)));
                               }
                             }
-                          }
-                        },
-                    )
+                            ..onLongPressCancel = () async {
+                              if (DateTime.now().millisecondsSinceEpoch - timeStamp < 500) {
+                                if (Uri.tryParse(text!) == null) {
+                                  copyToClipboard(context, text);
+                                } else {
+                                  Widget? value = await openInBrowser(url: Uri.parse(text), forceExternal: accessibilityConfig.forceExternalBrowser);
+                                  if (value != null) {
+                                    Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => value));
+                                  }
+                                }
+                              }
+                            },
+                    ),
                   ];
                 }
               }

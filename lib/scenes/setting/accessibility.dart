@@ -19,12 +19,9 @@ class VRChatMobileSettingsAccessibility extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    AccessibilityConfigNotifier accessibilityConfig =
-        ref.watch(accessibilityConfigProvider);
+    AccessibilityConfigNotifier accessibilityConfig = ref.watch(accessibilityConfigProvider);
     return Scaffold(
-      appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.setting),
-      ),
+      appBar: AppBar(title: Text(AppLocalizations.of(context)!.setting)),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Container(
@@ -34,44 +31,30 @@ class VRChatMobileSettingsAccessibility extends ConsumerWidget {
                 ListTile(
                   title: Text(AppLocalizations.of(context)!.language),
                   subtitle: Text(accessibilityConfig.languageCode.text),
-                  onTap: () => showModalBottomSheetStatelessWidget(
-                    context: context,
-                    builder: () => const LocaleModal(),
-                  ),
+                  onTap: () => showModalBottomSheetStatelessWidget(context: context, builder: () => const LocaleModal()),
                 ),
                 ListTile(
                   title: Text(AppLocalizations.of(context)!.deviceLightTheme),
-                  subtitle: Text(accessibilityConfig.themeBrightness
-                      .toLocalization(context)),
-                  onTap: () => showModalBottomSheetStatelessWidget(
-                    context: context,
-                    builder: () => const ThemeBrightnessModal(dark: false),
-                  ),
+                  subtitle: Text(accessibilityConfig.themeBrightness.toLocalization(context)),
+                  onTap: () => showModalBottomSheetStatelessWidget(context: context, builder: () => const ThemeBrightnessModal(dark: false)),
                 ),
                 ListTile(
                   title: Text(AppLocalizations.of(context)!.deviceDarkTheme),
-                  subtitle: Text(accessibilityConfig.darkThemeBrightness
-                      .toLocalization(context)),
-                  onTap: () => showModalBottomSheetStatelessWidget(
-                    context: context,
-                    builder: () => const ThemeBrightnessModal(dark: true),
-                  ),
+                  subtitle: Text(accessibilityConfig.darkThemeBrightness.toLocalization(context)),
+                  onTap: () => showModalBottomSheetStatelessWidget(context: context, builder: () => const ThemeBrightnessModal(dark: true)),
                 ),
                 if (!Platform.isWindows)
                   SwitchListTile(
                     value: accessibilityConfig.forceExternalBrowser,
-                    title: Text(
-                        AppLocalizations.of(context)!.forceExternalBrowser),
-                    subtitle: Text(AppLocalizations.of(context)!
-                        .forceExternalBrowserDetails),
-                    onChanged: (bool e) =>
-                        accessibilityConfig.setForceExternalBrowser(e),
+                    title: Text(AppLocalizations.of(context)!.forceExternalBrowser),
+                    subtitle: Text(AppLocalizations.of(context)!.forceExternalBrowserDetails),
+                    onChanged: (bool e) => accessibilityConfig.setForceExternalBrowser(e),
                   ),
                 SwitchListTile(
                   value: accessibilityConfig.debugMode,
                   title: Text(AppLocalizations.of(context)!.debugMode),
                   onChanged: (bool e) => accessibilityConfig.setDebugMode(e),
-                )
+                ),
               ],
             ),
           ),

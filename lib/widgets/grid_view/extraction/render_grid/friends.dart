@@ -25,13 +25,7 @@ class ExtractionFriend extends ConsumerGridWidget {
   final Map<String, VRChatWorld?> locationMap;
   final Map<String, VRChatInstance?> instanceMap;
 
-  const ExtractionFriend({
-    super.key,
-    required super.id,
-    required this.userList,
-    required this.locationMap,
-    required this.instanceMap,
-  });
+  const ExtractionFriend({super.key, required super.id, required this.userList, required this.locationMap, required this.instanceMap});
 
   @override
   List<Widget> normal(BuildContext context, WidgetRef ref, GridConfigNotifier config, ConsumerGridStyle style) {
@@ -44,11 +38,7 @@ class ExtractionFriend extends ConsumerGridWidget {
           String worldId = user.location.split(":")[0];
           return GenericTemplate(
             imageUrl: user.profilePicOverride ?? user.currentAvatarThumbnailImageUrl ?? "",
-            onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (BuildContext context) => VRChatMobileUser(userId: user.id),
-                )),
+            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => VRChatMobileUser(userId: user.id))),
             onLongPress: () {
               showModalBottomSheetStatelessWidget(
                 context: context,
@@ -71,14 +61,13 @@ class ExtractionFriend extends ConsumerGridWidget {
             }(),
             children: [
               Username(user: user, diameter: style.title.fontSize, fontWeight: style.title.fontWeight),
-              for (String text in [
-                if (user.statusDescription != null) user.statusDescription!,
-                if (!config.worldDetails && !VRChatInstanceIdOther.values.any((id) => id.name == user.location)) locationMap[worldId]?.name,
-                if (user.location == VRChatInstanceIdOther.private.name) AppLocalizations.of(context)!.privateWorld,
-                if (user.location == VRChatInstanceIdOther.traveling.name) AppLocalizations.of(context)!.loadingWorld,
-              ].whereType<String>()) ...[
-                Text(text, style: style.details, maxLines: 1),
-              ],
+              for (String text
+                  in [
+                    if (user.statusDescription != null) user.statusDescription!,
+                    if (!config.worldDetails && !VRChatInstanceIdOther.values.any((id) => id.name == user.location)) locationMap[worldId]?.name,
+                    if (user.location == VRChatInstanceIdOther.private.name) AppLocalizations.of(context)!.privateWorld,
+                    if (user.location == VRChatInstanceIdOther.traveling.name) AppLocalizations.of(context)!.loadingWorld,
+                  ].whereType<String>()) ...[Text(text, style: style.details, maxLines: 1)],
             ],
           );
         }(),
@@ -97,11 +86,7 @@ class ExtractionFriend extends ConsumerGridWidget {
           return GenericTemplate(
             imageUrl: user.profilePicOverride ?? user.currentAvatarThumbnailImageUrl ?? "",
             half: true,
-            onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (BuildContext context) => VRChatMobileUser(userId: user.id),
-                )),
+            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => VRChatMobileUser(userId: user.id))),
             onLongPress: () {
               showModalBottomSheetStatelessWidget(
                 context: context,
@@ -124,14 +109,13 @@ class ExtractionFriend extends ConsumerGridWidget {
             }(),
             children: [
               Username(user: user, diameter: style.title.fontSize, fontWeight: style.title.fontWeight),
-              for (String text in [
-                if (user.statusDescription != null) user.statusDescription!,
-                if (!config.worldDetails && !VRChatInstanceIdOther.values.any((id) => id.name == user.location)) locationMap[worldId]?.name,
-                if (!config.worldDetails && user.location == VRChatInstanceIdOther.private.name) AppLocalizations.of(context)!.privateWorld,
-                if (!config.worldDetails && user.location == VRChatInstanceIdOther.traveling.name) AppLocalizations.of(context)!.loadingWorld,
-              ].whereType<String>()) ...[
-                Text(text, style: style.details, maxLines: 1),
-              ],
+              for (String text
+                  in [
+                    if (user.statusDescription != null) user.statusDescription!,
+                    if (!config.worldDetails && !VRChatInstanceIdOther.values.any((id) => id.name == user.location)) locationMap[worldId]?.name,
+                    if (!config.worldDetails && user.location == VRChatInstanceIdOther.private.name) AppLocalizations.of(context)!.privateWorld,
+                    if (!config.worldDetails && user.location == VRChatInstanceIdOther.traveling.name) AppLocalizations.of(context)!.loadingWorld,
+                  ].whereType<String>()) ...[Text(text, style: style.details, maxLines: 1)],
             ],
           );
         }(),
@@ -148,11 +132,7 @@ class ExtractionFriend extends ConsumerGridWidget {
           }
           String worldId = user.location.split(":")[0];
           return GenericTemplateText(
-            onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (BuildContext context) => VRChatMobileUser(userId: user.id),
-                )),
+            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => VRChatMobileUser(userId: user.id))),
             onLongPress: () {
               showModalBottomSheetStatelessWidget(
                 context: context,

@@ -31,11 +31,7 @@ final isFirstProvider = StateProvider<bool>((ref) => true);
 
 final versionProvider = FutureProvider((ref) async => await PackageInfo.fromPlatform());
 
-enum SplashData {
-  home,
-  login,
-  userPolicy;
-}
+enum SplashData { home, login, userPolicy }
 
 final splashProvider = FutureProvider<SplashData>((ref) async {
   for (GridModalConfigType id in GridModalConfigType.values) {
@@ -73,11 +69,7 @@ final splashProvider = FutureProvider<SplashData>((ref) async {
 class VRChatMobileSplash extends ConsumerWidget {
   final Widget child;
   final Widget login;
-  const VRChatMobileSplash({
-    super.key,
-    this.child = const VRChatMobileHome(),
-    this.login = const VRChatMobileLogin(),
-  });
+  const VRChatMobileSplash({super.key, this.child = const VRChatMobileHome(), this.login = const VRChatMobileLogin()});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -88,19 +80,10 @@ class VRChatMobileSplash extends ConsumerWidget {
     return Scaffold(
       body: SafeArea(
         child: data.when(
-          loading: () => const Center(
-            child: SizedBox(
-              width: 100,
-              height: 100,
-              child: CircularProgressIndicator(strokeWidth: 8),
-            ),
-          ),
+          loading: () => const Center(child: SizedBox(width: 100, height: 100, child: CircularProgressIndicator(strokeWidth: 8))),
           error: (e, trace) {
             logger.w(getMessage(e), error: e, stackTrace: trace);
-            return ScrollWidget(
-              onRefresh: () => ref.refresh(splashProvider.future),
-              child: ErrorPage(loggerReport: ref.read(loggerReportProvider)),
-            );
+            return ScrollWidget(onRefresh: () => ref.refresh(splashProvider.future), child: ErrorPage(loggerReport: ref.read(loggerReportProvider)));
           },
           data: (SplashData data) {
             switch (data) {

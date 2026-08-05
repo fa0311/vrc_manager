@@ -16,25 +16,17 @@ class VRChatMobileSettingsOtherAccount extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return PopScope(
       onPopInvokedWithResult: (bool didPop, Object? result) {
-        if (!ref
-            .read(accountListConfigProvider)
-            .accountList
-            .contains(ref.read(accountConfigProvider).loggedAccount)) {
-          ref
-              .read(accountConfigProvider)
-              .login(ref.read(accountListConfigProvider).accountList.first);
+        if (!ref.read(accountListConfigProvider).accountList.contains(ref.read(accountConfigProvider).loggedAccount)) {
+          ref.read(accountConfigProvider).login(ref.read(accountListConfigProvider).accountList.first);
         }
       },
       child: Scaffold(
-        appBar: AppBar(
-          title: Text(AppLocalizations.of(context)!.accountSwitchSetting),
-        ),
+        appBar: AppBar(title: Text(AppLocalizations.of(context)!.accountSwitchSetting)),
         body: SafeArea(
           child: SingleChildScrollView(
             child: Column(
               children: [
-                for (AccountConfig account
-                    in ref.watch(accountListConfigProvider).accountList)
+                for (AccountConfig account in ref.watch(accountListConfigProvider).accountList)
                   Card(
                     elevation: 20.0,
                     child: InkWell(
@@ -49,12 +41,7 @@ class VRChatMobileSettingsOtherAccount extends ConsumerWidget {
                             Expanded(
                               child: SizedBox(
                                 width: double.infinity,
-                                child: Text(
-                                  account.displayName ??
-                                      AppLocalizations.of(context)!.unknown,
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.bold),
-                                ),
+                                child: Text(account.displayName ?? AppLocalizations.of(context)!.unknown, style: const TextStyle(fontWeight: FontWeight.bold)),
                               ),
                             ),
                             SizedBox(
@@ -65,28 +52,15 @@ class VRChatMobileSettingsOtherAccount extends ConsumerWidget {
                                     context: context,
                                     builder: (_) {
                                       return AlertDialog(
-                                        title: Text(
-                                            AppLocalizations.of(context)!
-                                                .deleteLoginInfoConfirm),
+                                        title: Text(AppLocalizations.of(context)!.deleteLoginInfoConfirm),
                                         actions: <Widget>[
-                                          TextButton(
-                                            child: Text(
-                                                AppLocalizations.of(context)!
-                                                    .cancel),
-                                            onPressed: () =>
-                                                Navigator.pop(context),
-                                          ),
+                                          TextButton(child: Text(AppLocalizations.of(context)!.cancel), onPressed: () => Navigator.pop(context)),
                                           TextButton(
                                             onPressed: () {
-                                              ref
-                                                  .read(
-                                                      accountListConfigProvider)
-                                                  .removeAccount(account);
+                                              ref.read(accountListConfigProvider).removeAccount(account);
                                               Navigator.pop(context);
                                             },
-                                            child: Text(
-                                                AppLocalizations.of(context)!
-                                                    .delete),
+                                            child: Text(AppLocalizations.of(context)!.delete),
                                           ),
                                         ],
                                       );
@@ -104,18 +78,10 @@ class VRChatMobileSettingsOtherAccount extends ConsumerWidget {
                 Container(
                   alignment: Alignment.center,
                   child: TextButton(
-                    style: ElevatedButton.styleFrom(
-                      foregroundColor: Colors.grey,
-                    ),
+                    style: ElevatedButton.styleFrom(foregroundColor: Colors.grey),
                     onPressed: () {
                       ref.read(accountConfigProvider).logout();
-                      Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => const VRChatMobileSplash(),
-                        ),
-                        (_) => false,
-                      );
+                      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (_) => const VRChatMobileSplash()), (_) => false);
                     },
                     child: Text(AppLocalizations.of(context)!.addAccount),
                   ),

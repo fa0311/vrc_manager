@@ -20,12 +20,7 @@ class ExtractionUser extends ConsumerGridWidget {
   final List<VRChatUser> userList;
   final VRChatFriendStatus? status;
 
-  const ExtractionUser({
-    super.key,
-    required super.id,
-    required this.userList,
-    this.status,
-  });
+  const ExtractionUser({super.key, required super.id, required this.userList, this.status});
 
   @override
   List<Widget> normal(BuildContext context, WidgetRef ref, GridConfigNotifier config, ConsumerGridStyle style) {
@@ -38,21 +33,11 @@ class ExtractionUser extends ConsumerGridWidget {
           }
           return GenericTemplate(
             imageUrl: user.profilePicOverride ?? user.currentAvatarThumbnailImageUrl ?? "",
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (BuildContext context) => VRChatMobileUser(userId: user.id),
-              ),
-            ),
+            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => VRChatMobileUser(userId: user.id))),
             onLongPress: () {
-              showModalBottomSheetStatelessWidget(
-                context: context,
-                builder: () => UserDetailsModalBottom(user: user, status: userStatus),
-              );
+              showModalBottomSheetStatelessWidget(context: context, builder: () => UserDetailsModalBottom(user: user, status: userStatus));
             },
-            children: [
-              Username(user: user, diameter: style.title.fontSize, fontWeight: style.title.fontWeight),
-            ],
+            children: [Username(user: user, diameter: style.title.fontSize, fontWeight: style.title.fontWeight)],
           );
         }(),
     ].whereType<Widget>().toList();
@@ -70,21 +55,11 @@ class ExtractionUser extends ConsumerGridWidget {
           return GenericTemplate(
             imageUrl: user.profilePicOverride ?? user.currentAvatarThumbnailImageUrl ?? "",
             half: true,
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (BuildContext context) => VRChatMobileUser(userId: user.id),
-              ),
-            ),
+            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => VRChatMobileUser(userId: user.id))),
             onLongPress: () {
-              showModalBottomSheetStatelessWidget(
-                context: context,
-                builder: () => UserDetailsModalBottom(user: user, status: userStatus),
-              );
+              showModalBottomSheetStatelessWidget(context: context, builder: () => UserDetailsModalBottom(user: user, status: userStatus));
             },
-            children: [
-              Username(user: user, diameter: style.title.fontSize, fontWeight: style.title.fontWeight),
-            ],
+            children: [Username(user: user, diameter: style.title.fontSize, fontWeight: style.title.fontWeight)],
           );
         }(),
     ].whereType<Widget>().toList();
@@ -100,21 +75,11 @@ class ExtractionUser extends ConsumerGridWidget {
             return null;
           }
           return GenericTemplateText(
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (BuildContext context) => VRChatMobileUser(userId: user.id),
-              ),
-            ),
+            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => VRChatMobileUser(userId: user.id))),
             onLongPress: () {
-              showModalBottomSheetStatelessWidget(
-                context: context,
-                builder: () => UserDetailsModalBottom(user: user, status: userStatus),
-              );
+              showModalBottomSheetStatelessWidget(context: context, builder: () => UserDetailsModalBottom(user: user, status: userStatus));
             },
-            children: [
-              Username(user: user, diameter: style.title.fontSize, fontWeight: style.title.fontWeight),
-            ],
+            children: [Username(user: user, diameter: style.title.fontSize, fontWeight: style.title.fontWeight)],
           );
         }(),
     ].whereType<Widget>().toList();

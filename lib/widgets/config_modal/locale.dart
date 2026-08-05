@@ -23,11 +23,7 @@ class LocaleModal extends ConsumerWidget {
             ListTile(
               title: Text(value.text),
               trailing: accessibilityConfig.languageCode == value ? const Icon(Icons.check) : null,
-              subtitle: Text(
-                AppLocalizations.of(context)!.translatorDetails(
-                  lookupAppLocalizations(Locale(value.name, "")).contributor,
-                ),
-              ),
+              subtitle: Text(AppLocalizations.of(context)!.translatorDetails(lookupAppLocalizations(Locale(value.name, "")).contributor)),
               onTap: () {
                 accessibilityConfig.setLanguageCode(value);
               },
