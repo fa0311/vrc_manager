@@ -11,8 +11,12 @@ Future<T?> showModalBottomSheetConsumer<T>({required BuildContext context, requi
   return showModalBottomSheet(
     context: context,
     shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(15))),
+    // A modal sheet always extends to the bottom of the screen, and Android now
+    // draws edge-to-edge, so the content has to inset itself or its last entry
+    // ends up under the navigation bar and cannot be tapped. `useSafeArea` does
+    // not help here: it only covers the top, left and right sides.
     builder: (BuildContext context) {
-      return Consumer(builder: builder);
+      return SafeArea(top: false, child: Consumer(builder: builder));
     },
   );
 }
@@ -24,6 +28,7 @@ Future<T?> showModalBottomSheetStatelessWidget<T>({required BuildContext context
   return showModalBottomSheet(
     context: context,
     shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(15))),
-    builder: (BuildContext context) => builder(),
+    // See showModalBottomSheetConsumer above for why this inset is manual.
+    builder: (BuildContext context) => SafeArea(top: false, child: builder()),
   );
 }
