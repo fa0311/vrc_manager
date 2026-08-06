@@ -2,7 +2,6 @@ name: "[ja] 💡 機能を提案する"
 description: vrc_managerに欲しい機能を提案して下さい
 labels: ["enhancement"]
 body:
-
   - type: textarea
     id: feature-description
     attributes:

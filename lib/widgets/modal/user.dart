@@ -2,13 +2,13 @@
 import 'package:flutter/material.dart';
 
 // Package imports:
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
 import 'package:vrc_manager/api/assets/assets.dart';
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
+import 'package:vrc_manager/l10n/app_localizations.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/core/splash.dart';
 import 'package:vrc_manager/scenes/setting/logger.dart';
@@ -97,10 +97,7 @@ class ProfileActionTileWidget extends ConsumerWidget {
     return ListTile(
       title: Text(AppLocalizations.of(context)!.friendManagement),
       onTap: () {
-        showModalBottomSheetStatelessWidget(
-          context: context,
-          builder: () => ProfileAction(status: status, user: user),
-        );
+        showModalBottomSheetStatelessWidget(context: context, builder: () => ProfileAction(status: status, user: user));
       },
     );
   }
@@ -121,36 +118,45 @@ class ProfileAction extends ConsumerWidget {
     );
 
     Future sendFriendRequest() async {
-      await vrchatLoginSession.sendFriendRequest(user.id).then((value) {
-        Navigator.of(context).pop();
-      }).catchError((e, trace) {
-        logger.e(getMessage(e), error: e, stackTrace: trace);
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage(context: context, status: e))));
-        Navigator.of(context).popUntil((route) => route.isFirst);
-      });
+      await vrchatLoginSession
+          .sendFriendRequest(user.id)
+          .then((value) {
+            Navigator.of(context).pop();
+          })
+          .catchError((e, trace) {
+            logger.e(getMessage(e), error: e, stackTrace: trace);
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage(context: context, status: e))));
+            Navigator.of(context).popUntil((route) => route.isFirst);
+          });
       status.outgoingRequest = true;
     }
 
     Future acceptFriendRequest() async {
-      await vrchatLoginSession.acceptFriendRequestByUid(user.id).then((value) {
-        Navigator.of(context).pop();
-      }).catchError((e, trace) {
-        logger.e(getMessage(e), error: e, stackTrace: trace);
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage(context: context, status: e))));
-        Navigator.of(context).popUntil((route) => route.isFirst);
-      });
+      await vrchatLoginSession
+          .acceptFriendRequestByUid(user.id)
+          .then((value) {
+            Navigator.of(context).pop();
+          })
+          .catchError((e, trace) {
+            logger.e(getMessage(e), error: e, stackTrace: trace);
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage(context: context, status: e))));
+            Navigator.of(context).popUntil((route) => route.isFirst);
+          });
       status.isFriend = true;
       status.incomingRequest = false;
     }
 
     Future deleteFriendRequest() async {
-      await vrchatLoginSession.deleteFriendRequest(user.id).then((value) {
-        Navigator.of(context).pop();
-      }).catchError((e, trace) {
-        logger.e(getMessage(e), error: e, stackTrace: trace);
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage(context: context, status: e))));
-        Navigator.of(context).popUntil((route) => route.isFirst);
-      });
+      await vrchatLoginSession
+          .deleteFriendRequest(user.id)
+          .then((value) {
+            Navigator.of(context).pop();
+          })
+          .catchError((e, trace) {
+            logger.e(getMessage(e), error: e, stackTrace: trace);
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage(context: context, status: e))));
+            Navigator.of(context).popUntil((route) => route.isFirst);
+          });
       status.outgoingRequest = false;
     }
 
@@ -159,9 +165,7 @@ class ProfileAction extends ConsumerWidget {
         context: context,
         builder: (_) {
           return AlertDialog(
-            title: Text(
-              AppLocalizations.of(context)!.unfriendConfirm,
-            ),
+            title: Text(AppLocalizations.of(context)!.unfriendConfirm),
             actions: <Widget>[
               TextButton(
                 child: Text(AppLocalizations.of(context)!.cancel),
@@ -171,14 +175,17 @@ class ProfileAction extends ConsumerWidget {
               ),
               FutureButton(
                 onPressed: () async {
-                  await vrchatLoginSession.deleteFriend(user.id).then((value) {
-                    Navigator.of(context).pop();
-                    Navigator.of(context).pop();
-                  }).catchError((e, trace) {
-                    logger.e(getMessage(e), error: e, stackTrace: trace);
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage(context: context, status: e))));
-                    Navigator.of(context).popUntil((route) => route.isFirst);
-                  });
+                  await vrchatLoginSession
+                      .deleteFriend(user.id)
+                      .then((value) {
+                        Navigator.of(context).pop();
+                        Navigator.of(context).pop();
+                      })
+                      .catchError((e, trace) {
+                        logger.e(getMessage(e), error: e, stackTrace: trace);
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage(context: context, status: e))));
+                        Navigator.of(context).popUntil((route) => route.isFirst);
+                      });
                   status.isFriend = false;
                 },
                 child: Text(AppLocalizations.of(context)!.unfriend),
@@ -193,35 +200,15 @@ class ProfileAction extends ConsumerWidget {
       child: Column(
         children: [
           if (!status.isFriend && !status.incomingRequest && !status.outgoingRequest)
-            FutureTile(
-              leading: const Icon(Icons.person_add),
-              title: Text(AppLocalizations.of(context)!.friendRequest),
-              onTap: sendFriendRequest,
-            ),
+            FutureTile(leading: const Icon(Icons.person_add), title: Text(AppLocalizations.of(context)!.friendRequest), onTap: sendFriendRequest),
           if (status.isFriend && !status.incomingRequest && !status.outgoingRequest)
-            ListTile(
-              leading: const Icon(Icons.person_remove),
-              title: Text(AppLocalizations.of(context)!.unfriend),
-              onTap: deleteFriend,
-            ),
+            ListTile(leading: const Icon(Icons.person_remove), title: Text(AppLocalizations.of(context)!.unfriend), onTap: deleteFriend),
           if (!status.isFriend && status.outgoingRequest)
-            FutureTile(
-              leading: const Icon(Icons.person_remove),
-              title: Text(AppLocalizations.of(context)!.requestCancel),
-              onTap: deleteFriendRequest,
-            ),
+            FutureTile(leading: const Icon(Icons.person_remove), title: Text(AppLocalizations.of(context)!.requestCancel), onTap: deleteFriendRequest),
           if (!status.isFriend && status.incomingRequest)
-            FutureTile(
-              leading: const Icon(Icons.person_add),
-              title: Text(AppLocalizations.of(context)!.allowFriends),
-              onTap: acceptFriendRequest,
-            ),
+            FutureTile(leading: const Icon(Icons.person_add), title: Text(AppLocalizations.of(context)!.allowFriends), onTap: acceptFriendRequest),
           if (!status.isFriend && status.incomingRequest)
-            FutureTile(
-              leading: const Icon(Icons.person_remove),
-              title: Text(AppLocalizations.of(context)!.denyFriends),
-              onTap: deleteFriendRequest,
-            ),
+            FutureTile(leading: const Icon(Icons.person_remove), title: Text(AppLocalizations.of(context)!.denyFriends), onTap: deleteFriendRequest),
         ],
       ),
     );

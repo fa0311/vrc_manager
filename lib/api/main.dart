@@ -24,7 +24,7 @@ class VRChatAPI {
     return vrchatSession.headers["cookie"] ?? "";
   }
 
-  setCookie(String? cookie) {
+  void setCookie(String? cookie) {
     vrchatSession.headers["cookie"] = cookie ?? "";
   }
 
@@ -39,9 +39,7 @@ class VRChatAPI {
   // Login
 
   Future<VRChatLogin> login(String username, String password) {
-    vrchatSession.get(
-      endpoint('api/1/config', {}),
-    );
+    vrchatSession.get(endpoint('api/1/config', {}));
     return vrchatSession.basic(endpoint('api/1/auth/user', apiKey()), username, password).then((value) {
       try {
         return VRChatLogin.fromJson(value);
@@ -53,9 +51,7 @@ class VRChatAPI {
   }
 
   Future<VRChatLogin> loginTotp(String code) {
-    final param = {"code": code}..addAll(
-        apiKey(),
-      );
+    final param = {"code": code}..addAll(apiKey());
     return vrchatSession.post(endpoint('api/1/auth/twofactorauth/totp/verify'), param).then((value) {
       try {
         return VRChatLogin.fromJson(value);
@@ -172,11 +168,7 @@ class VRChatAPI {
   // Friends
 
   Future<List<VRChatFriends>> friends({int offset = 0, bool offline = false}) {
-    final param = {
-      "offline": offline.toString(),
-      "offset": offset.toString(),
-      "n": "50",
-    }..addAll(apiKey());
+    final param = {"offline": offline.toString(), "offset": offset.toString(), "n": "50"}..addAll(apiKey());
     return vrchatSession.get(endpoint('api/1/auth/user/friends', param)).then((value) {
       return [
         for (dynamic content in value)
@@ -188,7 +180,7 @@ class VRChatAPI {
               if (ignoreErrors) return null;
               rethrow;
             }
-          }()
+          }(),
       ].whereType<VRChatFriends>().toList();
     });
   }
@@ -207,13 +199,7 @@ class VRChatAPI {
   // Search
 
   Future<List<VRChatUser>> searchUsers(String search, {int offset = 0, String sort = "relevance", bool fuzzy = false}) {
-    final param = {
-      "sort": sort,
-      "fuzzy": fuzzy.toString(),
-      "search": search,
-      "offset": offset.toString(),
-      "n": "50",
-    }..addAll(apiKey());
+    final param = {"sort": sort, "fuzzy": fuzzy.toString(), "search": search, "offset": offset.toString(), "n": "50"}..addAll(apiKey());
     return vrchatSession.get(endpoint('api/1/users', param)).then((value) {
       return [
         for (dynamic content in value)
@@ -225,19 +211,13 @@ class VRChatAPI {
               if (ignoreErrors) return null;
               rethrow;
             }
-          }()
+          }(),
       ].whereType<VRChatUser>().toList();
     });
   }
 
   Future<List<VRChatLimitedWorld>> searchWorlds(String search, {int offset = 0, String sort = "relevance", bool fuzzy = false}) {
-    final param = {
-      "sort": sort,
-      "fuzzy": fuzzy.toString(),
-      "search": search,
-      "offset": offset.toString(),
-      "n": "50",
-    }..addAll(apiKey());
+    final param = {"sort": sort, "fuzzy": fuzzy.toString(), "search": search, "offset": offset.toString(), "n": "50"}..addAll(apiKey());
     return vrchatSession.get(endpoint('api/1/worlds', param)).then((value) {
       return [
         for (dynamic content in value)
@@ -249,7 +229,7 @@ class VRChatAPI {
               if (ignoreErrors) return null;
               rethrow;
             }
-          }()
+          }(),
       ].whereType<VRChatLimitedWorld>().toList();
     });
   }
@@ -257,11 +237,7 @@ class VRChatAPI {
   // Favorite
 
   Future<List<VRChatFavoriteGroup>> favoriteGroups(String type, {int offset = 0}) {
-    final param = {
-      "type": type,
-      "offset": offset.toString(),
-      "n": "50",
-    }..addAll(apiKey());
+    final param = {"type": type, "offset": offset.toString(), "n": "50"}..addAll(apiKey());
     return vrchatSession.get(endpoint('api/1/favorite/groups', param)).then((value) {
       return [
         for (dynamic content in value)
@@ -273,16 +249,15 @@ class VRChatAPI {
               if (ignoreErrors) return null;
               rethrow;
             }
-          }()
+          }(),
       ].whereType<VRChatFavoriteGroup>().toList();
     });
   }
 
   Future<VRChatFavorite> addFavorites(String type, String id, String tags) {
-    return vrchatSession.post(
-      endpoint('api/1/favorites', apiKey()),
-      {"type": type, "favoriteId": id, "tags": tags},
-    ).then((value) => VRChatFavorite.fromJson(value));
+    return vrchatSession
+        .post(endpoint('api/1/favorites', apiKey()), {"type": type, "favoriteId": id, "tags": tags})
+        .then((value) => VRChatFavorite.fromJson(value));
   }
 
   Future<VRChatStatus> deleteFavorites(String fid) {
@@ -318,7 +293,7 @@ class VRChatAPI {
               if (ignoreErrors) return null;
               rethrow;
             }
-          }()
+          }(),
       ].whereType<VRChatNotifications>().toList();
     });
   }
@@ -348,11 +323,7 @@ class VRChatAPI {
   }
 
   Future<List<VRChatFavoriteWorld>> favoritesWorlds(String type, {int offset = 0}) {
-    final param = {
-      "tag": type,
-      "offset": offset.toString(),
-      "n": "50",
-    }..addAll(apiKey());
+    final param = {"tag": type, "offset": offset.toString(), "n": "50"}..addAll(apiKey());
     return vrchatSession.get(endpoint('api/1/worlds/favorites', param)).then((value) {
       return [
         for (dynamic content in value)
@@ -364,7 +335,7 @@ class VRChatAPI {
               if (ignoreErrors) return null;
               rethrow;
             }
-          }()
+          }(),
       ].whereType<VRChatFavoriteWorld>().toList();
     });
   }

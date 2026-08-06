@@ -2,10 +2,10 @@
 import 'package:flutter/material.dart';
 
 // Package imports:
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
+import 'package:vrc_manager/l10n/app_localizations.dart';
 import 'package:vrc_manager/l10n/code.dart';
 import 'package:vrc_manager/storage/accessibility.dart';
 
@@ -23,11 +23,7 @@ class LocaleModal extends ConsumerWidget {
             ListTile(
               title: Text(value.text),
               trailing: accessibilityConfig.languageCode == value ? const Icon(Icons.check) : null,
-              subtitle: Text(
-                AppLocalizations.of(context)!.translatorDetails(
-                  lookupAppLocalizations(Locale(value.name, "")).contributor,
-                ),
-              ),
+              subtitle: Text(AppLocalizations.of(context)!.translatorDetails(lookupAppLocalizations(Locale(value.name, "")).contributor)),
               onTap: () {
                 accessibilityConfig.setLanguageCode(value);
               },

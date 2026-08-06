@@ -37,7 +37,7 @@ Map<String, int> numberOfFriendsInLocation(List<VRChatUser> userList) {
   return inLocation;
 }
 
-sortByLocationMapFromUser(List<VRChatUser> userList) {
+void sortByLocationMapFromUser(List<VRChatUser> userList) {
   Map<String, int> inLocation = numberOfFriendsInLocation(userList);
   userList.sort((userA, userB) {
     String locationA = userA.location;
@@ -65,7 +65,7 @@ sortByLocationMapFromUser(List<VRChatUser> userList) {
   });
 }
 
-sortByNameFromUser(List<VRChatUser> userList) {
+void sortByNameFromUser(List<VRChatUser> userList) {
   userList.sort((userA, userB) {
     List<int> userBytesA = utf8.encode(userA.displayName.toLowerCase());
     List<int> userBytesB = utf8.encode(userB.displayName.toLowerCase());
@@ -79,12 +79,16 @@ sortByNameFromUser(List<VRChatUser> userList) {
   });
 }
 
-sortByLastLoginFromUser(List<VRChatUser> userList) {
+void sortByLastLoginFromUser(List<VRChatUser> userList) {
   userList.sort((userA, userB) {
     if (userA.lastLogin == null) return 1;
     if (userB.lastLogin == null) return -1;
-    if (userA.lastLogin!.millisecondsSinceEpoch > userB.lastLogin!.millisecondsSinceEpoch) return -1;
-    if (userA.lastLogin!.millisecondsSinceEpoch < userB.lastLogin!.millisecondsSinceEpoch) return 1;
+    if (userA.lastLogin!.millisecondsSinceEpoch > userB.lastLogin!.millisecondsSinceEpoch) {
+      return -1;
+    }
+    if (userA.lastLogin!.millisecondsSinceEpoch < userB.lastLogin!.millisecondsSinceEpoch) {
+      return 1;
+    }
     return 0;
   });
 }

@@ -64,10 +64,7 @@ class LaunchWorld extends ConsumerWidget {
             ListTile(
               leading: RegionWidget(region: region),
               title: Text(region.name),
-              onTap: () => showModalBottomSheetStatelessWidget(
-                context: context,
-                builder: () => SelectWordType(world: world, regionText: region.name),
-              ),
+              onTap: () => showModalBottomSheetStatelessWidget(context: context, builder: () => SelectWordType(world: world, regionText: region.name)),
             ),
         ],
       ),
@@ -99,10 +96,7 @@ class SelectWordType extends ConsumerWidget {
                 try {
                   String instanceId = await genInstanceId(vrchatLoginSession: vrchatLoginSession, region: regionText, type: type);
                   Navigator.of(context).popUntil((route) => route.isFirst);
-                  showModalBottomSheetStatelessWidget(
-                    context: context,
-                    builder: () => ShareInstanceListTile(worldId: world.id, instanceId: instanceId),
-                  );
+                  showModalBottomSheetStatelessWidget(context: context, builder: () => ShareInstanceListTile(worldId: world.id, instanceId: instanceId));
                 } catch (e, trace) {
                   logger.e(e, stackTrace: trace);
                 }

@@ -1,11 +1,13 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
+
 // Package imports:
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 // Project imports:
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
+import 'package:vrc_manager/l10n/app_localizations.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/core/splash.dart';
 import 'package:vrc_manager/scenes/setting/logger.dart';
@@ -19,9 +21,7 @@ import 'package:vrc_manager/widgets/world.dart';
 class VRChatMobileWorldData {
   VRChatWorld world;
 
-  VRChatMobileWorldData({
-    required this.world,
-  });
+  VRChatMobileWorldData({required this.world});
 }
 
 final vrchatMobileWorldProvider = FutureProvider.family<VRChatMobileWorldData, String>((ref, worldId) async {
@@ -53,17 +53,15 @@ class VRChatMobileWorld extends ConsumerWidget {
             logger.w(getMessage(e), error: e, stackTrace: trace);
             return null;
           },
-          data: (data) => [
-            IconButton(
-              icon: const Icon(Icons.more_vert),
-              onPressed: () {
-                showModalBottomSheetStatelessWidget(
-                  context: context,
-                  builder: () => WorldDetailsModalBottom(world: data.world),
-                );
-              },
-            )
-          ],
+          data:
+              (data) => [
+                IconButton(
+                  icon: const Icon(Icons.more_vert),
+                  onPressed: () {
+                    showModalBottomSheetStatelessWidget(context: context, builder: () => WorldDetailsModalBottom(world: data.world));
+                  },
+                ),
+              ],
         ),
       ),
       drawer: Navigator.of(context).canPop() ? null : const NormalDrawer(),
@@ -79,13 +77,11 @@ class VRChatMobileWorld extends ConsumerWidget {
                   child: ErrorPage(loggerReport: ref.read(loggerReportProvider)),
                 );
               },
-              data: (data) => ScrollWidget(
-                onRefresh: () => ref.refresh((vrchatMobileWorldProvider(worldId).future)),
-                child: Container(
-                  padding: const EdgeInsets.only(top: 10, right: 30, left: 30),
-                  child: WorldProfile(world: data.world),
-                ),
-              ),
+              data:
+                  (data) => ScrollWidget(
+                    onRefresh: () => ref.refresh((vrchatMobileWorldProvider(worldId).future)),
+                    child: Container(padding: const EdgeInsets.only(top: 10, right: 30, left: 30), child: WorldProfile(world: data.world)),
+                  ),
             );
           },
         ),

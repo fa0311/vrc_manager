@@ -3,13 +3,15 @@ import 'dart:io';
 
 // Flutter imports:
 import 'package:flutter/material.dart';
+
 // Package imports:
 import 'package:flutter_sharing_intent/flutter_sharing_intent.dart';
 import 'package:flutter_sharing_intent/model/sharing_file.dart';
+
 // Project imports:
 import 'package:vrc_manager/assets/flutter/url_parser.dart';
 
-textStream({required BuildContext context, required bool forceExternal}) async {
+Future<void> textStream({required BuildContext context, required bool forceExternal}) async {
   if (!Platform.isAndroid && !Platform.isIOS) return;
   await for (final file in FlutterSharingIntent().getMediaStream()) {
     for (final SharedFile sharedFile in file) {

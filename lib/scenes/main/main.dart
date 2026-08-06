@@ -1,9 +1,11 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
+
 // Package imports:
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 // Project imports:
+import 'package:vrc_manager/l10n/app_localizations.dart';
 import 'package:vrc_manager/scenes/main/friend_request.dart';
 import 'package:vrc_manager/scenes/main/friends.dart';
 import 'package:vrc_manager/scenes/main/search.dart';
@@ -65,11 +67,7 @@ class FastScrollPhysics extends ScrollPhysics {
   }
 
   @override
-  SpringDescription get spring => const SpringDescription(
-        mass: 80,
-        stiffness: 100,
-        damping: 1,
-      );
+  SpringDescription get spring => const SpringDescription(mass: 80, stiffness: 100, damping: 1);
 }
 
 class VRChatMobileHome extends ConsumerWidget {
@@ -107,10 +105,7 @@ class VRChatMobileHome extends ConsumerWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.more_vert),
-            onPressed: () => showModalBottomSheetStatelessWidget(
-              context: context,
-              builder: () => GridModal(type: ref.read(gridModalConfigIdProvider)),
-            ),
+            onPressed: () => showModalBottomSheetStatelessWidget(context: context, builder: () => GridModal(type: ref.read(gridModalConfigIdProvider))),
           ),
         ],
       ),
@@ -128,9 +123,7 @@ class VRChatMobileHome extends ConsumerWidget {
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        items: [
-          for (CurrentIndex scene in CurrentIndex.values) BottomNavigationBarItem(icon: Icon(scene.icon), label: scene.toLocalization(context)),
-        ],
+        items: [for (CurrentIndex scene in CurrentIndex.values) BottomNavigationBarItem(icon: Icon(scene.icon), label: scene.toLocalization(context))],
         currentIndex: currentIndex.index,
         onTap: (int index) => controller.jumpToPage(index),
         showSelectedLabels: false,

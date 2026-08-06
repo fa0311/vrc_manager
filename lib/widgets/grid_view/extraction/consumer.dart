@@ -25,35 +25,14 @@ abstract class ConsumerGridWidget extends ConsumerWidget {
 
     switch (config.displayMode) {
       case DisplayMode.normal:
-        final style = ConsumerGridStyle(
-          title: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-          details: const TextStyle(fontSize: 15),
-        );
-        return RenderGrid(
-          width: 600,
-          height: config.worldDetails ? 235 : 130,
-          children: normal(context, ref, config, style),
-        );
+        final style = ConsumerGridStyle(title: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold), details: const TextStyle(fontSize: 15));
+        return RenderGrid(width: 600, height: config.worldDetails ? 235 : 130, children: normal(context, ref, config, style));
       case DisplayMode.simple:
-        final style = ConsumerGridStyle(
-          title: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-          details: const TextStyle(fontSize: 10),
-        );
-        return RenderGrid(
-          width: 320,
-          height: config.worldDetails ? 119 : 64,
-          children: simple(context, ref, config, style),
-        );
+        final style = ConsumerGridStyle(title: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold), details: const TextStyle(fontSize: 10));
+        return RenderGrid(width: 320, height: config.worldDetails ? 119 : 64, children: simple(context, ref, config, style));
       case DisplayMode.textOnly:
-        final style = ConsumerGridStyle(
-          title: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-          details: const TextStyle(fontSize: 10),
-        );
-        return RenderGrid(
-          width: 200,
-          height: config.worldDetails ? 27 : 20,
-          children: textOnly(context, ref, config, style),
-        );
+        final style = ConsumerGridStyle(title: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold), details: const TextStyle(fontSize: 10));
+        return RenderGrid(width: 200, height: config.worldDetails ? 27 : 20, children: textOnly(context, ref, config, style));
     }
   }
 }

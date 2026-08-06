@@ -17,11 +17,7 @@ import 'package:vrc_manager/widgets/modal/world.dart';
 class ExtractionWorld extends ConsumerGridWidget {
   final List<VRChatLimitedWorld> worldList;
 
-  const ExtractionWorld({
-    super.key,
-    required super.id,
-    required this.worldList,
-  });
+  const ExtractionWorld({super.key, required super.id, required this.worldList});
 
   @override
   List<Widget> normal(BuildContext context, WidgetRef ref, GridConfigNotifier config, ConsumerGridStyle style) {
@@ -30,30 +26,14 @@ class ExtractionWorld extends ConsumerGridWidget {
         () {
           return GenericTemplate(
             imageUrl: world.thumbnailImageUrl,
-            onTap: world.id == "???"
-                ? null
-                : () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id),
-                      ),
-                    ),
+            onTap:
+                world.id == "???"
+                    ? null
+                    : () => Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id))),
             onLongPress: () {
-              showModalBottomSheetStatelessWidget(
-                context: context,
-                builder: () => WorldDetailsModalBottom(world: world),
-              );
+              showModalBottomSheetStatelessWidget(context: context, builder: () => WorldDetailsModalBottom(world: world));
             },
-            children: [
-              SizedBox(
-                child: Text(
-                  world.name,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 2,
-                  style: style.title,
-                ),
-              ),
-            ],
+            children: [SizedBox(child: Text(world.name, overflow: TextOverflow.ellipsis, maxLines: 2, style: style.title))],
           );
         }(),
     ];
@@ -67,31 +47,14 @@ class ExtractionWorld extends ConsumerGridWidget {
           return GenericTemplate(
             imageUrl: world.thumbnailImageUrl,
             half: true,
-            onTap: world.id == "???"
-                ? null
-                : () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id),
-                      ),
-                    ),
+            onTap:
+                world.id == "???"
+                    ? null
+                    : () => Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id))),
             onLongPress: () {
-              showModalBottomSheetStatelessWidget(
-                context: context,
-                builder: () => WorldDetailsModalBottom(world: world),
-              );
+              showModalBottomSheetStatelessWidget(context: context, builder: () => WorldDetailsModalBottom(world: world));
             },
-            children: [
-              SizedBox(
-                width: double.infinity,
-                child: Text(
-                  world.name,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 2,
-                  style: style.title,
-                ),
-              ),
-            ],
+            children: [SizedBox(width: double.infinity, child: Text(world.name, overflow: TextOverflow.ellipsis, maxLines: 2, style: style.title))],
           );
         }(),
     ];
@@ -103,26 +66,15 @@ class ExtractionWorld extends ConsumerGridWidget {
       for (VRChatLimitedWorld world in sortWorlds(config, worldList))
         () {
           return GenericTemplateText(
-            onTap: world.id == "???"
-                ? null
-                : () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id),
-                    )),
+            onTap:
+                world.id == "???"
+                    ? null
+                    : () => Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id))),
             onLongPress: () {
-              showModalBottomSheetStatelessWidget(
-                context: context,
-                builder: () => WorldDetailsModalBottom(world: world),
-              );
+              showModalBottomSheetStatelessWidget(context: context, builder: () => WorldDetailsModalBottom(world: world));
             },
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(world.name, style: style.title),
-                ],
-              ),
+              Row(mainAxisAlignment: MainAxisAlignment.center, children: [Text(world.name, style: style.title)]),
             ],
           );
         }(),

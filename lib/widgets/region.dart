@@ -1,8 +1,12 @@
 // Flutter imports:
+
+// Flutter imports:
+import 'package:flutter/material.dart';
+
 // Package imports:
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 // Project imports:
 import 'package:vrc_manager/api/assets/region.dart';
 import 'package:vrc_manager/scenes/core/splash.dart';
@@ -22,9 +26,7 @@ class RegionWidget extends ConsumerWidget {
         fit: BoxFit.fitWidth,
         progressIndicatorBuilder: (context, url, downloadProgress) => const CircularProgressIndicator(),
         errorWidget: (context, url, error) => const Icon(Icons.error),
-        httpHeaders: {
-          "user-agent": ref.watch(accountConfigProvider).userAgent,
-        },
+        httpHeaders: {"user-agent": ref.watch(accountConfigProvider).userAgent},
       ),
     );
   }

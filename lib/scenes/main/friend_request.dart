@@ -1,7 +1,9 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
+
 // Package imports:
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 // Project imports:
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
@@ -32,11 +34,16 @@ final vrchatMobileFriendsRequestProvider = FutureProvider<VRChatMobileFriendRequ
       int offset = futureList.length;
       List<VRChatNotifications> notify = await vrchatLoginSession.notifications(type: "friendRequest", offset: offset);
       for (VRChatNotifications requestUser in notify) {
-        futureList.add(vrchatLoginSession.users(requestUser.senderUserId).then((VRChatUser user) {
-          userList.add(user);
-        }).catchError((e, trace) {
-          logger.e(getMessage(e), error: e, stackTrace: trace);
-        }));
+        futureList.add(
+          vrchatLoginSession
+              .users(requestUser.senderUserId)
+              .then((VRChatUser user) {
+                userList.add(user);
+              })
+              .catchError((e, trace) {
+                logger.e(getMessage(e), error: e, stackTrace: trace);
+              }),
+        );
       }
       len = notify.length;
     } while (len > 0);
@@ -64,10 +71,11 @@ class VRChatMobileFriendRequest extends ConsumerWidget {
           child: ErrorPage(loggerReport: ref.read(loggerReportProvider)),
         );
       },
-      data: (data) => ScrollWidget(
-        onRefresh: () => ref.refresh(vrchatMobileFriendsRequestProvider.future),
-        child: ExtractionUser(id: GridModalConfigType.favoriteWorlds, userList: data.userList, status: status),
-      ),
+      data:
+          (data) => ScrollWidget(
+            onRefresh: () => ref.refresh(vrchatMobileFriendsRequestProvider.future),
+            child: ExtractionUser(id: GridModalConfigType.favoriteWorlds, userList: data.userList, status: status),
+          ),
     );
   }
 }

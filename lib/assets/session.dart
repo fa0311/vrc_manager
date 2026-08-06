@@ -6,28 +6,24 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 class Session {
-  Map<String, String> headers = <String, String>{
-    'cookie': '',
-    'user-agent': '',
-  };
+  Map<String, String> headers = <String, String>{'cookie': '', 'user-agent': ''};
 
   Future<dynamic> get(Uri url) async {
     http.Response response = await http.get(url, headers: headers);
-    if (response.statusCode != 200) throw HttpException(response.body, uri: url);
+    if (response.statusCode != 200) {
+      throw HttpException(response.body, uri: url);
+    }
     final dynamic body = json.decode(response.body);
     updateCookie(response);
     return body;
   }
 
   Future<dynamic> basic(Uri url, String username, String password) async {
-    final headersAuth = Map<String, String>.from(headers)
-      ..addAll(
-        {
-          'authorization': 'Basic ${base64Encode(utf8.encode('$username:$password'))}',
-        },
-      );
+    final headersAuth = Map<String, String>.from(headers)..addAll({'authorization': 'Basic ${base64Encode(utf8.encode('$username:$password'))}'});
     http.Response response = await http.get(url, headers: headersAuth);
-    if (response.statusCode != 200) throw HttpException(response.body, uri: url);
+    if (response.statusCode != 200) {
+      throw HttpException(response.body, uri: url);
+    }
     final dynamic body = json.decode(response.body);
     updateCookie(response);
     return body;
@@ -35,7 +31,9 @@ class Session {
 
   Future<dynamic> post(Uri url, [Object? data]) async {
     http.Response response = await http.post(url, body: data ?? {}, headers: headers);
-    if (response.statusCode != 200) throw HttpException(response.body, uri: url);
+    if (response.statusCode != 200) {
+      throw HttpException(response.body, uri: url);
+    }
     final dynamic body = json.decode(response.body);
     updateCookie(response);
     return body;
@@ -43,7 +41,9 @@ class Session {
 
   Future<dynamic> put(Uri url, [Object? data]) async {
     http.Response response = await http.put(url, body: data ?? {}, headers: headers);
-    if (response.statusCode != 200) throw HttpException(response.body, uri: url);
+    if (response.statusCode != 200) {
+      throw HttpException(response.body, uri: url);
+    }
     final dynamic body = json.decode(response.body);
     updateCookie(response);
     return body;
@@ -51,13 +51,15 @@ class Session {
 
   Future<dynamic> delete(Uri url, [Object? data]) async {
     http.Response response = await http.delete(url, body: data ?? {}, headers: headers);
-    if (response.statusCode != 200) throw HttpException(response.body, uri: url);
+    if (response.statusCode != 200) {
+      throw HttpException(response.body, uri: url);
+    }
     final dynamic body = json.decode(response.body);
     updateCookie(response);
     return body;
   }
 
-  updateCookie(http.Response response) {
+  void updateCookie(http.Response response) {
     String? rawCookie = response.headers['set-cookie'];
     if (rawCookie != null) {
       Map<String, String> cookieMap = decodeCookie(headers['cookie'] ?? "");

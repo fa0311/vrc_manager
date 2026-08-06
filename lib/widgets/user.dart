@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -16,6 +15,7 @@ import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/assets.dart';
 import 'package:vrc_manager/assets/anchor.dart';
 import 'package:vrc_manager/assets/date.dart';
+import 'package:vrc_manager/l10n/app_localizations.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/core/splash.dart';
 import 'package:vrc_manager/scenes/setting/logger.dart';
@@ -40,16 +40,7 @@ class Username extends ConsumerWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         StatusWidget(status: user.status, diameter: diameter ?? 20 - 2),
-        Padding(
-          padding: const EdgeInsets.only(left: 2, right: 5),
-          child: Text(
-            user.displayName,
-            style: TextStyle(
-              fontWeight: fontWeight,
-              fontSize: diameter,
-            ),
-          ),
-        ),
+        Padding(padding: const EdgeInsets.only(left: 2, right: 5), child: Text(user.displayName, style: TextStyle(fontWeight: fontWeight, fontSize: diameter))),
       ],
     );
   }
@@ -68,52 +59,22 @@ class UserProfile extends ConsumerWidget {
           child: CachedNetworkImage(
             imageUrl: user.profilePicOverride ?? user.currentAvatarImageUrl,
             fit: BoxFit.fitWidth,
-            progressIndicatorBuilder: (context, url, downloadProgress) => const SizedBox(
-              width: 250,
-              child: Padding(
-                padding: EdgeInsets.all(30),
-                child: CircularProgressIndicator(
-                  strokeWidth: 10,
-                ),
-              ),
-            ),
-            errorWidget: (context, url, error) => const SizedBox(
-              width: 250.0,
-              child: Icon(Icons.error),
-            ),
-            httpHeaders: {
-              "user-agent": ref.watch(accountConfigProvider).userAgent,
-            },
+            progressIndicatorBuilder:
+                (context, url, downloadProgress) =>
+                    const SizedBox(width: 250, child: Padding(padding: EdgeInsets.all(30), child: CircularProgressIndicator(strokeWidth: 10))),
+            errorWidget: (context, url, error) => const SizedBox(width: 250.0, child: Icon(Icons.error)),
+            httpHeaders: {"user-agent": ref.watch(accountConfigProvider).userAgent},
           ),
         ),
         Container(padding: const EdgeInsets.only(top: 10)),
         Username(user: user),
         if (user.statusDescription != null) Text(user.statusDescription ?? ""),
-        if (user.note != null)
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 0),
-            child: Text(user.note ?? ""),
-          ),
+        if (user.note != null) Padding(padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 0), child: Text(user.note ?? "")),
         if (user.bio != null)
-          ConstrainedBox(
-            constraints: const BoxConstraints(maxHeight: 200),
-            child: SingleChildScrollView(
-              child: TextToAnchor(text: user.bio ?? ""),
-            ),
-          ),
+          ConstrainedBox(constraints: const BoxConstraints(maxHeight: 200), child: SingleChildScrollView(child: TextToAnchor(text: user.bio ?? ""))),
         if (user.bioLinks.isNotEmpty) BioLink(bioLinks: user.bioLinks),
-        if (user.lastLogin != null)
-          Text(
-            AppLocalizations.of(context)!.lastLogin(
-              generalDateDifference(context, user.lastLogin!),
-            ),
-          ),
-        if (user.dateJoined != null)
-          Text(
-            AppLocalizations.of(context)!.dateJoined(
-              generalDateDifference(context, user.dateJoined!),
-            ),
-          ),
+        if (user.lastLogin != null) Text(AppLocalizations.of(context)!.lastLogin(generalDateDifference(context, user.lastLogin!))),
+        if (user.dateJoined != null) Text(AppLocalizations.of(context)!.dateJoined(generalDateDifference(context, user.dateJoined!))),
       ],
     );
   }
@@ -135,16 +96,9 @@ class EditBio extends ConsumerWidget {
     TextEditingController controller = ref.watch(bioControllerProvider(user));
 
     return AlertDialog(
-      content: TextField(
-        controller: controller,
-        maxLines: null,
-        decoration: InputDecoration(labelText: AppLocalizations.of(context)!.editBio),
-      ),
+      content: TextField(controller: controller, maxLines: null, decoration: InputDecoration(labelText: AppLocalizations.of(context)!.editBio)),
       actions: <Widget>[
-        TextButton(
-          child: Text(AppLocalizations.of(context)!.close),
-          onPressed: () => Navigator.pop(context),
-        ),
+        TextButton(child: Text(AppLocalizations.of(context)!.close), onPressed: () => Navigator.pop(context)),
         FutureButton(
           child: Text(AppLocalizations.of(context)!.save),
           onPressed: () async {
@@ -193,38 +147,29 @@ class EditNote extends ConsumerWidget {
       loading: () => const Center(child: CircularProgressIndicator()),
       error: (e, trace) {
         logger.w(getMessage(e), error: e, stackTrace: trace);
-        return ScrollWidget(
-          onRefresh: () => ref.refresh(vrchatMobileSelfProvider.future),
-          child: ErrorPage(loggerReport: ref.read(loggerReportProvider)),
-        );
+        return ScrollWidget(onRefresh: () => ref.refresh(vrchatMobileSelfProvider.future), child: ErrorPage(loggerReport: ref.read(loggerReportProvider)));
       },
-      data: (data) => AlertDialog(
-        content: TextField(
-          controller: data,
-          maxLines: null,
-          decoration: InputDecoration(labelText: AppLocalizations.of(context)!.editNote),
-        ),
-        actions: <Widget>[
-          TextButton(
-            child: Text(AppLocalizations.of(context)!.close),
-            onPressed: () => Navigator.pop(context),
+      data:
+          (data) => AlertDialog(
+            content: TextField(controller: data, maxLines: null, decoration: InputDecoration(labelText: AppLocalizations.of(context)!.editNote)),
+            actions: <Widget>[
+              TextButton(child: Text(AppLocalizations.of(context)!.close), onPressed: () => Navigator.pop(context)),
+              FutureButton(
+                child: Text(AppLocalizations.of(context)!.save),
+                onPressed: () async {
+                  try {
+                    await vrchatLoginSession.userNotes(user.id, user.note = data.text);
+                    user.note = user.note == "" ? null : user.note;
+                    ref.read(vrchatUserCountProvider.notifier).state++;
+                    Navigator.pop(context);
+                  } catch (e, trace) {
+                    logger.e(getMessage(e), error: e, stackTrace: trace);
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage(context: context, status: e))));
+                  }
+                },
+              ),
+            ],
           ),
-          FutureButton(
-            child: Text(AppLocalizations.of(context)!.save),
-            onPressed: () async {
-              try {
-                await vrchatLoginSession.userNotes(user.id, user.note = data.text);
-                user.note = user.note == "" ? null : user.note;
-                ref.read(vrchatUserCountProvider.notifier).state++;
-                Navigator.pop(context);
-              } catch (e, trace) {
-                logger.e(getMessage(e), error: e, stackTrace: trace);
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage(context: context, status: e))));
-              }
-            },
-          ),
-        ],
-      ),
     );
   }
 }
@@ -243,33 +188,27 @@ class BioLink extends ConsumerWidget {
           InkWell(
             borderRadius: BorderRadius.circular(20),
             onTap: () async {
-              Widget? value = await openInBrowser(
-                url: url,
-                forceExternal: accessibilityConfig.forceExternalBrowser,
-              );
+              Widget? value = await openInBrowser(url: url, forceExternal: accessibilityConfig.forceExternalBrowser);
               if (value != null) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (BuildContext context) => value),
-                );
+                Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => value));
               }
             },
             onLongPress: () {
-              showModalBottomSheetStatelessWidget(
-                context: context,
-                builder: () => ShareUrlListTile(url: url),
-              );
+              showModalBottomSheetStatelessWidget(context: context, builder: () => ShareUrlListTile(url: url));
             },
             child: Padding(
               padding: const EdgeInsets.all(5),
               child: Ink(
-                child: SvgPicture.asset(
-                  Assets.svg.resolve("${byVrchatExternalServices(url).text}.svg").toFilePath(windows: false),
-                  width: 20,
-                  height: 20,
-                  colorFilter: ColorFilter.mode(Color(byVrchatExternalServices(url).color), BlendMode.srcIn),
-                  semanticsLabel: url.toString(),
-                ),
+                child: switch (byVrchatExternalServices(url)) {
+                  VRChatExternalServices.none => const Icon(Icons.link),
+                  _ => SvgPicture.asset(
+                    Assets.svg.resolve("${byVrchatExternalServices(url).text}.svg").toFilePath(windows: false),
+                    width: 20,
+                    height: 20,
+                    colorFilter: ColorFilter.mode(Color(byVrchatExternalServices(url).color), BlendMode.srcIn),
+                    semanticsLabel: url.toString(),
+                  ),
+                },
               ),
             ),
           ),

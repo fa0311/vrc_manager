@@ -2,11 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
-enum ButtonType {
-  textButton,
-  outlinedButton,
-  elevatedButton;
-}
+enum ButtonType { textButton, outlinedButton, elevatedButton }
 
 class FutureButton extends StatefulWidget {
   final Widget child;
@@ -58,23 +54,11 @@ class FutureButtonState extends State<FutureButton> {
 
     switch (widget.type) {
       case ButtonType.textButton:
-        return TextButton(
-          key: key,
-          onPressed: onPressed,
-          child: widget.child,
-        );
+        return TextButton(key: key, onPressed: onPressed, child: widget.child);
       case ButtonType.outlinedButton:
-        return OutlinedButton(
-          key: key,
-          onPressed: onPressed,
-          child: widget.child,
-        );
+        return OutlinedButton(key: key, onPressed: onPressed, child: widget.child);
       case ButtonType.elevatedButton:
-        return ElevatedButton(
-          key: key,
-          onPressed: onPressed,
-          child: widget.child,
-        );
+        return ElevatedButton(key: key, onPressed: onPressed, child: widget.child);
     }
   }
 }

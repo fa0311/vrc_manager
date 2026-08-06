@@ -3,20 +3,11 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
 
-// Package imports:
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
 // Project imports:
 import 'package:vrc_manager/api/assets/assets.dart';
+import 'package:vrc_manager/l10n/app_localizations.dart';
 
-enum GridModalConfigType {
-  onlineFriends,
-  offlineFriends,
-  friendsRequest,
-  searchUsers,
-  searchWorlds,
-  favoriteWorlds;
-}
+enum GridModalConfigType { onlineFriends, offlineFriends, friendsRequest, searchUsers, searchWorlds, favoriteWorlds }
 
 enum SortMode {
   normal,
@@ -79,98 +70,40 @@ class GridModalConfigData {
   Uri? url;
 }
 
-GridModalConfigData getGridModalConfig({
-  required GridModalConfigType type,
-  required String text,
-}) {
+GridModalConfigData getGridModalConfig({required GridModalConfigType type, required String text}) {
   switch (type) {
     case GridModalConfigType.onlineFriends:
       return GridModalConfigData()
         ..url = VRChatAssets.locations
         ..joinable = true
         ..worldDetails = true
-        ..sortMode = [
-          SortMode.normal,
-          SortMode.name,
-          SortMode.friendsInInstance,
-          SortMode.lastLogin,
-        ]
-        ..displayMode = [
-          DisplayMode.normal,
-          DisplayMode.simple,
-          DisplayMode.textOnly,
-        ];
+        ..sortMode = [SortMode.normal, SortMode.name, SortMode.friendsInInstance, SortMode.lastLogin]
+        ..displayMode = [DisplayMode.normal, DisplayMode.simple, DisplayMode.textOnly];
     case GridModalConfigType.offlineFriends:
       return GridModalConfigData()
         ..url = VRChatAssets.locations
-        ..sortMode = [
-          SortMode.normal,
-          SortMode.name,
-          SortMode.lastLogin,
-        ]
-        ..displayMode = [
-          DisplayMode.normal,
-          DisplayMode.simple,
-          DisplayMode.textOnly,
-        ];
+        ..sortMode = [SortMode.normal, SortMode.name, SortMode.lastLogin]
+        ..displayMode = [DisplayMode.normal, DisplayMode.simple, DisplayMode.textOnly];
     case GridModalConfigType.friendsRequest:
       return GridModalConfigData()
         ..url = VRChatAssets.messages
-        ..sortMode = [
-          SortMode.normal,
-          SortMode.name,
-        ]
-        ..displayMode = [
-          DisplayMode.normal,
-          DisplayMode.simple,
-          DisplayMode.textOnly,
-        ];
+        ..sortMode = [SortMode.normal, SortMode.name]
+        ..displayMode = [DisplayMode.normal, DisplayMode.simple, DisplayMode.textOnly];
     case GridModalConfigType.searchUsers:
       return GridModalConfigData()
         ..url = VRChatAssets.search.resolve(text)
-        ..displayMode = [
-          DisplayMode.normal,
-          DisplayMode.simple,
-          DisplayMode.textOnly,
-        ]
-        ..sortMode = [
-          SortMode.normal,
-          SortMode.name,
-        ];
+        ..displayMode = [DisplayMode.normal, DisplayMode.simple, DisplayMode.textOnly]
+        ..sortMode = [SortMode.normal, SortMode.name];
     case GridModalConfigType.searchWorlds:
       return GridModalConfigData()
         ..url = VRChatAssets.search.resolve(text)
-        ..displayMode = [
-          DisplayMode.normal,
-          DisplayMode.simple,
-          DisplayMode.textOnly,
-        ]
-        ..sortMode = [
-          SortMode.normal,
-          SortMode.name,
-          SortMode.updatedDate,
-          SortMode.labsPublicationDate,
-          SortMode.heat,
-          SortMode.capacity,
-          SortMode.occupants,
-        ];
+        ..displayMode = [DisplayMode.normal, DisplayMode.simple, DisplayMode.textOnly]
+        ..sortMode = [SortMode.normal, SortMode.name, SortMode.updatedDate, SortMode.labsPublicationDate, SortMode.heat, SortMode.capacity, SortMode.occupants];
     case GridModalConfigType.favoriteWorlds:
       return GridModalConfigData()
         ..url = VRChatAssets.favoritesWorlds
         ..removeButton = true
-        ..displayMode = [
-          DisplayMode.normal,
-          DisplayMode.simple,
-          DisplayMode.textOnly,
-        ]
-        ..sortMode = [
-          SortMode.normal,
-          SortMode.name,
-          SortMode.updatedDate,
-          SortMode.labsPublicationDate,
-          SortMode.heat,
-          SortMode.capacity,
-          SortMode.occupants,
-        ];
+        ..displayMode = [DisplayMode.normal, DisplayMode.simple, DisplayMode.textOnly]
+        ..sortMode = [SortMode.normal, SortMode.name, SortMode.updatedDate, SortMode.labsPublicationDate, SortMode.heat, SortMode.capacity, SortMode.occupants];
   }
 }

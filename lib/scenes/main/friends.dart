@@ -1,7 +1,9 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
+
 // Package imports:
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 // Project imports:
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
@@ -19,11 +21,7 @@ class VRChatMobileFriendsData {
   Map<String, VRChatInstance?> instanceMap;
   List<VRChatFriends> userList;
 
-  VRChatMobileFriendsData({
-    required this.locationMap,
-    required this.instanceMap,
-    required this.userList,
-  });
+  VRChatMobileFriendsData({required this.locationMap, required this.instanceMap, required this.userList});
 }
 
 final vrchatMobileFriendsProvider = FutureProvider.family<VRChatMobileFriendsData, bool>((ref, offline) async {
@@ -44,12 +42,16 @@ final vrchatMobileFriendsProvider = FutureProvider.family<VRChatMobileFriendsDat
       userList.addAll(users);
       if (!offline) {
         for (VRChatFriends user in users) {
-          futureList.add(getWorld(vrchatLoginSession: vrchatLoginSession, user: user, locationMap: locationMap).catchError((e, trace) {
-            logger.e(getMessage(e), error: e, stackTrace: trace);
-          }));
-          futureList.add(getInstance(vrchatLoginSession: vrchatLoginSession, user: user, instanceMap: instanceMap).catchError((e, trace) {
-            logger.e(getMessage(e), error: e, stackTrace: trace);
-          }));
+          futureList.add(
+            getWorld(vrchatLoginSession: vrchatLoginSession, user: user, locationMap: locationMap).catchError((e, trace) {
+              logger.e(getMessage(e), error: e, stackTrace: trace);
+            }),
+          );
+          futureList.add(
+            getInstance(vrchatLoginSession: vrchatLoginSession, user: user, instanceMap: instanceMap).catchError((e, trace) {
+              logger.e(getMessage(e), error: e, stackTrace: trace);
+            }),
+          );
         }
       }
       len = users.length;
@@ -78,15 +80,16 @@ class VRChatMobileFriends extends ConsumerWidget {
           child: ErrorPage(loggerReport: ref.read(loggerReportProvider)),
         );
       },
-      data: (data) => ScrollWidget(
-        onRefresh: () => ref.refresh(vrchatMobileFriendsProvider(offline).future),
-        child: ExtractionFriend(
-          id: offline ? GridModalConfigType.offlineFriends : GridModalConfigType.onlineFriends,
-          userList: data.userList,
-          locationMap: data.locationMap,
-          instanceMap: data.instanceMap,
-        ),
-      ),
+      data:
+          (data) => ScrollWidget(
+            onRefresh: () => ref.refresh(vrchatMobileFriendsProvider(offline).future),
+            child: ExtractionFriend(
+              id: offline ? GridModalConfigType.offlineFriends : GridModalConfigType.onlineFriends,
+              userList: data.userList,
+              locationMap: data.locationMap,
+              instanceMap: data.instanceMap,
+            ),
+          ),
     );
   }
 }

@@ -7,11 +7,7 @@ import 'package:vrc_manager/api/main.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/setting/logger.dart';
 
-Future getWorld({
-  required VRChatAPI vrchatLoginSession,
-  required VRChatFriends user,
-  required Map<String, VRChatWorld?> locationMap,
-}) async {
+Future getWorld({required VRChatAPI vrchatLoginSession, required VRChatFriends user, required Map<String, VRChatWorld?> locationMap}) async {
   try {
     String wid = user.location.split(":")[0];
     if (VRChatInstanceIdOther.values.any((id) => id.name == user.location) || locationMap.containsKey(wid)) return;
@@ -37,11 +33,7 @@ Future getWorldFromFavorite({
   }
 }
 
-Future getInstance({
-  required VRChatAPI vrchatLoginSession,
-  required VRChatFriends user,
-  required Map<String, VRChatInstance?> instanceMap,
-}) async {
+Future getInstance({required VRChatAPI vrchatLoginSession, required VRChatFriends user, required Map<String, VRChatInstance?> instanceMap}) async {
   try {
     if (VRChatInstanceIdOther.values.any((id) => id.name == user.location) || instanceMap.containsKey(user.location)) return;
     instanceMap[user.location] = null;

@@ -21,11 +21,7 @@ import 'package:vrc_manager/widgets/modal/world.dart';
 class ExtractionFavoriteWorld extends ConsumerGridWidget {
   final List<VRChatFavoriteWorld> favoriteWorld;
 
-  const ExtractionFavoriteWorld({
-    super.key,
-    required super.id,
-    required this.favoriteWorld,
-  });
+  const ExtractionFavoriteWorld({super.key, required super.id, required this.favoriteWorld});
 
   @override
   List<Widget> normal(BuildContext context, WidgetRef ref, GridConfigNotifier config, ConsumerGridStyle style) {
@@ -40,43 +36,34 @@ class ExtractionFavoriteWorld extends ConsumerGridWidget {
         () {
           return GenericTemplate(
             imageUrl: world.thumbnailImageUrl,
-            onTap: world.id == "???"
-                ? null
-                : () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id),
-                    )),
+            onTap:
+                world.id == "???"
+                    ? null
+                    : () => Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id))),
             onLongPress: () {
-              showModalBottomSheetStatelessWidget(
-                context: context,
-                builder: () => WorldDetailsModalBottom(world: world),
-              );
+              showModalBottomSheetStatelessWidget(context: context, builder: () => WorldDetailsModalBottom(world: world));
             },
-            right: config.removeButton
-                ? [
-                    SizedBox(
-                      width: 50,
-                      child: IconButton(
-                        constraints: const BoxConstraints(),
-                        padding: const EdgeInsets.all(0),
-                        onPressed: () => delete(vrchatLoginSession: vrchatLoginSession, world: world, favoriteWorld: favoriteWorld),
-                        icon: const Icon(Icons.delete),
+            right:
+                config.removeButton
+                    ? [
+                      SizedBox(
+                        width: 50,
+                        child: IconButton(
+                          constraints: const BoxConstraints(),
+                          padding: const EdgeInsets.all(0),
+                          onPressed: () => delete(vrchatLoginSession: vrchatLoginSession, world: world, favoriteWorld: favoriteWorld),
+                          icon: const Icon(Icons.delete),
+                        ),
                       ),
-                    ),
-                  ]
-                : null,
+                    ]
+                    : null,
             children: [
               SizedBox(
                 child: Text(
                   world.name,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 2,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 15,
-                    height: 1,
-                  ),
+                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15, height: 1),
                 ),
               ),
             ],
@@ -98,43 +85,31 @@ class ExtractionFavoriteWorld extends ConsumerGridWidget {
           return GenericTemplate(
             imageUrl: world.thumbnailImageUrl,
             half: true,
-            onTap: world.id == "???"
-                ? null
-                : () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id),
-                    )),
+            onTap:
+                world.id == "???"
+                    ? null
+                    : () => Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id))),
             onLongPress: () {
-              showModalBottomSheetStatelessWidget(
-                context: context,
-                builder: () => WorldDetailsModalBottom(world: world),
-              );
+              showModalBottomSheetStatelessWidget(context: context, builder: () => WorldDetailsModalBottom(world: world));
             },
-            stack: config.removeButton
-                ? [
-                    SizedBox(
-                      height: 17,
-                      width: 17,
-                      child: Container(
-                        decoration: const BoxDecoration(
-                          color: Colors.red,
-                          borderRadius: BorderRadius.only(
-                            bottomRight: Radius.circular(10),
-                          ),
-                        ),
+            stack:
+                config.removeButton
+                    ? [
+                      SizedBox(
+                        height: 17,
+                        width: 17,
+                        child: Container(decoration: const BoxDecoration(color: Colors.red, borderRadius: BorderRadius.only(bottomRight: Radius.circular(10)))),
                       ),
-                    ),
-                    IconButton(
-                      iconSize: 15,
-                      color: Colors.white,
-                      constraints: const BoxConstraints(),
-                      padding: const EdgeInsets.all(0),
-                      onPressed: () => delete(vrchatLoginSession: vrchatLoginSession, world: world, favoriteWorld: favoriteWorld),
-                      icon: const Icon(Icons.delete),
-                    ),
-                  ]
-                : null,
+                      IconButton(
+                        iconSize: 15,
+                        color: Colors.white,
+                        constraints: const BoxConstraints(),
+                        padding: const EdgeInsets.all(0),
+                        onPressed: () => delete(vrchatLoginSession: vrchatLoginSession, world: world, favoriteWorld: favoriteWorld),
+                        icon: const Icon(Icons.delete),
+                      ),
+                    ]
+                    : null,
             children: [
               SizedBox(
                 width: double.infinity,
@@ -142,11 +117,7 @@ class ExtractionFavoriteWorld extends ConsumerGridWidget {
                   world.name,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 2,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 10,
-                    height: 1,
-                  ),
+                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 10, height: 1),
                 ),
               ),
             ],
@@ -161,30 +132,12 @@ class ExtractionFavoriteWorld extends ConsumerGridWidget {
       for (VRChatFavoriteWorld world in sortWorlds(config, favoriteWorld) as List<VRChatFavoriteWorld>)
         () {
           return GenericTemplateText(
-            onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id),
-                )),
+            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => VRChatMobileWorld(worldId: world.id))),
             onLongPress: () {
-              showModalBottomSheetStatelessWidget(
-                context: context,
-                builder: () => WorldDetailsModalBottom(world: world),
-              );
+              showModalBottomSheetStatelessWidget(context: context, builder: () => WorldDetailsModalBottom(world: world));
             },
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    world.name,
-                    style: const TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
+              Row(mainAxisAlignment: MainAxisAlignment.center, children: [Text(world.name, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold))]),
             ],
           );
         }(),

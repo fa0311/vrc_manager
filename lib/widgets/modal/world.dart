@@ -2,13 +2,13 @@
 import 'package:flutter/material.dart';
 
 // Package imports:
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
 import 'package:vrc_manager/api/assets/assets.dart';
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/api/main.dart';
+import 'package:vrc_manager/l10n/app_localizations.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/core/splash.dart';
 import 'package:vrc_manager/scenes/main/worlds_favorite.dart';
@@ -124,10 +124,7 @@ class FavoriteListTileWidget extends ConsumerWidget {
     return ListTile(
       title: Text(AppLocalizations.of(context)!.addFavoriteWorlds),
       onTap: () {
-        showModalBottomSheetStatelessWidget(
-          context: context,
-          builder: () => FavoriteAction(world: world),
-        );
+        showModalBottomSheetStatelessWidget(context: context, builder: () => FavoriteAction(world: world));
       },
     );
   }
@@ -169,10 +166,7 @@ class LaunchWorldListTileWidget extends ConsumerWidget {
     return ListTile(
       title: Text(AppLocalizations.of(context)!.launchWorld),
       onTap: () {
-        showModalBottomSheetStatelessWidget(
-          context: context,
-          builder: () => LaunchWorld(world: world),
-        );
+        showModalBottomSheetStatelessWidget(context: context, builder: () => LaunchWorld(world: world));
       },
     );
   }

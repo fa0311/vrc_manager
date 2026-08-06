@@ -36,7 +36,7 @@ List<VRChatLimitedWorld> sortWorlds(GridConfigNotifier config, List<VRChatLimite
   }
 }
 
-sortByNameFromWorlds(List<VRChatLimitedWorld> worldList) {
+void sortByNameFromWorlds(List<VRChatLimitedWorld> worldList) {
   worldList.sort((userA, userB) {
     List<int> userBytesA = utf8.encode(userA.name);
     List<int> userBytesB = utf8.encode(userB.name);
@@ -50,25 +50,33 @@ sortByNameFromWorlds(List<VRChatLimitedWorld> worldList) {
   });
 }
 
-sortByUpdatedDateFromWorlds(List<VRChatLimitedWorld> worldList) {
+void sortByUpdatedDateFromWorlds(List<VRChatLimitedWorld> worldList) {
   worldList.sort((userA, userB) {
-    if (userA.updatedAt.millisecondsSinceEpoch > userB.updatedAt.millisecondsSinceEpoch) return -1;
-    if (userA.updatedAt.millisecondsSinceEpoch < userB.updatedAt.millisecondsSinceEpoch) return 1;
+    if (userA.updatedAt.millisecondsSinceEpoch > userB.updatedAt.millisecondsSinceEpoch) {
+      return -1;
+    }
+    if (userA.updatedAt.millisecondsSinceEpoch < userB.updatedAt.millisecondsSinceEpoch) {
+      return 1;
+    }
     return 0;
   });
 }
 
-sortByLabsPublicationDateFromWorlds(List<VRChatLimitedWorld> worldList) {
+void sortByLabsPublicationDateFromWorlds(List<VRChatLimitedWorld> worldList) {
   worldList.sort((userA, userB) {
     if (userA.labsPublicationDate == null) return 1;
     if (userB.labsPublicationDate == null) return -1;
-    if (userA.labsPublicationDate!.millisecondsSinceEpoch > userB.labsPublicationDate!.millisecondsSinceEpoch) return -1;
-    if (userA.labsPublicationDate!.millisecondsSinceEpoch < userB.labsPublicationDate!.millisecondsSinceEpoch) return 1;
+    if (userA.labsPublicationDate!.millisecondsSinceEpoch > userB.labsPublicationDate!.millisecondsSinceEpoch) {
+      return -1;
+    }
+    if (userA.labsPublicationDate!.millisecondsSinceEpoch < userB.labsPublicationDate!.millisecondsSinceEpoch) {
+      return 1;
+    }
     return 0;
   });
 }
 
-sortByHeatFavoriteFromWorlds(List<VRChatLimitedWorld> worldList) {
+void sortByHeatFavoriteFromWorlds(List<VRChatLimitedWorld> worldList) {
   worldList.sort((userA, userB) {
     if (userA.heat > userB.heat) return -1;
     if (userA.heat < userB.heat) return 1;
@@ -76,7 +84,7 @@ sortByHeatFavoriteFromWorlds(List<VRChatLimitedWorld> worldList) {
   });
 }
 
-sortByCapacityFromWorlds(List<VRChatLimitedWorld> worldList) {
+void sortByCapacityFromWorlds(List<VRChatLimitedWorld> worldList) {
   worldList.sort((userA, userB) {
     if (userA.capacity > userB.capacity) return -1;
     if (userA.capacity < userB.capacity) return 1;
@@ -84,7 +92,7 @@ sortByCapacityFromWorlds(List<VRChatLimitedWorld> worldList) {
   });
 }
 
-sortByOccupantsFromWorlds(List<VRChatLimitedWorld> worldList) {
+void sortByOccupantsFromWorlds(List<VRChatLimitedWorld> worldList) {
   worldList.sort((userA, userB) {
     if (userA.occupants > userB.occupants) return -1;
     if (userA.occupants < userB.occupants) return 1;

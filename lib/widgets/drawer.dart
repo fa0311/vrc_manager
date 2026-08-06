@@ -1,12 +1,14 @@
 // Flutter imports:
+
+// Flutter imports:
 import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
+import 'package:vrc_manager/l10n/app_localizations.dart';
 import 'package:vrc_manager/scenes/core/splash.dart';
 import 'package:vrc_manager/scenes/setting/other_account.dart';
 import 'package:vrc_manager/scenes/setting/settings.dart';
@@ -25,9 +27,7 @@ class AccountList extends ConsumerWidget {
         children: [
           for (AccountConfig account in ref.watch(accountListConfigProvider).accountList)
             ListTile(
-              title: Text(
-                account.displayName ?? AppLocalizations.of(context)!.unknown,
-              ),
+              title: Text(account.displayName ?? AppLocalizations.of(context)!.unknown),
               onTap: () async {
                 ref.read(accountConfigProvider).login(account);
               },
@@ -36,15 +36,13 @@ class AccountList extends ConsumerWidget {
           ListTile(
             leading: const Icon(Icons.settings),
             title: Text(AppLocalizations.of(context)!.accountSwitchSetting),
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => const VRChatMobileSplash(
-                  login: VRChatMobileSettingsOtherAccount(),
-                  child: VRChatMobileSettingsOtherAccount(),
+            onTap:
+                () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const VRChatMobileSplash(login: VRChatMobileSettingsOtherAccount(), child: VRChatMobileSettingsOtherAccount()),
+                  ),
                 ),
-              ),
-            ),
           ),
         ],
       ),
@@ -65,32 +63,22 @@ class NormalDrawer extends ConsumerWidget {
           children: <Widget>[
             if (account?.data != null)
               GestureDetector(
-                onTapUp: (_) => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => const VRChatMobileSelf(),
-                  ),
-                ),
+                onTapUp: (_) => Navigator.push(context, MaterialPageRoute(builder: (_) => const VRChatMobileSelf())),
                 onLongPress: () {
-                  showModalBottomSheetStatelessWidget(
-                    context: context,
-                    builder: () => SelfUserModalBottom(user: account!.data!),
-                  );
+                  showModalBottomSheetStatelessWidget(context: context, builder: () => SelfUserModalBottom(user: account.data!));
                 },
                 child: UserAccountsDrawerHeader(
-                  decoration: BoxDecoration(color: Theme.of(context).colorScheme.background),
+                  decoration: BoxDecoration(color: Theme.of(context).colorScheme.surface),
                   accountName: Text(account!.data!.username),
                   accountEmail: Text(account.data!.statusDescription ?? ""),
                   currentAccountPicture: CachedNetworkImage(
                     imageUrl: account.data!.profilePicOverride ?? account.data!.currentAvatarImageUrl.toString(),
                     fit: BoxFit.fitWidth,
-                    progressIndicatorBuilder: (context, url, downloadProgress) =>
-                        const Padding(padding: EdgeInsets.all(20), child: CircularProgressIndicator()),
+                    progressIndicatorBuilder:
+                        (context, url, downloadProgress) => const Padding(padding: EdgeInsets.all(20), child: CircularProgressIndicator()),
                     errorWidget: (context, url, error) => const Icon(Icons.error),
                     imageBuilder: (context, imageProvider) => CircleAvatar(backgroundImage: imageProvider),
-                    httpHeaders: {
-                      "user-agent": ref.watch(accountConfigProvider).userAgent,
-                    },
+                    httpHeaders: {"user-agent": ref.watch(accountConfigProvider).userAgent},
                   ),
                 ),
               ),
@@ -100,67 +88,44 @@ class NormalDrawer extends ConsumerWidget {
                   children: <Widget>[
                     if (account?.data != null)
                       ListTile(
-                        onTap: () => Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => const VRChatMobileSplash(),
-                          ),
-                          (_) => false,
-                        ),
+                        onTap: () => Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (_) => const VRChatMobileSplash()), (_) => false),
                         leading: const Icon(Icons.home),
                         title: Text(AppLocalizations.of(context)!.home),
                       ),
-                    TextButton(
-                      onPressed: () => Navigator.pop(context),
-                      child: Text(AppLocalizations.of(context)!.close),
-                    ),
+                    TextButton(onPressed: () => Navigator.pop(context), child: Text(AppLocalizations.of(context)!.close)),
                   ],
                 ),
               ),
             ),
             if (MediaQuery.of(context).size.height > 500)
-              Column(children: [
-                const Divider(),
-                ListTile(
-                  onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => const VRChatMobileSettings(),
-                    ),
+              Column(
+                children: [
+                  const Divider(),
+                  ListTile(
+                    onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const VRChatMobileSettings())),
+                    leading: const Icon(Icons.settings),
+                    title: Text(AppLocalizations.of(context)!.setting),
                   ),
-                  leading: const Icon(Icons.settings),
-                  title: Text(AppLocalizations.of(context)!.setting),
-                ),
-                ListTile(
-                  onTap: () => showModalBottomSheetStatelessWidget(
-                    context: context,
-                    builder: () => const AccountList(),
+                  ListTile(
+                    onTap: () => showModalBottomSheetStatelessWidget(context: context, builder: () => const AccountList()),
+                    leading: const Icon(Icons.account_circle),
+                    title: Text(AppLocalizations.of(context)!.accountSwitch),
                   ),
-                  leading: const Icon(Icons.account_circle),
-                  title: Text(AppLocalizations.of(context)!.accountSwitch),
-                ),
-              ]),
+                ],
+              ),
             if (MediaQuery.of(context).size.height <= 500)
               Row(
                 children: <Widget>[
                   IconButton(
-                    onPressed: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => const VRChatMobileSettings(),
-                      ),
-                    ),
+                    onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const VRChatMobileSettings())),
                     icon: const Icon(Icons.settings),
                   ),
                   IconButton(
-                    onPressed: () => showModalBottomSheetStatelessWidget(
-                      context: context,
-                      builder: () => const AccountList(),
-                    ),
+                    onPressed: () => showModalBottomSheetStatelessWidget(context: context, builder: () => const AccountList()),
                     icon: const Icon(Icons.account_circle),
                   ),
                 ],
-              )
+              ),
           ],
         ),
       ),

@@ -3,11 +3,13 @@ import 'dart:convert';
 
 // Flutter imports:
 import 'package:flutter/material.dart';
+
 // Package imports:
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_json_viewer/flutter_json_viewer.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 // Project imports:
+import 'package:vrc_manager/l10n/app_localizations.dart';
 import 'package:vrc_manager/widgets/modal.dart';
 import 'package:vrc_manager/widgets/modal/share.dart';
 
@@ -26,24 +28,13 @@ class VRChatMobileJsonViewer extends ConsumerWidget {
             onPressed: () {
               showModalBottomSheetStatelessWidget(
                 context: context,
-                builder: () => SingleChildScrollView(
-                  child: Column(children: [CopyListTileWidget(text: jsonEncode(content))]),
-                ),
+                builder: () => SingleChildScrollView(child: Column(children: [CopyListTileWidget(text: jsonEncode(content))])),
               );
             },
-          )
+          ),
         ],
       ),
-      body: Container(
-        color: Theme.of(context).colorScheme.onPrimary,
-        child: SafeArea(
-          child: ListView(
-            children: [
-              JsonViewer(content),
-            ],
-          ),
-        ),
-      ),
+      body: Container(color: Theme.of(context).colorScheme.onPrimary, child: SafeArea(child: ListView(children: [JsonViewer(content)]))),
     );
   }
 }

@@ -42,12 +42,10 @@ class FutureTileState extends State<FutureTile> {
       title: widget.title,
       subtitle: widget.subtitle,
       leading: widget.leading,
-      trailing: state
-          ? const Padding(
-              padding: EdgeInsets.only(right: 2, top: 2),
-              child: SizedBox(width: 20, height: 20, child: CircularProgressIndicator()),
-            )
-          : widget.trailing,
+      trailing:
+          state
+              ? const Padding(padding: EdgeInsets.only(right: 2, top: 2), child: SizedBox(width: 20, height: 20, child: CircularProgressIndicator()))
+              : widget.trailing,
     );
   }
 }

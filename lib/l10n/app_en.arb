@@ -1,259 +1,259 @@
 {
-    "@@locale": "en",
-    "@____________________CONTRIBUTOR____________________": {},
-    "contributor": "DeepL(robot)",
-    "@____________________PLAY_STORE____________________": {},
-    "description": "VRChat assistant app",
-    "descriptionDetailed": "VRChat assistant app with intuitive UI built in Flutter",
-    "@____________________DIALOG____________________": {},
-    "ok": "OK",
-    "no": "NO",
-    "cancel": "Cancel",
-    "send": "Send",
-    "save": "Save",
-    "saved": "Saved",
-    "success": "Success",
-    "failed": "Failed",
-    "delete": "Delete",
-    "type": "Type",
-    "@____________________VRCHAT____________________": {},
-    "vrchatPublic": "Public",
-    "vrchatFriendsPlus": "Friends+",
-    "vrchatFriends": "Friends",
-    "vrchatInvitePlus": "Invite+",
-    "vrchatInvite": "Invite",
-    "vrchatGroup": "Group",
-    "@____________________ERROR_DIALOG____________________": {},
-    "error": "An error occurred",
-    "parseError": "Parse error",
-    "socketException": "No Internet connection",
-    "unknownError": "Unknown error",
-    "reportMessage1": "Please report this to the developer.",
-    "reportMessage2": "Tapping Report will copy the log to the clipboard and access the report page.",
-    "@____________________ERROR_TRANSLATION____________________": {},
-    "tooManyRequests": "Too many requests. Please wait a while and try again.",
-    "invalidLoginInfo": "Invalid Username/Email or Password.",
-    "@____________________DATE____________________": {},
-    "dateFormat1": "{inDays} days {inHours} hours ago",
-    "dateFormat2": "{inHours} hours {inMinutes} minutes ago",
-    "dateFormat3": "{inMinutes} minutes ago",
-    "dateFormat4": "{inSeconds} seconds ago",
-    "@____________________SHARE____________________": {},
-    "share": "Share",
-    "copy": "Copy",
-    "copied": "Copied to clipboard.",
-    "openInBrowser": "Open in browser",
-    "openInExternalBrowser": "Open in external browser",
-    "@____________________MENU____________________": {},
-    "close": "Close",
-    "setting": "Setting",
-    "@____________________LOGIN____________________": {},
-    "login": "Login",
-    "username": "Username",
-    "usernameOrEmail": "Username / Email",
-    "password": "Password",
-    "rememberPassword": "Remember password",
-    "twoFactorAuthentication": "Two Factor Authentication",
-    "authenticationCode": "Authentication Code",
-    "unknown": "Unknown",
-    "loginBrowser": "Login using a browser",
-    "@____________________LOGIN_ERROR_DIALOG____________________": {},
-    "incorrectLogin": "Incorrect login information",
-    "@____________________HOME____________________": {},
-    "home": "Home",
-    "@____________________FRIEND____________________": {},
-    "onlineFriends": "Online Friends",
-    "offlineFriends": "Offline Friends",
-    "@__FRIEND_SETTING__": {},
-    "showOnlyAvailable": "Show only available participants",
-    "worldDetails": "World details",
-    "worldUnfavoriteButton": "Unfavorite button",
-    "sort": "Sort",
-    "descending": "Descending order",
-    "sortedByDefault": "Sort by Default",
-    "sortedByName": "Sort by Name",
-    "sortedByLastLogin": "Sort by Last Login",
-    "sortedByFriendsInInstance": "Sort by Number of friends of the instance",
-    "sortedByUpdatedDate": "Sort by Updated date",
-    "sortedByLabsPublicationDate": "Sort by Labs publication date",
-    "sortedByHeat": "Sort by heat",
-    "sortedByCapacity": "Sort by capacity",
-    "sortedByOccupants": "Sort by occupants",
-    "display": "Display",
-    "normal": "Default",
-    "simple": "Simple",
-    "textOnly": "Text only",
-    "@____________________SEARCH____________________": {},
-    "search": "Search",
-    "@____________________FRIEND_REQUEST____________________": {},
-    "friendRequest": "Friend Request ",
-    "friendManagement": "Friend management",
-    "@____________________FAVORITE_WORLD____________________": {},
-    "favoriteWorlds": "Favorite Worlds",
-    "@____________________USER____________________": {},
-    "user": "User",
-    "lastLogin": "Last login: {data}",
-    "dateJoined": "Date joined: {data}",
-    "openInJsonViewer": "Open in json viewer",
-    "joinInstance": "Invite me",
-    "addFavoriteWorlds": "Add favorite worlds",
-    "removeFavoriteWorlds": "Remove from Favorite Worlds",
-    "editBio": "Edit bio",
-    "editNote": "Edit note",
-    "@__USER_DIALOG__": {},
-    "sendInvite": "Invitation sent.",
-    "selfInviteDetails": "Please check the invitation field of the VRChat.",
-    "@__USER_FRIEND__": {},
-    "unfriend": "Unfriend",
-    "unfriendConfirm": "Do you want to unfriend me?",
-    "requestCancel": "Unrequested",
-    "allowFriends": "Friends allow",
-    "denyFriends": "Friends deny",
-    "@____________________JSON_VIEWER____________________": {},
-    "jsonViewer": "JSON Viewer",
-    "@____________________WORLD____________________": {},
-    "world": "World",
-    "privateWorld": "Private World",
-    "loadingWorld": "Loading World",
-    "onTheWebsite": "On the website",
-    "occupants": "Number of users: {data}",
-    "privateOccupants": "Number of private users: {data}",
-    "favorites": "Favorites: {data}",
-    "createdAt": "Created at {data}",
-    "updatedAt": "Updated at {data}",
-    "launchWorld": "Launch world",
-    "openInVrchat": "Open in VRChat",
-    "@____________________ACCOUNT_SWITCH____________________": {},
-    "accountSwitch": "Account switching",
-    "accountSwitchSetting": "Account switching settings",
-    "accountSwitchSettingDetails": "Manage other accounts.",
-    "addAccount": "Add account",
-    "@____________________SETTING____________________": {},
-    "@__ACCESSIBILITY__": {},
-    "accessibility": "Accessibility",
-    "language": "Language",
-    "translatorDetails": "Translated by {name}",
-    "deviceLightTheme": "If the device is light theme",
-    "deviceDarkTheme": "If the device is dark theme",
-    "lightTheme": "Light theme",
-    "darkTheme": "Dark theme",
-    "blackTheme": "Black theme",
-    "trueBlackTheme": "True black theme",
-    "highContrastLightTheme": "High contrast light theme",
-    "highContrastDarkTheme": "High contrast dark theme",
-    "forceExternalBrowser": "Force external browsers",
-    "forceExternalBrowserDetails": "Force opening of an external browser when opening a browser",
-    "debugMode": "Debug mode",
-    "@__ACCOUNT__": {},
-    "account": "Account",
-    "logout": "Logout",
-    "logoutDetails": "Log out and remove session information from the device.",
-    "logoutConfirm": "Would you like to log out?",
-    "deleteLoginInfo": "Delete login information",
-    "deleteLoginInfoDetails": "Delete stored login information.",
-    "deleteLoginInfoConfirm": "Do you want to delete it?",
-    "token": "Token",
-    "tokenDetails": "View or change your credentials.",
-    "cookie": "Cookie",
-    "@__PERMISSIONS__": {},
-    "permissions": "Permissions",
-    "domainVerification": "Associate apps with domains",
-    "domainVerificationDetails": "Please associate this app with vrchat.com.",
-    "notSupported": "Not supported",
-    "notSupportedDetails": "This permission is not supported on this device.",
-    "@____________________HELP____________________": {},
-    "help": "Help",
-    "contribution": "Contribution",
-    "contributionDetails": "Contribute to development on Github.",
-    "reportDetails": "Report bugs and request new features to the developer.",
-    "developerInfo": "Developer Information",
-    "developerInfoDetails": "View developer information.",
-    "rateTheApp": "Rate the app",
-    "rateTheAppDetails": "Please rate us on Google PlayStore!",
-    "version": "Version",
-    "versionDetails": "Current Version: {version}",
-    "license": "License",
-    "licenseDetails": "Check License information",
-    "@____________________REPORT____________________": {},
-    "report": "Report",
-    "log": "Log",
-    "viewDetailedLogs": "View detailed logs",
-    "@____________________USER_POLICY____________________": {},
-    "userPolicy": "User Policy",
-    "agree": "Agree",
-    "disagree": "Disagree",
-    "lookAtYourBrowser": "Please check your browser",
-    "@____________________PLACEHOLDER____________________": {},
-    "@__PLACEHOLDER_DATE__": {},
-    "@dateFormat1": {
-        "placeholders": {
-            "inDays": {},
-            "inHours": {}
-        }
-    },
-    "@dateFormat2": {
-        "placeholders": {
-            "inHours": {},
-            "inMinutes": {}
-        }
-    },
-    "@dateFormat3": {
-        "placeholders": {
-            "inMinutes": {}
-        }
-    },
-    "@dateFormat4": {
-        "placeholders": {
-            "inSeconds": {}
-        }
-    },
-    "@__PLACEHOLDER_USER__": {},
-    "@dateJoined": {
-        "placeholders": {
-            "data": {}
-        }
-    },
-    "@lastLogin": {
-        "placeholders": {
-            "data": {}
-        }
-    },
-    "@__PLACEHOLDER_WORLD__": {},
-    "@occupants": {
-        "placeholders": {
-            "data": {}
-        }
-    },
-    "@privateOccupants": {
-        "placeholders": {
-            "data": {}
-        }
-    },
-    "@favorites": {
-        "placeholders": {
-            "data": {}
-        }
-    },
-    "@createdAt": {
-        "placeholders": {
-            "data": {}
-        }
-    },
-    "@updatedAt": {
-        "placeholders": {
-            "data": {}
-        }
-    },
-    "@__SETTING__": {},
-    "@translatorDetails": {
-        "placeholders": {
-            "name": {}
-        }
-    },
-    "@__HELP__": {},
-    "@versionDetails": {
-        "placeholders": {
-            "version": {}
-        }
+  "@@locale": "en",
+  "@____________________CONTRIBUTOR____________________": {},
+  "contributor": "DeepL(robot)",
+  "@____________________PLAY_STORE____________________": {},
+  "description": "VRChat assistant app",
+  "descriptionDetailed": "VRChat assistant app with intuitive UI built in Flutter",
+  "@____________________DIALOG____________________": {},
+  "ok": "OK",
+  "no": "NO",
+  "cancel": "Cancel",
+  "send": "Send",
+  "save": "Save",
+  "saved": "Saved",
+  "success": "Success",
+  "failed": "Failed",
+  "delete": "Delete",
+  "type": "Type",
+  "@____________________VRCHAT____________________": {},
+  "vrchatPublic": "Public",
+  "vrchatFriendsPlus": "Friends+",
+  "vrchatFriends": "Friends",
+  "vrchatInvitePlus": "Invite+",
+  "vrchatInvite": "Invite",
+  "vrchatGroup": "Group",
+  "@____________________ERROR_DIALOG____________________": {},
+  "error": "An error occurred",
+  "parseError": "Parse error",
+  "socketException": "No Internet connection",
+  "unknownError": "Unknown error",
+  "reportMessage1": "Please report this to the developer.",
+  "reportMessage2": "Tapping Report will copy the log to the clipboard and access the report page.",
+  "@____________________ERROR_TRANSLATION____________________": {},
+  "tooManyRequests": "Too many requests. Please wait a while and try again.",
+  "invalidLoginInfo": "Invalid Username/Email or Password.",
+  "@____________________DATE____________________": {},
+  "dateFormat1": "{inDays} days {inHours} hours ago",
+  "dateFormat2": "{inHours} hours {inMinutes} minutes ago",
+  "dateFormat3": "{inMinutes} minutes ago",
+  "dateFormat4": "{inSeconds} seconds ago",
+  "@____________________SHARE____________________": {},
+  "share": "Share",
+  "copy": "Copy",
+  "copied": "Copied to clipboard.",
+  "openInBrowser": "Open in browser",
+  "openInExternalBrowser": "Open in external browser",
+  "@____________________MENU____________________": {},
+  "close": "Close",
+  "setting": "Setting",
+  "@____________________LOGIN____________________": {},
+  "login": "Login",
+  "username": "Username",
+  "usernameOrEmail": "Username / Email",
+  "password": "Password",
+  "rememberPassword": "Remember password",
+  "twoFactorAuthentication": "Two Factor Authentication",
+  "authenticationCode": "Authentication Code",
+  "unknown": "Unknown",
+  "loginBrowser": "Login using a browser",
+  "@____________________LOGIN_ERROR_DIALOG____________________": {},
+  "incorrectLogin": "Incorrect login information",
+  "@____________________HOME____________________": {},
+  "home": "Home",
+  "@____________________FRIEND____________________": {},
+  "onlineFriends": "Online Friends",
+  "offlineFriends": "Offline Friends",
+  "@__FRIEND_SETTING__": {},
+  "showOnlyAvailable": "Show only available participants",
+  "worldDetails": "World details",
+  "worldUnfavoriteButton": "Unfavorite button",
+  "sort": "Sort",
+  "descending": "Descending order",
+  "sortedByDefault": "Sort by Default",
+  "sortedByName": "Sort by Name",
+  "sortedByLastLogin": "Sort by Last Login",
+  "sortedByFriendsInInstance": "Sort by Number of friends of the instance",
+  "sortedByUpdatedDate": "Sort by Updated date",
+  "sortedByLabsPublicationDate": "Sort by Labs publication date",
+  "sortedByHeat": "Sort by heat",
+  "sortedByCapacity": "Sort by capacity",
+  "sortedByOccupants": "Sort by occupants",
+  "display": "Display",
+  "normal": "Default",
+  "simple": "Simple",
+  "textOnly": "Text only",
+  "@____________________SEARCH____________________": {},
+  "search": "Search",
+  "@____________________FRIEND_REQUEST____________________": {},
+  "friendRequest": "Friend Request ",
+  "friendManagement": "Friend management",
+  "@____________________FAVORITE_WORLD____________________": {},
+  "favoriteWorlds": "Favorite Worlds",
+  "@____________________USER____________________": {},
+  "user": "User",
+  "lastLogin": "Last login: {data}",
+  "dateJoined": "Date joined: {data}",
+  "openInJsonViewer": "Open in json viewer",
+  "joinInstance": "Invite me",
+  "addFavoriteWorlds": "Add favorite worlds",
+  "removeFavoriteWorlds": "Remove from Favorite Worlds",
+  "editBio": "Edit bio",
+  "editNote": "Edit note",
+  "@__USER_DIALOG__": {},
+  "sendInvite": "Invitation sent.",
+  "selfInviteDetails": "Please check the invitation field of the VRChat.",
+  "@__USER_FRIEND__": {},
+  "unfriend": "Unfriend",
+  "unfriendConfirm": "Do you want to unfriend me?",
+  "requestCancel": "Unrequested",
+  "allowFriends": "Friends allow",
+  "denyFriends": "Friends deny",
+  "@____________________JSON_VIEWER____________________": {},
+  "jsonViewer": "JSON Viewer",
+  "@____________________WORLD____________________": {},
+  "world": "World",
+  "privateWorld": "Private World",
+  "loadingWorld": "Loading World",
+  "onTheWebsite": "On the website",
+  "occupants": "Number of users: {data}",
+  "privateOccupants": "Number of private users: {data}",
+  "favorites": "Favorites: {data}",
+  "createdAt": "Created at {data}",
+  "updatedAt": "Updated at {data}",
+  "launchWorld": "Launch world",
+  "openInVrchat": "Open in VRChat",
+  "@____________________ACCOUNT_SWITCH____________________": {},
+  "accountSwitch": "Account switching",
+  "accountSwitchSetting": "Account switching settings",
+  "accountSwitchSettingDetails": "Manage other accounts.",
+  "addAccount": "Add account",
+  "@____________________SETTING____________________": {},
+  "@__ACCESSIBILITY__": {},
+  "accessibility": "Accessibility",
+  "language": "Language",
+  "translatorDetails": "Translated by {name}",
+  "deviceLightTheme": "If the device is light theme",
+  "deviceDarkTheme": "If the device is dark theme",
+  "lightTheme": "Light theme",
+  "darkTheme": "Dark theme",
+  "blackTheme": "Black theme",
+  "trueBlackTheme": "True black theme",
+  "highContrastLightTheme": "High contrast light theme",
+  "highContrastDarkTheme": "High contrast dark theme",
+  "forceExternalBrowser": "Force external browsers",
+  "forceExternalBrowserDetails": "Force opening of an external browser when opening a browser",
+  "debugMode": "Debug mode",
+  "@__ACCOUNT__": {},
+  "account": "Account",
+  "logout": "Logout",
+  "logoutDetails": "Log out and remove session information from the device.",
+  "logoutConfirm": "Would you like to log out?",
+  "deleteLoginInfo": "Delete login information",
+  "deleteLoginInfoDetails": "Delete stored login information.",
+  "deleteLoginInfoConfirm": "Do you want to delete it?",
+  "token": "Token",
+  "tokenDetails": "View or change your credentials.",
+  "cookie": "Cookie",
+  "@__PERMISSIONS__": {},
+  "permissions": "Permissions",
+  "domainVerification": "Associate apps with domains",
+  "domainVerificationDetails": "Please associate this app with vrchat.com.",
+  "notSupported": "Not supported",
+  "notSupportedDetails": "This permission is not supported on this device.",
+  "@____________________HELP____________________": {},
+  "help": "Help",
+  "contribution": "Contribution",
+  "contributionDetails": "Contribute to development on Github.",
+  "reportDetails": "Report bugs and request new features to the developer.",
+  "developerInfo": "Developer Information",
+  "developerInfoDetails": "View developer information.",
+  "rateTheApp": "Rate the app",
+  "rateTheAppDetails": "Please rate us on Google PlayStore!",
+  "version": "Version",
+  "versionDetails": "Current Version: {version}",
+  "license": "License",
+  "licenseDetails": "Check License information",
+  "@____________________REPORT____________________": {},
+  "report": "Report",
+  "log": "Log",
+  "viewDetailedLogs": "View detailed logs",
+  "@____________________USER_POLICY____________________": {},
+  "userPolicy": "User Policy",
+  "agree": "Agree",
+  "disagree": "Disagree",
+  "lookAtYourBrowser": "Please check your browser",
+  "@____________________PLACEHOLDER____________________": {},
+  "@__PLACEHOLDER_DATE__": {},
+  "@dateFormat1": {
+    "placeholders": {
+      "inDays": {},
+      "inHours": {}
     }
+  },
+  "@dateFormat2": {
+    "placeholders": {
+      "inHours": {},
+      "inMinutes": {}
+    }
+  },
+  "@dateFormat3": {
+    "placeholders": {
+      "inMinutes": {}
+    }
+  },
+  "@dateFormat4": {
+    "placeholders": {
+      "inSeconds": {}
+    }
+  },
+  "@__PLACEHOLDER_USER__": {},
+  "@dateJoined": {
+    "placeholders": {
+      "data": {}
+    }
+  },
+  "@lastLogin": {
+    "placeholders": {
+      "data": {}
+    }
+  },
+  "@__PLACEHOLDER_WORLD__": {},
+  "@occupants": {
+    "placeholders": {
+      "data": {}
+    }
+  },
+  "@privateOccupants": {
+    "placeholders": {
+      "data": {}
+    }
+  },
+  "@favorites": {
+    "placeholders": {
+      "data": {}
+    }
+  },
+  "@createdAt": {
+    "placeholders": {
+      "data": {}
+    }
+  },
+  "@updatedAt": {
+    "placeholders": {
+      "data": {}
+    }
+  },
+  "@__SETTING__": {},
+  "@translatorDetails": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "@__HELP__": {},
+  "@versionDetails": {
+    "placeholders": {
+      "version": {}
+    }
+  }
 }

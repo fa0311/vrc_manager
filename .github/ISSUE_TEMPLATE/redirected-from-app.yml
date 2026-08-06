@@ -2,7 +2,6 @@ name: "📓 Redirected from app"
 description: Report error message in vrc_manager.
 labels: ["bug"]
 body:
-
   - type: textarea
     id: steps-to-reproduce
     attributes:

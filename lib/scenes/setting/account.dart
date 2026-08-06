@@ -2,10 +2,10 @@
 import 'package:flutter/material.dart';
 
 // Package imports:
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
+import 'package:vrc_manager/l10n/app_localizations.dart';
 import 'package:vrc_manager/scenes/core/splash.dart';
 import 'package:vrc_manager/scenes/setting/other_account.dart';
 import 'package:vrc_manager/scenes/setting/token.dart';
@@ -16,9 +16,7 @@ class VRChatMobileSettingsAccount extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.setting),
-      ),
+      appBar: AppBar(title: Text(AppLocalizations.of(context)!.setting)),
       body: SafeArea(
         child: SizedBox(
           child: SingleChildScrollView(
@@ -36,10 +34,7 @@ class VRChatMobileSettingsAccount extends ConsumerWidget {
                           return AlertDialog(
                             title: Text(AppLocalizations.of(context)!.logoutConfirm),
                             actions: <Widget>[
-                              TextButton(
-                                child: Text(AppLocalizations.of(context)!.cancel),
-                                onPressed: () => Navigator.pop(context),
-                              ),
+                              TextButton(child: Text(AppLocalizations.of(context)!.cancel), onPressed: () => Navigator.pop(context)),
                               TextButton(
                                 onPressed: () {
                                   ref.read(accountConfigProvider).loggedAccount!.removeCookie();
@@ -64,10 +59,7 @@ class VRChatMobileSettingsAccount extends ConsumerWidget {
                           return AlertDialog(
                             title: Text(AppLocalizations.of(context)!.deleteLoginInfoConfirm),
                             actions: <Widget>[
-                              TextButton(
-                                child: Text(AppLocalizations.of(context)!.cancel),
-                                onPressed: () => Navigator.pop(context),
-                              ),
+                              TextButton(child: Text(AppLocalizations.of(context)!.cancel), onPressed: () => Navigator.pop(context)),
                               TextButton(
                                 onPressed: () {
                                   ref.read(accountConfigProvider).loggedAccount!
@@ -89,31 +81,25 @@ class VRChatMobileSettingsAccount extends ConsumerWidget {
                   ListTile(
                     title: Text(AppLocalizations.of(context)!.token),
                     subtitle: Text(AppLocalizations.of(context)!.tokenDetails),
-                    onTap: () => {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => const VRChatMobileSplash(
-                            login: VRChatMobileTokenSetting(),
-                            child: VRChatMobileTokenSetting(),
+                    onTap:
+                        () => {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (_) => const VRChatMobileSplash(login: VRChatMobileTokenSetting(), child: VRChatMobileTokenSetting())),
                           ),
-                        ),
-                      )
-                    },
+                        },
                   ),
                   ListTile(
                     title: Text(AppLocalizations.of(context)!.accountSwitchSetting),
                     subtitle: Text(AppLocalizations.of(context)!.accountSwitchSettingDetails),
-                    onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => const VRChatMobileSplash(
-                          login: VRChatMobileSettingsOtherAccount(),
-                          child: VRChatMobileSettingsOtherAccount(),
+                    onTap:
+                        () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const VRChatMobileSplash(login: VRChatMobileSettingsOtherAccount(), child: VRChatMobileSettingsOtherAccount()),
+                          ),
                         ),
-                      ),
-                    ),
-                  )
+                  ),
                 ],
               ),
             ),

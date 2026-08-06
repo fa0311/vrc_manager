@@ -4,17 +4,19 @@ import 'dart:io';
 // Flutter imports:
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
 // Package imports:
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 // Project imports:
 import 'package:vrc_manager/assets.dart';
+import 'package:vrc_manager/l10n/app_localizations.dart';
 import 'package:vrc_manager/storage/user_policy.dart';
 import 'package:vrc_manager/widgets/config_modal/locale.dart';
 import 'package:vrc_manager/widgets/modal.dart';
 import 'package:vrc_manager/widgets/modal/share.dart';
 import 'package:vrc_manager/widgets/share.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
 class VRChatMobileWebViewUserPolicy extends ConsumerWidget {
   const VRChatMobileWebViewUserPolicy({super.key});
@@ -26,21 +28,13 @@ class VRChatMobileWebViewUserPolicy extends ConsumerWidget {
         title: Text(AppLocalizations.of(context)!.userPolicy),
         actions: <Widget>[
           IconButton(
-            icon: const Icon(
-              Icons.translate,
-            ),
-            onPressed: () => showModalBottomSheetStatelessWidget(
-              context: context,
-              builder: () => const LocaleModal(),
-            ),
+            icon: const Icon(Icons.translate),
+            onPressed: () => showModalBottomSheetStatelessWidget(context: context, builder: () => const LocaleModal()),
           ),
           IconButton(
             icon: const Icon(Icons.more_vert),
             onPressed: () {
-              showModalBottomSheetStatelessWidget(
-                context: context,
-                builder: () => ShareUrlListTile(url: Assets.userPolicy, browserExternalForce: true),
-              );
+              showModalBottomSheetStatelessWidget(context: context, builder: () => ShareUrlListTile(url: Assets.userPolicy, browserExternalForce: true));
             },
           ),
         ],
@@ -48,13 +42,7 @@ class VRChatMobileWebViewUserPolicy extends ConsumerWidget {
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
           color: Theme.of(context).cardColor,
-          boxShadow: [
-            BoxShadow(
-              color: Theme.of(context).colorScheme.shadow.withOpacity(0.2),
-              spreadRadius: 5,
-              blurRadius: 5,
-            ),
-          ],
+          boxShadow: [BoxShadow(color: Theme.of(context).colorScheme.shadow.withValues(alpha: 0.2), spreadRadius: 5, blurRadius: 5)],
         ),
         child: SizedBox(
           height: 50,
@@ -67,9 +55,7 @@ class VRChatMobileWebViewUserPolicy extends ConsumerWidget {
                 child: ElevatedButton(
                   onPressed: () => SystemNavigator.pop(),
                   style: ElevatedButton.styleFrom(),
-                  child: Text(
-                    AppLocalizations.of(context)!.disagree,
-                  ),
+                  child: Text(AppLocalizations.of(context)!.disagree),
                 ),
               ),
               const Spacer(),
@@ -79,9 +65,7 @@ class VRChatMobileWebViewUserPolicy extends ConsumerWidget {
                   onPressed: () async {
                     ref.read(userPolicyConfigProvider).setAgree(true);
                   },
-                  child: Text(
-                    AppLocalizations.of(context)!.agree,
-                  ),
+                  child: Text(AppLocalizations.of(context)!.agree),
                 ),
               ),
               const Spacer(),
@@ -91,40 +75,22 @@ class VRChatMobileWebViewUserPolicy extends ConsumerWidget {
       ),
       body: () {
         if (Platform.isAndroid || Platform.isIOS) {
-          return WebView(
-            initialUrl: Assets.userPolicy.toString(),
-            javascriptMode: JavascriptMode.unrestricted,
+          return InAppWebView(
+            initialUrlRequest: URLRequest(url: WebUri(Assets.userPolicy.toString())),
+            initialSettings: InAppWebViewSettings(javaScriptEnabled: true),
           );
         } else {
           openInBrowser(url: Assets.userPolicy, forceExternal: true).then((value) {
             if (value == null) return;
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (BuildContext context) => value),
-            );
+            Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => value));
           });
 
           return Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  AppLocalizations.of(context)!.lookAtYourBrowser,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
-                  ),
-                ),
-                const Padding(
-                  padding: EdgeInsets.all(16.0),
-                  child: SizedBox(
-                    width: 50,
-                    height: 50,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 6,
-                    ),
-                  ),
-                ),
+                Text(AppLocalizations.of(context)!.lookAtYourBrowser, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+                const Padding(padding: EdgeInsets.all(16.0), child: SizedBox(width: 50, height: 50, child: CircularProgressIndicator(strokeWidth: 6))),
               ],
             ),
           );

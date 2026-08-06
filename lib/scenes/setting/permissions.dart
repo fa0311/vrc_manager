@@ -6,10 +6,10 @@ import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:domain_verification_manager/domain_verification_manager.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
+import 'package:vrc_manager/l10n/app_localizations.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/scenes/setting/logger.dart';
 
@@ -63,18 +63,9 @@ class VRChatMobileSettingsPermissions extends ConsumerWidget {
           context: context,
           builder: (_) {
             return AlertDialog(
-              title: Text(
-                AppLocalizations.of(context)!.notSupported,
-              ),
-              content: Text(
-                AppLocalizations.of(context)!.notSupportedDetails,
-              ),
-              actions: [
-                TextButton(
-                  child: Text(AppLocalizations.of(context)!.send),
-                  onPressed: () => Navigator.pop(context),
-                ),
-              ],
+              title: Text(AppLocalizations.of(context)!.notSupported),
+              content: Text(AppLocalizations.of(context)!.notSupportedDetails),
+              actions: [TextButton(child: Text(AppLocalizations.of(context)!.send), onPressed: () => Navigator.pop(context))],
             );
           },
         );
@@ -84,9 +75,7 @@ class VRChatMobileSettingsPermissions extends ConsumerWidget {
     AsyncValue<bool> domainStageVerification = ref.watch(domainStageVerificationProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.permissions),
-      ),
+      appBar: AppBar(title: Text(AppLocalizations.of(context)!.permissions)),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Container(
@@ -100,22 +89,13 @@ class VRChatMobileSettingsPermissions extends ConsumerWidget {
                       error: (e, trace) {
                         logger.w(getMessage(e), error: e, stackTrace: trace);
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage(context: context, status: e))));
-                        return const Icon(
-                          Icons.close,
-                          color: Colors.red,
-                        );
+                        return const Icon(Icons.close, color: Colors.red);
                       },
                       data: (data) {
                         if (data) {
-                          return const Icon(
-                            Icons.check,
-                            color: Colors.green,
-                          );
+                          return const Icon(Icons.check, color: Colors.green);
                         } else {
-                          return const Icon(
-                            Icons.close,
-                            color: Colors.red,
-                          );
+                          return const Icon(Icons.close, color: Colors.red);
                         }
                       },
                     ),

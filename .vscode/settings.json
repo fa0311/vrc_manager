@@ -2,5 +2,11 @@
   "dart.lineLength": 160,
   "markdownlint.config": {
     "MD033": false
+  },
+  "files.associations": {
+    "*.arb": "json"
+  },
+  "[json][jsonc][yaml]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   }
 }

@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:device_info_plus/device_info_plus.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -17,6 +16,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:vrc_manager/api/data_class.dart';
 import 'package:vrc_manager/assets.dart';
 import 'package:vrc_manager/assets/date.dart';
+import 'package:vrc_manager/l10n/app_localizations.dart';
 import 'package:vrc_manager/main.dart';
 import 'package:vrc_manager/storage/accessibility.dart';
 import 'package:vrc_manager/widgets/modal.dart';
@@ -32,15 +32,11 @@ class LoggerExt extends Logger {
   final LogPrinter _printer;
   final LogOutput _output;
 
-  LoggerExt({
-    LogFilter? filter,
-    LogPrinter? printer,
-    LogOutput? output,
-    Level? level,
-  })  : _filter = filter ?? DevelopmentFilter(),
-        _printer = printer ?? PrettyPrinter(),
-        _output = output ?? ConsoleOutput(),
-        super(filter: AlwaysHiddenFilter()) {
+  LoggerExt({LogFilter? filter, LogPrinter? printer, LogOutput? output, Level? level})
+    : _filter = filter ?? DevelopmentFilter(),
+      _printer = printer ?? PrettyPrinter(),
+      _output = output ?? ConsoleOutput(),
+      super(filter: AlwaysHiddenFilter()) {
     _filter.init();
     _filter.level = level ?? Logger.level;
     _printer.init();
@@ -48,13 +44,7 @@ class LoggerExt extends Logger {
   }
 
   @override
-  void log(
-    Level level,
-    dynamic message, {
-    DateTime? time,
-    Object? error,
-    StackTrace? stackTrace,
-  }) {
+  void log(Level level, dynamic message, {DateTime? time, Object? error, StackTrace? stackTrace}) {
     super.log(level, message, error: error, stackTrace: stackTrace);
     final logEvent = LogEvent(level, message, error: error, stackTrace: stackTrace);
     final output = _printer.log(logEvent);
@@ -97,17 +87,11 @@ class LoggerReport extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     Iterable<OutputEventExt> log = ref.watch(loggerReportProvider);
     return Scaffold(
-      appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.log),
-      ),
+      appBar: AppBar(title: Text(AppLocalizations.of(context)!.log)),
       body: SafeArea(
         child: ScrollWidget(
           onRefresh: () async => ref.refresh(loggerReportProvider.notifier),
-          child: ErrorPage(
-            loggerReport: log,
-            title: Text(AppLocalizations.of(context)!.reportMessage2),
-            hiddenSubtitle: true,
-          ),
+          child: ErrorPage(loggerReport: log, title: Text(AppLocalizations.of(context)!.reportMessage2), hiddenSubtitle: true),
         ),
       ),
     );
@@ -121,14 +105,7 @@ class ErrorPage extends ConsumerWidget {
   final bool hiddenSubtitle;
   final bool hiddenTitle;
 
-  const ErrorPage({
-    super.key,
-    required this.loggerReport,
-    this.title,
-    this.subtitle,
-    this.hiddenTitle = false,
-    this.hiddenSubtitle = false,
-  });
+  const ErrorPage({super.key, required this.loggerReport, this.title, this.subtitle, this.hiddenTitle = false, this.hiddenSubtitle = false});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -140,34 +117,35 @@ class ErrorPage extends ConsumerWidget {
         Card(
           child: ListTile(
             title: hiddenTitle ? null : title ?? Text(AppLocalizations.of(context)!.error),
-            subtitle: hiddenSubtitle
-                ? null
-                : subtitle ??
-                    Text([
-                      AppLocalizations.of(context)!.reportMessage1,
-                      AppLocalizations.of(context)!.reportMessage2,
-                    ].join('\n')),
+            subtitle:
+                hiddenSubtitle
+                    ? null
+                    : subtitle ?? Text([AppLocalizations.of(context)!.reportMessage1, AppLocalizations.of(context)!.reportMessage2].join('\n')),
             trailing: IconButton(
               icon: const Icon(Icons.more_vert),
-              onPressed: () => showModalBottomSheetConsumer(
-                  context: context,
-                  builder: (context, ref, child) {
-                    List<Level> loggerFilter = ref.watch(loggerFilterProvider);
-                    return SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          SwitchListTile(
-                            title: Text(AppLocalizations.of(context)!.viewDetailedLogs),
-                            onChanged: (bool value) {
-                              if (!loggerFilter.remove(Level.warning)) loggerFilter.add(Level.warning);
-                              ref.read(loggerFilterProvider.notifier).state = [...loggerFilter];
-                            },
-                            value: loggerFilter.contains(Level.warning),
-                          ),
-                        ],
-                      ),
-                    );
-                  }),
+              onPressed:
+                  () => showModalBottomSheetConsumer(
+                    context: context,
+                    builder: (context, ref, child) {
+                      List<Level> loggerFilter = ref.watch(loggerFilterProvider);
+                      return SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            SwitchListTile(
+                              title: Text(AppLocalizations.of(context)!.viewDetailedLogs),
+                              onChanged: (bool value) {
+                                if (!loggerFilter.remove(Level.warning)) {
+                                  loggerFilter.add(Level.warning);
+                                }
+                                ref.read(loggerFilterProvider.notifier).state = [...loggerFilter];
+                              },
+                              value: loggerFilter.contains(Level.warning),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
             ),
           ),
         ),
@@ -196,23 +174,14 @@ class ErrorPage extends ConsumerWidget {
                   text += '\n';
                   text += state.lines.join('\n').replaceAll(RegExp(r'\u001b\[([0-9]|;)+m'), '');
                   await copyToClipboard(context, text);
-                  Widget? value = await openInBrowser(
-                    url: Assets.report,
-                    forceExternal: accessibilityConfig.forceExternalBrowser,
-                  );
+                  Widget? value = await openInBrowser(url: Assets.report, forceExternal: accessibilityConfig.forceExternalBrowser);
                   if (value != null) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (BuildContext context) => value),
-                    );
+                    Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => value));
                   }
                 },
               ),
               children: [
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Text(state.lines.join('\n').replaceAll(RegExp(r'\u001b\[([0-9]|;)+m'), '')),
-                )
+                SingleChildScrollView(scrollDirection: Axis.horizontal, child: Text(state.lines.join('\n').replaceAll(RegExp(r'\u001b\[([0-9]|;)+m'), ''))),
               ],
             ),
           ),

@@ -1,13 +1,3 @@
-enum VRChatInstanceType {
-  public,
-  hidden,
-  friends,
-  private,
-  group;
-}
+enum VRChatInstanceType { public, hidden, friends, private, group }
 
-enum VRChatInstanceIdOther {
-  traveling,
-  private,
-  offline;
-}
+enum VRChatInstanceIdOther { traveling, private, offline }

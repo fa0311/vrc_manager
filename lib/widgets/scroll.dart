@@ -9,12 +9,7 @@ class ScrollWidget extends ConsumerWidget {
   final ScrollNotificationPredicate notificationPredicate;
   final Widget child;
 
-  const ScrollWidget({
-    super.key,
-    required this.onRefresh,
-    required this.child,
-    this.notificationPredicate = defaultScrollNotificationPredicate,
-  });
+  const ScrollWidget({super.key, required this.onRefresh, required this.child, this.notificationPredicate = defaultScrollNotificationPredicate});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

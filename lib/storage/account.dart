@@ -16,7 +16,7 @@ class AccountListConfigNotifier extends ChangeNotifier {
   List<AccountConfig> accountList = [];
   bool isFirst = true;
 
-  init() async {
+  Future<void> init() async {
     isFirst = false;
 
     List<String> uidList = await getStorageList("account_index_list");
@@ -72,7 +72,7 @@ class AccountConfigNotifier extends ChangeNotifier {
   AccountConfig? loggedAccount;
   String userAgent = "";
 
-  init(AccountConfig? account) async {
+  Future<void> init(AccountConfig? account) async {
     loggedAccount = account;
     await PackageInfo.fromPlatform().then((value) => userAgent = Assets.userAgent(value.version));
   }
@@ -161,19 +161,18 @@ class AccountConfig extends ChangeNotifier {
   }
 
   Future<bool> tokenCheck() async {
-    VRChatAPI vrchatLoginSession = VRChatAPI(
-      cookie: cookie ?? "",
-      userAgent: Assets.userAgent((await PackageInfo.fromPlatform()).version),
-      logger: logger,
-    );
-    return await vrchatLoginSession.user().then((VRChatUserSelfOverload response) {
-      data = response;
-      setDisplayName(response.displayName);
-      return true;
-    }).catchError((e, trace) {
-      logger.e(getMessage(e), error: e, stackTrace: trace);
-      data = null;
-      return false;
-    });
+    VRChatAPI vrchatLoginSession = VRChatAPI(cookie: cookie ?? "", userAgent: Assets.userAgent((await PackageInfo.fromPlatform()).version), logger: logger);
+    return await vrchatLoginSession
+        .user()
+        .then((VRChatUserSelfOverload response) {
+          data = response;
+          setDisplayName(response.displayName);
+          return true;
+        })
+        .catchError((e, trace) {
+          logger.e(getMessage(e), error: e, stackTrace: trace);
+          data = null;
+          return false;
+        });
   }
 }
